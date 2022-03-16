@@ -1,13 +1,57 @@
-
 input::placeholder {
     font-style: italic;
 }
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
+
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.form-check {
+    position: relative;
+    display: flex;
+    padding-left: $form-check-input-gutter;
+}
+
+.form-check-label {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    word-break: break-word;
+}
+
+.form-sub-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    .form-check-input {
+        margin-top: -0.1rem;
+        top: 0;
+    }
+    margin-bottom: $spacer;
+}
+
+.form-check-input {
+    position: relative;
+    margin-top: 0;
+    top: 0.1rem;
+    margin-left: -$form-check-input-gutter;
+    margin-right: $spacer;
+    // Use [disabled] and :disabled for workaround https://github.com/twbs/bootstrap/issues/28247
+    &[disabled]~.form-check-label,
+    &:disabled~.form-check-label {
+        color: $text-muted;
+    }
+}
+
+.form-check-label {
+    margin-bottom: 0; // Override default `<label>` bottom margin
 }

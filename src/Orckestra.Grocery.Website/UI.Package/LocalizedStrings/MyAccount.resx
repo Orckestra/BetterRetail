@@ -192,6 +192,15 @@
   <data name="H_WishListInHeaderTitle" xml:space="preserve">
     <value>Wishlist</value>
   </data>
+   <data name="H_RecipeListInHeaderTitle" xml:space="preserve">
+    <value>Recipe List</value>
+  </data>
+   <data name="H_RemoveFromRecipeList" xml:space="preserve">
+    <value>Remove from Recipe List</value>
+  </data>
+   <data name="H_AddToRecipeList" xml:space="preserve">
+    <value>Add to Recipe List</value>
+  </data>
   <data name="L_CancelOrderInformation" xml:space="preserve">
     <value>You will receive an email at this address: {emailaddress} with a summary of your cancellation</value>
   </data>

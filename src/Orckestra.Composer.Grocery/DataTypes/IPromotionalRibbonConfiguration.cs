@@ -17,7 +17,6 @@ namespace Orckestra.Composer.Grocery.DataTypes
     [KeyPropertyName("Id")]
     [Title("PromotionalRibbon")]
     [LabelPropertyName("LookupValue")]
-    [SearchableType]
     public interface IPromotionalRibbonConfiguration : IData
     {
         [ImmutableFieldId("7ad1a538-a357-40dc-b8df-332021f5a213")]

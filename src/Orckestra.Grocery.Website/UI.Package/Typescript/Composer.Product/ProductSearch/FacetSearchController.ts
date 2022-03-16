@@ -130,14 +130,15 @@ module Orckestra.Composer {
                             facetType: el.data('type'),
                         })
                     });
-                    this.eventHub.publish('facetsRemoved', { data });
+
+                    this.eventHub.publish(SearchEvents.FacetsRemoved, { data });
                 } else {
                     var parentDiv = $(el).parent().parent();
                     parentDiv.parent().find('input:checked').each((index, el: any) => {
                         if (el.dataset.selected) {
                             el['checked'] = false;
                         }
-                    })
+                    });
                     this.publishSingleFacetsChanged(facetKey, facetValue, UrlHelper.resolvePageType());
                 }
             }
@@ -193,7 +194,7 @@ module Orckestra.Composer {
         }
 
         protected publishMultiFacetChanged(facetKey, facetValue, pageType) {
-            this.eventHub.publish('multiFacetChanged', {
+            this.eventHub.publish(SearchEvents.MultiFacetChanged, {
                 data: {
                     facetKey,
                     facetValue,

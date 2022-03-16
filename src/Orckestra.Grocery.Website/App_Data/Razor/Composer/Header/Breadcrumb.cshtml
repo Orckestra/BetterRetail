@@ -25,7 +25,7 @@
             @Html.Localize("General", "B_Back")
         </a>
         <span class="d-none d-md-block">&#160;| @Html.Localize("General", "L_Breadcrumb")&#160;</span>
-        <ol class="breadcrumb  d-none d-md-flex bg-white">
+        <ul class="breadcrumb  d-none d-md-flex bg-white">
             @foreach (var item in Model.Items)
             {
                 if (!string.IsNullOrEmpty(item.Url))
@@ -42,7 +42,7 @@
                 }
             }
             <li class="breadcrumb-item active">@Model.ActivePageName</li>
-        </ol>
+        </ul>
     </div>
 </body>
 </html>

@@ -118,7 +118,7 @@
 
 @helper StoreListRow(string vueBinding, bool isStep = false, bool showMap = true)
 {
-    <div class="card bg-light store-row">
+    <div class="card bg-lighter store-row">
         <div class="row">
             @if (showMap)
             {
@@ -209,7 +209,7 @@
 @helper SelectedFulfillmentMethod()
 {
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
-        <div class="border-bottom bg-light p-3  mx-n3 mt-n3">
+        <div class="border-bottom bg-lighter p-3  mx-n3 mt-n3">
             <a class="cta dark-blue float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                 <i class="fa fa-edit d-inline d-sm-none"></i>
                 <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>

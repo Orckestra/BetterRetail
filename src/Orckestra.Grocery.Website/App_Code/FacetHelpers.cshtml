@@ -34,10 +34,10 @@
 
 @helper MultiSelectPromotedFacet()
 {
-    <div class="form-check mb-1"
+    <div class="form-check mb-1 form-sub-group"
          v-bind:data-facetfieldname="facetValue.FieldName"
          v-bind:data-facettype="facetValue.FacetType">
-        <label class="m-0">
+        <label class="m-0 form-check-label">
             <input type="checkbox"
                    class="form-check-input"
                    v-bind:name="facetValue.FieldName + '[]'"
@@ -80,8 +80,8 @@
 
 @helper MultiSelectFacet(string valueBinding = "FacetValues")
 {
-    <div v-for="facetValue in facet.@(valueBinding)" v-bind:key="facetValue.Value" class="form-check mb-1">
-        <label class="m-0">
+    <div v-for="facetValue in facet.@(valueBinding)" v-bind:key="facetValue.Value" class="form-check mb-1 form-sub-group">
+        <label class="m-0 form-check-label">
             <input class="form-check-input"
                    type="checkbox"
                    v-bind:name="facet.FieldName + '[]'"
@@ -122,10 +122,10 @@
 
 @helper RenderFacet()
 {
-    <div v-if="facet.FacetType == '@(FacetType.SingleSelect)'">
+    <div class="form-group" v-if="facet.FacetType == '@(FacetType.SingleSelect)'">
         @SingleFacet()
     </div>
-    <div v-if="facet.FacetType == '@(FacetType.MultiSelect)'">
+    <div class="form-group" v-if="facet.FacetType == '@(FacetType.MultiSelect)'">
         @MultiSelectFacet()
     </div>
     <div v-if="facet.FacetType == '@(FacetType.Range)'">
@@ -153,7 +153,7 @@
 
 @helper ShowMoreLessButton()
 {
-    <a v-if="facet.OnDemandFacetValues.length" class="btn  btn-link  font-weight-bold"
+    <a v-if="facet.OnDemandFacetValues.length" class="btn-link  font-weight-bold"
        v-bind:class="{'collapsed': IsValuesCollapsed(facet)}"
        data-toggle="collapse"
        v-bind:data-target="'#onDemandFacets-' + facet.FieldName">
@@ -197,7 +197,7 @@
 
 @helper CategoryFactesTree(string rootTitle)
 {
-    <div id="categoriesTree" class="card bg-light  mb-3  facets-card">
+    <div id="categoriesTree" class="card bg-lighter  mb-3  facets-card">
         <div class="card-header">
             <a data-toggle="collapse"
                data-target="#categoryFacets"

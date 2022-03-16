@@ -2,14 +2,17 @@
  * Orckestra Overture Composer
  */
 
+
 /**
  * Configs
  */
+
 @import "config";
 
 /**
  * Libs
  */
+
 @import "bootstrap";
 @import "Lib/font-awesome/fontawesome.scss";
 @import "lib/nouislider/nouislider";
@@ -17,6 +20,7 @@
 /**
  * Blades
  */
+
 @import "Blades/AddToCartNotification/_notification-modal.scss";
 @import "Blades/CartSummary/_cart.scss";
 @import "Blades/CartSummary/_display-table.scss";
@@ -32,6 +36,8 @@
 @import "Blades/OrderSummary/_additional-info.scss";
 @import "Blades/ProductDetail/_product-details.scss";
 @import "Blades/ProductDetail/_product-specifications.scss";
+@import "Blades/Recipes/_recipe-details.scss";
+@import "Blades/Recipes/_recipe-list.scss";
 @import "Blades/StoreLocator/_store-details.scss";
 @import "Blades/StoreLocator/_store-directory.scss";
 @import "Blades/StoreLocator/_store-inventory.scss";
@@ -46,6 +52,7 @@
 /**
  * Composer bootstrap overrides
 */
+
 @import "Overrides/_breadcrumb.scss";
 @import "Overrides/_button-groups.scss";
 @import "Overrides/_buttons.scss";
@@ -67,6 +74,7 @@
 /**
  * Composer custom components
  */
+
 @import "Custom/_additional-fees.scss";
 @import "Custom/_affix.scss";
 @import "Custom/_anchor.scss";

@@ -1,0 +1,115 @@
+@inherits RazorFunction
+@using System.Globalization
+@using Orckestra.Composer.Recipes
+@using Orckestra.Composer.Recipes.DataTypes
+@using Composite.Data
+@using System.Threading
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Recipes List Details"; }
+    }
+
+    [FunctionParameter(Label = "Recipe count", Help = @"The number of recipes to display on the page (6 by default).", DefaultValue = 6)]
+    public int PageSize { get; set; }
+
+    [FunctionParameter]
+    public RoutedData<Orckestra.Composer.Recipes.DataTypes.IRecipe> RecipeData { get; set; }
+
+    public IRecipeUrlProvider RecipeUrlProvider { get; set; }
+
+}
+
+@{
+   
+    var difficulties = DataFacade.GetData<IDifficulty>().ToLookup(_ => _.Id.ToString());
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    @if (RecipeData.IsItem)
+    {
+        @Function("Grocery.Recipes.Details", new { Item = RecipeData.Item })
+    }
+    else
+    {
+        var categoriesLookup = DataFacade.GetData<IRecipeMealType>().ToLookup(_ => _.Id.ToString());
+        var recipeCategories = RecipeData.List.GroupBy(i => i.MealType).OrderBy(g => categoriesLookup[g.Key.ToString()].FirstOrDefault().Order).ToList();
+        var categoryItemsCount = 3;
+
+        foreach (var group in recipeCategories)
+        {
+            var items = group.Take(categoryItemsCount);
+            var categoryTitle = categoriesLookup[group.Key.ToString()].FirstOrDefault().Title;
+            <h1 class="text-center">@categoryTitle (@group.Count())</h1>
+            <div class="row">
+            @foreach (var item in items)
+            {
+                var imgURL = Html.C1().MediaUrl(item.Image);
+                var itemTitle = item.Title;
+                var itemURL = RecipeData.ItemUrl(item);
+                var hasCookingTime = (item.CookingTime > 0);
+                var cookingTime = hasCookingTime ? item.CookingTime: 0;
+                var hasPrepTime = (item.PreparationTime > 0);
+                var preparationTime = hasPrepTime ? item.PreparationTime : 0;
+                var difficulty = difficulties[item.Difficulty.ToString()].FirstOrDefault().Title;
+                var servings = item.Servings;
+                <div class="col-12 col-sm-4 col-lg-4  mb-4">
+                    <div class="card h-100">
+                        @if (imgURL != null)
+                        {
+                            <a href="@itemURL">
+                                <span class="recipe-tile-media">
+                                    
+                                    <img class="card-img-top" src="@imgURL?h=200" alt="@itemTitle" />
+                                    <span class="card-img-overlay recipe-info-table">
+                                        @if (!string.IsNullOrWhiteSpace(difficulty))
+                                        {
+                                            <span class="recipe-info-table-cell">
+                                                <span class="fa fa-spoon recipe-info-icon"></span>
+                                                <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
+                                                <span class="recipe-info-value">@difficulty</span>
+                                            </span>
+                                        }
+                                        @if (hasCookingTime || hasPrepTime)
+                                        {
+                                            <span class="recipe-info-table-cell">
+                                                <span class="fa fa-blender recipe-info-icon"></span>
+                                                <span class="recipe-info-type">@Html.Localize("Recipes", "L_TotalTime")</span>
+                                                <span class="recipe-info-value">@(cookingTime + preparationTime) @Html.Localize("Recipes", "L_Minutes")</span>
+                                            </span>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(servings))
+                                        {
+                                            <span class="recipe-info-table-cell">
+                                                <span class="fa fa-chart-pie recipe-info-icon"></span>
+                                                <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
+                                                <span class="recipe-info-value">@servings</span>
+                                            </span>
+                                        }
+                                    </span>
+                                </span>
+                            </a>
+                        }
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4><a href="@itemURL">@itemTitle</a></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            </div>
+            if (group.Count() > categoryItemsCount)
+            {
+                <div class="mb-3 text-center">
+                    <a href="@RecipeUrlProvider.BuildRecipeMealTypeUrl(group.Key, Thread.CurrentThread.CurrentCulture)" class="btn btn-default">View All @categoryTitle </a>
+                </div>
+            }
+        }
+    }
+</body>
+</html>

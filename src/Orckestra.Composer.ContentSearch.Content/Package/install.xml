@@ -57,6 +57,19 @@
         <Type type="Orckestra.Composer.Articles.DataTypes.IArticle,Orckestra.Composer.Articles">
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_public.xml" />
         </Type>
+
+        <Type type="Orckestra.Composer.Recipes.DataTypes.IRecipe,Orckestra.Composer.Recipes">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipes_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.Recipes.DataTypes.IRecipe,Orckestra.Composer.Recipes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipes_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.Recipes.DataTypes.IIngredientsList,Orckestra.Composer.Recipes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IIngredientsLists_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.Recipes.DataTypes.IIngredient,Orckestra.Composer.Recipes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IIngredients_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
 	</mi:PackageFragmentInstallers>

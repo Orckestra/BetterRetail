@@ -78,7 +78,7 @@ module Orckestra.Composer {
                 template: `
                  
                 <div class="mb-1"
-                    :class="{'form-check': !!node }"
+                    :class="{'form-check form-sub-group': !!node }"
                     :data-facetfieldname="node?.FieldName"
                     :data-facettype="node?.FacetType">
                     <label v-if="node" 
@@ -137,7 +137,7 @@ module Orckestra.Composer {
                         :categoryid="categoryid"                  
                     />
                     </div>
-                    <a class="btn  btn-link  collapsed  font-weight-bold" 
+                    <a class="btn-link  collapsed  font-weight-bold" 
                         data-toggle="collapse" 
                         :data-target="'#onDemandFacets-' + currentNode.FieldName">
                         <span class="more">{{showmoretext}} <i class="fa fa-angle-down" /></span>

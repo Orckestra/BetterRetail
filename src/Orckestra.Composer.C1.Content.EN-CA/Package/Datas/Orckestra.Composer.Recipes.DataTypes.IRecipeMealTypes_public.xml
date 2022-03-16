@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="ad88d89d-18e9-41e7-a3cb-45ba5cda3682" Title="Dessert"  Order="4" SourceCultureName="en-CA" />
+  <Add Id="3a9a0497-43fa-41f4-bdca-8733cb14122c" Title="Breakfast"  Order="1" SourceCultureName="en-CA" />
+  <Add Id="bdaeef60-e1c0-41ab-8baa-99b1cc2d9d0c" Title="Appetizer" Order="0" SourceCultureName="en-CA" />
+  <Add Id="ba7b088a-d8f0-4ed6-a187-7df4d7772b11" Title="Drink"  Order="5" SourceCultureName="en-CA" />
+  <Add Id="165bc213-8d25-40bb-aca7-2044e333ce63" Title="Dinner"  Order="3" SourceCultureName="en-CA" />
+  <Add Id="fd23c6d7-66ca-4301-875c-3dee19e276b9" Title="Lunch"  Order="2" SourceCultureName="en-CA" />
+</Data>

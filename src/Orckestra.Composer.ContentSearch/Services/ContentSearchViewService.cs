@@ -44,7 +44,8 @@ namespace Orckestra.Composer.ContentSearch.Services
                     SearchResults = result,
                     PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / param.PageSize),
                     Total = result.ResultsFound,
-                    IsActive = isActive
+                    IsActive = isActive,
+                    DataTypes = tab.DataTypes
                 });
             }
 

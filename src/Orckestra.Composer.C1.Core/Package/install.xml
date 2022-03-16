@@ -9,6 +9,7 @@
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.dll" />
     <mi:Add path="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" />
     <mi:Add path="~\Bin\Orckestra.Composer.Grocery.dll" />
+    <mi:Add path="~\Bin\Orckestra.Composer.Recipes.dll" />
   </mi:PackageFragmentInstallerBinaries>
 
   <mi:PackageFragmentInstallers>
@@ -70,6 +71,7 @@
         <File sourceFilename="~\Bin\Microsoft.ApplicationInsights.dll" targetFilename="~\Bin\Microsoft.ApplicationInsights.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" targetFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Composer.Recipes.dll" targetFilename="~\Bin\Orckestra.Composer.Recipes.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 

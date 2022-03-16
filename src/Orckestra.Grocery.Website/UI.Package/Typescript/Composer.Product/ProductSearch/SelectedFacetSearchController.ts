@@ -55,21 +55,41 @@ module Orckestra.Composer {
                                     facetLandingPageUrl: facetLandingPageUrl
                                 }
                             });
-                        } else {
-                            if (categoryTreeRef) {
-                                //remove also all child categories
-                                const parentCategoryElement = $('#categoriesTree').find('div[data-facetfieldname="' + categoryTreeRef + '"]');
-                                const checkedItems = parentCategoryElement.find('input:checked');
-                                const data = [];
-                                checkedItems.each(index => {
-                                    let el = $(checkedItems[index]);
-                                    data.push({
-                                        facetFieldName: el.attr('name').replace('[]',''),
-                                        facetValue: el.attr('value'),
-                                        facetType: el.data('type')
-                                    })
-                                });
-                                self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
+                        } else if(categoryTreeRef) {
+                            switch (facet.FacetType) {
+                                case 'MultiSelect': {
+                                    const data = {
+                                        facetKey: facet.FieldName,
+                                        facetValue: facet.Value,
+                                        //    pageType,
+                                        filter: this.Facets.reduce((filter, f) => {
+                                            if (f.Value !== facet.Value) {
+                                                filter[f.FieldName] = f.FacetType === 'MultiSelect' ?
+                                                    (filter[f.FieldName] || []).concat(f.Value) : f.Value;
+                                            }
+                                            return filter;
+                                        }, {})
+                                    };
+
+                                    self.eventHub.publish(SearchEvents.MultiFacetChanged, {data});
+                                    break;
+                                }
+                                case 'SingleSelect':
+                                default:
+                                    //remove also all child categories
+                                    const parentCategoryElement = $('#categoriesTree').find('div[data-facetfieldname="' + categoryTreeRef + '"]');
+                                    const checkedItems = parentCategoryElement.find('input:checked');
+                                    const data = [];
+                                    checkedItems.each(index => {
+                                        let el = $(checkedItems[index]);
+                                        data.push({
+                                            facetFieldName: el.attr('name').replace('[]',''),
+                                            facetValue: el.attr('value'),
+                                            facetType: el.data('type')
+                                        })
+                                    });
+
+                                    self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
                             }
                         }
                     }

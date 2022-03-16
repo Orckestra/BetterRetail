@@ -191,12 +191,23 @@
                                     </div>
                                     <div class="col-12 col-lg-10">
                                         <div class="row">
-                                            @foreach (var entry in currentTab.SearchResults.Entries)
-                                            {
-                                                <div class="col-12 col-sm-4 col-lg-4  mb-4">
-                                                    @ShowContentSearchEntry(entry)
-                                                </div>
+                                            @{
+                                                var isRecipes = currentTab.DataTypes.Contains(nameof(Orckestra.Composer.Recipes.DataTypes.IRecipe));
+                                                if (isRecipes)
+                                                {
+                                                    @Function("Grocery.Recipes.SearchResults", new { Results = currentTab.SearchResults.Entries })
+                                                }
+                                                else
+                                                {
+                                                    foreach (var entry in currentTab.SearchResults.Entries)
+                                                    {
+                                                        <div class="col-12 col-sm-4 col-lg-4  mb-4">
+                                                            @ShowContentSearchEntry(entry)
+                                                        </div>
+                                                    }
+                                                }
                                             }
+                                            
                                         </div>
                                     </div>
                                     <div class="col-12  d-block  d-lg-none">
@@ -234,7 +245,7 @@
 
         @if (vm.Tabs.Count > 0)
         {
-            <div class="container-fluid search-tabs bg-light  pt-2">
+            <div class="container-fluid search-tabs bg-lighter  pt-2">
                 <div class=" container">
                     <ul class="nav nav-tabs" role="tablist">
                         @foreach (var tab in vm.Tabs)
@@ -330,7 +341,7 @@
     var sortOptions = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.ISortOption>().OrderBy(t => t.Order).ToList();
     var selectedSortOption = sortOptions.Find(o => o.FieldName == SearchRequestContext.SortBy && (o.IsReverted && SearchRequestContext.SortDirection == "desc" || !o.IsReverted && SearchRequestContext.SortDirection == "asc"));
     var selectedTitle = selectedSortOption != null ? selectedSortOption.Title : Html.Localize("List-Search", "F_Relevance_Option");
-    <div class="dropdown sort-by">
+    <div class="dropdown sort-by mb-1">
         <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")</span>
         <button type="button" class="btn btn-outline-secondary  dropdown-toggle" data-toggle="dropdown">
             @selectedTitle
@@ -359,7 +370,7 @@
 
 @helper ShowPaging(ContentSearchTabViewModel tab)
 {
-    if (tab.Total > 1)
+    if (tab.PagesCount > 1)
     {
         <div class="float-right">
             @SearchHelpers.Pagination(SearchRequestContext.CurrentPage, tab.PagesCount, 10, Request.Url.AbsoluteUri, SearchRequestParams.Page)

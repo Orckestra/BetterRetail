@@ -21,7 +21,6 @@ namespace Orckestra.Composer.Grocery.DataTypes
     [KeyPropertyName("Id")]
     [Title("PromotionalBanner")]
     [LabelPropertyName("LookupValue")]
-    [SearchableType]
     public interface IPromotionalBannerConfiguration : IData
     {
         [ImmutableFieldId("222c4e0f-1454-48e4-a07a-186226ae731c")]

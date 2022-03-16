@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="831ab48c-b3f7-409e-9218-6a1751e360c8" Title="French" SourceCultureName="en-CA" />
+  <Add Id="9af3b88a-e3cc-47fc-bca0-5a4522dbdf52" Title="Japanese" SourceCultureName="en-CA" />
+  <Add Id="9ca94c8b-33d9-4e8c-9ef7-76772f559f9f" Title="Italian" SourceCultureName="en-CA" />
+</Data>

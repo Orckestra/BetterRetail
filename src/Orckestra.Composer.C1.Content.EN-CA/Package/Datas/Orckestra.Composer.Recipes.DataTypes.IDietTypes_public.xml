@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="21521d19-df6c-4823-988b-07c134dce1e4" Title="Vegetarian" Order="1" SourceCultureName="en-CA" />
+  <Add Id="3f2aefe5-05da-435c-b7b2-3845891914d4" Title="Vegan" Order="2" SourceCultureName="en-CA" />
+  <Add Id="52d5f92c-0d1a-4af3-8079-2dd304519043" Title="Keto" Order="3" SourceCultureName="en-CA" />
+  <Add Id="76541aaa-6ffe-4ce5-be38-cfd960cb9aad" Title="Low-Sodium" Order="4" SourceCultureName="en-CA" />
+  <Add Id="c18e3fa5-4e38-4b06-824e-22b73fe36a55" Title="Gluten-Free" Order="6" SourceCultureName="en-CA" />
+</Data>

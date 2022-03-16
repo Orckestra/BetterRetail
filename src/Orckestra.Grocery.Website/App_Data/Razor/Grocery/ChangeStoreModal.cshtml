@@ -109,7 +109,7 @@
             </div>
         </div>
     </div>
-    <div v-if="NoStores" class="alert bg-light mt-4">
+    <div v-if="NoStores" class="alert bg-lighter mt-4">
         @Html.Localize("Grocery", "L_StoresNotAvailableMessage")
     </div>
     @Forms.Validations.ShowError("Errors.StoreSelectionError", "L_StoreSelectionFailed")

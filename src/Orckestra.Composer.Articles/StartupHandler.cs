@@ -12,7 +12,8 @@ namespace Orckestra.Composer.Articles
     {
         public static void ConfigureServices(IServiceCollection collection)
         {
-            collection.AddSingleton<IDataFieldProcessorProvider>(new ArticlesDataFieldProcessorProvider());
+            //TODO: roback this comment when C1 CMS 6.12 is used , for now there is a bug in C1 and need to remove line below, so Recipes works. Without fix both DataFieldProcessorProvider for Articles and Recipes do not work together 
+            //collection.AddSingleton<IDataFieldProcessorProvider>(new ArticlesDataFieldProcessorProvider());
         }
 
         public static void OnBeforeInitialize()

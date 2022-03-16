@@ -14,7 +14,7 @@
 </head>
 <body>
     <div data-oc-controller="Grocery.SelectedStoreInCart">
-        <div v-if="Cart" class="card bg-light">
+        <div v-if="Cart" class="card bg-lighter">
             <div v-if="FulfillmentMethodType" class="card-header">
                 <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                     @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")

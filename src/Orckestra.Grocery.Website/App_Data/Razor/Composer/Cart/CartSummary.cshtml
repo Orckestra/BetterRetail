@@ -25,7 +25,7 @@
                     @EmptyCart()
                 </div>
                 <div v-else="else" class="card">
-                    <div class="card-body bg-light pt-0 px-3">
+                    <div class="card-body bg-lighter pt-0 px-3">
                         @CartHeader()
                         <div v-if="Cart.InvalidLineItemCount > 0">
                             @CartSummaryHelpers.InvalideItemsMessage()
@@ -71,7 +71,7 @@
 
 @helper CartHeader()
 {
-    <div class="row bg-light font-weight-bold cart-header-items py-2">
+    <div class="row bg-lighter font-weight-bold cart-header-items py-2">
         <div class="col-9 col-sm-5 text-left">
             @Html.Localize("ShoppingCart", "T_ShoppingCart")
         </div>
