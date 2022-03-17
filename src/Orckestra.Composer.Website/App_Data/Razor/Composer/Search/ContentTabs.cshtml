@@ -17,17 +17,13 @@
         get { return "Search Results with Content Tabs"; }
     }
 
-    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}",
-        Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
     public bool CurrentSite { get; set; }
 
-    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Label}",
-    Help = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Help}",
-    DefaultValue = false)]
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Help}", DefaultValue = false)]
     public bool ShowHighlights { get; set; }
 
     public ISearchRequestContext SearchRequestContext { get; set; }
-
     public IContentSearchViewService ContentSearchViewService { get; set; }
 
     public SearchViewModel ProductsSearchViewModel => SearchRequestContext.ProductsSearchViewModel;
@@ -162,33 +158,40 @@
                 }
                 else
                 {
-                    <form id="SearchForm" class="search-form" method="get" role="search"
-                          action="@CurrentPageNode.Url/@currentTab.UrlTitle">
+                    <form id="SearchForm" method="get" role="search" action="@CurrentPageNode.Url/@currentTab.UrlTitle">
                         <input id="keywords" type="hidden" value="@SearchRequestContext.SearchQuery" name="keywords" />
-                        <div class="row">
-                            <div class="col-12 col-lg-10 offset-lg-2">
-                                <div class="row filters-row">
-                                    @if (currentTab.Total > 0)
-                                    {
-                                        <div class="col-6 d-lg-none">
-                                            @ShowFacetsCollapseBtn()
+
+                        <f:function name="Composer.Grids.SearchGrid">
+                            <f:param name="LeftPart">
+                                <html>
+                                <head>
+                                </head>
+                                <body>
+                                    @Function("Composer.ContentSearch.SelectedFacets", new { Results = contentSearchVm })
+                                    @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm })
+                                </body>
+                                </html>
+                            </f:param>
+                            <f:param name="RightPart">
+                                <html>
+                                <head>
+                                </head>
+                                <body>
+                                    <div class="search-results">
+                                        <div class="row filters-row">
+                                            @if (currentTab.Total > 0)
+                                            {
+                                                <div class="col-6 d-lg-none">
+                                                    @ShowFacetsCollapseBtn()
+                                                </div>
+                                                <div class="col-6">
+                                                    @ShowSortBy()
+                                                </div>
+                                                <div class="col-6 d-none d-lg-block">
+                                                    @ShowPaging(currentTab)
+                                                </div>
+                                            }
                                         </div>
-                                        <div class="col-6">
-                                            @ShowSortBy()
-                                        </div>
-                                        <div class="col-6 d-none d-lg-block">
-                                            @ShowPaging(currentTab)
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="row">
-                                    <div id="leftCol" class="col-12 col-lg-2  facets-col collapse">
-                                        @Partial("ContentSearch", "SelectedFacets", contentSearchVm)
-                                        @Partial("ContentSearch", "Facets", contentSearchVm)
-                                    </div>
-                                    <div class="col-12 col-lg-10">
                                         <div class="row">
                                             @foreach (var entry in currentTab.SearchResults.Entries)
                                             {
@@ -197,16 +200,15 @@
                                                 </div>
                                             }
                                         </div>
-                                    </div>
-                                    <div class="col-12  d-block  d-lg-none">
                                         @ShowPaging(currentTab)
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                </body>
+                                </html>
+                            </f:param>
+                        </f:function>
                     </form>
                 }
-            }
+             }
         </div>
     </div>
 </body>
@@ -352,7 +354,7 @@
 @helper ShowContentSearchEntry(SearchResultEntry entry)
 {
     var vm = ContentSearchViewService.GetSearchResultsEntryViewModel(entry);
-    @Partial("ContentSearch", "SearchEntryItem", vm)
+    @Function("Composer.ContentSearch.SearchEntryItem", new { SearchResultEntry = vm })
 }
 
 @helper ShowPaging(ContentSearchTabViewModel tab)

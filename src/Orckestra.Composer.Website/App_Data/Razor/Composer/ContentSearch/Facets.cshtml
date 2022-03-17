@@ -1,0 +1,69 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.ContentSearch.ViewModels
+
+@{
+    var visibleFacetsCount = 5;
+    var index = 0;
+}
+
+@functions {
+    [FunctionParameter(Label = "", Help = "")]
+    public ContentSearchViewModel Results { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div>
+        @foreach (var facet in Results.Facets)
+        {
+            index++;
+            var visibleFacets = facet.Hits.Take(visibleFacetsCount).ToList();
+            var hiddenFacets = facet.Hits.Skip(visibleFacetsCount).ToList();
+            <div class="card facets-card bg-light  mb-3">
+                <div class="card-body">
+                    <h5>@facet.Label</h5>
+                    <div id="facet@(index)">
+                        <div>
+                            @foreach (var hit in visibleFacets)
+                            {
+                                @FacetHit(facet, hit)
+                            }
+                        </div>
+                        @if (hiddenFacets.Count > 0)
+                        {
+                            <div id="moreHits@(index)" class="collapse">
+                                @foreach (var hit in hiddenFacets)
+                                {
+                                    @FacetHit(facet, hit)
+                                }
+                            </div>
+                            <a class="btn  btn-link" onclick="toggleMoreFacets(this)" data-toggle="collapse" data-target="#moreHits@(index)"
+                               data-label-more="@Html.Localize("List-Search", "B_ShowMore")"
+                               data-label-less="@Html.Localize("List-Search", "B_ShowLess")">
+                                @Html.Localize("List-Search", "B_ShowMore")
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
+
+@helper FacetHit(FacetViewModel facet, FacetHitViewModel hit)
+{
+    bool isChecked = Request.QueryString.AllKeys.Contains(hit.Key);
+    <div class="form-check mb-1">
+        <input id="@hit.Key" name="@hit.Key"
+               class="form-check-input"
+               type="checkbox"
+               onchange="submitContentSearchForm()"
+               @if (isChecked) { <text> checked="checked" </text> } />
+        <label for="@hit.Key" class="form-check-label">
+            @hit.Label (@hit.Count)
+        </label>
+    </div>
+}
