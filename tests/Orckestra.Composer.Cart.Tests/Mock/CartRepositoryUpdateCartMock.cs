@@ -131,5 +131,9 @@ namespace Orckestra.Composer.Cart.Tests.Mock
         public Task<HttpWebResponse> DeleteCartAsync(DeleteCartParam param) => throw new NotImplementedException();
         public Task<List<LineItem>> GetLineItemsAsync(GetLineItemsParam param) => throw new NotImplementedException();
 
+        public Task<Overture.ServiceModel.Orders.Cart> CreateCartPaymentVaultProfile(CreateCartPaymentVaultProfileParam param)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
