@@ -621,6 +621,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 PaymentId = param.PaymentId,
                 ScopeId = param.Scope,
+                CustomerId = param.CustomerId,
                 Data = param.Data
             };
 
