@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Orckestra.Composer.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {
-    public class ContentSearchViewModel
+    public class ContentSearchViewModel: BaseViewModel
     {
         public ContentSearchViewModel()
         {
