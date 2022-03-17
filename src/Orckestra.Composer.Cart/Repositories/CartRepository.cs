@@ -612,5 +612,19 @@ namespace Orckestra.Composer.Cart.Repositories
 
             return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
+
+        public virtual Task<Orckestra.Overture.ServiceModel.Orders.Cart> CreateCartPaymentVaultProfile(CreateCartPaymentVaultProfileParam param)
+        {
+            var request = new CreateCartPaymentVaultProfileRequest()
+            {
+                CartName = param.CartName,
+                CultureName = param.CultureInfo.Name,
+                PaymentId = param.PaymentId,
+                ScopeId = param.Scope,
+                Data = param.Data
+            };
+
+            return OvertureClient.SendAsync(request);
+        }
     }
 }

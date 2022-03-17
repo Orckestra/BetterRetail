@@ -26,6 +26,7 @@ using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using Orckestra.Composer.Store.Repositories;
+using System.Collections;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -637,36 +638,20 @@ namespace Orckestra.Composer.Cart.Services
             return cart.Payments.Find(x => !x.IsVoided()) ?? throw new InvalidOperationException("No valid payment was found in the cart.");
         }
 
-        public virtual async Task<ProcessedCart> TokenizePaymentAsync(TokenizePaymentParam param)
+        public virtual Task<Orckestra.Overture.ServiceModel.Orders.Cart> TokenizePaymentAsync(TokenizePaymentParam param)
         {
+            var data = new PropertyBag();
+            data["ApplePaymentToken"] = param.Token;
 
-            var payment = await PaymentRepository.GetPaymentAsync(new GetPaymentParam()
+            return CartRepository.CreateCartPaymentVaultProfile(new CreateCartPaymentVaultProfileParam()
             {
                 PaymentId = param.PaymentId,
                 Scope = param.Scope,
                 CartName = param.CartName,
                 CultureInfo = param.CultureInfo,
-                CustomerId = param.CustomerId
-            }).ConfigureAwait(false);
-
-            if(payment == null)
-            {
-                throw new NullReferenceException("payment doesn't exist");
-            }
-
-            payment.PropertyBag["ApplePaymentToken"] = param.Token;
-
-            var cart = await PaymentRepository.UpdatePaymentAsync(new UpdatePaymentParam()
-            {
-                CartName = param.CartName,
-                CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope,
-                PaymentId = payment.Id,
-                PropertyBag = payment.PropertyBag
+                Data = data
             });
-
-            return cart;
 
         }
 

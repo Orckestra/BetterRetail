@@ -150,5 +150,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="param"></param>
         /// <returns></returns>
         Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param);
+
+        Task<Orckestra.Overture.ServiceModel.Orders.Cart> CreateCartPaymentVaultProfile(CreateCartPaymentVaultProfileParam param);
     }
 }

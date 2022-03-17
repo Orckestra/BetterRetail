@@ -23,6 +23,6 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The Order</returns>
         Task<CompleteCheckoutViewModel> CompleteCheckoutAsync(CompleteCheckoutParam param);
 
-        Task<ProcessedCart> TokenizePaymentAsync(TokenizePaymentParam param);
+        Task<Orckestra.Overture.ServiceModel.Orders.Cart> TokenizePaymentAsync(TokenizePaymentParam param);
     }
 }
