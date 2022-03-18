@@ -139,6 +139,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Repositories\CustomerDefinitionsRepository.cs" />
     <Compile Include="Providers\CustomerConditionProvider.cs" />
     <Compile Include="Repositories\ICustomerDefinitionsRepository.cs" />

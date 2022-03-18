@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
@@ -17,14 +18,15 @@ namespace Orckestra.Composer.CustomerConditionProvider.Repositories
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
+
         public virtual async Task<EntityDefinition> GetCustomerDefinitionAsync()
         {
-            var definition = await OvertureClient.SendAsync(new GetCustomerDefinitionRequest()
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductSettings, nameof(CustomerDefinitionsRepository));
+
+            return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(new GetCustomerDefinitionRequest()
             {
                 Name = "CUSTOMER"
-            }).ConfigureAwait(false);
-
-            return definition;
+            })).ConfigureAwait(false);
         }
     }
 }

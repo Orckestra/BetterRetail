@@ -18,7 +18,7 @@ namespace Orckestra.Composer.CustomerConditionProvider.Providers
         protected ICustomerRepository CustomerRepository { get; }
         protected ICustomerDefinitionsRepository CustomerDefinitionsRepository { get; }
 
-        public CustomerConditionProvider(IComposerContext composerContext,ICustomerRepository customerRepository, ICustomerDefinitionsRepository customerDefinitionsRepository)
+        public CustomerConditionProvider(IComposerContext composerContext, ICustomerRepository customerRepository, ICustomerDefinitionsRepository customerDefinitionsRepository)
         {
             ComposerContext = composerContext;
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
@@ -58,7 +58,7 @@ namespace Orckestra.Composer.CustomerConditionProvider.Providers
                 Activity = customer,
                 State = new
                 {
-                    IsLoggedIn = ComposerContext.IsAuthenticated 
+                    IsLoggedIn = ComposerContext.IsAuthenticated
                 },
                 Custom = customer?.PropertyBag
             };
@@ -119,8 +119,6 @@ namespace Orckestra.Composer.CustomerConditionProvider.Providers
                 SubFields = GetSubFields(definition, a => !a.IsBuiltIn)
             }
             );
-
-
 
             return result;
         }
