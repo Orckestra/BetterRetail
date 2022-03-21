@@ -98,9 +98,11 @@
     }
 
     var currentTab = contentSearchVm.ActiveTab;
+
+    string vueId = "vueSearchResults" + Guid.NewGuid().ToString("N");
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
     <script type="text/javascript" defer="defer">
         function submitContentSearchForm(sortBy, sortDirection) {
@@ -173,11 +175,16 @@
                                 </html>
                             </f:param>
                             <f:param name="RightPart">
-                                <html>
+                                <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
                                 <head>
                                 </head>
                                 <body>
-                                    <div class="search-results">
+                                    <div class="search-results"
+                                         data-oc-controller="ContentSearch.SearchResults"
+                                         data-context="@JsonConvert.SerializeObject(contentSearchVm, new Newtonsoft.Json.Converters.StringEnumConverter())"
+                                         data-vueid="@vueId"
+                                         id="@vueId"
+                                         v-cloak="true">
                                         <div class="row filters-row">
                                             @if (currentTab.Total > 0)
                                             {
@@ -188,19 +195,21 @@
                                                     @ShowSortBy()
                                                 </div>
                                                 <div class="col-6 d-none d-lg-block">
-                                                    @ShowPaging(currentTab)
+                                                    @SearchHelpers.PaginationDropdownByCount()
                                                 </div>
                                             }
                                         </div>
                                         <div class="row">
-                                            @foreach (var entry in currentTab.SearchResults.Entries)
-                                            {
-                                                <div class="col-12 col-sm-4 col-lg-4  mb-4">
-                                                    @ShowContentSearchEntry(entry)
-                                                </div>
-                                            }
+                                            <div v-for="(contentItem, index) in SearchResults" class="col-12 col-sm-4 col-lg-4  mb-4" v-bind:key="contentItem.ProductId">
+                                                @ShowContentSearchEntry()
+                                            </div>
                                         </div>
-                                        @ShowPaging(currentTab)
+
+                                        <div class="row">
+                                            <div class="col-12 d-block pt-2" v-if="TotalCount > 0">
+                                                @SearchHelpers.PaginationByCount()
+                                            </div>
+                                        </div>
                                     </div>
                                 </body>
                                 </html>
@@ -208,7 +217,7 @@
                         </f:function>
                     </form>
                 }
-             }
+            }
         </div>
     </div>
 </body>
@@ -357,14 +366,16 @@
     @Function("Composer.ContentSearch.SearchEntryItem", new { SearchResultEntry = vm })
 }
 
-@helper ShowPaging(ContentSearchTabViewModel tab)
+@helper ShowContentSearchEntry(string searchEntry = "contentItem")
 {
-    if (tab.Total > 1)
-    {
-        <div class="float-right">
-            @SearchHelpers.Pagination(SearchRequestContext.CurrentPage, tab.PagesCount, 10, Request.Url.AbsoluteUri, SearchRequestParams.Page)
+    <div class="card h-100">
+        <img v-if="@(searchEntry).ImageUrl" class="card-img-top" v-bind:src="@(searchEntry).ImageUrl + '?h=200'" v-bind:alt="@(searchEntry).Title" />
+
+        <div class="card-body">
+            <a class="card-title" v-bind:href="@(searchEntry).DetailsUrl">{{@(searchEntry).Title}}</a>
+            <p v-if="@(searchEntry).Description" class="card-text">{{@(searchEntry).Description}}</p>
         </div>
-    }
+    </div>
 }
 
 @helper ShowFacetsCollapseBtn()

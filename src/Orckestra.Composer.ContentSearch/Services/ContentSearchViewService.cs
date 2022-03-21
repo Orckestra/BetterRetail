@@ -44,7 +44,8 @@ namespace Orckestra.Composer.ContentSearch.Services
                     SearchResults = result,
                     PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / param.PageSize),
                     Total = result.ResultsFound,
-                    IsActive = isActive
+                    IsActive = isActive,
+                    SearchResultEntries = isActive ? result.Entries.Select(x => GetSearchResultsEntryViewModel(x)).ToList() : new List<SearchResultsEntryViewModel>()
                 });
             }
 

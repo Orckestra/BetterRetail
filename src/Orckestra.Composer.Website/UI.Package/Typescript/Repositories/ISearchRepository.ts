@@ -33,5 +33,11 @@ module Orckestra.Composer {
          * @param QueryType
          */
         getQuerySearchResults(QueryString, QueryName, QueryType): Q.Promise<any>;
+
+        /**
+         * Get content search results
+         * @param QueryString
+         */
+        getContentSearchResults(QueryString): Q.Promise<any>;
     }
 }
