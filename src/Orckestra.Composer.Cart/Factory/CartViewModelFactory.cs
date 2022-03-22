@@ -594,9 +594,13 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (paymentMethod == null || paymentMethodDisplayNames == null) { return null; }
 
-            paymentMethodDisplayNames.TryGetValue(paymentMethod.Type.ToString(), out string paymentMethodDisplayName);
+            var paymentMethodDisplayName = paymentMethod.DisplayName.GetLocalizedValue(cultureInfo.Name);
+            if (string.IsNullOrWhiteSpace(paymentMethodDisplayName) && paymentMethodDisplayNames.ContainsKey(paymentMethod.Type.ToString()))
+            {
+                paymentMethodDisplayName = paymentMethodDisplayNames[paymentMethod.Type.ToString()];
+            }
 
-            if (paymentMethodDisplayName == null) { return null; }
+            if (string.IsNullOrWhiteSpace(paymentMethodDisplayName)) { return null; }
 
             IPaymentMethodViewModel paymentMethodViewModel;
             switch (paymentMethod.Type)
