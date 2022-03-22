@@ -29,12 +29,12 @@
 
     if (model == null) { return; }
 
-     var url = new Uri(baseurl, model.Url);
+    var url = new Uri(baseurl, model.Url);
 
     model.Context.Add("zoom", zoom);
     model.Context.Add("id", model.Id);
     model.Context.Add("SupportPickUp", model.SupportPickUp);
-     model.Context.Add("SupportDelivery", model.SupportDelivery);
+    model.Context.Add("SupportDelivery", model.SupportDelivery);
 
     var extendedModel = model.AsExtensionModel<IGroceryStoreViewModel>();
 }
@@ -57,20 +57,20 @@
                         </a>
                         <hr />
                         <div v-cloak="true">
-                            <button v-if="!IsCurrentStoreSelected" v-bind:disabled="!IsSupportSelectedFulfillmentMethod || SelectedFulfillment.StoreLoading" 
+                            <button v-if="!IsCurrentStoreSelected &amp;&amp; !IsDraftCart" v-bind:disabled="!IsSupportSelectedFulfillmentMethod || SelectedFulfillment.StoreLoading"
                                     v-on:click.prevent="selectStore()"
                                     class="btn btn-primary btn-block">
                                 @Html.Localize("Grocery", "B_SelectThisStore")
                                 @GeneralHelpers.ButtonLoadingSpinner("SelectedFulfillment.StoreLoading")
                             </button>
-                            <div v-else="else" >
+                            <div v-if="IsCurrentStoreSelected">
                                 <div class="bg-success border border-success text-center p-1">
                                     <span class="text-white">
                                         <i class="fa fa-check fa-lg"></i>
                                         @Html.Localize("CheckoutProcess", "L_Selected")
                                     </span>
                                 </div>
-                                <a class="btn btn-outline-secondary text-uppercase btn-block mt-2" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                                <a v-if="!IsDraftCart" class="btn btn-outline-secondary text-uppercase btn-block my-2" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
                                     @Html.Localize("Grocery", "B_ChangeStore")
                                 </a>
                             </div>
@@ -78,11 +78,9 @@
                                 @Html.Localize("Grocery", "T_StoreDoNotSupportSelectedFulfillmentMethod")
                             </div>
                             <div v-if="IsCurrentStoreSelected">
-                                <hr />
-                                @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
+                                 @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
                             </div>
                         </div>
-                        <hr />
                         @StoreHours(model.Schedule, Html.Localize("Store", "T_OpenHours"))
                         @StoreOpenHourExceptions(model)
                         @StoreHours(extendedModel.PickUpSchedule, Html.Localize("Grocery", "T_StorePickUpHours"), false)

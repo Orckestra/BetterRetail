@@ -294,4 +294,7 @@
   <data name="L_GiftItem" xml:space="preserve">
     <value>Votre cadeau gratuit</value>
   </data>
+  <data name="L_EditCartBannerMessage" xml:space="preserve">
+    <value>Vous modifiez actuellement la commande « {0} »</value>
+  </data>
 </root>

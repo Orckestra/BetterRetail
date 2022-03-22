@@ -13,31 +13,31 @@
     [FunctionParameter(Label = "Stepper Title", DefaultValue = "Shop better in these easy steps")]
     public string StepperTitle { get; set; }
 
-	[FunctionParameter(Label = "Location Selection Step Summary", DefaultValue = "Check service availability near you")]
+    [FunctionParameter(Label = "Location Selection Step Summary", DefaultValue = "Check service availability near you")]
     public string LocationStepSummary { get; set; }
 
     [FunctionParameter(Label = "Location Selection Step Short Summary", DefaultValue = "Check Availability")]
     public string LocationStepShortSummary { get; set; }
 
-	[FunctionParameter(Label = "Shipping Method Selection Step Summary", DefaultValue = "Select to pick up your order or get it delivered")]
+    [FunctionParameter(Label = "Shipping Method Selection Step Summary", DefaultValue = "Select to pick up your order or get it delivered")]
     public string ShippingMethodStepSummary { get; set; }
 
     [FunctionParameter(Label = "Shipping Method Selection Step Short Summary", DefaultValue = "Pickup or Delivery?")]
     public string ShippingMethodStepShortSummary { get; set; }
 
-	[FunctionParameter(Label = "Store Selection Step Summary", DefaultValue = "Select the default store to fulfill your order")]
+    [FunctionParameter(Label = "Store Selection Step Summary", DefaultValue = "Select the default store to fulfill your order")]
     public string StoresStepSummary { get; set; }
 
     [FunctionParameter(Label = "Store Selection Step Short Summary", DefaultValue = "Select Store")]
     public string StoresStepShortSummary { get; set; }
 
-	[FunctionParameter(Label = "Date And Time Selection Step Summary", DefaultValue = "Pick a date and time of fulfillment")]
+    [FunctionParameter(Label = "Date And Time Selection Step Summary", DefaultValue = "Pick a date and time of fulfillment")]
     public string TimeslotsStepSummary { get; set; }
 
-	[FunctionParameter(Label = "Date And Time Selection Step Short Summary", DefaultValue = "Select Timeslot")]
+    [FunctionParameter(Label = "Date And Time Selection Step Short Summary", DefaultValue = "Select Timeslot")]
     public string TimeslotsStepShortSummary { get; set; }
 
-	private const string urlSelectorWidgetMarkup = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.UrlComboBox'></f:widgetfunction>";
+    private const string urlSelectorWidgetMarkup = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.UrlComboBox'></f:widgetfunction>";
     [FunctionParameter(Label = "Start Shopping Button URL", WidgetMarkup = urlSelectorWidgetMarkup, DefaultValue = null)]
     public string StartShoppingButtonURL { get; set; }
 
@@ -90,7 +90,7 @@
                     <h3>@Html.Localize("Grocery", "T_FulfillmentMethod")</h3>
                     <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
-                    <div class="action">
+                    <div v-if="!IsDraftCart"  class="action">
                         <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                             <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToShipping")</span>
                             <span v-else="else">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToPickup")</span>
@@ -101,7 +101,7 @@
                     <h3>@Html.Localize("Grocery", "T_Store")</h3>
                     <strong>{{SelectedFulfillment.Store.LocalizedDisplayName}}</strong>
                     @StoreHelpers.StoreAddress("SelectedFulfillment.Store", false)
-                    <div class="action">
+                    <div v-if="!IsDraftCart"  class="action">
                         <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
                             @Html.Localize("Grocery", "B_ChangeStore")
                         </a>
@@ -110,7 +110,7 @@
                 <div v-if="SelectedFulfillment.TimeSlot" class="col-sm mb-4 mb-sm-0 selection-column">
                     <h3>@Html.Localize("Grocery", "T_TimeSlot")</h3>
                     @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment", false, false)
-                    <div class="action">
+                    <div v-if="!IsDraftCart" class="action">
                         <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
                             @Html.Localize("Grocery", "B_ChangeSlot")
                         </a>
@@ -258,10 +258,10 @@
 @helper StartShoppingButton()
 {
     if (!String.IsNullOrWhiteSpace(StartShoppingButtonURL))
-     {
+    {
         <a ref="startShoppingButton" class="btn btn-primary btn-block  text-uppercase"
-            href="@StartShoppingButtonURL">
+           href="@StartShoppingButtonURL">
             @StartShoppingButtonText
         </a>
-     }
+    }
 }

@@ -168,6 +168,8 @@
     <Compile Include="Parameters\BaseFulfillmentLocationTimeSlotReservationParam.cs" />
     <Compile Include="Parameters\CalculateScheduleAvailabilitySlotsParam.cs" />
     <Compile Include="Parameters\GetFulfillmentLocationTimeSlotByIdParam.cs" />
+    <Compile Include="Parameters\SetFulfillmentSelectionByStoreParam.cs" />
+    <Compile Include="Parameters\SetOrderFulfillmentParam.cs" />
     <Compile Include="Parameters\RecoverSelectionDataParam.cs" />
     <Compile Include="Parameters\ReserveTimeSlotParam.cs" />
     <Compile Include="Parameters\SetSelectedFulfillmentMethodTypeParam.cs" />

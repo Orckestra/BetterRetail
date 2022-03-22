@@ -7,9 +7,9 @@ module Orckestra.Composer {
 
         getSelectedFulfillment(): Q.Promise<any>;
 
-		getFreshSelectedFulfillment(): Q.Promise<any>;
+        getFreshSelectedFulfillment(): Q.Promise<any>;
 
-		disableForcingToSelectStore(): Q.Promise<any>;
+        disableForcingToSelectStore(): Q.Promise<any>;
 
         disableForcingToSelectTimeSlot(): Q.Promise<any>;
 
@@ -20,5 +20,9 @@ module Orckestra.Composer {
         setTimeSlotId(StoreId: any, shipmentId: any, slotId: any, date: any): Q.Promise<any>;
 
         invalidateCache(): Q.Promise<void>;
+
+        setOrderFulfillment(OrderNumber: string): Q.Promise<any>;
+
+        restoreFulfillment(fromBackup: boolean): Q.Promise<any>;
     }
 }

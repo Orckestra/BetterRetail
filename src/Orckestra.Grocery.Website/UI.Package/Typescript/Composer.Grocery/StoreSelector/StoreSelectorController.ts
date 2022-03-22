@@ -25,9 +25,10 @@ module Orckestra.Composer {
 
             let getFulfillmentPromise = this.selectedFulfillmentService.getSelectedFulfillment();
             let getShippingMethodTypesPromise = this.shippingMethodService.getShippingMethodTypes();
-            Q.all([getFulfillmentPromise, getShippingMethodTypesPromise])
-                .spread((fulfillment, shippingMethodTypes) => {
-                    this.initializeVueComponent(fulfillment, shippingMethodTypes);
+            let getCartPromise = this.cartService.getCart();
+            Q.all([getFulfillmentPromise, getShippingMethodTypesPromise, getCartPromise])
+                .spread((fulfillment, shippingMethodTypes, cart) => {
+                    this.initializeVueComponent(fulfillment, shippingMethodTypes, cart);
                 })
                 .fail((reason: any) => {
                     console.error('Error while initializing StoreSelectorController.', reason);
@@ -42,7 +43,7 @@ module Orckestra.Composer {
             }
         }
 
-        private initializeVueComponent(fulfillment, shippingMethodTypesVm: any) {
+        private initializeVueComponent(fulfillment, shippingMethodTypesVm: any, cart: any) {
             let self: StoreSelectorController = this;
             let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
             this.StoreSelector = new Vue({
@@ -54,6 +55,7 @@ module Orckestra.Composer {
                 data: {
                     ...commonFulfillmentOptions.data,
                     AllStores: undefined,
+                    Cart: cart,
                     Stores: [],
                     SelectedStoreId: undefined,
                     PostalCode: undefined,
@@ -84,6 +86,7 @@ module Orckestra.Composer {
                     self.eventHub.subscribe(FulfillmentEvents.TimeSlotSelectionFailed, e => this.onSlotFailed(e.data));
                 },
                 computed: {
+                    IsDraftCart() { return this.Cart && this.Cart.CartType === 'OrderDraft'; },
                     IsLocationFilled() {
                         return !!this.Location;
                     },

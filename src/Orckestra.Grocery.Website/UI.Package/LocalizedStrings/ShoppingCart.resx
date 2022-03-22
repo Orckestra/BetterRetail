@@ -300,4 +300,7 @@
   <data name="B_SecureCheckout" xml:space="preserve">
     <value>Secure Checkout</value>
   </data>
+  <data name="L_EditCartBannerMessage" xml:space="preserve">
+    <value>You are currently editing Order “{0}”</value>
+  </data>
 </root>

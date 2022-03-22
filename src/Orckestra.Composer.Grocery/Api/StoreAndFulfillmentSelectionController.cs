@@ -3,7 +3,6 @@ using Orckestra.Composer.Grocery.Parameters;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.Requests;
 using Orckestra.Composer.Grocery.Services;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
@@ -194,6 +193,56 @@ namespace Orckestra.Composer.Grocery.Api
         public virtual void DisableForcingToSelectStore()
         {
             StoreAndFulfillmentSelectionProvider.EnableBrowsingWithoutStoreSelection();
+        }
+
+        [ActionName("setOrderFulfillment")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> SetOrderFulfillment([FromBody]string orderNumber)
+        {
+            if (string.IsNullOrEmpty(orderNumber)) throw new ArgumentNullException(nameof(orderNumber));
+
+            var viewService = await StoreAndFulfillmentSelectionViewService.SetOrderFulfillmentAsync(new SetOrderFulfillmentParam
+            {
+                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                OrderNumber = orderNumber
+            }).ConfigureAwait(false);
+
+            return Ok(viewService);
+        }
+
+        [ActionName("setStoreFulfillment")]
+        [HttpPost]
+        public virtual async Task<IHttpActionResult> SetStoreFulfillment([FromBody] string storeNumber)
+        {
+            if (string.IsNullOrEmpty(storeNumber)) throw new ArgumentNullException(nameof(storeNumber));
+
+            await StoreAndFulfillmentSelectionProvider.SetFullfilmentSelectionByStore(new SetFulfillmentSelectionByStoreParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                StoreNumber = storeNumber,
+                IsAuthenticated = ComposerContext.IsAuthenticated
+            }).ConfigureAwait(false);
+
+            return Ok(true);
+        }
+
+        [ActionName("recoverFulfillment")]
+        [HttpGet]
+        public virtual async Task<IHttpActionResult> RecoverFulfillment()
+        {
+            await StoreAndFulfillmentSelectionProvider.RecoverSelection(new RecoverSelectionDataParam()
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                CartName= CartConfiguration.ShoppingCartName,
+                IsAuthenticated = ComposerContext.IsAuthenticated
+            }).ConfigureAwait(false);
+
+            return Ok(true);
         }
     }
 }

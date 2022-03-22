@@ -72,6 +72,8 @@
 ///<reference path='./Composer.Grocery/StoreSelector/ChangeStoreModalController.ts' />
 ///<reference path='./Composer.Grocery/TimeSlotBannerController.ts' />
 
+///<reference path='./Composer.Cart/EditOrder/EditOrderBannerController.ts' />
+
 (() => {
     'use strict';
 
@@ -105,6 +107,8 @@
                 { name: 'Cart.Coupons', controller: Orckestra.Composer.CouponController },
                 { name: 'Cart.AddToCartNotification', controller: Orckestra.Composer.AddToCartNotificationController },
                 { name: 'Cart.ChangeRecurringFrequency', controller: Orckestra.Composer.CartChangeRecurringFrequencyController },
+                { name: 'Cart.EditOrderBanner', controller: Orckestra.Composer.EditOrderBannerController },
+                { name: 'Cart.OrderDetails', controller: Orckestra.Composer.OrderDetailsController },
 
                 { name: 'Product.SortBySearch', controller: Orckestra.Composer.SortBySearchController },
                 { name: 'Product.FacetSearch', controller: Orckestra.Composer.FacetSearchController },

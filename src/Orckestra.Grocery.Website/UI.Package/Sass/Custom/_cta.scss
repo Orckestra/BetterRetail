@@ -5,4 +5,9 @@
     &:focus {
         text-decoration: none;
     }
+    &.disabled {
+        text-decoration: none;
+        pointer-events: none;
+        color: $gray-500;
+    }
 }

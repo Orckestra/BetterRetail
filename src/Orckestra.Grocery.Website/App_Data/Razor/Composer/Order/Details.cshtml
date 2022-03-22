@@ -24,11 +24,11 @@
         return;
     }
 }
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
-    <div class="order-details">
+    <div id="vueOrderDetails" class="order-details">
         @OrderDetails(Order)
 
         @OrderShipments(Order)
@@ -57,7 +57,52 @@
         <div class="card-body">
             <div class="card">
                 <div class="card-header">
-                    <strong>@Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)</strong>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="m-0">
+                                @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
+                            </h4>
+                        </div>
+                        @if (order.OrderInfos.IsOrderEditable)
+                        {
+                            <div class="col-sm-6 text-sm-right">
+                                <ul class="nav-pills full float-right m-0">
+                                    <li>
+                                        <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
+                                            @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
+                                            {
+                                                @Html.Localize("MyAccount", "B_ContinueEditing")
+                                            }
+                                            else
+                                            {
+                                                @Html.Localize("MyAccount", "B_EditOrder")
+                                            }
+                                        </a>
+
+                                    </li>
+                                    @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
+                                    {
+                                        <li>
+                                            <a href="#" class="cta" v-bind:class="{'disabled': Loading}" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
+                                                @Html.Localize("MyAccount", "B_CancelEditing")
+                                            </a>
+                                        </li>
+
+                                    }
+                                    @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited && !order.OrderInfos.HasOwnDraft)
+                                    {
+                                        <li>
+                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
+                                                @Html.Localize("MyAccount", "B_CancelOrder")
+                                            </a>
+                                        </li>
+
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -70,17 +115,29 @@
                                 var statusCss = status == "InProgress" ? "text-warning" :
                                     status == "Canceled" ? "text-danger" : "text-success";
                             }
-                            <p class="@statusCss  m-0"><strong>@order.OrderInfos.OrderStatus</strong></p>
-                            <div class="row mt-3">
-                                @foreach (var item in Shipment.LineItems)
+                            <p class="@statusCss  m-0">
+                                @if (order.OrderInfos.IsOrderPendingCancellation)
                                 {
-                                    <div class="col-2">
-                                        <img src="@item.ImageUrl"
-                                             class="img-fluid"
-                                             alt="thumbnail"
-                                             onerror="this.onerror=null; this.src='@item.FallbackImageUrl'" />
-                                        <div class="text-center small">@("x" + item.Quantity)</div>
-                                    </div>
+                                    <strong>@Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a> )</strong>
+                                }
+                                else
+                                {
+                                    <strong> @order.OrderInfos.OrderStatus</strong>
+                                }
+                            </p>
+                            <div class="row mt-3">
+                                @if (Shipment != null)
+                                {
+                                    foreach (var item in Shipment.LineItems)
+                                    {
+                                        <div class="col-2">
+                                            <img src="@item.ImageUrl"
+                                                 class="img-fluid"
+                                                 alt="thumbnail"
+                                                 onerror="this.onerror=null; this.src='@item.FallbackImageUrl'" />
+                                            <div class="text-center small">@("x" + item.Quantity)</div>
+                                        </div>
+                                    }
                                 }
                             </div>
                         </div>
@@ -93,6 +150,7 @@
             </div>
         </div>
     </div>
+    @OrdersHelper.CancelOrderConfirmationModal()
 }
 
 @helper OrderShipments(OrderDetailViewModel order)
@@ -105,7 +163,7 @@
             <div class="col-12 col-sm-6">
                 <div class="card bg-lighter h-100">
                     <h3 class="card-header">
-                        @Html.Localize("Grocery", type == FulfillmentMethodType.PickUp ? "T_FulfillmentMethodTitle_PickUp": "T_FulfillmentMethodTitle_Shipping")
+                        @Html.Localize("Grocery", type == FulfillmentMethodType.PickUp ? "T_FulfillmentMethodTitle_PickUp" : "T_FulfillmentMethodTitle_Shipping")
                     </h3>
                     <div class="card-body">
                         @ShippingStatus(shipping)
@@ -117,7 +175,7 @@
                 <div class="card bg-lighter h-100">
                     <h3 class="card-header">
                         @Html.Localize("Grocery", "T_TimeSlot")
-                       
+
                     </h3>
                     <div class="card-body">
                         @if (extendedShipping.TimeSlotReservation != null && extendedShipping.TimeSlot != null)
@@ -282,13 +340,13 @@
                                 @if (item.IsOnSale)
                                 {
                                     <p>
-                                <del>@item.DefaultPrice</del><br />
-                                <strong class="text-danger">@item.CurrentPrice</strong>
+                                        <del>@item.DefaultPrice</del><br />
+                                        <strong class="text-danger">@item.CurrentPrice</strong>
                                     </p>
                                 }
                                 else
                                 {
-                            <p>@item.DefaultPrice</p>
+                                    <p>@item.DefaultPrice</p>
                                 }
                             </div>
                             <div class="col-sm-3  text-left text-sm-center">
@@ -362,7 +420,7 @@
                             </div>
                         }
                     </div>
-                 
+
                 </div>
             }
         </div>
@@ -498,24 +556,24 @@
 
 @helper AddressPreview(AddressViewModel address)
 {
-<div>
-    @if (!string.IsNullOrEmpty(address.FirstName))
-    {
-        <strong data-qa="order-address-fullname">
-            @address.FirstName @address.LastName
-        </strong><br />
-    }
+    <div>
+        @if (!string.IsNullOrEmpty(address.FirstName))
+        {
+            <strong data-qa="order-address-fullname">
+                @address.FirstName @address.LastName
+            </strong><br />
+        }
 
-    @if (!string.IsNullOrEmpty(address.Line2))
-    {
-        <span data-qa="order-address-line2">@address.Line2</span><br />
-    }
-    <span data-qa="order-address-line1">@address.Line1</span><br />
-    <span data-qa="order-address-city">@address.City</span>,
-    <span data-qa="order-address-region">@address.RegionName</span>,
-    <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
-    <span data-qa="order-address-phone">@address.PhoneNumber</span>
-</div>
+        @if (!string.IsNullOrEmpty(address.Line2))
+        {
+            <span data-qa="order-address-line2">@address.Line2</span><br />
+        }
+        <span data-qa="order-address-line1">@address.Line1</span><br />
+        <span data-qa="order-address-city">@address.City</span>,
+        <span data-qa="order-address-region">@address.RegionName</span>,
+        <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
+        <span data-qa="order-address-phone">@address.PhoneNumber</span>
+    </div>
 }
 
 @helper FeeSummary(AdditionalFeeSummaryViewModel fee)
