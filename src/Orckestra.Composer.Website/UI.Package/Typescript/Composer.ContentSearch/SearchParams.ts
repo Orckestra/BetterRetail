@@ -2,6 +2,8 @@
 
 module Orckestra.Composer {
     const PAGE_PARAM = 'page';
+    const SORT_BY_PARAM = 'sortBy';
+    const SORT_DIRECTION_PARAM = 'sortDirection';
 
     export abstract class SearchParams {
         public static getSearchParams(): URLSearchParams {
@@ -37,6 +39,13 @@ module Orckestra.Composer {
             if( page > 1)
                 page -= 1;
             params.set(PAGE_PARAM, page.toString());
+            return this.getSearchQuery(params)
+        }
+
+        public static changeSorting(sortBy, sortDirection): string {
+            const params = this.getSearchParams();
+            params.set(SORT_BY_PARAM, sortBy);
+            params.set(SORT_DIRECTION_PARAM, sortDirection);
             return this.getSearchQuery(params)
         }
 

@@ -57,6 +57,10 @@ namespace Orckestra.Composer.ContentSearch.Services
                     }
                 }
 
+                var sortBys = DataFacade.GetData<ISortOption>().OrderBy(t => t.Order).ToList();
+                vm.AvailableSortBys = sortBys;
+                vm.SelectedSortBy = sortBys.Find(o => o.FieldName == param.SortBy && (o.IsReverted && param.SortDirection == "desc" || !o.IsReverted && param.SortDirection == "asc")) ?? sortBys.First();
+
                 vm.SuggestedTabs = GetSuggestedTabs(param, contentTabs);
 
                 return vm;

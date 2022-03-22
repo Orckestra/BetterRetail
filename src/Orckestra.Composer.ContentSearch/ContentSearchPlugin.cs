@@ -19,8 +19,6 @@ namespace Orckestra.Composer.ContentSearch
 
             host.RegisterApiControllers(typeof(ContentSearchPlugin).Assembly);
 
-            
-
             host.Initialized += HostOnInitialized;
         }
 

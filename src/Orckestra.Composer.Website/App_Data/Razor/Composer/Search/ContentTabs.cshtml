@@ -192,7 +192,7 @@
                                                     @ShowFacetsCollapseBtn()
                                                 </div>
                                                 <div class="col-6">
-                                                    @ShowSortBy()
+                                                    @SearchHelpers.ContentSortBy()
                                                 </div>
                                                 <div class="col-6 d-none d-lg-block">
                                                     @SearchHelpers.PaginationDropdownByCount()
@@ -332,32 +332,6 @@
         @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
     </f:param>
 </f:function>
-}
-
-@helper ShowSortBy()
-{
-    var sortOptions = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.ISortOption>().OrderBy(t => t.Order).ToList();
-    var selectedSortOption = sortOptions.Find(o => o.FieldName == SearchRequestContext.SortBy && (o.IsReverted && SearchRequestContext.SortDirection == "desc" || !o.IsReverted && SearchRequestContext.SortDirection == "asc"));
-    var selectedTitle = selectedSortOption != null ? selectedSortOption.Title : Html.Localize("List-Search", "F_Relevance_Option");
-    <div class="dropdown sort-by">
-        <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")</span>
-        <button type="button" class="btn btn-outline-secondary  dropdown-toggle" data-toggle="dropdown">
-            @selectedTitle
-        </button>
-        <input type="hidden" id="sortDirection" name="sortDirection" value="@SearchRequestContext.SortDirection" />
-        <input type="hidden" id="sortBy" name="sortBy" value="@SearchRequestContext.SortBy" />
-        <div class="dropdown-menu">
-            @foreach (var sortOption in sortOptions)
-            {
-                var sortDirectionOption = sortOption.IsReverted ? "desc" : "asc";
-
-                <a class="dropdown-item" onClick="submitContentSearchForm('@sortOption.FieldName','@sortDirectionOption')">
-                    @sortOption.Title
-                </a>
-
-            }
-        </div>
-    </div>
 }
 
 @helper ShowContentSearchEntry(string searchEntry = "contentItem")

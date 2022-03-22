@@ -17,6 +17,7 @@ module Orckestra.Composer {
             super.initialize();
             console.log(this.context.viewModel);
             const { SearchResults, PagesCount, Total } = this.context.viewModel.ActiveTab;
+            const { SelectedSortBy, AvailableSortBys } = this.context.viewModel;
 
             const self = this;
             this.vueSearchResults = new Vue({
@@ -26,6 +27,8 @@ module Orckestra.Composer {
                 data: {
                     SearchResults,
                     TotalCount: Total,
+                    SelectedSortBy,
+                    AvailableSortBys,
                     Pagination: {
                         PagesCount: 1,
                         CurrentPage: 1,
@@ -50,19 +53,20 @@ module Orckestra.Composer {
                             NextPage:  currentPage < count
                         });
                     },
-                    previousPage(): any {
+                    previousPage(): void {
                         const queryString = SearchParams.previousPage();
-
                         this.loadSearchResults({queryString});
                     },
-                    nextPage(): any {
+                    nextPage(): void {
                         const queryString = SearchParams.nextPage();
-
                         this.loadSearchResults({queryString});
                     },
-                    toPage(page: any): any {
+                    toPage(page: any): void {
                         const queryString = SearchParams.toPage(page);
-
+                        this.loadSearchResults({queryString});
+                    },
+                    sortingChanged(sortBy, sortOrder): void {
+                        const queryString = SearchParams.changeSorting(sortBy, sortOrder);
                         this.loadSearchResults({queryString});
                     },
                     loadSearchResults({queryString}): void {

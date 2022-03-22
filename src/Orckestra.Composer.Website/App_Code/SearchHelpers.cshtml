@@ -194,3 +194,21 @@
         </li>
     </ul>
 }
+
+@helper ContentSortBy()
+{
+    <div class="dropdown sort-by" v-if="SelectedSortBy">
+        <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")&#160;</span>
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-qa="search-sort-by-toggle"
+                data-toggle="dropdown" aria-expanded="true">
+            {{SelectedSortBy.Title}}
+        </button>
+        <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
+            <a v-for="sortBy in AvailableSortBys"
+               class="dropdown-item"
+               v-on:click="sortingChanged(sortBy.FieldName, sortBy.IsReverted ? 'desc' : 'asc')">
+                {{sortBy.Title}}
+            </a>
+        </div>
+    </div>
+}
