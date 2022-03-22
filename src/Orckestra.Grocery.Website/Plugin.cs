@@ -7,6 +7,7 @@ using Orckestra.Composer.ExceptionFilters;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Services;
 using Orckestra.Composer.MyAccount.Repositories;
+using Orckestra.Composer.Recipes;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Services;
@@ -29,6 +30,7 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<CookieBasedFulfillmentContext, IFulfillmentContext>();
             host.Register<SalesScopeFulfillmentMethodRepository, IFulfillmentMethodRepository>();
             host.Register<SalesScopePaymentRepository, IPaymentRepository>();
+            host.Register<RecipeUrlProvider, IRecipeUrlProvider>();
             host.RegisterControllers(GetType().Assembly);
             host.RegisterApiControllers(GetType().Assembly);
             host.RegisterExceptionFiltersForApiControllers(typeof(AggregatedComposerExceptionFilter), typeof(ComposerExceptionFilter));

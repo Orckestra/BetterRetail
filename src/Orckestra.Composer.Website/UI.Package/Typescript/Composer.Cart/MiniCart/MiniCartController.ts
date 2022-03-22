@@ -37,11 +37,17 @@ module Orckestra.Composer {
 
             var loggedInScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedIn]);
             var loggedOutScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedOut]);
-
+    
             this.eventHub.subscribe('cartUpdated', (e: IEventInformation) => this.onCartUpdated(e));
+            this.eventHub.subscribe(MyAccountEvents.EditOrderStarted, (e: IEventInformation) => this.onEditOrderStarted(e));
 
             loggedOutScheduler.subscribe((e: IEventInformation) => this.onRefreshUser(e));
             loggedInScheduler.subscribe((e: IEventInformation) => this.onRefreshUser(e));
+        }
+
+        protected onEditOrderStarted(e: IEventInformation): void {
+            this.cartService.invalidateCache()
+                .then(() => window.location = e.data.redirectUrl);
         }
 
         protected onCartUpdated(e: IEventInformation): void {

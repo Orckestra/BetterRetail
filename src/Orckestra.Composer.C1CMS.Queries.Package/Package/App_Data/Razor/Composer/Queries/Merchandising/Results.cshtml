@@ -20,7 +20,6 @@
     {
         return;
     }
-    var FallbackImageUrl = queryViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
 }
 
 
@@ -28,24 +27,7 @@
 <head>
 </head>
 <body>
-    <div class="row filters-row mb-4">
-        <div class="col-6 d-lg-none">
-            @FacetHelpers.FacetsModalCollapseBtn()
-        </div>
-        <div class="col-6">
-            @Partial("SearchSortBy", queryViewModel.ProductSearchResults)
-        </div>
-        <div class="col-6 d-none d-lg-block">
-            @Partial("PaginationDropDown", queryViewModel.ProductSearchResults)
-        </div>
-    </div>
-
-    @Function("Composer.Search.Products.ProductResultsVue", new { JsonContext = queryViewModel.JsonContext, FallbackImageUrl = FallbackImageUrl })
-
-    <div>
-        @Partial("Pager", queryViewModel.ProductSearchResults)
-    </div>
-
+    @Function("Composer.Search.Products.ProductResultsVue", new { Results = queryViewModel });
 </body>
 </html>
 

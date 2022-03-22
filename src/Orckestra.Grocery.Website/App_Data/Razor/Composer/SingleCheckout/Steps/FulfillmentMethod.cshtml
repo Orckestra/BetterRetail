@@ -27,7 +27,7 @@
                 @CheckoutHelpers.StepEditButton("shipping")
             </div>
             <transition-collapse>
-                <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
+                <div class="card-body  bg-lighter" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
 
                     @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
                     <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state" key="preview">
+                <div class="card-body bg-lighter" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state" key="preview">
                     <div v-if="Cart.ShippingMethod">
                         <div class="row">
                             <div class="col-12 col-sm-6">
@@ -83,7 +83,7 @@
                     </div>
                 </div>
 
-                <div v-show="step.displayContinueButton" class="card-body bg-light" key="disabledPreview"  v-cloak="true">
+                <div v-show="step.displayContinueButton" class="card-body bg-lighter" key="disabledPreview"  v-cloak="true">
                     <div class="row disabled" v-if="Cart.ShippingMethod">
                         <div class="col-12 col-sm-6">
                             <strong v-if="IsShippingMethodType">

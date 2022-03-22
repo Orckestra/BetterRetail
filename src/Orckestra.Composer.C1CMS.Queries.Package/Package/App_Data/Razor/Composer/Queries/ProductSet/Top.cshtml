@@ -2,6 +2,7 @@
 @using Orckestra.Composer.SearchQuery.Context
 @using Orckestra.Overture.ServiceModel.SearchQueries
 @using Orckestra.Composer.SearchQuery.ViewModels
+@using Newtonsoft.Json;
 
 @functions {
     public override string FunctionDescription
@@ -36,7 +37,7 @@
 
 @{
     var queryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync(SearchQueryType.ProductSet, QueryName, Number).Result;
-    if (queryViewModel.ProductSearchResults.TotalCount <= 0)
+    if (queryViewModel == null)
     {
         return;
     }
@@ -48,16 +49,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
-    @GeneralHelpers.RenderFallbackImageScript(FallbackImageUrl)
 </head>
 <body>
     @if (IsCarouselView)
     {
         @Html.LazyFunction("Composer.Queries.Instant.TopCarousel", new
         {
-            JsonContext = queryViewModel.JsonContext,
+            JsonContext = JsonConvert.SerializeObject(queryViewModel, new Newtonsoft.Json.Converters.StringEnumConverter()),
             VueId = getVueId(),
-            SlidesToShow = NumberPerRow
+            SlidesToShow = NumberPerRow,
+            FallbackImageUrl
         })
     }
     else
@@ -65,9 +66,9 @@
         @Function("Composer.Search.Products.ProductResultsVue", new
         {
            VueId = getVueId(),
-           JsonContext = queryViewModel.JsonContext,
-           FallbackImageUrl = FallbackImageUrl,
-           ColumnsStyle = "col-6  col-sm-" + 12 / NumberPerRow
+           ColumnsStyle = "col-6  col-sm-" + 12 / NumberPerRow,
+           Results = queryViewModel,
+           ShowPagination = false,
         })
     }
     @if (Page != null)

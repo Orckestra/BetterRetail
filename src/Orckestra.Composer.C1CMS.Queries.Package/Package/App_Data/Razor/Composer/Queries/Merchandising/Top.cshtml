@@ -2,6 +2,7 @@
 @using Orckestra.Composer.SearchQuery.Context
 @using Orckestra.Overture.ServiceModel.SearchQueries
 @using Orckestra.Composer.SearchQuery.ViewModels
+@using Newtonsoft.Json;
 
 @functions {
     public override string FunctionDescription
@@ -29,26 +30,25 @@
     public Guid? Page { get; set; }
 
 
-	private string getVueId()
+    private string getVueId()
     {
         return $"vue{Guid.NewGuid().GetHashCode()}";
     }
 }
 
 @{
-    var queryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync(SearchQueryType.Merchandising, QueryName, Number).Result;
-    if (queryViewModel.ProductSearchResults.TotalCount <= 0)
+    var searchQueryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync(SearchQueryType.Merchandising, QueryName, Number).Result;
+    if (searchQueryViewModel == null)
     {
         return;
     }
-    var FallbackImageUrl = queryViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
+    var FallbackImageUrl = searchQueryViewModel.ProductSearchResults.SearchResults.FirstOrDefault()?.FallbackImageUrl;
     int[] validNumbersPerGridRaw = new int[] { 1, 2, 3, 4, 6 };
     NumberPerRow = IsCarouselView ? NumberPerRow : (Array.IndexOf(validNumbersPerGridRaw, NumberPerRow) > 0 ? NumberPerRow : 4);
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
-  @GeneralHelpers.RenderFallbackImageScript(FallbackImageUrl)
 </head>
 <body>
     <div class="mt-2 mb-3">
@@ -56,20 +56,21 @@
         {
             @Html.LazyFunction("Composer.Queries.Instant.TopCarousel", new
             {
-                JsonContext = queryViewModel.JsonContext,
+                JsonContext = JsonConvert.SerializeObject(searchQueryViewModel, new Newtonsoft.Json.Converters.StringEnumConverter()),
                 VueId = getVueId(),
-                SlidesToShow = NumberPerRow
+                SlidesToShow = NumberPerRow,
+                FallbackImageUrl
             })
         }
         else
         {
             @Function("Composer.Search.Products.ProductResultsVue", new
-            {
-                VueId = getVueId(),
-                JsonContext = queryViewModel.JsonContext,
-                FallbackImageUrl = FallbackImageUrl,
-                ColumnsStyle = "col-6  col-sm-" + 12 / NumberPerRow
-            })
+           {
+               Results = searchQueryViewModel,
+               ShowPagination = false,
+               VueId = getVueId(),
+               ColumnsStyle = "col-6  col-sm-" + 12 / NumberPerRow
+           })
         }
         @if (Page != null)
         {
@@ -80,4 +81,3 @@
     </div>
 </body>
 </html>
-

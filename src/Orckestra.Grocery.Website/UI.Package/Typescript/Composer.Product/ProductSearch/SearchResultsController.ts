@@ -1,4 +1,5 @@
 /// <reference path='../../../Typings/tsd.d.ts' />
+/// <reference path='../../../Typings/vue/index.d.ts' />
 /// <reference path='../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 /// <reference path='../../Mvc/Controller.ts' />
 /// <reference path='../../ErrorHandling/ErrorHandler.ts' />
@@ -12,6 +13,12 @@
 ///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
 ///<reference path='../../Utils/PriceHelper.ts' />
+///<reference path='../../Repositories/ISearchRepository.ts' />
+///<reference path='../../Repositories/SearchRepository.ts' />
+/// <reference path='./UrlHelper.ts' />
+/// <reference path='../ProductEvents.ts' />
+/// <reference path='./Constants/SearchEvents.ts' />
+///<reference path='../../Composer.Grocery/FulfillmentEvents.ts' />
 
 
 module Orckestra.Composer {
@@ -22,6 +29,7 @@ module Orckestra.Composer {
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
         protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
+        protected searchRepository: ISearchRepository = new SearchRepository();
         protected currentPage: any;
         protected VueSearchResults: Vue;
 
@@ -29,31 +37,15 @@ module Orckestra.Composer {
 
             super.initialize();
             let authenticatedPromise = this.membershipService.isAuthenticated();
+
+            const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
+            this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
+
             Q.all([authenticatedPromise]).spread((authVm) => this.initializeVueComponent(authVm));
-
-            this.currentPage = this.getCurrentPage();
-
-            let pageDisplayName;
-            if (!this.currentPage || _.isUndefined(this.currentPage) || this.currentPage === null) {
-                pageDisplayName = '';
-            } else {
-                pageDisplayName = this.currentPage.DisplayName;
-            }
-
-            this.eventHub.publish('searchResultRendered', {
-                data: {
-                    ProductSearchResults: this.context.viewModel.SearchResults,
-                    Keywords: this.context.viewModel.Keywords,
-                    TotalCount: this.context.viewModel.TotalCount,
-                    ListName: this.context.viewModel.ListName,
-                    PageNumber: pageDisplayName,
-                    MaxItemsPerPage: this.context.viewModel.MaxItemsPerPage
-                }
-            });
         }
 
         private initializeVueComponent(authVm) {
-            const { SearchResults } = this.context.viewModel;
+            const { ProductSearchResults, ListName, MaxItemsPerPage, JsonContext } = this.context.viewModel;
             const vueId = this.context.container.data("vueid");
             let self = this;
 
@@ -70,9 +62,14 @@ module Orckestra.Composer {
                     self.wishListService.getWishListSummary()
                         .then(wishList => this.WishList = wishList);
                     self.eventHub.publish('iniCarousel', null);
+                    this.registerSubscriptions();
                 },
                 data: {
-                    SearchResults,
+                    ...ProductSearchResults,
+                    SearchResults: JSON.parse(JsonContext).SearchResults,
+                    ListName,
+                    MaxItemsPerPage,
+
                     Cart: undefined,
                     WishList: undefined,
                     UpdatingProductId: undefined,
@@ -111,6 +108,7 @@ module Orckestra.Composer {
                             return product;
 
                         });
+
                         return results;
                     },
                     UpdatingProduct() {
@@ -118,17 +116,6 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                    productClick(product, index) {
-                        self.eventHub.publish(ProductEvents.ProductClick, {
-                            data: {
-                                Product: product,
-                                ListName: self.context.viewModel.ListName,
-                                Index: index,
-                                PageNumber: self.currentPage.DisplayName,
-                                MaxItemsPerPage: self.context.viewModel.MaxItemsPerPage
-                            }
-                        });
-                    },
                     onCartUpdated(result) {
                         this.Cart = result.data;
                     },
@@ -159,8 +146,9 @@ module Orckestra.Composer {
                         }
 
                         let { ProductId, VariantId } = cartItem;
+                        let product = this.SearchResults.find(product => product.ProductId === ProductId);
 
-                        self.publishProductDataForAnalytics(ProductId, cartItem.Quantity, analyticEventName);
+                        self.publishProductDataForAnalytics(product, cartItem.Quantity, this.ListName, analyticEventName);
 
                         if (!this.debounceUpdateItem) {
                             this.debounceUpdateItem = _.debounce(({ Id, Quantity, ProductId }) => {
@@ -174,7 +162,7 @@ module Orckestra.Composer {
                                     .then(() => {
                                         ErrorHandler.instance().removeErrors();
                                     }, (reason: any) => {
-                                        self.onAddToCartFailed(reason);
+                                        this.onAddToCartFailed(reason);
                                         throw reason;
                                     })
                                     .fin(() => this.Loading = false);
@@ -205,7 +193,66 @@ module Orckestra.Composer {
                         self.wishListService.removeLineItem(item.WishListItemId)
                             .then(wishList => this.WishList = wishList).fail(self.onAddToWishFailed);
                     },
-                    addToCart: this.addToCart.bind(this),
+                    loadingProduct(product, loading) {
+                        this.Loading = loading;
+                        this.SearchResults = [...this.SearchResults];
+                    },
+                    sortingChanged(url: string): void {
+                        self.eventHub.publish(SearchEvents.SortingChanged, {data: {url}});
+                    },
+                    addToCart(event: any, product: any): void {
+                        const {
+                            HasVariants: hasVariants,
+                            ProductId: productId,
+                            VariantId: variantId,
+                            RecurringOrderProgramName: recurringOrderProgramName
+                        } = product;
+
+                        const price: number = product.IsOnSale ? product.Price : product.ListPrice;
+
+                        this.loadingProduct(product, true);
+
+                        if (hasVariants) {
+                            self.productService.loadQuickBuyProduct(productId, variantId, 'productSearch', this.ListName)
+                                .then(this.addToCartSuccess, this.onAddToCartFailed)
+                                .fin(() => this.loadingProduct(product, false));
+
+                        } else {
+                            self.sendProductDataForAnalytics(product, price, this.ListName);
+
+                            self.cartService.addLineItem(productId, '' + price, null, 1, null, recurringOrderProgramName)
+                                .then(this.addToCartSuccess, this.onAddToCartFailed)
+                                .fin(() => this.loadingProduct(product, false));
+                        }
+                    },
+                    onAddToCartFailed(reason: any): void {
+                        console.error('Error on adding item to cart', reason);
+
+                        ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
+                    },
+                    addToCartSuccess(data: any): void {
+                        ErrorHandler.instance().removeErrors();
+                        return data;
+                    },
+                    registerSubscriptions(): void {
+                        self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
+                    },
+                    onSearchRequested({data}): void {
+                        const searchRequest = (!data.categoryId && data.queryName) ?
+                            self.searchRepository.getQuerySearchResults(data.queryString, data.queryName, data.queryType) :
+                            self.searchRepository.getSearchResults(data.queryString, data.categoryId);
+
+                        this.Loading = true;
+                        searchRequest.then(result => {
+                            this.Loading = false;
+                            Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
+
+                            self.eventHub.publish(SearchEvents.SearchResultsLoaded, { data: result });
+                        });
+                    },
+                    productClick(product, index): void {
+                        self.sendProductClickForAnalytics(product, index, this.Pagination.CurrentPage, this.ListName, this.MaxItemsPerPage)
+                    }
                 }
             });
         }
@@ -216,71 +263,59 @@ module Orckestra.Composer {
             ErrorHandler.instance().outputErrorFromCode('AddToWishListFailed');
         }
 
-        private getCurrentPage(): any {
-
-            return <any>this.context.viewModel.PaginationCurrentPage;
-        }
-
-        public addToCart(event, product) {
-            const { HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName } = product;
-
-            let promise: Q.Promise<any>;
-            product.Loading = true;
-            event.target.disabled = true;
-
-            if (HasVariants) {
-                promise = this.productService.loadQuickBuyProduct(ProductId, VariantId, 'productSearch', this.context.viewModel.ListName)
-                    .then((data: any) => {
-                        ErrorHandler.instance().removeErrors();
-                        return data;
-                    }, (reason: any) => this.onAddToCartFailed(reason));
-            } else {
-                this.publishProductDataForAnalytics(ProductId, 1, ProductEvents.LineItemAdding);
-
-                promise = this.cartService.addLineItem(ProductId, '' + Price, null, 1, null, RecurringOrderProgramName)
-                    .then((data: any) => {
-                        ErrorHandler.instance().removeErrors();
-                        return data;
-                    }, (reason: any) => this.onAddToCartFailed(reason));
-            }
-
-            promise.fin(() => {
-                event.target.disabled = false;
-                product.Loading = false;
-            });
-        }
-
-        protected onAddToCartFailed(reason: any): void {
-            console.error('Error on adding item to cart', reason);
-
-            ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
-        }
-
-        protected publishProductDataForAnalytics(productId: string, quantity: number, eventName: string): void {
-            const data = this.getProductDataForAnalytics(productId, quantity);
+        protected publishProductDataForAnalytics(product: any, quantity: number, listName: string, eventName: string): void {
+            const data = {
+                List: listName,
+                ProductId: product.ProductId,
+                DisplayName: product.DisplayName,
+                ListPrice: product.IsOnSale ? product.Price : product.ListPrice,
+                Brand: product.Brand,
+                CategoryId: product.CategoryId,
+                Quantity: quantity
+            };
 
             this.eventHub.publish(eventName, { data });
         }
 
-        protected getProductDataForAnalytics(productId: string, quantity: number): any {
-            var results = this.context.viewModel.SearchResults;
-            var vm = _.find(results, (r: any) => r.ProductId === productId);
-
-            if (!vm) {
-                throw new Error(`Could not find a product with the ID '${productId}'.`);
-            }
-
-            var data = {
-                List: this.context.viewModel.ListName,
-                ProductId: vm.ProductId,
-                DisplayName: vm.DisplayName,
-                ListPrice: vm.IsOnSale ? vm.Price : vm.ListPrice,
-                Brand: vm.Brand,
-                CategoryId: vm.CategoryId,
-                Quantity: quantity
+        protected sendProductClickForAnalytics(product, index, currentPage, listName: string, maxItemsPerPage: any): void {
+            const productData = {
+                Product: product,
+                ListName: listName,
+                Index: index,
+                PageNumber: currentPage.DisplayName,
+                MaxItemsPerPage: maxItemsPerPage
             };
 
-            return data;
+            this.eventHub.publish(ProductEvents.ProductClick, { data: productData });
+        }
+
+        protected sendProductDataForAnalytics(product: any, price: any, list: string): void {
+            const productData = {
+                List: list,
+                ProductId: product.ProductId,
+                DisplayName: product.DisplayName,
+                ListPrice: price,
+                Brand: product.Brand,
+                CategoryId: product.CategoryId,
+                Quantity: 1
+            };
+
+            this.eventHub.publish(ProductEvents.LineItemAdding, { data: productData });
+        }
+
+        protected sendSearchResultsForAnalytics(productSearchResults: any, listName: string, maxItemsPerPage: any): void {
+            const { Pagination: {CurrentPage}, SearchResults, Keywords, TotalCount} = productSearchResults;
+
+            const searchResultsData = {
+                ProductSearchResults: SearchResults,
+                Keywords,
+                TotalCount,
+                ListName: listName,
+                PageNumber: CurrentPage && CurrentPage.DisplayName || '',
+                MaxItemsPerPage: maxItemsPerPage
+            };
+
+            this.eventHub.publish('searchResultRendered', { data: searchResultsData });
         }
     }
 }

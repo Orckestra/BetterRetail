@@ -1,0 +1,177 @@
+﻿@inherits RazorFunction
+@using System.Globalization
+@using Orckestra.Composer.Recipes.DataTypes
+@using Composite.Data
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Recipes Details"; }
+    }
+
+    [FunctionParameter]
+    public Orckestra.Composer.Recipes.DataTypes.IRecipe Item { get; set; }
+
+}
+
+@{
+    var ingredientsList = DataFacade.GetData<IIngredientsList>().Where(l => l.Recipe == Item.Id).OrderBy(l => l.Order).ToList();
+    var difficulty = DataFacade.GetData<IDifficulty>().FirstOrDefault(l => l.Id == Item.Difficulty);
+    var mealType = DataFacade.GetData<IRecipeMealType>().FirstOrDefault(l => l.Id == Item.MealType);
+    var dishType = DataFacade.GetData<IDishType>().FirstOrDefault(l => l.Id == Item.DishType);
+    var dietTypes = DataFacade.GetData<IDietType>().Where(l => Item.DietType != null && Item.DietType.Contains(l.Id.ToString())).ToList();
+    var cuisineType = DataFacade.GetData<ICuisineType>().FirstOrDefault(l => l.Id == Item.CuisineType);
+    var inRecipeList = false; // later can be used with actual RecipeList
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <title>@Item.Title</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-12">
+            <h1>
+                @Item.Title
+            </h1>
+            <div class="recipe-info">
+                @if (mealType != null)
+                {
+                    <span class="recipe-info-item"><span class="font-weight-bold">@mealType.Title</span></span>
+                }
+                @if (Item.PreparationTime.HasValue || Item.CookingTime.HasValue)
+                {
+                    <span class="recipe-info-item"><span class="font-weight-bold">@Html.Localize("Recipes", "L_TotalTime")</span>: @((Item.CookingTime ?? 0) + (Item.PreparationTime ?? 0)) @Html.Localize("Recipes", "L_Minutes")</span>
+                }
+            </div>
+            <div class="recipe-info-table">
+                @if (difficulty != null)
+                {
+                    <div class="recipe-info-table-cell">
+                        <span class="fa fa-spoon recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
+                        <span class="recipe-info-value">@difficulty.Title</span>
+                    </div>
+                }
+                @if (Item.PreparationTime.HasValue)
+                {
+                    <div class="recipe-info-table-cell">
+                        <span class="fa fa-blender recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Preparation")</span>
+                        <span class="recipe-info-value">@Item.PreparationTime @Html.Localize("Recipes", "L_Minutes")</span>
+                    </div>
+                }
+                @if (Item.CookingTime.HasValue)
+                {
+                    <div class="recipe-info-table-cell">
+                        <span class="fa fa-fire-alt recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_CookingTime")</span>
+                        <span class="recipe-info-value">@Item.CookingTime @Html.Localize("Recipes", "L_Minutes")</span>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Item.Servings))
+                {
+                    <div class="recipe-info-table-cell">
+                        <span class="fa fa-chart-pie recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
+                        <span class="recipe-info-value">@Item.Servings</span>
+                    </div>
+                }
+            </div>
+
+            <div class="recipe-description">
+                @Html.Raw(Item.Description)
+            </div>
+
+            <div class="recipe-action-bar">
+                <button class="btn btn-outline-secondary"><span class="fa fa-print"></span> @Html.Localize("Recipes", "L_Print")</button>
+            </div>
+        </div>
+
+        <div class="col-12 order-first mb-3">
+            @if (!string.IsNullOrWhiteSpace(Item.Image))
+            {
+                <div class="recipe-img">
+                    <img src="/media(@Item.Image)?h=520" />
+                    <div class="recipe-like">
+                        <a data-qa="add-to-recipelist" title="@Html.Localize("MyAccount", "H_AddToRecipeList")" class="add-to-recipelist p-0">
+                            <i class="fa  fa-heart-o"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+
+            @if (dishType != null || dietTypes != null || cuisineType != null)
+            {
+                <div class="recipe-info-item">
+
+                    @if (cuisineType != null)
+                    {
+                        <span class="badge badge-pill badge-primary p-1">@cuisineType.Title</span>
+                    }
+
+                    @if (dishType != null)
+                    {
+                        <span class="badge badge-pill badge-light p-1">@dishType.Title</span>
+                    }
+
+                    @if (dietTypes != null)
+                    {
+                        foreach (var diet in dietTypes)
+                        {
+                            <span class="badge badge-pill badge-secondary p-1">@diet.Title </span>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <hr class="my-3" />
+    <div class="row">
+        <div class="col-12 col-sm-5 recipe-ingredients">
+            <h2 class="mb-3">@Html.Localize("Recipes", "L_Ingredients")</h2>
+
+            @foreach (var iList in ingredientsList)
+            {
+                var ingredients = DataFacade.GetData<IIngredient>().Where(i => i.IngredientsList == iList.Id)
+                    .OrderBy(i => i.Order)
+                    .ToList();
+
+                var isIgredientsPresent = ingredients.Count() > 0;
+                if (!isIgredientsPresent) { continue; }
+
+                if (!iList.HideTitle)
+                {
+                    <h4 class="mt-3 mb-2">@iList.Title</h4>
+                }
+
+                foreach (var ingredient in ingredients)
+                {
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" />
+                            @ingredient.Title
+                        </label>
+                    </div>
+                }
+            }
+
+        </div>
+        <div class="col-12 col-sm-7 recipe-instructions">
+            <h2>@Html.Localize("Recipes", "L_Instructions")</h2>
+            @Html.Raw(Item.Instructions)
+        </div>
+    </div>
+
+</body>
+</html>
+
+@helper SelectAll()
+{
+    <div class="form-group form-check mt-3">
+        <label class="form-check-label  font-weight-bold">
+            <input type="checkbox" class="form-check-input" />
+            @Html.Localize("Recipes", "L_SelectAll")
+        </label>
+    </div>
+}

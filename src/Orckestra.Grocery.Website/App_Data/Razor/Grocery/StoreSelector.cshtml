@@ -226,7 +226,7 @@
         <h2 class="text-center">@Html.Localize("Grocery", "T_PickStore")</h2>
         @Function("Grocery.StoreSelector.StoresList")
 
-        <div v-if="NoStores" class="alert bg-light">
+        <div v-if="NoStores" class="alert bg-lighter">
             @Html.Localize("Grocery", "L_StoresNotAvailableMessage")
         </div>
         <div class="mt-2">

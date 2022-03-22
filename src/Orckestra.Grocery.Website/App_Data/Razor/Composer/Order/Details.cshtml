@@ -50,7 +50,7 @@
 
 @helper OrderDetails(OrderDetailViewModel order)
 {
-    <div class="card  bg-light">
+    <div class="card  bg-lighter">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_OrderDetails")
         </h3>
@@ -103,7 +103,7 @@
         var extendedShipping = shipping.AsExtensionModel<IGroceryOrderShipmentDetailViewModel>();
         <div class="row mt-4">
             <div class="col-12 col-sm-6">
-                <div class="card bg-light h-100">
+                <div class="card bg-lighter h-100">
                     <h3 class="card-header">
                         @Html.Localize("Grocery", type == FulfillmentMethodType.PickUp ? "T_FulfillmentMethodTitle_PickUp": "T_FulfillmentMethodTitle_Shipping")
                     </h3>
@@ -114,7 +114,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6">
-                <div class="card bg-light h-100">
+                <div class="card bg-lighter h-100">
                     <h3 class="card-header">
                         @Html.Localize("Grocery", "T_TimeSlot")
                        
@@ -155,7 +155,7 @@
 
 @helper OrderBillingAddress(OrderDetailViewModel order)
 {
-    <div class="card  bg-light  mt-4">
+    <div class="card  bg-lighter  mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_BillingAddress")
         </h3>
@@ -175,7 +175,7 @@
 
 @helper OrderPayment(OrderDetailViewModel order)
 {
-    <div class="card  bg-light  mt-4">
+    <div class="card  bg-lighter  mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_PaymentMethod")
         </h3>
@@ -232,7 +232,7 @@
     var shipment = order.Shipments.FirstOrDefault();
     if (shipment == null) { return; }
     var index = 0;
-    <div class="card bg-light mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "L_OrderLineItemProductsTitle")
         </h3>
@@ -390,7 +390,7 @@
     var addFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => !t.Taxable).ToList();
     var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
 
-    <div class="card bg-light mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header  bg-gray text-white">
             @Html.Localize("ShoppingCart", "T_OrderSummary")
         </h3>

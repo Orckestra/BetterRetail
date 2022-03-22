@@ -38,5 +38,11 @@ namespace Orckestra.Composer.Repositories
         Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName);
 
         Task<List<Facet>> GetBrandProductCount(string scopeId, string cultureName);
+
+        /// <summary>
+        /// Cleare cache for categories tree
+        /// </summary>
+        /// <param name="scope"></param>
+        void ClearCategoriesCache(string scope);
     }
 }

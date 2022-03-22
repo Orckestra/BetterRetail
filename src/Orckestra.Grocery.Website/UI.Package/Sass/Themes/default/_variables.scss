@@ -40,11 +40,12 @@ $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
-$light: $gray-100 !default;
+$light: $gray-300 !default;
+$lighter: $gray-100 !default;
 $dark: $gray-800 !default;
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
-$theme-colors: map-merge( ( "primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "gray": $gray-700, "dark": $dark),
+$theme-colors: map-merge( ( "primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "lighter": $lighter, "gray": $gray-500, "dark": $dark),
 $theme-colors);
 // Set a specific jump point for requesting color jumps
 $theme-color-interval: 8% !default;

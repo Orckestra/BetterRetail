@@ -1,0 +1,133 @@
+﻿<cms:formdefinition xmlns:cms="http://www.composite.net/ns/management/bindingforms/1.0" xmlns="http://www.composite.net/ns/management/bindingforms/std.ui.controls.lib/1.0" xmlns:ff="http://www.composite.net/ns/management/bindingforms/std.function.lib/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+  <cms:bindings>
+    <cms:binding name="Id" type="System.Guid" />
+    <cms:binding name="Image" type="System.String" />
+    <cms:binding name="Title" type="System.String" />
+    <cms:binding name="UrlTitle" type="System.String" optional="true" />
+    <cms:binding name="MealType" type="System.Guid" />
+    <cms:binding name="Description" type="System.String" />
+    <cms:binding name="Instructions" type="System.String" />
+    <cms:binding name="Difficulty" type="System.Guid" />
+    <cms:binding name="Date" type="System.DateTime" />
+    <cms:binding name="DishType" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="DietType" type="System.String" optional="true" />
+    <cms:binding name="CuisineType" type="System.Nullable`1[System.Guid]" optional="true" />
+    <cms:binding name="PreparationTime" type="System.Nullable`1[System.Int32]" optional="true" />
+    <cms:binding name="CookingTime" type="System.Nullable`1[System.Int32]" optional="true" />
+    <cms:binding name="Servings" type="System.String" optional="true" />
+    <cms:binding name="PublicationStatus" type="System.String" />
+    <cms:binding name="PageId" type="System.Guid" />
+    <cms:binding name="SourceCultureName" type="System.String" />
+    <cms:binding name="PublicationStatusOptions" type="System.Object" />
+    <cms:binding name="PublishDate" type="System.DateTime" optional="true" />
+    <cms:binding name="UnpublishDate" type="System.DateTime" optional="true" />
+  </cms:bindings>
+  <cms:layout>
+    <cms:layout.label>
+      <cms:read source="Title" />
+    </cms:layout.label>
+    <TabPanels>
+      <PlaceHolder Label="Settings">
+        
+        <FieldGroup Label="General Settings">
+          <DataReferenceTreeSelector Label="Image" Help="" Handle="Composite.Management.ImageSelectorDialog" SearchToken="{&quot;$type&quot;:&quot;Composite.Plugins.Elements.ElementProviders.MediaFileProviderElementProvider.MediaFileSearchToken, Composite&quot;,&quot;MimeTypes&quot;:[&quot;image/gif&quot;,&quot;image/jpeg&quot;,&quot;image/png&quot;,&quot;image/bmp&quot;,&quot;image/svg+xml&quot;],&quot;Extensions&quot;:null,&quot;Folder&quot;:null,&quot;HideSubfolders&quot;:false,&quot;Keyword&quot;:null}" DataType="Composite.Data.Types.IImageFile,Composite" NullValueAllowed="false">
+            <DataReferenceTreeSelector.Selected>
+              <cms:bind source="Image" />
+            </DataReferenceTreeSelector.Selected>
+          </DataReferenceTreeSelector>
+          <TextBox Label="Title" Help="" SpellCheck="true">
+            <TextBox.Text>
+              <cms:bind source="Title" />
+            </TextBox.Text>
+          </TextBox>
+          <KeySelector Label="Meal Type" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="true">
+            <KeySelector.Selected>
+              <cms:bind source="MealType" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <ff:StaticMethodCall Type="&lt;t n=&quot;Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.DataReferenceSelectorWidgetFunction`1, Composite, Version=6.11.7982.26191, Culture=neutral, PublicKeyToken=null&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;Orckestra.Composer.Recipes.DataTypes.IRecipeMealType,Orckestra.Composer.Recipes&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" Method="GetOptions" Parameters="Orckestra.Composer.Recipes.DataTypes.IRecipeMealType,Orckestra.Composer.Recipes" />
+            </KeySelector.Options>
+          </KeySelector>
+          <InlineXhtmlEditor Label="Description" Help="" ClassConfigurationName="common">
+            <InlineXhtmlEditor.Xhtml>
+              <cms:bind source="Description" />
+            </InlineXhtmlEditor.Xhtml>
+          </InlineXhtmlEditor>
+          <KeySelector Label="Dish Type" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="false">
+            <KeySelector.Selected>
+              <cms:bind source="DishType" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <ff:StaticMethodCall Type="&lt;t n=&quot;Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.NullableDataReferenceSelectorWidgetFunction`1, Composite, Version=6.11.7982.26191, Culture=neutral, PublicKeyToken=null&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;Orckestra.Composer.Recipes.DataTypes.IDishType,Orckestra.Composer.Recipes&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" Method="GetOptions" Parameters="Orckestra.Composer.Recipes.DataTypes.IDishType,Orckestra.Composer.Recipes" />
+            </KeySelector.Options>
+          </KeySelector>
+          <MultiKeySelector Label="Diet Type" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="false" CompactMode="false">
+            <MultiKeySelector.SelectedAsString>
+              <cms:bind source="DietType" />
+            </MultiKeySelector.SelectedAsString>
+            <MultiKeySelector.Options>
+              <ff:StaticMethodCall Type="Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.String.DataIdMultiSelectorWidgetFunction,Composite" Method="GetOptions" Parameters="Orckestra.Composer.Recipes.DataTypes.IDietType,Orckestra.Composer.Recipes" />
+            </MultiKeySelector.Options>
+          </MultiKeySelector>
+          <KeySelector Label="Cuisine Type" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="false">
+            <KeySelector.Selected>
+              <cms:bind source="CuisineType" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <ff:StaticMethodCall Type="&lt;t n=&quot;Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.NullableDataReferenceSelectorWidgetFunction`1, Composite, Version=6.11.7982.26191, Culture=neutral, PublicKeyToken=null&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;Orckestra.Composer.Recipes.DataTypes.ICuisineType,Orckestra.Composer.Recipes&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" Method="GetOptions" Parameters="Orckestra.Composer.Recipes.DataTypes.ICuisineType,Orckestra.Composer.Recipes" />
+            </KeySelector.Options>
+          </KeySelector>
+        </FieldGroup>
+        
+        <FieldGroup Label="Summary Information">
+          <KeySelector Label="Difficulty" Help="" OptionsKeyField="Key" OptionsLabelField="Label" Required="true">
+            <KeySelector.Selected>
+              <cms:bind source="Difficulty" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <ff:StaticMethodCall Type="&lt;t n=&quot;Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.DataReferenceSelectorWidgetFunction`1, Composite, Version=6.11.7982.26191, Culture=neutral, PublicKeyToken=null&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;Orckestra.Composer.Recipes.DataTypes.IDifficulty,Orckestra.Composer.Recipes&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" Method="GetOptions" Parameters="Orckestra.Composer.Recipes.DataTypes.IDifficulty,Orckestra.Composer.Recipes" />
+            </KeySelector.Options>
+          </KeySelector>
+          <TextBox Label="Preparation Time " Help="Preparation time in minutes" Type="Integer">
+            <TextBox.Text>
+              <cms:bind source="PreparationTime" />
+            </TextBox.Text>
+          </TextBox>
+          <TextBox Label="Cooking Time" Help="Cooking time in minutes" Type="Integer">
+            <TextBox.Text>
+              <cms:bind source="CookingTime" />
+            </TextBox.Text>
+          </TextBox>
+          <TextBox Label="Servings">
+            <TextBox.Text>
+              <cms:bind source="Servings" />
+            </TextBox.Text>
+          </TextBox>
+        </FieldGroup>
+        
+        <FieldGroup Label="Publication settings">
+          <KeySelector OptionsKeyField="Key" OptionsLabelField="Value" Label="Status" Help="Send the data to another publication status.">
+            <KeySelector.Selected>
+              <cms:bind source="PublicationStatus" />
+            </KeySelector.Selected>
+            <KeySelector.Options>
+              <cms:read source="PublicationStatusOptions" />
+            </KeySelector.Options>
+          </KeySelector>
+          <DateTimeSelector Label="Publish date" Help="Specify at which date and time you want the data to be published automatically.">
+            <cms:bind source="PublishDate" />
+          </DateTimeSelector>
+          <DateTimeSelector Label="Unpublish date" Help="Specify at which date and time you want the data to be unpublished automatically.">
+            <cms:bind source="UnpublishDate" />
+          </DateTimeSelector>
+        </FieldGroup>
+
+      </PlaceHolder>
+      <XhtmlEditor Label="Recipe Instructions" Help="" ClassConfigurationName="common">
+        <XhtmlEditor.Xhtml>
+          <cms:bind source="Instructions" />
+        </XhtmlEditor.Xhtml>
+      </XhtmlEditor>
+    </TabPanels>
+  </cms:layout>
+</cms:formdefinition>

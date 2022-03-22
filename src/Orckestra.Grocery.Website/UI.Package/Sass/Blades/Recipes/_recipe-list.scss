@@ -1,0 +1,50 @@
+.recipe {
+    &-tile {
+        &-media {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            height: $recipe-tile-height-xs;
+            @include media-breakpoint-up(sm) {
+                height: $recipe-tile-height-sm;
+            }
+            @include media-breakpoint-up(md) {
+                height: $recipe-tile-height-md;
+            }
+            @include media-breakpoint-up(lg) {
+                height: $recipe-tile-height-lg;
+            }
+            @include media-breakpoint-up(xl) {
+                height: $recipe-tile-height-xl;
+            }
+            background-color: $recipe-tile-background;
+            >.card-img-top {
+                @include media-breakpoint-up(sm) {
+                    position: relative;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+            &:hover {
+                .recipe-info-table {
+                    top: 0;
+                }
+            }
+            .recipe-info-table {
+                top: 100%;
+                width: 100%;
+                height: 100%;
+                margin-top: 0;
+                transition: top 0.5s ease-in-out;
+                background-color: rgba(0, 0, 0, 0.5);
+                border-radius: 0;
+                &-cell {
+                    color: $white;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+}

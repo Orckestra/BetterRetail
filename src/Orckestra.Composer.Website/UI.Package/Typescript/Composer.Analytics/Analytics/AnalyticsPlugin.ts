@@ -477,25 +477,25 @@ module Orckestra.Composer {
                 return;
             }
 
-            var data = eventInfo.data;
+            const {Index, PageNumber, MaxItemsPerPage, Product, ListName} = eventInfo.data;
 
-            var position: number = data.Index + 1;
+            var position: number = Index + 1;
 
-            if (data.MaxItemsPerPage && data.PageNumber) {
-                position = position + (data.MaxItemsPerPage * (parseInt(data.PageNumber, 10) - 1));
+            if (MaxItemsPerPage && PageNumber) {
+                position = position + (MaxItemsPerPage * (parseInt(PageNumber, 10) - 1));
             }
 
             var product: IAnalyticsProduct = {
-                id: data.Product.ProductId,
-                name: data.Product.DisplayName,
-                price: this.trimPriceAndUnlocalize(data.Product.Price || data.Product.Pricing.Price),
-                brand: data.Product.Brand,
-                category: data.Product.CategoryId,
+                id: Product.ProductId,
+                name: Product.DisplayName,
+                price: this.trimPriceAndUnlocalize(Product.IsOnSale ? Product.Price : Product.ListPrice),
+                brand: Product.Brand,
+                category: Product.CategoryId,
                 position: position
             };
 
             //var products: IAnalyticsProduct[] = [product];
-            this.productClick(product, data.ListName);
+            this.productClick(product, ListName);
         }
 
         /**

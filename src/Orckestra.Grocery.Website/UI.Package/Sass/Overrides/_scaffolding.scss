@@ -1,3 +1,9 @@
 html {
-  -webkit-tap-highlight-color: rgba(0,0,0, 0.2);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
+}
+
+ol {
+    >li+li {
+        margin-top: $spacer;
+    }
 }

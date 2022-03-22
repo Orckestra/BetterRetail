@@ -2,5 +2,6 @@
 <Data>
   <Add Id="32a0a9c7-a813-4ac6-be17-d9bf2dab1436" Title="Articles" UrlTitle="Articles" IsProductTab="False" DataTypes="Orckestra.Composer.Articles.DataTypes.IArticle" Facets="IArticle.Tags,IArticle.Category" Order="2" PublicationStatus="published" SourceCultureName="en-CA" />
   <Add Id="39bb04af-899e-411b-a107-b1c6c643f421" Title="Resources" UrlTitle="Resources" IsProductTab="False" DataTypes="Composite.Data.Types.IMediaFile" Facets="IMediaFile.MimeType" MediaFolders="MediaArchive:da211d4c-ecaa-4d94-8ac2-1691d49e000e" Order="3" PublicationStatus="published" SourceCultureName="en-CA" />
+  <Add Id="45a0a9c7-a813-4ac6-be17-d9bf2da71430" Title="Recipes" UrlTitle="Recipes" IsProductTab="False" DataTypes="Orckestra.Composer.Recipes.DataTypes.IRecipe" Order="3"  Facets="IRecipe.MealType,IRecipe.Difficulty,IRecipe.CuisineType,IRecipe.DietType,IRecipe.DishType" PublicationStatus="published" SourceCultureName="en-CA" />
   <Add Id="44717a7d-9f4b-43e1-9260-0ee204813c38" Title="Products" UrlTitle="Products" IsProductTab="True" DataTypes="" Facets="" MediaFolders="" Order="1" PublicationStatus="published" SourceCultureName="en-CA" />
 </Data>

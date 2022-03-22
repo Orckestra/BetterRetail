@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
   <Add Id="57f28899-a64b-4a1a-b8b6-3178980d9f12" TreeId="NavigationElement.xml" Position="Top" InterfaceType="Composite.Data.Types.IPage,Composite" KeyValue="f3dbd28d-365f-4d3e-91c3-7b730b39b294"/>
+  <Add Id="b1ad8022-d5a5-4b04-b94c-5492f3eb8717" TreeId="Receipts.xml" Position="Top" InterfaceType="Composite.Data.Types.IPage,Composite" KeyValue="c9344cca-14e3-4430-95de-ea5949f62e10" />
 </Data>

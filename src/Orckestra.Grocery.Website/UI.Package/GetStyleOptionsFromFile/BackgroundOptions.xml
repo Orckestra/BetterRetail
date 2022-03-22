@@ -2,6 +2,7 @@
 <Options>
   <Option  CssClassKey="bg-none" Label="NONE"></Option>
   <Option  CssClassKey="bg-white" Label="White"></Option>
+  <Option  CssClassKey="bg-lighter" Label="Lighter"></Option>
   <Option  CssClassKey="bg-light" Label="Light"></Option>
   <Option  CssClassKey="bg-gray" Label="Gray"></Option>
   <Option  CssClassKey="bg-dark" Label="Dark"></Option>

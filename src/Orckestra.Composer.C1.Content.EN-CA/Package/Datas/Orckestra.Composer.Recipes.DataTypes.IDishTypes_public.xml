@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="96ee8462-0d86-4e35-b41b-b47251a4a01e" Title="Pasta" Order="3" SourceCultureName="en-CA" />
+  <Add Id="e94b1733-198b-4fe2-a399-9e87a79da2c7" Title="Burgers" Order="2" SourceCultureName="en-CA" />
+  <Add Id="f5f11b2b-f4fd-4b08-b15d-13e3a614e335" Title="Soups" Order="1" SourceCultureName="en-CA" />
+</Data>

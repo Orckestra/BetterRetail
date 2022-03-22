@@ -64,6 +64,7 @@ module Orckestra.Composer {
                             IsAuthenticated: false,
                             PasswordStrength: '',
                             ShowPassword: false,
+                            IsUpdatedOrder: result.IsUpdatedOrder ? result.IsUpdatedOrder : false,
                             ...result
                         },
                         mounted() {
@@ -150,15 +151,15 @@ module Orckestra.Composer {
         }
 
         private createCustomer(FirstName: string, LastName: string, Email: string, Password: string): Q.Promise<any> {
-            let formData = {FirstName, LastName, Email, Password};
+            let formData = { FirstName, LastName, Email, Password };
             return this.membershipService.register(formData, null).then(result => {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.AccountCreated], { data: result });
                 if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
                     this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 }
 
-               return result;
-            }).fail(({Errors: [error]}) => {
+                return result;
+            }).fail(({ Errors: [error] }) => {
                 ErrorHandler.instance().outputErrorFromCode(error.ErrorCode);
                 throw error;
             });

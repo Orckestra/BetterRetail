@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -35,6 +36,11 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public List<Overture.ServiceModel.Orders.Order> Orders { get; set; }
 
         /// <summary>
+        /// Gets or sets the Order Cart Drafts
+        /// </summary>
+        public List<CartSummary> OrderCartDrafts { get; set; }
+
+        /// <summary>
         /// Gets or sets the Order Statuses
         /// </summary>
         public Dictionary<string, string> OrderStatuses { get; set; }
@@ -51,8 +57,18 @@ namespace Orckestra.Composer.Cart.Parameters.Order
         public Dictionary<Guid, TrackingInfoViewModel> ShipmentsTrackingInfos { get; set; }
 
         /// <summary>
-        /// The Order Settings.
+        /// The Order Editing Infos.
         /// </summary>
-        public OrderSettings OrderSettings { get; set; }
+        public Dictionary<Guid, bool> OrderEditingInfos { get; set; }
+
+        /// <summary>
+        /// The Order Cancellation Status Infos.
+        /// </summary>
+        public Dictionary<Guid, CancellationStatus> OrderCancellationStatusInfos { get; set; }
+        
+       /// <summary>
+       /// Gets or sets the Id of the currently edited order
+       /// </summary>
+        public Guid CurrentlyEditedOrderId { get; set; }
     }
 }

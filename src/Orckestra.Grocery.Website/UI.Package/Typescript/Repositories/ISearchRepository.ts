@@ -15,9 +15,23 @@ module Orckestra.Composer {
         getCategoryFacets(categoryId, searchCriteria): Q.Promise<any>;
 
         /**
-        * Get the facets for the query page and current query string.
-        */
+       * Get the facets for the query page and current query string.
+       */
         getQueryFacets(QueryName, QueryType, QueryString): Q.Promise<any>;
 
+        /**
+         * Get search results
+         * @param QueryString
+         * @param CategoryId
+         */
+        getSearchResults(QueryString, CategoryId): Q.Promise<any>;
+
+        /**
+         * Get query search results
+         * @param QueryString
+         * @param QueryName
+         * @param QueryType
+         */
+        getQuerySearchResults(QueryString, QueryName, QueryType): Q.Promise<any>;
     }
 }

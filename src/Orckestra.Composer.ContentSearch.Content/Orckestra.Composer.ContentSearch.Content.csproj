@@ -61,6 +61,9 @@
     <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticleCategory_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Articles.DataTypes.IArticle_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IIngredientsLists_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IIngredients_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipes_public.xml" />
     <Content Include="Package\install.xml">
       <SubType>Designer</SubType>
     </Content>

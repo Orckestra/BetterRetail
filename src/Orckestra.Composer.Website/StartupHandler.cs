@@ -4,6 +4,7 @@ using Composite.Core.Application;
 using Composite.Core.Xml;
 using Composite.Data;
 using Composite.Data.DynamicTypes;
+using Composite.Data.Types;
 using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -11,9 +12,12 @@ using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Website.Controllers;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System;
+using System.Linq;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -61,7 +65,52 @@ namespace Orckestra.Composer.Website
             RegisterFunctions(functions);
             RegisterFunctionRoutes(functions);
 
+            DataEvents<IPage>.OnAfterAdd += UpdateAfterPageChanged;
+
             log.Info("Application Started");
+        }
+
+
+        /// <summary>
+        /// Do some updates when C1 page is added, for example clear Categories Cache
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="dataEventArgs"></param>
+        private static void UpdateAfterPageChanged(object sender, DataEventArgs dataEventArgs)
+        {
+            var page = dataEventArgs.Data as IPage;
+            if (page == null) return;
+
+            ClearCategoriesCache(page);
+        }
+
+        private static void ClearCategoriesCache(IPage data)
+        {
+            if (data.PageTypeId != CategoryPages.CategoryPageTypeId) return;
+
+            Guid homepageId = GetHomePageId(data);
+            using (var con = new DataConnection())
+            {
+                var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+                if (meta == null) return;
+
+                var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
+                categoryRepository.ClearCategoriesCache(meta.Scope);
+            }
+        }
+
+        private static Guid GetHomePageId(IPage data)
+        {
+            Guid homepageId = Guid.Empty;
+            Guid pageId = data.Id;
+
+            while (pageId != Guid.Empty)
+            {
+                homepageId = pageId;
+                pageId = PageManager.GetParentId(pageId);
+            }
+
+            return homepageId;
         }
 
         private static void RegisterFunctions(FunctionCollection functions)
@@ -72,9 +121,7 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
-            functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
 
-            functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Index");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")

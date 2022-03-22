@@ -53,6 +53,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 IncludeChildScopes = param.IncludeChildScopes,
+                CartType = param.CartType
             };
 
             return OvertureClient.SendAsync(request);
@@ -80,6 +81,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
                 CartName = param.CartName,
+                CartType = param.CartType,
                 //Reexecute price engine and promotion engine is automatically done at each request
                 ExecuteWorkflow = param.ExecuteWorkflow,
                 WorkflowToExecute = param.WorkflowToExecute
@@ -170,6 +172,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope,
                 CultureName = param.CultureInfo.Name,
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CustomerId = param.CustomerId,
                 ProductId = param.ProductId,
                 Quantity = param.Quantity,
@@ -198,6 +201,7 @@ namespace Orckestra.Composer.Cart.Repositories
             AddOrUpdateLineItemsRequest request = new AddOrUpdateLineItemsRequest
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 LineItems = param.LineItems,
@@ -275,6 +279,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope,
                 CultureName = param.CultureInfo.Name,
                 CartName = param.CartName,
+                CartType = param.CartType,
                 Id = param.LineItemId,
                 CustomerId = param.CustomerId
             };
@@ -323,6 +328,7 @@ namespace Orckestra.Composer.Cart.Repositories
             var request = new AddOrUpdateLineItemsRequest
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
@@ -352,6 +358,7 @@ namespace Orckestra.Composer.Cart.Repositories
             {
                 CartName = param.CartName,
                 CultureName = param.CultureInfo.Name,
+                CartType = param.CartType,
                 CustomerId = param.CustomerId,
                 GiftMessage = param.GiftMessage,
                 GiftWrap = param.GiftWrap,
@@ -385,7 +392,8 @@ namespace Orckestra.Composer.Cart.Repositories
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-                CartName = param.CartName
+                CartName = param.CartName,
+                CartType = param.CartType
             };
 
             //Avoid caching because of returning with type of line items
@@ -438,6 +446,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 {
                     CouponCode = couponCode,
                     CartName = param.CartName,
+                    CartType = param.CartType,
                     CustomerId = param.CustomerId,
                     ScopeId = param.Scope
                 };

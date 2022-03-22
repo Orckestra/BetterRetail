@@ -313,11 +313,13 @@
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\GoogleSettings.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\ISearchTerm.xml" />
     <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\CompositeC1\DataTypes\RecurringOrdersSettings.xml" />
+    <Content Include="App_Data\Composite\DynamicTypeForms\Orckestra\Composer\Recipes\DataTypes\IRecipe.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\ProductTile.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\ContentSearch.xml" />
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Data\Composite\TreeDefinitions\Receipts.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Descriptive HTML head elements.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Minicart.html" />
     <Content Include="App_Data\PageTemplateFeatures\Social links.html" />
@@ -448,6 +450,12 @@
     <Content Include="App_Data\Razor\Grocery\SelectedStoreInSticky.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\MultiLevelMainMenu.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\SelectedFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\BaseSelectedFacets.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\Recipes\List.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\Recipes\Details.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\Recipes\SearchResults.cshtml" />
+    <Content Include="App_Data\Media\d5c85c06-13b8-4af4-bf40-0dc4685fa801" />
+    <Content Include="App_Data\Media\ff7debb9-d9a5-454a-99d0-ac7b41cb1441" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />
@@ -508,6 +516,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
       <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.Recipes\Orckestra.Composer.Recipes.csproj">
+      <Project>{b9ac700b-be2a-4e06-8919-2e153012861b}</Project>
+      <Name>Orckestra.Composer.Recipes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
       <Project>{ce6ad95e-0ebb-4e38-bf0b-27a67915fa68}</Project>

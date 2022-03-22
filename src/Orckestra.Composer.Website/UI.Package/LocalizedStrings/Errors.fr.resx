@@ -203,10 +203,10 @@
   </data>
   <data name="L_RecurringCartShippingAddressMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre adresse de livraison. Identifiant d'adresse manquant.</value>
-  </data>  
+  </data>
   <data name="L_RecurringCartShippingMethodMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre méthode de livraison. Identifiant de méthode manquant.</value>
-  </data>  
+  </data>
   <data name="L_RecurringCartShippingMethodUpdateFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre méthode de livraison. Veuillez réessayer.</value>
   </data>
@@ -218,19 +218,19 @@
   </data>
   <data name="L_RecurringScheduleBillingAddressMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant d'adresse manquant.</value>
-  </data>  
+  </data>
   <data name="L_RecurringSchedulePaymentMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant de paiement manquant.</value>
-  </data>  
+  </data>
   <data name="L_RecurringScheduleShippingAddressMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant d'adresse manquant.</value>
-  </data>  
+  </data>
   <data name="L_RecurringScheduleShippingProviderMissing" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Identifiant de livraison manquant.</value>
-  </data> 
+  </data>
   <data name="L_RecurringScheduleUpdateFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant la mise à jour de votre horaire de récurrence. Veuillez réessayer.</value>
-  </data>  
+  </data>
   <data name="L_RelatedProductLoadFailed" xml:space="preserve">
     <value>Une erreur est survenue pendant le chargement des produits reliés. Veuillez &lt;a href="javascript:window.location.reload();"&gt;recharger la page&lt;/a&gt;.</value>
   </data>
@@ -251,5 +251,14 @@
   </data>
   <data name="L_UserNameAlreadyUsed" xml:space="preserve">
     <value>Ce compte existe déjà. Avez-vous oublié votre mot de passe?</value>
+  </data>
+  <data name="L_CancelOrderFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors de l'annulation de la commande. Veuillez essayer de nouveaux ou contactez-nous pour de plus amples informations.</value>
+  </data>
+  <data name="L_EditingOrderFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors de la modification de votre commande. Cette commande ne peut être modifiée. Veuillez essayer de nouveaux ou contactez-nous pour de plus amples informations.</value>
+  </data>
+  <data name="L_UpdatingOrderFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors de la modification de votre commande. La commande ne peut être modifiée. Veuillez &lt;a href="javascript:window.location.reload();"&gt;rafraîchir la page&lt;/a&gt; pour essayer de modifier votre commande de nouveau ou contactez-nous pour de plus amples informations.</value>
   </data>
 </root>

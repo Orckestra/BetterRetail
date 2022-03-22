@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ElementStructure xmlns="http://www.composite.net/ns/management/trees/treemarkup/1.0" xmlns:f="http://www.composite.net/ns/function/1.0">
+
+  <ElementStructure.AllowedAttachments ApplicationName="Recipes">
+    <DataType Type="Composite.Data.Types.IPage" />
+  </ElementStructure.AllowedAttachments>
+
+  <ElementRoot>
+    <Actions>
+      <AddDataAction Label="Add Recipe" Type="Orckestra.Composer.Recipes.DataTypes.IRecipe"/>
+      <AddDataAction Label="Add Meal Type" Type="Orckestra.Composer.Recipes.DataTypes.IRecipeMealType"/>
+      <AddDataAction Label="Add Dish Type" Type="Orckestra.Composer.Recipes.DataTypes.IDishType"/>
+      <AddDataAction Label="Add Diet Type" Type="Orckestra.Composer.Recipes.DataTypes.IDietType"/>
+      <AddDataAction Label="Add Cuisine Type" Type="Orckestra.Composer.Recipes.DataTypes.ICuisineType"/>
+    </Actions>
+    <Children>
+      <DataElements Type="Orckestra.Composer.Recipes.DataTypes.IRecipeMealType" Label="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IRecipeMealType:Title}" Icon="folder">
+        <Actions>
+          <AddDataAction Label="Add Recipe" Type="Orckestra.Composer.Recipes.DataTypes.IRecipe"/>
+          <EditDataAction Label="Edit Recipe Meal Type"  />
+          <DeleteDataAction Label="Delete Recipe Meal Type" />
+        </Actions>
+        <Children>
+          <DataElements Type="Orckestra.Composer.Recipes.DataTypes.IRecipe" Label="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IRecipe:Title}">
+            <Actions>
+              <EditDataAction Label="Edit Recipe"  />
+              <AddDataAction Label="Add Ingridients List" Type="Orckestra.Composer.Recipes.DataTypes.IIngredientsList"/>
+              <DeleteDataAction Label="Delete Recipe" />
+              <DuplicateDataAction Label="Duplicate Recipe"/>
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.Recipes.DataTypes.IIngredientsList" Label="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IIngredientsList:Title}" Icon="folder">
+                <Actions>
+                  <EditDataAction Label="Edit Ingredients List"  />
+                  <AddDataAction Label="Add Ingredient" Type="Orckestra.Composer.Recipes.DataTypes.IIngredient"/>
+                  <DeleteDataAction Label="Delete Ingredients List" />
+                </Actions>
+                <Children>
+                  <DataElements Type="Orckestra.Composer.Recipes.DataTypes.IIngredient" Label="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IIngredient:Title}">
+                    <Actions>
+                      <EditDataAction Label="Edit Ingredient"  />
+                      <DeleteDataAction Label="Delete Ingredient" />
+                      <DuplicateDataAction Label="Duplicate Ingredient"/>
+                    </Actions>
+                    <Filters>
+                      <ParentIdFilter ParentType="Orckestra.Composer.Recipes.DataTypes.IIngredientsList" ReferenceFieldName="IngredientsList" />
+                    </Filters>
+                    <OrderBy>
+                      <Field FieldName="Order" Direction="ascending"></Field>
+                    </OrderBy>
+                  </DataElements>
+                </Children>
+                <Filters>
+                  <ParentIdFilter ParentType="Orckestra.Composer.Recipes.DataTypes.IRecipe" ReferenceFieldName="Recipe" />
+                </Filters>
+                <OrderBy>
+                  <Field FieldName="Order" Direction="ascending"></Field>
+                </OrderBy>
+              </DataElements>
+            </Children>
+            <Filters>
+              <ParentIdFilter ParentType="Orckestra.Composer.Recipes.DataTypes.IRecipeMealType" ReferenceFieldName="MealType" />
+              <ParentIdFilter ParentType="Composite.Data.Types.IPage" ReferenceFieldName="PageId" />
+            </Filters>
+            <OrderBy>
+              <Field FieldName="Date" Direction="descending"></Field>
+            </OrderBy>
+          </DataElements>
+        </Children>
+        <OrderBy>
+          <Field FieldName="Order" Direction="ascending"></Field>
+        </OrderBy>
+      </DataElements>
+    </Children>
+  </ElementRoot>
+</ElementStructure>

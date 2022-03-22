@@ -92,5 +92,7 @@ module Orckestra.Composer {
         CustomerLastName: string;
 
         NextStepUrl: string;
+
+        IsUpdatedOrder?: boolean;
     }
 }

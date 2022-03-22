@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="372b18ed-06fd-49c2-9a7f-90a3465db26d" Title="Easy" Order="1" SourceCultureName="en-CA" />
+  <Add Id="44de15e3-4fd9-4f61-be66-23f0521c4ebb" Title="Medium" Order="2" SourceCultureName="en-CA" />
+  <Add Id="f6726248-6e1e-4ad0-8cc2-c5cdedd1ddbc" Title="Difficult" Order="3" SourceCultureName="en-CA" />
+</Data>

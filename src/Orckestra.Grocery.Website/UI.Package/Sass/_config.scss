@@ -43,3 +43,13 @@ $col-lg-2-width: 16.66667%;
 * {
     [v-cloak] { display:none; }
 }
+
+
+// Recipe Tiles configuration
+$recipe-tile-height-xl: 165px !default;
+$recipe-tile-height-lg: 138px !default;
+$recipe-tile-height-md: 122px !default;
+$recipe-tile-height-sm: 122px !default;
+$recipe-tile-height-xs: auto !default;
+$recipe-tile-background: $black !default;
+

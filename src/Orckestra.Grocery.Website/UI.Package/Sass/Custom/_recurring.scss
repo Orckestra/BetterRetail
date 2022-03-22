@@ -1,53 +1,50 @@
 .recurring-modes {
-  margin-top: 10px;
-  padding-bottom: 10px;
-
-  .alert {
-
-    &.selected {
-      background-color: $light;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    .alert {
+        &.selected {
+            background-color: $lighter;
+        }
     }
-  }
-
-  .recurring-frequencies {
-    margin-left: 20px;
-  }
+    .recurring-frequencies {
+        margin-left: 20px;
+    }
 }
 
 .recurring-orders-frequency-selection.template-details-frequency {
-  border: 1px solid gray("400");
-  margin-left: 12px;
+    border: 1px solid gray("400");
+    margin-left: 12px;
 }
 
 .recurring-price {
-  white-space: nowrap;
-  display: inline-block;
-  vertical-align: middle;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .recurring-price-x {
-  padding-top: 10px 15px;
-  display: inline-block;
+    padding-top: 10px 15px;
+    display: inline-block;
 }
 
 .small-thumbnail {
-  float: none;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 5px;
-  &.item {
-    width: 50px;
-  }
-  > .img-small-thumbnail {
-    border: 1px solid gray("400");
-  }
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    &.item {
+        width: 50px;
+    }
+    >.img-small-thumbnail {
+        border: 1px solid gray("400");
+    }
 }
 
 .container-fluid.recurring-container-thumbnail {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .recurring-icon {
-  height: 20px;
-  width: 20px;
+    height: 20px;
+    width: 20px;
 }

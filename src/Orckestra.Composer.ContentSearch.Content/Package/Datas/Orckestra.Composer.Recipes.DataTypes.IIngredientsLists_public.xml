@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="34257df8-84c7-4fdb-9339-fffecef1bc96" Title="Salad" HideTitle="False" Recipe="5547566e-69ce-4199-8fed-0b9df653d704" Order="1" SourceCultureName="en-CA" />
+  <Add Id="62678c66-891b-448d-a1cf-f5d41ec16a19" Title="Ingredients" HideTitle="True" Recipe="aa2f11ea-5fe5-44dc-b5b6-29a9717b467f" Order="0" SourceCultureName="en-CA" />
+  <Add Id="d00ffb65-11d7-4f03-ae0c-07f9a704160e" Title="Ingredients" HideTitle="True" Recipe="5547566e-69ce-4199-8fed-0b9df653d704" Order="0" SourceCultureName="en-CA" />
+</Data>
