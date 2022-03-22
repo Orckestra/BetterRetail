@@ -45,6 +45,8 @@ namespace Orckestra.Composer.ApplePay
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
+
             // POST the data to create a valid Apple Pay merchant session.
             string json = JsonConvert.SerializeObject(request);
 

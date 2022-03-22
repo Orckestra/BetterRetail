@@ -1,23 +1,19 @@
-﻿using Orckestra.Composer.ApplePay.Parameters;
+﻿using Composite.Core;
+using Orckestra.Composer.ApplePay.Parameters;
 using Orckestra.Composer.ApplePay.Requests;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Orckestra.Composer.Request;
-using Composite.Core;
-using System.Configuration;
 
 namespace Orckestra.Composer.ApplePay.Api
 {
     public class ApplePayController : ApiController
     {
         private readonly ApplePayClient _client;
-       // private readonly MerchantCertificate _certificate;
 
         public ApplePayController()
         {
             _client = new ApplePayClient();
-           // _certificate = new MerchantCertificate(new Options.ApplePayOptions());
         }
 
         /// <summary>
@@ -38,23 +34,17 @@ namespace Orckestra.Composer.ApplePay.Api
             try
             {
                 var request = new ApplePaySessionRequest();
-                request.DisplayName = "Pay for Better Retail Order";
+                request.DisplayName = "Pay for Better Retail Order"; // TODO: Have somewhere configured this
                 request.Initiative = "web";
-                request.InitiativeContext = Request.Headers.Host; // "wfecm.int6.platform.orckestra.cloud";
-                Log.LogWarning("Apple Pay Host", Request.Headers.Host);
-                request.MerchantIdentifier = ConfigurationManager.AppSettings["ApplePayMerchantId"];
-                // request.InitiativeContext = Request.Headers.Host;
-                //request.MerchantIdentifier = _certificate.GetMerchantIdentifier();
+                request.InitiativeContext = Request.Headers.Host;
 
                 var merchantSession = await _client.GetMerchantSessionAsync(requestUri, request);
-
 
                 return Json(merchantSession);
             }
             catch (Exception ex)
             {
                 Log.LogError("Appl Pay Controller", ex);
-                Log.LogError("Appl Pay Controller", ex.InnerException?.Message);
                 return Json(ex);
             }
         }

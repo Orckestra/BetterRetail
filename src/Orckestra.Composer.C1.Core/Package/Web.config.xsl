@@ -47,10 +47,6 @@
   <add key="AutoImageResizing.ImageFormats" value="image/webp, image/jpeg"/>
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
-    <xsl:comment> BAMBORA - APPLE Pay </xsl:comment>
-  <add key="BamboraMerchantId" value="" />
-  <add key="BamboraPaymentsApiPasscode" value="" />
-  <add key="ApplePayMerchantId" value="merchant.wfecm.int.platform.orckestra.cloud" />
 </appSettings>
 </xsl:variable>
 

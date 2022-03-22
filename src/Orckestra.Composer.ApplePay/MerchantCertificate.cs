@@ -1,13 +1,12 @@
 // Copyright (c) Just Eat, 2016. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Orckestra.Composer.ApplePay.Options;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Composite.Core;
-using Orckestra.Composer.ApplePay.Options;
 
 namespace Orckestra.Composer.ApplePay
 {
@@ -23,20 +22,6 @@ namespace Orckestra.Composer.ApplePay
         public X509Certificate2 GetCertificate()
         {
             return LoadCertificateFromDisk(_options.MerchantCertificateFileName, _options.MerchantCertificatePassword);
-
-            /* // Get the merchant certificate for two-way TLS authentication with the Apple Pay server.
-             if (!string.IsNullOrWhiteSpace(_options.MerchantCertificate))
-             {
-                 return LoadCertificateFromBase64String(_options.MerchantCertificate, _options.MerchantCertificatePassword);
-             }
-             else if (_options.UseCertificateStore)
-             {
-                 return LoadCertificateFromStore(_options.MerchantCertificateThumbprint);
-             }
-             else
-             {
-                 return LoadCertificateFromDisk(_options.MerchantCertificateFileName, _options.MerchantCertificatePassword);
-             }*/
         }
 
         public string GetMerchantIdentifier()
