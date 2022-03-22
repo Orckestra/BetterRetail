@@ -4,6 +4,7 @@
 ///<reference path='../Repositories/SearchRepository.ts' />
 /// <reference path='../Utils/UrlHelper.ts' />
 /// <reference path='./SearchParams.ts' />
+/// <reference path='./Constants/ContentSearchEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -15,7 +16,7 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
             console.log(this.context.viewModel);
-            const { SearchResults, PagesCount, Total, SearchResultEntries } = this.context.viewModel.ActiveTab;
+            const { SearchResults, PagesCount, Total } = this.context.viewModel.ActiveTab;
 
             const self = this;
             this.vueSearchResults = new Vue({
@@ -23,30 +24,19 @@ module Orckestra.Composer {
                 components: {
                 },
                 data: {
-                    SearchResults: SearchResultEntries,
-                    TotalCount: SearchResults.ResultsFound,
-                    Pagination: null,
+                    SearchResults,
+                    TotalCount: Total,
+                    Pagination: {
+                        PagesCount: 1,
+                        CurrentPage: 1,
+                        PreviousPage: false,
+                        NextPage: false,
+                    },
                     isLoading: false
                 },
                 mounted() {
-                    var pageUrl = decodeURIComponent(Composer.urlHelper.getURLParameter(window.location.href, 'errorpath'));
-                   // console.log(window.location.href);
-                    console.log(window.location.search);
-
-                    console.log(window.location.pathname);
-
                     this.Pagination = this.getPagination(PagesCount)
-
-                    console.log(this.Pagination);
-
-                    console.log(SearchParams.toPage('5'));
-                    console.log(SearchParams.nextPage());
-                    console.log(SearchParams.previousPage());
-
-                    //this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + queryString);
-                    //pathInfo?.Split('/')[1];
-
-                    // this.eventHub.publish(ProductEvents.LineItemAdding, { data: productData });
+                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, this.onSearchResultsLoaded);
                 },
                 computed: {
                 },
@@ -60,26 +50,41 @@ module Orckestra.Composer {
                             NextPage:  currentPage < count
                         });
                     },
-                    onSearchRequested({data}): void {
+                    previousPage(): any {
+                        const queryString = SearchParams.previousPage();
+
+                        this.loadSearchResults({queryString});
+                    },
+                    nextPage(): any {
+                        const queryString = SearchParams.nextPage();
+
+                        this.loadSearchResults({queryString});
+                    },
+                    toPage(page: any): any {
+                        const queryString = SearchParams.toPage(page);
+
+                        this.loadSearchResults({queryString});
+                    },
+                    loadSearchResults({queryString}): void {
+                        SearchParams.pushState(queryString);
+                        const currentTab = SearchParams.getLastSegment();
+
                         this.isLoading = true;
-                        self.searchRepository.getContentSearchResults(data.queryString).then(result => {
+                        self.searchRepository.getContentSearchResults(queryString, currentTab).then(result => {
                             this.isLoading = false;
                             console.log(result)
-                        //    Object.keys(result.ProductSearchResults).forEach(key => this[key] = result.ProductSearchResults[key]);
-
-                           // self.eventHub.publish(SearchEvents.SearchResultsLoaded, { data: result });
+                            self.eventHub.publish(ContentSearchEvents.SearchResultsLoaded, { data: result });
                         });
                     },
+                    onSearchResultsLoaded({data}): void {
+                        const { SearchResults, PagesCount, Total } = data.ActiveTab;
+
+                        this.Pagination = this.getPagination(PagesCount);
+                        this.SearchResults = [...SearchResults];
+                        this.TotalCount = Total;
+                    }
                 }
             });
-        }
-
-        private encodeQuerystringValue(valueToEncode: string) {
-            return encodeURIComponent(valueToEncode).replace(/%20/g, '+');
-        }
-
-        private decodeQuerystringValue(valueToDecode) {
-            return decodeURIComponent(valueToDecode).replace(/\+/g, ' ');
         }
     }
 }

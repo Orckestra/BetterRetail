@@ -145,7 +145,7 @@
     <div class="pagination-dropdown" v-if="@vueModel">
         <ul class="pagination m-0  align-items-center justify-content-end">
             <li class="page-item previous" v-bind:class="{ disabled: !@(vueModel).PreviousPage }">
-                <a class="page-link" v-bind:title="@Html.Localize("List-Search", "B_Previous")" v-on:click="previousPage()">
+                <a class="page-link" title="@Html.Localize("List-Search", "B_Previous")" v-on:click="previousPage()">
                     <i class="fa fa-arrow-circle-left"></i>&#160;@Html.Localize("List-Search", "B_Previous")
                 </a>
             </li>
@@ -170,7 +170,7 @@
                 </span>
             </li>
             <li class="page-item next ml-2" v-bind:class="{ disabled: !@(vueModel).NextPage }">
-                <a class="page-link" v-bind:title="@Html.Localize("List-Search", "B_Next")" v-on:click="nextPage()">
+                <a class="page-link" title="@Html.Localize("List-Search", "B_Next")" v-on:click="nextPage()">
                     @Html.Localize("List-Search", "B_Next")&#160;<i class="fa  fa-arrow-circle-right"></i>
                 </a>
             </li>
@@ -183,12 +183,12 @@
 {
     <ul class="pager pagination" v-if="@vueModel">
         <li class="page-item previous mr-auto" v-bind:class="{ disabled: !@(vueModel).PreviousPage }">
-            <a class="page-link" data-qa="search-pagination-previous" v-bind:title="@Html.Localize("List-Search", "B_Previous")" v-on:click="previousPage()">
+            <a class="page-link" data-qa="search-pagination-previous" title="@Html.Localize("List-Search", "B_Previous")" v-on:click="previousPage()">
                 <span class="fa fa-arrow-circle-left"></span> @Html.Localize("List-Search", "B_Previous")
             </a>
         </li>
         <li class="page-item next" v-bind:class="{ disabled: !@(vueModel).NextPage }">
-            <a class="page-link" data-qa="search-pagination-next" v-bind:title="@Html.Localize("List-Search", "B_Next")" v-on:click="nextPage()">
+            <a class="page-link" data-qa="search-pagination-next" title="@Html.Localize("List-Search", "B_Next")" v-on:click="nextPage()">
                 @Html.Localize("List-Search", "B_Next") <span class="fa fa-arrow-circle-right"></span>
             </a>
         </li>

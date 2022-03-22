@@ -39,5 +39,13 @@ module Orckestra.Composer {
             params.set(PAGE_PARAM, page.toString());
             return this.getSearchQuery(params)
         }
+
+        public static getLastSegment(): string {
+            return window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+        }
+
+        public static pushState(query: string): void {
+            window.history.pushState(window.history.state, "", window.location.pathname + query);
+        }
     }
 }

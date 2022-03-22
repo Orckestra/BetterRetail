@@ -37,7 +37,8 @@ module Orckestra.Composer {
         /**
          * Get content search results
          * @param QueryString
+         * @param CurrentTabPathInfo
          */
-        getContentSearchResults(QueryString): Q.Promise<any>;
+        getContentSearchResults(QueryString, CurrentTabPathInfo): Q.Promise<any>;
     }
 }

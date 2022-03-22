@@ -27,8 +27,8 @@ module Orckestra.Composer {
             return ComposerClient.post('/api/searchquery/search', { QueryString, QueryName, QueryType });
         }
 
-        public getContentSearchResults(QueryString): Q.Promise<any> {
-            return ComposerClient.post('/api/contentsearch/search', { QueryString });
+        public getContentSearchResults(QueryString, CurrentTabPathInfo): Q.Promise<any> {
+            return ComposerClient.post('/api/contentsearch/search', { QueryString, CurrentTabPathInfo });
         }
     }
 }
