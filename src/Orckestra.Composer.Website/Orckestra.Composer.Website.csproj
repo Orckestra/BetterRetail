@@ -412,10 +412,6 @@
       <Project>{4e03ed32-6962-42a6-b8ce-ca505d4ca10f}</Project>
       <Name>Orckestra.Composer.ApplePay</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.Bambora\Orckestra.Composer.BamboraPayment.csproj">
-      <Project>{9b8185ae-541a-4b4a-a3ff-c2d63c218235}</Project>
-      <Name>Orckestra.Composer.BamboraPayment</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj">
       <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
       <Name>Orckestra.Composer.Cart</Name>
