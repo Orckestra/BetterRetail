@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Orckestra.Composer.ViewModels;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {
-    public class SearchResultsEntryViewModel
+    public class SearchResultsEntryViewModel: BaseViewModel
     {
         public string Title { get; set; }
         public string Description { get; set; }

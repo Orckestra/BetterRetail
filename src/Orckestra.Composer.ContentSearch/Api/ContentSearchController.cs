@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Http;
+using Composite.Core;
 using Orckestra.Composer.ContentSearch.Parameters;
 using Orckestra.Composer.ContentSearch.Request;
 using Orckestra.Composer.ContentSearch.Services;
@@ -39,6 +40,12 @@ namespace Orckestra.Composer.ContentSearch.Api
             SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
             BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
             ContentSearchViewService = contentSearchViewService ?? throw new ArgumentNullException(nameof(contentSearchViewService));
+        }
+
+        public ContentSearchController()
+        {
+            ContentSearchViewService = ServiceLocator.GetService<IContentSearchViewService>();
+            ComposerContext = ServiceLocator.GetService<IComposerContext>();
         }
 
         [ActionName("search")]

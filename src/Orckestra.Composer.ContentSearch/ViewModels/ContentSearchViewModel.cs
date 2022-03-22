@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {
-    public class ContentSearchViewModel: BaseViewModel
+    public class ContentSearchViewModel
     {
         public ContentSearchViewModel()
         {

@@ -290,7 +290,7 @@
     <div class="content-tab-teaser">
         @foreach (var tab in tabs)
         {
-            var resutls = tab.SearchResults?.Entries?.Take(teaserItemsCount);
+            var resutls = tab.SearchResults.Take(teaserItemsCount);
             if (resutls == null) { continue; }
             <div class="header">
                 <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
@@ -302,9 +302,9 @@
             <div class="row mb-4">
                 @foreach (var entry in resutls)
                 {
-                    <div class="col-12 col-sm-4 col-md-4">
-                        @ShowContentSearchEntry(entry)
-                    </div>
+                <div class="col-12 col-sm-4 col-md-4">
+                    @Function("Composer.ContentSearch.SearchEntryItem", new { SearchResultEntry = entry })
+                </div>
                 }
             </div>
         }
@@ -358,12 +358,6 @@
             }
         </div>
     </div>
-}
-
-@helper ShowContentSearchEntry(SearchResultEntry entry)
-{
-    var vm = ContentSearchViewService.GetSearchResultsEntryViewModel(entry);
-    @Function("Composer.ContentSearch.SearchEntryItem", new { SearchResultEntry = vm })
 }
 
 @helper ShowContentSearchEntry(string searchEntry = "contentItem")
