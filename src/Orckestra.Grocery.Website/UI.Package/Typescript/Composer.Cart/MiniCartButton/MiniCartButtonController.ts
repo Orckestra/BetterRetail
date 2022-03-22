@@ -32,6 +32,13 @@ module Orckestra.Composer {
             var loggedOutScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedOut]);
             loggedOutScheduler.subscribe((e: IEventInformation) => this.cartService.invalidateCache());
             loggedInScheduler.subscribe((e: IEventInformation) => this.cartService.invalidateCache());
+            this.eventHub.subscribe(MyAccountEvents.EditOrderStarted, (e: IEventInformation) => this.onEditOrderStarted(e));
+
+        }
+
+        protected onEditOrderStarted(e: IEventInformation): void {
+            this.cartService.invalidateCache()
+                .then(() => window.location = e.data.redirectUrl);
         }
 
         protected initializeMiniCartQuantity(cart, fulfillment): void {

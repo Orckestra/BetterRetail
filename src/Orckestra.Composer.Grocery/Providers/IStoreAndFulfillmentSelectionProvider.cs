@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Grocery.Parameters;
 using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -99,5 +100,19 @@ namespace Orckestra.Composer.Grocery.Providers
         Task RecoverSelection(RecoverSelectionDataParam param);
 
         String GetSelectedStoreNumber();
+
+        /// <summary>
+        /// Set fulfilement selection on wesbite by order data. It is used for Edit Order mode
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> SetSelectedFulfillmentByOrderAsync(Order order);
+
+        /// <summary>
+        /// Set fulfilement selection on wesbite by store number. It is used for Edit Order mode when need to restore selection for prevoius selected store
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        Task<Orckestra.Overture.ServiceModel.Customers.Stores.Store> SetFullfilmentSelectionByStore(SetFulfillmentSelectionByStoreParam param);
     }
 }

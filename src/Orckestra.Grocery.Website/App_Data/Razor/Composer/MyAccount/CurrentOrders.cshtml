@@ -19,7 +19,7 @@
                 <div class="card-body busy-container" v-cloak="true" v-bind:class="{ 'busy': Loading }">
                     @GeneralHelpers.LoadingSpinner()
                     <div v-if="Orders">
-                         @OrdersHelper.CompactOrderDetails()
+                        @OrdersHelper.CompactOrderDetails()
                     </div>
                     <div v-else="else">
                         <span class="text-muted px-4">@Html.Localize("MyAccount", "L_CurrentOrdersEmpty")</span>
@@ -27,6 +27,7 @@
                 </div>
             </div>
             @OrdersHelper.OrderHistoryPagination()
+            @OrdersHelper.CancelOrderConfirmationModal()
         </div>
     </div>
 </body>

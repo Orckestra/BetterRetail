@@ -1,5 +1,7 @@
 @inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Overture.ServiceModel.Orders
+@using Orckestra.Composer.Cart
+
 @functions {
     public override string FunctionDescription
     {
@@ -16,7 +18,7 @@
     <div data-oc-controller="Grocery.SelectedStoreInCart">
         <div v-if="Cart" class="card bg-lighter">
             <div v-if="FulfillmentMethodType" class="card-header">
-                <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                     @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
                 </a>
                 <h3 class="float-left m-0">
@@ -26,7 +28,7 @@
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </h3>
             </div>
-            <button v-else="else" class="btn btn-primary"
+            <button v-else-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="btn btn-primary"
                     v-on:click.prevent="changeStoreModal($event, 'method')">
                 @Html.Localize("Grocery", "B_SelectFulfillmentMethod")
             </button>
@@ -38,7 +40,7 @@
                     @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
                 </div>
                 <div v-else="else">
-                    <button class="btn btn-primary"
+                    <button v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="btn btn-primary"
                             v-on:click.prevent="changeStoreModal($event, 'store')">
                         @Html.Localize("Grocery", "B_BookStore")
                     </button>

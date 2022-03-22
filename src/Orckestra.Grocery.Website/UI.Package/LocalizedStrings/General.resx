@@ -288,4 +288,19 @@
   <data name="L_EachAbbrev" xml:space="preserve">
     <value>ea.</value>
   </data>
+  <data name="B_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="B_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="B_UpdateOrder" xml:space="preserve">
+    <value>Update Order</value>
+  </data>
+  <data name="B_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="T_Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
 </root>

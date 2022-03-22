@@ -11,6 +11,7 @@ module Orckestra.Composer {
 
         protected _geoService: GeoLocationService = new GeoLocationService();
         protected fulfillmentService: IFulfillmentService = FulfillmentService.instance();
+        private cartService: ICartService = CartService.getInstance();
 
         private _map: google.maps.Map;
         private _marker: google.maps.Marker;
@@ -18,8 +19,12 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
 
-            this.fulfillmentService.getSelectedFulfillment()
-                .then(fulfillment => this.initializeVueComponent(fulfillment));
+            let getCartPromise = this.cartService.getCart();
+            let getFulfilment = this.fulfillmentService.getSelectedFulfillment();
+            Q.all([getCartPromise, getFulfilment])
+                .spread((cart, fulfillment) => {
+                    this.initializeVueComponent(cart, fulfillment);
+                });
 
             var center = new google.maps.LatLng(this.context.viewModel.latitude, this.context.viewModel.longitude);
             var mapOptions: google.maps.MapOptions = {
@@ -51,7 +56,7 @@ module Orckestra.Composer {
             this.setGoogleDirectionLink();
         }
 
-        protected initializeVueComponent(fulfillment) {
+        protected initializeVueComponent(cart, fulfillment) {
             let self: StoreDetailsController = this;
             let commonFulfillmentOptions = FulfillmentHelper.getCommonSelectedFulfillmentStateOptions(fulfillment);
             let data = self.context.viewModel;
@@ -59,7 +64,8 @@ module Orckestra.Composer {
                 el: "#vueStoreDetails",
                 data: {
                     ...data,
-                    ...commonFulfillmentOptions.data
+                    ...commonFulfillmentOptions.data,
+                    Cart: cart
                 },
                 mounted() {
                     self.eventHub.subscribe(FulfillmentEvents.StoreUpdating, e => this.onStoreUpdating(e.data));
@@ -69,6 +75,7 @@ module Orckestra.Composer {
                 },
                 computed: {
                     ...commonFulfillmentOptions.computed,
+                    IsDraftCart() { return this.Cart && this.Cart.CartType === 'OrderDraft'; },
                     IsCurrentStoreSelected() {
                         return !!(this.SelectedFulfillment.Store && this.SelectedFulfillment.Store.Id === data.id);
                     },

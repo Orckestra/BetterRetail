@@ -30,6 +30,13 @@ module Orckestra.Composer {
                     this.initializeMiniCartQuantity(cart, fulfillment);
                 });
             this.eventHub.subscribe(GeneralEvents.LanguageSwitched, (e: IEventInformation) => this.cartService.invalidateCache());
+            this.eventHub.subscribe(MyAccountEvents.EditOrderStarted, (e: IEventInformation) => this.onEditOrderStarted(e));
+
+        }
+
+        protected onEditOrderStarted(e: IEventInformation): void {
+            this.cartService.invalidateCache()
+                .then(() => window.location = e.data.redirectUrl);
         }
 
         protected initializeMiniCartQuantity(cart, fulfillment): void {

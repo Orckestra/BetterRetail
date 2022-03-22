@@ -47,7 +47,7 @@
                             @StoreLocatorLink(pages)
                         </li>
 
-                         @Function("Composer.Membership.SignInHeader")
+                        @Function("Composer.Membership.SignInHeader")
                         <li class="nav-item d-none d-lg-block">
                             @Function("Composer.WishList.WishListInHeader")
                         </li>
@@ -69,17 +69,18 @@
                         @Logo()
                     </div>
                     <div class="col-12 col-md-9 col-lg-6  justify-content-center align-self-center">
-						<f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
-							<f:param name="Autocomplete" value="true" />
-						</f:function>
+                        <f:function xmlns:f="http://www.composite.net/ns/function/1.0" name="Composer.SearchBox">
+                            <f:param name="Autocomplete" value="true" />
+                        </f:function>
                     </div>
-					<div class="col-3 col-lg-2 justify-content-center align-self-center">
-						@Function("Composer.Cart.MinicartButton")
-					</div>
+                    <div class="col-3 col-lg-2 justify-content-center align-self-center">
+                        @Function("Composer.Cart.MinicartButton")
+                    </div>
                 </div>
             </div>
         </div>
         @Function("Grocery.TimeSlotBanner")
+        @Function("Composer.Header.EditOrderBanner")
     </header>
 </body>
 </html>

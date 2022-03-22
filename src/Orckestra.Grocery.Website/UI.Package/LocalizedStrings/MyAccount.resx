@@ -178,7 +178,7 @@
     <value>Sign out</value>
   </data>
   <data name="H_OrderDetail" xml:space="preserve">
-    <value>See details</value>
+    <value>See Details</value>
   </data>
   <data name="H_OrderTracking" xml:space="preserve">
     <value>Track your order</value>
@@ -494,5 +494,26 @@
   </data>
   <data name="L_UnavailableOrderItem" xml:space="preserve">
     <value>This item was unavailable and a substitute couldn’t be found</value>
+  </data>
+  <data name="B_CancelEditing" xml:space="preserve">
+    <value>Cancel Editing</value>
+  </data>
+  <data name="B_ContinueEditing" xml:space="preserve">
+    <value>Continue Editing</value>
+  </data>
+  <data name="B_EditOrder" xml:space="preserve">
+    <value>Edit Order</value>
+  </data>
+  <data name="L_ConfirmCancelOrder" xml:space="preserve">
+    <value>Are you sure you want to cancel this order {0}?</value>
+  </data>
+  <data name="T_PendingCancel" xml:space="preserve">
+    <value>Canceling in progress</value>
+  </data>
+  <data name="T_ReloadOrderStatus" xml:space="preserve">
+    <value>Reload page to check status</value>
+  </data>
+  <data name="B_CancelOrder" xml:space="preserve">
+    <value>Cancel Order</value>
   </data>
 </root>

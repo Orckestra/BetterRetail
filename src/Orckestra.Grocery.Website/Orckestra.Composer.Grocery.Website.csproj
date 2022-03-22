@@ -451,6 +451,7 @@
     <Content Include="App_Data\Razor\Composer\Header\MultiLevelMainMenu.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\SelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\BaseSelectedFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\EditOrderBanner.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\List.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\Details.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\SearchResults.cshtml" />

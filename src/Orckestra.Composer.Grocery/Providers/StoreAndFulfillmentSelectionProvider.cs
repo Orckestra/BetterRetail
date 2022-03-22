@@ -1,12 +1,10 @@
 using Composite.Plugins.PageTemplates.MasterPages.Controls.Functions;
 using Orckestra.Composer.Cart;
-using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Grocery.Parameters;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Settings;
-using Orckestra.Composer.Grocery.ViewModels;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
@@ -263,6 +261,40 @@ namespace Orckestra.Composer.Grocery.Providers
             return processedCart;
         }
 
+        public virtual async Task<StoreServiceModel> SetSelectedFulfillmentByOrderAsync(Order order)
+        {
+            if (order == null) { throw new ArgumentNullException(nameof(order)); }
+
+            var shipment = order.Cart.Shipments.FirstOrDefault();
+
+            if(shipment == null) { throw new ArgumentException($"Order #{order.OrderNumber} has no shipments"); }
+
+            var fulfillmentLocationId = shipment.FulfillmentLocationId;
+
+            var store = await StoreRepository.GetStoreAsync(new GetStoreParam()
+            {
+                Id = fulfillmentLocationId,
+                Scope = order.ScopeId
+            }).ConfigureAwait(false);
+
+            if(store == null)
+            {
+                throw new ArgumentException($"Store for order #{order.OrderNumber} and fulfillment location id {fulfillmentLocationId} does not exist");
+            }
+
+            var cookie = CookieAccessor.Read();
+            cookie.Scope = order.ScopeId;
+            var cookieData = new ExtendedCookieData(cookie);
+            cookieData.FulfillmentMethodType = shipment.FulfillmentMethod?.FulfillmentMethodType;
+            cookieData.SelectedStoreNumber = store.Number;
+            Guid.TryParse(shipment.FulfillmentScheduleReservationNumber, out Guid timeSlotReservationId);
+            cookieData.TimeSlotReservationId = timeSlotReservationId;
+
+            CookieAccessor.Write(cookieData.Cookie);
+
+            return store;
+        }
+
         protected virtual async Task UpdateWishListWithNewFulfillmentLocation(Guid fulfillmentLocationId, SetSelectedStoreParam param)
         {
             var wishList = await WishlistRepository.GetWishListAsync(new GetCartParam
@@ -305,12 +337,8 @@ namespace Orckestra.Composer.Grocery.Providers
             var cookieData = new ExtendedCookieData(CookieAccessor.Read());
             if (cookieData.TimeSlotReservationId != default || param.TimeSlotReservationId != default)
             {
-                await TimeSlotRepository.DeleteFulfillmentLocationTimeSlotReservationByIdAsync(new BaseFulfillmentLocationTimeSlotReservationParam()
-                {
-                    SlotReservationId = cookieData.TimeSlotReservationId == default ? param.TimeSlotReservationId : cookieData.TimeSlotReservationId,
-                    Scope = param.Scope,
-                    FulfillmentLocationId = param.FulfillmentLocationId
-                }).ConfigureAwait(false);
+                var timeSlotReservationId = cookieData.TimeSlotReservationId == default ? param.TimeSlotReservationId : cookieData.TimeSlotReservationId;
+                await RemoveTimeSlotReservation(param.FulfillmentLocationId, timeSlotReservationId, param.Scope).ConfigureAwait(false);
 
                 cookieData.TimeSlotReservationId = default;
                 CookieAccessor.Write(cookieData.Cookie);
@@ -347,6 +375,16 @@ namespace Orckestra.Composer.Grocery.Providers
                 }
                 throw;
             }
+        }
+
+        private Task RemoveTimeSlotReservation(Guid fulfillmentLocationId, Guid timeSlotReservationId, string scope)
+        {
+            return TimeSlotRepository.DeleteFulfillmentLocationTimeSlotReservationByIdAsync(new BaseFulfillmentLocationTimeSlotReservationParam()
+            {
+                SlotReservationId = timeSlotReservationId,
+                Scope = scope,
+                FulfillmentLocationId = fulfillmentLocationId
+            });
         }
 
         public virtual async Task<TimeSlotReservation> GetFulfillmentLocationTimeSlotReservationByIdAsync(BaseFulfillmentLocationTimeSlotReservationParam param)
@@ -454,6 +492,12 @@ namespace Orckestra.Composer.Grocery.Providers
             CookieAccessor.Write(cookieData.Cookie);
         }
 
+        /// <summary>
+        /// Fill Cart with Fulfilment Selection or Recover selection by Customer
+        /// Use case: when Order completed, the customer cart is refreshed, so we need to fill data from current fulfilment selection
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public virtual Task RecoverSelection(RecoverSelectionDataParam param)
         {
             if (param == null) throw new ArgumentException(GetMessageOfNull(nameof(param)));
@@ -464,7 +508,7 @@ namespace Orckestra.Composer.Grocery.Providers
             var selectedStore = cookieData.SelectedStoreNumber;
             if (string.IsNullOrWhiteSpace(selectedStore))
             {
-                return RecoverSelectionForCustomer(param);
+                return RecoverFulfillmentSelectionByCustomer(param);
             }
             else
             {
@@ -472,7 +516,34 @@ namespace Orckestra.Composer.Grocery.Providers
             }
         }
 
-        protected virtual async Task RecoverSelectionForCustomer(RecoverSelectionDataParam param)
+        /// <summary>
+        /// Set fulfillment selection by Store Number
+        /// Use Case: restore for previous store selection after the edit order mode
+        /// </summary>
+        /// <param name="storeNumber"></param>
+        /// <returns></returns>
+        public virtual async Task<StoreServiceModel> SetFullfilmentSelectionByStore(SetFulfillmentSelectionByStoreParam param)
+        {
+            if (param == null) throw new ArgumentNullException(GetMessageOfNull(nameof(param)));
+            if (string.IsNullOrEmpty(param.StoreNumber)) throw new ArgumentNullException(GetMessageOfNull(nameof(param.StoreNumber)));
+
+            var store = await StoreRepository.GetStoreByNumberAsync(new GetStoreByNumberParam
+            {
+                StoreNumber = param.StoreNumber,
+                CultureInfo = param.CultureInfo,
+                Scope = ScopeProvider.DefaultScope,
+                IncludeAddresses = false,
+                IncludeSchedules = true
+            }).ConfigureAwait(false);
+
+            if (store == null) throw new ArgumentException($"Store #{param.StoreNumber} doesn't exist");
+
+            await WriteStoreCartDataToCookie(store, param.CustomerId, param.IsAuthenticated, param.CultureInfo).ConfigureAwait(false);
+
+            return store;
+        }
+
+        protected virtual async Task RecoverFulfillmentSelectionByCustomer(RecoverSelectionDataParam param)
         {
             if (param == null) throw new ArgumentException(GetMessageOfNull(nameof(param)));
             if (param.CultureInfo == null) throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)));
@@ -497,41 +568,55 @@ namespace Orckestra.Composer.Grocery.Providers
                     IncludeSchedules = true
                 }).ConfigureAwait(false);
 
-                var cart = await CartRepository.GetCartAsync(new GetCartParam
+                await WriteStoreCartDataToCookie(preferredStore, param.CustomerId, param.IsAuthenticated, param.CultureInfo).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Get Cart for Store and write Cart data to fulfillemnt selection
+        /// </summary>
+        /// <param name="store"></param>
+        /// <param name="customerId"></param>
+        /// <param name="isAuthenticated"></param>
+        /// <param name="cultureInfo"></param>
+        /// <returns></returns>
+        private async Task WriteStoreCartDataToCookie(StoreServiceModel store, Guid customerId, bool isAuthenticated, CultureInfo cultureInfo)
+        {
+            var cart = await CartRepository.GetCartAsync(new GetCartParam
+            {
+                CultureInfo = cultureInfo,
+                CustomerId = customerId,
+                Scope = store.ScopeId ?? ScopeProvider.DefaultScope,
+                CartName = CartConfiguration.ShoppingCartName
+            }).ConfigureAwait(false);
+
+            var shipment = cart.Shipments?.FirstOrDefault() ?? throw new InvalidOperationException("No shipment was found in the cart.");
+
+            if (shipment.FulfillmentLocationId == Guid.Empty)
+            {
+                // the method ChangeSelectedStoreAsync will just update the current cart with fulfilment location id from store and set fulfillment selection in cookies 
+                await ChangeSelectedStoreAsync(store, store, new SetSelectedFulfillmentParam()
                 {
-                    CultureInfo = param.CultureInfo,
-                    CustomerId = param.CustomerId,
-                    Scope = preferredStore?.ScopeId ?? ScopeProvider.DefaultScope,
-                    CartName = param.CartName
+                    CultureInfo = cultureInfo,
+                    CustomerId = customerId,
+                    StoreId = store.Id,
+                    IsAuthenticated = isAuthenticated,
+                    UpdatePreferredStore = false
                 }).ConfigureAwait(false);
-
-                var shipment = cart.Shipments?.FirstOrDefault() ?? throw new InvalidOperationException("No shipment was found in the cart.");
-
-                if (shipment.FulfillmentLocationId == Guid.Empty)
+            }
+            else
+            {
+                Guid.TryParse(shipment.FulfillmentScheduleReservationNumber, out Guid TimeSlotReservationId);
+                var cookieData = new ExtendedCookieData(CookieAccessor.Read())
                 {
-                    await ChangeSelectedStoreAsync(preferredStore, preferredStore, new SetSelectedFulfillmentParam()
-                    {
-                        CultureInfo = param.CultureInfo,
-                        CustomerId = param.CustomerId,
-                        StoreId = preferredStore.Id,
-                        IsAuthenticated = param.IsAuthenticated,
-                        UpdatePreferredStore = false
-                    }).ConfigureAwait(false);
-                }
-                else
-                {
-                    Guid.TryParse(shipment.FulfillmentScheduleReservationNumber, out Guid TimeSlotReservationId);
-                    var cookieData = new ExtendedCookieData(CookieAccessor.Read())
-                    {
-                        SelectedDay = shipment.FulfillmentScheduleReservationDate,
-                        TimeSlotReservationId = TimeSlotReservationId,
-                        FulfillmentMethodType = shipment.FulfillmentMethod?.FulfillmentMethodType,
-                        BrowseWithoutStore = false,
-                        SelectedStoreNumber = preferredStore?.Number,
-                    };
+                    SelectedDay = shipment.FulfillmentScheduleReservationDate,
+                    TimeSlotReservationId = TimeSlotReservationId,
+                    FulfillmentMethodType = shipment.FulfillmentMethod?.FulfillmentMethodType,
+                    BrowseWithoutStore = false,
+                    SelectedStoreNumber = store.Number,
+                };
 
-                    CookieAccessor.Write(cookieData.Cookie);
-                }
+                CookieAccessor.Write(cookieData.Cookie);
             }
         }
 

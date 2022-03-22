@@ -40,5 +40,7 @@ namespace Orckestra.Composer.Grocery.Services
         /// <returns></returns>
         Task<TimeSlotCalendarViewModel> CalculateScheduleAvailabilitySlotsAsync(CalculateScheduleAvailabilitySlotsParam param);
 
+        Task<StoreAndFulfillmentSelectionViewModel> SetOrderFulfillmentAsync(SetOrderFulfillmentParam param);
+
     }
 }

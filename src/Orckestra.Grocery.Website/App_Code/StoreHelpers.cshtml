@@ -1,5 +1,6 @@
 @using Composite.AspNet.Razor
 @using Orckestra.Overture.ServiceModel.Orders
+@using Orckestra.Composer.Cart
 
 @helper StoreAddress(string vueBinding, bool displayPhone = true)
 {
@@ -47,7 +48,7 @@
             @if (showChangeLink)
             {
                 <div class="clearfix">
-                    <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
+                    <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
                         <i class="fa fa-edit d-inline d-sm-none"></i>
                         <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
                     </a>
@@ -57,7 +58,7 @@
         @if (showChangeLink)
         {
             <div v-else="v-else">
-                <button v-on:click.prevent="changeStoreModal($event, 'slot')"
+                <button v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'"  v-on:click.prevent="changeStoreModal($event, 'slot')"
                         v-bind:disabled="!IsStoreSelected || @(vueBinding).TimeSlotLoading"
                         class="btn btn-block btn-primary">
                     @Html.Localize("Grocery", "B_BookYourSlot")
@@ -104,7 +105,7 @@
                 @if (showChangeLink)
                 {
                     <div class="clearfix">
-                        <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                        <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
                             <i class="fa fa-edit d-inline d-sm-none"></i>
                             <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeStore")</span>
                         </a>
@@ -180,9 +181,10 @@
         <span v-if="Store">
             <span class="d-none d-lg-inline">
                 {{Store.LocalizedDisplayName}}
-                @if (showTimeslotInformation) {
-                <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
-                <span v-else-if="TimeSlotReservationTentative">&#160;|&#160;{{TimeSlotReservationDisplay}}</span>
+                @if (showTimeslotInformation)
+                {
+                    <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
+                    <span v-else-if="TimeSlotReservationTentative">&#160;|&#160;{{TimeSlotReservationDisplay}}</span>
                 }
             </span>
             <span class="d-lg-none">
@@ -210,7 +212,7 @@
 {
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
         <div class="border-bottom bg-lighter p-3  mx-n3 mt-n3">
-            <a class="cta dark-blue float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+            <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta dark-blue float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                 <i class="fa fa-edit d-inline d-sm-none"></i>
                 <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
             </a>

@@ -12,6 +12,8 @@
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../Composer.Cart/OrderHistory/Services/OrderService.ts' />
 ///<reference path='../Composer.Grocery/TimeSlotsHelper.ts' />
+///<reference path='../Composer.Grocery/FulfillmentEvents.ts' />
+///<reference path='../Composer.Grocery/FulfillmentService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -76,6 +78,7 @@ module Orckestra.Composer {
                             OrderSummary: null,
                             Fulfillment: null,
                             TimeslotInfo: null,
+                            IsUpdatedOrder: result.IsUpdatedOrder ? result.IsUpdatedOrder : false,
                             ...result
                         },
                         mounted() {
@@ -97,9 +100,18 @@ module Orckestra.Composer {
                                     orderData.Shipments[0].TimeSlot.SlotBeginTime, orderData.Shipments[0].TimeSlot.SlotEndTime, culture);
                             });
 
-                            self.fulfillmentService.getFreshSelectedFulfillment().then(fulfillment => {
-                                this.Fulfillment = fulfillment;
-                            });
+                            self.fulfillmentService.getSelectedFulfillment()
+                                .then(fulfillment => {
+                                    this.Fulfillment = fulfillment;
+                                    return self.fulfillmentService.restoreFulfillment(this.IsUpdatedOrder)
+                                })
+                                .then(() => self.fulfillmentService.getSelectedFulfillment())
+                                .then(fulfillment => {
+                                    self.eventHub.publish(FulfillmentEvents.StoreSelected, { data: fulfillment.Store });
+                                    self.eventHub.publish(FulfillmentEvents.TimeSlotSelected, {
+                                        data: { TimeSlot: fulfillment.TimeSlot, TimeSlotReservation: fulfillment.TimeSlotReservation }
+                                    });
+                                });
                         },
                         computed: {
                             ShowCreateAccountForm() {
