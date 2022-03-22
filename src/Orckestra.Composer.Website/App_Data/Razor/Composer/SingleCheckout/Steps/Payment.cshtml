@@ -192,10 +192,6 @@
 
 @helper ApplePay()
 {
-    <button v-if="IsApplePayMethod" class="btn btn-outline-secondary"
-            v-on:click.prevent="testCompleteApplePay">
-        Test Complete Checkout with hardcoded ApplePay token - the authorization on Bambora will fail
-    </button>
     <input id="storeContext"
            data-merchantidentifier="@ConfigurationManager.AppSettings["ApplePayMerchantId"]"
            data-storename="@HomePageNode.Title"
