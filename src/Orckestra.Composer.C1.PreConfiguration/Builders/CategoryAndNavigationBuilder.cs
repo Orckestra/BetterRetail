@@ -57,36 +57,13 @@ namespace Orckestra.Composer.CompositeC1.Builders
         }
 
 
-        private void DeleteCategoriesAndMenu(DataConnection connection, CultureInfo culture)
+        private void DeleteCategories(DataConnection connection, CultureInfo culture)
         {
             var currentPages = from p in DataFacade.GetData<IPage>()
                 join catPAge in DataFacade.GetData<CategoryPage>() on p.Id equals catPAge.PageId
                 select p;
 
             DataFacade.Delete(currentPages.ToList(), CascadeDeleteType.Allow);
-
-            DataFacade.Delete<NavigationImage>(d => true);
-
-            Func<List<MainMenu>> getMainMenuWithoutRefs = () =>
-                connection.Get<MainMenu>().Where(d => d.GetReferees(typeof(MainMenu), null, false).Count == 0).ToList();
-
-            var mainMenuWithoutRefs = getMainMenuWithoutRefs();
-            // sometimes optional refs is broken and updating optional link throw error on republish
-            while (mainMenuWithoutRefs.Any())
-            {
-                mainMenuWithoutRefs.ForEach(d =>
-                {
-                    connection.Delete(d);
-                });
-                mainMenuWithoutRefs = getMainMenuWithoutRefs();
-            }
-
-            connection.Delete(connection.Get<MainMenu>());//.Delete<MainMenu>(d => true);
-
-            using (var connection2 = new DataConnection(PublicationScope.Published, culture))
-            {
-                connection2.Delete(connection2.Get<MainMenu>().ToList());
-            }
         }
 
 
@@ -96,7 +73,7 @@ namespace Orckestra.Composer.CompositeC1.Builders
             {
                 using (var connection = new DataConnection(PublicationScope.Unpublished, culture))
                 {
-                    DeleteCategoriesAndMenu(connection, culture);
+                    DeleteCategories(connection, culture);
 
                     foreach (var websiteId in connection.SitemapNavigator.HomePageIds)
                     {
