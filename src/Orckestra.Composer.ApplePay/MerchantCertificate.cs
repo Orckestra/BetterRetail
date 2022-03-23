@@ -13,6 +13,7 @@ namespace Orckestra.Composer.ApplePay
     public class MerchantCertificate
     {
         private readonly ApplePayOptions _options;
+        private X509Certificate2 _certificate;
 
         public MerchantCertificate(ApplePayOptions options)
         {
@@ -21,14 +22,17 @@ namespace Orckestra.Composer.ApplePay
 
         public X509Certificate2 GetCertificate()
         {
-            return LoadCertificateFromDisk(_options.MerchantCertificateFileName, _options.MerchantCertificatePassword);
+            if (_certificate == null)
+            {
+                _certificate = LoadCertificateFromDisk(_options.MerchantCertificateFileName, _options.MerchantCertificatePassword);
+            }
+            return _certificate;
         }
 
         public string GetMerchantIdentifier()
         {
             try
             {
-                //using var merchantCertificate = GetCertificate();
                 var merchantCertificate = GetCertificate();
                 return GetMerchantIdentifier(merchantCertificate);
             }
