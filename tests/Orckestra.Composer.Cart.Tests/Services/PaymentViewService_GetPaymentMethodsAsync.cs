@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                 new PaymentMethod
                 {
                     Id = activeMethodId,
-                    DisplayName = new LocalizedString(new Dictionary<string, string>{{"en-US", GetRandom.String(32)}}),
+                    DisplayName = new LocalizedString(new Dictionary<string, string>{{"en-US", "TestDisplayName" } }),
                     PaymentProviderName = GetRandom.String(32),
                     Enabled = true,
                     Type = PaymentMethodType.Cash
@@ -103,7 +103,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
                  new PaymentMethod
                 {
                     Id = GetRandom.Guid(),
-                    DisplayName = new LocalizedString(new Dictionary<string, string>{{"en-US", GetRandom.String(32)}}),
+                    DisplayName = new LocalizedString(new Dictionary<string, string>{{"en-US", "TestDisplayName 2" } }),
                     PaymentProviderName = GetRandom.String(32),
                     Enabled = false,
                     Type = PaymentMethodType.Cash

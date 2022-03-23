@@ -696,7 +696,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             vm.Payment.Should().NotBeNull();
             vm.Payment.PaymentMethod.Should().NotBeNull();
             vm.Payment.PaymentMethod.Id.ShouldBeEquivalentTo(methodId);
-            vm.Payment.PaymentMethod.DisplayName.ShouldBeEquivalentTo("TestDisplayName");
+            vm.Payment.PaymentMethod.DisplayName.ShouldBeEquivalentTo(displayName);
             vm.Payment.PaymentMethod.PaymentProviderName.ShouldBeEquivalentTo(paymentProviderName);
 
             vm.Payment.BillingAddress.Should().NotBeNull();
