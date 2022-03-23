@@ -1,69 +1,95 @@
 ﻿@inherits RazorFunction
 @using Orckestra.Composer.ContentSearch.ViewModels
-
-@{
-    var visibleFacetsCount = 5;
-    var index = 0;
-}
+@using Newtonsoft.Json
 
 @functions {
     [FunctionParameter(Label = "", Help = "")]
     public ContentSearchViewModel Results { get; set; }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"  xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
-    <div>
-        @foreach (var facet in Results.Facets)
-        {
-            index++;
-            var visibleFacets = facet.Hits.Take(visibleFacetsCount).ToList();
-            var hiddenFacets = facet.Hits.Skip(visibleFacetsCount).ToList();
-            <div class="card facets-card bg-light  mb-3">
+    <div data-oc-controller="ContentSearch.FacetSearch"
+         data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         id="vueContentSearchFacets" 
+         v-cloak="true">
+        <div v-if="SelectedFacets.length" class="card facets-card mb-3 selected-facets">
+            <div class="card-header">
+                @Html.Localize("List-Search", "L_Selection")
+                <a v-if="false" 
+                    class="float-right"
+                    data-qa="search-refiners-clear-all"
+                    v-on:click="clearSelectedFacets()">
+                    @Html.Localize("List-Search", "B_ClearAll")
+                </a>
+            </div>
                 <div class="card-body">
-                    <h5>@facet.Label</h5>
-                    <div id="facet@(index)">
-                        <div>
-                            @foreach (var hit in visibleFacets)
-                            {
-                                @FacetHit(facet, hit)
-                            }
-                        </div>
-                        @if (hiddenFacets.Count > 0)
-                        {
-                            <div id="moreHits@(index)" class="collapse">
-                                @foreach (var hit in hiddenFacets)
-                                {
-                                    @FacetHit(facet, hit)
-                                }
-                            </div>
-                            <a class="btn  btn-link" onclick="toggleMoreFacets(this)" data-toggle="collapse" data-target="#moreHits@(index)"
-                               data-label-more="@Html.Localize("List-Search", "B_ShowMore")"
-                               data-label-less="@Html.Localize("List-Search", "B_ShowLess")">
-                                @Html.Localize("List-Search", "B_ShowMore")
+                <ul class="list-group">
+                    <li v-for="(facet, index) in SelectedFacets"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        {{facet.Label}}
+                        <span class="badge badge-light">
+                            <a class="float-right" data-qa="search-refiner-remove"
+                                v-on:click="removeSelectedFacet(facet.Key)"
+                                v-bind:title="facet.Label">
+                                <span class="fa  fa-times  fa-lg"></span>
                             </a>
-                        }
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      
+        <div  v-for="(facet, index) in Facets" class="card  bg-light  mb-3  facets-card" >
+            <div class="card-header">
+                <a data-toggle="collapse"
+                   v-bind:data-target="'#' + facet.Label"
+                   aria-expanded="true"
+                   v-bind:aria-controls="facet.Label">
+                    {{facet.Label}}
+                    <span class="down"><i class="fa fa-angle-down" /></span>
+                    <span class="up"><i class="fa fa-angle-up" /></span>
+                </a>
+            </div>
+
+            <div v-bind:id="facet.Label" class="card-body collapse show">
+                <div v-for="hit in facet.visibleFacets">
+                    @FacetHit()
+                </div>
+            
+                <div v-if="facet.hiddenFacets.length">
+                    <div v-bind:id="'moreHit' + index" class="collapse">
+                        <div v-for="hit in facet.hiddenFacets">
+                            @FacetHit()
+                        </div>
                     </div>
+                    <a class="btn  btn-link"
+                       data-toggle="collapse"
+                       aria-expanded="false" 
+                       v-bind:data-target="'#moreHit' + index">
+                        <span class="show-more">@Html.Localize("List-Search", "B_ShowMore")</span>
+                        <span class="show-less">@Html.Localize("List-Search", "B_ShowLess")</span>
+                    </a>
                 </div>
             </div>
-        }
+        </div>
     </div>
 </body>
 </html>
 
-@helper FacetHit(FacetViewModel facet, FacetHitViewModel hit)
+@helper FacetHit()
 {
-    bool isChecked = Request.QueryString.AllKeys.Contains(hit.Key);
     <div class="form-check mb-1">
-        <input id="@hit.Key" name="@hit.Key"
+        <input v-bind:id="hit.Key" v-bind:name="hit.Key"
                class="form-check-input"
                type="checkbox"
-               onchange="submitContentSearchForm()"
-               @if (isChecked) { <text> checked="checked" </text> } />
-        <label for="@hit.Key" class="form-check-label">
-            @hit.Label (@hit.Count)
+               v-on:change="onFacetToggle($event, hit.Key)"
+               v-bind:checked="hit.isSelected"
+        />
+        <label v-bind:for="hit.Key" class="form-check-label">
+            {{hit.Label}} ({{hit.Count}})
         </label>
     </div>
 }

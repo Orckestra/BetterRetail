@@ -49,6 +49,12 @@ module Orckestra.Composer {
             return this.getSearchQuery(params)
         }
 
+        public static changeFacet(key: string, value: boolean): string {
+            const params = this.getSearchParams();
+            value ? params.set(key, 'on') : params.delete(key);
+            return this.getSearchQuery(params)
+        }
+
         public static getLastSegment(): string {
             return window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
         }

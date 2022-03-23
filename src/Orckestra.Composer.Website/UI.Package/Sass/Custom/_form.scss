@@ -36,3 +36,8 @@
 .error-item {
     color: theme-color("danger");
 }
+
+[aria-expanded="false"] > .show-less,
+[aria-expanded="true"] > .show-more {
+    display: none;
+}

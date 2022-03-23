@@ -104,33 +104,6 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
-    <script type="text/javascript" defer="defer">
-        function submitContentSearchForm(sortBy, sortDirection) {
-
-            if (sortBy) {
-                document.getElementById("sortBy").value = sortBy;
-            }
-
-            if (sortDirection) {
-                document.getElementById("sortDirection").value = sortDirection;
-            }
-
-            document.getElementById('SearchForm').submit();
-        }
-
-        function removeSelection(key) {
-            var checkbox = document.getElementById(key);
-            checkbox.checked = !checkbox.checked;
-            document.getElementById('SearchForm').submit();
-        }
-
-        function toggleMoreFacets(el) {
-            var targetId = $(el).data("target");
-            var lessText = $(el).data("label-less");
-            var moreText = $(el).data("label-more");
-            $(el).text($(targetId).hasClass("in") ? moreText : lessText);
-        }
-    </script>
 </head>
 <body>
     @SearchSummary(contentSearchVm, isProductTab, currentTab?.Title, productTab)
@@ -169,7 +142,6 @@
                                 <head>
                                 </head>
                                 <body>
-                                    @Function("Composer.ContentSearch.SelectedFacets", new { Results = contentSearchVm })
                                     @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm })
                                 </body>
                                 </html>
@@ -290,7 +262,7 @@
     <div class="content-tab-teaser">
         @foreach (var tab in tabs)
         {
-            var resutls = tab.SearchResults.Take(teaserItemsCount);
+            var resutls = tab.SearchResults?.Take(teaserItemsCount);
             if (resutls == null) { continue; }
             <div class="header">
                 <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>

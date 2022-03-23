@@ -24,6 +24,7 @@
 ///<reference path='./Composer.Product/ProductDetail/ProductZoomController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/RecurringOrderSignInFormController.ts' />
 ///<reference path='./Composer.ContentSearch/SearchResultsController.ts' />
+///<reference path='./Composer.ContentSearch/FacetSearchController.ts' />
 ///<reference path='./Composer.Cart/OrderSummary/OrderSummaryController.ts' />
 ///<reference path='./Composer.MyAccount/AddressList/AddressListController.ts' />
 ///<reference path='./Composer.MyAccount/ChangePassword/ChangePasswordController.ts' />
@@ -114,6 +115,7 @@
                 { name: 'Product.ProductZoom', controller: Orckestra.Composer.ProductZoomController },
                 { name: 'Product.RecurringOrderSignInForm', controller: Orckestra.Composer.RecurringOrderSignInFormController },
                 { name: 'ContentSearch.SearchResults', controller: Orckestra.Composer.ContentSearchResultsController },
+                { name: 'ContentSearch.FacetSearch', controller: Orckestra.Composer.ContentFacetSearchController },
 
                 { name: 'SingleCheckout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoSingleCheckoutController },
                 { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },
