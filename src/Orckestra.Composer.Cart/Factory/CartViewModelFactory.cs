@@ -594,7 +594,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (paymentMethod == null || paymentMethodDisplayNames == null) { return null; }
 
-            var paymentMethodDisplayName = paymentMethod.DisplayName.GetLocalizedValue(cultureInfo.Name);
+            var paymentMethodDisplayName = paymentMethod.DisplayName?.GetLocalizedValue(cultureInfo.Name);
             if (string.IsNullOrWhiteSpace(paymentMethodDisplayName) && paymentMethodDisplayNames.ContainsKey(paymentMethod.Type.ToString()))
             {
                 paymentMethodDisplayName = paymentMethodDisplayNames[paymentMethod.Type.ToString()];
