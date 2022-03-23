@@ -47,6 +47,9 @@
   <add key="AutoImageResizing.ImageFormats" value="image/webp, image/jpeg"/>
   <xsl:comment> OWIN </xsl:comment>
   <add key="owin:AutomaticAppStartup" value="false" />
+  <xsl:comment> Apple Pay </xsl:comment>
+  <add key="ApplePayMerchantId" value="merchant.wfecm.int.platform.orckestra.cloud" />
+  <add key="ApplePayMethodId" value="084dbf29-e00d-4709-ad4e-c8c7562cfefd" />
 </appSettings>
 </xsl:variable>
 

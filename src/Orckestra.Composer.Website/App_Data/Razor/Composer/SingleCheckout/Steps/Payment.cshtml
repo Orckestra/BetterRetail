@@ -194,6 +194,7 @@
 {
     <input id="storeContext"
            data-merchantidentifier="@ConfigurationManager.AppSettings["ApplePayMerchantId"]"
+           data-paymentmethodid="@ConfigurationManager.AppSettings["ApplePayMethodId"]"
            data-storename="@HomePageNode.Title"
            data-currency="@ComposerContext.ScopeCurrencyIso"
            data-country="@ComposerContext.CountryCode" type="hidden" />
