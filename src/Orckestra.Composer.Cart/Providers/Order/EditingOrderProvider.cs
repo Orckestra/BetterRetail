@@ -46,8 +46,9 @@ namespace Orckestra.Composer.Cart.Providers.Order
             var isOrderEditable = shipmentStatuses
                 .All(item => orderSettings
                     .EditableShipmentStates
-                    ?.Split('|')
-                    .Contains(item) ?? false);
+                    .ToLower()
+                    .Split('|')
+                    .Contains(item.ToLower()));
 
             return isOrderEditable;
         }
@@ -85,7 +86,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
             if (orderFulfillmentState?.ShipmentFulfillmentStates == null) return false;
 
             return orderFulfillmentState.ShipmentFulfillmentStates.Any(item =>
-                item.Messages?.Exists(el => el.MessageId == orderFulfillmentState.OrderId.ToString()
+                item.Messages?.Exists(el => Guid.Parse(el.MessageId) == Guid.Parse(orderFulfillmentState.OrderId.ToString())
                                             && el.PropertyBag[Constants.RequestedOrderCancellationDatePropertyBagKey] is DateTime
                                             && (DateTime)el.PropertyBag[Constants.RequestedOrderCancellationDatePropertyBagKey] >
                                             DateTime.UtcNow.AddMinutes(-10)) ?? false);

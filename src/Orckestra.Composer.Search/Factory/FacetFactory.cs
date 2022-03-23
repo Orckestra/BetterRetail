@@ -93,6 +93,7 @@ namespace Orckestra.Composer.Search.Factory
             {
                 foreach (var node in nodes)
                 {
+                    if (!node.IsSelected) continue;
                     categoryTree.TryGetValue(node.CategoryId, out TreeNode<Overture.ServiceModel.Products.Category> categoriesRoot);
                     node.ChildNodes  = GetTreeNodes(facetSetting, facets, selectedFacets, categoriesRoot, culture, counts);
                     node.MaxCollapsedCount = facetSetting.MaxCollapsedValueCount;
