@@ -71,6 +71,7 @@
 ///<reference path='./Composer.Grocery/StoreSelector/SelectedStoreInCartController.ts' />
 ///<reference path='./Composer.Grocery/StoreSelector/ChangeStoreModalController.ts' />
 ///<reference path='./Composer.Grocery/TimeSlotBannerController.ts' />
+///<reference path='./Composer.Grocery/Recipes/RecipeDetailsController.ts' />
 
 ///<reference path='./Composer.Cart/EditOrder/EditOrderBannerController.ts' />
 
@@ -170,6 +171,8 @@
                 { name: 'Grocery.SelectedStoreInCart', controller: Orckestra.Composer.SelectedStoreInCartController },
                 { name: 'Grocery.ChangeStoreModal', controller: Orckestra.Composer.ChangeStoreModalController },
                 { name: 'Grocery.TimeSlotBanner', controller: Orckestra.Composer.TimeSlotBannerController },
+                { name: 'Grocery.RecipeDetails', controller: Orckestra.Composer.RecipeDetailsController },
+
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]
         };

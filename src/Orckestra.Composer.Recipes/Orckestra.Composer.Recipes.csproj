@@ -145,7 +145,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecipeUrlProvider.cs" />
     <Compile Include="Search\RecipeDataFieldProcessorProvider.cs" />
+    <Compile Include="Services\IRecipesViewService.cs" />
+    <Compile Include="Services\RecipesViewService.cs" />
     <Compile Include="StartupHandler.cs" />
+    <Compile Include="ViewModels\IngredientsListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
