@@ -352,7 +352,7 @@
     <Content Include="App_Data\Razor\Composer\Search\BaseSelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\SearchEntryItem.cshtml" />
-    <Content Include="App_Data\Razor\Composer\ContentSearch\SelectedFacets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\ContentSearch\Results.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">

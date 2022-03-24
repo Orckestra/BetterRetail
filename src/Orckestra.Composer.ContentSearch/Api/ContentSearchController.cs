@@ -6,11 +6,8 @@ using Orckestra.Composer.ContentSearch.Parameters;
 using Orckestra.Composer.ContentSearch.Request;
 using Orckestra.Composer.ContentSearch.Services;
 using Orckestra.Composer.ContentSearch.ViewModels;
-using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.RequestConstants;
-using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
@@ -23,29 +20,14 @@ namespace Orckestra.Composer.ContentSearch.Api
     public class ContentSearchController : ApiController
     {
         protected IComposerContext ComposerContext { get; private set; }
-        protected ISearchViewService SearchViewService { get; private set; }
-        protected ISearchUrlProvider SearchUrlProvider { get; set; }
-        protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
         protected IContentSearchViewService ContentSearchViewService { get; private set; }
 
         public ContentSearchController(
             IComposerContext composerContext,
-            ISearchViewService searchViewService,
-            ISearchUrlProvider searchUrlProvider,
-            IBaseSearchCriteriaProvider baseSearchCriteriaProvider,
             IContentSearchViewService contentSearchViewService)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
-            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
-            BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
             ContentSearchViewService = contentSearchViewService ?? throw new ArgumentNullException(nameof(contentSearchViewService));
-        }
-
-        public ContentSearchController()
-        {
-            ContentSearchViewService = ServiceLocator.GetService<IContentSearchViewService>();
-            ComposerContext = ServiceLocator.GetService<IComposerContext>();
         }
 
         [ActionName("search")]

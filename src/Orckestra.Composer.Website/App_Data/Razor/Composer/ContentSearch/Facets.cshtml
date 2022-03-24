@@ -15,7 +15,7 @@
          data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
          id="vueContentSearchFacets" 
          v-cloak="true">
-        <div v-if="SelectedFacets.length" class="card facets-card mb-3 selected-facets">
+        <div v-if="SelectedFacets?.length" class="card facets-card mb-3 selected-facets">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
                 <a v-if="false" 

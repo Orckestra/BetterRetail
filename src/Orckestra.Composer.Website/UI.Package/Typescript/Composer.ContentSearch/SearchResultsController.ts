@@ -15,9 +15,10 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-            console.log(this.context.viewModel);
-            const { SearchResults, PagesCount, Total } = this.context.viewModel.ActiveTab;
-            const { SelectedSortBy, AvailableSortBys } = this.context.viewModel;
+            const { SearchResults, PagesCount, Total } = this.context.viewModel;
+            const SelectedSortBy = this.context.container.data('selected-sort');
+            const AvailableSortBys = this.context.container.data('available-sort');
+            const itemsCount = this.context.container.data('items-count');
 
             const self = this;
             this.vueSearchResults = new Vue({
@@ -25,7 +26,7 @@ module Orckestra.Composer {
                 components: {
                 },
                 data: {
-                    SearchResults,
+                    SearchResults: SearchResults && SearchResults.slice(0, itemsCount),
                     TotalCount: Total,
                     SelectedSortBy,
                     AvailableSortBys,
