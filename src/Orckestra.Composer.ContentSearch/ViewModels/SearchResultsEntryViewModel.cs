@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {
-    public class SearchResultsEntryViewModel: BaseViewModel
+    public class SearchResultsEntryViewModel
     {
         public string Title { get; set; }
         public string Description { get; set; }

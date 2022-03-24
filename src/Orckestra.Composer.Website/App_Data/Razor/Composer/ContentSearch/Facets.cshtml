@@ -5,6 +5,9 @@
 @functions {
     [FunctionParameter(Label = "", Help = "")]
     public ContentSearchViewModel Results { get; set; }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    public bool CurrentSite { get; set; }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"  xmlns:v-bind="v-bind" xmlns:v-on="v-on">
@@ -13,6 +16,7 @@
 <body>
     <div data-oc-controller="ContentSearch.FacetSearch"
          data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-current-site="@(CurrentSite)"
          id="vueContentSearchFacets" 
          v-cloak="true">
         <div v-if="SelectedFacets?.length" class="card facets-card mb-3 selected-facets">

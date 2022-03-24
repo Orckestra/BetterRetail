@@ -133,13 +133,14 @@
                 {
                    <f:function name="Composer.Grids.SearchGrid">
                      <f:param name="LeftPart">
-                        @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm })
+                        @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm, CurrentSite = CurrentSite })
                      </f:param>
                      <f:param name="RightPart">
                         @Function("Composer.ContentSearch.Results", new {
                             SelectedSortBy = contentSearchVm.SelectedSortBy,
                             AvailableSortBys = contentSearchVm.AvailableSortBys,
                             Tab = contentSearchVm.ActiveTab,
+                            CurrentSite = CurrentSite
                         })
                      </f:param>
                    </f:function>
@@ -226,7 +227,7 @@
                 }
             </div>
 
-            @Function("Composer.ContentSearch.Results", new { Tab = tab, IsTeaser = true })
+            @Function("Composer.ContentSearch.Results", new { Tab = tab, IsTeaser = true, CurrentSite = CurrentSite })
         }
     </div>
 }
@@ -246,10 +247,10 @@
                 <f:function name="Composer.Search.SelectedFacets"></f:function>
                 <f:function name="Composer.Search.Facets"></f:function>
             </body>
-        </html>
-    </f:param>
-    <f:param name="RightPart">
-        @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
-    </f:param>
-</f:function>
+            </html>
+        </f:param>
+        <f:param name="RightPart">
+            @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
+        </f:param>
+    </f:function>
 }

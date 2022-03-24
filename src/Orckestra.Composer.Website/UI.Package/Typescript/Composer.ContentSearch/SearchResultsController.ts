@@ -19,6 +19,7 @@ module Orckestra.Composer {
             const SelectedSortBy = this.context.container.data('selected-sort');
             const AvailableSortBys = this.context.container.data('available-sort');
             const itemsCount = this.context.container.data('items-count');
+            const currentSite = this.context.container.data('current-site') === 'True';
 
             const self = this;
             this.vueSearchResults = new Vue({
@@ -75,7 +76,7 @@ module Orckestra.Composer {
                         const currentTab = SearchParams.getLastSegment();
 
                         this.isLoading = true;
-                        self.searchRepository.getContentSearchResults(queryString, currentTab).then(result => {
+                        self.searchRepository.getContentSearchResults(queryString, currentTab, currentSite).then(result => {
                             this.isLoading = false;
                             console.log(result)
                             self.eventHub.publish(ContentSearchEvents.SearchResultsLoaded, { data: result });
@@ -87,6 +88,7 @@ module Orckestra.Composer {
                         this.Pagination = this.getPagination(PagesCount);
                         this.SearchResults = [...SearchResults];
                         this.TotalCount = Total;
+                        this.SelectedSortBy = data.SelectedSortBy;
                     }
                 }
             });

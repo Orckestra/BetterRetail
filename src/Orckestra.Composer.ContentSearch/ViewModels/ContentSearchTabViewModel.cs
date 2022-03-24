@@ -1,10 +1,8 @@
-﻿using Orckestra.Composer.ViewModels;
-using Orckestra.Search.WebsiteSearch;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {
-    public class ContentSearchTabViewModel: BaseViewModel
+    public class ContentSearchTabViewModel
     {
         public string UrlTitle { get; set; }
         public string TabUrl { get; set; }

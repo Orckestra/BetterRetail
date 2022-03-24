@@ -27,6 +27,7 @@ module Orckestra.Composer {
 
         private initializeVueComponent() {
             const { Facets, SelectedFacets } = this.context.viewModel;
+            const currentSite = this.context.container.data('current-site') === 'True';
 
             let self = this;
             this.VueFacets = new Vue({
@@ -60,7 +61,7 @@ module Orckestra.Composer {
                         const currentTab = SearchParams.getLastSegment();
 
                         this.Mode.isLoading = true;
-                        self.searchRepository.getContentSearchResults(queryString, currentTab).then(result => {
+                        self.searchRepository.getContentSearchResults(queryString, currentTab, currentSite).then(result => {
                             this.Mode.isLoading = false;
                             self.eventHub.publish(ContentSearchEvents.SearchResultsLoaded, { data: result });
                         });

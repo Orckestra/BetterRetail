@@ -48,13 +48,13 @@ namespace Orckestra.Composer.ContentSearch.Api
                 PageSize = SearchConfiguration.MaxItemsPerPage,
                 CurrentPage = CurrentPage,
                 PathInfo = request.CurrentTabPathInfo,
-                CurrentSiteOnly = true, //CurrentSite,
+                CurrentSiteOnly = request.IsCurrentSiteOnly,
                 SearchQuery = Keywords,
                 IsCorrectedSearchQuery = false,
                 CorrectedSearchQuery = string.Empty,
-                BaseUrl = BaseUrl, //CurrentPageNode.Url,
+                BaseUrl = BaseUrl,
                 QueryKeys = queryString?.AllKeys,
-                ProductsTabActive = false, //isProductTab,
+                ProductsTabActive = false,
                 SortBy = SortBy,
                 SortDirection = SortDirection
             });
