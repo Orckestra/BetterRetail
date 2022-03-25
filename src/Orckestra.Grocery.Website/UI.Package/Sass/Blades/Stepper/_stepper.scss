@@ -5,16 +5,19 @@
     .bs-stepper-tab {
         position: relative;
         &.passed {
-			&:after, &:before {
-				background: map-get($theme-colors, "success");
-			}
-		}
-        &.active {
+            &:after,
             &:before {
                 background: map-get($theme-colors, "success");
             }
         }
-
+        &.active {
+            &>.step-trigger {
+                font-weight: $font-weight-semibold;
+            }
+            &:before {
+                background: map-get($theme-colors, "success");
+            }
+        }
         &:after,
         &:before {
             width: 50%;
@@ -22,7 +25,7 @@
             background: map-get($grays, "300");
             position: absolute;
             top: calc( 1.5rem - 11px);
-			@include media-breakpoint-up(md) {
+            @include media-breakpoint-up(md) {
                 top: calc(1.5rem - 4px);
             }
             z-index: -1;
@@ -38,7 +41,6 @@
     }
     .step-trigger {
         font-size: 1rem;
-        font-weight: 600;
         line-height: 1.5;
         color: black;
         text-align: center;
@@ -68,14 +70,14 @@
             line-height: 2rem;
             font-size: 1.2em;
         }
-		@include media-breakpoint-up(md) {
-			width: 3rem;
-			height: 3rem;
+        @include media-breakpoint-up(md) {
+            width: 3rem;
+            height: 3rem;
             span {
                 line-height: 1.5em;
                 font-size: 2em;
             }
-		}
+        }
     }
     .active {
         .bs-stepper-circle {
@@ -90,17 +92,15 @@
     .bs-stepper-header {
         display: flex;
         background: #fff;
-
         .store-selector-container & {
-            background: $gray-200;
+            background: map-get($theme-colors, "container");
         }
-
         &.sticky-top {
             top: 90px;
             padding-top: $spacer;
-			@include media-breakpoint-up(md) {
-				top: 112px;
-			}
+            @include media-breakpoint-up(md) {
+                top: 112px;
+            }
         }
     }
     .bs-stepper-content {

@@ -22,16 +22,18 @@ a {
         fieldset[disabled] & {
             opacity: 0.5;
         }
-		font-family: "Roboto Condensed";
-		font-weight: bold;
+        font-family: $font-family-base;
+        font-size: 1rem;
         white-space: normal;
-        text-transform: uppercase;
+        text-transform: none !important;
         border-radius: $btn-border-radius;
+        position: relative;
+        line-height: 1.4;
         &.btn-primary {}
-		&.btn-default {
-			border-color: $gray-400;
-			background-color: $gray-100;
-		}
+        &.btn-default {
+            border-color: $gray-400;
+            background-color: $gray-100;
+        }
         &.btn-dashed-block {
             width: 100%;
             border: dashed 2px $gray-400;
@@ -51,14 +53,21 @@ a {
     .more {
         display: none;
     }
-
     &.collapsed {
         .less {
             display: none;
         }
-
         .more {
             display: inline-block;
         }
+    }
+}
+
+div:not(.input-group)>div:not(.btn-group)>.btn:not([type="submit"]):not(.geolocate-btn)>.fa {
+    padding-left: $spacer;
+    &:before {
+        position: absolute;
+        top: 9.5px;
+        left: $spacer;
     }
 }

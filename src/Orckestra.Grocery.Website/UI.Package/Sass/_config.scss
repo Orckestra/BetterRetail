@@ -9,15 +9,12 @@
 // image on product in search result
 $product-image-width: 242;
 $product-image-height: 242;
-
 // large image on product page
 $product-xl-image-width: 410;
 $product-xl-image-height: 526;
-
 // thumbnail image on product page
 $product-thumb-image-width: 80;
 $product-thumb-image-height: 103;
-
 // calculated ratios
 // longer side / shorter side
 $product-image-ratio: $product-image-height / $product-image-width;
@@ -27,6 +24,7 @@ $product-thumb-image-ratio: $product-thumb-image-height / $product-thumb-image-w
 /**
  * Custom Font sizes
  */
+
 $font-size-h1-sm: $h1-font-size * .8;
 $font-size-h2-sm: $h2-font-size;
 $font-size-h3-sm: $h3-font-size;
@@ -35,15 +33,15 @@ $h4-font-size-sm: $h4-font-size;
 $font-size-h5-sm: $h5-font-size;
 $font-size-h6-sm: $h6-font-size;
 
-
 /** Custom widths */
+
 $col-md-3-width: 25%;
 $col-lg-2-width: 16.66667%;
-
 * {
-    [v-cloak] { display:none; }
+    [v-cloak] {
+        display: none;
+    }
 }
-
 
 // Recipe Tiles configuration
 $recipe-tile-height-xl: 165px !default;
@@ -53,3 +51,10 @@ $recipe-tile-height-sm: 122px !default;
 $recipe-tile-height-xs: auto !default;
 $recipe-tile-background: $black !default;
 
+// Custom Colors for the theme
+$gray-orange: #e4e1dd !default;
+
+// stylelint-disable-next-line scss/dollar-variable-default
+$theme-colors: map-merge( ("body-bg": $gray-orange, "container": $gray-200), $theme-colors);
+
+$body-bg: theme-color("body-bg");

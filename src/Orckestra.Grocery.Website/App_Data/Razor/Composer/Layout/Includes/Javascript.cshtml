@@ -28,6 +28,7 @@
     <script src="/UI.Package/JavaScript/parsley.min.js"></script>
     <script src="/UI.Package/JavaScript/slick.js"></script>
     <script src="/UI.Package/JavaScript/vue-autosuggest.js"></script>
+    <script src="/UI.Package/JavaScript/mainMenu.js"></script>
     <script src="/UI.Package/JavaScript/scrollPosStyler.js"></script>
     <script src="/UI.Package/JavaScript/jquery.serialize-object.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=@(MapApiKey)&amp;libraries=places,geometry"></script>
@@ -44,118 +45,5 @@
     {
         <script id="vuejs" src="~/UI.Package/JavaScript/vue.min.js"></script>
     }
-    <script type="text/javascript">
-        /*****************************************
-         **
-         **  MainMenu Image display code
-         **
-         *****************************************/
-        var prevImage = "";
-        $('.main-nav [data-image]').hover(
-            function(e) {
-                var data = $(this).data("image");
-                var hasImage = ($('#menu-image-' + data).length == 1);
-                if (hasImage) {
-                    if (data != prevImage) {
-                        $('.menu-image').removeClass('selected');
-                        $('.multimenu-image').removeClass('selected');
-                        $('#menu-image-' + data).addClass('selected');
-                    }
-                }
-                else {
-                    $('.menu-image').removeClass('selected');
-                    $('.multimenu-image').removeClass('selected');
-                }
-                prevImage = data;
-            }
-        );
-
-        /*****************************************
-         **
-         **  MultiLevelMegaMenu Image display code
-         **
-         *****************************************/
-        $('[data-imageid]').hover(
-            function(e) {
-                var data = $(this).data("imageid");
-                var hasImage = ($('#menu-image-' + data).length == 1);
-                if (hasImage) {
-                    if (data != prevImage) {
-                        $('.menu-image').removeClass('selected');
-                        $('.multimenu-image').removeClass('selected');
-                        $('#menu-image-' + data).addClass('selected');
-                    }
-                }
-                else {
-                    $('.menu-image').removeClass('selected');
-                    $('.multimenu-image').removeClass('selected');
-                }
-                prevImage = data;
-            }
-        );
-
-        $('a.main-nav-section-title').click(
-            function(e) {
-                $('.menu-image').removeClass('selected');
-                $('.multimenu-image').removeClass('selected');
-            }
-        );
-        /*****************************************
-         **
-         **  Disable page scroll when menu is open
-         **
-         *****************************************/
-
-         function disableScroll(disable) {
-             if (disable) {
-                  $('body').css('overflow', 'hidden');
-             }
-             else {
-                  $('body').css('overflow', 'auto');
-             }
-         }
-        $('.main-nav-fw.dropdown').mouseover(
-            function(e) {
-                disableScroll(true);
-            }
-
-        );
-
-        $('.main-nav-fw.dropdown').mouseout(
-           function(e) {
-                disableScroll(false);
-            }
-        );
-        $('.main-nav-fw.dropdown').focusin(
-            function(e) {
-                disableScroll(true);
-            }
-        );
-
-        $('.main-nav-fw.dropdown').focusout(
-            function(e) {
-                disableScroll(false);
-            }
-        );
-
-         /*****************************************
-         **
-         **  Back menu link
-         **  Remove focus on current back button
-         **  Remove focus on back button parent
-         **  Remove focus on category link
-         **  this will close the sub menu that was opened with css :focus-within
-         **
-         *****************************************/
-
-        $('.mobile-menu-back-link').click(
-            function(e) {
-                $(this).blur();
-                $(this).parent().blur();
-                $(this).parents(".multi-nav-section:not(.mobile-menu-back-item)").find('.main-nav-section-title[data-target]').blur();
-            }
-        );
-
-    </script>
 </body>
 </html>

@@ -1,17 +1,17 @@
 <div data-oc-controller="Store.Inventory" class="store-inventory" data-context="{{JsonContext}}">
-    <div class="row">
-        <div class="col-lg-10  offset-lg-1">
+    <div class="row mt-4">
+        <div class="col-lg-12">
             <hr/>
             <span id="storeinventory" class="anchor-offset"></span></div>
-        <div class="col-lg-5  offset-lg-1">
+        <div class="col-lg-6">
            <h2>{{localize 'ProductPage' 'L_StoreInventory'}}</h2>
         </div>
-        <div class="col-lg-5  store-inventory-search">
+        <div class="col-lg-6 store-inventory-search">
             <input id="storeInventorySearchInput" name="storeInventorySearchInput"
 		       class="form-control" type="text"
 		       placeholder="{{localize 'Store' 'I_Placeholder'}}" />
         </div>
-        <div class="col-lg-10  offset-lg-1">
+        <div class="col-lg-12">
             <div id="storesList" class="store-inventory">
                 {{> StoreInventoryList}}
             </div>

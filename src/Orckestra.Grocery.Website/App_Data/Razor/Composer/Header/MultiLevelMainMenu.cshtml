@@ -32,10 +32,9 @@
                             {
                                 var hasImage = !string.IsNullOrEmpty(mainMenuEntry.Image.ImageSource);
 
-                                <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
-
-                                    @if (mainMenuEntry.HasChildren)
-                                    {
+                                if (mainMenuEntry.HasChildren)
+                                {
+                                    <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category"
                                            target="@mainMenuEntry.UrlTarget"
@@ -86,9 +85,12 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    }
-                                    else
-                                    {
+                                    
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category-link"
                                            target="@mainMenuEntry.UrlTarget"
@@ -98,8 +100,9 @@
                                         </a>
 
                                         @Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false, "multimenu-image")
-                                    }
-                                </li>
+                                    
+                                    </li>
+                                }
                             }
                         }
                         @Function("Grocery.SelectedStoreInSticky")
@@ -131,7 +134,7 @@
             <a data-qa="main-menu-section"
                href="@menuEntry.Url"
                target="@menuEntry.UrlTarget"
-               class="main-nav-section-title d-none d-lg-block"
+               class="main-nav-section-title d-none d-lg-flex justify-content-lg-between align-items-center"
                style="@menuEntry.CssClass"
                @{ if (hasImage) { <text> data-imageid="@menuEntry.GetHashCode()" </text> }}>
                 @menuEntry.DisplayName

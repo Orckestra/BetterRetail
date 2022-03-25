@@ -3,7 +3,7 @@
 @helper CompactOrderDetails(bool IsPastOrders = false)
 {
     <div v-for="order in Orders" class="card mb-2">
-        <div class="card-header">
+        <div class="card-header bg-light">
             <div class="row">
                 <div class="col-sm-5">
                     <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>

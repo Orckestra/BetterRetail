@@ -4,7 +4,7 @@
     }
     &-container {
         border-radius: 20px;
-        background-color: $gray-200;
+        background-color: map-get($theme-colors, "container");
     }
     .store-row {
         .store-row-map {

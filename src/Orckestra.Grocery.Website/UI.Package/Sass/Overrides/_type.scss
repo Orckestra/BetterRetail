@@ -8,11 +8,18 @@ h2,
 .h2,
 h3,
 .h3 {
-	font-family: "im_fell_english_pro";
-	font-style: "italic";
+    font-family: $font-family-header;
     margin-bottom: $spacer;
-    font-weight: $font-weight-normal;
+    font-weight: 600;
 }
+
+
+/*
+h1,
+.h1 {
+    text-transform: uppercase;
+}
+*/
 
 h4,
 .h4,

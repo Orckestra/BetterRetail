@@ -1,21 +1,18 @@
 ﻿.page-summary {
-    text-align: center;
-
+    text-align: left;
     &-links {
-        .more, .less {
+        .more,
+        .less {
             font-size: small;
             font-weight: bold;
         }
     }
-
     .less.collapsed {
         display: none;
     }
-
     .more {
         display: none;
     }
-
     .more.collapsed {
         display: inline-block;
     }

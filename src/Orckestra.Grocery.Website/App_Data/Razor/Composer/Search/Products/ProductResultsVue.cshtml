@@ -42,7 +42,7 @@
                 <div class="col-6 d-lg-none">
                     @FacetHelpers.FacetsModalCollapseBtn()
                 </div>
-                <div class="col-6">
+                <div class="col-6 col-md-5">
                     <div class="dropdown sort-by" v-if="SelectedSortBy">
                         <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")&#160;</span>
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-qa="search-sort-by-toggle"
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 d-none d-lg-block">
+                <div class="col-6 col-md-7 d-none d-lg-block">
                     <div class="pagination-dropdown" v-if="Pagination">
                         <ul class="pagination m-0  align-items-center justify-content-end">
                             <li class="page-item previous" v-bind:class="{ disabled: !Pagination.PreviousPage.Url }">

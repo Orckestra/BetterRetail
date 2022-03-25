@@ -1,5 +1,9 @@
 ﻿// Load external Fonts
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Open+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+$font-poppins: 'Poppins';
+$font-dosis: 'Dosis';
+$font-roboto-cond: 'Roboto Condensed';
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -28,7 +32,8 @@ $red: #BF1D3F !default;
 $orange: #fd7e14 !default;
 $yellow: #da9e3d !default;
 $green: #28a745 !default;
-$teal: #20c997 !default;
+$teal: #d7e2e3 !default;
+$gray-teal: #dee5e6 !default;
 $cyan: #33b3c3 !default;
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -93,7 +98,7 @@ $sizes);
 // Body
 //
 // Settings for the `<body>` element.
-$body-bg: $white !default;
+$body-bg: white !default;
 $body-color: $gray-800 !default;
 // Links
 //
@@ -128,8 +133,8 @@ xl: 1200px) !default;
 $container-max-widths: ( xs: 340px,
 sm: 540px,
 md: 720px,
-lg: 960px,
-xl: 1140px) !default;
+lg: 977px,
+xl: 1200px) !default;
 @include _assert-ascending($container-max-widths,
 "$container-max-widths");
 // Grid columns
@@ -145,7 +150,7 @@ $line-height-lg: 1.5 !default;
 $line-height-sm: 1.5 !default;
 $border-width: 1px !default;
 $border-color: $gray-400 !default;
-$border-radius: 3px !default;
+$border-radius: 5px !default;
 $border-radius-lg: 10px !default;
 $border-radius-sm: 1px !default;
 $rounded-pill: 50rem !default;
@@ -171,7 +176,7 @@ $embed-responsive-aspect-ratios);
 //
 // Font, line-height, and color for body text, headings, and more.
 // stylelint-disable value-keyword-case
-$font-family-sans-serif: 'Roboto',
+$font-family-sans-serif: $font-poppins,
 Helvetica,
 "Helvetica Neue",
 sans-serif;
@@ -182,6 +187,8 @@ Consolas,
 "Liberation Mono",
 "Courier New",
 monospace !default;
+$font-family-header: $font-dosis,
+sans-serif !default;
 $font-family-base: $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 $font-size-base: 0.875rem !default; // Assumes the browser default, typically `14px`
@@ -365,7 +372,7 @@ $input-padding-y) !default;
 $input-height-inner-quarter: add($input-line-height * .25em,
 $input-padding-y / 2) !default;
 $input-height: add($input-line-height * 1em,
-add($input-padding-y * 2, $input-height-border, false)) !default;
+add(1rem, $input-height-border, false)) !default;
 $input-height-sm: add($input-line-height-sm * 1em,
 add($input-padding-y-sm * 2, $input-height-border, false)) !default;
 $input-height-lg: add($input-line-height-lg * 1em,
@@ -637,13 +644,16 @@ $pagination-disabled-border-color: $gray-300 !default;
 $jumbotron-padding: 2rem !default;
 $jumbotron-color: null !default;
 $jumbotron-bg: $gray-200 !default;
+// Product Tiles
+$product-tile-border-radius: $border-radius-lg !default;
+$product-tile-border-width: 0 !default;
+$product-tile-border-color: transparent !default;
 // Cards
 $card-spacer-y: .75rem !default;
 $card-spacer-x: 1.25rem !default;
-$card-border-width: $border-width !default;
-$card-border-radius: 0;
-$card-border-color: rgba($black,
-.125) !default;
+$card-border-width: 0 !default;
+$card-border-radius: $border-radius-lg !default;
+$card-border-color: transparent !default;
 $card-inner-border-radius: 0;
 $card-cap-bg: rgba($black,
 .03) !default;

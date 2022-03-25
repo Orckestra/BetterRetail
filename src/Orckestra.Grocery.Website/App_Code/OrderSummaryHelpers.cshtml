@@ -106,13 +106,13 @@
 {
     <div class="row mb-2">
         <div class="col-6  col-md-7">
-            <h4>@Html.Localize("MyAccount", "L_Total")</h4>
+            <h4 class="h3">@Html.Localize("MyAccount", "L_Total")</h4>
         </div>
         <div class="col-6  col-md-5  text-right">
             <div v-if="IsLoading">
                 @GeneralHelpers.LoadingSpinner()
             </div>
-            <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="order-summary-total"></h4>
+            <h4 class="h3" v-else="v-else" v-text="OrderSummary.Total" data-qa="order-summary-total"></h4>
         </div>
     </div>
 }

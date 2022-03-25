@@ -79,7 +79,11 @@
 
 @helper BuildRibbon()
 {
-    <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right"><span v-bind:class="[Product.PromotionalRibbonBackgroundColor, Product.PromotionalRibbonTextColor]">{{Product.PromotionalRibbon}}</span></div>
+    <div class="product-tile-ribbon-holder">
+        <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right">
+            <span v-bind:class="[Product.PromotionalRibbonBackgroundColor, Product.PromotionalRibbonTextColor]">{{Product.PromotionalRibbon}}</span>
+        </div>
+    </div>
 }
 
 @helper BuildBanner()
@@ -121,7 +125,7 @@
             <span v-if="Product.IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{Product.ProductUnitSize}}{{Product.ProductUnitMeasure}}</span>
         </small>
         <span v-if="Product.IsOnSale" class="original-price" v-bind:class="{'order-1 d-block' : Product.IsOnSale}">
-            &nbsp;<del>{{Product.DisplayListPrice}}</del>
+            <del>{{Product.DisplayListPrice}}</del>
         </span>
 
         <span v-if="Product.PricePerUnit" class="product-tile-price-per-unit" v-bind:class="{'order-3' : Product.IsOnSale}">

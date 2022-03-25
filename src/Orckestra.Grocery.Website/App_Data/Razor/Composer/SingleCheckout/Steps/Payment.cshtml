@@ -27,10 +27,10 @@
                             <div class="col-md-6 pb-3" v-if="HasCreditCardProvider">
                                 <div class="border rounded bg-white" v-bind:class="{'bg-selected border-primary' : IsCreditCardProviderSelect}">
                                     <div class="form-check">
-                                        <label class="form-check-label d-block p-3" for="CreditCard-radio">
+                                        <label class="form-check-label d-flex align-items-center flex-wrap p-3" for="CreditCard-radio">
                                             <input data-parsley-class-handler-selector=".card-body"
                                                    data-parsley-errors-container="#method-errors"
-                                                   class="form-check-input" type="radio"
+                                                   class="form-check-input flex-grow-0 flex-shrink-0 mr-0" type="radio"
                                                    v-bind:checked="IsCreditCardProviderSelect"
                                                    v-bind:disabled="IsLoading"
                                                    required="required"
@@ -40,14 +40,14 @@
                                                    id="CreditCard-radio"
                                                    v-on:change="changePaymentMethod"
                                                    xmlns:v-on="v-on" />
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    @Html.Localize("CheckoutProcess", "B_UseCreditCard")
-                                                </div>
-                                                <div class="col-6">
-                                                    <img class="img-fluid" v-bind:src="CreditCardTrustImage.Url" v-bind:alt="CreditCardTrustImage.Alt" xmlns:v-bind="v-bind" />
-                                                </div>
+                                            
+                                            <div class="col-sm-5 col-md-12 col-lg-5">
+                                                @Html.Localize("CheckoutProcess", "B_UseCreditCard")
                                             </div>
+                                            <div class="col-sm-7 col-md-12 col-lg-7">
+                                                <img class="img-fluid" v-bind:src="CreditCardTrustImage.Url" v-bind:alt="CreditCardTrustImage.Alt" xmlns:v-bind="v-bind" />
+                                            </div>
+                                            
                                         </label>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                             <div class="col-md-6 pb-3" v-for="paymentMethod in MainPaymentMethods">
                                 <div class="border rounded bg-white" v-bind:class="{'bg-selected' : paymentMethod.IsSelected}">
                                     <div class="form-check">
-                                        <label class="form-check-label d-block p-3" v-bind:for="paymentMethod.PaymentType + '-radio'">
+                                        <label class="form-check-label d-flex align-items-center p-3" v-bind:for="paymentMethod.PaymentType + '-radio'">
                                             <input data-parsley-class-handler-selector=".card-body"
                                                    data-parsley-errors-container="#method-errors"
                                                    class="form-check-input" type="radio"
@@ -154,7 +154,7 @@
 {
     <div class="row">
         <div class="col-md-3 text-sm-left text-md-center">
-            <img v-bind:src="'/UI.Package/Images/creditcards/' + @(vueMethodBinding).CardType + '.png'"
+            <img class="img-fluid" v-bind:src="'/UI.Package/Images/creditcards/' + @(vueMethodBinding).CardType + '.png'"
                  v-bind:alt="@(vueMethodBinding).CardType" xmlns:v-bind="v-bind" />
         </div>
 

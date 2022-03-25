@@ -96,7 +96,7 @@
 
 @helper AddToCartButton()
 {
-    <button class="btn btn-primary btn-block text-uppercase"
+    <button class="btn btn-primary btn-block"
             v-bind:disabled="AddToCartDisabled"
             title="@Html.Localize("General", "B_AddToCartProductDetail")"
             v-on:click="addItemToCart">

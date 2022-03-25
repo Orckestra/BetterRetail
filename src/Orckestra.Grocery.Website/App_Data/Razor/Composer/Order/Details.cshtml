@@ -130,7 +130,7 @@
                                 {
                                     foreach (var item in Shipment.LineItems)
                                     {
-                                        <div class="col-2">
+                                        <div class="col-2 mb-2">
                                             <img src="@item.ImageUrl"
                                                  class="img-fluid"
                                                  alt="thumbnail"
@@ -143,7 +143,7 @@
                         </div>
                         <div class="col-4 text-right">
                             @Html.Localize("MyAccount", "L_Total"):
-                            <h5>@order.OrderInfos.PricePaid</h5>
+                            <h5 class="h3">@order.OrderInfos.PricePaid</h5>
                         </div>
                     </div>
                 </div>
@@ -198,15 +198,15 @@
     <div class="mb-3 @statusCss">
         @if (status == "Fulfilled")
         {
-            <span class="fa fa-check-circle"> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate) </span>
+            <span class="fa fa-check-circle"></span> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate)
         }
         else if (status == "Canceled")
         {
-            <span class="fa fa-times-circle"> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)</span>
+            <span class="fa fa-times-circle"></span> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)
         }
         else
         {
-            <span class="fa fa-clock-o"> @Html.Localize("MyAccount", "L_OrderInProgress")</span>
+            <span class="fa fa-clock-o"></span> @Html.Localize("MyAccount", "L_OrderInProgress")
         }
     </div>
 }
@@ -358,11 +358,11 @@
                                 @if (item.IsPriceDiscounted)
                                 {
                                     <del>@item.TotalWithoutDiscount</del><br />
-                                    <strong class="text-danger">@item.Total</strong>
+                                    <strong class="text-danger" class="h3">@item.Total</strong>
                                 }
                                 else
                                 {
-                                    <strong>@item.Total</strong>
+                                    <strong class="h3">@item.Total</strong>
                                 }
                                 @if (!string.IsNullOrEmpty(item.SavingsTotal))
                                 {
@@ -449,7 +449,7 @@
     var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
 
     <div class="card bg-lighter mt-4">
-        <h3 class="card-header  bg-gray text-white">
+        <h3 class="card-header  bg-primary text-white">
             @Html.Localize("ShoppingCart", "T_OrderSummary")
         </h3>
         <div class="card-body">
@@ -529,10 +529,10 @@
 
             <div class="row mb-2">
                 <div class="col-6  col-md-7">
-                    <h4>@Html.Localize("MyAccount", "L_Total")</h4>
+                    <h4 class="h3">@Html.Localize("MyAccount", "L_Total")</h4>
                 </div>
                 <div class="col-6  col-md-5  text-right">
-                    <h4>@order.OrderSummary.Total</h4>
+                    <h4 class="h3">@order.OrderSummary.Total</h4>
                 </div>
             </div>
 

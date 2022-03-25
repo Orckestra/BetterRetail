@@ -34,9 +34,9 @@
                             @if (isGrouped)
                             {
                                 <div class="row" v-for="group in Cart.GroupedLineItemDetailViewModels" v-bind:key="group.TopLevelCategoryId">
-                                    <div class="col-12 bg-gray text-white font-weight-bold py-2 h5 border-bottom border-top">
+                                    <h3 class="col-12 bg-dark text-white py-1 px-2 border-bottom border-top">
                                         {{group.TopLevelCategoryName}} ({{group.Quantity}})
-                                    </div>
+                                    </h3>
                                     <div class="col-12 mb-3">
                                         @CartLineItemsList("group.LineItemDetailViewModels")
                                     </div>
