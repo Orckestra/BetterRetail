@@ -85,7 +85,7 @@
         <img v-if="@(searchEntry).ImageUrl" class="card-img-top" v-bind:src="@(searchEntry).ImageUrl + '?h=200'" v-bind:alt="@(searchEntry).Title" />
 
         <div class="card-body">
-            <a class="card-title" v-bind:href="@(searchEntry).DetailsUrl">{{@(searchEntry).Title}}</a>
+            <a class="card-title" v-bind:href="@(searchEntry).DetailsUrl" v-html="@(searchEntry).Title"></a>
             <p v-if="@(searchEntry).Description" class="card-text">{{@(searchEntry).Description}}</p>
         </div>
     </div>
