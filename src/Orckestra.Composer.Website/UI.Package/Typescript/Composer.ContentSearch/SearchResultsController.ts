@@ -21,6 +21,8 @@ module Orckestra.Composer {
             const itemsCount = this.context.container.data('items-count');
             const currentSite = this.context.container.data('current-site') === 'True';
 
+            this.sendContentSearchResultsForAnalytics(Total);
+
             const self = this;
             this.vueSearchResults = new Vue({
                 el: `#${this.context.container.data('vueid')}`,
@@ -78,7 +80,6 @@ module Orckestra.Composer {
                         this.isLoading = true;
                         self.searchRepository.getContentSearchResults(queryString, currentTab, currentSite).then(result => {
                             this.isLoading = false;
-                            console.log(result)
                             self.eventHub.publish(ContentSearchEvents.SearchResultsLoaded, { data: result });
                         });
                     },
@@ -89,9 +90,21 @@ module Orckestra.Composer {
                         this.SearchResults = [...SearchResults];
                         this.TotalCount = Total;
                         this.SelectedSortBy = data.SelectedSortBy;
+
+                        self.sendContentSearchResultsForAnalytics(Total);
                     }
                 }
             });
+        }
+
+        protected sendContentSearchResultsForAnalytics(totalCount: number): void {
+            const data = {
+                Keywords: SearchParams.getKeyword(),
+                TotalCount: totalCount,
+                CurrentTab: SearchParams.getLastSegment()
+            };
+
+            this.eventHub.publish('contentSearchResultRendered', { data });
         }
     }
 }

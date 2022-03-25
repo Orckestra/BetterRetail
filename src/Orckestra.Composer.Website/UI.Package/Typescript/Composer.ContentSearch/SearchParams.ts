@@ -4,6 +4,7 @@ module Orckestra.Composer {
     const PAGE_PARAM = 'page';
     const SORT_BY_PARAM = 'sortBy';
     const SORT_DIRECTION_PARAM = 'sortDirection';
+    const KEYWORDS_PARAM = 'keywords';
 
     export abstract class SearchParams {
         public static getSearchParams(): URLSearchParams {
@@ -17,6 +18,11 @@ module Orckestra.Composer {
         public static currentPage(): number {
             const params = this.getSearchParams();
             return parseInt(params.get(PAGE_PARAM)) || 1
+        }
+
+        public static getKeyword(): string {
+            const params = this.getSearchParams();
+            return params.get(KEYWORDS_PARAM)
         }
 
         public static toPage(page: string): string {
