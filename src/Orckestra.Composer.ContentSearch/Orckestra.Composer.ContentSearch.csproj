@@ -120,6 +120,7 @@
     <Compile Include="Search\MediaSearchDocumentBuilderExtension.cs" />
     <Compile Include="Services\ContentSearchViewService.cs" />
     <Compile Include="Services\IContentSearchViewService.cs" />
+    <Compile Include="StartupHandler.cs" />
     <Compile Include="ViewModels\ContentSearchViewModel.cs" />
     <Compile Include="ViewModels\ContentSearchTabViewModel.cs" />
     <Compile Include="ViewModels\FacetViewModel.cs" />
