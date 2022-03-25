@@ -1,5 +1,4 @@
-﻿using Orckestra.Composer.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {

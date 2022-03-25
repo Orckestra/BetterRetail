@@ -1,9 +1,8 @@
-﻿using Orckestra.Composer.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Orckestra.Composer.ContentSearch.ViewModels
 {
-    public class FacetViewModel: BaseViewModel
+    public class FacetViewModel
     {
         public string Label { get; set; }
         public string Key { get; set;  }

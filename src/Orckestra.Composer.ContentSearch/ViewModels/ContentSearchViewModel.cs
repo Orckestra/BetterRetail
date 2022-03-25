@@ -1,6 +1,4 @@
 ﻿using Orckestra.Composer.ContentSearch.DataTypes;
-using Orckestra.Composer.Search.ViewModels;
-using Orckestra.Composer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 
