@@ -642,6 +642,7 @@ namespace Orckestra.Composer.Cart.Services
         {
             var data = new PropertyBag();
             data["ApplePaymentToken"] = param.Token;
+            data["CustomerIp"] = param.Ip;
 
             return CartRepository.CreateCartPaymentVaultProfile(new CreateCartPaymentVaultProfileParam()
             {

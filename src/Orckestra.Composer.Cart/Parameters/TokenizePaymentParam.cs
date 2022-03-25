@@ -8,6 +8,8 @@ namespace Orckestra.Composer.Cart.Parameters
         public Guid PaymentId { get; set; }
         public string Token { get; set; }
 
+        public string Ip { get; set; }
+
         public Guid CustomerId { get; set; }
 
         /// <summary>

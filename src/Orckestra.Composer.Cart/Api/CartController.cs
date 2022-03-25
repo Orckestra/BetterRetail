@@ -12,7 +12,9 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 
@@ -498,17 +500,36 @@ namespace Orckestra.Composer.Cart.Api
         [HttpPost]
         public virtual async Task<IHttpActionResult> SavePaymentToken([FromBody] TokenizePaymentRequest request)
         {
-            var cart = await CheckoutService.TokenizePaymentAsync(new TokenizePaymentParam()
-            {
-                CartName = CartConfiguration.ShoppingCartName,
-                CustomerId = ComposerContext.CustomerId,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                Token = request.Token,
-                PaymentId = request.PaymentId
-            });
+             var cart = await CheckoutService.TokenizePaymentAsync(new TokenizePaymentParam()
+             {
+                 CartName = CartConfiguration.ShoppingCartName,
+                 CustomerId = ComposerContext.CustomerId,
+                 CultureInfo = ComposerContext.CultureInfo,
+                 Scope = ComposerContext.Scope,
+                 Token = request.Token,
+                 PaymentId = request.PaymentId,
+                 Ip = GetClientIp()
+             });
 
-            return Ok(cart);
+             return Ok(cart);
+        }
+
+        private string GetClientIp(HttpRequestMessage request = null)
+        {
+            request = request ?? Request;
+
+            if (request.Properties.ContainsKey("MS_HttpContext"))
+            {
+                return ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request.UserHostAddress;
+            }
+            else if (HttpContext.Current != null)
+            {
+                return HttpContext.Current.Request.UserHostAddress;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
