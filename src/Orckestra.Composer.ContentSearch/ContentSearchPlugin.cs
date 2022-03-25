@@ -24,8 +24,6 @@ namespace Orckestra.Composer.ContentSearch
 
         private void HostOnInitialized(object sender, EventArgs eventArgs)
         {
-            IComposerHost host = (IComposerHost)sender;
-
             DynamicTypeManager.EnsureCreateStore(typeof(IContentTab));
             DynamicTypeManager.EnsureCreateStore(typeof(ISortOption));
         }

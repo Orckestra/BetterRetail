@@ -115,7 +115,7 @@
                 { name: 'Product.ProductZoom', controller: Orckestra.Composer.ProductZoomController },
                 { name: 'Product.RecurringOrderSignInForm', controller: Orckestra.Composer.RecurringOrderSignInFormController },
                 { name: 'ContentSearch.SearchResults', controller: Orckestra.Composer.ContentSearchResultsController },
-                { name: 'ContentSearch.FacetSearch', controller: Orckestra.Composer.ContentFacetSearchController },
+                { name: 'ContentSearch.Facets', controller: Orckestra.Composer.ContentFacetSearchController },
 
                 { name: 'SingleCheckout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoSingleCheckoutController },
                 { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },
