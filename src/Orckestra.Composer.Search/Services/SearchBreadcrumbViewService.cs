@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Search.Services
                 CultureInfo = cultureInfo
             });
 
-            return string.Format("{0} <span id=\"breadcrumbSearchKeyword\">{1}{2}{3}</span>", leftPart, quoteOpen, keywords ?? string.Empty, quoteClose);
+            return string.Format("{0} {1}<span id=\"breadcrumbSearchKeyword\">{2}</span>{3}", leftPart, quoteOpen, keywords ?? string.Empty, quoteClose);
         }
     }
 }
