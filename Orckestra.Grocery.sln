@@ -114,6 +114,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Media.AutoImageRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Recipes", "src\Orckestra.Composer.Recipes\Orckestra.Composer.Recipes.csproj", "{B9AC700B-BE2A-4E06-8919-2E153012861B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CustomerConditionProvider", "src\Orckestra.Composer.CustomerConditionProvider\Orckestra.Composer.CustomerConditionProvider.csproj", "{91EBDFE4-73C2-4812-A4E9-9FED337D2223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CustomerConditionProvider.Package", "src\Orckestra.Composer.CustomerConditionProvider.Package\Orckestra.Composer.CustomerConditionProvider.Package.csproj", "{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -284,6 +288,14 @@ Global
 		{B9AC700B-BE2A-4E06-8919-2E153012861B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9AC700B-BE2A-4E06-8919-2E153012861B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9AC700B-BE2A-4E06-8919-2E153012861B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -336,9 +348,11 @@ Global
 		{A006CC7C-3290-4BE2-AC06-B2B8F694D4D0} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 		{1C67610A-44C0-49BE-A75A-4482413E063A} = {B770DD6A-41C2-4576-80D9-58023319B204}
 		{B9AC700B-BE2A-4E06-8919-2E153012861B} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal
