@@ -3,15 +3,44 @@
 @using Orckestra.Composer.ViewModels.Home;
 @using Orckestra.Composer.CompositeC1.Mappers;
 @using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+@using Orckestra.Composer.CompositeC1.Providers.MainMenu
 
 
 @functions {
     public INavigationMapper HomeNavigationMapper { get; set; }
+
+    public IEnumerable<IMainMenuItemsProvider> ExternalMainMenuItemsProviders { get; set; }
 }
 
 @{
     var websiteId = SitemapNavigator.CurrentHomePageId;
-    var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).ToList();
+
+    var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).Select(i => new MainMenuItemWrapper()
+    {
+        Id = i.Id,
+        DisplayName = i.DisplayName,
+        CssClassName = i.CssClassName,
+        ParentId = i.ParentId,
+        CssStyle = i.CssStyle,
+        Order = i.Order,
+        Target = i.Target,
+        Url = i.Url,
+        SourceCultureName = i.SourceCultureName
+
+    }).ToList();
+
+    if(ExternalMainMenuItemsProviders != null)
+    {
+        foreach(var provider in ExternalMainMenuItemsProviders)
+        {
+            if(provider.IsActive(websiteId))
+            {
+                var items = provider.GetMainMenuItems(websiteId).ToList();
+                mainMenuData.AddRange(items);
+            }
+        }
+    }
+
     var optionalLinksData = Data.Get<HeaderOptionalLink>().Where(x => x.PageId == websiteId).ToList();
 
     var mainMenu = HomeNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;

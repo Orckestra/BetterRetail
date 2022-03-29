@@ -5,6 +5,7 @@ using System.Linq;
 using Composite.Data;
 using Orckestra.Composer.CompositeC1.Cache;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.ViewModels.Home;
@@ -22,7 +23,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             _analyticsNavigationUrlHelper = analyticsNavigationUrlHelper ?? throw new ArgumentNullException(nameof(analyticsNavigationUrlHelper));
         }
 
-        public virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(List<MainMenu> mainMenuItems, Guid? parentId = null)
+        public virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(List<MainMenuItemWrapper> mainMenuItems, Guid? parentId = null)
         {
             return mainMenuItems
                 .Where(x=> x.ParentId == parentId && C1Helper.IsUrlPagePublished(x.Url))
