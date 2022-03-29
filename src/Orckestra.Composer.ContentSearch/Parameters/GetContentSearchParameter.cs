@@ -17,7 +17,6 @@ namespace Orckestra.Composer.ContentSearch.Parameters
 
         public string SortDirection { get; set; }
         public string[] QueryKeys { get; set; }
-        public string[] Facets { get; set; }
         public CultureInfo Culture { get; set; }
         public int PageSize { get; set; }
 

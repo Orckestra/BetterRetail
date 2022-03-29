@@ -61,6 +61,10 @@ module Orckestra.Composer {
                 this.onSearchResultRendered(eventInfo);
             });
 
+            this.eventHub.subscribe('contentSearchResultRendered', (eventInfo: IEventInformation) => {
+                this.onContentSearchResultRendered(eventInfo);
+            });
+
             this.eventHub.subscribe('relatedProductsLoaded', (eventInfo: IEventInformation) => {
                 this.onRelatedProductsLoaded(eventInfo);
             });
@@ -438,6 +442,16 @@ module Orckestra.Composer {
             }
 
             this.sendEvent('event', 'Search Results', 'Rendered', data.Keywords, data.TotalCount);
+        }
+
+        protected onContentSearchResultRendered(eventInfo: IEventInformation): void {
+            if (!eventInfo) {
+                return;
+            }
+
+            const { data: { Keywords, TotalCount, CurrentTab } } = eventInfo
+
+            this.sendEvent('event', `${CurrentTab} Content Search Results`, 'Rendered', Keywords, TotalCount);
         }
 
         /**

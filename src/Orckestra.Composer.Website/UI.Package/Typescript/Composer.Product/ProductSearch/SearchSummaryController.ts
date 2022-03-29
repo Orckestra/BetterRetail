@@ -3,6 +3,7 @@
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='../../Mvc/IControllerContext.ts' />
 /// <reference path='./Constants/SearchEvents.ts' />
+/// <reference path='../../Composer.ContentSearch/Constants/ContentSearchEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -13,8 +14,7 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
 
-            const ProductCount = this.context.viewModel.TotalCount;
-            const TotalCount = this.context.container.data('total');
+            const Tabs = this.context.viewModel;
             const self = this;
 
             this.vueSearchSummary = new Vue({
@@ -22,17 +22,27 @@ module Orckestra.Composer {
                 components: {
                 },
                 data: {
-                    ProductCount,
-                    OtherCount: TotalCount > ProductCount ? TotalCount - ProductCount : 0
+                    Tabs,
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({data}) => {
-                        this.ProductCount = data.ProductSearchResults.TotalCount;
+                        this.Tabs[0].Total = data.ProductSearchResults.TotalCount;
+                        this.Tabs = [...this.Tabs];
+                    });
+
+                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({data}) => {
+                        data.Tabs.forEach(x => {
+                            const foundTab = this.Tabs.find(tab => tab.Title === x.Title)
+                            if(foundTab) {
+                                foundTab.Total = x.Total;
+                            }
+                        })
+                        this.Tabs = [...this.Tabs];
                     });
                 },
                 computed: {
                     totalCount() {
-                        return this.ProductCount + this.OtherCount;
+                        return this.Tabs.reduce((accum, item) => accum + item.Total, 0);
                     }
                 },
             });

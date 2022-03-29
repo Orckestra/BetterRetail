@@ -457,6 +457,8 @@
     <Content Include="App_Data\Razor\Grocery\Recipes\SearchResults.cshtml" />
     <Content Include="App_Data\Media\d5c85c06-13b8-4af4-bf40-0dc4685fa801" />
     <Content Include="App_Data\Media\ff7debb9-d9a5-454a-99d0-ac7b41cb1441" />
+    <Content Include="App_Data\Razor\Composer\ContentSearch\Facets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\ContentSearch\Results.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />
@@ -464,9 +466,6 @@
     <None Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />
-    <Content Include="Views\ContentSearch\Facets.cshtml" />
-    <Content Include="Views\ContentSearch\SearchEntryItem.cshtml" />
-    <Content Include="Views\ContentSearch\SelectedFacets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
@@ -566,8 +565,6 @@
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
     <Folder Include="UI.Package\Sass\Custom\" />
-    <Folder Include="Views\ProductSet\" />
-    <Folder Include="Views\SearchQuery\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

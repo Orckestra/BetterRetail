@@ -55,7 +55,7 @@ namespace Orckestra.Composer.MvcFilters
         /// </summary>
         /// <param name="couple"></param>
         /// <returns></returns>
-        private Tuple<decimal, string> GetQuantifiedValue(string couple)
+        private (decimal quantity, string value) GetQuantifiedValue(string couple)
         {
             decimal quantity = 1.0m;
             string value = string.Empty;
@@ -70,7 +70,7 @@ namespace Orckestra.Composer.MvcFilters
                 decimal.TryParse(parts[1], out quantity);
             }
 
-            return Tuple.Create(quantity, value);
+            return (quantity, value);
         }
 
         private CultureInfo GetFirstMatchingCultureInfo(List<string> acceptedLanguages, CultureInfo[] supportedCultures)

@@ -1,0 +1,103 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Newtonsoft.Json
+@using Orckestra.Composer.ContentSearch.DataTypes
+@using Orckestra.Composer.ContentSearch.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Content Search Page Results"; }
+    }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    public bool CurrentSite { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ISortOption SelectedSortBy { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public IList<ISortOption> AvailableSortBys { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ContentSearchTabViewModel Tab { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = 3)]
+    public int TeaserItemsCount { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = false)]
+    public bool IsTeaser { get; set; }
+
+
+    string vueId = "vueContentSearchResults" + Guid.NewGuid().ToString("N");
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div class="search-results"
+         data-oc-controller="ContentSearch.SearchResults"
+         data-context="@JsonConvert.SerializeObject(Tab, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-available-sort="@JsonConvert.SerializeObject(AvailableSortBys, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-selected-sort="@JsonConvert.SerializeObject(SelectedSortBy, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-items-count="@(IsTeaser ? TeaserItemsCount : Tab.SearchResults.Count)"
+         data-current-site="@(CurrentSite)"
+         data-vueid="@vueId"
+         id="@vueId"
+         v-cloak="true">
+
+        @if (!IsTeaser)
+        {
+            <div class="row filters-row" v-if="TotalCount > 0">
+                <div class="col-6 d-lg-none">
+                    @ShowFacetsCollapseBtn()
+                </div>
+                <div class="col-6">
+                    @SearchHelpers.ContentSortBy()
+                </div>
+                <div class="col-6 d-none d-lg-block">
+                    @SearchHelpers.PaginationDropdownByCount()
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div v-for="(contentItem, index) in SearchResults" class="col-12 col-sm-4 mb-4">
+                @ShowContentSearchEntry()
+            </div>
+        </div>
+
+        @if (!IsTeaser)
+        {
+            <div class="row">
+                <div class="col-12 d-block pt-2" v-if="TotalCount > 0">
+                    @SearchHelpers.PaginationByCount()
+                </div>
+            </div>
+        }
+        </div>
+</body>
+</html>
+
+@helper ShowContentSearchEntry(string searchEntry = "contentItem")
+{
+    <div class="card h-100">
+        <img v-if="@(searchEntry).ImageUrl" class="card-img-top" v-bind:src="@(searchEntry).ImageUrl + '?h=200'" v-bind:alt="@(searchEntry).Title" />
+
+        <div class="card-body">
+            <a class="card-title" v-bind:href="@(searchEntry).DetailsUrl" v-html="@(searchEntry).Title"></a>
+            <p v-if="@(searchEntry).Description" class="card-text">{{@(searchEntry).Description}}</p>
+        </div>
+    </div>
+}
+
+@helper ShowFacetsCollapseBtn()
+{
+    <button type="button"
+            class="btn  btn-outline-secondary btn-dropdown  w-100"
+            data-toggle="collapse"
+            data-target="#leftCol" aria-expanded="false">
+        @Html.Localize("List-Search", "B_FilterBy")
+        <span class="fa  fa-angle-down"></span>
+    </button>
+}

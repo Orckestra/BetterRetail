@@ -3,6 +3,9 @@
 @using Orckestra.Composer.Recipes.DataTypes
 @using Composite.Data
 @using Orckestra.Composer.ContentSearch.Services
+@using Newtonsoft.Json
+@using Orckestra.Composer.ContentSearch.DataTypes
+@using Orckestra.Composer.ContentSearch.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -10,76 +13,102 @@
         get { return "Recipe Search TIle"; }
     }
 
-    public IContentSearchViewService ContentSearchViewService { get; set; }
 
-    [FunctionParameter]
-    public List<Orckestra.Search.WebsiteSearch.SearchResultEntry> Results { get; set; }
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    public bool CurrentSite { get; set; }
 
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ISortOption SelectedSortBy { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public IList<ISortOption> AvailableSortBys { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ContentSearchTabViewModel Tab { get; set; }
+
+    string vueId = "vueContentSearchResults" + Guid.NewGuid().ToString("N");
 }
 @{
     var difficulties = DataFacade.GetData<IDifficulty>().ToLookup(_ => _.Id.ToString());
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
-    @foreach (var item in Results)
-    {
-        var itemViewModel = ContentSearchViewService.GetSearchResultsEntryViewModel(item);
-        var imgURL = itemViewModel.ImageUrl;
-        var itemTitle = itemViewModel.Title;
-        var itemURL = itemViewModel.DetailsUrl;
-        var hasCookingTime = itemViewModel.FieldsBag.ContainsKey("IRecipe.CookingTime");
-        int cookingTime = hasCookingTime ? int.Parse(itemViewModel.FieldsBag["IRecipe.CookingTime"].ToString()) : 0;
-        var hasPrepTime = itemViewModel.FieldsBag.ContainsKey("IRecipe.PreparationTime");
-        int preparationTime = hasPrepTime ? int.Parse(itemViewModel.FieldsBag["IRecipe.PreparationTime"].ToString()): 0;
-        var difficulty = itemViewModel.FieldsBag.ContainsKey("IRecipe.Difficulty") ? difficulties[itemViewModel.FieldsBag["IRecipe.Difficulty"].ToString()].FirstOrDefault().Title : "";
-        var servings = itemViewModel.FieldsBag.ContainsKey("IRecipe.Servings") ? itemViewModel.FieldsBag["IRecipe.Servings"].ToString() : "";
-        <div class="col-12 col-sm-4 col-lg-4  mb-4">
-            <div class="card h-100">
-                @if (imgURL != null)
-                {
-                    <a href="@itemURL">
-                        <span class="recipe-tile-media">
-                            
-                            <img class="card-img-top" src="@imgURL?h=200" alt="@itemTitle" />
-                            <span class="card-img-overlay recipe-info-table">
-                                @if (!string.IsNullOrWhiteSpace(difficulty))
-                                {
-                                    <span class="recipe-info-table-cell">
-                                        <span class="fa fa-spoon recipe-info-icon"></span>
-                                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
-                                        <span class="recipe-info-value">@difficulty</span>
-                                    </span>
-                                }
-                                @if (hasCookingTime || hasPrepTime)
-                                {
-                                    <span class="recipe-info-table-cell">
-                                        <span class="fa fa-blender recipe-info-icon"></span>
-                                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_TotalTime")</span>
-                                        <span class="recipe-info-value">@(cookingTime + preparationTime) @Html.Localize("Recipes", "L_Minutes")</span>
-                                    </span>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(servings))
-                                {
-                                    <span class="recipe-info-table-cell">
-                                        <span class="fa fa-chart-pie recipe-info-icon"></span>
-                                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
-                                        <span class="recipe-info-value">@servings</span>
-                                    </span>
-                                }
-                            </span>
-                        </span>
-                    </a>
-                }
-                <div class="card-body">
-                    <div class="card-title">
-                        <h4><a href="@itemURL">@Html.Raw(itemTitle)</a></h4>
-                    </div>
-                </div>
+    <div class="search-results"
+         data-oc-controller="ContentSearch.SearchResults"
+         data-context="@JsonConvert.SerializeObject(Tab, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-available-sort="@JsonConvert.SerializeObject(AvailableSortBys, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-selected-sort="@JsonConvert.SerializeObject(SelectedSortBy, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-items-count="@(Tab.SearchResults.Count)"
+         data-current-site="@(CurrentSite)"
+         data-is-recipes="@(true)"
+         data-difficulties="@JsonConvert.SerializeObject(difficulties, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-vueid="@vueId"
+         id="@vueId"
+         v-cloak="true">
+
+        <div class="row filters-row mb-4" v-if="TotalCount > 0">
+            <div class="col-6 d-lg-none">
+                @SearchHelpers.ShowFacetsCollapseBtn()
+            </div>
+            <div class="col-6">
+                @SearchHelpers.ContentSortBy()
+            </div>
+            <div class="col-6 d-none d-lg-block" v-if="Pagination.PagesCount > 1">
+                @SearchHelpers.PaginationDropdownByCount()
             </div>
         </div>
-    }
+
+        <div class="row">
+            <div v-for="(contentItem, index) in SearchResults" class="col-12 col-sm-4 mb-4">
+                @ShowRecipeContentSearchEntry()
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 d-block pt-2" v-if="Pagination.PagesCount > 1">
+                @SearchHelpers.PaginationByCount()
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+
+@helper ShowRecipeContentSearchEntry(string searchEntry = "contentItem")
+{
+    <div class="card h-100">
+        <a v-if="@(searchEntry).ImageUrl" v-bind:href="@(searchEntry).DetailsUrl">
+            <span class="recipe-tile-media">
+
+                <img class="card-img-top" v-bind:src="@(searchEntry).ImageUrl + '?h=200'" v-bind:alt="@(searchEntry).Title" />
+                <span class="card-img-overlay recipe-info-table">
+                    <span v-if="@(searchEntry).difficulty" class="recipe-info-table-cell">
+                        <span class="fa fa-spoon recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
+                        <span class="recipe-info-value">{{@(searchEntry).difficulty}}</span>
+                    </span>
+
+                    <span v-if="@(searchEntry).hasTime" class="recipe-info-table-cell">
+                        <span class="fa fa-blender recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_TotalTime")</span>
+                        <span class="recipe-info-value">{{@(searchEntry).cookingTime + @(searchEntry).preparationTime}} @Html.Localize("Recipes", "L_Minutes")</span>
+                    </span>
+                 
+                    <span v-if="@(searchEntry).servings" class="recipe-info-table-cell">
+                        <span class="fa fa-chart-pie recipe-info-icon"></span>
+                        <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
+                        <span class="recipe-info-value">{{@(searchEntry).servings}}</span>
+                    </span>
+                </span>
+            </span>
+        </a>
+        <div class="card-body">
+            <div class="card-title">
+                <h4><a v-bind:href="@(searchEntry).DetailsUrl" v-html="@(searchEntry).Title"></a></h4>
+            </div>
+        </div>
+    </div>
+}

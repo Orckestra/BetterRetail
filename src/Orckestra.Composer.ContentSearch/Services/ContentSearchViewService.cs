@@ -1,4 +1,5 @@
-﻿using Composite.Data;
+using Composite.Core.Routing;
+using Composite.Data;
 using Composite.Data.Types;
 using Composite.Search;
 using Orckestra.Composer.CompositeC1.Services;
@@ -24,40 +25,47 @@ namespace Orckestra.Composer.ContentSearch.Services
 
         public virtual ContentSearchViewModel GetContentSearchViewModel(GetContentSearchParameter param)
         {
-            var contentTabs = DataFacade.GetData<IContentTab>().Where(c => !string.IsNullOrEmpty(c.DataTypes)).OrderBy(t => t.Order).ToList();
-            if (contentTabs == null || contentTabs.Count == 0) { return null; }
-
-            var vm = new ContentSearchViewModel();
-
-            foreach (var tab in contentTabs)
+            using (var conn = new DataConnection(param.Culture))
             {
-                var isActive = param.PathInfo == tab.UrlTitle;
-                var searchQuery = GetSearchQuery(param);
-                var searchRequest = GetSearchRequestForContentTab(param, tab, searchQuery);
-                var result = WebsiteSearchFacade.Search(searchRequest);
+                var contentTabs = DataFacade.GetData<IContentTab>().Where(c => !string.IsNullOrEmpty(c.DataTypes)).OrderBy(t => t.Order).ToList();
+                if (contentTabs == null || contentTabs.Count == 0) { return null; }
 
-                vm.Tabs.Add(new ContentSearchTabViewModel
+                var vm = new ContentSearchViewModel();
+
+                foreach (var tab in contentTabs)
                 {
-                    Title = tab.Title,
-                    UrlTitle = tab.UrlTitle,
-                    TabUrl = GetTabUrl(param, tab, searchQuery),
-                    SearchResults = result,
-                    PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / param.PageSize),
-                    Total = result.ResultsFound,
-                    IsActive = isActive,
-                    DataTypes = tab.DataTypes
-                });
+                    var isActive = param.PathInfo == tab.UrlTitle;
+                    var searchQuery = GetSearchQuery(param);
+                    var searchRequest = GetSearchRequestForContentTab(param, tab, searchQuery);
+                    var result = WebsiteSearchFacade.Search(searchRequest);
+
+                    vm.Tabs.Add(new ContentSearchTabViewModel
+                    {
+                        Title = tab.Title,
+                        UrlTitle = tab.UrlTitle,
+                        TabUrl = GetTabUrl(param, tab, searchQuery),
+                        PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / param.PageSize),
+                        Total = result.ResultsFound,
+                        IsActive = isActive,
+                        SearchResults = result.Entries.Select(x => GetSearchResultsEntryViewModel(x)).ToList(),
+                        DataTypes = tab.DataTypes
+                    });
+
+                    if(isActive)
+                    {
+                        vm.SelectedFacets = GetSelectedFacets(param, result);
+                        vm.Facets = GetFacets(param, result);
+                    }
+                }
+
+                var sortBys = DataFacade.GetData<ISortOption>().OrderBy(t => t.Order).ToList();
+                vm.AvailableSortBys = sortBys;
+                vm.SelectedSortBy = sortBys.Find(o => o.FieldName == param.SortBy && (o.IsReverted && param.SortDirection == "desc" || !o.IsReverted && param.SortDirection == "asc")) ?? sortBys.First();
+
+                vm.SuggestedTabs = GetSuggestedTabs(param, contentTabs);
+
+                return vm;
             }
-
-            vm.SuggestedTabs = GetSuggestedTabs(param, contentTabs);
-
-            if (vm.ActiveTab != null)
-            {
-                vm.SelectedFacets = GetSelectedFacets(param, vm.ActiveTab);
-                vm.Facets = GetFacets(param, vm.ActiveTab);
-            }
-
-            return vm;
         }
 
         public virtual SearchResultsEntryViewModel GetSearchResultsEntryViewModel(SearchResultEntry entry)
@@ -65,7 +73,7 @@ namespace Orckestra.Composer.ContentSearch.Services
             var vm = new SearchResultsEntryViewModel
             {
                 Title = entry.Title,
-                DetailsUrl = entry.Url,
+                DetailsUrl = InternalUrls.TryConvertInternalUrlToPublic(entry.Url),
                 ImageUrl = GetSearchEntryImage(entry),
                 Description = GetSearchEntryDesc(entry),
                 FieldsBag = entry.FieldValues
@@ -100,11 +108,11 @@ namespace Orckestra.Composer.ContentSearch.Services
             return desc?.ToString();
         }
 
-        protected virtual List<FacetViewModel> GetSelectedFacets(GetContentSearchParameter param, ContentSearchTabViewModel tab)
+        protected virtual List<FacetViewModel> GetSelectedFacets(GetContentSearchParameter param, WebsiteSearchResult searchResults)
         {
             var selectedFacets = new Dictionary<string, List<SearchResultFacetHit>>();
             int count = 0;
-            foreach (var f in tab.SearchResults.Facets)
+            foreach (var f in searchResults.Facets)
             {
                 var facets = GetFacetSelection(param, f.Name).ToList();
                 count += facets.Count;
@@ -134,12 +142,12 @@ namespace Orckestra.Composer.ContentSearch.Services
             return null;
         }
 
-        protected virtual List<FacetViewModel> GetFacets(GetContentSearchParameter param, ContentSearchTabViewModel tab)
+        protected virtual List<FacetViewModel> GetFacets(GetContentSearchParameter param, WebsiteSearchResult searchResults)
         {
             var facets = new List<FacetViewModel>();
             var labels = WebsiteSearchFacade.GetFacetOptions().ToDictionary(t => t.Item1, t => t.Item2);
 
-            foreach (var f in tab.SearchResults.Facets)
+            foreach (var f in searchResults.Facets)
             {
                 if(f.Hits.Count == 0) { continue;  }
 

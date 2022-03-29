@@ -5,25 +5,23 @@
             display: block;
             overflow: hidden;
             cursor: pointer;
-            height: $recipe-tile-height-xs;
+            max-height: $recipe-tile-height-xs;
             @include media-breakpoint-up(sm) {
-                height: $recipe-tile-height-sm;
+                max-height: $recipe-tile-height-sm;
             }
             @include media-breakpoint-up(md) {
-                height: $recipe-tile-height-md;
+                max-height: $recipe-tile-height-md;
             }
             @include media-breakpoint-up(lg) {
-                height: $recipe-tile-height-lg;
+                max-height: $recipe-tile-height-lg;
             }
             @include media-breakpoint-up(xl) {
-                height: $recipe-tile-height-xl;
+                max-height: $recipe-tile-height-xl;
             }
             background-color: $recipe-tile-background;
             >.card-img-top {
                 @include media-breakpoint-up(sm) {
                     position: relative;
-                    top: 50%;
-                    transform: translateY(-50%);
                 }
             }
             &:hover {
