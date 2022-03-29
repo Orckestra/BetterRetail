@@ -13,6 +13,7 @@ using Orckestra.Composer.ViewModels.MenuNavigation;
 using System.Web;
 using Orckestra.Composer.Utils;
 using System.Collections.Specialized;
+using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 
 namespace Orckestra.Composer.CompositeC1.Mappers
 {
@@ -50,7 +51,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             return UrlFormatter.AppendQueryString(url, queryString);
         }
 
-        public virtual string BuildUrl(MainMenu current, IEnumerable<MainMenu> items, MenuOrigin origin)
+        public virtual string BuildUrl(MainMenuItemWrapper current, IEnumerable<MainMenuItemWrapper> items, MenuOrigin origin)
         {
             var categoryHierarchy = GetCategoryHierarchy(items, current);
             return BuildUrl(current.Url, current.DisplayName, categoryHierarchy, origin);
@@ -86,7 +87,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         /// <param name="items"></param>
         /// <param name="currentItem"></param>
         /// <returns></returns>
-        private IEnumerable<string> GetHierarchy(IEnumerable<MainMenu> items, MainMenu currentItem)
+        private IEnumerable<string> GetHierarchy(IEnumerable<MainMenuItemWrapper> items, MainMenuItemWrapper currentItem)
         {            
             yield return SanatizeDisplayName(currentItem.DisplayName);            
 
@@ -98,7 +99,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             }
         }
 
-        protected virtual NameValueCollection GetCategoryHierarchy(IEnumerable<MainMenu> items, MainMenu currentItem)
+        protected virtual NameValueCollection GetCategoryHierarchy(IEnumerable<MainMenuItemWrapper> items, MainMenuItemWrapper currentItem)
         {
             var collection = new NameValueCollection();
             var hierarchy = GetHierarchy(items, currentItem).Reverse().ToArray();            
