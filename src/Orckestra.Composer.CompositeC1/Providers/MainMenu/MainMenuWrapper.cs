@@ -12,7 +12,6 @@ namespace Orckestra.Composer.CompositeC1.Providers.MainMenu
         public int Order { get; set; }
         public Nullable<Guid> CssStyle { get; set; }
         public string CssClassName { get; set; }
-
         public string SourceCultureName { get; set; }
     }
 }
