@@ -1,4 +1,4 @@
-@inherits Composite.AspNet.Razor.RazorFunction
+﻿@inherits Composite.AspNet.Razor.RazorFunction
 @using Orckestra.Composer.CompositeC1.DataTypes
 @using Orckestra.Composer.Search.Context
 @using Newtonsoft.Json;
@@ -26,14 +26,11 @@
 @{
     var summary = Data.Get<ICategoryPageSummaryMeta>().FirstOrDefault(i => i.PageId == CurrentPageNode.Id);
     var model = BrowseCategoryRequestContext.GetViewModelAsync().GetAwaiter().GetResult();
-
-    var tabs = new[] { new { Total = model.ProductSearchResults.TotalCount }};
-
     if (summary == null)
     {
-        <div class="@(FullWidth ? "container-fluid": "")  page-summary"
+        <div class="@(FullWidth ? "container-fluid": "")  page-summary" 
              data-oc-controller="Product.SearchSummary"
-             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
+             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
              v-cloak="true">
             <div class="container-md my-1">
                 <div class="row">
@@ -55,7 +52,7 @@
 <body>
     <div class="@(FullWidth ? "container-fluid": "") page-summary  mb-2  bg-cover" style="@BgInlineStyle(summary.BackgroundImage)"
          data-oc-controller="Product.SearchSummary"
-         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
+         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
          v-cloak="true">
         <div class="container-md">
             <div class="row">
