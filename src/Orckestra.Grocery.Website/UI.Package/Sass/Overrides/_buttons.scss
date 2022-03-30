@@ -63,11 +63,29 @@ a {
     }
 }
 
-div:not(.input-group)>div:not(.btn-group)>.btn:not([type="submit"]):not(.geolocate-btn)>.fa {
-    padding-left: $spacer;
-    &:before {
-        position: absolute;
-        top: 9.5px;
-        left: $spacer;
+.btn {
+    &.btn-block {
+        >.fa {
+            padding-left: $spacer;
+            &.fa-2x {
+                &:before {
+                    top: 1px;
+                }
+            }
+            &:before {
+                position: absolute;
+                top: 9.5px;
+                left: $spacer;
+            }
+        }
+        &.btn-icon-right {
+            >.fa {
+                &:before {
+                    left: unset;
+                    right: $spacer;
+                }
+            }
+        }
+
     }
 }

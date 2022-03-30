@@ -211,17 +211,17 @@
 @helper SelectedFulfillmentMethod()
 {
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
-        <div class="border-bottom bg-lighter p-3  mx-n3 mt-n3">
-            <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta dark-blue float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
-                <i class="fa fa-edit d-inline d-sm-none"></i>
-                <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
-            </a>
-            <h5 class="m-0">
+        <div class="border-bottom bg-lighter p-3  mx-n3 mt-n3 d-flex ">
+            <h5 class="m-0 flex-fill mr-4">
                 <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
                 <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                 <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
             </h5>
 
+            <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta dark-blue flex-fill" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                <i class="fa fa-edit d-inline d-sm-none"></i>
+                <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
+            </a>
         </div>
     </div>
 }
