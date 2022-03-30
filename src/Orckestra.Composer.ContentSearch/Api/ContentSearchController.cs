@@ -39,7 +39,6 @@ namespace Orckestra.Composer.ContentSearch.Api
             var CurrentPage = int.TryParse(queryString[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
             var SortDirection = queryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
             var SortBy = queryString[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
-            var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
             var Keywords = queryString[SearchRequestParams.Keywords];
 
             ContentSearchViewModel contentSearchVm = ContentSearchViewService.GetContentSearchViewModel(new GetContentSearchParameter
@@ -52,7 +51,6 @@ namespace Orckestra.Composer.ContentSearch.Api
                 SearchQuery = Keywords,
                 IsCorrectedSearchQuery = false,
                 CorrectedSearchQuery = string.Empty,
-                BaseUrl = BaseUrl,
                 QueryKeys = queryString?.AllKeys,
                 ProductsTabActive = false,
                 SortBy = SortBy,
