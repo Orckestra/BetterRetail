@@ -1,7 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
-  <Add Id="171bb4a3-3d67-4cea-b698-63d9ee18ae2e" DisplayName="Recipes" Url="~/page(c9344cca-14e3-4430-95de-ea5949f62e10)" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Order="2" CssClassName="" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" PublicationStatus="published" SourceCultureName="en-CA" />
-  <Add Id="45b90c73-8abd-4432-9a78-58bff5dc2a72" DisplayName="Dinners" ParentId="171bb4a3-3d67-4cea-b698-63d9ee18ae2e" Url="~/page(8cbbe0d2-6e2b-4364-ad60-5c89a27ad70a)/Recipes?keywords=*&amp;f_IRecipe.MealType_165bc213-8d25-40bb-aca7-2044e333ce63=on" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Order="1" CssClassName="" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" PublicationStatus="published" SourceCultureName="en-CA" />
-  <Add Id="0a622451-cbfe-4a77-bfad-b68b78a0d739" DisplayName="Appetizer" ParentId="171bb4a3-3d67-4cea-b698-63d9ee18ae2e" Url="~/page(8cbbe0d2-6e2b-4364-ad60-5c89a27ad70a)/Recipes?keywords=*&amp;f_IRecipe.MealType_bdaeef60-e1c0-41ab-8baa-99b1cc2d9d0c=on" Target="d5203756-52fe-413e-a8ea-1ddacbf6549b" Order="1" CssClassName="" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" PublicationStatus="published" SourceCultureName="en-CA" />
  </Data>
 

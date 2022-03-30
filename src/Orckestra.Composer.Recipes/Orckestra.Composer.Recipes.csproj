@@ -143,6 +143,7 @@
     <Compile Include="DataTypes\ICuisineType.cs" />
     <Compile Include="IRecipeUrlProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecipesMainMenuItemsProvider.cs" />
     <Compile Include="RecipeUrlProvider.cs" />
     <Compile Include="Search\RecipeDataFieldProcessorProvider.cs" />
     <Compile Include="Services\IRecipesViewService.cs" />
@@ -157,6 +158,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.CompositeC1.DataTypes\Orckestra.Composer.CompositeC1.DataTypes.csproj">
+      <Project>{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}</Project>
+      <Name>Orckestra.Composer.CompositeC1.DataTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj">
       <Project>{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}</Project>
       <Name>Orckestra.Composer.CompositeC1</Name>
