@@ -7,6 +7,8 @@ using Orckestra.Composer.ContentSearch.DataTypes;
 using Orckestra.Composer.ContentSearch.Parameters;
 using Orckestra.Composer.ContentSearch.ViewModels;
 using Orckestra.Composer.Search.RequestConstants;
+using Orckestra.Composer.Services;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Search.WebsiteSearch;
 using System;
 using System.Collections.Generic;
@@ -18,9 +20,20 @@ namespace Orckestra.Composer.ContentSearch.Services
     {
         private readonly Dictionary<string, System.Type> KnowTypes = DataFacade.GetAllInterfaces().ToDictionary(t => t.FullName);
         protected IMediaService MediaService { get; private set; }
-        public ContentSearchViewService(IMediaService mediaService)
+        private IWebsiteContext WebsiteContext { get; set; }
+        public IPageService PageService { get; set; }
+        public ISiteConfiguration SiteConfiguration { get; set; }
+
+        public ContentSearchViewService(
+            IMediaService mediaService, 
+            IWebsiteContext websiteContext, 
+            IPageService pageService, 
+            ISiteConfiguration siteConfiguration)
         {
-            MediaService = mediaService;
+            MediaService = mediaService ?? throw new ArgumentNullException(nameof(mediaService));
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
         }
 
         public virtual ContentSearchViewModel GetContentSearchViewModel(GetContentSearchParameter param)
@@ -202,7 +215,13 @@ namespace Orckestra.Composer.ContentSearch.Services
 
         protected virtual string GetTabUrl(GetContentSearchParameter param, IContentTab tab, string searchQuery)
         {
-            return $"{param.BaseUrl}/{tab.UrlTitle}?{SearchRequestParams.Keywords}={searchQuery}";
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.Culture, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
+            var url = PageService.GetPageUrl(pagesConfiguration.SearchPageId, param.Culture);
+            if (url == null) return null;
+
+            return $"{url}/{tab.UrlTitle}?{SearchRequestParams.Keywords}={searchQuery}";
         }
        
         protected virtual WebsiteSearchQuery GetSearchRequestForContentTab(GetContentSearchParameter param, IContentTab tab, string searchQuery)
