@@ -227,6 +227,8 @@
     <Compile Include="Providers\LanguageSwitch\ProductLanguageSwitchProvider.cs" />
     <Compile Include="Providers\LanguageSwitch\StoreLanguageSwitchProvider.cs" />
     <Compile Include="Providers\LazyFunctionCallDataProvider.cs" />
+    <Compile Include="Providers\MainMenu\IMainMenuItemsProvider.cs" />
+    <Compile Include="Providers\MainMenu\MainMenuWrapper.cs" />
     <Compile Include="Providers\MyAccountUrlProvider.cs" />
     <Compile Include="Providers\OrderUrlProvider.cs" />
     <Compile Include="Providers\PageNotFoundUrlProvider.cs" />
