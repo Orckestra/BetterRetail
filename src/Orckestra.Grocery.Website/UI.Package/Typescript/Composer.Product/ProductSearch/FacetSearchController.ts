@@ -56,6 +56,8 @@ module Orckestra.Composer {
                     onFacetsLoaded({data}) {
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
                         this.Facets = data.ProductSearchResults.Facets;
+
+                        self._searchService.updateFacetRegistry(self.buildFacetRegistry());
                     },
                     categoryFacetChanged(event, isSelected) {
                         self.categoryFacetChanged(event, isSelected);

@@ -28,11 +28,14 @@
 @{
     var summary = Data.Get<ICategoryPageSummaryMeta>().FirstOrDefault(i => i.PageId == CurrentPageNode.Id);
     var model = BrowseCategoryRequestContext.GetViewModelAsync().GetAwaiter().GetResult();
+
+    var tabs = new[] { new { Total = model.ProductSearchResults.TotalCount }};
+
     if (summary == null)
     {
         <div class="@(FullWidth ? "container-fluid": "")  page-summary"
              data-oc-controller="Product.SearchSummary"
-             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
+             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
              v-cloak="true">
             <div class="container-md mb-1">
                 <div class="row">
@@ -54,7 +57,7 @@
 <body>
     <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@(FullWidth ? BgInlineStyle(summary.BackgroundImage): "")"
          data-oc-controller="Product.SearchSummary"
-         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
+         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
          v-cloak="true">
         <div class="container-md bg-cover" style="@(!FullWidth ? BgInlineStyle(summary.BackgroundImage): "")">
             <div class="row">

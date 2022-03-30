@@ -33,6 +33,10 @@ module Orckestra.Composer {
             this.loadFromQuerystring(this._window.location.search);
         }
 
+        public updateFacetRegistry(facetRegistry: IHashTable<string>): void {
+            this._facetRegistry = facetRegistry;
+        }
+
         public loadFromQuerystring(querystring: string) {
             this.loadNonFacetCriteria(querystring);
             this.loadFacetCriteria(querystring);
