@@ -36,6 +36,10 @@ module Orckestra.Composer {
             this.registerSubscriptions();
         }
 
+        public updateFacetRegistry(facetRegistry: IHashTable<string>): void {
+            this._searchCriteria.updateFacetRegistry(facetRegistry);
+        }
+
         public singleFacetsChanged(eventInformation: IEventInformation) {
             var facetKey: string = eventInformation.data.facetKey,
                 facetValue: string = eventInformation.data.facetValue;
