@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Orckestra.Composer.Cart.Parameters
 {
-    public class RemoveInvalidLineItemsParam
+    public class RemoveInvalidLineItemsParam : BaseCartParam
     {
         /// <summary>
         /// The Request Base Url

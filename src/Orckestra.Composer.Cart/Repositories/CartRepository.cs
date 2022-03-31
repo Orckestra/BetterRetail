@@ -302,7 +302,7 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
             if (param.LineItems == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.LineItems)), nameof(param)); }
 
-            var list = new List<LineItemInfo>();
+            var array = new Guid[param.LineItems.Count];
             for(int i = 0; i < param.LineItems.Count; i++)
             {
                 var currentLine = param.LineItems[i];
@@ -314,25 +314,16 @@ namespace Orckestra.Composer.Cart.Repositories
                 {
                     throw new InvalidOperationException($"Line item with index {i} has null or white space product id");
                 }
-                list.Add(new LineItemInfo
-                {
-                    Id = currentLine.Id,
-                    ProductId = currentLine.ProductId,
-                    VariantId = currentLine.VariantId,
-                    Quantity = 0.0,
-                    RecurringOrderFrequencyName = string.Empty,
-                    RecurringOrderProgramName = string.Empty,
-                });
+                array[i] = currentLine.Id;
             }
-            //Removing method, but AddOrUpdate request, it is unclear
-            var request = new AddOrUpdateLineItemsRequest
+            var request = new RemoveLineItemsRequest
             {
                 CartName = param.CartName,
                 CartType = param.CartType,
                 CultureName = param.CultureInfo.Name,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-                LineItems = list
+                LineItemIds = array
             };
 
             var cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);

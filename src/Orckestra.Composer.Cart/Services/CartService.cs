@@ -466,6 +466,7 @@ namespace Orckestra.Composer.Cart.Services
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 ExecuteWorkflow = param.ExecuteWorkflow,
@@ -480,6 +481,7 @@ namespace Orckestra.Composer.Cart.Services
                 var p = new RemoveLineItemsParam
                 {
                     CartName = param.CartName,
+                    CartType = param.CartType,
                     CultureInfo = param.CultureInfo,
                     CustomerId = param.CustomerId,
                     Scope = param.Scope,
