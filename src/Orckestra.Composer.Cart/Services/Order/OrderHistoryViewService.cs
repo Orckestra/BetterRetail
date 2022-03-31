@@ -579,7 +579,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Scope = ComposerContext.Scope,
                 BaseUrl = baseUrl
             };
-            await CartService.RemoveInvalidLineItemsAsync(removeInvalidLineItemsParam);
+            await CartService.RemoveInvalidLineItemsAsync(removeInvalidLineItemsParam).ConfigureAwait(false);
 
             var orderResult = await EditingOrderProvider.SaveEditedOrderAsync(order).ConfigureAwait(false);
 
