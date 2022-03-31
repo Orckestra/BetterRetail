@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
+using Orckestra.Composer.Cart.Extensions;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services.Order
@@ -572,14 +573,14 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var removeInvalidLineItemsParam = new RemoveInvalidLineItemsParam
             {
-                CartName = Guid.Parse(order.Id).ToString("N"),
+                CartName = order.Id.GetDraftCartName(),
                 CartType = CartConfiguration.OrderDraftCartType,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 BaseUrl = baseUrl
             };
-            await CartService.RemoveInvalidLineItemsAsync(removeInvalidLineItemsParam).ConfigureAwait(false);
+            await CartService.ProcessInvalidLineItemsRemovalAsync(removeInvalidLineItemsParam).ConfigureAwait(false);
 
             var orderResult = await EditingOrderProvider.SaveEditedOrderAsync(order).ConfigureAwait(false);
 

@@ -258,7 +258,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         }
 
         [Test]
-        public async Task WHEN_all_parameters_ok_SHOULD_invoke_OvertureClient_SendAsync_with_AddOrUpdateRequest()
+        public async Task WHEN_all_parameters_ok_SHOULD_invoke_OvertureClient_SendAsync_with_RemoveLineItemRequest()
         {
             //Arrange
             var p = new RemoveLineItemsParam
@@ -284,7 +284,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var vm = await sut.RemoveLineItemsAsync(p);
 
             //Assert
-            Container.Verify<IOvertureClient>(m => m.SendAsync(It.IsNotNull<AddOrUpdateLineItemsRequest>()));
+            Container.Verify<IOvertureClient>(m => m.SendAsync(It.IsNotNull<RemoveLineItemRequest>()));
         }
 
         [Test]
