@@ -379,6 +379,27 @@
                 height: 100%;
                 position: relative;
             }
+
+            // add styling for simple dropdowns without multi levels
+            .simple-dropdown {
+                &.dropdown:hover {
+                    >.dropdown-menu {
+                        display: block;
+                    }
+                    &.main-nav-fw {
+                        >.dropdown-menu {
+                            min-height: unset;
+                            max-height: unset;
+                            overflow-y: unset;
+                            right: unset;
+                            left: unset;
+                        }
+                    }
+                }
+                & .col-submenu {
+                    flex: 1 1 0;
+                }
+            }
         }
         // Mobile & Tablet
         @include media-breakpoint-down(md) {

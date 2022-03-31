@@ -9,6 +9,18 @@
     public INavigationMapper MainMenuNavigationMapper { get; set; }
 
     public IEnumerable<IMainMenuItemsProvider> ExternalMainMenuItemsProviders { get; set; }
+
+    private int MenuDepthLevel(HomeMainMenuEntryViewModel menuEntry, int pageLevel = 0)
+    {
+        var maxLevel = pageLevel;
+
+        foreach (var childItem in menuEntry.Children.OfType<HomeMainMenuEntryViewModel>())
+        {
+            maxLevel = Math.Max(maxLevel, @MenuDepthLevel(childItem, (pageLevel+1)));
+        }
+
+        return maxLevel;
+    }
 }
 
 @{
@@ -37,6 +49,7 @@
     });
 
     var mainMenu = MainMenuNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
+    
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -56,7 +69,9 @@
 
                                 if (mainMenuEntry.HasChildren)
                                 {
-                                    <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
+                                    var maxlevel = @MenuDepthLevel(mainMenuEntry);
+                                    var simpleDropdownClass = (maxlevel > 1) ? "" : "simple-dropdown";
+                                    <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName @simpleDropdownClass" tabindex="0" data-menu-level="@maxlevel">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category"
                                            target="@mainMenuEntry.UrlTarget"
@@ -143,7 +158,7 @@
 {
     int maxLevel = 3;
     int subLevel = pageLevel + 1;
-    var childItems = menuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
+    var childItems = menuEntry.Children.OfType<HomeMainMenuEntryViewModel>();
     var hasImage = !string.IsNullOrEmpty(menuEntry.Image.ImageSource);
     var curEntry = (hasImage) ? menuEntry : parentMenuEntry;
 
