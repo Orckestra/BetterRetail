@@ -572,7 +572,7 @@ namespace Orckestra.Composer.Cart.Services.Order
 
             var removeInvalidLineItemsParam = new RemoveInvalidLineItemsParam
             {
-                CartName = order.Id.Replace("-", "").ToLower(),
+                CartName = Guid.Parse(order.Id).ToString("N"),
                 CartType = CartConfiguration.OrderDraftCartType,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
