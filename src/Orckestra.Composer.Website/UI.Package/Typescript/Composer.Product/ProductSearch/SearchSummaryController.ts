@@ -14,7 +14,7 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
 
-            const Tabs = this.context.container.data('tabs') ;
+            const Tabs = this.context.viewModel;
             const self = this;
 
             this.vueSearchSummary = new Vue({
@@ -23,36 +23,26 @@ module Orckestra.Composer {
                 },
                 data: {
                     Tabs,
-                    ProductSearchResults:  this.context.viewModel
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({data}) => {
-                        this.ProductSearchResults = data.ProductSearchResults;
-
-                        if(this.Tabs) {
-                            this.Tabs[0].Total = data.ProductSearchResults.TotalCount;
-                            this.Tabs = [...this.Tabs];
-                        }
+                        this.Tabs[0].Total = data.ProductSearchResults.TotalCount;
+                        this.Tabs = [...this.Tabs];
                     });
 
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({data}) => {
-                        if(this.Tabs) {
-                            data.Tabs.forEach(x => {
-                                const foundTab = this.Tabs.find(tab => tab.Title === x.Title)
-                                if (foundTab) {
-                                    foundTab.Total = x.Total;
-                                }
-                            })
-                            this.Tabs = [...this.Tabs];
-                        }
+                        data.Tabs.forEach(x => {
+                            const foundTab = this.Tabs.find(tab => tab.Title === x.Title)
+                            if(foundTab) {
+                                foundTab.Total = x.Total;
+                            }
+                        })
+                        this.Tabs = [...this.Tabs];
                     });
                 },
                 computed: {
-                    totalTabsCount() {
-                        return this.Tabs ? this.Tabs.reduce((accum, item) => accum + item.Total, 0) : 0;
-                    },
                     totalCount() {
-                        return this.ProductSearchResults.TotalCount;
+                        return this.Tabs.reduce((accum, item) => accum + item.Total, 0);
                     }
                 },
             });
