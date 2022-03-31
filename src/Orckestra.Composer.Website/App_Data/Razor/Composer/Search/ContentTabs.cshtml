@@ -154,7 +154,8 @@
 @helper SearchSummary(ContentSearchViewModel vm, bool isProductTab)
 {
     <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary" 
-         data-context="@JsonConvert.SerializeObject(vm.Tabs)" 
+         data-context="@JsonConvert.SerializeObject(ProductSearchResults)" 
+         data-tabs="@JsonConvert.SerializeObject(vm.Tabs)" 
          v-cloak="true">
         <div class="container-md">
             @if (IsProductsCorrected() && isProductTab)
@@ -162,11 +163,11 @@
                 <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
                 <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, vm.ActiveTab?.Title)</p>
                 @ShowButWeFindIn(vm.SuggestedTabs)
-                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{totalCount}}", ProductSearchResults.CorrectedSearchTerms))</h1>
+                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{totalTabsCount}}", ProductSearchResults.CorrectedSearchTerms))</h1>
             }
             else
             {
-                <h1 v-if="totalCount > 0"><strong>{{totalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
+                <h1 v-if="totalTabsCount > 0"><strong>{{totalTabsCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
                 <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
                 @Function("Composer.Search.Suggestions")
             }
