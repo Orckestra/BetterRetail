@@ -13,6 +13,7 @@ module Orckestra.Composer {
         FacetsModalClosed = 'facetsModalClosed',
         SearchRequested = 'searchRequested',
         SearchResultsLoaded = 'searchResultsLoaded',
-        FacetsLoaded = 'facetsLoaded'
+        FacetsLoaded = 'facetsLoaded',
+        SearchKeywordChanged  = 'searchKeywordChanged'
     }
 }

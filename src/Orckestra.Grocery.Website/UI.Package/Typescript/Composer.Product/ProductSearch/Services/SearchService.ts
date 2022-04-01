@@ -48,6 +48,12 @@ module Orckestra.Composer {
             this.search();
         }
 
+        public searchKeywordChanged(eventInformation: IEventInformation) {
+            var keyword: string = eventInformation.data.keyword;
+            this._searchCriteria.searchKeywordChanged(keyword);
+            this.search();
+        }
+
         public sortingChanged(eventInformation: IEventInformation) {
             this._searchCriteria.clearAll();
             this._searchCriteria.loadFromQuerystring(eventInformation.data.url);
@@ -152,7 +158,8 @@ module Orckestra.Composer {
             this._eventHub.subscribe(SearchEvents.SingleCategoryAdded, this.addSingleSelectCategory.bind(this));
             this._eventHub.subscribe(SearchEvents.FacetsModalOpened, this.facetsModalOpened.bind(this));
             this._eventHub.subscribe(SearchEvents.FacetsModalClosed, this.facetsModalClosed.bind(this));
-
+            this._eventHub.subscribe(SearchEvents.SearchKeywordChanged, this.searchKeywordChanged.bind(this));
+            
             $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
             $(FacetsModalId).on('click', '.modal--close',  this.facetsModalClosed.bind(this));
             $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));

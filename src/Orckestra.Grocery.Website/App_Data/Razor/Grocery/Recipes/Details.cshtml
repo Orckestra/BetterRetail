@@ -1,19 +1,22 @@
 ﻿@inherits RazorFunction
 @using System.Globalization
+@using System.Threading
 @using Orckestra.Composer.Recipes.DataTypes
 @using Orckestra.Composer.Recipes.ViewModels
 @using Orckestra.Composer.Recipes.Services
 @using Composite.Data
 @using Newtonsoft.Json;
+@using Orckestra.Composer.Recipes
 
 @functions {
     public override string FunctionDescription
     {
         get { return "Recipes Details"; }
     }
-    
+
     public IRecipesViewService RecipesViewService { get; set; }
-    
+    public IRecipeUrlProvider RecipeUrlProvider { get; set; }
+
     [FunctionParameter]
     public Orckestra.Composer.Recipes.DataTypes.IRecipe Item { get; set; }
 
@@ -30,12 +33,12 @@
 
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
     <title>@Item.Title</title>
 </head>
 <body>
-    <div data-oc-controller="Grocery.RecipeDetails" data-context="@JsonConvert.SerializeObject(ingredientsLists)">
+    <div data-oc-controller="Grocery.RecipeDetails" data-context="@JsonConvert.SerializeObject(ingredientsLists)" data-searchUrl="@RecipeUrlProvider.GetSearchPageUrl(Thread.CurrentThread.CurrentCulture)">
         <div id="vueRecipeDetails">
             <div class="row">
                 <div class="col-12">
@@ -134,13 +137,22 @@
             <div class="row">
                 <div class="col-12 col-sm-5 recipe-ingredients">
                     <h2 class="mb-3">@Html.Localize("Recipes", "L_Ingredients")</h2>
+                    @SelectAll()
                     <div v-for="list in IngredientsList">
                         <h4 v-if="!list.HideTitle" class="mt-3 mb-2">{{list.Title}}</h4>
                         <div class="form-group form-check" v-for="item in list.Ingredients">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" />
+                                <input type="checkbox" class="form-check-input" v-bind:value="item.Id" v-model="SelectedIngredientsIds"  name="ingredients"/>
                                 {{item.Title}}
                             </label>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <button class="btn btn-secondary w-100 " v-bind:disabled="!IsIngredientsSelected" v-on:click="searchIngredient" >@Html.Localize("Recipes", "B_ShopIngredients")</button>
+                        </div>       
+                        <div class="col-6">
+                            <button class="btn btn-success w-100">Todo</button>
                         </div>
                     </div>
                 </div>
@@ -159,7 +171,7 @@
 {
     <div class="form-group form-check mt-3">
         <label class="form-check-label  font-weight-bold">
-            <input type="checkbox" class="form-check-input" />
+            <input type="checkbox" class="form-check-input" name="all" v-model="SelectAll"/>
             @Html.Localize("Recipes", "L_SelectAll")
         </label>
     </div>

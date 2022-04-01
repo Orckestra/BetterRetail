@@ -13,6 +13,7 @@
 ///<reference path='./Composer.Product/ProductSearch/SearchSummaryController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/QuickViewController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SelectedFacetSearchController.ts' />
+///<reference path='./Composer.Product/ProductSearch/MultiKeywordsSearchController.ts' />
 ///<reference path='./Composer.Cart/AddToCartNotification/AddToCartNotificationController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartSummaryController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartChangeRecurringFrequencyController.ts' />
@@ -125,6 +126,7 @@
                 { name: 'Product.RecurringOrderSignInForm', controller: Orckestra.Composer.RecurringOrderSignInFormController },
                 { name: 'ContentSearch.SearchResults', controller: Orckestra.Composer.ContentSearchResultsController },
                 { name: 'ContentSearch.Facets', controller: Orckestra.Composer.ContentFacetSearchController },
+                { name: 'Product.MultiKeywordsSearch', controller: Orckestra.Composer.MultiKeywordsSearchController },
 
                 { name: 'SingleCheckout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoSingleCheckoutController },
                 { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },

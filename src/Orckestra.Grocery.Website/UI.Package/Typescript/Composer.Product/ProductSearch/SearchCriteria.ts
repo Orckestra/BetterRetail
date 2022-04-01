@@ -116,6 +116,12 @@ module Orckestra.Composer {
             this.selectedFacets[facetKey] = facetValue;
         }
 
+        public searchKeywordChanged(keyword: string) {
+            this.clearAll();
+            this.keywords = keyword;
+            this.correctedSearchTerm = null;
+        }
+
         public updateMultiFacets(facets: IHashTable<string|string[]>) {
             var facetKey: string,
                 facetValues: string[];

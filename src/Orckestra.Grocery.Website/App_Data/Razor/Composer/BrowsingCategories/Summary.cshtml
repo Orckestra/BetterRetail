@@ -29,7 +29,7 @@
     var summary = Data.Get<ICategoryPageSummaryMeta>().FirstOrDefault(i => i.PageId == CurrentPageNode.Id);
     var model = BrowseCategoryRequestContext.GetViewModelAsync().GetAwaiter().GetResult();
 
-    var tabs = new[] { new { Total = model.ProductSearchResults.TotalCount }};
+    var tabs = new[] { new { Total = model.ProductSearchResults.TotalCount, IsProducts = true }};
 
     if (summary == null)
     {
@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h1>
-                            @CurrentPageNode.Title ({{totalCount}})
+                            @CurrentPageNode.Title ({{TotalCount}})
                         </h1>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
             <div class="row">
                 <div class="col-12 py-2 ">
                     <h1>
-                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) ({{totalCount}})
+                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) ({{TotalCount}})
                     </h1>
                     @if (!string.IsNullOrWhiteSpace(summary.ShortDescription))
                     {

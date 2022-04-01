@@ -135,6 +135,9 @@
   <data name="L_Instructions" xml:space="preserve">
     <value>Instructions</value>
   </data>
+  <data name="B_ShopIngredients" xml:space="preserve">
+    <value>Ingrédients de la boutique</value>
+  </data>
   <data name="L_MealType" xml:space="preserve">
     <value>Type de repas</value>
   </data>

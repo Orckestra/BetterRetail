@@ -349,6 +349,7 @@
     <Content Include="ApplicationInsights.config" />
     <Content Include="App_Code\ProductSepcificationHelpers.cshtml" />
     <Content Include="App_Code\ImageHelpers.cshtml" />
+    <Content Include="App_Code\ContentSearchHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -459,6 +460,7 @@
     <Content Include="App_Data\Media\ff7debb9-d9a5-454a-99d0-ac7b41cb1441" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\Results.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\MultiKeywords.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

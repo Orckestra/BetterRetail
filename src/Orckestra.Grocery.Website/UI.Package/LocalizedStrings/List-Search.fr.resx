@@ -312,4 +312,10 @@
   <data name="B_FiltersApplied" xml:space="preserve">
     <value>Filtres appliqués</value>
   </data>
+  <data name="L_SelectAnItem" xml:space="preserve">
+    <value>Sélectionnez un élément</value>
+  </data>
+  <data name="L_MultipleKeywordSearch" xml:space="preserve">
+    <value>Sélectionnez un élément</value>
+  </data>
 </root>
