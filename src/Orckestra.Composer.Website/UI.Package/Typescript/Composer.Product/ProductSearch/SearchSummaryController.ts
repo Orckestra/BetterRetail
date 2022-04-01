@@ -10,12 +10,37 @@ module Orckestra.Composer {
 
     export class SearchSummaryController extends Orckestra.Composer.Controller {
         protected vueSearchSummary: Vue;
+        protected vueTabSearchSummary: any;
 
         public initialize() {
             super.initialize();
 
             const Tabs = this.context.viewModel;
+            const SearchQuery = this.context.container.data('searchquery');
+            const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms'); 
+            const IsProductTab = this.context.container.data('isproducttab');
             const self = this;
+
+            this.vueTabSearchSummary = new Vue({
+                el: '#vueTabSearchSummary',
+                data: {
+                    Tabs,
+                    SearchQuery
+                },
+                mounted() {
+                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
+                       this.Tabs = [...this.Tabs];
+                    });
+                },
+                computed: {
+                    CurrentTab() {
+                        return this.Tabs.find(t => t.IsActive);
+                    },
+                    TabsWithResults() {
+                        return this.Tabs.filter(t => t.Total > 0);
+                    }
+                }
+            });
 
             this.vueSearchSummary = new Vue({
                 el: '#vueSearchSummary',
@@ -23,26 +48,40 @@ module Orckestra.Composer {
                 },
                 data: {
                     Tabs,
+                    SearchQuery,
+                    CorrectedSearchTerms,
+                    ProductsLoading: false,
+                    ContentLoading: false
                 },
                 mounted() {
+                    self.eventHub.subscribe(SearchEvents.SearchRequested, () => this.ProductsLoading = true);
                     self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({data}) => {
-                        this.Tabs[0].Total = data.ProductSearchResults.TotalCount;
+                        this.ProductsLoading = false;
+                        this.Tabs.find(t => t.IsProducts).Total = data.ProductSearchResults.TotalCount;
                         this.Tabs = [...this.Tabs];
+                        this.CorrectedSearchTerms = data.ProductSearchResults.CorrectedSearchTerms;
+                        this.ProductCount = data.ProductSearchResults.TotalCount;
                     });
 
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({data}) => {
+                        this.ContentLoading = false;
                         data.Tabs.forEach(x => {
                             const foundTab = this.Tabs.find(tab => tab.Title === x.Title)
                             if(foundTab) {
                                 foundTab.Total = x.Total;
+                                foundTab.TabUrl = x.TabUrl;
                             }
                         })
                         this.Tabs = [...this.Tabs];
                     });
                 },
                 computed: {
-                    totalCount() {
+                    Loading() { return this.ProductsLoading || this.ContentLoading },
+                    TotalCount() {
                         return this.Tabs.reduce((accum, item) => accum + item.Total, 0);
+                    },
+                    IsProductsCorrected() {
+                        return this.CorrectedSearchTerms && this.ProductCount > 0 && IsProductTab;
                     }
                 },
             });
