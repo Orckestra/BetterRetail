@@ -36,6 +36,7 @@
     }
     else
     {
+        <h1>@CurrentPageNode.Title</h1>
         var categoriesLookup = DataFacade.GetData<IRecipeMealType>().ToLookup(_ => _.Id.ToString());
         var recipeCategories = RecipeData.List.GroupBy(i => i.MealType).OrderBy(g => categoriesLookup[g.Key.ToString()].FirstOrDefault().Order).ToList();
         var categoryItemsCount = 3;
@@ -44,7 +45,7 @@
         {
             var items = group.Take(categoryItemsCount);
             var categoryTitle = categoriesLookup[group.Key.ToString()].FirstOrDefault().Title;
-            <h1 class="text-center">@categoryTitle (@group.Count())</h1>
+            <h2 class="recipe-category-title">@categoryTitle (@group.Count())</h2>
             <div class="row">
             @foreach (var item in items)
             {
@@ -57,47 +58,48 @@
                 var preparationTime = hasPrepTime ? item.PreparationTime : 0;
                 var difficulty = difficulties[item.Difficulty.ToString()].FirstOrDefault().Title;
                 var servings = item.Servings;
-                <div class="col-12 col-sm-4 col-lg-4  mb-4">
-                    <div class="card h-100">
+                <div class="col-12 col-sm-6 col-lg-4  mb-4">
+                    <div class="card h-100 recipe-tile">
                         @if (imgURL != null)
                         {
                             <a href="@itemURL">
                                 <span class="recipe-tile-media">
                                     
                                     <img class="card-img-top" src="@imgURL?h=200" alt="@itemTitle" />
-                                    <span class="card-img-overlay recipe-info-table">
+                                    
+                                </span>
+                            </a>
+                        }
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="card-title">
+                                <h3 class="h5"><a href="@itemURL">@itemTitle</a></h3>
+                            </div>
+                            <span class="recipe-info-table">
                                         @if (!string.IsNullOrWhiteSpace(difficulty))
                                         {
                                             <span class="recipe-info-table-cell">
-                                                <span class="fa fa-spoon recipe-info-icon"></span>
-                                                <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
+                                                
+                                                <span class="recipe-info-type"><span class="fa fa-spoon recipe-info-icon"></span> @Html.Localize("Recipes", "L_Difficulty")</span>
                                                 <span class="recipe-info-value">@difficulty</span>
                                             </span>
                                         }
                                         @if (hasCookingTime || hasPrepTime)
                                         {
                                             <span class="recipe-info-table-cell">
-                                                <span class="fa fa-blender recipe-info-icon"></span>
-                                                <span class="recipe-info-type">@Html.Localize("Recipes", "L_TotalTime")</span>
+                                                
+                                                <span class="recipe-info-type"><span class="fa fa-blender recipe-info-icon"></span> @Html.Localize("Recipes", "L_TotalTime")</span>
                                                 <span class="recipe-info-value">@(cookingTime + preparationTime) @Html.Localize("Recipes", "L_Minutes")</span>
                                             </span>
                                         }
                                         @if (!string.IsNullOrWhiteSpace(servings))
                                         {
                                             <span class="recipe-info-table-cell">
-                                                <span class="fa fa-chart-pie recipe-info-icon"></span>
-                                                <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
+                                                
+                                                <span class="recipe-info-type"><span class="fa fa-chart-pie recipe-info-icon"></span> @Html.Localize("Recipes", "L_Serves")</span>
                                                 <span class="recipe-info-value">@servings</span>
                                             </span>
                                         }
                                     </span>
-                                </span>
-                            </a>
-                        }
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h4><a href="@itemURL">@itemTitle</a></h4>
-                            </div>
                         </div>
                     </div>
                 </div>

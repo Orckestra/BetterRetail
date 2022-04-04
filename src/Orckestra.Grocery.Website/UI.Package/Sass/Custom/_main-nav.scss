@@ -147,7 +147,7 @@
         &-content {
             margin-left: -$grid-gutter-width/2;
             margin-right: -$grid-gutter-width/2;
-            height: 50vh;
+            max-height: 50vh;
             overflow-y: auto;
             ul p {
                 border-bottom: 1px solid #fff;
@@ -379,7 +379,6 @@
                 height: 100%;
                 position: relative;
             }
-
             // add styling for simple dropdowns without multi levels
             .simple-dropdown {
                 &.dropdown:hover {

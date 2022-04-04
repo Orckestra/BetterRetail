@@ -1,5 +1,32 @@
 .recipe {
+    &-category-title {
+        padding: $spacer;
+        text-align: center;
+        background-color: #ffffff55;
+        border-radius: $spacer*2;
+        margin-top: $spacer*4;
+        margin-bottom: $spacer*3;
+    }
     &-tile {
+        .recipe-info {
+            &-icon {
+                font-size: 16px;
+                text-align: center;
+            }
+            &-type {
+                font-size: 16px;
+                font-weight: 600;
+                text-align: center;
+            }
+            &-value {
+                font-weight: 400;
+                text-align: center;
+            }
+            &-table {
+                margin: ($spacer*2) (-1*$spacer*2) (-1*$spacer*2);
+                border-radius: 0 0 $spacer $spacer;
+            }
+        }
         &-media {
             position: relative;
             display: block;
@@ -24,13 +51,7 @@
                     position: relative;
                 }
             }
-            &:hover {
-                .recipe-info-table {
-                    top: 0;
-                }
-            }
             .recipe-info-table {
-                top: 100%;
                 width: 100%;
                 height: 100%;
                 margin-top: 0;
