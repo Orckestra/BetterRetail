@@ -138,7 +138,7 @@
                 <div class="col-12 col-sm-5 recipe-ingredients">
                     <h2 class="mb-3">@Html.Localize("Recipes", "L_Ingredients")</h2>
                     @SelectAll()
-                    <div v-for="list in IngredientsList">
+                    <div v-for="list in IngredientsList" v-cloak="true">
                         <h4 v-if="!list.HideTitle" class="mt-3 mb-2">{{list.Title}}</h4>
                         <div class="form-group form-check" v-for="item in list.Ingredients">
                             <label class="form-check-label">
