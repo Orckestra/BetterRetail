@@ -7,6 +7,7 @@
 /// <reference path='./Services/ISearchService.ts' />
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='./UrlHelper.ts' />
+/// <reference path='../../Composer.ContentSearch/SearchParams.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -58,12 +59,15 @@ module Orckestra.Composer {
                         } else if(categoryTreeRef) {
                             switch (facet.FacetType) {
                                 case 'MultiSelect': {
+                                    const currentFacets: any = [];
+                                    SearchParams.getSearchParams().forEach(a => currentFacets.push(a));
+
                                     const data = {
                                         facetKey: facet.FieldName,
                                         facetValue: facet.Value,
                                         //    pageType,
                                         filter: this.Facets.reduce((filter, f) => {
-                                            if (f.Value !== facet.Value && f.IsRemovable) {
+                                            if (f.Value !== facet.Value && currentFacets.includes(f.FieldName)) {
                                                 filter[f.FieldName] = f.FacetType === 'MultiSelect' ?
                                                     (filter[f.FieldName] || []).concat(f.Value) : f.Value;
                                             }
