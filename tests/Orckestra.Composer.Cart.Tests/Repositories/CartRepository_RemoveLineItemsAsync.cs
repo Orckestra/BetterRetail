@@ -264,6 +264,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var p = new RemoveLineItemsParam
             {
                 CartName = GetRandom.String(7),
+                CartType = GetRandom.String(7),
                 CultureInfo = ForTests.TestingExtensions.GetRandomCulture(),
                 CustomerId = GetRandom.Guid(),
                 LineItems = new List<RemoveLineItemsParam.LineItemDescriptor>
@@ -281,10 +282,10 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var vm = await sut.RemoveLineItemsAsync(p);
+            var vm = await sut.RemoveLineItemsAsync(p).ConfigureAwait(false);
 
             //Assert
-            Container.Verify<IOvertureClient>(m => m.SendAsync(It.IsNotNull<RemoveLineItemRequest>()));
+            Container.Verify<IOvertureClient>(m => m.SendAsync(It.IsNotNull<RemoveLineItemsRequest>()));
         }
 
         [Test]
