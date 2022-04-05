@@ -53,5 +53,15 @@ namespace Orckestra.Composer.Cart.Extensions
             var applicationNames = ConfigurationManager.AppSettings["ApplicationNames"] ?? string.Empty;
             return applicationNames.ToLower().Split(',').Contains(orderDraftOwnershipUserName?.ToString().ToLower());
         }
+
+        /// <summary>
+        /// Convert order id to the format, which used for the name of editing cart
+        /// </summary>
+        /// <param name="orderId">Contains guid</param>
+        /// <returns>Expected draft cart name</returns>
+        public static string GetDraftCartName(this string orderId)
+        {
+            return Guid.TryParse(orderId, out Guid guid) ? guid.ToString("N") : null;
+        }
     }
 }

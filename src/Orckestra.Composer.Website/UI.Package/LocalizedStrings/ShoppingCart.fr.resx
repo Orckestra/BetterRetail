@@ -297,4 +297,7 @@
   <data name="L_GiftItem" xml:space="preserve">
     <value>Votre cadeau gratuit</value>
   </data>
+  <data name="B_RemoveUnavailableProducts" xml:space="preserve">
+    <value>Supprimer les produits indisponibles</value>
+  </data>
 </root>
