@@ -92,10 +92,10 @@ module Orckestra.Composer {
                     },
                     removeInvalidLineItems() {
                         this.Mode.Loading = true;
-                        self.orderSummaryService.cleanCart()                
-                            .then(this.cartService.invalidateCache())
+                        self.cartService.invalidateCache();
+                        self.orderSummaryService.cleanCart()
                             .then(cart => 
-                                this.eventHub.publish(CartEvents.CartUpdated, { data: cart })
+                                self.eventHub.publish(CartEvents.CartUpdated, { data: cart })
                         );
                     }
                 }

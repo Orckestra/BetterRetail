@@ -22,7 +22,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
-using Orckestra.Composer.Cart.Extensions;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services.Order
