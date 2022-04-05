@@ -12,5 +12,6 @@ namespace Orckestra.Composer.ContentSearch.ViewModels
         public int PagesCount { get; set; }
         public bool IsProducts { get; set; }
         public bool IsActive { get; set; }
+        public string DataTypes { get; set; }
     }
 }
