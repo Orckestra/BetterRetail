@@ -91,17 +91,12 @@ module Orckestra.Composer {
                         });
                     },
                     removeInvalidLineItems() {
-                        let nextStepUrl = this.OrderSummary.EditCartUrlTarget;
-                        if (!nextStepUrl) {
-                            throw 'No next step Url was defined.';
-                        }
-
                         this.Mode.Loading = true;
-                        self.orderSummaryService.cleanCart().done(() => {
-                            window.location.href = nextStepUrl;
-                        }, reason => {
-                            console.error('Error while removing invalid items from the cart', reason);
-                        });
+                        self.orderSummaryService.cleanCart()                
+                            .then(this.cartService.invalidateCache())
+                            .then(cart => 
+                                this.eventHub.publish(CartEvents.CartUpdated, { data: cart })
+                        );
                     }
                 }
             };

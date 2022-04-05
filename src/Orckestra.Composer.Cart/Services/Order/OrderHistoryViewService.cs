@@ -51,7 +51,6 @@ namespace Orckestra.Composer.Cart.Services.Order
         public ILineItemViewModelFactory LineItemViewModelFactory { get; }
         protected virtual IEditingOrderProvider EditingOrderProvider { get; private set; }
         protected virtual ICheckoutService CheckoutService { get; private set; }
-        protected virtual ICartService CartService { get; private set; }
 
 
         public OrderHistoryViewService(
@@ -69,8 +68,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             IComposerContext composerContext, 
             ICartUrlProvider cartUrlProvider,
             IEditingOrderProvider editingOrderProvider,
-            ICheckoutService checkoutService,
-            ICartService cartService)
+            ICheckoutService checkoutService)
         {
             OrderHistoryViewModelFactory = orderHistoryViewModelFactory ?? throw new ArgumentNullException(nameof(orderHistoryViewModelFactory));
             OrderUrlProvider = orderUrlProvider ?? throw new ArgumentNullException(nameof(orderUrlProvider));
@@ -87,7 +85,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
             EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
             CheckoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
-            CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
         }
 
         /// <summary>
@@ -570,17 +567,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 throw new InvalidOperationException($"Cannot save edited order #${orderNumber} as it doesn't exist.");
             }
-
-            var removeInvalidLineItemsParam = new RemoveInvalidLineItemsParam
-            {
-                CartName = order.Id.GetDraftCartName(),
-                CartType = CartConfiguration.OrderDraftCartType,
-                CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
-                BaseUrl = baseUrl
-            };
-            await CartService.ProcessInvalidLineItemsRemovalAsync(removeInvalidLineItemsParam).ConfigureAwait(false);
 
             var orderResult = await EditingOrderProvider.SaveEditedOrderAsync(order).ConfigureAwait(false);
 
