@@ -96,7 +96,7 @@ module Orckestra.Composer {
                         self.orderSummaryService.cleanCart()
                             .then(cart => 
                                 self.eventHub.publish(CartEvents.CartUpdated, { data: cart })
-                        );
+                        ).fin(() => this.Mode.Loading = false);
                     }
                 }
             };
