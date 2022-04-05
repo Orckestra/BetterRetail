@@ -79,12 +79,18 @@
 
 @helper ShowRecipeContentSearchEntry(string searchEntry = "contentItem")
 {
-    <div class="card h-100">
+    <div class="card h-100 recipe-tile">
         <a v-if="@(searchEntry).ImageUrl" v-bind:href="@(searchEntry).DetailsUrl">
             <span class="recipe-tile-media">
 
                 <img class="card-img-top" v-bind:src="@(searchEntry).ImageUrl + '?h=200'" v-bind:alt="@(searchEntry).Title" />
-                <span class="card-img-overlay recipe-info-table">
+            </span>
+        </a>
+        <div class="card-body d-flex flex-column justify-content-between">
+            <div class="card-title">
+                <h3 class="h5"><a v-bind:href="@(searchEntry).DetailsUrl" v-html="@(searchEntry).Title"></a></h3>
+            </div>
+            <span class="recipe-info-table">
                     <span v-if="@(searchEntry).difficulty" class="recipe-info-table-cell">
                         <span class="fa fa-spoon recipe-info-icon"></span>
                         <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
@@ -103,12 +109,6 @@
                         <span class="recipe-info-value">{{@(searchEntry).servings}}</span>
                     </span>
                 </span>
-            </span>
-        </a>
-        <div class="card-body">
-            <div class="card-title">
-                <h4><a v-bind:href="@(searchEntry).DetailsUrl" v-html="@(searchEntry).Title"></a></h4>
-            </div>
         </div>
     </div>
 }

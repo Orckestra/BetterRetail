@@ -12,15 +12,26 @@
             &-icon {
                 font-size: 16px;
                 text-align: center;
+                .searchgrid & {
+                    font-size: 14px;
+                }
             }
             &-type {
                 font-size: 16px;
                 font-weight: 600;
                 text-align: center;
+                .searchgrid & {
+                    font-size: 12px;
+                    margin-top: 2px;
+                }
             }
             &-value {
                 font-weight: 400;
                 text-align: center;
+                .searchgrid & {
+                    font-size: 12px;
+                    margin-top: 2px;
+                }
             }
             &-table {
                 margin: ($spacer*2) (-1*$spacer*2) (-1*$spacer*2);
