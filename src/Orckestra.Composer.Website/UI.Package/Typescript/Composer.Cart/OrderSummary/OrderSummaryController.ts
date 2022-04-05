@@ -89,6 +89,19 @@ module Orckestra.Composer {
                             console.error('Error while proceeding to Checkout', reason);
                             ErrorHandler.instance().outputErrorFromCode('ProceedToCheckoutFailed');
                         });
+                    },
+                    removeInvalidLineItems() {
+                        let nextStepUrl = this.OrderSummary.EditCartUrlTarget;
+                        if (!nextStepUrl) {
+                            throw 'No next step Url was defined.';
+                        }
+
+                        this.Mode.Loading = true;
+                        self.orderSummaryService.cleanCart().done(() => {
+                            window.location.href = nextStepUrl;
+                        }, reason => {
+                            console.error('Error while removing invalid items from the cart', reason);
+                        });
                     }
                 }
             };
