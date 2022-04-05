@@ -60,7 +60,8 @@ namespace Orckestra.Composer.ContentSearch.Services
                         PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / param.PageSize),
                         Total = result.ResultsFound,
                         IsActive = isActive,
-                        SearchResults = result.Entries.Select(x => GetSearchResultsEntryViewModel(x)).ToList()
+                        SearchResults = result.Entries.Select(x => GetSearchResultsEntryViewModel(x)).ToList(),
+                        DataTypes = tab.DataTypes
                     });
 
                     if(isActive)
