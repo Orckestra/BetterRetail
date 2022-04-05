@@ -63,7 +63,7 @@ module Orckestra.Composer {
                                         facetValue: facet.Value,
                                         //    pageType,
                                         filter: this.Facets.reduce((filter, f) => {
-                                            if (f.Value !== facet.Value) {
+                                            if (f.Value !== facet.Value && f.IsRemovable) {
                                                 filter[f.FieldName] = f.FacetType === 'MultiSelect' ?
                                                     (filter[f.FieldName] || []).concat(f.Value) : f.Value;
                                             }
