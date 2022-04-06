@@ -164,6 +164,8 @@ namespace Orckestra.Composer.Search.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> GetSearchResultsBySkus(GetSearchResultsBySkusRequest request)
         {
+            if (request.Skus == null) return BadRequest($"{nameof(request.Skus)} cannot be empty");
+
             var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
             var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
             var Keywords = queryString[SearchRequestParams.Keywords];
