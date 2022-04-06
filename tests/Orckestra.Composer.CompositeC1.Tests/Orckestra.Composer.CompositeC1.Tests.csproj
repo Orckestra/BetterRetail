@@ -51,12 +51,12 @@
       <HintPath>..\..\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Composite, Version=6.11.7982.26191, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.dll</HintPath>
+    <Reference Include="Composite, Version=6.12.8122.18346, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Composite.Workflows, Version=6.11.7982.26195, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.Workflows.dll</HintPath>
+    <Reference Include="Composite.Workflows, Version=6.12.8122.18350, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
@@ -75,27 +75,27 @@
       <HintPath>..\..\packages\HttpSimulator.2.2.1\lib\net40\HttpSimulator.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

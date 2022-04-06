@@ -7,6 +7,7 @@
 /// <reference path='./Services/ISearchService.ts' />
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='./UrlHelper.ts' />
+/// <reference path='../../Composer.ContentSearch/SearchParams.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -47,6 +48,22 @@ module Orckestra.Composer {
                         const facetLandingPageUrl = categoryTreeRef && this.LandingPageUrls.length > index && this.LandingPageUrls[index];
 
                         if(facetLandingPageUrl || !categoryTreeRef) {
+                            if(categoryTreeRef) {
+                                // case, when remove category facet with landing page url and sub-categories selected
+                                const getLevel = (f) => {
+                                    const match = f.FieldName.match(/CategoryLevel(\d+)_Facet/);
+                                    return match && match[1];
+                                }
+                                const level = getLevel(facet);
+                                const data = this.Facets.filter(f => getLevel(f) > level).map(f => ({
+                                    facetFieldName: f.FieldName,
+                                    facetType: f.FacetType,
+                                    facetValue: f.Value,
+                                }))
+
+                                self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
+                            }
+
                             self.eventHub.publish(SearchEvents.FacetRemoved, {
                                 data: {
                                     facetFieldName: facet.FieldName,
@@ -58,12 +75,15 @@ module Orckestra.Composer {
                         } else if(categoryTreeRef) {
                             switch (facet.FacetType) {
                                 case 'MultiSelect': {
+                                    const currentFacets: any = [];
+                                    SearchParams.getSearchParams().forEach(a => currentFacets.push(a));
+
                                     const data = {
                                         facetKey: facet.FieldName,
                                         facetValue: facet.Value,
                                         //    pageType,
                                         filter: this.Facets.reduce((filter, f) => {
-                                            if (f.Value !== facet.Value && f.IsRemovable) {
+                                            if (f.Value !== facet.Value && currentFacets.includes(f.FieldName)) {
                                                 filter[f.FieldName] = f.FacetType === 'MultiSelect' ?
                                                     (filter[f.FieldName] || []).concat(f.Value) : f.Value;
                                             }
