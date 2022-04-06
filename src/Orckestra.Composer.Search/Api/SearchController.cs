@@ -164,20 +164,18 @@ namespace Orckestra.Composer.Search.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> GetSearchResultsBySkus(GetSearchResultsBySkusRequest request)
         {
-            var Skus = request.Skus;
             var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
             var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
             var Keywords = queryString[SearchRequestParams.Keywords];
             var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
             var IncludeFactes = request.IncludeFacets;
-            BaseSearchViewModel viewModel;
 
             var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, IncludeFactes).ConfigureAwait(false);
             var searchBySkusCriteria = new SearchBySkusCriteria
             {
-                Skus = Skus,
+                Skus = request.Skus,
                 Keywords = searchCriteria.Keywords,
-                NumberOfItemsPerPage = Skus.Length,
+                NumberOfItemsPerPage = request.Skus.Length,
                 StartingIndex = searchCriteria.StartingIndex,
                 Page = searchCriteria.Page,
                 BaseUrl = searchCriteria.BaseUrl,
@@ -190,7 +188,7 @@ namespace Orckestra.Composer.Search.Api
 
             searchBySkusCriteria.SelectedFacets.AddRange(SelectedFacets);
 
-            viewModel = await SearchViewService.GetSearchViewModelAsync(searchBySkusCriteria).ConfigureAwait(false);
+            var viewModel = await SearchViewService.GetSearchViewModelAsync(searchBySkusCriteria).ConfigureAwait(false);
 
             if (IncludeFactes)
             {
