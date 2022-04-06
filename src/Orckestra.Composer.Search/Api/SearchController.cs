@@ -169,26 +169,33 @@ namespace Orckestra.Composer.Search.Api
             var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
             var Keywords = queryString[SearchRequestParams.Keywords];
             var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+            var IncludeFactes = request.IncludeFacets;
             BaseSearchViewModel viewModel;
 
-            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, true).ConfigureAwait(false);
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, IncludeFactes).ConfigureAwait(false);
             var searchBySkusCriteria = new SearchBySkusCriteria
             {
                 Skus = Skus,
                 Keywords = searchCriteria.Keywords,
                 NumberOfItemsPerPage = Skus.Length,
-                StartingIndex = 0,
+                StartingIndex = searchCriteria.StartingIndex,
                 Page = searchCriteria.Page,
                 BaseUrl = searchCriteria.BaseUrl,
                 Scope = searchCriteria.Scope,
                 CultureInfo = searchCriteria.CultureInfo,
                 InventoryLocationIds = searchCriteria.InventoryLocationIds,
                 AvailabilityDate = searchCriteria.AvailabilityDate,
+                IncludeFacets = searchCriteria.IncludeFacets
             };
 
             searchBySkusCriteria.SelectedFacets.AddRange(SelectedFacets);
 
             viewModel = await SearchViewService.GetSearchViewModelAsync(searchBySkusCriteria).ConfigureAwait(false);
+
+            if (IncludeFactes)
+            {
+                viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+            }
 
             return Ok(viewModel);
         }
