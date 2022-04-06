@@ -48,6 +48,22 @@ module Orckestra.Composer {
                         const facetLandingPageUrl = categoryTreeRef && this.LandingPageUrls.length > index && this.LandingPageUrls[index];
 
                         if(facetLandingPageUrl || !categoryTreeRef) {
+                            if(categoryTreeRef) {
+                                // case, when remove category facet with landing page url and sub-categories selected
+                                const getLevel = (f) => {
+                                    const match = f.FieldName.match(/CategoryLevel(\d+)_Facet/);
+                                    return match && match[1];
+                                }
+                                const level = getLevel(facet);
+                                const data = this.Facets.filter(f => getLevel(f) > level).map(f => ({
+                                    facetFieldName: f.FieldName,
+                                    facetType: f.FacetType,
+                                    facetValue: f.Value,
+                                }))
+
+                                self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
+                            }
+
                             self.eventHub.publish(SearchEvents.FacetRemoved, {
                                 data: {
                                     facetFieldName: facet.FieldName,
