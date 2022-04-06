@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
@@ -155,6 +156,40 @@ namespace Orckestra.Composer.Search.Api
             }
 
             viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+            return Ok(viewModel);
+        }
+
+        [ActionName("searchBySkus")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetSearchResultsBySkus(GetSearchResultsBySkusRequest request)
+        {
+            var Skus = request.Skus;
+            var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
+            var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
+            var Keywords = queryString[SearchRequestParams.Keywords];
+            var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+            BaseSearchViewModel viewModel;
+
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, true).ConfigureAwait(false);
+            var searchBySkusCriteria = new SearchBySkusCriteria
+            {
+                Skus = Skus,
+                Keywords = searchCriteria.Keywords,
+                NumberOfItemsPerPage = Skus.Length,
+                StartingIndex = 0,
+                Page = searchCriteria.Page,
+                BaseUrl = searchCriteria.BaseUrl,
+                Scope = searchCriteria.Scope,
+                CultureInfo = searchCriteria.CultureInfo,
+                InventoryLocationIds = searchCriteria.InventoryLocationIds,
+                AvailabilityDate = searchCriteria.AvailabilityDate,
+            };
+
+            searchBySkusCriteria.SelectedFacets.AddRange(SelectedFacets);
+
+            viewModel = await SearchViewService.GetSearchViewModelAsync(searchBySkusCriteria).ConfigureAwait(false);
+
             return Ok(viewModel);
         }
 
