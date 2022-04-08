@@ -135,27 +135,65 @@
             </div>
             <hr class="my-3" />
             <div class="row">
-                <div class="col-12 col-sm-5 recipe-ingredients">
+                <div class="col-12 col-sm-5 recipe-ingredients" v-cloak="true">
                     <h2 class="mb-3">@Html.Localize("Recipes", "L_Ingredients")</h2>
                     @SelectAll()
-                    <div v-for="list in IngredientsList" v-cloak="true">
+                    <div v-for="list in IngredientsList">
                         <h4 v-if="!list.HideTitle" class="mt-3 mb-2">{{list.Title}}</h4>
                         <div class="form-group form-check" v-for="item in list.Ingredients">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" v-bind:value="item.Id" v-model="SelectedIngredientsIds"  name="ingredients"/>
+                            <label class="form-check-label recipe-ingredient" v-bind:class="{'text-danger' : !item.CanBeAddedToCart &amp;&amp; IsIngredientSelected(item.Id) &amp;&amp; AddToCartHasIssues}">
+                                <input type="checkbox" class="form-check-input" v-bind:value="item.Id" v-model="SelectedIngredientsIds" name="ingredients" />
                                 {{item.Title}}
                             </label>
+                            <div v-if="item.ProductInformation" class="recipe-ingredient-product">
+                                <div class="product-tile d-flex h-100">
+                                    <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="item.ProductInformation.ImageUrl"
+                                         v-bind:alt="item.ProductInformation.FullDisplayName"
+                                         v-on:error="onImageError($event, item)" />
+
+                                    <div class="product-tile-information">
+                                        <div>
+                                            <p v-if="item.ProductInformation.Brand" class="product-tile-brand m-0"
+                                               data-qa="search-product-brand">
+                                                {{item.ProductInformation.Brand}}
+                                            </p>
+
+                                            <p class="text-default-font">
+                                                {{item.ProductInformation.DisplayName}}
+                                            </p>
+
+                                            @ProductHelpers.DisplayFormat("item.ProductInformation")
+                                        </div>
+                                        @ProductHelpers.PriceBasedOnUnitMeasure("item.ProductInformation")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="AddToCartSucceeded" class="alert alert-success  text-success">
+                        <div class="multiline-message">
+                            <span>
+                                @Html.Localize("Recipes", "L_ItemsAddedToCartSucsessMessage")
+                            </span>
+                        </div>
+                    </div>
+                    <div v-if="AddToCartHasIssues" class="alert alert-danger text-danger">
+                        <div class="multiline-message">
+                            <span>
+                                @Html.Localize("Recipes", "L_ItemsAddedToCartWithIssuesMessage")
+                            </span>
                         </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-6">
-                            <button class="btn btn-secondary w-100 " v-bind:disabled="!IsIngredientsSelected" v-on:click="searchIngredient" >@Html.Localize("Recipes", "B_ShopIngredients")</button>
-                        </div>       
+                            <button class="btn btn-secondary w-100 " v-bind:disabled="!IsIngredientsSelected || Loading" v-on:click="searchIngredient">@Html.Localize("Recipes", "B_ShopIngredients")</button>
+                        </div>
                         <div class="col-6">
-                            <button class="btn btn-success w-100">Todo</button>
+                            <button class="btn btn-success w-100" v-bind:disabled="!IsIngredientsSelected || Loading" v-on:click="addIngredientsToCart">@Html.Localize("Recipes", "L_AddRecommendedProducts")</button>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-12 col-sm-7 recipe-instructions">
                     <h2>@Html.Localize("Recipes", "L_Instructions")</h2>
                     @Html.Raw(Item.Instructions)

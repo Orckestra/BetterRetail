@@ -188,3 +188,49 @@
         </button>
     </div>
 }
+
+@helper DisplayFormat(string valueBinding = "Product")
+{
+    <div class="product-tile-format" v-if="@(valueBinding).HasUnitValues">
+        <span v-if="@(valueBinding).IsUnit &amp;&amp; @(valueBinding).IsWeightedProduct">
+            @Html.Localize("ProductPage", "L_Approx") {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}} @Html.Localize("General", "L_EachAbbrev")
+        </span>
+        <span v-if="@(valueBinding).IsUnit &amp;&amp; !@(valueBinding).IsWeightedProduct">
+            {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}
+        </span>
+        <span v-if="!@(valueBinding).IsUnit &amp;&amp; @(valueBinding).IsWeightedProduct">
+            {{@(valueBinding).ProductUnitQuantity}} x @Html.Localize("ProductPage", "L_Approx") {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}
+        </span>
+        <span v-if="!@(valueBinding).IsUnit &amp;&amp; !@(valueBinding).IsWeightedProduct">
+            {{@(valueBinding).ProductUnitQuantity}} x {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}
+        </span>
+    </div>
+}
+
+@helper PriceBasedOnUnitMeasure(string valueBinding = "Product")
+{
+    <div class="product-tile-price">
+        <small class="display-price" v-bind:class="{'text-danger order-2' : @(valueBinding).IsOnSale}">
+            <span v-if="@(valueBinding).HasPriceRange">
+                @Html.Localize("List-Search", "L_PriceFrom")
+            </span>
+            <span class="h4" v-if="@(valueBinding).IsOnSale">
+                {{@(valueBinding).DisplaySpecialPrice}}
+            </span>
+            <span class="h4" v-else="else">
+                {{@(valueBinding).DisplayListPrice}}
+            </span>
+            <span v-if="@(valueBinding).IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}</span>
+        </small>
+        <span v-if="@(valueBinding).IsOnSale" class="original-price" v-bind:class="{'order-1 d-block' : @(valueBinding).IsOnSale}">
+            &nbsp;<del>{{@(valueBinding).DisplayListPrice}}</del>
+        </span>
+
+        <span v-if="@(valueBinding).PricePerUnit" class="product-tile-price-per-unit" v-bind:class="{'order-3' : @(valueBinding).IsOnSale}">
+            <span v-if="@(valueBinding).IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{@(valueBinding).PricePerUnit.replace('0.00', '0.01')}}</span>
+            <span v-else="v-else">{{@(valueBinding).PricePerUnit}}</span>
+            @Html.Localize("ProductPage", "L_Per")
+            <span v-if="@(valueBinding).BaseProductSize != 1 ">{{@(valueBinding).BaseProductSize}}&nbsp;</span>{{@(valueBinding).BaseProductMeasure}}
+        </span>
+    </div>
+}

@@ -30,5 +30,10 @@ module Orckestra.Composer {
         public getContentSearchResults(QueryString, CurrentTabPathInfo, IsCurrentSiteOnly): Q.Promise<any> {
             return ComposerClient.post('/api/contentsearch/search', { QueryString, CurrentTabPathInfo, IsCurrentSiteOnly });
         }
+
+        public getProductsSearchResults(QueryString, Skus): Q.Promise<any> {
+            return ComposerClient.post('/api/search/searchBySkus', { QueryString, Skus });
+        }
+
     }
 }

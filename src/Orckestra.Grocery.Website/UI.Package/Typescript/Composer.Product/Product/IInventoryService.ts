@@ -7,5 +7,7 @@ module Orckestra.Composer {
         isAvailableToSell(sku: string): Q.Promise<boolean>;
 
         clearCache(): void;
+
+        getProductsAvailability(Skus: string[]): Q.Promise<any>;
     }
 }

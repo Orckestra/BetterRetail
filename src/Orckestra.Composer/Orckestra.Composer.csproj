@@ -292,6 +292,7 @@
     <Compile Include="Parameters\MapToTemplateLineItemViewModelParam.cs" />
     <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\RemoveRecurringOrderTemplateLineItemsParam.cs" />
+    <Compile Include="Parameters\SearchBySkusCriteria.cs" />
     <Compile Include="Parameters\SendResetPasswordInstructionsParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemParam.cs" />
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />

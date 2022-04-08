@@ -157,6 +157,18 @@
     <value>Print</value>
   </data>
   <data name="L_SelectAll" xml:space="preserve">
-    <value>select all</value>
+    <value>Select All</value>
+  </data>
+  <data name="L_AddRecommendedProducts" xml:space="preserve">
+    <value>Add Recommended Products</value>
+  </data>
+  <data name="L_ShopIngredients" xml:space="preserve">
+    <value>Shop Ingredients</value>
+  </data>
+  <data name="L_ItemsAddedToCartSucsessMessage" xml:space="preserve">
+    <value>All selected items added to your cart</value>
+  </data>
+  <data name="L_ItemsAddedToCartWithIssuesMessage" xml:space="preserve">
+    <value>Some recommended products could not be added to cart, please shop Ingredients for highlighted items.</value>
   </data>
 </root>

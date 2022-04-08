@@ -156,7 +156,13 @@
   <data name="L_Print" xml:space="preserve">
     <value>Imprimer</value>
   </data>
-   <data name="L_SelectAll" xml:space="preserve">
-    <value>tout sélectionner</value>
+  <data name="L_SelectAll" xml:space="preserve">
+    <value>Tout sélectionner</value>
+  </data>
+  <data name="L_ItemsAddedToCartSucsessMessage" xml:space="preserve">
+    <value>Tous les articles sélectionnés ajoutés à votre panier</value>
+  </data>
+  <data name="L_ItemsAddedToCartWithIssuesMessage" xml:space="preserve">
+    <value>Certains produits recommandés n'ont pas pu être ajoutés au panier, veuillez acheter des ingrédients pour les articles mis en évidence.</value>
   </data>
 </root>
