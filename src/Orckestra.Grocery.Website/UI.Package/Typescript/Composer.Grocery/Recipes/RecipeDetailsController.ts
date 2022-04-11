@@ -47,8 +47,16 @@ module Orckestra.Composer {
           this.getIngredientsProducts();
         },
         computed: {
-          IsIngredientsSelected() {
+          SelectedKeywords() {
+            return this.SelectedIngredients
+            .map(a => a.Keyword)
+            .filter((value, index, self) => value && self.indexOf(value) === index);
+          },
+          IsIngredientsSelected() {            
             return this.SelectedIngredientsIds.length > 0;
+          },
+          IsInredientKeywordsSelected() {
+            return this.IsIngredientsSelected && this.SelectedKeywords.length > 0;
           },
           SelectedIngredients() {
             return this.SelectedIngredientsIds.map(id => this.IngredientsMap[id]);
@@ -136,12 +144,10 @@ module Orckestra.Composer {
             }).fin(() => this.Loading = false)
           },
           searchIngredient() {
-            var keywords = this.SelectedIngredients
-              .map(a => a.Keyword)
-              .filter((value, index, self) => self.indexOf(value) === index);
-
-            self.multiKeywordsSearchService.setKeywords(keywords);
-            window.location.href = this.SearchUrl + "?keywords=" + keywords[0] + "&multikeywords=on";
+            if(!this.IsInredientKeywordsSelected) return;
+            
+            self.multiKeywordsSearchService.setKeywords(this.SelectedKeywords);
+            window.location.href = this.SearchUrl + "?keywords=" + this.SelectedKeywords[0] + "&multikeywords=on";
           }
         }
       });
