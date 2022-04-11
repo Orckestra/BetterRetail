@@ -186,7 +186,7 @@
                     </div>
                     <div class="row mt-2">
                         <div class="col-6">
-                            <button class="btn btn-secondary w-100 " v-bind:disabled="!IsIngredientsSelected || Loading" v-on:click="searchIngredient">@Html.Localize("Recipes", "B_ShopIngredients")</button>
+                            <button class="btn btn-secondary w-100 " v-bind:disabled="!IsInredientKeywordsSelected || Loading" v-on:click="searchIngredient">@Html.Localize("Recipes", "B_ShopIngredients")</button>
                         </div>
                         <div class="col-6">
                             <button class="btn btn-success w-100" v-bind:disabled="!IsIngredientsSelected || Loading" v-on:click="addIngredientsToCart">@Html.Localize("Recipes", "L_AddRecommendedProducts")</button>
