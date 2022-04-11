@@ -136,6 +136,7 @@
     <Compile Include="Repositories\ProductRequestFactory.cs" />
     <Compile Include="Parameters\RemoveSelectedFacetsFromFacetsParam.cs" />
     <Compile Include="RequestConstants\SearchRequestParams.cs" />
+    <Compile Include="Request\GetSearchResultsBySkusRequest.cs" />
     <Compile Include="Request\GetSearchResultsRequest.cs" />
     <Compile Include="Request\GetCategoryFacetsRequest.cs" />
     <Compile Include="Request\GetFacetsRequest.cs" />

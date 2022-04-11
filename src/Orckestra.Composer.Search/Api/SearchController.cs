@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Composer.Search.Providers;
@@ -155,6 +156,47 @@ namespace Orckestra.Composer.Search.Api
             }
 
             viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+            return Ok(viewModel);
+        }
+
+        [ActionName("searchBySkus")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetSearchResultsBySkus(GetSearchResultsBySkusRequest request)
+        {
+            if (request.Skus == null) return BadRequest($"{nameof(request.Skus)} cannot be empty");
+
+            var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
+            var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
+            var Keywords = queryString[SearchRequestParams.Keywords];
+            var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
+            var IncludeFactes = request.IncludeFacets;
+
+            var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, IncludeFactes).ConfigureAwait(false);
+            var searchBySkusCriteria = new SearchBySkusCriteria
+            {
+                Skus = request.Skus,
+                Keywords = searchCriteria.Keywords,
+                NumberOfItemsPerPage = request.Skus.Length,
+                StartingIndex = searchCriteria.StartingIndex,
+                Page = searchCriteria.Page,
+                BaseUrl = searchCriteria.BaseUrl,
+                Scope = searchCriteria.Scope,
+                CultureInfo = searchCriteria.CultureInfo,
+                InventoryLocationIds = searchCriteria.InventoryLocationIds,
+                AvailabilityDate = searchCriteria.AvailabilityDate,
+                IncludeFacets = searchCriteria.IncludeFacets
+            };
+
+            searchBySkusCriteria.SelectedFacets.AddRange(SelectedFacets);
+
+            var viewModel = await SearchViewService.GetSearchViewModelAsync(searchBySkusCriteria).ConfigureAwait(false);
+
+            if (IncludeFactes)
+            {
+                viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+            }
+
             return Ok(viewModel);
         }
 

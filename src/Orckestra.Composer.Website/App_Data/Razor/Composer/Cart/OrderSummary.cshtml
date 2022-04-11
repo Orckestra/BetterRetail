@@ -54,24 +54,33 @@
 
                 @OrderSummaryHelpers.AdditionalFeesMessage()
 
-                <div v-if="Cart.InvalidLineItemCount > 0" class="text-danger">
-                    @Html.Localize("ShoppingCart", "L_RemoveUnavailableItems")
-                </div>
-
                 <div v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'">
+                    <div v-if="Cart.InvalidLineItemCount > 0" class="text-danger">
+                        @Html.Localize("ShoppingCart", "L_RemoveUnavailableItems")
+                    </div>
+
                     @CheckoutBtn()
                 </div>
 
                 <div v-if="Cart.CartType == '@CartConfiguration.OrderDraftCartType'">
+                    <div class="row mb-2" v-if="Cart.InvalidLineItemCount > 0">
+                        <div class="col-12">
+                            <button v-on:click="removeInvalidLineItems" v-bind:disabled="IsLoading"
+                                    class="btn w-100 text-uppercase alert-danger text-danger">
+                                @Html.Localize("ShoppingCart", "B_RemoveUnavailableProducts")
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-6">
-                            <button v-on:click="cancelEditOrder" v-bind:disabled="IsLoading" 
+                            <button v-on:click="cancelEditOrder" v-bind:disabled="IsLoading"
                                     class="btn btn-secondary w-100  text-uppercase">
                                 @Html.Localize("General", "B_Cancel")
                             </button>
                         </div>
                         <div class="col-6">
-                            <button v-on:click="saveEditOrder" v-bind:disabled="IsLoading" 
+                            <button v-on:click="saveEditOrder" v-bind:disabled="IsLoading || Cart.InvalidLineItemCount > 0"
                                     class="btn btn-success w-100 text-uppercase">
                                 @Html.Localize("General", "B_Update")
                             </button>

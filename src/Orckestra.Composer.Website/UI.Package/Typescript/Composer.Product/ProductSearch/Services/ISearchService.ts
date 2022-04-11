@@ -6,6 +6,8 @@ module Orckestra.Composer {
     export interface ISearchService {
         initialize(options: ISearchCriteriaOptions);
 
+        updateFacetRegistry(facetRegistry: IHashTable<string>): void;
+
         singleFacetsChanged(eventInformation: IEventInformation);
 
         multiFacetChanged(eventInformation: IEventInformation);

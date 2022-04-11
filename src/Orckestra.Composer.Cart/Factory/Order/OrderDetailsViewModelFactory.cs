@@ -145,12 +145,11 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
         {
-            if (!Guid.TryParse(param.Order.Id, out Guid orderGuid)) return false;
+            var draftCartName = param.Order.Id.GetDraftCartName();
+            if (draftCartName == null) return false;
 
-            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == orderGuid.ToString("N"));
-            if (orderDraft == null) return false;
-
-            return orderDraft.IsCurrentApplicationOwner();
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == draftCartName);
+            return orderDraft != null && orderDraft.IsCurrentApplicationOwner();
         }
 
         protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Parameters;
 using Orckestra.Overture.ServiceModel.Queries;
@@ -48,8 +49,42 @@ namespace Orckestra.Composer.Search.Repositories
                     CategoryName = categoryCriteria.CategoryId
                 };
             }
+            else if (criteria is SearchBySkusCriteria searchBySkusCriteria)
+            {
+                var request = new SearchAvailableProductsRequest
+                {
+                    Query = CreateQuery(searchBySkusCriteria)
+                };
+
+                return request;
+            }
 
             return CreateProductRequest(criteria.Scope);
+        }
+
+        protected virtual Query CreateQuery(SearchBySkusCriteria searchBySkusCriteria)
+        {
+            var skus = searchBySkusCriteria.Skus.Select(s => $"Sku:{s}").ToList();
+            var customExpr = String.Join(" OR ", skus);
+
+            return new Query
+            {
+                Filter = new FilterGroup
+                {
+                    BinaryOperator = BinaryOperator.And,
+                    Filters = new List<Filter>
+                    {
+                        new Filter
+                        {
+                            Member = "Sku",
+                            CustomExpression = customExpr,
+                            Operator = Operator.Custom
+                        }
+                    }
+                }
+
+            };
+
         }
 
         protected virtual Query CreateQuery(string scopeId)

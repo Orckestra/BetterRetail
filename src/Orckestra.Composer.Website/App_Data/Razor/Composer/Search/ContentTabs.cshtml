@@ -1,4 +1,4 @@
-@inherits Composer.Razor.ComposerRazorFunction
+﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search.ViewModels
 @using Orckestra.Search.WebsiteSearch;
@@ -90,7 +90,8 @@
             UrlTitle = productTab.UrlTitle,
             TabUrl = $"{CurrentPageNode.Url}/{productTab.UrlTitle}?{SearchRequestParams.Keywords}={SearchRequestContext.SearchQuery}",
             Total = IsProductsCorrected() && !isProductTab ? 0 : ProductSearchResults.TotalCount,
-            IsActive = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo)
+            IsActive = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo),
+            IsProducts = true
         };
 
         contentSearchVm.Tabs.Insert(0, productTabVm);
@@ -112,16 +113,13 @@
             {
                 if (currentTab.Total == 0)
                 {
-                    var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
-                    <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, currentTab.Title)</p>
-                    if (tabsWithResults.Any())
-                    {
-                        if (!(isProductTab && IsProductFacetsSelected()))
-                        {
-                            @ShowButWeFindIn(tabsWithResults)
-                            @ShowButWeFindInTeaser(tabsWithResults)
-                        }
-                    }
+                    <div id="vueTabSearchSummary">
+                        <template v-if="CurrentTab.Total == 0">
+                            <p>@Html.Localized("List-Search", "WeAreSorry", "{{SearchQuery}}", currentTab.Title)</p>
+                            @ShowButWeFindIn()
+                            @ShowButWeFindInTeaser()
+                        </template>
+                    </div>
                 }
 
                 if (isProductTab)
@@ -130,19 +128,20 @@
                 }
                 else
                 {
-                   <f:function name="Composer.Grids.SearchGrid">
-                     <f:param name="LeftPart">
-                        @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm, CurrentSite = CurrentSite })
-                     </f:param>
-                     <f:param name="RightPart">
-                        @Function("Composer.ContentSearch.Results", new {
-                            SelectedSortBy = contentSearchVm.SelectedSortBy,
-                            AvailableSortBys = contentSearchVm.AvailableSortBys,
-                            Tab = contentSearchVm.ActiveTab,
-                            CurrentSite = CurrentSite
-                        })
-                     </f:param>
-                   </f:function>
+                    <f:function name="Composer.Grids.SearchGrid">
+                        <f:param name="LeftPart">
+                            @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm, CurrentSite = CurrentSite })
+                        </f:param>
+                        <f:param name="RightPart">
+                            @Function("Composer.ContentSearch.Results", new
+                            {
+                                SelectedSortBy = contentSearchVm.SelectedSortBy,
+                                AvailableSortBys = contentSearchVm.AvailableSortBys,
+                                Tab = contentSearchVm.ActiveTab,
+                                CurrentSite = CurrentSite
+                            })
+                        </f:param>
+                    </f:function>
                 }
             }
         </div>
@@ -152,23 +151,27 @@
 
 @helper SearchSummary(ContentSearchViewModel vm, bool isProductTab)
 {
-    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary" 
-         data-context="@JsonConvert.SerializeObject(vm.Tabs)" 
+    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary"
+         data-context="@JsonConvert.SerializeObject(vm.Tabs)"
+         data-isProductTab="@isProductTab"
+         data-сorrectedSearchTerms="@ProductSearchResults.CorrectedSearchTerms"
+         data-searchQuery="@SearchRequestContext.SearchQuery"
+         data-total="@vm.Total"
          v-cloak="true">
         <div class="container-md">
-            @if (IsProductsCorrected() && isProductTab)
-            {
-                <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
-                <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, vm.ActiveTab?.Title)</p>
-                @ShowButWeFindIn(vm.SuggestedTabs)
-                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{totalCount}}", ProductSearchResults.CorrectedSearchTerms))</h1>
-            }
-            else
-            {
-                <h1 v-if="totalCount > 0"><strong>{{totalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
-                <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
+            <template v-if="IsProductsCorrected">
+                <h2>@Html.Localized("List-Search", "L_NoResultsFor", "{{SearchQuery}}")</h2>
+                <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", "{{SearchQuery}}", vm.ActiveTab?.Title)</p>
+                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{TotalCount}}", "{{CorrectedSearchTerms}}"))</h1>
+            </template>
+            <template v-else="v-else">
+                <h1 v-if="TotalCount > 0">
+                    <strong v-if="Loading">@GeneralHelpers.LoadingSpinner()</strong>   <strong v-else="else">{{TotalCount}}</strong>
+                    @Html.Localized("List-Search", "L_SearchResults", "{{SearchQuery}}")
+                </h1>
+                <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", "{{SearchQuery}}")</h1>
                 @Function("Composer.Search.Suggestions")
-            }
+            </template>
         </div>
 
         <div v-if="Tabs?.length" class="container-fluid search-tabs bg-light  pt-2">
@@ -185,44 +188,28 @@
     </div>
 }
 
-@helper ShowButWeFindIn(List<ContentSearchTabViewModel> tabs)
+@helper ShowButWeFindIn()
 {
-    if (tabs == null || !tabs.Any()) { return; }
-    <p>
+    <p v-if="TabsWithResults.length > 0">
         @Html.Localize("List-Search", "ButWeFind_Part1")
-        @for (var i = 0; i < tabs.Count; i++)
-        {
-            var tab = tabs[i];
-            <a href="@tab.TabUrl">@tab.Title (@tab.Total)</a>
-
-            if (i < tabs.Count - 1)
-            {
-                <text>@Html.Localize("List-Search", "ButWeFind_Separator")</text>
-            }
-        }
-        @Html.Localized("List-Search", "ButWeFind_Part2", SearchRequestContext.SearchQuery)
+        <span v-for="tab in TabsWithResults">
+            <a v-bind:href="tab.TabUrl">{{tab.Title}} ({{tab.Total}})</a>
+        </span>
+        @Html.Localized("List-Search", "ButWeFind_Part2", "{{SearchQuery}}")
     </p>
 }
 
-@helper ShowButWeFindInTeaser(List<ContentSearchTabViewModel> tabs)
+@helper ShowButWeFindInTeaser()
 {
-    if (tabs == null || !tabs.Any(t => t.SearchResults != null)) { return; }
+    <div class="content-tab-teaser" v-if="!IsMultiKeywords">
+        <div class="header" v-for="tab in TabsWithResults" v-if="tab.SearchResults">
 
-    var teaserItemsCount = 3;
-    <div class="content-tab-teaser">
-        @foreach (var tab in tabs)
-        {
-            if (tab.SearchResults == null) { continue; }
-            <div class="header">
-                <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
-                @if (tab.Total > teaserItemsCount)
-                {
-                    <a class="d-inline-flex  ml-4" href="@tab.TabUrl">@Html.Localized("List-Search", "L_SearchResultsSeeAll", tab.Title)</a>
-                }
+            <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", "{{tab.Title}}", "{{tab.Total}}")</h3>
+            <a v-if="tab.Total > 3" class="d-inline-flex  ml-4" v-bind:href="tab.TabUrl">@Html.Localized("List-Search", "L_SearchResultsSeeAll", "{{tab.Title}}")</a>
+            <div v-for="(contentItem, index) in tab.SearchResults" class="col-12 col-sm-4 mb-4">
+                @ContentSearchHelpers.ContentSearchEntry()
             </div>
-
-            @Function("Composer.ContentSearch.Results", new { Tab = tab, IsTeaser = true, TeaserItemsCount = teaserItemsCount, CurrentSite = CurrentSite })
-        }
+        </div>
     </div>
 }
 
@@ -241,10 +228,10 @@
                 <f:function name="Composer.Search.SelectedFacets"></f:function>
                 <f:function name="Composer.Search.Facets"></f:function>
             </body>
-            </html>
-        </f:param>
-        <f:param name="RightPart">
-            @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
-        </f:param>
-    </f:function>
+        </html>
+    </f:param>
+    <f:param name="RightPart">
+        @Function("Composer.Search.BaseSearchResults", new { Results = ProductsSearchViewModel })
+    </f:param>
+</f:function>
 }
