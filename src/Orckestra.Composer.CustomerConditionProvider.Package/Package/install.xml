@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes"?>
+<mi:PackageInstaller xmlns:mi="http://www.composite.net/ns/management/packageinstaller/1.0">
+	<mi:PackageRequirements minimumCompositeVersion="6.0.0.0" maximumCompositeVersion="9.9999.9999.9999" />
+	<mi:PackageInformation name="Orckestra.Composer.CustomerConditionProvider" groupName="Orckestra.Composer" version="1.0.0" author="Orckestra" website="https://www.orckestra.com/" readMoreUrl="https://www.orckestra.com/" id="5f59bf3f-4490-4490-9931-bde4472ad060" canBeUninstalled="true" systemLocking="hard" flushOnCompletion="true" allowOverwrite="false">
+		<TechnicalDetails>-</TechnicalDetails>
+		<Description>-</Description>
+	</mi:PackageInformation>
+	<mi:PackageFragmentInstallerBinaries />
+	<mi:PackageFragmentInstallers>
+		<mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FilePackageFragmentUninstaller, Composite">
+			<Files>
+				<File sourceFilename="~\Bin\Orckestra.Composer.CustomerConditionProvider.dll" targetFilename="~\Bin\Orckestra.Composer.CustomerConditionProvider.dll" allowOverwrite="false" />
+			</Files>
+		</mi:Add>
+	</mi:PackageFragmentInstallers>
+</mi:PackageInstaller>

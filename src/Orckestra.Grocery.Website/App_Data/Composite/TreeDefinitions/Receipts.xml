@@ -31,6 +31,11 @@
             <Children>
               <DataElements Type="Orckestra.Composer.Recipes.DataTypes.IIngredientsList" Label="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IIngredientsList:Title}" Icon="folder">
                 <Actions>
+                      <CustomUrlAction Icon="folder-edit" 
+                        ViewLabel="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IRecipe:Title} - ${C1:Data:Orckestra.Composer.Recipes.DataTypes.IIngredientsList:Title}" 
+                        ViewToolTip="Manage Ingredients - ${C1:Data:Orckestra.Composer.Recipes.DataTypes.IRecipe:Title} - ${C1:Data:Orckestra.Composer.Recipes.DataTypes.IIngredientsList:Title}" 
+                        Label="Manage Ingredients" Url="Composite/InstalledPackages/Orckestra.Composer.Recipes/ManageIngredients.cshtml?id=${C1:Data:Orckestra.Composer.Recipes.DataTypes.IRecipe:Id}&amp;listId=${C1:Data:Orckestra.Composer.Recipes.DataTypes.IIngredientsList:Id}" 
+                        ViewType="documentview" />
                   <EditDataAction Label="Edit Ingredients List"  />
                   <AddDataAction Label="Add Ingredient" Type="Orckestra.Composer.Recipes.DataTypes.IIngredient"/>
                   <DeleteDataAction Label="Delete Ingredients List" />

@@ -59,6 +59,12 @@ namespace Orckestra.Composer.CompositeC1.Context
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             }).ConfigureAwait(false);
 
+
+            if (productViewModel == null)
+            {
+                throw new HttpException(404, "Product Not Found");
+            }
+
             return productViewModel;
         }
      

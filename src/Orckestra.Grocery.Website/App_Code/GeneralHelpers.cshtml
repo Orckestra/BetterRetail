@@ -3,7 +3,7 @@
 @helper LoadingSpinner(bool isSmall = false)
 {
 <span class="loading-spinner">
-    <span class="spinner-border @(isSmall ? "spinner-border-sm" : "") text-info" role="status">
+    <span class="spinner-border @(isSmall ? "spinner-border-sm" : "")" role="status">
         <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
     </span>
 </span>
@@ -12,7 +12,7 @@
 @helper ButtonLoadingSpinner(string vueBinding)
 {
 <span v-if="@vueBinding" v-cloak="true"
-      class="spinner-border spinner-border-sm text-info" role="status">
+      class="spinner-border spinner-border-sm" role="status">
     <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
     &#160;
 </span>

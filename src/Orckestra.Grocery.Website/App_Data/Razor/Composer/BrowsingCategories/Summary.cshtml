@@ -28,17 +28,20 @@
 @{
     var summary = Data.Get<ICategoryPageSummaryMeta>().FirstOrDefault(i => i.PageId == CurrentPageNode.Id);
     var model = BrowseCategoryRequestContext.GetViewModelAsync().GetAwaiter().GetResult();
+
+    var tabs = new[] { new { Total = model.ProductSearchResults.TotalCount, IsProducts = true }};
+
     if (summary == null)
     {
         <div class="@(FullWidth ? "container-fluid": "")  page-summary"
              data-oc-controller="Product.SearchSummary"
-             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
+             id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
              v-cloak="true">
             <div class="container-md mb-1">
                 <div class="row">
                     <div class="col-12">
                         <h1>
-                            @CurrentPageNode.Title ({{totalCount}})
+                            @CurrentPageNode.Title ({{TotalCount}})
                         </h1>
                     </div>
                 </div>
@@ -54,13 +57,13 @@
 <body>
     <div class="@(FullWidth ? "container-fluid": "") page-summary bg-cover" style="@(FullWidth ? BgInlineStyle(summary.BackgroundImage): "")"
          data-oc-controller="Product.SearchSummary"
-         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(model.ProductSearchResults)"
+         id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
          v-cloak="true">
         <div class="container-md bg-cover" style="@(!FullWidth ? BgInlineStyle(summary.BackgroundImage): "")">
             <div class="row">
                 <div class="col-12 py-2 ">
                     <h1>
-                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) ({{totalCount}})
+                        @(string.IsNullOrWhiteSpace(summary.Title) ? CurrentPageNode.Title: summary.Title) ({{TotalCount}})
                     </h1>
                     @if (!string.IsNullOrWhiteSpace(summary.ShortDescription))
                     {

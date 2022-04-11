@@ -1,38 +1,68 @@
 .recipe {
+    &-category-title {
+        padding: $spacer;
+        text-align: center;
+        background-color: #ffffff55;
+        border-radius: $spacer*2;
+        margin-top: $spacer*4;
+        margin-bottom: $spacer*3;
+    }
     &-tile {
+        .recipe-info {
+            &-icon {
+                font-size: 16px;
+                text-align: center;
+                .searchgrid & {
+                    font-size: 14px;
+                }
+            }
+            &-type {
+                font-size: 16px;
+                font-weight: 600;
+                text-align: center;
+                .searchgrid & {
+                    font-size: 12px;
+                    margin-top: 2px;
+                }
+            }
+            &-value {
+                font-weight: 400;
+                text-align: center;
+                .searchgrid & {
+                    font-size: 12px;
+                    margin-top: 2px;
+                }
+            }
+            &-table {
+                margin: ($spacer*2) (-1*$spacer*2) (-1*$spacer*2);
+                border-radius: 0 0 $spacer $spacer;
+            }
+        }
         &-media {
             position: relative;
             display: block;
             overflow: hidden;
             cursor: pointer;
-            height: $recipe-tile-height-xs;
+            max-height: $recipe-tile-height-xs;
             @include media-breakpoint-up(sm) {
-                height: $recipe-tile-height-sm;
+                max-height: $recipe-tile-height-sm;
             }
             @include media-breakpoint-up(md) {
-                height: $recipe-tile-height-md;
+                max-height: $recipe-tile-height-md;
             }
             @include media-breakpoint-up(lg) {
-                height: $recipe-tile-height-lg;
+                max-height: $recipe-tile-height-lg;
             }
             @include media-breakpoint-up(xl) {
-                height: $recipe-tile-height-xl;
+                max-height: $recipe-tile-height-xl;
             }
             background-color: $recipe-tile-background;
             >.card-img-top {
                 @include media-breakpoint-up(sm) {
                     position: relative;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
-            }
-            &:hover {
-                .recipe-info-table {
-                    top: 0;
                 }
             }
             .recipe-info-table {
-                top: 100%;
                 width: 100%;
                 height: 100%;
                 margin-top: 0;

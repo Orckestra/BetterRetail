@@ -33,6 +33,10 @@ module Orckestra.Composer {
             this.loadFromQuerystring(this._window.location.search);
         }
 
+        public updateFacetRegistry(facetRegistry: IHashTable<string>): void {
+            this._facetRegistry = facetRegistry;
+        }
+
         public loadFromQuerystring(querystring: string) {
             this.loadNonFacetCriteria(querystring);
             this.loadFacetCriteria(querystring);
@@ -110,6 +114,12 @@ module Orckestra.Composer {
 
         public addSingleFacet(facetKey: string, facetValue: string) {
             this.selectedFacets[facetKey] = facetValue;
+        }
+
+        public searchKeywordChanged(keyword: string) {
+            this.clearAll();
+            this.keywords = keyword;
+            this.correctedSearchTerm = null;
         }
 
         public updateMultiFacets(facets: IHashTable<string|string[]>) {

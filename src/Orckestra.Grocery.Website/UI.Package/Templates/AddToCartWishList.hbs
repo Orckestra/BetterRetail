@@ -1,6 +1,6 @@
-<span data-templateid="AddToCartWishList">
+<div data-templateid="AddToCartWishList">
     {{#if IsValid}}
-        <button class="btn  btn-primary  text-uppercase"
+        <button class="btn  btn-primary btn-block  text-uppercase"
             data-qa="wishlist-product-add-to-cart"
             data-productid="{{ProductId}}"
             data-variantid="{{VariantId}}"
@@ -11,15 +11,17 @@
             data-category="{{ProductSummary.CategoryId}}"                
             data-recurringorderprogramname="{{RecurringOrderProgramName}}"                
             data-oc-click="addToCart">
+            <span class="fa  fa-shopping-cart"></span>&#160;
             {{localize "General" "B_AddToCartProductList"}}
             <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
         </button>
     {{else}}
         <button data-qa="wishlist-product-add-to-cart"
-                class="btn  btn-primary  text-uppercase"
+                class="btn  btn-primary btn-block  text-uppercase"
                 disabled="disabled">
+            <span class="fa  fa-times"></span>&#160;
             {{localize "General" "B_AddToCartProductListOOS"}}
             <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
         </button>
     {{/if}}
-</span>
+</div>

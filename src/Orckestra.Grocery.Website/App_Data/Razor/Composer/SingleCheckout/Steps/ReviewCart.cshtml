@@ -145,9 +145,9 @@
     <div v-if="item.IsGiftItem" class="text-center">
         <p v-text="item.Quantity" v-bind:data-qa="'cart-item-quantity-' + index"> </p>
     </div>
-    <div v-else-if="item.IsValid" class="btn-group mb-2" role="group">
+    <div v-else-if="item.IsValid" class="btn-group w-100 mb-2" role="group">
 
-        <button class="btn btn-sm btn-outline-secondary"
+        <button class="btn btn-sm btn-dark"
                 v-bind:disabled="DecrementDisabled(item)"
                 v-on:click="updateItemQuantity(item.Id, 'decrement')">
             <span class="fa  fa-minus"></span>
@@ -156,7 +156,7 @@
         <strong class="form-control rounded-0"
                 v-text="item.Quantity" v-bind:data-qa="'cart-item-quantity-' + index"> </strong>
 
-        <button class="btn  btn-sm btn-outline-secondary"
+        <button class="btn  btn-sm btn-dark"
                 v-bind:disabled="IncrementDisabled(item)"
                 v-on:click="updateItemQuantity(item.Id, 'increment')">
             <span class="fa  fa-plus"></span>
@@ -170,10 +170,10 @@
 {
     <div>
         <div v-if="item.IsPriceDiscounted">
-            <del v-bind:data-qa="'cart-item-subtotal-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
-            <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
+            <del v-bind:data-qa="'cart-item-subtotal-del-'+ index" class="h3">{{item.TotalWithoutDiscount}}</del><br />
+            <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger h3">{{item.Total}}</strong>
         </div>
-        <div v-else="v-else"><strong v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong></div>
+        <div v-else="v-else"><strong v-bind:data-qa="'cart-item-subtotal-' + index" class="h3">{{item.Total}}</strong></div>
         <small v-if="item.SavingsTotal">
             <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
             <span class="text-success" v-bind:data-qa="'cart-item-savingstotal-' + index">{{item.SavingsTotal}}</span>

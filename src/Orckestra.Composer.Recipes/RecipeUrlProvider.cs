@@ -51,5 +51,14 @@ namespace Orckestra.Composer.Recipes
             queryString.Add($"f_IRecipe.MealType_{mealType.ToString()}", "on");
             return queryString;
         }
+
+        public string GetSearchPageUrl(CultureInfo cultureInfo)
+        {
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
+            if (pagesConfiguration == null) return null;
+
+            var url = PageService.GetPageUrl(pagesConfiguration.SearchPageId, cultureInfo);
+            return url;
+        }
     }
 }

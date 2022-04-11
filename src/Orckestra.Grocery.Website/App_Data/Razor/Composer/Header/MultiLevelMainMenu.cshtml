@@ -3,18 +3,53 @@
 @using Orckestra.Composer.ViewModels.Home;
 @using Orckestra.Composer.CompositeC1.Mappers;
 @using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+@using Orckestra.Composer.CompositeC1.Providers.MainMenu
 
 @functions {
-    public INavigationMapper HomeNavigationMapper { get; set; }
+    public INavigationMapper MainMenuNavigationMapper { get; set; }
+
+    public IEnumerable<IMainMenuItemsProvider> ExternalMainMenuItemsProviders { get; set; }
+
+    private int MenuDepthLevel(HomeMainMenuEntryViewModel menuEntry, int pageLevel = 0)
+    {
+        var maxLevel = pageLevel;
+
+        foreach (var childItem in menuEntry.Children.OfType<HomeMainMenuEntryViewModel>())
+        {
+            maxLevel = Math.Max(maxLevel, @MenuDepthLevel(childItem, (pageLevel+1)));
+        }
+
+        return maxLevel;
+    }
 }
 
 @{
     var websiteId = SitemapNavigator.CurrentHomePageId;
-    var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).ToList();
-    var optionalLinksData = Data.Get<HeaderOptionalLink>().Where(x => x.PageId == websiteId).ToList();
+    var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).Select(i => new MainMenuItemWrapper()
+    {
+        Id = i.Id,
+        DisplayName = i.DisplayName,
+        CssClassName = i.CssClassName,
+        ParentId = i.ParentId,
+        CssStyle = i.CssStyle,
+        Order = i.Order,
+        Target = i.Target,
+        Url = i.Url,
+        SourceCultureName = i.SourceCultureName
 
-    var mainMenu = HomeNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
-    var optionalLinks = HomeNavigationMapper.MapHeaderOptionalLinksItems(optionalLinksData) as IEnumerable<OptionalLinkEntryViewModel>;
+    }).ToList();
+
+    ExternalMainMenuItemsProviders?.ToList().ForEach(p =>
+    {
+        if (p.IsActive(websiteId))
+        {
+            var items = p.GetMainMenuItems(websiteId).ToList();
+            mainMenuData.AddRange(items);
+        }
+    });
+
+    var mainMenu = MainMenuNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
+    
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -32,10 +67,11 @@
                             {
                                 var hasImage = !string.IsNullOrEmpty(mainMenuEntry.Image.ImageSource);
 
-                                <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
-
-                                    @if (mainMenuEntry.HasChildren)
-                                    {
+                                if (mainMenuEntry.HasChildren)
+                                {
+                                    var maxlevel = @MenuDepthLevel(mainMenuEntry);
+                                    var simpleDropdownClass = (maxlevel > 1) ? "" : "simple-dropdown";
+                                    <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName @simpleDropdownClass" tabindex="0" data-menu-level="@maxlevel">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category"
                                            target="@mainMenuEntry.UrlTarget"
@@ -86,9 +122,12 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    }
-                                    else
-                                    {
+
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category-link"
                                            target="@mainMenuEntry.UrlTarget"
@@ -98,8 +137,9 @@
                                         </a>
 
                                         @Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false, "multimenu-image")
-                                    }
-                                </li>
+
+                                    </li>
+                                }
                             }
                         }
                         @Function("Grocery.SelectedStoreInSticky")
@@ -118,11 +158,11 @@
 {
     int maxLevel = 3;
     int subLevel = pageLevel + 1;
-    var childItems = menuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
+    var childItems = menuEntry.Children.OfType<HomeMainMenuEntryViewModel>();
     var hasImage = !string.IsNullOrEmpty(menuEntry.Image.ImageSource);
     var curEntry = (hasImage) ? menuEntry : parentMenuEntry;
 
-    var collapseClass = (pageLevel == (maxLevel-1)) ? "collapse" : "";
+    var collapseClass = (pageLevel == (maxLevel - 1)) ? "collapse" : "";
 
     <li class="multi-nav-section @menuEntry.CssClassName" tabindex="0">
 
@@ -131,9 +171,9 @@
             <a data-qa="main-menu-section"
                href="@menuEntry.Url"
                target="@menuEntry.UrlTarget"
-               class="main-nav-section-title d-none d-lg-block"
+               class="main-nav-section-title d-none d-lg-flex justify-content-lg-between align-items-center"
                style="@menuEntry.CssClass"
-               @{ if (hasImage) { <text> data-imageid="@menuEntry.GetHashCode()" </text> }}>
+               @{ if (hasImage) { <text> data-imageid="@menuEntry.GetHashCode()" </text>  }}>
                 @menuEntry.DisplayName
                 <span class="fa fa-chevron-right" aria-hidden="true"></span>
             </a>
@@ -146,7 +186,7 @@
                class="main-nav-section-title d-block d-lg-none"
                data-imageid="@curEntry.GetHashCode()">
                 @menuEntry.DisplayName
-                @if (pageLevel == (maxLevel-1))
+                @if (pageLevel == (maxLevel - 1))
                 {
                     <span class="fa fa-chevron-down" aria-hidden="true"></span>
                     <span class="fa fa-chevron-up" aria-hidden="true"></span>
@@ -181,14 +221,14 @@
                     <ul class="list-unstyled sub-collapse col-submenu">
                         @if (pageLevel < (maxLevel - 1))
                         {
-                        <li class="multi-nav-section">
-                            <a data-qa="main-menu-link"
-                               href="@menuEntry.Url"
-                               target="@menuEntry.UrlTarget"
-                               class="d-md-block d-lg-none main-nav-section-title font-weight-bold">
-                                @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
-                            </a>
-                        </li>
+                            <li class="multi-nav-section">
+                                <a data-qa="main-menu-link"
+                                   href="@menuEntry.Url"
+                                   target="@menuEntry.UrlTarget"
+                                   class="d-md-block d-lg-none main-nav-section-title font-weight-bold">
+                                    @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
+                                </a>
+                            </li>
                         }
                         @if (pageLevel <= maxLevel)
                         {

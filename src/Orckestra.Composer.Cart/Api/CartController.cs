@@ -427,14 +427,15 @@ namespace Orckestra.Composer.Cart.Api
         {
             var param = new RemoveInvalidLineItemsParam
             {
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             };
 
-            var cartViewModel = await CartService.RemoveInvalidLineItemsAsync(param);
+            var cartViewModel = await CartService.RemoveInvalidLineItemsAsync(param).ConfigureAwait(false);
 
             return Ok(cartViewModel);
         }

@@ -31,7 +31,7 @@
         //margin-bottom: $grid-gutter-width;
         padding-bottom: 0;
         @include media-breakpoint-up(md) {
-            padding-bottom: 40px;
+            padding-bottom: 43px;
         }
         @include media-breakpoint-down(md) {
             padding-bottom: 0;
@@ -159,7 +159,11 @@
         }
         &.sps--blw {
             position: sticky;
-            top: -42px;
+
+            .header {
+                height: 0;
+                overflow: hidden;
+            }
             // width: 100%;
             .reserved-slot-baller {
                 margin-top: -62px !important;
@@ -209,4 +213,9 @@
     100% {
         top: 0;
     }
+}
+
+// cart button and badge
+.fa-shopping-cart+.badge-pill.badge-top-right {
+    left: -26px !important;
 }

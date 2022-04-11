@@ -1,20 +1,43 @@
 ﻿@inherits RazorFunction
-@using Orckestra.Composer.ViewModels.MenuNavigation
 @using Orckestra.Composer.ViewModels.Home;
 @using Orckestra.Composer.CompositeC1.Mappers;
 @using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+@using Orckestra.Composer.CompositeC1.Providers.MainMenu
 
 @functions {
     public INavigationMapper HomeNavigationMapper { get; set; }
+
+    public IEnumerable<IMainMenuItemsProvider> ExternalMainMenuItemsProviders { get; set; }
 }
 
 @{
     var websiteId = SitemapNavigator.CurrentHomePageId;
     var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).ToList();
-    var optionalLinksData = Data.Get<HeaderOptionalLink>().Where(x => x.PageId == websiteId).ToList();
+
+    var mainMenuData = Data.Get<MainMenu>().Where(x => x.PageId == websiteId).Select(i => new MainMenuItemWrapper()
+    {
+        Id = i.Id,
+        DisplayName = i.DisplayName,
+        CssClassName = i.CssClassName,
+        ParentId = i.ParentId,
+        CssStyle = i.CssStyle,
+        Order = i.Order,
+        Target = i.Target,
+        Url = i.Url,
+        SourceCultureName = i.SourceCultureName
+
+    }).ToList();
+
+    ExternalMainMenuItemsProviders?.ToList().ForEach(p =>
+    {
+        if (p.IsActive(websiteId))
+        {
+            var items = p.GetMainMenuItems(websiteId).ToList();
+            mainMenuData.AddRange(items);
+        }
+    });
 
     var mainMenu = HomeNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
-    var optionalLinks = HomeNavigationMapper.MapHeaderOptionalLinksItems(optionalLinksData) as IEnumerable<OptionalLinkEntryViewModel>;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -78,7 +101,7 @@
                                                     </div>
                                                     <div class="col-xl-4 d-none d-lg-block">
 
-														@Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false)
+                                                        @Image(mainMenuEntry, mainMenuEntry.GetHashCode(), false)
 
                                                         @foreach (var subMenuEntry in mainMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                         {
@@ -88,7 +111,7 @@
                                                             foreach (var subSubMenuEntry in subMenuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>)
                                                             {
 
-                                                               @Image(subSubMenuEntry, subSubMenuEntry.GetHashCode(), true)
+                                                                @Image(subSubMenuEntry, subSubMenuEntry.GetHashCode(), true)
 
                                                             }
                                                         }
@@ -111,7 +134,7 @@
                             </li>
                         }
                         @Function("Grocery.SelectedStoreInSticky")
-						@Function("Grocery.SignInSticky")
+                        @Function("Grocery.SignInSticky")
                     </ul>
                     @Function("Composer.Membership.SignInHeaderMobile")
                     @Function("Composer.Header.LanguageSwitсhMobile")
@@ -125,7 +148,7 @@
 @helper NavigationTree(HomeMainMenuEntryViewModel menuEntry, HomeMainMenuEntryViewModel parentMenuEntry)
 {
     var childItems = menuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
-	var curImgId = !string.IsNullOrEmpty(menuEntry.Image.ImageSource) ? menuEntry.GetHashCode() : parentMenuEntry.GetHashCode();
+    var curImgId = !string.IsNullOrEmpty(menuEntry.Image.ImageSource) ? menuEntry.GetHashCode() : parentMenuEntry.GetHashCode();
 
     <li class="main-nav-section @menuEntry.CssClassName">
 
@@ -163,7 +186,7 @@
                 @menuEntry.DisplayName
             </a>
         }
-       @*SubNavigation Start If Any*@
+        @*SubNavigation Start If Any*@
         @if (childItems.Any())
         {
 
@@ -171,15 +194,15 @@
                 <li class="main-nav-subsection d-lg-none">
                     <a data-qa="main-menu-link"
                        href="@menuEntry.Url"
-                        target="@menuEntry.UrlTarget"
+                       target="@menuEntry.UrlTarget"
                        class="d-md-block d-lg-none">
                         @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
                     </a>
                 </li>
                 @foreach (var childItem in childItems)
                 {
-					var curChildImgId = !string.IsNullOrEmpty(childItem.Image.ImageSource) ? childItem.GetHashCode() : curImgId;
-				
+                    var curChildImgId = !string.IsNullOrEmpty(childItem.Image.ImageSource) ? childItem.GetHashCode() : curImgId;
+
                     if (!String.IsNullOrWhiteSpace(childItem.DisplayName))
                     {
                         <li class="main-nav-subsection @childItem.CssClassName">
@@ -200,27 +223,27 @@
 
 @helper Image(HomeMainMenuEntryViewModel vm, int id, bool isSubMenu)
 {
-	var imgId = "menu-image-"+id;
-	var className = isSubMenu ? "menu-image" : "main-image";
+    var imgId = "menu-image-" + id;
+    var className = isSubMenu ? "menu-image" : "main-image";
     if (!string.IsNullOrEmpty(vm.Image.ImageSource))
     {
-		<div id="@imgId" class="menu-image">
-        @if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
-        {
-            <a href="@vm.Image.ImageUrl" target="@vm.Image.ImageUrlTarget">
+        <div id="@imgId" class="menu-image">
+            @if (!string.IsNullOrEmpty(vm.Image.ImageUrl))
+            {
+                <a href="@vm.Image.ImageUrl" target="@vm.Image.ImageUrlTarget">
+                    <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
+                </a>
+            }
+            else
+            {
                 <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
-            </a>
-        }
-        else
-        {
-            <img src="@vm.Image.ImageSource" class="img-fluid img-menu" />
-        }
-        @if (!string.IsNullOrEmpty(vm.Image.ImageLabel))
-        {
-            <span class="caption">
-                <span>@vm.Image.ImageLabel</span>
-            </span>
-        }
-		</div>
+            }
+            @if (!string.IsNullOrEmpty(vm.Image.ImageLabel))
+            {
+                <span class="caption">
+                    <span>@vm.Image.ImageLabel</span>
+                </span>
+            }
+        </div>
     }
 }

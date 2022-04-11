@@ -103,9 +103,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
         }
          public virtual bool IsBeingEdited(Overture.ServiceModel.Orders.Order order)
         {
-            if (order == null) return false;
-            var guidOrderId = Guid.Parse(order.Id);
-            return IsEditMode() & ComposerContext.EditingCartName == guidOrderId.ToString("N");
+            return order != null && IsEditMode() & ComposerContext.EditingCartName == order.Id.GetDraftCartName();
         }
 
         public virtual async Task<ProcessedCart> StartEditOrderModeAsync(Overture.ServiceModel.Orders.Order order)
@@ -143,7 +141,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
                     draftCart = await CartRepository.GetCartAsync(new GetCartParam
                     {
                         Scope = order.ScopeId,
-                        CartName = orderId.ToString("N"),
+                        CartName = order.Id.GetDraftCartName(),
                         CartType = CartConfiguration.OrderDraftCartType,
                         CustomerId = Guid.Parse(order.CustomerId),
                         CultureInfo = ComposerContext.CultureInfo

@@ -18,17 +18,14 @@
         get { return "Search Results with Content Tabs"; }
     }
 
-    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}",
-        Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
     public bool CurrentSite { get; set; }
 
-    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Label}",
-    Help = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Help}",
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.ShowHighlights.Help}",
     DefaultValue = false)]
     public bool ShowHighlights { get; set; }
 
     public ISearchRequestContext SearchRequestContext { get; set; }
-
     public IContentSearchViewService ContentSearchViewService { get; set; }
 
     public SearchViewModel ProductsSearchViewModel => SearchRequestContext.ProductsSearchViewModel;
@@ -67,7 +64,6 @@
         SearchQuery = SearchRequestContext.SearchQuery,
         IsCorrectedSearchQuery = IsProductsCorrected(),
         CorrectedSearchQuery = ProductSearchResults.CorrectedSearchTerms,
-        BaseUrl = CurrentPageNode.Url,
         QueryKeys = Request.QueryString?.AllKeys,
         ProductsTabActive = isProductTab,
         SortBy = SearchRequestContext.SortBy,
@@ -93,6 +89,7 @@
         var productTabVm = new ContentSearchTabViewModel
         {
             Title = productTab.Title,
+            IsProducts = true,
             UrlTitle = productTab.UrlTitle,
             TabUrl = $"{CurrentPageNode.Url}/{productTab.UrlTitle}?{SearchRequestParams.Keywords}={SearchRequestContext.SearchQuery}",
             Total = IsProductsCorrected() && !isProductTab ? 0 : ProductSearchResults.TotalCount,
@@ -105,57 +102,24 @@
     var currentTab = contentSearchVm.ActiveTab;
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
-    <script type="text/javascript" defer="defer">
-        function submitContentSearchForm(sortBy, sortDirection) {
-
-            if (sortBy) {
-                document.getElementById("sortBy").value = sortBy;
-            }
-
-            if (sortDirection) {
-                document.getElementById("sortDirection").value = sortDirection;
-            }
-
-            document.getElementById('SearchForm').submit();
-        }
-
-        function removeSelection(key) {
-            var checkbox = document.getElementById(key);
-            checkbox.checked = !checkbox.checked;
-            document.getElementById('SearchForm').submit();
-        }
-
-        function toggleMoreFacets(el) {
-            var targetId = $(el).data("target");
-            var lessText = $(el).data("label-less");
-            var moreText = $(el).data("label-more");
-            $(el).text($(targetId).hasClass("in") ? moreText : lessText);
-        }
-    </script>
 </head>
 <body>
-    @SearchSummary(contentSearchVm, isProductTab, currentTab?.Title, productTab)
+    @SearchSummary(contentSearchVm, isProductTab)
 
     <div>
         <!-- Tab panes -->
         <div class="tab-content mt-2">
             @if (currentTab != null)
             {
-                if (currentTab.Total == 0)
-                {
-                    var tabsWithResults = contentSearchVm.Tabs.Where(t => t.Total > 0).ToList();
-                    <p>@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, currentTab.Title)</p>
-                    if (tabsWithResults.Any())
-                    {
-                        if (!(isProductTab && IsProductFacetsSelected()))
-                        {
-                            @ShowButWeFindIn(tabsWithResults)
-                            @ShowButWeFindInTeaser(tabsWithResults)
-                        }
-                    }
-                }
+                <div id="vueTabSearchSummary">
+                    <template v-if="CurrentTab.Total == 0">
+                        <p>@Html.Localized("List-Search", "WeAreSorry", "{{SearchQuery}}", currentTab.Title)</p>
+                        @ShowButWeFindInVue()
+                        @ShowButWeFindInTeaser()
+                    </template>
+                </div>
 
                 if (isProductTab)
                 {
@@ -163,60 +127,35 @@
                 }
                 else
                 {
-                    <form id="SearchForm" class="search-form" method="get" role="search"
-                          action="@CurrentPageNode.Url/@currentTab.UrlTitle">
-                        <input id="keywords" type="hidden" value="@SearchRequestContext.SearchQuery" name="keywords" />
-                        <div class="row">
-                            <div class="col-12 col-lg-10 offset-lg-2">
-                                <div class="row filters-row">
-                                    @if (currentTab.Total > 0)
-                                    {
-                                        <div class="col-6 d-lg-none">
-                                            @ShowFacetsCollapseBtn()
-                                        </div>
-                                        <div class="col-6">
-                                            @ShowSortBy()
-                                        </div>
-                                        <div class="col-6 d-none d-lg-block">
-                                            @ShowPaging(currentTab)
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="row">
-                                    <div id="leftCol" class="col-12 col-lg-2  facets-col collapse">
-                                        @Partial("ContentSearch", "SelectedFacets", contentSearchVm)
-                                        @Partial("ContentSearch", "Facets", contentSearchVm)
-                                    </div>
-                                    <div class="col-12 col-lg-10">
-                                        <div class="row">
-                                            @{
-                                                var isRecipes = currentTab.DataTypes.Contains(nameof(Orckestra.Composer.Recipes.DataTypes.IRecipe));
-                                                if (isRecipes)
-                                                {
-                                                    @Function("Grocery.Recipes.SearchResults", new { Results = currentTab.SearchResults.Entries })
-                                                }
-                                                else
-                                                {
-                                                    foreach (var entry in currentTab.SearchResults.Entries)
-                                                    {
-                                                        <div class="col-12 col-sm-4 col-lg-4  mb-4">
-                                                            @ShowContentSearchEntry(entry)
-                                                        </div>
-                                                    }
-                                                }
-                                            }
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="col-12  d-block  d-lg-none">
-                                        @ShowPaging(currentTab)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    bool isRecipes = contentSearchVm.ActiveTab.DataTypes.Contains(nameof(Orckestra.Composer.Recipes.DataTypes.IRecipe));
+                    <f:function name="Composer.Grids.SearchGrid">
+                        <f:param name="IsCollapse" value="True" />
+                        <f:param name="LeftPart">
+                            @Function("Composer.ContentSearch.Facets", new { Results = contentSearchVm, CurrentSite = CurrentSite })
+                        </f:param>
+                        <f:param name="RightPart">
+                            @if (isRecipes)
+                            {
+                                @Function("Grocery.Recipes.SearchResults", new
+                                {
+                                    SelectedSortBy = contentSearchVm.SelectedSortBy,
+                                    AvailableSortBys = contentSearchVm.AvailableSortBys,
+                                    Tab = contentSearchVm.ActiveTab,
+                                    CurrentSite = CurrentSite
+                                })
+                            }
+                            else
+                            {
+                                @Function("Composer.ContentSearch.Results", new
+                                {
+                                    SelectedSortBy = contentSearchVm.SelectedSortBy,
+                                    AvailableSortBys = contentSearchVm.AvailableSortBys,
+                                    Tab = contentSearchVm.ActiveTab,
+                                    CurrentSite = CurrentSite
+                                })
+                            }
+                        </f:param>
+                    </f:function>
                 }
             }
         </div>
@@ -224,44 +163,56 @@
 </body>
 </html>
 
-@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab, string tabTitle, IContentTab productTab)
+@helper SearchSummary(ContentSearchViewModel vm, bool isProductTab)
 {
-    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(ProductSearchResults)" data-total="@vm.Total" v-cloak="true">
+    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary"
+         data-context="@JsonConvert.SerializeObject(vm.Tabs)"
+         data-isProductTab="@isProductTab"
+         data-сorrectedSearchTerms="@ProductSearchResults.CorrectedSearchTerms"
+         data-current-site="@(CurrentSite)"
+         data-searchQuery="@SearchRequestContext.SearchQuery" data-total="@vm.Total" v-cloak="true">
         <div class="container-md">
-            @if (IsProductsCorrected() && isProductTab)
-            {
-                <h2>@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h2>
-                <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", SearchRequestContext.SearchQuery, tabTitle)</p>
+
+            <template v-if="IsProductsCorrected">
+                <h2>@Html.Localized("List-Search", "L_NoResultsFor", "{{SearchQuery}}")</h2>
+                <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", "{{SearchQuery}}", vm.ActiveTab?.Title)</p>
                 @ShowButWeFindIn(vm.SuggestedTabs)
-                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{totalCount}}", ProductSearchResults.CorrectedSearchTerms))</h1>
-            }
-            else
-            {
-                <h1 v-if="totalCount > 0"><strong>{{totalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
-                <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", SearchRequestContext.SearchQuery)</h1>
+                <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{TotalCount}}", "{{CorrectedSearchTerms}}"))</h1>
+            </template>
+            <template v-else="v-else">
+                <h1 v-if="TotalCount > 0">
+                    <strong v-if="Loading">@GeneralHelpers.LoadingSpinner()</strong>   <strong v-else="else">{{TotalCount}}</strong>
+                    @Html.Localized("List-Search", "L_SearchResults", "{{SearchQuery}}")
+                </h1>
+                <h1 v-else="v-else">@Html.Localized("List-Search", "L_NoResultsFor", "{{SearchQuery}}")</h1>
                 @Function("Composer.Search.Suggestions")
-            }
+            </template>
+
         </div>
 
-        @if (vm.Tabs.Count > 0)
-        {
-            <div class="container-fluid search-tabs bg-lighter  pt-2">
-                <div class=" container">
-                    <ul class="nav nav-tabs" role="tablist">
-                        @foreach (var tab in vm.Tabs)
-                        {
-                            var classValue = tab.IsActive ? "active" : "";
-                            <li role="presentation" class="nav-item">
-                                <a href="@tab.TabUrl" class="nav-link @classValue">
-                                    @tab.Title (@(productTab?.UrlTitle == tab.UrlTitle ? "{{ProductCount}}" : tab.Total.ToString()))
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+        <div v-if="Tabs?.length" class="container-fluid search-tabs bg-lighter  pt-2">
+            <div class=" container">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li v-for="tab in Tabs" role="presentation" class="nav-item">
+                        <a v-bind:href="tab.TabUrl" class="nav-link" v-bind:class="{ active: tab.IsActive }">
+                            {{tab.Title}} ({{tab.Total}})
+                        </a>
+                    </li>
+                </ul>
             </div>
-        }
+        </div>
     </div>
+}
+
+@helper ShowButWeFindInVue()
+{
+    <p v-if="TabsWithResults.length > 0">
+        @Html.Localize("List-Search", "ButWeFind_Part1")
+        <span v-for="tab in TabsWithResults">
+            <a v-bind:href="tab.TabUrl">{{tab.Title}} ({{tab.Total}})</a>
+        </span>
+        @Html.Localized("List-Search", "ButWeFind_Part2", "{{SearchQuery}}")
+    </p>
 }
 
 @helper ShowButWeFindIn(List<ContentSearchTabViewModel> tabs)
@@ -283,38 +234,24 @@
     </p>
 }
 
-@helper ShowButWeFindInTeaser(List<ContentSearchTabViewModel> tabs)
+@helper ShowButWeFindInTeaser()
 {
-    if (tabs == null || !tabs.Any(t => t.SearchResults != null)) { return; }
-
-    var teaserItemsCount = 3;
-    <div class="content-tab-teaser">
-        @foreach (var tab in tabs)
-        {
-            var resutls = tab.SearchResults?.Entries?.Take(teaserItemsCount);
-            if (resutls == null) { continue; }
-            <div class="header">
-                <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", tab.Title, tab.Total)</h3>
-                @if (tab.Total > teaserItemsCount)
-                {
-                    <a class="d-inline-flex  ml-4" href="@tab.TabUrl">@Html.Localized("List-Search", "L_SearchResultsSeeAll", tab.Title)</a>
-                }
-            </div>
-            <div class="row mb-4">
-                @foreach (var entry in resutls)
-                {
-                    <div class="col-12 col-sm-4 col-md-4">
-                        @ShowContentSearchEntry(entry)
-                    </div>
-                }
-            </div>
-        }
+    <div class="content-tab-teaser" v-if="!IsMultiKeywords">
+        <div class="header" v-for="tab in TabsWithResults" v-if="tab.SearchResults">
+            
+                <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", "{{tab.Title}}", "{{tab.Total}}")</h3>
+                <a v-if="tab.Total > 3" class="d-inline-flex  ml-4" v-bind:href="tab.TabUrl">@Html.Localized("List-Search", "L_SearchResultsSeeAll", "{{tab.Title}}")</a>
+                <div v-for="(contentItem, index) in tab.SearchResults" class="col-12 col-sm-4 mb-4">
+                    @ContentSearchHelpers.ContentSearchEntry()
+                </div>
+        </div>
     </div>
 }
 
 @helper ShowProductsSearchResults()
 {
-    if (ProductSearchResults.TotalCount == 0 && !IsProductFacetsSelected())
+    var multikeywords = Request["multikeywords"]?.ToString() == "on";
+    if (ProductSearchResults.TotalCount == 0 && !IsProductFacetsSelected() && !multikeywords)
     {
         return;
     }
@@ -325,6 +262,7 @@
             <head>
             </head>
             <body>
+                <f:function name="Composer.Search.MultiKeywords"></f:function>
                 <f:function name="Composer.Search.SelectedFacets"></f:function>
                 <f:function name="Composer.Search.Facets"></f:function>
             </body>
@@ -334,57 +272,4 @@
         @Function("Composer.Search.Products.ProductResultsVue", new { Results = ProductsSearchViewModel })
     </f:param>
 </f:function>
-}
-
-@helper ShowSortBy()
-{
-    var sortOptions = Data.Get<Orckestra.Composer.ContentSearch.DataTypes.ISortOption>().OrderBy(t => t.Order).ToList();
-    var selectedSortOption = sortOptions.Find(o => o.FieldName == SearchRequestContext.SortBy && (o.IsReverted && SearchRequestContext.SortDirection == "desc" || !o.IsReverted && SearchRequestContext.SortDirection == "asc"));
-    var selectedTitle = selectedSortOption != null ? selectedSortOption.Title : Html.Localize("List-Search", "F_Relevance_Option");
-    <div class="dropdown sort-by mb-1">
-        <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")</span>
-        <button type="button" class="btn btn-outline-secondary  dropdown-toggle" data-toggle="dropdown">
-            @selectedTitle
-        </button>
-        <input type="hidden" id="sortDirection" name="sortDirection" value="@SearchRequestContext.SortDirection" />
-        <input type="hidden" id="sortBy" name="sortBy" value="@SearchRequestContext.SortBy" />
-        <div class="dropdown-menu">
-            @foreach (var sortOption in sortOptions)
-            {
-                var sortDirectionOption = sortOption.IsReverted ? "desc" : "asc";
-
-                <a class="dropdown-item" onClick="submitContentSearchForm('@sortOption.FieldName','@sortDirectionOption')">
-                    @sortOption.Title
-                </a>
-
-            }
-        </div>
-    </div>
-}
-
-@helper ShowContentSearchEntry(SearchResultEntry entry)
-{
-    var vm = ContentSearchViewService.GetSearchResultsEntryViewModel(entry);
-    @Partial("ContentSearch", "SearchEntryItem", vm)
-}
-
-@helper ShowPaging(ContentSearchTabViewModel tab)
-{
-    if (tab.PagesCount > 1)
-    {
-        <div class="float-right">
-            @SearchHelpers.Pagination(SearchRequestContext.CurrentPage, tab.PagesCount, 10, Request.Url.AbsoluteUri, SearchRequestParams.Page)
-        </div>
-    }
-}
-
-@helper ShowFacetsCollapseBtn()
-{
-    <button type="button"
-            class="btn  btn-outline-secondary btn-dropdown  w-100"
-            data-toggle="collapse"
-            data-target="#leftCol" aria-expanded="false">
-        @Html.Localize("List-Search", "B_FilterBy")
-        <span class="fa  fa-angle-down"></span>
-    </button>
 }

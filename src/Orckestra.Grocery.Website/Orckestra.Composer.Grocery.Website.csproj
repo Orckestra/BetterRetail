@@ -62,16 +62,16 @@
       <HintPath>..\..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Composite, Version=6.11.7982.26191, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.dll</HintPath>
+    <Reference Include="Composite, Version=6.12.8122.18346, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Composite.AspNet.MvcFunctions, Version=1.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMSPackages.Composite.AspNet.MvcFunctions.1.0.15\lib\net461\Composite.AspNet.MvcFunctions.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Composite.Workflows, Version=6.11.7982.26195, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Composite.Workflows.dll</HintPath>
+    <Reference Include="Composite.Workflows, Version=6.12.8122.18350, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
@@ -108,11 +108,11 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -124,11 +124,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.SemanticLogging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -144,11 +144,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.11.7982.26191\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -158,20 +158,14 @@
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.AsyncExtensions, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\OrckestraCommerce.AsyncExtensions.5.2.0-alpha0102\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Caching, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Common.5.2.0-alpha0102\lib\net461\Orckestra.Caching.dll</HintPath>
-    </Reference>
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.9.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Orckestra.Logging, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Common.5.2.0-alpha0102\lib\net461\Orckestra.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Overture.Interfaces, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.2.0-alpha0102\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
@@ -349,6 +343,7 @@
     <Content Include="ApplicationInsights.config" />
     <Content Include="App_Code\ProductSepcificationHelpers.cshtml" />
     <Content Include="App_Code\ImageHelpers.cshtml" />
+    <Content Include="App_Code\ContentSearchHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -457,6 +452,9 @@
     <Content Include="App_Data\Razor\Grocery\Recipes\SearchResults.cshtml" />
     <Content Include="App_Data\Media\d5c85c06-13b8-4af4-bf40-0dc4685fa801" />
     <Content Include="App_Data\Media\ff7debb9-d9a5-454a-99d0-ac7b41cb1441" />
+    <Content Include="App_Data\Razor\Composer\ContentSearch\Facets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\ContentSearch\Results.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\MultiKeywords.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />
@@ -464,9 +462,6 @@
     <None Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />
-    <Content Include="Views\ContentSearch\Facets.cshtml" />
-    <Content Include="Views\ContentSearch\SearchEntryItem.cshtml" />
-    <Content Include="Views\ContentSearch\SelectedFacets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
@@ -566,8 +561,6 @@
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
     <Folder Include="UI.Package\Sass\Custom\" />
-    <Folder Include="Views\ProductSet\" />
-    <Folder Include="Views\SearchQuery\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -461,11 +461,30 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> RemoveInvalidLineItemsAsync(RemoveInvalidLineItemsParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var cart = await ProcessInvalidLineItemsRemovalAsync(param).ConfigureAwait(false);
+
+            var vmParam = new CreateCartViewModelParam
+            {
+                Cart = cart,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl
+            };
+
+            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
+
+            return viewModel;
+        }
+
+        public virtual async Task<ProcessedCart> ProcessInvalidLineItemsRemovalAsync(RemoveInvalidLineItemsParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 ExecuteWorkflow = param.ExecuteWorkflow,
@@ -480,6 +499,7 @@ namespace Orckestra.Composer.Cart.Services
                 var p = new RemoveLineItemsParam
                 {
                     CartName = param.CartName,
+                    CartType = param.CartType,
                     CultureInfo = param.CultureInfo,
                     CustomerId = param.CustomerId,
                     Scope = param.Scope,
@@ -494,16 +514,7 @@ namespace Orckestra.Composer.Cart.Services
                 cart = await CartRepository.RemoveLineItemsAsync(p).ConfigureAwait(false);
             }
 
-            var vmParam = new CreateCartViewModelParam
-            {
-                Cart = cart,
-                CultureInfo = param.CultureInfo,
-                BaseUrl = param.BaseUrl
-            };
-
-            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
-
-            return viewModel;
+            return cart;
         }
 
         public virtual async Task<CartViewModel> UpdateShippingAddressPostalCodeAsync(UpdateShippingAddressPostalCodeParam param)

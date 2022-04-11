@@ -297,4 +297,7 @@
   <data name="L_EditCartBannerMessage" xml:space="preserve">
     <value>Vous modifiez actuellement la commande « {0} »</value>
   </data>
+  <data name="B_RemoveUnavailableProducts" xml:space="preserve">
+    <value>Supprimer les produits indisponibles</value>
+  </data>
 </root>

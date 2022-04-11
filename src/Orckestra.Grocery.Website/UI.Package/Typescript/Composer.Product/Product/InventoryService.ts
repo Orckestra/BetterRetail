@@ -32,7 +32,11 @@ module Orckestra.Composer {
             var data = { skus: [sku] };
 
             return ComposerClient.post('/api/inventory/findInventoryItems', data)
-                                 .then(availableSkus => _.includes(availableSkus, sku));
+                .then(availableSkus => _.includes(availableSkus, sku));
+        }
+
+        public getProductsAvailability(Skus: string[]): Q.Promise<any> {
+            return ComposerClient.post('/api/inventory/findInventoryItems', { Skus })
         }
 
     }

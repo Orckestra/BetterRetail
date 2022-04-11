@@ -312,4 +312,10 @@
   <data name="B_Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="L_SelectAnItem" xml:space="preserve">
+    <value>Select an item</value>
+  </data>
+  <data name="L_MultipleKeywordSearch" xml:space="preserve">
+    <value>Multiple Keyword Search</value>
+  </data>
 </root>

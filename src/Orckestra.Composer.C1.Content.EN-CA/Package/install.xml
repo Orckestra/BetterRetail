@@ -125,6 +125,9 @@
           <Type type="Orckestra.Composer.Recipes.DataTypes.IDishType,Orckestra.Composer.Recipes">
             <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IDishTypes_public.xml" />
          </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.IMainMenuProviderConfiguration,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.Navigation.IMainMenuProviderConfigurations_public.xml" />
+        </Type>
 
       </Types>
     </mi:Add>

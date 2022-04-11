@@ -1,41 +1,125 @@
-<div class="wishlist-tile  island-xl">
-                           
-    <a class="wishlist-tile-media" href="{{ProductUrl}}">
-        <img class="img-fluid" src="{{ImageUrl}}" alt="{{ProductSummary.DisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+<div class="wishlist-tile  product-tile d-flexh-100">
+    <a class="product-tile-media" href="{{ProductUrl}}">
+        <img class="img-fluid m-auto" src="{{ImageUrl}}" alt="{{ProductSummary.FullDisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
+        {{!-- TODO Add Banner to ViewModel --}}
+        {{#if PromotionalBanner}}
+            <div class="product-tile-banner">
+                <span class="{{PromotionalBannerBackgroundColor}} {{PromotionalBannerTextColor}} w-100 p-1">
+                    {{PromotionalBanner}}
+                </span>
+            </div>
+        {{/if}}
     </a>
-
-    <div class="wishlist-tile-text">
-        {{#if ProductSummary.Brand}}
-        <strong class="text-uppercase  product-tile-brand" title="{{ProductSummary.Brand}}">{{ProductSummary.Brand}}</strong>
-        <br/>
-        {{/if}}
-        <a  href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
-    </div>
-    
-    <div class="wishlist-tile-variants">
-        {{#if VariantId}}
-            {{#each KeyVariantAttributesList}}
-                {{#if_neq @index 0}}|{{/if_neq}}
-                {{Value}}
-             {{/each}}
-        {{/if}}
-   </div>
-   
-   {{#if IsOnSale}}
-        <div class="wishlist-tile-special-price">
-            <del>{{DefaultListPrice}}</del>
-        </div>
-        <div class="wishlist-tile-price">
-               <span class="h4  text-danger">{{ListPrice}}</span>
-        </div>
-    {{else}}
-        <div class="wishlist-tile-special-price">
-                <!--only used for proper spacing-->
-         </div>
-         <div class="wishlist-tile-price">
-                <span class="h4">{{DefaultListPrice}}</span>
+    {{!-- TODO Add Ribbon to ViewModel --}}
+    {{#if PromotionalRibbon}}
+        <div class="product-tile-ribbon-holder">
+            <div class="product-tile-ribbon ribbon-top-right">
+                <span class="{{PromotionalRibbonBackgroundColor}} {{PromotionalRibbonTextColor}}">
+                    {{PromotionalRibbon}}
+                </span>
+            </div>
         </div>
     {{/if}}
-    
-    {{> AddToCartWishList}}
+    {{!-- TODO Add Badge to ViewModel
+    {{#if ProductBadgeMap}}
+        <ul class="product-tile-badges list-unstyled">
+            {{#each ProductBadgeMap}}
+                <li><img src="/UI.Package/Images/badge/{{@key}}.svg" alt="{{this}}" /></li>
+            {{/each}}
+        </ul>
+    {{/if}}
+    --}}
+    <div class="product-tile-information">
+        <div class="product-tile-text">
+            {{#if ProductSummary.Brand}}
+                <p class="product-tile-brand m-0" data-qa="wishlist-product-brand">{{ProductSummary.Brand}}</p>
+            {{/if}}
+            {{#if RecurringOrderProgramName}}
+                <div class="product-tile-recurring">
+                    <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="{{localize 'General' 'L_RecurringProduct'}}" title="{{localize 'General' 'L_RecurringProduct'}}" />
+                </div>
+            {{/if}}
+            <a class="p text-default-font" data-qa="wishlist-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
+            {{!-- TODO Add Unit Values to ViewModel --}}
+            {{#if HasUnitValues}}
+                <div class="product-tile-format">
+                    {{#if IsUnit}}
+                        {{#if IsWeightedProduct}}
+                            <span> {{Localize 'ProductPage' 'L_Approx'}} {{ProductUnitSize}}{{ProductUnitMeasure}} {{Localize 'General' 'L_EachAbbrev'}}</span>
+                        {{else}}
+                            <span>{{ProductUnitSize}}{{ProductUnitMeasure}}</span>
+                        {{/if}}
+                    {{else}}
+                        {{#if IsWeightedProduct}}
+                            <span>{{ProductUnitQuantity}} x {{Localize 'ProductPage' 'L_Approx'}} {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
+                        {{else}}
+                            <span>{{ProductUnitQuantity}} x {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
+                        {{/if}}
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+        <div class="product-tile-price">
+            {{!-- TODO Add HasPriceRange, IsWeightedProduct , ProductUnitSize, ProductUnitMeasure to ViewModel --}}
+            {{#if IsOnSale}}
+                <small class="display-price text-danger order-2">
+                    {{#if HasPriceRange}}
+                        <span>{{Localize 'List-Search' 'L_PriceFrom'}}</span>
+                    {{/if}}
+                    <span class="h4">{{DisplaySpecialPrice}}</span>
+                    {{#if IsWeightedProduct}}
+                        <span>{{Localize 'ProductPage' 'L_Per'}} {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
+                    {{/if}}
+                </small>
+                <span class="order-1 d-block">
+                    <del>{{DefaultListPrice}}</del>
+                </span>
+                {{!-- TODO add PricePerUnit to ViewModel
+                {{#if PricePerUnit}}
+                    <span class="product-tile-price-per-unit order-3">
+                        {{#if IsPricePerUnitZero}}
+                            <span>{{Localize 'ProductPage' 'L_LessThan'}} {{PricePerUnit.replace('0.00', '0.01')}}</span>
+                        {{else}}
+                            <span>{{PricePerUnit}}</span>
+                        {{/if}}
+                        {{Localize 'ProductPage' 'L_Per'}}
+                        {{#if_neq BaseProductSize 1}}
+                            <span>{{BaseProductSize}}&nbsp;</span>
+                        {{/if_neq}}
+                        {{BaseProductMeasure}}
+                    </span>
+                {{/if}}
+                --}}
+            {{else}}
+                <small class="display-price">
+                    {{#if HasPriceRange}}
+                        <span>{{Localize 'List-Search' 'L_PriceFrom'}}</span>
+                    {{/if}}
+                    <span class="h4">{{DefaultListPrice}}</span>
+                    {{#if IsWeightedProduct}}
+                        <span>{{Localize 'ProductPage' 'L_Per'}} {{ProductUnitSize}}{{.ProductUnitMeasure}}</span>
+                    {{/if}}
+                </small>
+                {{!-- TODO add PricePerUnit to ViewModel
+                {{#if ProductSummary.PricePerUnit}}
+                    <span class="product-tile-price-per-unit">
+                        {{#if ProductSummary.IsPricePerUnitZero}}
+                            <span>{{Localize 'ProductPage' 'L_LessThan'}} {{ProductSummary.PricePerUnit.replace('0.00', '0.01')}}</span>
+                        {{else}}
+                            <span>{{ProductSummary.PricePerUnit}}</span>
+                        {{/if}}
+                        {{Localize 'ProductPage' 'L_Per'}}
+                        {{#if_neq ProductSummary.BaseProductSize 1}}
+                            <span>{{Product.BaseProductSize}}&nbsp;</span>
+                        {{/if_neq}}
+                        {{Product.BaseProductMeasure}}
+                    </span>
+                {{/if}}
+                --}}
+            {{/if}}
+        </div>
+        <div class="product-tile-button-container">
+            {{> AddToCartWishList}}
+        </div>
+    </div>
 </div>

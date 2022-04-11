@@ -1,37 +1,35 @@
 .checkout-page {
-    [v-cloak] { display:none; }
-
+    [v-cloak] {
+        display: none;
+    }
     .card-header {
         .btn {
             text-transform: uppercase;
         }
-
         h3 {
             margin: 0;
         }
     }
-
     .checkout-step-container {
-
         position: relative;
-
         .card-header {
             opacity: 0.4;
         }
-
-       
-        &.active-step, &.next-step, &.preview-step {
+        &.active-step,
+        &.next-step,
+        &.preview-step {
             .card-header {
                 opacity: 1;
             }
         }
-
         .loading-spinner {
-            position: absolute; top: 50%; left: 50%; margin-left: -1rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -1rem;
             z-index: 10;
             display: none;
         }
-
         &.loading {
             opacity: 0.6;
             .loading-spinner {
@@ -39,7 +37,6 @@
             }
         }
     }
-
     .collapse-enter-active {
         overflow: hidden;
         transition: height 0.5s ease;
@@ -54,16 +51,12 @@
 }
 
 @include media-breakpoint-up(sm) {
-
     .sps-order-summary {
-
         transition: all 0.25s ease;
         max-width: 200px;
-
         &.sps--abv {
-            top: 0;
+            top: 20px;
         }
-
         &.sps--blw {
             position: fixed;
             top: 20px;
@@ -90,18 +83,22 @@
     }
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     transition: opacity 0.25s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
     opacity: 0;
 }
 
-.items-list-leave-to, .items-list-enter {
+.items-list-leave-to,
+.items-list-enter {
     opacity: 0;
 }
 
-.items-list-enter-active, .items-list-leave-active {
+.items-list-enter-active,
+.items-list-leave-active {
     transition: all 0.25s ease;
 }

@@ -3,11 +3,13 @@ using Orckestra.Composer.Cart;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
+using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 using Orckestra.Composer.ExceptionFilters;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Services;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.Recipes;
+using Orckestra.Composer.Recipes.Services;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Services;
@@ -31,10 +33,15 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<SalesScopeFulfillmentMethodRepository, IFulfillmentMethodRepository>();
             host.Register<SalesScopePaymentRepository, IPaymentRepository>();
             host.Register<RecipeUrlProvider, IRecipeUrlProvider>();
+            host.Register<RecipesViewService, IRecipesViewService>();
             host.RegisterControllers(GetType().Assembly);
             host.RegisterApiControllers(GetType().Assembly);
             host.RegisterExceptionFiltersForApiControllers(typeof(AggregatedComposerExceptionFilter), typeof(ComposerExceptionFilter));
+
+            host.Register<RecipesMainMenuItemsProvider, IMainMenuItemsProvider>();
+
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
+            
             RegisterPaymentProviders();
         }
 

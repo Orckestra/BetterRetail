@@ -18,7 +18,7 @@
         <div class="card  mb-4 w-100 sps-order-summary sps  sps--abv" data-sps-offset="100">
             @GeneralHelpers.LoadingSpinner()
 
-            <h3 class="card-header bg-gray text-white">
+            <h3 class="card-header bg-primary text-white">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
             <div class="card-body  bg-lighter" v-cloak="true">
@@ -86,13 +86,13 @@
 {
     <div class="row mb-2">
         <div class="col-6  col-md-7">
-            <h4>@Html.Localize("MyAccount", "L_Total")</h4>
+            <h4 class="h3">@Html.Localize("MyAccount", "L_Total")</h4>
         </div>
         <div class="col-6  col-md-5  text-right">
             <div v-if="IsLoading &amp;&amp; !Mode.CompleteCheckoutLoading">
                 @GeneralHelpers.LoadingSpinner()
             </div>
-            <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
+            <h4 class="h3" v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
         </div>
     </div>
 }

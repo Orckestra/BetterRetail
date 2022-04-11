@@ -53,7 +53,7 @@
     </div>
     <div v-else-if="item.IsValid" class="input-group mb-2" role="group">
         <div class="input-group-prepend">
-            <button class="btn btn-remove btn-sm btn-outline-secondary"
+            <button class="btn btn-remove btn-sm btn-dark"
                     v-bind:disabled="DecrementDisabled(item)"
                     v-on:click="updateItemQuantity(item, item.Quantity - 1)">
                 <span class="fa  fa-minus"></span>
@@ -68,7 +68,7 @@
                xmlns:v-on="v-on"
                xmlns:v-bind="v-bind" />
         <div class="input-group-append">
-            <button class="btn btn-add btn-sm btn-outline-secondary"
+            <button class="btn btn-add btn-sm btn-dark"
                     v-bind:disabled="IncrementDisabled(item)"
                     v-on:click="updateItemQuantity(item, item.Quantity + 1)">
                 <span class="fa  fa-plus"></span>
@@ -82,14 +82,14 @@
 @helper CartItemTotalCell()
 {
     <div v-if="item.IsGiftItem">
-        <strong v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong>
+        <strong v-bind:data-qa="'cart-item-subtotal-' + index" class="h3">{{item.Total}}</strong>
     </div>
     <div v-else="v-else">
         <div v-if="item.IsPriceDiscounted">
             <del v-bind:data-qa="'cart-item-subtotal-del-'+ index">{{item.TotalWithoutDiscount}}</del><br />
-            <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger">{{item.Total}}</strong>
+            <strong v-bind:data-qa="'cart-subtotal-sales-'+ index" class="text-danger h3">{{item.Total}}</strong>
         </div>
-        <div v-else="v-else"><strong v-bind:data-qa="'cart-item-subtotal-' + index">{{item.Total}}</strong></div>
+        <div v-else="v-else"><strong v-bind:data-qa="'cart-item-subtotal-' + index" class="h3">{{item.Total}}</strong></div>
         <small v-if="item.SavingsTotal">
             <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
             <span class="text-success" v-bind:data-qa="'cart-item-savingstotal-' + index">{{item.SavingsTotal}}</span>

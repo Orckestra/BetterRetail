@@ -13,6 +13,7 @@
 ///<reference path='./Composer.Product/ProductSearch/SearchSummaryController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/QuickViewController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SelectedFacetSearchController.ts' />
+///<reference path='./Composer.Product/ProductSearch/MultiKeywordsSearchController.ts' />
 ///<reference path='./Composer.Cart/AddToCartNotification/AddToCartNotificationController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartSummaryController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartChangeRecurringFrequencyController.ts' />
@@ -23,6 +24,8 @@
 ///<reference path='./Composer.Product/RelatedProducts/RelatedProductsController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/ProductZoomController.ts' />
 ///<reference path='./Composer.Product/ProductDetail/RecurringOrderSignInFormController.ts' />
+///<reference path='./Composer.ContentSearch/SearchResultsController.ts' />
+///<reference path='./Composer.ContentSearch/FacetSearchController.ts' />
 ///<reference path='./Composer.Cart/OrderSummary/OrderSummaryController.ts' />
 ///<reference path='./Composer.MyAccount/AddressList/AddressListController.ts' />
 ///<reference path='./Composer.MyAccount/ChangePassword/ChangePasswordController.ts' />
@@ -71,6 +74,7 @@
 ///<reference path='./Composer.Grocery/StoreSelector/SelectedStoreInCartController.ts' />
 ///<reference path='./Composer.Grocery/StoreSelector/ChangeStoreModalController.ts' />
 ///<reference path='./Composer.Grocery/TimeSlotBannerController.ts' />
+///<reference path='./Composer.Grocery/Recipes/RecipeDetailsController.ts' />
 
 ///<reference path='./Composer.Cart/EditOrder/EditOrderBannerController.ts' />
 
@@ -120,6 +124,9 @@
                 { name: 'Product.SelectedSearchFacets', controller: Orckestra.Composer.SelectedFacetSearchController },
                 { name: 'Product.ProductZoom', controller: Orckestra.Composer.ProductZoomController },
                 { name: 'Product.RecurringOrderSignInForm', controller: Orckestra.Composer.RecurringOrderSignInFormController },
+                { name: 'ContentSearch.SearchResults', controller: Orckestra.Composer.ContentSearchResultsController },
+                { name: 'ContentSearch.Facets', controller: Orckestra.Composer.ContentFacetSearchController },
+                { name: 'Product.MultiKeywordsSearch', controller: Orckestra.Composer.MultiKeywordsSearchController },
 
                 { name: 'SingleCheckout.GuestCustomerInfo', controller: Orckestra.Composer.GuestCustomerInfoSingleCheckoutController },
                 { name: 'SingleCheckout.Shipping', controller: Orckestra.Composer.ShippingSingleCheckoutController },
@@ -170,6 +177,8 @@
                 { name: 'Grocery.SelectedStoreInCart', controller: Orckestra.Composer.SelectedStoreInCartController },
                 { name: 'Grocery.ChangeStoreModal', controller: Orckestra.Composer.ChangeStoreModalController },
                 { name: 'Grocery.TimeSlotBanner', controller: Orckestra.Composer.TimeSlotBannerController },
+                { name: 'Grocery.RecipeDetails', controller: Orckestra.Composer.RecipeDetailsController },
+
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]
         };

@@ -34,19 +34,20 @@
 <head>
 </head>
 <body>
-    <div class="island" data-oc-controller="Product.SearchSummary" id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(ProductsSearchViewModel.ProductSearchResults)" v-cloak="true">
-        <template v-if="totalCount > 0">
+    <div data-oc-controller="Product.SearchSummary" id="vueSearchSummary" 
+         data-context="@JsonConvert.SerializeObject(new[] { new { Total = ProductsSearchViewModel.ProductSearchResults.TotalCount, IsProducts = true }})" data-searchQuery="@SearchRequestContext.SearchQuery" v-cloak="true">
+        <template v-if="TotalCount > 0">
             @{
                 var corrected = ProductsSearchViewModel.ProductSearchResults.CorrectedSearchTerms;
                 if (!string.IsNullOrEmpty(corrected))
                 {
                     <h2>@Html.Localized("List-Search", "YourSearch", SearchRequestContext.SearchQuery)</h2>
                     <h1>@Html.Localized("List-Search", "SearchResult", corrected)</h1>
-                    <p>@Html.Localized("List-Search", "ProductMatches", "{{totalCount}}")</p>
+                    <p>@Html.Localized("List-Search", "ProductMatches", "{{TotalCount}}")</p>
                 }
                 else
                 {
-                   <h1><strong>{{totalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", SearchRequestContext.SearchQuery)</h1>
+                   <h1><strong>{{TotalCount}}</strong> @Html.Localized("List-Search", "L_SearchResults", "{{SearchQuery}}")</h1>
                 }
             }
         </template>

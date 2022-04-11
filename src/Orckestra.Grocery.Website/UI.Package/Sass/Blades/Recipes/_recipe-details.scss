@@ -2,61 +2,76 @@
     &-action-bar {
         display: flex;
         justify-content: flex-end;
-        .btn+.btn {
+
+        .btn + .btn {
             margin-left: $spacer;
         }
     }
+
     &-description {
         padding: $spacer*2 0;
     }
+
     &-info {
         &-item {
             margin-top: $spacer;
-            &+& {
+
+            & + & {
                 margin-left: $spacer*2;
             }
         }
+
         &-icon {
             font-size: 28px;
         }
+
         &-type {
             font-size: 14px;
         }
+
         &-value {
             font-weight: bold;
             font-size: 16px;
         }
+
         &-table {
             display: flex;
             margin-top: $spacer*2;
             padding: $spacer*2 0;
-            background-color: theme-color("light");
+            background-color: theme-color("lighter");
             border-radius: $border-radius-lg;
+
             &-cell {
                 display: flex;
                 flex-direction: column;
                 flex: 1 0 0;
                 align-items: center;
-                >span+span {
+
+                > span + span {
                     margin-top: 8px;
                 }
-                &+& {
+
+                & + & {
                     border-left: 1px solid $border-color;
                 }
             }
         }
     }
+
     &-ingredients {
-        background-color: $gray-200;
+        background-color: theme-color("lighter");
         padding: $spacer*2;
         border-radius: $border-radius-lg;
-        .form-group>label {
+
+        .form-group > label {
             font-weight: 400;
         }
     }
+
     &-instructions {
         padding: $spacer*2;
     }
+
     &-img {
         max-width: 100%;
         border-radius: $border-radius-lg;
@@ -64,23 +79,52 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
         @include media-breakpoint-up(md) {
             height: 33.333vw;
             max-height: 520px;
         }
-        >img {
+
+        > img {
             width: 100%;
             margin: 0 auto;
         }
     }
+
     &-like {
         position: absolute;
         background-color: $white;
         padding: $spacer $spacer*2;
         top: 0;
         right: $spacer;
+
         .add-to-recipelist {
             font-size: 30px;
         }
+    }
+
+    &-ingredient {
+        position: relative;
+
+        &-product {
+            max-width: 180px;
+
+            img {
+                border-radius: 10px;
+            }
+        }
+    }
+
+    &-ingredient + &-ingredient-product {
+        visibility: hidden;
+        position: absolute;
+        z-index: 2000;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+    }
+
+    &-ingredient:hover + &-ingredient-product {
+        visibility: visible;
     }
 }

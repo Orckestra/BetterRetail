@@ -42,70 +42,22 @@
                 <div class="col-6 d-lg-none">
                     @FacetHelpers.FacetsModalCollapseBtn()
                 </div>
-                <div class="col-6">
-                    <div class="dropdown sort-by" v-if="SelectedSortBy">
-                        <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")&#160;</span>
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-qa="search-sort-by-toggle"
-                                data-toggle="dropdown" aria-expanded="true">
-                            {{SelectedSortBy.DisplayName}}
-                        </button>
-                        <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
-                            <a v-for="sortBy in AvailableSortBys"
-                               class="dropdown-item"
-                               v-on:click="sortingChanged(sortBy.Url)">
-                                {{sortBy.DisplayName}}
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-6 col-md-5">
+                    @SearchHelpers.SortBy()
                 </div>
-                <div class="col-6 d-none d-lg-block">
-                    <div class="pagination-dropdown" v-if="Pagination">
-                        <ul class="pagination m-0  align-items-center justify-content-end">
-                            <li class="page-item previous" v-bind:class="{ disabled: !Pagination.PreviousPage.Url }">
-                                <a class="page-link" v-bind:title="Pagination.PreviousPage.DisplayName" v-on:click="sortingChanged(Pagination.PreviousPage.Url)">
-                                    <i class="fa fa-arrow-circle-left"></i>&#160;{{Pagination.PreviousPage.DisplayName}}
-                                </a>
-                            </li>
-
-                            <li class="page-item mx-2">
-                                <div class="dropdown" v-if="Pagination.CurrentPage">
-                                    <button class="btn btn-outline-secondary  dropdown-toggle" type="button" data-qa="page-select-toggle"
-                                            data-toggle="dropdown" aria-expanded="true">
-                                        @Html.Localize("List-Search", "L_PageInDropDown")&#160;{{Pagination.CurrentPage.DisplayName}}
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-sm-right dropdown-menu-md-right" role="menu" data-qa="page-select">
-                                        <a class="dropdown-item" v-for="page in Pagination.Pages" v-on:click="sortingChanged(page.UrlPath)">
-                                            @Html.Localize("List-Search", "L_PageInDropDown")&#160;{{page.DisplayName}}
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li class="page-item ">
-                                <span class="d-flex-inline pt-2">
-                                    &#160;@Html.Localized("List-Search", "L_PageOfTotalItems", "{{Pagination.TotalNumberOfPages}}")&#160;
-                                </span>
-                            </li>
-                            <li class="page-item next ml-2" v-bind:class="{ disabled: !Pagination.NextPage.Url }">
-                                <a class="page-link" v-bind:title="Pagination.NextPage.DisplayName" v-on:click="sortingChanged(Pagination.NextPage.Url)">
-                                    {{Pagination.NextPage.DisplayName}}&#160;<i class="fa  fa-arrow-circle-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="col-6 col-md-7 d-none d-lg-block">
+                    @SearchHelpers.PaginationDropdown()
                 </div>
             </div>
         }
 
-        <div class="products-search-results">
-            <!-- Search results -->
-            <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px">
-                @GeneralHelpers.LoadingSpinner()
-                <div class="row">
-                    <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
-                            class="@ColumnsStyle  mb-2" data-qa="search-results">
-                        @Function("Composer.Search.Products.ProductTileVue")
-                    </div>
+        <!-- Search results -->
+        <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px">
+            @GeneralHelpers.LoadingSpinner()
+            <div class="row">
+                <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
+                     class="@ColumnsStyle  mb-2" data-qa="search-results">
+                    @Function("Composer.Search.Products.ProductTileVue")
                 </div>
             </div>
         </div>
@@ -113,18 +65,7 @@
         @if (ShowPagination)
         {
             <div class="row d-block pt-2" v-if="TotalCount > 0">
-                <ul class="pager pagination" v-if="Pagination">
-                    <li v-if="Pagination.PreviousPage" class="page-item previous mr-auto" v-bind:class="{ disabled: !Pagination.PreviousPage.Url }">
-                        <a class="page-link" data-qa="search-pagination-previous" v-on:click="sortingChanged(Pagination.PreviousPage.Url)">
-                            <span class="fa fa-arrow-circle-left"></span> {{Pagination.PreviousPage.DisplayName}}
-                        </a>
-                    </li>
-                    <li v-if="Pagination.NextPage" class="page-item next" v-bind:class="{ disabled: !Pagination.NextPage.Url }">
-                        <a class="page-link" data-qa="search-pagination-next" v-on:click="sortingChanged(Pagination.NextPage.Url)">
-                            {{Pagination.NextPage.DisplayName}} <span class="fa fa-arrow-circle-right"></span>
-                        </a>
-                    </li>
-                </ul>
+                @SearchHelpers.Pagination()
             </div>
         }
     </div>

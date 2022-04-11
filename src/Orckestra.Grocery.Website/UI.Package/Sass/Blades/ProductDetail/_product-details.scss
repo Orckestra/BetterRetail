@@ -2,7 +2,7 @@
     .add-to-wishlist {
         position: absolute;
         top: 0;
-        right: 0;
+        right: 10px;
         z-index: 9;
     }
     .brand {
@@ -27,6 +27,15 @@
         font-size: 20px;
         color: $gray-700;
     }
+    .thumbnail {
+        background-color: #fff;
+        border-radius: $border-radius;
+        border: 1px solid transparent;
+        overflow: hidden;
+        &.active {
+            border-color: theme-color('primary');
+        }
+    }
 }
 
 .product-details-thumbnail {
@@ -39,6 +48,8 @@
     position: relative;
     //height: 0;
     //padding-bottom: $product-lg-image-ratio * 100%;
+    background-color: #fff;
+    border-radius: $border-radius-lg;
     margin-bottom: round($spacer / 2);
     padding: $spacer*4;
     i {
@@ -58,7 +69,7 @@
 .product-details-badges {
     position: absolute;
     top: 0.625rem;
-    left: 0.625rem;
+    left: 1.25rem;
 }
 
 .product-details-zoom {

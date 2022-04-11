@@ -7,6 +7,8 @@
 ///<reference path='../Composer.Product/Product/ProductService.ts' />
 ///<reference path='../Composer.Product/ProductEvents.ts' />
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../Composer.Product/ProductSearch/Services/MultiKeywordsSearchService.ts' />
+///<reference path='../Composer.Product/ProductSearch/Services/IMultiKeywordsSearchService.ts' />
 
 module Orckestra.Composer {
     interface VueAutocompleteData {
@@ -28,6 +30,7 @@ module Orckestra.Composer {
         private source: string = 'Autosuggestion Search Box';
         protected cartService: ICartService = CartService.getInstance();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
+        protected multiKeywordSearchService: IMultiKeywordsSearchService = MultiKeywordsSearchService.instance();
 
         public initialize() {
             super.initialize();
@@ -97,6 +100,8 @@ module Orckestra.Composer {
                     };
                 },
                 mounted() {
+                    self.eventHub.subscribe(SearchEvents.SearchKeywordChanged , this.onMultiKeywordsChanged);
+                    
                     this.query = this.$el.attributes.keywords.value;
                     this.sectionConfigs.autocomplete.limit = +this.$el.attributes['autocomplete-limit'].value;
                     this.sectionConfigs.suggestcategories.limit = +this.$el.attributes['categories-limit'].value;
@@ -117,6 +122,7 @@ module Orckestra.Composer {
 
                     const input = document.getElementById('autosuggest__input');
                     input.addEventListener('keydown', (event) => {
+                        self.multiKeywordSearchService.clearKeywords();
                         if (event.code === 'Enter') {
                             this.searchMore()
                         }
@@ -133,6 +139,9 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
+                    onMultiKeywordsChanged({data}){
+                        this.query = data.keyword;
+                    },
                     selectCategory(suggestion) {
                         this.sectionConfigs.suggestcategories.onSelected({ item: suggestion })
                     },

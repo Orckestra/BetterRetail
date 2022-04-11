@@ -29,7 +29,7 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
             this.initializeVueComponent();
-        }
+         }
 
         private initializeVueComponent() {
             var { CategoryFacetValuesTree, Facets, PromotedFacetValues, SelectedFacets } = this.context.viewModel;
@@ -56,6 +56,8 @@ module Orckestra.Composer {
                     onFacetsLoaded({data}) {
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
                         this.Facets = data.ProductSearchResults.Facets;
+
+                        self._searchService.updateFacetRegistry(self.buildFacetRegistry());
                     },
                     categoryFacetChanged(event, isSelected) {
                         self.categoryFacetChanged(event, isSelected);

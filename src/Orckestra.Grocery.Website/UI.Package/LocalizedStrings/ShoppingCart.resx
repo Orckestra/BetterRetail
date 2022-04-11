@@ -303,4 +303,7 @@
   <data name="L_EditCartBannerMessage" xml:space="preserve">
     <value>You are currently editing Order “{0}”</value>
   </data>
+  <data name="B_RemoveUnavailableProducts" xml:space="preserve">
+    <value>Remove unavailable products</value>
+  </data>
 </root>

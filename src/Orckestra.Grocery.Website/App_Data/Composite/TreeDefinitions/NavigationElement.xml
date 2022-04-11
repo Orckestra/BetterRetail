@@ -19,9 +19,10 @@
         </Actions>
         <Children>
 
-          <Element Label="Header" Id="Header" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+          <Element Label="Main Menu" Id="Header" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
             <Actions>
               <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.IMainMenuProviderConfiguration" Label="Add External Menu Items Provider"/>
             </Actions>
             <Children>
               <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" >
@@ -160,7 +161,15 @@
                   </DataElements>
                 </Children>
               </DataElements>
-
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.IMainMenuProviderConfiguration" Icon="settings">
+                <Actions>
+                  <EditDataAction Label="Edit Main Menu Items Provider"/>
+                  <DeleteDataAction Label="Delete Main Menu Items Provider"/>
+                </Actions>
+                <Filters>
+                  <ParentIdFilter ParentType="Composite.Data.Types.IPage" ReferenceFieldName="PageId" />
+                </Filters>
+              </DataElements>
             </Children>
           </Element>
 
