@@ -36,6 +36,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
     <title>@Item.Title</title>
+    @if (!string.IsNullOrEmpty(Item.Keywords))
+    {
+        <meta name="keywords" content="@Item.Keywords" />
+    }
 </head>
 <body>
     <div data-oc-controller="Grocery.RecipeDetails" data-context="@JsonConvert.SerializeObject(ingredientsLists)" data-searchUrl="@RecipeUrlProvider.GetSearchPageUrl(Thread.CurrentThread.CurrentCulture)">
