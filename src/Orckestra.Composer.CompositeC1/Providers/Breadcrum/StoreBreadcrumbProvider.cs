@@ -4,6 +4,7 @@ using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.ViewModels.Breadcrumb;
 using Orckestra.ExperienceManagement.Configuration;
 using System;
+using System.Web;
 
 namespace Orckestra.Composer.CompositeC1.Providers.Breadcrumb
 {
@@ -41,7 +42,7 @@ namespace Orckestra.Composer.CompositeC1.Providers.Breadcrumb
 
             if (!string.IsNullOrEmpty(StoreContext.ViewModel.LocalizedDisplayName))
             {
-                breadcrumbViewModel.ActivePageName = StoreContext.ViewModel.LocalizedDisplayName;
+                breadcrumbViewModel.ActivePageName = HttpUtility.HtmlEncode(StoreContext.ViewModel.LocalizedDisplayName);
             }
 
             return breadcrumbViewModel;
