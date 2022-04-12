@@ -96,8 +96,12 @@ module Orckestra.Composer {
                             request.then(orderData => {
                                 this.OrderDetails = orderData;
                                 this.OrderSummary = orderData.OrderSummary;
-                                this.TimeslotInfo = TimeSlotsHelper.getTimeSlotLocalizations(orderData.Shipments[0].TimeSlotReservation.ReservationDate,
-                                    orderData.Shipments[0].TimeSlot.SlotBeginTime, orderData.Shipments[0].TimeSlot.SlotEndTime, culture);
+                                let shipment = orderData.Shipments[0];
+                                let { TimeSlot, TimeSlotReservation } = shipment;
+                                if (TimeSlot && TimeSlotReservation) {
+                                    this.TimeslotInfo = TimeSlotsHelper.getTimeSlotLocalizations(TimeSlotReservation.ReservationDate,
+                                        TimeSlot.SlotBeginTime, TimeSlot.SlotEndTime, culture);
+                                }
                             });
 
                             self.fulfillmentService.getSelectedFulfillment()
