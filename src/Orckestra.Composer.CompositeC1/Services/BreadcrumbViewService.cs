@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Composite.Data.Types;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.ViewModels.Breadcrumb;
@@ -29,7 +30,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
             var breadcrumbViewModel = new BreadcrumbViewModel
             {
-                ActivePageName = page.MenuTitle,
+                ActivePageName = HttpUtility.HtmlEncode(page.MenuTitle),
                 Items = CreateBreadcrumbItems(param, page)
             };
 
