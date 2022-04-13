@@ -20,27 +20,30 @@ module Orckestra.Composer {
             const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms'); 
             const IsProductTab = this.context.container.data('isproducttab');
             const self = this;
+            let elTabSearchSummary = document.getElementById('vueTabSearchSummary');
 
-            this.vueTabSearchSummary = new Vue({
-                el: '#vueTabSearchSummary',
-                data: {
-                    Tabs,
-                    SearchQuery
-                },
-                mounted() {
-                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
-                       this.Tabs = [...this.Tabs];
-                    });
-                },
-                computed: {
-                    CurrentTab() {
-                        return this.Tabs.find(t => t.IsActive);
+            if (elTabSearchSummary) {
+                this.vueTabSearchSummary = new Vue({
+                    el: '#vueTabSearchSummary',
+                    data: {
+                        Tabs,
+                        SearchQuery
                     },
-                    TabsWithResults() {
-                        return this.Tabs.filter(t => t.Total > 0);
+                    mounted() {
+                        self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
+                            this.Tabs = [...this.Tabs];
+                        });
+                    },
+                    computed: {
+                        CurrentTab() {
+                            return this.Tabs.find(t => t.IsActive);
+                        },
+                        TabsWithResults() {
+                            return this.Tabs.filter(t => t.Total > 0);
+                        }
                     }
-                }
-            });
+                });
+            }
 
             this.vueSearchSummary = new Vue({
                 el: '#vueSearchSummary',
