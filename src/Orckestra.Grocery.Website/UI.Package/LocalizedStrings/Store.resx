@@ -208,7 +208,7 @@
     <value>To use your current location, please enable it on your browser.</value>
   </data>
   <data name="T_Phone" xml:space="preserve">
-    <value>Pnone</value>
+    <value>Phone</value>
   </data>
   <data name="B_ShowLess" xml:space="preserve">
     <value>See fewer stores</value>

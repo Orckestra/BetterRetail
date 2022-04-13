@@ -165,4 +165,7 @@
   <data name="L_ItemsAddedToCartWithIssuesMessage" xml:space="preserve">
     <value>Certains produits recommandés n'ont pas pu être ajoutés au panier, veuillez acheter des ingrédients pour les articles mis en évidence.</value>
   </data>
+  <data name="L_AddRecommendedProducts" xml:space="preserve">
+    <value>Ajouter au panier</value>
+  </data>
 </root>
