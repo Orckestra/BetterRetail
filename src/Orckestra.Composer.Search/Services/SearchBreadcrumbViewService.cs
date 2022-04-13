@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Web;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Search.Parameters;
@@ -72,7 +73,7 @@ namespace Orckestra.Composer.Search.Services
                 CultureInfo = cultureInfo
             });
 
-            return string.Format("{0} {1}<span id=\"breadcrumbSearchKeyword\">{2}</span>{3}", leftPart, quoteOpen, keywords ?? string.Empty, quoteClose);
+            return string.Format("{0} {1}<span id=\"breadcrumbSearchKeyword\">{2}</span>{3}", leftPart, quoteOpen, HttpUtility.HtmlEncode(keywords ?? string.Empty), quoteClose);
         }
     }
 }

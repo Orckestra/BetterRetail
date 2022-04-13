@@ -88,7 +88,7 @@
         {
             Title = productTab.Title,
             UrlTitle = productTab.UrlTitle,
-            TabUrl = $"{CurrentPageNode.Url}/{productTab.UrlTitle}?{SearchRequestParams.Keywords}={SearchRequestContext.SearchQuery}",
+            TabUrl = $"{CurrentPageNode.Url}/{productTab.UrlTitle}?{SearchRequestParams.Keywords}={HttpUtility.UrlEncode(SearchRequestContext.SearchQuery)}",
             Total = IsProductsCorrected() && !isProductTab ? 0 : ProductSearchResults.TotalCount,
             IsActive = (productTab != null && currentTabPathInfo == null) || (productTab != null && productTab.UrlTitle == currentTabPathInfo),
             IsProducts = true
