@@ -41,10 +41,17 @@ module Orckestra.Composer {
           SelectedIngredientsIds: [],
           AddToCartState: "",
           SearchUrl,
-          Loading: false
+          Loading: false,
+          PopoverIsInitialized: false,
         },
         mounted() {
           this.getIngredientsProducts();
+        },
+        updated() {
+          if (!this.PopoverIsInitialized) {
+            self.initializeRecipePopover();
+            this.PopoverIsInitialized = true;
+          }
         },
         computed: {
           SelectedKeywords() {
@@ -157,6 +164,17 @@ module Orckestra.Composer {
       console.error('Error on adding item to cart', reason);
 
       ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
+    }
+
+    protected initializeRecipePopover():void {
+      this.context.container.find('.recipe-ingredient[data-toggle="popover"]').popover({
+        html:true,
+        content: function(){
+          return document.getElementById(this.getAttribute('data-popover-content')).innerHTML;
+        },
+        trigger: 'hover',
+        placement: 'top'
+      });
     }
   }
 }
