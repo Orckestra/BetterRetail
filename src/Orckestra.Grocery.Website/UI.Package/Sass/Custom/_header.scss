@@ -218,5 +218,7 @@
 // cart button and badge
 .fa-shopping-cart+.badge-pill.badge-top-right {
     left: -26px !important;
-    padding: 2px 9px;
+    padding: 5px 7px 4px;
+	display: inline-block;
+	min-width: 23px;
 }
