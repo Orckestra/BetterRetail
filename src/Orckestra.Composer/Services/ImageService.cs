@@ -7,9 +7,12 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.ViewModels;
+using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
+using Orckestra.Overture.ServiceModel.Search;
 
 namespace Orckestra.Composer.Services
 {
@@ -18,6 +21,9 @@ namespace Orckestra.Composer.Services
         protected IDamProvider DamProvider { get; private set; }
         protected IProductRepository ProductRepository { get; }
         protected IComposerContext ComposerContext { get; private set; }
+
+        private const string VariantPropertyBagKey = "VariantId";
+        private const string DefinitionNamePropertyBagKey = "DefinitionName";
 
         public ImageService(IDamProvider damProvider, IProductRepository productRepository, IComposerContext composerContext)
         {
@@ -55,7 +61,7 @@ namespace Orckestra.Composer.Services
                 var productImageRequest = new ProductImageRequest
                 {
                     ProductId = product.productId,
-                    Variant = new VariantKey {Id = product.variantId},
+                    Variant = new VariantKey { Id = product.variantId },
                 };
                 var imageUrl = imageUrls[product];
                 if (imageUrl != null)
@@ -94,6 +100,36 @@ namespace Orckestra.Composer.Services
 
             var imagesList = await Task.WhenAll(tasks);
             return imagesList.ToDictionary(x => x.key, x => x.image);
+        }
+
+        public virtual Task<List<ProductMainImage>> GetImageUrlsFromProperty(List<ProductDocument> documents)
+        {
+            return GetImageUrlsFromProperty(documents.Select(doc => (doc.ProductId, doc.PropertyBag.ContainsKey(VariantPropertyBagKey) ? doc.PropertyBag[VariantPropertyBagKey].ToString() : string.Empty, doc.PropertyBag)));
+        }
+
+        public virtual Task<List<ProductMainImage>> GetImageUrlsFromProperty(List<LineItem> documents)
+        {
+            return GetImageUrlsFromProperty(documents.Select(doc => (doc.ProductId, doc.VariantId, doc.PropertyBag)));
+        }
+
+        protected virtual async Task<List<ProductMainImage>> GetImageUrlsFromProperty(IEnumerable<(string productId, string variantId, PropertyBag propertyBag)> documents)
+        {
+            var imagesParam = new GetProductMainImagesParam
+            {
+                ImageSize = ImageConfiguration.CartThumbnailImageSize,
+                ProductImageRequests = documents
+                   .Select(document => new ProductImageRequest
+                   {
+                       ProductId = document.productId,
+                       Variant = new VariantKey { Id = document.variantId },
+                       ProductDefinitionName = document.propertyBag.ContainsKey(DefinitionNamePropertyBagKey)
+                           ? document.propertyBag[DefinitionNamePropertyBagKey].ToString()
+                           : string.Empty,
+                       PropertyBag = document.propertyBag
+                   }).ToList()
+            };
+
+            return await DamProvider.GetProductMainImagesAsync(imagesParam).ConfigureAwait(false);
         }
     }
 }
