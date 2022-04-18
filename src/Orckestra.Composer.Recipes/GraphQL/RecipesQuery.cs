@@ -17,8 +17,8 @@ namespace Orckestra.Composer.Recipes.GraphQL
 
             this.Field<IRecipeMealType>(d => d.Id);
             this.Field<IDishType>(d => d.Id);
-            this.Field<IRecipe>(d => d.Id);
-            this.FieldList<IRecipe>();
+            this.Field<IRecipe, RecipeGraphType>(d => d.Id);
+            this.FieldList<IRecipe, RecipeGraphType>();
 
 
             Field<IngredientsListGraphType>("IngredientsList",
