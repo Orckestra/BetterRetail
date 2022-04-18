@@ -26,7 +26,7 @@
         CartName = CartConfiguration.WishlistCartName,
         ExecuteWorkflow = CartConfiguration.WishListExecuteWorkflow,
         WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
-        BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
+        BaseUrl = RequestUtils.GetBaseUrl(Request.Url, Request.ApplicationPath).ToString()
     }).Result;
 
     var VueId = $"vue{Guid.NewGuid().GetHashCode()}";
