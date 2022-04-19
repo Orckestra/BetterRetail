@@ -95,19 +95,7 @@
             <img class="img-fluid m-auto" v-bind:src="@(entity).ImageUrl"
                  v-bind:alt="@(entity).ProductSummary.DisplayName"
                  v-bind:onerror="'this.onerror=null; this.src=\'' + @(entity).FallbackImageUrl + '\''" />
-            <div v-if="@(entity).Bag.PromotionalBanner" class="product-tile-banner">
-                <span v-bind:class="[@(entity).Bag.PromotionalBannerBackgroundColor, @(entity).Bag.PromotionalBannerTextColor]" class="w-100 p-1">
-                    {{@(entity).Bag.PromotionalBanner}}
-                </span>
-            </div>
         </a>
-        <div v-if="@(entity).Bag.PromotionalRibbon" class="product-tile-ribbon-holder">
-            <div class="product-tile-ribbon ribbon-top-right">
-                <span v-bind:class="[@(entity).Bag.PromotionalRibbonBackgroundColor, @(entity).Bag.PromotionalRibbonTextColor]">
-                    {{@(entity).Bag.PromotionalRibbon}}
-                </span>
-            </div>
-        </div>
         <div class="wishlist-tile-delete d-none ">
             <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
                     class="btn btn-secondary bg-white text-secondary"
@@ -117,9 +105,6 @@
             </button>
         </div>
 
-        <ul v-if="@(entity).Bag.ProductBadgeValues" class="product-tile-badges list-unstyled">
-            <li v-for="(name, key) in @(entity).Bag.ProductBadgeValues"><img v-bind:src="'/UI.Package/Images/badge/' + key + '.svg'" v-bind:alt="name" /></li>
-        </ul>
         <div class="product-tile-information">
             <div class="product-tile-text">
                 <p v-if="@(entity).ProductSummary.Brand" class="product-tile-brand m-0" data-qa="wishlist-product-brand">{{@(entity).ProductSummary.Brand}}</p>
@@ -130,19 +115,6 @@
 
                 <a class="p text-default-font" data-qa="wishlist-product-title" v-bind:href="@(entity).ProductUrl"
                    v-bind:title="@(entity).ProductSummary.DisplayName" v-bind:data-productId="@(entity).ProductId">{{@(entity).ProductSummary.DisplayName}}</a>
-
-                <div class="product-tile-format" v-if="@(entity).Bag.IsUnit">
-                    <span v-if="!@(entity).Bag.IsSingleUnit">
-                        {{@(entity).Bag.ProductUnitQuantity + " x "}}
-                    </span>
-                    <span v-if="@(entity).Bag.IsWeightedProduct">
-                        @Html.Localize("ProductPage", "L_Approx")
-                    </span>
-                    {{@(entity).Bag.ProductUnitSize}}{{@(entity).Bag.ProductUnitMeasure}}
-                    <span v-if="@(entity).Bag.IsSingleUnit &amp;&amp; @(entity).Bag.IsWeightedProduct">
-                        @Html.Localize("General", "L_EachAbbrev")
-                    </span>
-                </div>
             </div>
             <div class="product-tile-price">
 
