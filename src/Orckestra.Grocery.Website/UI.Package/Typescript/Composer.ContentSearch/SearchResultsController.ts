@@ -22,9 +22,9 @@ module Orckestra.Composer {
             const currentSite = this.context.container.data('current-site') === 'True';
             const isRecipe = this.context.container.data('is-recipes') === 'True';
             let difficulties = this.context.container.data('difficulties');
-            difficulties = difficulties && difficulties.reduce((acumm, item) => {
-                acumm[item[0].Id] = item[0].Title;
-                return acumm;
+            difficulties = difficulties && difficulties.reduce((accum, item) => {
+                item.forEach(x => accum[x.Id] = x.Title)
+                return accum;
             },{});
 
             this.sendContentSearchResultsForAnalytics(Total);

@@ -172,6 +172,11 @@ namespace Orckestra.Composer.Search.Factory
                 return;
             }
 
+            if(productDocument.InventoryLocationStatuses == null)
+            {
+                throw new InvalidOperationException("Product document doesn't contain inventory information");
+            }
+
             var availableStatusesForSell = ComposerConfiguration.AvailableStatusForSell;
 
             productSearchViewModel.IsAvailableToSell = productDocument.InventoryLocationStatuses.SelectMany(_ => _.Statuses)

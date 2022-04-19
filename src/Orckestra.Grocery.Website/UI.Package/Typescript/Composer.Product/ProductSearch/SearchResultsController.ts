@@ -90,11 +90,6 @@ module Orckestra.Composer {
                             product.InWishList = !!wishListItem;
                             product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
 
-                            if (product.ProductBadgeValues) {
-                                product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
-                                    .map((key) => ({ Key: key, Value: product.ProductBadgeValues[key] }));
-                            }
-
                             product.HasUnitValues = PriceHelper.HasUnitValues(product);
                             product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
                                 product.ProductUnitQuantity,
