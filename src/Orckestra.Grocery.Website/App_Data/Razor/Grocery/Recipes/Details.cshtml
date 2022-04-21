@@ -165,8 +165,9 @@
                                             <p class="text-default-font">
                                                 {{item.ProductInformation.DisplayName}}
                                             </p>
-
-                                            @ProductHelpers.DisplayFormat("item.ProductInformation")
+                                            <div class="product-tile-format">
+                                                {{item.ProductInformation.Format}}
+                                            </div>
                                         </div>
                                         @ProductHelpers.PriceBasedOnUnitMeasure("item.ProductInformation")
                                     </div>

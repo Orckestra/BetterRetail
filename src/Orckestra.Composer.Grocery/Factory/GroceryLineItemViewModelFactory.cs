@@ -1,19 +1,18 @@
-﻿using Orckestra.Composer.Configuration;
+﻿using Orckestra.Composer.Cart.Factory;
+using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Providers.LineItemValidation;
+using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Factory;
+using Orckestra.Composer.Grocery.Context;
+using Orckestra.Composer.Grocery.Factory;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Orckestra.Composer.Grocery.Context;
-using Orckestra.Composer.Cart.Factory;
-using Orckestra.Composer.Cart.Providers.LineItemValidation;
-using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Factory;
-using Orckestra.Composer.Cart.ViewModels;
-using Orckestra.Composer.Cart.Parameters;
 
 namespace Orckestra.Composer.Grocery.Services
 {
@@ -21,6 +20,8 @@ namespace Orckestra.Composer.Grocery.Services
     {
         public IConverterProvider ConverterProvider { get; }
         public IProductTileConfigurationContext ProductTileConfigurationContext { get; }
+
+        public IGroceryProductInformationFactory GroceryProductInformationFactory { get; }
 
         public GroceryLineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
@@ -32,8 +33,7 @@ namespace Orckestra.Composer.Grocery.Services
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings,
             ICurrencyProvider currencyProvider,
-            IConverterProvider converterProvider,
-            IProductTileConfigurationContext productTileConfigurationContext)
+            IGroceryProductInformationFactory groceryProductInformationFactory)
             : base(viewModelMapper,
              localizationProvider,
              productUrlProvider,
@@ -45,90 +45,26 @@ namespace Orckestra.Composer.Grocery.Services
              recurringOrdersSettings,
              currencyProvider)
         {
-            ConverterProvider = converterProvider ?? throw new ArgumentNullException(nameof(converterProvider));
-            ProductTileConfigurationContext = productTileConfigurationContext ?? throw new ArgumentNullException(nameof(productTileConfigurationContext));
+           GroceryProductInformationFactory = groceryProductInformationFactory ?? throw new ArgumentNullException(nameof(groceryProductInformationFactory));
         }
 
         public override LineItemDetailViewModel GetLineItemDetailViewModel(CreateLineItemDetailViewModelParam param)
         {
             var lineItemhViewModel = base.GetLineItemDetailViewModel(param);
-            BuildProductBadgeValues(lineItemhViewModel);
-            BuildPromotionalRibbon(lineItemhViewModel);
-            BuildPromotionalBanner(lineItemhViewModel);
-            BuildMeasure(lineItemhViewModel);
+            var extendedVM = lineItemhViewModel.AsExtensionModel<IGroceryLineItemDetailViewModel>();
+            extendedVM.ProductBadgeValues = GroceryProductInformationFactory.BuildProductBadgeValues(extendedVM.ProductBadges, extendedVM.ProductBadgesLookup);
+            
+            var ribbonStyles = GroceryProductInformationFactory.BuildPromotionalRibbonStyles(extendedVM.PromotionalRibbonKey);
+            extendedVM.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
+            extendedVM.PromotionalRibbonTextColor = ribbonStyles.TextColor;
+
+            var bannerStyles = GroceryProductInformationFactory.BuildPromotionalBannerStyles(extendedVM.PromotionalBannerKey);
+            extendedVM.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
+            extendedVM.PromotionalBannerTextColor = bannerStyles.TextColor;
+
+            extendedVM.Format = GroceryProductInformationFactory.BuildProductFormat(extendedVM.ProductUnitQuantity, extendedVM.ProductUnitSize, extendedVM.ProductUnitMeasure, extendedVM.IsWeightedProduct, param.CultureInfo);
 
             return lineItemhViewModel;
-        }
-
-        public virtual void BuildProductBadgeValues(LineItemDetailViewModel productSearchViewModel)
-        {
-            var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryLineItemDetailViewModel>();
-
-            var productBadges = extendedVM.ProductBadges?.Split('|');
-            if (productBadges == null || !productBadges.Any())
-            {
-                return;
-            }
-
-            var productBadgesLookup = extendedVM.ProductBadgesLookup?.Split(new[] { ", " }, StringSplitOptions.None);
-            if (productBadgesLookup == null || !productBadgesLookup.Any())
-            {
-                return;
-            }
-
-            extendedVM.ProductBadgeValues = new Dictionary<string, string>();
-            for (var i = 0; i < productBadges.Length; i++)
-            {
-                var value = productBadges[i];
-                var name = productBadgesLookup[i];
-                if (!extendedVM.ProductBadgeValues.ContainsKey(value))
-                {
-                    extendedVM.ProductBadgeValues.Add(value, name);
-                }
-            }
-
-            productSearchViewModel.Context["ProductBadgeValues"] = extendedVM.ProductBadgeValues;
-        }
-
-        public virtual void BuildPromotionalRibbon(LineItemDetailViewModel productSearchViewModel)
-        {
-            var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryLineItemDetailViewModel>();
-        
-            var promotionalRibbonSettings = ProductTileConfigurationContext.GetPromotionalRibbonConfigurations().FirstOrDefault(item => item.LookupValue == extendedVM.PromotionalRibbonKey);
-            extendedVM.PromotionalRibbonBackgroundColor = promotionalRibbonSettings?.BackgroundColor != null && promotionalRibbonSettings.BackgroundColor != "bg-none"
-                ? promotionalRibbonSettings.BackgroundColor
-                : ProductTileConfigurationContext.PromotionalRibbonDefaultBackgroundColor;
-            extendedVM.PromotionalRibbonTextColor = promotionalRibbonSettings?.TextColor != null && promotionalRibbonSettings?.TextColor != "text-none"
-                ? promotionalRibbonSettings.TextColor
-                : ProductTileConfigurationContext.PromotionalRibbonDefaultTextColor;
-
-            productSearchViewModel.Context["PromotionalRibbon"] = extendedVM.PromotionalRibbon;
-            productSearchViewModel.Context["PromotionalRibbonDefaultBackgroundColor"] = extendedVM.PromotionalRibbonBackgroundColor;
-            productSearchViewModel.Context["PromotionalRibbonDefaultTextColor"] = extendedVM.PromotionalRibbonTextColor;
-        }
-
-        public virtual void BuildPromotionalBanner(LineItemDetailViewModel productSearchViewModel)
-        {
-            var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryLineItemDetailViewModel>();
-           
-            var promotionalBannerSettings = ProductTileConfigurationContext.GetPromotionalBannerConfigurations().FirstOrDefault(item => item.LookupValue == extendedVM.PromotionalBannerKey);
-            extendedVM.PromotionalBannerBackgroundColor = promotionalBannerSettings?.BackgroundColor != null && promotionalBannerSettings.BackgroundColor != "bg-none"
-                ? promotionalBannerSettings.BackgroundColor
-                : ProductTileConfigurationContext.PromotionalBannerDefaultBackgroundColor;
-            extendedVM.PromotionalBannerTextColor = promotionalBannerSettings?.TextColor != null && promotionalBannerSettings?.TextColor != "text-none"
-                ? promotionalBannerSettings.TextColor
-                : ProductTileConfigurationContext.PromotionalBannerDefaultTextColor;
-
-            productSearchViewModel.Context["PromotionalBanner"] = extendedVM.PromotionalBanner;
-            productSearchViewModel.Context["PromotionalBannerDefaultBackgroundColor"] = extendedVM.PromotionalBannerBackgroundColor;
-            productSearchViewModel.Context["PromotionalBannerDefaultTextColor"] = extendedVM.PromotionalBannerTextColor;
-        }
-
-        public virtual void BuildMeasure(LineItemDetailViewModel productSearchViewModel)
-        {
-            var extendedVM = productSearchViewModel.AsExtensionModel<IGroceryLineItemDetailViewModel>();
-            extendedVM.HasUnitValues = extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
-            extendedVM.IsSingleUnit = extendedVM.ProductUnitQuantity == 1;
         }
     }
 }

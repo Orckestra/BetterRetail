@@ -1,6 +1,7 @@
 ﻿using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Grocery.Providers;
+using Orckestra.Composer.Grocery.ViewModels;
 using Orckestra.Composer.Product.Factory;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Services;
@@ -11,37 +12,33 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Orckestra.Composer.Grocery.Context;
-using Orckestra.Composer.Grocery.ViewModels;
 
 namespace Orckestra.Composer.Grocery.Factory
 {
-    public class GroceryProductViewModelFactory: ProductViewModelFactory
+    public class GroceryProductViewModelFactory : ProductViewModelFactory
     {
         public IConverterProvider ConverterProvider { get; }
-        public IProductTileConfigurationContext ProductTileConfigurationContext { get; }
-        
+        public IGroceryProductInformationFactory GroceryProductInformationFactory { get; }
+
         public GroceryProductViewModelFactory(IViewModelMapper viewModelMapper,
-            IProductRepository productRepository, 
+            IProductRepository productRepository,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            ILookupService lookupService, 
-            IProductUrlProvider productUrlProvider, 
-            IScopeViewService scopeViewService, 
+            ILookupService lookupService,
+            IProductUrlProvider productUrlProvider,
+            IScopeViewService scopeViewService,
             IRecurringOrdersRepository recurringOrdersRepository,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersSettings recurringOrdersSettings, 
+            IRecurringOrdersSettings recurringOrdersSettings,
             IProductSpecificationsViewService productSpecificationsViewService,
             IMyAccountUrlProvider myAccountUrlProvider,
             IConverterProvider converterProvider,
-            IProductTileConfigurationContext productTileConfigurationContext)
-            : base(viewModelMapper, 
+            IGroceryProductInformationFactory groceryProductInformationFactory)
+            : base(viewModelMapper,
                 productRepository,
                 damProvider,
-                localizationProvider, 
-                lookupService, 
+                localizationProvider,
+                lookupService,
                 productUrlProvider,
                 scopeViewService,
                 recurringOrdersRepository,
@@ -51,45 +48,30 @@ namespace Orckestra.Composer.Grocery.Factory
                 myAccountUrlProvider)
         {
             ConverterProvider = converterProvider ?? throw new ArgumentNullException(nameof(converterProvider));
-            ProductTileConfigurationContext = productTileConfigurationContext ?? throw new ArgumentNullException(nameof(productTileConfigurationContext));
+            GroceryProductInformationFactory = groceryProductInformationFactory ?? throw new ArgumentNullException(nameof(groceryProductInformationFactory));
         }
 
         protected override ProductViewModel CreateViewModel(CreateProductDetailViewModelParam param)
         {
             var productViewModel = base.CreateViewModel(param);
             var extendedVM = productViewModel.AsExtensionModel<IGroceryProductViewModel>();
-         
-            extendedVM.ProductBadgeValues = BuildProductBadgeValues(param.Product, productViewModel);
+
+            extendedVM.ProductBadgeValues = GroceryProductInformationFactory.BuildProductBadgeValues(extendedVM.ProductBadgesKeys, extendedVM.ProductBadgesLookup);
+            extendedVM.Format = GroceryProductInformationFactory.BuildProductFormat(extendedVM.ProductUnitQuantity,
+                extendedVM.ProductUnitSize,
+                extendedVM.ProductUnitMeasure,
+                extendedVM.IsWeightedProduct,
+                param.CultureInfo);
 
             var convertedVolumeMeasurment = BuildConvertedVolumeMeasurement(param.Product);
-            if (convertedVolumeMeasurment.HasValue) {
+            if (convertedVolumeMeasurment.HasValue)
+            {
                 extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment.Value;
                 productViewModel.Context["ConvertedVolumeMeasurement"] = convertedVolumeMeasurment.Value;
                 productViewModel.Context["BaseProductMeasure"] = extendedVM.BaseProductMeasure;
             }
 
             return productViewModel;
-        }
-
-        public virtual Dictionary<string, string> BuildProductBadgeValues(Overture.ServiceModel.Products.Product product, BaseProductViewModel productViewModel)
-        {
-            var productBadges = productViewModel.Bag.TryGetValue("ProductBadges", out var badges) && badges != null ? badges.ToString().Split('|').ToList() : new List<string>();
-            var productBadgeKeys = product.PropertyBag.TryGetValue("ProductBadges", out var badgekeys) && badgekeys != null ? badgekeys.ToString().Split('|').ToList() : new List<string>();
-
-            if (!productBadgeKeys.Any())
-            {
-                return null;
-            }
-
-            var productBadgeValues = new Dictionary<string, string>();
-
-            for (var i = 0; i < productBadgeKeys.Count; i++)
-            {
-                if (!productBadgeValues.ContainsValue(productBadgeKeys[i]))
-                    productBadgeValues.Add(productBadgeKeys[i], productBadges[i]);
-            }
-
-            return productBadgeValues;
         }
 
         public virtual decimal? BuildConvertedVolumeMeasurement(Overture.ServiceModel.Products.Product product)
@@ -103,52 +85,6 @@ namespace Orckestra.Composer.Grocery.Factory
             }
 
             return (decimal)ConverterProvider.ConvertMeasurements(baseProductSize, baseProductMeasure, productUnitMeasure);
-        }
-
-        public virtual (string BackgroundColor, string TextColor) BuildPromotionalRibbonStyles(Overture.ServiceModel.Products.Product product)
-        {
-            var defaultBackgroundColor = ProductTileConfigurationContext.PromotionalRibbonDefaultBackgroundColor;
-            var defaultTextColor = ProductTileConfigurationContext.PromotionalRibbonDefaultTextColor;
-
-            var getPromotionalRibbonValue =
-                product.PropertyBag.TryGetValue("PromotionalRibbon", out var promotionalRibbonValue);
-            if (getPromotionalRibbonValue)
-            {
-                var promotionalRibbonSettings = ProductTileConfigurationContext.GetPromotionalRibbonConfigurations()
-                    .FirstOrDefault(item => item.LookupValue == promotionalRibbonValue.ToString());
-                var backgroundColor = promotionalRibbonSettings != null 
-                    ? promotionalRibbonSettings.BackgroundColor
-                    : defaultBackgroundColor;
-
-                var textColor = promotionalRibbonSettings != null
-                    ? promotionalRibbonSettings.TextColor
-                    : defaultTextColor;
-                return (backgroundColor, textColor);
-            }
-
-            return (defaultBackgroundColor, defaultTextColor);
-        }
-
-        public virtual (string BackgroundColor, string TextColor) BuildPromotionalBannerStyles(Overture.ServiceModel.Products.Product product)
-        {
-            var defaultBackgroundColor = ProductTileConfigurationContext.PromotionalBannerDefaultBackgroundColor;
-            var defaultTextColor = ProductTileConfigurationContext.PromotionalBannerDefaultTextColor;
-
-            if(product.PropertyBag.TryGetValue("PromotionalBanner", out var promotionalBannerValue))
-            {
-                var promotionalBannerSettings = ProductTileConfigurationContext.GetPromotionalBannerConfigurations()
-                    .FirstOrDefault(item => item.LookupValue == promotionalBannerValue.ToString());
-                var backgroundColor = promotionalBannerSettings != null && promotionalBannerSettings.BackgroundColor != "bg-none"
-                    ? promotionalBannerSettings.BackgroundColor
-                    : defaultBackgroundColor;
-
-                var textColor = promotionalBannerSettings != null && promotionalBannerSettings?.TextColor != "text-none"
-                    ? promotionalBannerSettings.TextColor
-                    : defaultTextColor;
-                return (backgroundColor, textColor);
-            }
-
-            return (defaultBackgroundColor, defaultTextColor);
         }
     }
 }

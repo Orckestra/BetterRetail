@@ -90,7 +90,6 @@ module Orckestra.Composer {
                             product.InWishList = !!wishListItem;
                             product.WishListItemId = wishListItem ? wishListItem.Id : undefined;
 
-                            product.HasUnitValues = PriceHelper.HasUnitValues(product);
                             product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
                                 product.ProductUnitQuantity,
                                 product.ProductUnitSize,

@@ -72,5 +72,10 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// Gets or sets the product Promotional Banner Text Color
         /// </summary>
         string PromotionalBannerTextColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Format
+        /// </summary>
+        string Format { get; set; }
     }
 }

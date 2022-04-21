@@ -189,24 +189,6 @@
     </div>
 }
 
-@helper DisplayFormat(string valueBinding = "Product")
-{
-    <div class="product-tile-format" v-if="@(valueBinding).HasUnitValues">
-        <span v-if="@(valueBinding).IsUnit &amp;&amp; @(valueBinding).IsWeightedProduct">
-            @Html.Localize("ProductPage", "L_Approx") {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}} @Html.Localize("General", "L_EachAbbrev")
-        </span>
-        <span v-if="@(valueBinding).IsUnit &amp;&amp; !@(valueBinding).IsWeightedProduct">
-            {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}
-        </span>
-        <span v-if="!@(valueBinding).IsUnit &amp;&amp; @(valueBinding).IsWeightedProduct">
-            {{@(valueBinding).ProductUnitQuantity}} x @Html.Localize("ProductPage", "L_Approx") {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}
-        </span>
-        <span v-if="!@(valueBinding).IsUnit &amp;&amp; !@(valueBinding).IsWeightedProduct">
-            {{@(valueBinding).ProductUnitQuantity}} x {{@(valueBinding).ProductUnitSize}}{{@(valueBinding).ProductUnitMeasure}}
-        </span>
-    </div>
-}
-
 @helper PriceBasedOnUnitMeasure(string valueBinding = "Product")
 {
     <div class="product-tile-price">

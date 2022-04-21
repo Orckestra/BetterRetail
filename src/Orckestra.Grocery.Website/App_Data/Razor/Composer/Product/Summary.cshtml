@@ -63,7 +63,7 @@
                 <div class="mb-1 w-50" property="offers" typeof="Offer">
                     @ProductPrice()
                 </div>
-                
+
                 @ProductHelpers.AddToCartWithQuantity(true)
             </div>
         </div>
@@ -79,22 +79,22 @@
 
 @helper DisplayName()
 {
-  if (IsWithoutVariants())
-  {
-    <h1>@Model.DisplayName</h1>
-  }
-  else
-  {
-    var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
-
-    foreach (var group in displayNames)
+    if (IsWithoutVariants())
     {
-      var ids = group.Select(v => v.Id).ToArray();
-      <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
+        <h1>@Model.DisplayName</h1>
     }
-    <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
-   }
- }
+    else
+    {
+        var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
+
+        foreach (var group in displayNames)
+        {
+            var ids = group.Select(v => v.Id).ToArray();
+            <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
+        }
+        <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
+    }
+}
 
 
 @helper Sku()
@@ -104,8 +104,9 @@
 
 @helper BrandName()
 {
-    if(!string.IsNullOrWhiteSpace(Model.Brand)) {
-    <div class="h5 brand mb-1" property="brand" data-qa="product-brand">@Model.Brand</div>
+    if (!string.IsNullOrWhiteSpace(Model.Brand))
+    {
+        <div class="h5 brand mb-1" property="brand" data-qa="product-brand">@Model.Brand</div>
     }
 }
 
@@ -131,7 +132,7 @@
                     <span class="product-price">{{Product.ListPrice}}</span><span v-if="Product.IsWeightedProduct">@Html.Localize("ProductPage", "L_Per"){{Product.ProductUnitSize}}@extendedVM.ProductUnitMeasure</span>
                 </small>
                 <del v-if="Product.IsPriceDiscounted" class="mt-1" v-bind:class="{'order-1 d-block w-100' : Product.IsPriceDiscounted}">{{Product.DefaultListPrice}}</del>
-                
+
                 <div v-if="PricePerUnit" class="mt-1 unit-price" v-bind:class="{'order-3 ml-auto' : Product.IsPriceDiscounted}">
                     <span v-if="IsPricePerUnitZero">@Html.Localize("ProductPage", "L_LessThan") {{PricePerUnit.replace('0.00', '0.01')}}</span>
                     <span v-else="v-else">{{PricePerUnit}}</span>
@@ -147,13 +148,11 @@
 @helper DisplayFormat()
 {
     var extendedVM = Model.AsExtensionModel<IGroceryProductViewModel>();
-    var hasUnitValues = extendedVM.ProductUnitQuantity > 0 && extendedVM.ProductUnitSize > 0 && !string.IsNullOrWhiteSpace(extendedVM.ProductUnitMeasure);
 
-    if(hasUnitValues){
-        var isSingleUnit = (extendedVM.ProductUnitQuantity == 1);
-        var unitQuantity = (isSingleUnit) ? "" : extendedVM.ProductUnitQuantity +" x ";
-        var unitQuantitySuffix = (isSingleUnit && extendedVM.IsWeightedProduct) ? Html.Localize("General", "L_EachAbbrev") : "";
-        var unitSize = (extendedVM.IsWeightedProduct) ? Html.Localize("ProductPage", "L_Approx") + " " + extendedVM.ProductUnitSize + extendedVM.ProductUnitMeasure : extendedVM.ProductUnitSize + extendedVM.ProductUnitMeasure;
-        <p class="unit-weight mb-2">@unitQuantity @unitSize @unitQuantitySuffix</p>
+    if (extendedVM.Format != null)
+    {
+        <p class="unit-weight mb-2">
+            @extendedVM.Format
+        </p>
     }
 }

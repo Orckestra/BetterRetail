@@ -20,11 +20,10 @@ module Orckestra.Composer {
                 el: '#' + vueId,
 
                 data: {
-                    Items: [],
-                    ...this.context.viewModel
+                    Items: []
                 },
                 mounted() {
-
+                    this.Items = this.context.viewModel.Items;
                 },
                 computed: {
                     Total() {

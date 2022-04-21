@@ -60,8 +60,9 @@
                class="p text-default-font">
                 {{Product.DisplayName}}
             </a>
-
-            @ProductHelpers.DisplayFormat()
+            <div v-if="Product.Format" class="product-tile-format">
+                {{Product.Format}}
+            </div>
         </div>
         @ProductHelpers.PriceBasedOnUnitMeasure()
         @if (ShowAddToCartButton)

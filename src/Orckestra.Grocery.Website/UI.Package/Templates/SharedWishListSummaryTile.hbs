@@ -39,21 +39,9 @@
             {{/if}}
             <a class="p text-default-font" data-qa="wishlist-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
             {{!-- TODO Add Unit Values to ViewModel --}}
-            {{#if HasUnitValues}}
+            {{#if Format}}
                 <div class="product-tile-format">
-                    {{#if IsUnit}}
-                        {{#if IsWeightedProduct}}
-                            <span> {{Localize 'ProductPage' 'L_Approx'}} {{ProductUnitSize}}{{ProductUnitMeasure}} {{Localize 'General' 'L_EachAbbrev'}}</span>
-                        {{else}}
-                            <span>{{ProductUnitSize}}{{ProductUnitMeasure}}</span>
-                        {{/if}}
-                    {{else}}
-                        {{#if IsWeightedProduct}}
-                            <span>{{ProductUnitQuantity}} x {{Localize 'ProductPage' 'L_Approx'}} {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
-                        {{else}}
-                            <span>{{ProductUnitQuantity}} x {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
-                        {{/if}}
-                    {{/if}}
+                    {{Format}}
                 </div>
             {{/if}}
         </div>

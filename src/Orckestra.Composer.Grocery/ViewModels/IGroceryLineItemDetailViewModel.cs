@@ -32,6 +32,7 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// <summary>
         /// Gets or sets the product unit measure
         /// </summary>
+        [Lookup(LookupType.Product, "UnitOfMeasure")]
         [MapTo("Product.ProductUnitMeasure")]
         string ProductUnitMeasure { get; set; }
 
@@ -47,9 +48,10 @@ namespace Orckestra.Composer.Grocery.ViewModels
         [MapTo("Product.UnitOfMeasure")]
         string UnitOfMeasure { get; set; }
 
-        bool HasUnitValues { get; set; }
-
-        bool IsSingleUnit { get; set; }
+        /// <summary>
+        /// Gets or sets the product Format
+        /// </summary>
+        string Format { get; set; }
 
         /// <summary>
         /// Gets or sets the product Promotional Ribbon

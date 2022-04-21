@@ -37,50 +37,49 @@
 </head>
 <body>
     <div data-oc-controller="MyAccount.MyWishList"
-         data-context="@JsonConvert.SerializeObject(vm)"
          data-vueid="@VueId"
-         id="@VueId"
-         v-cloak="true">
-
-        <div data-templateid="WishList" class="card">
-            <div class="card-header  clearfix">
-                <h3 class="float-left">@Html.Localize("MyAccount", "T_WishList")</h3>
-                <div class="float-right  wishlist-count  lead">
-                    <strong><span class="wishlist-header-count navbar-count">{{Total}}</span></strong>&#160;@Html.Localize("MyAccount", "T_WishListCount")
-                </div>
-            </div>
-
-            <div class="card-body">
-                <div class="wishlist-share">
-                    <p>@Html.Localize("MyAccount", "L_ShareWishListText")</p>
-                    <div v-bind:class="{'inactive': !Total}">
-                        <div class="form-group row">
-                            <div class="col-12  col-md-6  col-lg-9">
-                                <input id="txtShareUrl" type="text" class="form-control" placeholder="@Html.Localize("MyAccount", "P_ShareWishListCopyLink")" v-bind:value="ShareUrl" />
-                            </div>
-                            <div class="col-12  col-md-6  col-lg-3">
-                                <br class="d-block d-sm-none" />
-
-                                <button type="submit"
-                                        v-on:click="copyShareUrl(ShareUrl)"
-                                        class="btn btn-primary">
-                                    @Html.Localize("MyAccount", "B_ShareWishListCopyLink")
-                                </button>
-                            </div>
-                        </div>
+         data-context="@JsonConvert.SerializeObject(vm)">
+        <div id="@VueId" v-cloak="true">
+            <div data-templateid="WishList" class="card">
+                <div class="card-header  clearfix">
+                    <h3 class="float-left">@Html.Localize("MyAccount", "T_WishList")</h3>
+                    <div class="float-right  wishlist-count  lead">
+                        <strong><span class="wishlist-header-count navbar-count">{{Total}}</span></strong>&#160;@Html.Localize("MyAccount", "T_WishListCount")
                     </div>
                 </div>
 
-                <template v-if="Total">
-                    <div class="row">
-                        <div v-for="item in Items" class="col-12 col-md-4 mb-2">
-                            @SummaryTile("item")
+                <div class="card-body">
+                    <div class="wishlist-share">
+                        <p>@Html.Localize("MyAccount", "L_ShareWishListText")</p>
+                        <div v-bind:class="{'inactive': !Total}">
+                            <div class="form-group row">
+                                <div class="col-12  col-md-6  col-lg-9">
+                                    <input id="txtShareUrl" type="text" class="form-control" placeholder="@Html.Localize("MyAccount", "P_ShareWishListCopyLink")" v-bind:value="ShareUrl" />
+                                </div>
+                                <div class="col-12  col-md-6  col-lg-3">
+                                    <br class="d-block d-sm-none" />
+
+                                    <button type="submit"
+                                            v-on:click="copyShareUrl(ShareUrl)"
+                                            class="btn btn-primary">
+                                        @Html.Localize("MyAccount", "B_ShareWishListCopyLink")
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </template>
-                <template v-else="v-else">
-                    @Html.Raw(emptyWishListContent.Body)
-                </template>
+
+                    <template v-if="Total">
+                        <div class="row">
+                            <div v-for="item in Items" class="col-12 col-md-4 mb-2">
+                                @SummaryTile("item")
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else="v-else">
+                        @Html.Raw(emptyWishListContent.Body)
+                    </template>
+                </div>
             </div>
         </div>
     </div>
@@ -120,17 +119,8 @@
                 <a class="p text-default-font" data-qa="wishlist-product-title" v-bind:href="@(entity).ProductUrl"
                    v-bind:title="@(entity).ProductSummary.DisplayName" v-bind:data-productId="@(entity).ProductId">{{@(entity).ProductSummary.DisplayName}}</a>
 
-                <div class="product-tile-format" v-if="@(entity).Bag.HasUnitValues">
-                    <span v-if="!@(entity).Bag.IsSingleUnit">
-                        {{@(entity).Bag.ProductUnitQuantity + " x "}}
-                    </span>
-                    <span v-if="@(entity).Bag.IsWeightedProduct">
-                        @Html.Localize("ProductPage", "L_Approx")
-                    </span>
-                    {{@(entity).Bag.ProductUnitSize}}{{@(entity).Bag.ProductUnitMeasure}}
-                    <span v-if="@(entity).Bag.IsSingleUnit &amp;&amp; @(entity).Bag.IsWeightedProduct">
-                        @Html.Localize("General", "L_EachAbbrev")
-                    </span>
+                <div class="product-tile-format" v-if="@(entity).Bag.Format">
+                    {{@(entity).Bag.Format}}
                 </div>
             </div>
             <div class="product-tile-price">
