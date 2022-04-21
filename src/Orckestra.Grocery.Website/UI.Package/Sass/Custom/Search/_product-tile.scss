@@ -100,6 +100,12 @@
         @include media-breakpoint-down(xs) {
             top: unset;
             bottom: -17px;
+            &.list-unstyled li {
+                display: inline-block;
+                & + li {
+                    margin-left: $spacer/2;
+                }
+            }
         }
     }
     .product-tile-price {
