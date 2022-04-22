@@ -96,7 +96,7 @@ module Orckestra.Composer {
                             }
 
                             product.HasUnitValues = PriceHelper.HasUnitValues(product);
-                            product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
+                            product.PricePerUnit = PriceHelper.PricePerUnit(product.IsOnSale ? product.DisplaySpecialPrice :product.DisplayListPrice,
                                 product.ProductUnitQuantity,
                                 product.ProductUnitSize,
                                 product.ConvertedVolumeMeasurement
