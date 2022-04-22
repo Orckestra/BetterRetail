@@ -27,7 +27,7 @@ namespace Orckestra.Composer.Repositories
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
-            if (!param.CustomProfileIds.Any()) return null;
+            if (!param.CustomProfileIds.Any()) throw new ArgumentNullException(nameof(param.CustomProfileIds));
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.CustomProfiles)
             {
