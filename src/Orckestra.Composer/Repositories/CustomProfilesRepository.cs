@@ -23,10 +23,13 @@ namespace Orckestra.Composer.Repositories
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
-        public async Task<List<CustomProfile>> GetProfileInstances(GetCustomProfilesParam param)
+        public virtual async Task<List<CustomProfile>> GetProfileInstances(GetCustomProfilesParam param)
         {
-            if (param == null || !param.CustomProfileIds.Any()) return null;
-            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Scopes)
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            if (!param.CustomProfileIds.Any()) return null;
+
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.CustomProfiles)
             {
                 Scope = param.Scope,
                 Key = JsonConvert.SerializeObject(param.CustomProfileIds)
@@ -41,7 +44,7 @@ namespace Orckestra.Composer.Repositories
             return result;
         }
 
-        public Task BulkUpdateProfiles(BulkUpdateProfilesRequest request)
+        public virtual Task BulkUpdateProfiles(BulkUpdateProfilesRequest request)
         {
             return OvertureClient.SendAsync(request);
         }
