@@ -9,7 +9,6 @@ namespace Orckestra.Composer.ContentSearch.Parameters
 {
     public class GetContentSearchParameter
     {
-        public string BaseUrl { get; set; }
         public string SearchQuery { get; set; }
         public bool IsCorrectedSearchQuery { get; set; }
         public string CorrectedSearchQuery { get; set; }
@@ -17,7 +16,6 @@ namespace Orckestra.Composer.ContentSearch.Parameters
 
         public string SortDirection { get; set; }
         public string[] QueryKeys { get; set; }
-        public string[] Facets { get; set; }
         public CultureInfo Culture { get; set; }
         public int PageSize { get; set; }
 

@@ -411,12 +411,12 @@ namespace Orckestra.Composer.Search.Services
 
             return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
         }
-        private static GetProductMainImagesParam GetImagesParam(List<ProductDocument> documnets)
+        private static GetProductMainImagesParam GetImagesParam(List<ProductDocument> documents)
         {
             return new GetProductMainImagesParam
             {
                 ImageSize = SearchConfiguration.DefaultImageSize,
-                ProductImageRequests = documnets
+                ProductImageRequests = documents
                     .Select(document => new ProductImageRequest
                     {
                         ProductId = document.ProductId,

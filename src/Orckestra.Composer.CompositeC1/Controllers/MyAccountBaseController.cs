@@ -132,28 +132,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult WishList(XhtmlDocument emptyWishListContent)
-        {
-            var vm = WishListViewService.GetWishListViewModelAsync(new GetCartParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.WishlistCartName,
-                ExecuteWorkflow = CartConfiguration.WishListExecuteWorkflow,
-                WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
-
-            if (vm != null && vm.TotalQuantity == 0 && emptyWishListContent != null)
-            {
-                return View("WishListContainer", new {TotalQuantity = 0, EmptyContent = emptyWishListContent.Body});
-            }
-
-            return View("WishListContainer", vm);
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult RecurringSchedule()
         {
             var vm = RecurringOrderTemplatesViewService.GetRecurringOrderTemplatesViewModelAsync(new GetRecurringOrderTemplatesParam {

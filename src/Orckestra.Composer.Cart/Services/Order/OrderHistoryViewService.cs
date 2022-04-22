@@ -23,7 +23,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
-using System.Net;
 
 namespace Orckestra.Composer.Cart.Services.Order
 {
@@ -85,7 +84,6 @@ namespace Orckestra.Composer.Cart.Services.Order
             CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
             EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
             CheckoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
-
         }
 
         /// <summary>

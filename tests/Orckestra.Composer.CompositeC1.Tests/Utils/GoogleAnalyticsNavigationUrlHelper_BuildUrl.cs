@@ -14,6 +14,7 @@ using Orckestra.Composer.CompositeC1.Tests.Mocks;
 using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Mappers;
+using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Utils
 {
@@ -35,15 +36,15 @@ namespace Orckestra.Composer.CompositeC1.Tests.Utils
         public void WHEN_requested_MainMenuItems_SHOULD_return_expected_result()
         {
             //Arrange
-            var menuItems = new List<MainMenu>();
-            menuItems.Add(new MainMenuMock { Url = null, DisplayName = "cat1", Id = Guid.NewGuid(), ParentId = null });
-            menuItems.Add(new MainMenuMock { Url = string.Empty, DisplayName = "cat1", Id = Guid.NewGuid(), ParentId = null });
-            menuItems.Add(new MainMenuMock { Url = _customUrl, DisplayName = "cat1", Id = Guid.NewGuid(), ParentId = null });
-            menuItems.Add(new MainMenuMock { Url = _customUrl, DisplayName = "cat2", Id = Guid.NewGuid(), ParentId = null });
-            menuItems.Add(new MainMenuMock { Url = _customUrl, DisplayName = "cat1.1", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1")).Id });
-            menuItems.Add(new MainMenuMock { Url = _customUrl, DisplayName = "cat1.2", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1")).Id });
-            menuItems.Add(new MainMenuMock { Url = _customUrl, DisplayName = "cat1.1.1", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1.1")).Id });
-            menuItems.Add(new MainMenuMock { Url = _customUrl, DisplayName = "cat1.1.2", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1.1")).Id });
+            var menuItems = new List<MainMenuItemWrapper>();
+            menuItems.Add(new MainMenuItemWrapper { Url = null, DisplayName = "cat1", Id = Guid.NewGuid(), ParentId = null });
+            menuItems.Add(new MainMenuItemWrapper { Url = string.Empty, DisplayName = "cat1", Id = Guid.NewGuid(), ParentId = null });
+            menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1", Id = Guid.NewGuid(), ParentId = null });
+            menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat2", Id = Guid.NewGuid(), ParentId = null });
+            menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1.1", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1")).Id });
+            menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1.2", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1")).Id });
+            menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1.1.1", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1.1")).Id });
+            menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1.1.2", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1.1")).Id });
 
             var expectedResult = new List<string>
             {          

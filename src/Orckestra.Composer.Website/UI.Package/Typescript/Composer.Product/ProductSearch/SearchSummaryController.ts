@@ -3,36 +3,85 @@
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='../../Mvc/IControllerContext.ts' />
 /// <reference path='./Constants/SearchEvents.ts' />
+/// <reference path='../../Composer.ContentSearch/Constants/ContentSearchEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
     export class SearchSummaryController extends Orckestra.Composer.Controller {
         protected vueSearchSummary: Vue;
+        protected vueTabSearchSummary: any;
 
         public initialize() {
             super.initialize();
 
-            const ProductCount = this.context.viewModel.TotalCount;
-            const TotalCount = this.context.container.data('total');
+            const Tabs = this.context.viewModel;
+            const SearchQuery = this.context.container.data('searchquery');
+            const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms'); 
+            const IsProductTab = this.context.container.data('isproducttab');
             const self = this;
+
+            this.vueTabSearchSummary = new Vue({
+                el: '#vueTabSearchSummary',
+                data: {
+                    Tabs,
+                    SearchQuery
+                },
+                mounted() {
+                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
+                       this.Tabs = [...this.Tabs];
+                    });
+                },
+                computed: {
+                    CurrentTab() {
+                        return this.Tabs.find(t => t.IsActive);
+                    },
+                    TabsWithResults() {
+                        return this.Tabs.filter(t => t.Total > 0);
+                    }
+                }
+            });
 
             this.vueSearchSummary = new Vue({
                 el: '#vueSearchSummary',
                 components: {
                 },
                 data: {
-                    ProductCount,
-                    OtherCount: TotalCount > ProductCount ? TotalCount - ProductCount : 0
+                    Tabs,
+                    SearchQuery,
+                    CorrectedSearchTerms,
+                    ProductsLoading: false,
+                    ContentLoading: false
                 },
                 mounted() {
+                    self.eventHub.subscribe(SearchEvents.SearchRequested, () => this.ProductsLoading = true);
                     self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({data}) => {
+                        this.ProductsLoading = false;
+                        this.Tabs.find(t => t.IsProducts).Total = data.ProductSearchResults.TotalCount;
+                        this.Tabs = [...this.Tabs];
+                        this.CorrectedSearchTerms = data.ProductSearchResults.CorrectedSearchTerms;
                         this.ProductCount = data.ProductSearchResults.TotalCount;
+                    });
+
+                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({data}) => {
+                        this.ContentLoading = false;
+                        data.Tabs.forEach(x => {
+                            const foundTab = this.Tabs.find(tab => tab.Title === x.Title)
+                            if(foundTab) {
+                                foundTab.Total = x.Total;
+                                foundTab.TabUrl = x.TabUrl;
+                            }
+                        })
+                        this.Tabs = [...this.Tabs];
                     });
                 },
                 computed: {
-                    totalCount() {
-                        return this.ProductCount + this.OtherCount;
+                    Loading() { return this.ProductsLoading || this.ContentLoading },
+                    TotalCount() {
+                        return this.Tabs.reduce((accum, item) => accum + item.Total, 0);
+                    },
+                    IsProductsCorrected() {
+                        return this.CorrectedSearchTerms && this.ProductCount > 0 && IsProductTab;
                     }
                 },
             });
