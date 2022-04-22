@@ -30,7 +30,6 @@
     var cuisineType = DataFacade.GetData<ICuisineType>().FirstOrDefault(l => l.Id == Item.CuisineType);
     var inRecipeList = false; // later can be used with actual RecipeList
     var ingredientsLists = RecipesViewService.GetIngedientsListsViewModel(Item.Id);
-
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
@@ -42,7 +41,7 @@
     }
 </head>
 <body>
-    <div data-oc-controller="Grocery.RecipeDetails" data-context="@JsonConvert.SerializeObject(ingredientsLists)" data-searchUrl="@RecipeUrlProvider.GetSearchPageUrl(Thread.CurrentThread.CurrentCulture)">
+    <div data-oc-controller="Grocery.RecipeDetails" data-context="@JsonConvert.SerializeObject(ingredientsLists)" data-recipeId="@Item.Id" data-searchUrl="@RecipeUrlProvider.GetSearchPageUrl(Thread.CurrentThread.CurrentCulture)">
         <div id="vueRecipeDetails">
             <div class="row">
                 <div class="col-12">
@@ -103,10 +102,10 @@
                     @if (!string.IsNullOrWhiteSpace(Item.Image))
                     {
                         <div class="recipe-img">
-                            <img src="/media(@Item.Image)?h=520" />
+                            <img src="/media(@Item.Image)?h=520"/>
                             <div class="recipe-like">
-                                <a data-qa="add-to-recipelist" title="@Html.Localize("MyAccount", "H_AddToRecipeList")" class="add-to-recipelist p-0">
-                                    <i class="fa  fa-heart-o"></i>
+                                <a data-qa="add-to-recipelist" title="@Html.Localize("MyAccount", "H_AddToRecipeList")" v-on:click="setFavorite" class="add-to-recipelist p-0">
+                                    <i class="fa" v-bind:class="{'fa-heart text-danger' : IsRecipeFavorite, 'fa-heart-o' : !IsRecipeFavorite}"></i>
                                 </a>
                             </div>
                         </div>

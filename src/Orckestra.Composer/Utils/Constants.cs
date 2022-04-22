@@ -29,5 +29,8 @@
 
         public const string DefaultOrderCancellationReason = "Cancelled at Customer request";
         public const string RequestedOrderCancellationDatePropertyBagKey = "RequestedOrderCancellationDate";
+        public const string CustomerProfileRecipeFavorites = "CustomerRecipeFavorites";
+        public const string CustomProfileRecipeFavorites = "RecipeFavorites";
+        public const string Customer = "CUSTOMER";
     }
 }
