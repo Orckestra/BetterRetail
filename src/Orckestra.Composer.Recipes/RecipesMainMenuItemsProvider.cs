@@ -9,12 +9,13 @@ using Orckestra.Composer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Composite.Core.Routing;
 
 namespace Orckestra.Composer.Recipes
 {
     public class RecipesMainMenuItemsProvider : IMainMenuItemsProvider
     {
-        protected ICacheStore<Guid, IEnumerable<MainMenuItemWrapper>> Cache { get; }
+        protected ICacheStore<string, IEnumerable<MainMenuItemWrapper>> Cache { get; }
         public IComposerContext ComposerContext { get; set; }
 
         protected IPageService PageService { get; }
@@ -30,7 +31,7 @@ namespace Orckestra.Composer.Recipes
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             RecipeUrlProvider = recipeUrlProvider ?? throw new ArgumentNullException(nameof(recipeUrlProvider));
-            Cache = cacheService.GetStoreWithDependencies<Guid, IEnumerable<MainMenuItemWrapper>>("Recipes Menu Items",
+            Cache = cacheService.GetStoreWithDependencies<string, IEnumerable<MainMenuItemWrapper>>("Recipes Menu Items",
                new CacheDependentEntry<IRecipe>(),
                new CacheDependentEntry<IRecipeMealType>(),
                new CacheDependentEntry<IMainMenuProviderConfiguration>()
@@ -39,7 +40,9 @@ namespace Orckestra.Composer.Recipes
 
         public IEnumerable<MainMenuItemWrapper> GetMainMenuItems(Guid websiteId)
         {
-            return Cache.GetOrAdd(websiteId, _ => LoadMenuItems(websiteId));
+            var key =
+                $"{websiteId}.{LocalizationScopeManager.CurrentLocalizationScope.Name}.{new UrlSpace().ForceRelativeUrls}";
+            return Cache.GetOrAdd(key, _ => LoadMenuItems(websiteId));
         }
 
         private IEnumerable<MainMenuItemWrapper> LoadMenuItems(Guid websiteId)
