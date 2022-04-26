@@ -201,7 +201,7 @@
 
 @helper ShowButWeFindInTeaser()
 {
-    <div class="content-tab-teaser" v-if="!IsMultiKeywords">
+    <div class="content-tab-teaser">
         <div class="header" v-for="tab in TabsWithResults" v-if="tab.SearchResults">
 
             <h3 class="title d-inline-flex  mt-3">@Html.Localized("List-Search", "T_SearchResultsFoundIn", "{{tab.Title}}", "{{tab.Total}}")</h3>

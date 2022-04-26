@@ -595,40 +595,28 @@ namespace Orckestra.Composer.Cart.Services
         {
             return PaymentProviderFactory.ResolveProvider(paymentProviderName);
         }
-        public virtual async Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param)
+
+        public virtual async Task<CustomerPaymentMethodsViewModel> GetCustomerPaymentMethodsViewModelAsync(GetCustomerPaymentMethodListViewModelParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
-            var tasks = param.ProviderNames.Select(pName => PaymentRepository.GetCustomerPaymentMethodForProviderAsync(new GetCustomerPaymentMethodsForProviderParam
+            var allMethods = await PaymentRepository.GetPaymentMethodsAsync(new GetPaymentMethodsParam
             {
+                CartName = CartConfiguration.ShoppingCartName,
+                CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                ScopeId = param.ScopeId,
-                ProviderName = pName
-            }));
+                Scope = param.ScopeId,
+                ProviderNames = param.ProviderNames
 
-            try
-            {
-                await Task.WhenAll(tasks).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                Log.Warn($"GetCustomerPaymentMethodsRequest failed. {e.ToString()}");
-            }
+            }).ConfigureAwait(false);
 
-            var savedCreditCardVm = tasks
-                .Where(t => !t.IsFaulted)
-                .SelectMany(t => t.Result)
-                .Select(s => CartViewModelFactory.MapSavedCreditCard(s, param.CultureInfo)).ToList();
+            var savedCreditCardVm = allMethods.Where(m => m.Type == PaymentMethodType.SavedCreditCard)
+               .Select(m => CartViewModelFactory.MapSavedCreditCard(m, param.CultureInfo)).ToList();
 
-            List<Task> taskList = new List<Task>();
-            foreach (var vm in savedCreditCardVm)
-            {
-                taskList.Add(IsSavedCardUsedInRecurringOrders(vm, param.CultureInfo, param.CustomerId, param.ScopeId));
-            }
+            var isUsedInRecurringTasks = savedCreditCardVm.Select(vm => IsSavedCardUsedInRecurringOrders(vm, param.CultureInfo, param.CustomerId, param.ScopeId)).ToList();
+            await Task.WhenAll(isUsedInRecurringTasks).ConfigureAwait(false);
 
-            await Task.WhenAll(taskList).ConfigureAwait(false);
-
-            return new CustomerPaymentMethodListViewModel
+            return new CustomerPaymentMethodsViewModel
             {
                 SavedCreditCards = savedCreditCardVm
                 //AddWalletUrl
