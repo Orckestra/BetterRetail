@@ -40,8 +40,9 @@ namespace Orckestra.Composer.Recipes
 
         public IEnumerable<MainMenuItemWrapper> GetMainMenuItems(Guid websiteId)
         {
+            //  PageUrls.BuildUrl depends from culture info and forceRelativeUrls
             var key =
-                $"{websiteId}.{LocalizationScopeManager.CurrentLocalizationScope.Name}.{new UrlSpace().ForceRelativeUrls}";
+                $"{websiteId}.{ComposerContext.CultureInfo}.{new UrlSpace().ForceRelativeUrls}";
             return Cache.GetOrAdd(key, _ => LoadMenuItems(websiteId));
         }
 
