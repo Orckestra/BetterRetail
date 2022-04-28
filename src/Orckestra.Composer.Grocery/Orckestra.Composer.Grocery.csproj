@@ -182,6 +182,7 @@
     <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
     <Compile Include="Repositories\SalesScopeInventoryRepository.cs" />
     <Compile Include="Repositories\SalesScopeCustomerRepository.cs" />
+    <Compile Include="Repositories\SalesScopeCartRepository.cs" />
     <Compile Include="Repositories\SalesScopeOrderRepository.cs" />
     <Compile Include="Repositories\SalesScopePaymentRepository.cs" />
     <Compile Include="Repositories\SalesScopeWishListRepository.cs" />
