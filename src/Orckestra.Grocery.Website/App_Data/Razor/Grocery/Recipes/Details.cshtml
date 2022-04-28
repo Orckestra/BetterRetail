@@ -94,7 +94,8 @@
                     </div>
 
                     <div class="recipe-action-bar mt-2">
-                        <button class="btn btn-outline-secondary"><span class="fa fa-print px-1"></span> @Html.Localize("Recipes", "L_Print")</button>
+                        <div>@Html.Raw(Item.Description)</div>
+                        <button class="btn btn-outline-secondary text-nowrap"><span class="fa fa-print px-1"></span> @Html.Localize("Recipes", "L_Print")</button>
                     </div>
                 </div>
 
