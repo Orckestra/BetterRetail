@@ -16,6 +16,7 @@ module Orckestra.Composer {
             super.initialize();
 
             const Tabs = this.context.viewModel;
+            const SuggestedTabs = this.context.container.data('suggestedtabs')
             const SearchQuery = this.context.container.data('searchquery');
             const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms');
             const ProductsCount = this.context.container.data('productstotal');
@@ -33,7 +34,8 @@ module Orckestra.Composer {
                     CorrectedSearchTerms,
                     ProductsCount,
                     ProductsLoading: false,
-                    ContentLoading: false
+                    ContentLoading: false,
+                    SuggestedTabs
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.SearchRequested, () => this.ProductsLoading = true);

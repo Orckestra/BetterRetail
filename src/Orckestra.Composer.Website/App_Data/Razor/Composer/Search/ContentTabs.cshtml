@@ -116,7 +116,7 @@
                     <div id="vueTabSearchSummary">
                         <template v-if="CurrentTab.Total == 0">
                             <p>@Html.Localized("List-Search", "WeAreSorry", "{{SearchQuery}}", currentTab.Title)</p>
-                            @ShowButWeFindInVue()
+                            @ShowButWeFindIn("TabsWithResults")
                             @ShowButWeFindInTeaser()
                         </template>
                     </div>
@@ -157,13 +157,14 @@
          data-сorrectedSearchTerms="@ProductSearchResults.CorrectedSearchTerms"
          data-productsTotal="@ProductSearchResults.TotalCount"
          data-searchQuery="@SearchRequestContext.SearchQuery"
+         data-suggestedTabs="@JsonConvert.SerializeObject(vm.SuggestedTabs)"
          data-total="@vm.Total"
          v-cloak="true">
         <div class="container-md">
             <template v-if="IsProductsCorrected">
                 <h2>@Html.Localized("List-Search", "L_NoResultsFor", "{{SearchQuery}}")</h2>
                 <p class="m-0">@Html.Localized("List-Search", "WeAreSorry", "{{SearchQuery}}", vm.ActiveTab?.Title)</p>
-                @ShowButWeFindIn(vm.SuggestedTabs)
+                @ShowButWeFindIn("SuggestedTabs")
                 <h1 class="mt-4">@(Html.Localized("List-Search", "L_SearchResultsCorrected", "{{TotalCount}}", "{{CorrectedSearchTerms}}"))</h1>
             </template>
             <template v-else="v-else">
@@ -190,33 +191,17 @@
     </div>
 }
 
-@helper ShowButWeFindInVue()
+@helper ShowButWeFindIn(string vueBinding = "TabsWithResults")
 {
-    <p v-if="TabsWithResults.length > 0">
+    <p v-if="@(vueBinding).length > 0">
         @Html.Localize("List-Search", "ButWeFind_Part1")
-        <span v-for="tab in TabsWithResults">
+        <span v-for="(tab, index) in @(vueBinding)">
             <a v-bind:href="tab.TabUrl">{{tab.Title}} ({{tab.Total}})</a>
+            <span v-if="index != (@(vueBinding).length -1)">
+                @Html.Localize("List-Search", "ButWeFind_Separator")
+            </span>
         </span>
         @Html.Localized("List-Search", "ButWeFind_Part2", "{{SearchQuery}}")
-    </p>
-}
-
-@helper ShowButWeFindIn(List<ContentSearchTabViewModel> tabs)
-{
-    if (tabs == null || !tabs.Any()) { return; }
-    <p>
-        @Html.Localize("List-Search", "ButWeFind_Part1")
-        @for (var i = 0; i < tabs.Count; i++)
-        {
-            var tab = tabs[i];
-            <a href="@tab.TabUrl">@tab.Title (@tab.Total)</a>
-
-            if (i < tabs.Count - 1)
-            {
-                <text>@Html.Localize("List-Search", "ButWeFind_Separator")</text>
-            }
-        }
-        @Html.Localized("List-Search", "ButWeFind_Part2", SearchRequestContext.SearchQuery)
     </p>
 }
 
