@@ -1,0 +1,72 @@
+﻿@inherits RazorFunction
+@using Newtonsoft.Json
+@using Orckestra.Composer.Recipes.DataTypes
+@using Orckestra.Composer.Recipes.Services
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "My Favorites"; }
+    }
+
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    public bool CurrentSite { get; set; }
+
+    [FunctionParameter(Label = "Empty Recipe Favorites List Content", Help = "That content will be shown when recipe favorites List is Empty")]
+    public XhtmlDocument emptyRecipeFavoritesContent { get; set; }
+
+    public IRecipesViewService RecipesViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+
+}
+@{
+    var difficulties = DataFacade.GetData<IDifficulty>().ToLookup(_ => _.Id.ToString());
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div>
+       <div data-oc-controller="Grocery.RecipeMyFavoritesList"
+            id="vueRecipeMyFavoriteList"
+            v-cloak="true"
+            data-difficulties="@JsonConvert.SerializeObject(difficulties, new Newtonsoft.Json.Converters.StringEnumConverter())">
+           <div class="card">
+               <div class="card-header  clearfix">
+                   <h3 class="float-left">
+                       @Html.Localize("MyAccount", "T_MyRecipeFavorites")
+                   </h3>
+                   <div class="float-right m-0 lead">
+                       <strong><span class="recipelist-header-count navbar-count">{{TotalCount}}</span></strong>&#160;@Html.Localize("MyAccount", "T_RecipeListCount")
+                   </div>
+                   </div>
+                   <div class="card-body">
+                       <template v-if="TotalCount > 0">
+                           <div class="row filters-row mb-2" v-if="Pagination.PagesCount > 1">
+                                   @SearchHelpers.PaginationDropdownByCount()
+                           </div>
+                           <div class="row">
+                               <div v-for="(contentItem, index) in Recipes" class="col-12 col-sm-4 mb-4">
+                                   @RecipeHelpers.SearchTile(showLikeIcon: false, showDeleteIcon: true)
+                               </div>
+                           </div>
+                           <div class="row">
+                               <div class="col-12 d-block pt-2" v-if="Pagination.PagesCount > 1">
+                                   @SearchHelpers.PaginationByCount()
+                               </div>
+                           </div>
+                       </template>
+                       <template v-else="v-else">
+                           @Html.Raw(emptyRecipeFavoritesContent.Body)
+                       </template>
+                   </div>
+               </div>
+           </div>
+    </div>
+</body>
+</html>
+
+

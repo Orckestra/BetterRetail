@@ -1,6 +1,8 @@
 ﻿using Composite.Core.Threading;
 using Composite.Data;
+using Composite.Search;
 using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.Composer.ContentSearch.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Recipes.DataTypes;
 using Orckestra.Composer.Recipes.Parameters;
@@ -9,14 +11,15 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Customers.CustomProfiles;
+using Orckestra.Overture.ServiceModel.Requests.Customers.CustomProfiles;
+using Orckestra.Search.WebsiteSearch;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Overture.ServiceModel.Customers;
-using Orckestra.Overture.ServiceModel.Customers.CustomProfiles;
-using Orckestra.Overture.ServiceModel.Requests.Customers.CustomProfiles;
 
 namespace Orckestra.Composer.Recipes.Services
 {
@@ -28,13 +31,15 @@ namespace Orckestra.Composer.Recipes.Services
         protected IPageService PageService { get; }
         protected ISiteConfiguration SiteConfiguration { get; }
         protected IWebsiteContext WebsiteContext { get; }
+        protected IContentSearchViewService ContentSearchViewService { get; private set; }
 
         public RecipesViewService(IComposerContext composerContext,
             ICustomerRepository customerRepository,
             ICustomProfilesRepository customProfileRepository,
             IPageService pageService,
             ISiteConfiguration siteConfiguration,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IContentSearchViewService contentSearchViewService)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
@@ -42,6 +47,7 @@ namespace Orckestra.Composer.Recipes.Services
             PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            ContentSearchViewService = contentSearchViewService ?? throw new ArgumentNullException(nameof(contentSearchViewService));
         }
 
         public virtual List<IngredientsListViewModel> GetIngedientsListsViewModel(Guid recipeId)
@@ -70,7 +76,73 @@ namespace Orckestra.Composer.Recipes.Services
             return listWithIngredients;
         }
 
-        public virtual async Task<FavoritesViewModel> GetCustomerRecipeFavorites(GetCustomerRecipeFavoritesParam param)
+        public virtual async Task<RecipeSearchResultsViewModel> GetCustomerRecipeFavoriteSearchResultsViewModel(GetCustomerRecipeFavoriteSearchResultsParam param)
+        {
+            var customerRecipeFavorites = await GetCustomerRecipeFavorites(param.Scope, param.CustomerId, param.Culture).ConfigureAwait(false);
+            
+            if (!customerRecipeFavorites.Any())
+            {
+                return new RecipeSearchResultsViewModel();
+            }
+
+            param.FavoriteIds = customerRecipeFavorites.Select(item => item.ToString()).ToList();
+
+            var searchQuery = param.SearchQuery?.Trim().ToLower();
+            var searchRequest = GetSearchRequestForRecipeFavorites(param, searchQuery);
+            var result = WebsiteSearchFacade.Search(searchRequest);
+
+            using (var conn = new DataConnection(param.Culture))
+            {
+                var searchResult = new RecipeSearchResultsViewModel()
+                {
+                    PagesCount = (int)Math.Ceiling((decimal)result.ResultsFound / param.PageSize),
+                    Total = result.ResultsFound,
+                    SearchResults = result.Entries.Select(x => ContentSearchViewService.GetSearchResultsEntryViewModel(x)).ToList(),
+                };
+                return searchResult;
+
+            }
+        }
+        
+        protected virtual WebsiteSearchQuery GetSearchRequestForRecipeFavorites(GetCustomerRecipeFavoriteSearchResultsParam param, string searchQuery)
+        {
+            // keywords
+            var sq = searchQuery == "*" ? "*:*" : searchQuery;
+            string[] keywords = sq == null ? null : sq?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // facets
+            var facets = new List<WebsiteSearchQueryFacet>();
+            if (param.FavoriteIds != null && param.FavoriteIds.Any())
+            {
+                facets.Add(
+                    new WebsiteSearchQueryFacet()
+                    {
+                        Name = "IRecipe.Id",
+                        Selections = param.FavoriteIds.ToArray()
+                    });
+            }
+
+            var sortOptions = new List<SearchQuerySortOption>();
+            if (!string.IsNullOrEmpty(param.SortDirection) && !string.IsNullOrEmpty(param.SortBy))
+            {
+                var isReverted = param.SortDirection == "desc" ? true : false;
+                sortOptions.Add(new SearchQuerySortOption(param.SortBy, isReverted, SortTermsAs.String));
+            }
+
+            return new WebsiteSearchQuery
+            {
+                Culture = param.Culture,
+                CurrentSiteOnly = true,
+                Keywords = keywords,
+                DataTypes = new [] { typeof(IRecipe) },
+                PageNumber = param.CurrentPage - 1,
+                Facets = facets.ToArray(),
+                PageSize = param.PageSize,
+                SortOptions = sortOptions
+            };
+        }
+
+        public virtual async Task<FavoritesViewModel> GetCustomerRecipeFavoritesViewModel(GetCustomerRecipeFavoritesParam param)
         {
             var signInUrl = GetSignInUrl(param.CultureInfo);
             if (!param.IsAuthenticated)
@@ -81,11 +153,23 @@ namespace Orckestra.Composer.Recipes.Services
                 };
             }
 
+            var customerRecipeFavorites = await GetCustomerRecipeFavorites(param.Scope, param.CustomerId, param.CultureInfo).ConfigureAwait(false);
+
+            var viewModel = new FavoritesViewModel()
+            {
+                SignInUrl = signInUrl,
+                FavoriteIds = customerRecipeFavorites
+            };
+            return viewModel;
+        }
+
+        private async Task<List<Guid>> GetCustomerRecipeFavorites(string scope, Guid customerId, CultureInfo cultureInfo)
+        {
             var customerParam = new GetCustomerByIdParam()
             {
-                Scope = param.Scope,
-                CustomerId = param.CustomerId,
-                CultureInfo = param.CultureInfo
+                Scope = scope,
+                CustomerId = customerId,
+                CultureInfo = cultureInfo
             };
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(customerParam).ConfigureAwait(false);
@@ -96,17 +180,11 @@ namespace Orckestra.Composer.Recipes.Services
 
             if (!customer.PropertyBag.ContainsKey(Constants.CustomerProfileRecipeFavorites))
             {
-                return new FavoritesViewModel();
+                return new List<Guid>();
             }
-            
-            var favoriteIds = ((IEnumerable<Guid>)customer.PropertyBag[Constants.CustomerProfileRecipeFavorites]).ToList();
 
-            var viewModel = new FavoritesViewModel()
-            {
-                SignInUrl = signInUrl,
-                FavoriteIds = favoriteIds
-            };
-            return viewModel;
+            var favoriteIds = ((IEnumerable<Guid>)customer.PropertyBag[Constants.CustomerProfileRecipeFavorites]).ToList();
+            return favoriteIds;
         }
 
         public virtual Task<List<CustomProfile>> GetProfileInstances(GetCustomProfilesParam param)

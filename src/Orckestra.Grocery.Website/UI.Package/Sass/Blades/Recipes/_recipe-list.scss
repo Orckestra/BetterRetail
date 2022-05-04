@@ -8,6 +8,7 @@
         margin-bottom: $spacer*3;
     }
     &-tile {
+        border: solid 1px $gray-400;
         .recipe-info {
             &-icon {
                 font-size: 16px;
@@ -93,4 +94,15 @@ a.add-to-recipelist{
     vertical-align: middle;
     color: #333;
     background-color: white;
+}
+.recipe-tile-delete {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    z-index: 10;
+}
+
+.recipelist-header-count {
+    min-width: $spacer;
+    display: inline-block;
 }

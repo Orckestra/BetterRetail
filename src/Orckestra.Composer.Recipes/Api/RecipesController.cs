@@ -1,14 +1,15 @@
-﻿using Composite.Core;
+﻿using Orckestra.Composer.Providers;
 using Orckestra.Composer.Recipes.Parameters;
 using Orckestra.Composer.Recipes.Services;
-using Orckestra.Composer.Recipes.ViewModels;
+using Orckestra.Composer.Search;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
-using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search.RequestConstants;
 
 namespace Orckestra.Composer.Recipes.Api
 {
@@ -33,12 +34,12 @@ namespace Orckestra.Composer.Recipes.Api
             var param = new GetCustomerRecipeFavoritesParam()
             {
                 Scope = ScopeProvider.DefaultScope,
-                CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
+                CultureInfo = ComposerContext.CultureInfo,
                 IsAuthenticated = ComposerContext.IsAuthenticated
             };
 
-            var viewModel = await RecipesViewService.GetCustomerRecipeFavorites(param).ConfigureAwait(false);
+            var viewModel = await RecipesViewService.GetCustomerRecipeFavoritesViewModel(param).ConfigureAwait(false);
             
             return Ok(viewModel);
         }
@@ -80,6 +81,32 @@ namespace Orckestra.Composer.Recipes.Api
 
             await RecipesViewService.RemoveFavorite(param).ConfigureAwait(false);
             return Ok();
+        }
+
+        [HttpPost]
+        [ActionName("myfavorites")]
+        public virtual async Task<IHttpActionResult> MyFavorites([FromBody] string query)
+        {
+            var queryString = HttpUtility.ParseQueryString(query ?? "");
+            var CurrentPage = int.TryParse(queryString[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
+            var SortDirection = queryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
+            var SortBy = queryString[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
+            var Keywords = queryString[SearchRequestParams.Keywords];
+
+            var recipeSearchVm = await RecipesViewService.GetCustomerRecipeFavoriteSearchResultsViewModel(new GetCustomerRecipeFavoriteSearchResultsParam()
+            {
+                Scope = ScopeProvider.DefaultScope,
+                CustomerId = ComposerContext.CustomerId,
+                Culture = ComposerContext.CultureInfo,
+                PageSize = SearchConfiguration.MaxItemsPerPage,
+                CurrentPage = CurrentPage,
+                SearchQuery = Keywords ?? "*",
+                QueryKeys = queryString?.AllKeys,
+                SortBy = SortBy,
+                SortDirection = SortDirection
+            }).ConfigureAwait(false);
+
+            return Ok(recipeSearchVm);
         }
     }
 }

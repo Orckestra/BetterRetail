@@ -18,5 +18,9 @@ module Orckestra.Composer {
         public removeFavorite(id: string) {
             return ComposerClient.remove(`/api/recipes/removefavorite`, id);
         }
+
+        public getMyFavorites(queryString): Q.Promise<any> {
+            return ComposerClient.post('/api/recipes/myfavorites', queryString);
+        }
     }
 }

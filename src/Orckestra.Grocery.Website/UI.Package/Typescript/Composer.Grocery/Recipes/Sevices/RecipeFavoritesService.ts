@@ -48,6 +48,10 @@ module Orckestra.Composer {
                 });
         }
 
+        public getMyFavorites(quesryString): Q.Promise<any>{
+            return this.recipeFavoritesRepository.getMyFavorites(quesryString);
+        }
+
         public getFreshRecipeFavoritesSummary(): Q.Promise<any> {
             if (!RecipeFavoritesService.GettingFreshRecipeFavoritesSummary) {
 
@@ -102,6 +106,29 @@ module Orckestra.Composer {
         public redirectToSignIn(): Q.Promise<any> {
             return this.getSignInUrl().then(signInUrl => {
                 window.location.href = signInUrl + '?ReturnUrl=' + window.location.href;
+            });
+        }
+
+        public mapSearchResults(searchResults, difficulties, favorites = []) {
+            return searchResults && searchResults.map(item => {
+                const hasTime = item.FieldsBag["IRecipe.CookingTime"] != null || item.FieldsBag["IRecipe.PreparationTime"] != null
+                const cookingTime = Number(item.FieldsBag["IRecipe.CookingTime"]) || 0;
+                const preparationTime = Number(item.FieldsBag["IRecipe.PreparationTime"]) || 0;
+                const difficulty = difficulties[item.FieldsBag["IRecipe.Difficulty"]]
+                const servings = item.FieldsBag["IRecipe.Servings"];
+                const id = item.FieldsBag["IRecipe.Id"];
+                const isFavorite = favorites.indexOf(id) > -1;
+                
+                return {
+                    hasTime,
+                    id,
+                    cookingTime,
+                    preparationTime,
+                    difficulty,
+                    servings,
+                    isFavorite,
+                    ...item
+                }
             });
         }
     }

@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Orckestra.Composer.Parameters;
 
 namespace Orckestra.Composer.Recipes.Services
 {
     public interface IRecipesViewService
     {
         List<IngredientsListViewModel> GetIngedientsListsViewModel(Guid recipeId);
-        Task<FavoritesViewModel> GetCustomerRecipeFavorites(GetCustomerRecipeFavoritesParam param);
+        Task<RecipeSearchResultsViewModel> GetCustomerRecipeFavoriteSearchResultsViewModel(GetCustomerRecipeFavoriteSearchResultsParam param);
+        Task<FavoritesViewModel> GetCustomerRecipeFavoritesViewModel(GetCustomerRecipeFavoritesParam param);
         Task AddFavorite(UpdateFavoriteParam param);
         Task RemoveFavorite(UpdateFavoriteParam param);
         string GetSignInUrl(CultureInfo cultureInfo);

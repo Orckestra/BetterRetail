@@ -25,7 +25,7 @@ module Orckestra.Composer {
 
             let authenticatedPromise = this.membershipService.isAuthenticated();
             let favPromise = this.recipeFavoritesService.getRecipeFavoritesSummary();
-            Q.all([authenticatedPromise, favPromise ]).spread((authVm, {FavoriteIds}) => this.initializeVueComponent(authVm, FavoriteIds));
+            Q.all([authenticatedPromise, favPromise]).spread((authVm, { FavoriteIds }) => this.initializeVueComponent(authVm, FavoriteIds));
         }
 
         private initializeVueComponent(authVm, favorites) {
@@ -67,7 +67,6 @@ module Orckestra.Composer {
                     this.Pagination = this.getPagination(PagesCount);
 
                     this.SearchResults = this.mapSearchResults(SearchResults);
-
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, this.onSearchResultsLoaded);
                 },
                 methods: {
@@ -118,29 +117,10 @@ module Orckestra.Composer {
                         self.sendContentSearchResultsForAnalytics(Total);
                     },
                     mapSearchResults(searchResults) {
-                        return searchResults && searchResults.map(item => {
-                            if (isRecipe) {
-                                const hasTime = item.FieldsBag["IRecipe.CookingTime"] != null || item.FieldsBag["IRecipe.PreparationTime"] != null
-                                const cookingTime = Number(item.FieldsBag["IRecipe.CookingTime"]) || 0;
-                                const preparationTime = Number(item.FieldsBag["IRecipe.PreparationTime"]) || 0;
-                                const difficulty = difficulties[item.FieldsBag["IRecipe.Difficulty"]]
-                                const servings = item.FieldsBag["IRecipe.Servings"];
-                                const id = item.FieldsBag["IRecipe.Id"];
-                                const isFavorite = this.RecipeFavorites.indexOf(id) > -1;
-
-                                return {
-                                    hasTime,
-                                    id,
-                                    isFavorite,
-                                    cookingTime,
-                                    preparationTime,
-                                    difficulty,
-                                    servings,
-                                    ...item
-                                }
-                            }
-                            return item;
-                        });
+                        if (isRecipe) {
+                            return self.recipeFavoritesService.mapSearchResults(searchResults, difficulties, this.RecipeFavorites);
+                        }
+                        return searchResults;
                     },
                     setFavorite(itemId, isFavorite) {
                         if (!this.IsAuthenticated) {

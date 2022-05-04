@@ -12,5 +12,9 @@ module Orckestra.Composer {
         clearCache(): Q.Promise<any>;
 
         redirectToSignIn(): Q.Promise<any>;
+        
+        getMyFavorites(quesryString): Q.Promise<any>;
+        
+        mapSearchResults(searchResults, difficulties, favorites? : string[]);
     }
 }

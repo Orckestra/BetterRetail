@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Recipes.DataTypes
         [StoreFieldType(PhysicalStoreFieldType.Guid)]
         [FieldPosition(0)]
         [RouteSegment(0)]
-        [SearchableField(false, true, false)]
+        [SearchableField(false, true, true)]
         Guid Id { get; set; }
         
         [ImmutableFieldId("92f1af7c-7c15-4f41-939a-82cd036acc63")]

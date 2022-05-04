@@ -12,5 +12,7 @@ module Orckestra.Composer {
         getFavorites();
         
         removeFavorite(id: string);
+
+        getMyFavorites(queryString);
     }
 }

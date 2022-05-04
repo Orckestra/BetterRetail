@@ -78,6 +78,8 @@
     <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IDifficultys_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IDishTypes_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipeMealTypes_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipeSettingsMetas_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipeSettingsMetas_public.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurationMetas_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousels_public.xml" />

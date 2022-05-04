@@ -197,6 +197,7 @@
     <Compile Include="Requests\SetSelectedStoreRequest.cs" />
     <Compile Include="Requests\SetSelectedTimeSlotRequest.cs" />
     <Compile Include="Factory\GroceryProductSearchViewModelFactory.cs" />
+    <Compile Include="Services\GroceryMyAccountViewService.cs" />
     <Compile Include="Services\GroceryRelatedProductViewService.cs" />
     <Compile Include="Services\SalesScopeStoreLocatorViewService.cs" />
     <Compile Include="Services\SalesScopeStoreViewService.cs" />
@@ -253,6 +254,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1F767098-1FBF-4CB9-8637-6529E1CC0B24}</Project>
       <Name>Orckestra.Composer.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.Recipes\Orckestra.Composer.Recipes.csproj">
+      <Project>{b9ac700b-be2a-4e06-8919-2e153012861b}</Project>
+      <Name>Orckestra.Composer.Recipes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
       <Project>{6DEE1972-E64B-43F0-BBAF-04D0AA64DD60}</Project>
