@@ -16,9 +16,11 @@ module Orckestra.Composer {
             super.initialize();
 
             const Tabs = this.context.viewModel;
+            const SuggestedTabs = this.context.container.data('suggestedtabs')
             const SearchQuery = this.context.container.data('searchquery');
             const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms');
-            const IsProductTab = this.context.container.data('isproducttab');
+            const ProductsCount = this.context.container.data('productstotal');
+            const IsProductTab = this.context.container.data('isproducttab') === 'True';
             const self = this;
             this.initializeTabSummaryVue(Tabs, SearchQuery, self);
 
@@ -30,8 +32,10 @@ module Orckestra.Composer {
                     Tabs,
                     SearchQuery,
                     CorrectedSearchTerms,
+                    ProductsCount,
                     ProductsLoading: false,
-                    ContentLoading: false
+                    ContentLoading: false,
+                    SuggestedTabs
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.SearchRequested, () => this.ProductsLoading = true);
@@ -40,7 +44,8 @@ module Orckestra.Composer {
                         this.Tabs.find(t => t.IsProducts).Total = data.ProductSearchResults.TotalCount;
                         this.Tabs = [...this.Tabs];
                         this.CorrectedSearchTerms = data.ProductSearchResults.CorrectedSearchTerms;
-                        this.ProductCount = data.ProductSearchResults.TotalCount;
+                        this.ProductsCount = data.ProductSearchResults.TotalCount;
+                        this.SearchQuery = data.Keywords;
                     });
 
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
@@ -61,7 +66,7 @@ module Orckestra.Composer {
                         return this.Tabs.reduce((accum, item) => accum + item.Total, 0);
                     },
                     IsProductsCorrected() {
-                        return this.CorrectedSearchTerms && this.ProductCount > 0 && IsProductTab;
+                        return this.CorrectedSearchTerms && this.ProductsCount > 0 && IsProductTab;
                     }
                 },
             });
