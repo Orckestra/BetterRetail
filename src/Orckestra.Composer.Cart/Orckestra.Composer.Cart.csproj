@@ -105,6 +105,7 @@
     <Compile Include="Parameters\Order\ChangeOrderDraftOwnershipParam.cs" />
     <Compile Include="Parameters\Order\ChangeShipmentStatusParam.cs" />
     <Compile Include="Parameters\Order\EditOrderParam.cs" />
+    <Compile Include="Parameters\Order\GetCustomerOrderedProductsParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
     <Compile Include="Parameters\Order\CreateCartOrderDraftParam.cs" />
     <Compile Include="Parameters\Order\SubmitCartOrderDraftParam.cs" />
