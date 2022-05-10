@@ -301,8 +301,12 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public async Task<GetCustomerOrderedProductsResponse> GetCustomerOrderedProductsAsync(GetCustomerOrderedProductsParam param)
+        public virtual Task<GetCustomerOrderedProductsResponse> GetCustomerOrderedProductsAsync(GetCustomerOrderedProductsParam param)
         {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CustomerId)), nameof(param)); }
+
             var request = new GetCustomerOrderedProductsRequest
             {
                 ScopeId = param.ScopeId,
@@ -313,7 +317,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             };
 
             var cacheKey = CustomerOrderedProductsCacheKey(param.ScopeId, param.CustomerId);
-            return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
         public static CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
