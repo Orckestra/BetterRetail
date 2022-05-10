@@ -316,7 +316,7 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
         }
 
-        protected virtual CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
+        public static CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.CustomerOrderedProducts)
             {

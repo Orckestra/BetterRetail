@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
@@ -100,5 +101,6 @@ namespace Orckestra.Composer.Cart.Repositories.Order
         /// </summary>
         /// <returns></returns>
         Task<GetCustomerOrderedProductsResponse> GetCustomerOrderedProductsAsync(GetCustomerOrderedProductsParam param);
+
     }
 }
