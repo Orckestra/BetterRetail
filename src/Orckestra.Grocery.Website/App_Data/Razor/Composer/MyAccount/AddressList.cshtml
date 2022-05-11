@@ -8,6 +8,7 @@
 @functions {
     public ICustomerAddressViewService CustomerAddressViewService { get; set; }
     public IComposerContext ComposerContext { get; set; }
+    public override bool PreventFunctionOutputCaching { get { return true; } } 
 }
 
 @{
