@@ -80,7 +80,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Orckestra.Caching">
-      <HintPath>..\Orckestra.Grocery.Website\Bin\Orckestra.Caching.dll</HintPath>
+      <HintPath>..\Orckestra.Composer.Website\Bin\Orckestra.Caching.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.3.0, Culture=neutral, processorArchitecture=MSIL">
