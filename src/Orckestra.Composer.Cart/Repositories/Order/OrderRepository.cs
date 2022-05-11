@@ -295,5 +295,40 @@ namespace Orckestra.Composer.Cart.Repositories.Order
 
             return OvertureClient.SendAsync(request);
         }
+
+        /// <summary>
+        /// Get Customer Ordered Products
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public virtual Task<GetCustomerOrderedProductsResponse> GetCustomerOrderedProductsAsync(GetCustomerOrderedProductsParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (param.CustomerId == default) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CustomerId)), nameof(param)); }
+
+            var request = new GetCustomerOrderedProductsRequest
+            {
+                ScopeId = param.ScopeId,
+                CustomerId = param.CustomerId,
+                StartDate = param.StartDate,
+                EndDate = param.EndDate,
+                MinimumOrderedNumberOfTimes = param.MinimumOrderedNumberOfTimes
+            };
+
+            var cacheKey = CustomerOrderedProductsCacheKey(param.ScopeId, param.CustomerId);
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
+        }
+
+        public static CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
+        {
+            var key = new CacheKey(CacheConfigurationCategoryNames.CustomerOrderedProducts)
+            {
+                Scope = scope
+            };
+
+            key.AppendKeyParts(customerId);
+            return key;
+        }
     }
 }
