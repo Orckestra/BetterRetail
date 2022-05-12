@@ -15,7 +15,7 @@
         }
         @if (showDeleteIcon)
         {
-            <div class="recipe-tile-delete d-block">
+            <div class="recipe-tile-delete d-block d-sm-none">
                 <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheRecipeFavoritesList")"
                         class="btn btn-secondary bg-white text-secondary"
                         v-on:click="removeFavorite(@(vueBinding).id)"

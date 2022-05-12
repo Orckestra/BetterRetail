@@ -95,6 +95,13 @@ a.add-to-recipelist{
     color: #333;
     background-color: white;
 }
+.recipe-tile {
+    &:hover {
+        .recipe-tile-delete {
+            display:block !important;
+        }
+    }
+}
 .recipe-tile-delete {
     position: absolute;
     top: 0.625rem;
