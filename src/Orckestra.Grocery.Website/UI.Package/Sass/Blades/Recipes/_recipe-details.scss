@@ -106,6 +106,9 @@
     }
 
     &-ingredient {
+        &[data-toggle="popover"] {
+            cursor: pointer;
+        }
         position: relative;
 
         &-product {
@@ -119,14 +122,6 @@
 
     &-ingredient + &-ingredient-product {
         visibility: hidden;
-        position: absolute;
-        z-index: 2000;
-        bottom: 100%;
-        left: 50%;
-        margin-left: -60px;
-    }
-
-    &-ingredient:hover + &-ingredient-product {
-        visibility: visible;
+        display: none;
     }
 }

@@ -103,11 +103,13 @@
                     @DisplayAddress("OrderDetails.Shipments[0].ShippingAddress")
                 </div>
                 <hr />
-                <h6 class="font-weight-bold">@Html.Localize("Grocery", "T_SelectedTimeSlot")</h6>
-                <p class="card-text mb-3">
-                    {{TimeslotInfo.LocalizedSlotDate}}<br />
-                    @Html.Localized("Grocery", "L_TimeSlotRow", "{{TimeslotInfo.LocalizedSlotBeginTime}}", "{{TimeslotInfo.LocalizedSlotEndTime}}")
-                </p>
+                <template v-if="TimeslotInfo" >
+                    <h6 class="font-weight-bold">@Html.Localize("Grocery", "T_SelectedTimeSlot")</h6>
+                    <p class="card-text mb-3">
+                        {{TimeslotInfo.LocalizedSlotDate}}<br />
+                        @Html.Localized("Grocery", "L_TimeSlotRow", "{{TimeslotInfo.LocalizedSlotBeginTime}}", "{{TimeslotInfo.LocalizedSlotEndTime}}")
+                    </p>
+                </template>
             </div>
         </div>
         <div class="card" v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType != '@(FulfillmentMethodType.PickUp)'">

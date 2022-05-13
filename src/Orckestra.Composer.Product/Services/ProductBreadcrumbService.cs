@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Providers;
@@ -71,7 +72,7 @@ namespace Orckestra.Composer.Product.Services
         {
             var breadcrumbViewModel = new BreadcrumbViewModel
             {
-                ActivePageName = parameters.ProductName
+                ActivePageName = HttpUtility.HtmlEncode(parameters.ProductName)
             };
 
             var stack = new Stack<BreadcrumbItemViewModel>();

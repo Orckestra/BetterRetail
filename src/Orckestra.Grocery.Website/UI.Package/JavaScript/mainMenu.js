@@ -164,28 +164,36 @@ var $body = $('body'),
 
 var listenerFunc;
 
+var headerMenu = document.querySelector("header.masthead");
+
 function disableScroll(disable) {
     if (disable) {
         if (scrollDisabled) { return; }
 
-        scrollTop = $(window).scrollTop();
+        scrollTop = window.scrollY;
         //Disable ScrollPosStyler scroll event listener to prevent position flickering
         // Here we make use of the ListenerTracker that added new functionalities to list the events
         var eventlistener = window.getEventListeners().filter(evt => { return evt.type === "scroll" })[0];
         listenerFunc = eventlistener.listener;
         window.removeEventListener("scroll", listenerFunc, eventlistener.useCapture);
-        $body.addClass('scrollDisabled').css({ top: -1 * scrollTop });
+        document.body.classList.add("scrollDisabled");
         if (scrollTop != 0) {
-            $('.masthead').addClass('sps--blw');
+            headerMenu.style.transition = "initial";
+            document.body.style.top = -(scrollTop - headerMenu.offsetHeight) + "px";
+            headerMenu.classList.add('sps--blw');
+            headerMenu.style.top = (scrollTop - headerMenu.offsetHeight) + "px";
         }
 
         scrollDisabled = true;
 
     } else {
         if (!scrollDisabled) { return; }
-
-        $body.removeClass('scrollDisabled');
+        document.body.classList.remove('scrollDisabled');
+        document.body.style.top = null;
+        headerMenu.style.top = null;
         $(window).scrollTop(scrollTop);
+        headerMenu.style.transition = null;
+
         //Reactivate ScrollPosStyler
         ScrollPosStyler.init({ spsClass: "sps" });
         window.addEventListener("scroll", listenerFunc);

@@ -41,7 +41,7 @@ module Orckestra.Composer {
                                     product.Quantity = cartItem ? cartItem.Quantity : 0;
                                     product.LineItemId = cartItem ? cartItem.Id : undefined;
 
-                                    product.PricePerUnit = PriceHelper.PricePerUnit(product.DisplayListPrice,
+                                    product.PricePerUnit = PriceHelper.PricePerUnit(product.IsOnSale ? product.DisplaySpecialPrice :product.DisplayListPrice,
                                         product.ProductUnitQuantity,
                                         product.ProductUnitSize,
                                         product.ConvertedVolumeMeasurement

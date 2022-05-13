@@ -22,6 +22,11 @@
     }
 }
 
+.scrollDisabled .masthead.sps--blw {
+	position: absolute !important;
+	width: 100%;
+}
+
 .masthead {
     position: relative;
     z-index: 1030;
@@ -159,7 +164,6 @@
         }
         &.sps--blw {
             position: sticky;
-
             .header {
                 height: 0;
                 overflow: hidden;
@@ -217,5 +221,17 @@
 
 // cart button and badge
 .fa-shopping-cart+.badge-pill.badge-top-right {
-    left: -26px !important;
+    left: -10px !important;
+    padding: 5px 7px 4px;
+    display: inline-block;
+    min-width: 23px;
+    @include media-breakpoint-up(md) {
+        left: -26px !important;
+    }
+    @include media-breakpoint-up(lg) {
+        left: -15px !important;
+    }
+    @include media-breakpoint-up(xl) {
+        left: -33px !important;
+    }
 }

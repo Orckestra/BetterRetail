@@ -15,6 +15,25 @@
     }
 }
 
+.popover-body {
+    padding: $spacer/2;
+    &>.product-tile {
+        border: 1px solid transparent;
+        overflow: hidden;
+        width: 180px;
+        .product-tile-text {
+            height: auto;
+            a, .product-title {
+                font-size: 18px;
+            }
+        }
+        .product-tile-brand {
+            font-size: 14px;
+            font-family: $font-family-header, sans-serif;
+        }
+    }
+}
+
 .product-tile {
     $lines-of-text: 3;
     background-color: $lighter;
@@ -51,7 +70,7 @@
         height: ($line-height-base * 18px) * 4;
         position: relative;
         overflow: hidden;
-        a {
+        a, .product-title {
             font-size: 18px;
             font-family: $font-family-base;
             line-height: $line-height-base;
@@ -81,6 +100,12 @@
         @include media-breakpoint-down(xs) {
             top: unset;
             bottom: -17px;
+            &.list-unstyled li {
+                display: inline-block;
+                & + li {
+                    margin-left: $spacer/2;
+                }
+            }
         }
     }
     .product-tile-price {

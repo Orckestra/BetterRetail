@@ -207,4 +207,10 @@
   <data name="L_MyLocationError" xml:space="preserve">
     <value>Pour utiliser votre emplacement, veuillez activer l’option dans votre navigateur.</value>
   </data>
+  <data name="B_ViewStoreDetails" xml:space="preserve">
+    <value>Voir les détails du magasin</value>
+  </data>
+  <data name="T_Phone" xml:space="preserve">
+    <value>Téléphone</value>
+  </data>
 </root>

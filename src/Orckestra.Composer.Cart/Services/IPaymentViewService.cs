@@ -57,7 +57,7 @@ namespace Orckestra.Composer.Cart.Services
         /// Returns the Saved Credit card for a customer and providers
         /// To be used in recurring orders menu
         /// </summary>
-        Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param);
+        Task<CustomerPaymentMethodsViewModel> GetCustomerPaymentMethodsViewModelAsync(GetCustomerPaymentMethodListViewModelParam param);
 
         /// <summary>
         /// Updates the payment method for a recurring cart 

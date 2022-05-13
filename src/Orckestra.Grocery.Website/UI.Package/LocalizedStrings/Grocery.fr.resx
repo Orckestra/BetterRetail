@@ -118,167 +118,167 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="B_BookStore" xml:space="preserve">
-    <value>Book Your Store</value>
+    <value>Réservez votre magasin</value>
   </data>
   <data name="B_BookYourSlot" xml:space="preserve">
-    <value>Book Your Timeslot</value>
+    <value>Réservez votre plage horaire</value>
   </data>
   <data name="B_ChangeFulfillmentMethod" xml:space="preserve">
-    <value>Change Fulfillment Method</value>
+    <value>Modifier la méthode de traitement</value>
   </data>
   <data name="B_ChangeFulfillmentMethodToPickup" xml:space="preserve">
-    <value>Change to Pick Up</value>
+    <value>Changer pour la cueillette</value>
   </data>
   <data name="B_ChangeFulfillmentMethodToShipping" xml:space="preserve">
-    <value>Change to Delivery</value>
+    <value>Changer pour la livraison</value>
   </data>
   <data name="B_ChangeSlot" xml:space="preserve">
-    <value>Change Timeslot</value>
+    <value>Changer de plage horaire</value>
   </data>
   <data name="B_ChangeStore" xml:space="preserve">
-    <value>Change Store</value>
+    <value>Changer de magasin</value>
   </data>
   <data name="B_CheckServiceAvailability" xml:space="preserve">
-    <value>Check Service Availability</value>
+    <value>Vérifier la disponibilité du service</value>
   </data>
   <data name="B_Find" xml:space="preserve">
-    <value>Find</value>
+    <value>Trouver</value>
   </data>
   <data name="B_NotNow" xml:space="preserve">
-    <value>Not Now</value>
+    <value>Pas maintenant</value>
   </data>
   <data name="B_SelectFulfillmentMethod" xml:space="preserve">
-    <value>Select Fulfillment Method</value>
+    <value>Sélectionnez la méthode de traitement</value>
   </data>
   <data name="B_SelectThisStore" xml:space="preserve">
-    <value>Select this Store</value>
+    <value>Sélectionnez ce magasin</value>
   </data>
   <data name="H_ChangeMethodModal" xml:space="preserve">
-    <value>Your Fulfillment Method</value>
+    <value>Votre méthode de traitement</value>
   </data>
   <data name="H_ChangeStoreModal" xml:space="preserve">
-    <value>Find a Store</value>
+    <value>Trouver un magasin</value>
   </data>
   <data name="H_ChangeTimeSlotModal" xml:space="preserve">
-    <value>Choose Date &amp; Timeslot</value>
+    <value>Choisissez la date et la plage horaire</value>
   </data>
   <data name="L_AvailableSlot" xml:space="preserve">
-    <value>Available</value>
+    <value>Disponible</value>
   </data>
   <data name="L_ChangeStoreWarning" xml:space="preserve">
-    <value>Some items may not be available at all collection stores. If you change your collection store your cart will be updated.</value>
+    <value>Certains articles ne sont pas disponibles dans tous les magasins pour la cueillette. Si vous changez de magasin pour la cueillette, votre panier sera mis à jour.</value>
   </data>
   <data name="L_ClickHere" xml:space="preserve">
-    <value>Click Here</value>
+    <value>Cliquez ici</value>
   </data>
   <data name="L_CollectOrder" xml:space="preserve">
-    <value>Collect your order at:</value>
+    <value>Récupérez votre commande au :</value>
   </data>
   <data name="L_EnterPostalCode" xml:space="preserve">
-    <value>Enter your postal code to see the stores or services available near you.</value>
+    <value>Entrez votre code postal pour consulter les magasins ou services disponibles près de chez vous.</value>
   </data>
   <data name="L_FullSlot" xml:space="preserve">
-    <value>Full</value>
+    <value>Plein</value>
   </data>
   <data name="L_NoSlotsForStoreWarning" xml:space="preserve">
-    <value>Sorry, there are no timeslots available at this store. Please try again later or select another store.</value>
+    <value>Désolé, il n'y a pas de plages horaires disponibles dans ce magasin. Veuillez réessayer plus tard ou sélectionner un autre magasin.</value>
   </data>
   <data name="L_ReservationExpired" xml:space="preserve">
-    <value>Your timeslot reservation has expired.</value>
+    <value>Votre plage horaire réservée a expiré.</value>
   </data>
   <data name="L_ReservedUntil" xml:space="preserve">
-    <value>Your timeslot is reserved until {0}</value>
+    <value>Votre plage horaire est réservée jusqu'au {0}</value>
   </data>
   <data name="L_ServicesNear" xml:space="preserve">
-    <value>Services near you</value>
+    <value>Services près de chez vous</value>
   </data>
   <data name="L_ShippingMethodDescriptionPickUp" xml:space="preserve">
-    <value>Select this option to view a list of stores
-near you offering this service.</value>
+    <value>Sélectionnez cette option pour afficher une liste de magasins
+près de chez vous qui proposent ce service.</value>
   </data>
   <data name="L_ShippingMethodDescriptionShipping" xml:space="preserve">
-    <value>Good news! The delivery service is
-available for you.</value>
+    <value>Bonnes nouvelles! Le service de livraison est
+disponible pour vous.</value>
   </data>
   <data name="L_StoresNotAvailableMessage" xml:space="preserve">
-    <value>Sorry, no store is available in this area. Try another location.</value>
+    <value>Désolé, aucun magasin n'est disponible dans ce secteur. Essayez un autre endroit.</value>
   </data>
   <data name="L_TimeSlotLoadingError" xml:space="preserve">
-    <value>An error occurred while loading timeslots. Please try again later.</value>
+    <value>Une erreur s'est produite lors du chargement des plages horaires. Veuillez réessayer plus tard.</value>
   </data>
   <data name="L_TimeSlotQuotaIsFull" xml:space="preserve">
-    <value>This timeslot is fully booked. Please try another one.</value>
+    <value>Cette plage horaire est complète. Veuillez essayer une autre plage horaire.</value>
   </data>
   <data name="L_TimeSlotReservationAlreadyBookedForThisCart" xml:space="preserve">
-    <value>A timeslot reservation already booked for this cart. Please try another one.</value>
+    <value>Une plage horaire est déjà réservée pour ce panier. Veuillez essayer une autre plage horaire.</value>
   </data>
   <data name="L_TimeSlotReservationFailed" xml:space="preserve">
-    <value>An error occurred while reserving this timeslot. Please try another one.</value>
+    <value>Une erreur s'est produite lors de la réservation de cette plage horaire. Veuillez essayer une autre plage horaire.</value>
   </data>
   <data name="L_TimeSlotRow" xml:space="preserve">
-    <value>{0} to {1}</value>
+    <value>{0} à {1}</value>
   </data>
   <data name="L_Today" xml:space="preserve">
-    <value>today</value>
+    <value>aujourd'hui</value>
   </data>
   <data name="L_Tomorrow" xml:space="preserve">
-    <value>tomorrow</value>
+    <value>demain</value>
   </data>
   <data name="L_ToReserveNewTimeSlot" xml:space="preserve">
-    <value>to book a new timeslot.</value>
+    <value>pour réserver une nouvelle plage horaire.</value>
   </data>
   <data name="L_UnavailableSlot" xml:space="preserve">
-    <value>N/A</value>
+    <value>N.D.</value>
   </data>
   <data name="T_CustomerDetails" xml:space="preserve">
-    <value>Customer Details</value>
+    <value>Informations du client</value>
   </data>
   <data name="T_Fulfillment" xml:space="preserve">
-    <value>Fulfillment</value>
+    <value>Traitement</value>
   </data>
   <data name="T_FulfillmentMethod" xml:space="preserve">
-    <value>Fulfillment method</value>
+    <value>Méthode de traitement</value>
   </data>
   <data name="T_FulfillmentMethodTitle_PickUp" xml:space="preserve">
-    <value>Pickup</value>
+    <value>Cueillette</value>
   </data>
   <data name="T_FulfillmentMethodTitle_Shipping" xml:space="preserve">
-    <value>Delivery</value>
+    <value>Livraison</value>
   </data>
   <data name="T_PickStore" xml:space="preserve">
-    <value>Pick your store</value>
+    <value>Choisissez votre magasin</value>
   </data>
   <data name="T_PickTimeSlot" xml:space="preserve">
-    <value>Pick a timeslot</value>
+    <value>Choisissez une plage horaire</value>
   </data>
   <data name="T_SelectedTimeSlot" xml:space="preserve">
-    <value>Selected timeslot:</value>
+    <value>Plage horaire sélectionnée :</value>
   </data>
   <data name="T_ShippingMethodTitle" xml:space="preserve">
-    <value>Delivery</value>
+    <value>Livraison</value>
   </data>
   <data name="T_Store" xml:space="preserve">
-    <value>Store</value>
+    <value>Magasin</value>
   </data>
   <data name="T_StoreDeliveryHours" xml:space="preserve">
-    <value>Delivery hours</value>
+    <value>Heures de livraison</value>
   </data>
   <data name="T_StoreDoNotSupportSelectedFulfillmentMethod" xml:space="preserve">
-    <value>This store doesn't support selected fulfillment method.</value>
+    <value>Ce magasin n'offre pas la méthode de traitement sélectionnée.</value>
   </data>
   <data name="T_StoreInformation" xml:space="preserve">
-    <value>Store Information</value>
+    <value>Informations sur le magasin</value>
   </data>
   <data name="T_StorePickUpHours" xml:space="preserve">
-    <value>Pickup hours</value>
+    <value>Heures de cueillette</value>
   </data>
   <data name="T_StoresFound" xml:space="preserve">
-    <value>{0} store(s) found</value>
+    <value>{0} magasin(s) trouvé(s)</value>
   </data>
   <data name="T_TimeSlot" xml:space="preserve">
-    <value>Timeslot</value>
+    <value>Créneau horaire</value>
   </data>
   <data name="T_YourSelection" xml:space="preserve">
-    <value>Your selection</value>
+    <value>Votre sélection</value>
   </data>
 </root>
