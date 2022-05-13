@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Orckestra.Composer.Enums;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.ViewModels;
 
@@ -39,13 +40,24 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// <summary>
         /// Gets or sets the product Badges
         /// </summary>
-        string ProductBadges { get; set; }
+        [MapTo("ProductBadges")]
+        string ProductBadgesKeys { get; set; }
+
+        [Lookup(LookupType.Product, "ProductBadges")]
+        [MapTo("ProductBadges")]
+        string ProductBadgesLookup { get; set; }
+
         Dictionary<string, string> ProductBadgeValues { get; set; }
 
         /// <summary>
         /// Gets or sets the product IsWeightedProduct
         /// </summary>
         bool IsWeightedProduct { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Format
+        /// </summary>
+        string Format { get; set; }
 
     }
 }

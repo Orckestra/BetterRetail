@@ -8,6 +8,7 @@
         margin-bottom: $spacer*3;
     }
     &-tile {
+        border: solid 1px $gray-400;
         .recipe-info {
             &-icon {
                 font-size: 16px;
@@ -74,7 +75,41 @@
                     align-items: center;
                     justify-content: center;
                 }
-            }
+            }            
+        }
+    }    
+}
+.product-tile-recipelist {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
+a.add-to-recipelist{
+    text-decoration: none;
+    padding: 0.625rem;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    color: #333;
+    background-color: white;
+}
+.recipe-tile {
+    &:hover {
+        .recipe-tile-delete {
+            display:block !important;
         }
     }
+}
+.recipe-tile-delete {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    z-index: 10;
+}
+
+.recipelist-header-count {
+    min-width: $spacer;
+    display: inline-block;
 }

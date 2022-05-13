@@ -1,0 +1,83 @@
+﻿@inherits RazorFunction
+@using System.Collections.Specialized
+@using System.Text.RegularExpressions
+@using Composite.Core.Routing
+@using Newtonsoft.Json
+@using Orckestra.Composer.Recipes.ViewModels
+@using Orckestra.Composer.Recipes.DataTypes
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Recipe Structured Data"; }
+    }
+    
+    [FunctionParameter]
+    public Orckestra.Composer.Recipes.DataTypes.IRecipe Item { get; set; }
+
+    [FunctionParameter]
+    public List<IngredientsListViewModel> IngredientLists { get; set; }
+
+}
+@functions {
+
+    public string GetMediaUrl(string mediaPath)
+    {
+        string[] parts = mediaPath.Split(new[] { ':' });
+
+        var mediaStore = parts[0];
+        var mediaId = new Guid(parts[1]);
+
+        var mediaUrl = MediaUrls.BuildUrl(new MediaUrlData
+        {
+            MediaStore = mediaStore,
+            MediaId = mediaId,
+            QueryParameters = new NameValueCollection()
+        }, UrlKind.Public);
+        return mediaUrl;
+    }
+}
+@{
+    var ingredients = IngredientLists
+        .SelectMany(item => item.Ingredients)
+        .Select(item => item.Title).ToArray();
+
+    var totalTime = Item.CookingTime + Item.PreparationTime;
+    var formatPreparationTime = $"PT{Item.PreparationTime}M";
+    var formatCookingTime = $"PT{Item.CookingTime}M";
+    var formatTotalTime = $"PT{totalTime}M";
+
+    var madiaUrl = GetMediaUrl(Item.Image);
+    var imageUrl = new UriBuilder(Request.Url.Scheme, Request.Url.Host, Request.Url.Port, madiaUrl);
+
+    var mealType = DataFacade.GetData<IRecipeMealType>().FirstOrDefault(l => l.Id == Item.MealType).Title;
+    var cuisineType = DataFacade.GetData<ICuisineType>().FirstOrDefault(l => l.Id == Item.CuisineType)?.Title;
+    var description = Regex.Replace(Item.Description, "<.*?>", string.Empty).Trim();
+    var instructions = Regex.Replace(Item.Instructions, "<.*?>", string.Empty).Trim();
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org/",
+      "@@type": "Recipe",
+      "name": "@Item.Title",
+      "image": ["@imageUrl"],
+      "datePublished": "@Item.Date.ToString("d")",
+      "description": "@description",
+      "recipeCuisine": "@cuisineType",
+      "prepTime": "@formatPreparationTime",
+      "cookTime": "@formatCookingTime",
+      "totalTime": "@formatTotalTime",
+      "keywords": "@Item.Keywords",
+      "recipeYield": "@Item.Servings",
+      "recipeCategory": "@mealType" ,
+      "recipeIngredient": @Html.Raw(JsonConvert.SerializeObject(ingredients)),
+      "recipeInstructions": "@instructions"
+    }
+    </script>
+</head>
+<body>
+</body>
+</html>

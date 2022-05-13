@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Orckestra.Composer.Configuration;
+﻿using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Grocery.Factory;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.ViewModels;
@@ -16,6 +12,9 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Orckestra.Composer.Grocery.Services
 {
@@ -23,6 +22,7 @@ namespace Orckestra.Composer.Grocery.Services
     {
         public GroceryProductViewModelFactory GroceryProductViewModelFactory { get; }
         public IConverterProvider ConverterProvider { get; }
+        public IGroceryProductInformationFactory GroceryProductInformationFactory { get; }
 
         public GroceryRelatedProductViewService(
             IProductRepository productRepository,
@@ -35,11 +35,13 @@ namespace Orckestra.Composer.Grocery.Services
             IRecurringOrdersSettings recurringOrdersSettings,
             IFulfillmentContext fulfillmentContext,
             IProductViewModelFactory groceryProductViewModelFactory,
-            IConverterProvider converterProvider)
+            IConverterProvider converterProvider,
+            IGroceryProductInformationFactory groceryProductInformationFactory)
             : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext)
         {
             GroceryProductViewModelFactory = groceryProductViewModelFactory as GroceryProductViewModelFactory ?? throw new ArgumentNullException(nameof(groceryProductViewModelFactory));
             ConverterProvider = converterProvider ?? throw new ArgumentNullException(nameof(converterProvider));
+            GroceryProductInformationFactory = groceryProductInformationFactory ?? throw new ArgumentNullException(nameof(groceryProductInformationFactory));
         }
 
         protected override RelatedProductViewModel CreateRelatedProductsViewModel(
@@ -53,19 +55,19 @@ namespace Orckestra.Composer.Grocery.Services
             var relatedProductViewModel = base.CreateRelatedProductsViewModel(baseUrl, cultureInfo, productVariant, prices, images, currencyIso);
 
             var extendedVM = relatedProductViewModel.AsExtensionModel<IGroceryRelatedProductViewModel>();
-            extendedVM.ProductBadgeValues = GroceryProductViewModelFactory.BuildProductBadgeValues(productVariant.Product, relatedProductViewModel);
-            
+            extendedVM.ProductBadgeValues = GroceryProductInformationFactory.BuildProductBadgeValues(extendedVM.ProductBadgesKeys, extendedVM.ProductBadgesLookup);
+            extendedVM.Format = GroceryProductInformationFactory.BuildProductFormat(extendedVM.ProductUnitQuantity, extendedVM.ProductUnitSize, extendedVM.ProductUnitMeasure, extendedVM.IsWeightedProduct, cultureInfo);
             var convertedVolumeMeasurment = GroceryProductViewModelFactory.BuildConvertedVolumeMeasurement(productVariant.Product);
             if (convertedVolumeMeasurment.HasValue)
             {
                 extendedVM.ConvertedVolumeMeasurement = convertedVolumeMeasurment.Value;
             }
 
-            var ribbonStyles = GroceryProductViewModelFactory.BuildPromotionalRibbonStyles(productVariant.Product);
+            var ribbonStyles = GroceryProductInformationFactory.BuildPromotionalRibbonStyles(extendedVM.PromotionalRibbonValue);
             extendedVM.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
             extendedVM.PromotionalRibbonTextColor = ribbonStyles.TextColor;
 
-            var bannerStyles = GroceryProductViewModelFactory.BuildPromotionalBannerStyles(productVariant.Product);
+            var bannerStyles = GroceryProductInformationFactory.BuildPromotionalBannerStyles(extendedVM.PromotionalBannerValue);
             extendedVM.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
             extendedVM.PromotionalBannerTextColor = bannerStyles.TextColor;
 

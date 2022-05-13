@@ -1,0 +1,151 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.Utils;
+@using Orckestra.Composer.Cart;
+@using Orckestra.Composer.Cart.Services;
+@using Orckestra.Composer.Cart.Parameters;
+@using Newtonsoft.Json;
+@using System;
+
+@functions {
+    public IComposerContext ComposerContext { get; set; }
+    public IWishListViewService WishListViewService { get; set; }
+
+    [FunctionParameter(Label = "Empty Wish List Content", Help = "That content will be shown when Wish List is Empty")]
+    public XhtmlDocument emptyWishListContent { get; set; }
+}
+
+@{
+    RedirectNotAuthorized();
+
+    var vm = WishListViewService.GetWishListViewModelAsync(new GetCartParam
+    {
+        Scope = ComposerContext.Scope,
+        CultureInfo = ComposerContext.CultureInfo,
+        CustomerId = ComposerContext.CustomerId,
+        CartName = CartConfiguration.WishlistCartName,
+        ExecuteWorkflow = CartConfiguration.WishListExecuteWorkflow,
+        WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
+        BaseUrl = RequestUtils.GetBaseUrl(Request.Url, Request.ApplicationPath).ToString()
+    }).Result;
+
+    var VueId = $"vue{Guid.NewGuid().GetHashCode()}";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="MyAccount.MyWishList"
+         data-vueid="@VueId"
+         data-context="@JsonConvert.SerializeObject(vm)">
+        <div id="@VueId" v-cloak="true">
+            <div data-templateid="WishList" class="card">
+                <div class="card-header  clearfix">
+                    <h3 class="float-left">@Html.Localize("MyAccount", "T_WishList")</h3>
+                    <div class="float-right  wishlist-count  lead">
+                        <strong><span class="wishlist-header-count navbar-count">{{Total}}</span></strong>&#160;@Html.Localize("MyAccount", "T_WishListCount")
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="wishlist-share">
+                        <p>@Html.Localize("MyAccount", "L_ShareWishListText")</p>
+                        <div v-bind:class="{'inactive': !Total}">
+                            <div class="form-group row">
+                                <div class="col-12  col-md-6  col-lg-9">
+                                    <input id="txtShareUrl" type="text" class="form-control" placeholder="@Html.Localize("MyAccount", "P_ShareWishListCopyLink")" v-bind:value="ShareUrl" />
+                                </div>
+                                <div class="col-12  col-md-6  col-lg-3">
+                                    <br class="d-block d-sm-none" />
+
+                                    <button type="submit"
+                                            v-on:click="copyShareUrl(ShareUrl)"
+                                            class="btn btn-primary">
+                                        @Html.Localize("MyAccount", "B_ShareWishListCopyLink")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template v-if="Total">
+                        <div class="row">
+                            <div v-for="item in Items" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                                @SummaryTile("item")
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else="v-else">
+                        @Html.Raw(emptyWishListContent.Body)
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+@helper SummaryTile(string entity)
+{
+    <div class="wishlist-tile product-tile d-flex h-100" v-bind:key="@(entity).Id" v-bind:class="{'is-loading': @(entity).Removing}">
+        <a class="product-tile-media" v-bind:href="@(entity).ProductUrl">
+            <img class="img-fluid m-auto" v-bind:src="@(entity).ImageUrl"
+                 v-bind:alt="@(entity).ProductSummary.DisplayName"
+                 v-bind:onerror="'this.onerror=null; this.src=\'' + @(entity).FallbackImageUrl + '\''" />
+            @ProductHelpers.PromotionalBanner(entity + ".Bag")
+        </a>
+        @ProductHelpers.PromotionalRibbon(entity + ".Bag")
+
+        <div class="wishlist-tile-delete d-block d-sm-none ">
+            <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
+                    class="btn btn-secondary bg-white text-secondary"
+                    v-on:click="deleteLineItem(@(entity).Id)"
+                    data-qa="wishlist-product-delete">
+                <span class="fa fa-times fa-lg"></span>
+            </button>
+        </div>
+
+        @ProductHelpers.ProductBadges(entity + ".Bag")
+        <div class="product-tile-information">
+            <div class="product-tile-text">
+                <p v-if="@(entity).ProductSummary.Brand" class="product-tile-brand m-0" data-qa="wishlist-product-brand">{{@(entity).ProductSummary.Brand}}</p>
+
+                <div v-if="@(entity).RecurringOrderProgramName" class="product-tile-recurring">
+                    <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="@Html.Localize("General", "L_RecurringProduct")" title="@Html.Localize("General", "L_RecurringProduct")" />
+                </div>
+
+                <a class="p text-default-font" data-qa="wishlist-product-title" v-bind:href="@(entity).ProductUrl"
+                   v-bind:title="@(entity).ProductSummary.DisplayName" v-bind:data-productId="@(entity).ProductId">{{@(entity).ProductSummary.DisplayName}}</a>
+
+                <div class="product-tile-format" v-if="@(entity).Bag.Format">
+                    {{@(entity).Bag.Format}}
+                </div>
+            </div>
+            <div class="product-tile-price">
+
+            </div>
+            <div class="product-tile-button-container">
+                <div data-templateid="AddToCartWishList">
+                    <button v-if="@(entity).IsValid" class="btn  btn-primary btn-block  text-uppercase"
+                            data-qa="wishlist-product-add-to-cart"
+                            v-bind:disabled="@(entity).Loading"
+                            v-on:click="addToCart(@(entity))">
+                        <span class="fa  fa-shopping-cart"></span>&#160;
+                        @Html.Localize("General", "B_AddToCartProductList")
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                    </button>
+                    <button v-else="v-else"
+                            data-qa="wishlist-product-add-to-cart"
+                            class="btn  btn-primary btn-block  text-uppercase"
+                            disabled="disabled">
+                        <span class="fa  fa-times"></span>&#160;
+                        @Html.Localize("General", "B_AddToCartProductListOOS")
+                        <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

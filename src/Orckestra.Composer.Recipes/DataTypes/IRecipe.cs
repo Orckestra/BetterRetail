@@ -33,6 +33,7 @@ namespace Orckestra.Composer.Recipes.DataTypes
         [StoreFieldType(PhysicalStoreFieldType.Guid)]
         [FieldPosition(0)]
         [RouteSegment(0)]
+        [SearchableField(false, true, true)]
         Guid Id { get; set; }
         
         [ImmutableFieldId("92f1af7c-7c15-4f41-939a-82cd036acc63")]
@@ -54,7 +55,15 @@ namespace Orckestra.Composer.Recipes.DataTypes
         [DefaultFieldStringValue("")]
         [SearchableField(true, false, false)]
         string Title { get; set; }
-        
+
+        [ImmutableFieldId("bdbc57d5-aae2-4668-90b1-3fe881dae300")]
+        [StoreFieldType(PhysicalStoreFieldType.String, 256)]
+        [FieldPosition(1)]
+        [StringSizeValidator(0, 256)]
+        [DefaultFieldStringValue("")]
+        [SearchableField(true, false, false)]
+        string Keywords { get; set; }
+
         [ImmutableFieldId("5d61e9da-0b5e-4e98-8ccc-e1d3f364c429")]
         [StoreFieldType(PhysicalStoreFieldType.String, 256)]
         [FieldPosition(2)]

@@ -5,6 +5,12 @@
 ///<reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 ///<reference path='../../Composer.Product/Product/ProductService.ts' />
 ///<reference path='../../ErrorHandling/ErrorHandler.ts' />
+///<reference path='../../Composer.Grocery/Recipes/Sevices/IRecipeFavoritesService.ts' />
+///<reference path='../../Composer.Grocery/Recipes/Sevices/RecipeFavoritesService.ts' />
+///<reference path='../../Repositories/RecipeFavoritesRepository.ts' />
+///<reference path='../../Repositories/IRecipeFavoritesRepository.ts' />
+///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
+///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
 
 module Orckestra.Composer {
   enum AddIngredientsToCartStates {
@@ -16,19 +22,25 @@ module Orckestra.Composer {
     public VueRecipe: Vue;
 
     protected searchRepository: ISearchRepository = new SearchRepository();
+    protected recipeFavoritesService: IRecipeFavoritesService = new RecipeFavoritesService(new RecipeFavoritesRepository());
     protected multiKeywordsSearchService: IMultiKeywordsSearchService = MultiKeywordsSearchService.instance();
     protected cartService: ICartService = CartService.getInstance();
     protected productService: ProductService = new ProductService(this.eventHub, this.context);
     protected inventoryService = new InventoryService();
+    protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
 
     public initialize() {
       super.initialize();
-      this.initializeVue();
+
+      let authenticatedPromise = this.membershipService.isAuthenticated();
+      let favPromise = this.recipeFavoritesService.getRecipeFavoritesSummary();
+      Q.all([authenticatedPromise, favPromise ]).spread((authVm, {FavoriteIds}) => this.initializeVueComponent(authVm, FavoriteIds));
     }
 
-    public initializeVue() {
+    private initializeVueComponent(authVm, favorites) {
       const self = this;
       const SearchUrl = this.context.container.data('searchurl');
+      const RecipeId = this.context.container.data('recipeid');
       var ingredientsList = self.context.viewModel;
       var ingredientsMap = ingredientsList.flatMap(a => a.Ingredients).reduce((map, obj) => { map[obj.Id] = obj; return map }, {});
       this.VueRecipe = new Vue({
@@ -43,9 +55,9 @@ module Orckestra.Composer {
           SearchUrl,
           Loading: false,
           PopoverIsInitialized: false,
-        },
-        mounted() {
-          this.getIngredientsProducts();
+          RecipeId,
+          IsRecipeFavorite: favorites.indexOf(RecipeId) > -1,
+          IsAuthenticated: authVm.IsAuthenticated,
         },
         updated() {
           if (!this.PopoverIsInitialized) {
@@ -56,10 +68,10 @@ module Orckestra.Composer {
         computed: {
           SelectedKeywords() {
             return this.SelectedIngredients
-            .map(a => a.Keyword)
-            .filter((value, index, self) => value && self.indexOf(value) === index);
+              .map(a => a.Keyword)
+              .filter((value, index, self) => value && self.indexOf(value) === index);
           },
-          IsIngredientsSelected() {            
+          IsIngredientsSelected() {
             return this.SelectedIngredientsIds.length > 0;
           },
           IsInredientKeywordsSelected() {
@@ -151,10 +163,22 @@ module Orckestra.Composer {
             }).fin(() => this.Loading = false)
           },
           searchIngredient() {
-            if(!this.IsInredientKeywordsSelected) return;
-            
+            if (!this.IsInredientKeywordsSelected) return;
+
             self.multiKeywordsSearchService.setKeywords(this.SelectedKeywords);
             window.location.href = this.SearchUrl + "?keywords=" + this.SelectedKeywords[0] + "&multikeywords=on";
+          },
+          setFavorite() {
+            if (!this.IsAuthenticated) {
+              return self.recipeFavoritesService.redirectToSignIn();
+            }
+
+            if (!this.IsRecipeFavorite) {
+              self.recipeFavoritesService.addFavorite(RecipeId);
+            } else {
+              self.recipeFavoritesService.removeFavorite(RecipeId);
+            }
+            this.IsRecipeFavorite = !this.IsRecipeFavorite;
           }
         }
       });

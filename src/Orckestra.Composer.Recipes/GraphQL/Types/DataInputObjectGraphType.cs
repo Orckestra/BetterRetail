@@ -4,16 +4,18 @@ using GraphQL.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using Orckestra.Composer.Recipes.GraphQL.Extensions;
 
 namespace Orckestra.Composer.Recipes.GraphQL.Types
 {
     public class DataInputObjectGraphType<TSourceType> : AutoRegisteringInputObjectGraphType<TSourceType> where TSourceType : class, IData
     {
-        public DataInputObjectGraphType()
+        public DataInputObjectGraphType(params Expression<Func<TSourceType, object>>[] excludedProperties) : base(excludedProperties)
         {
-            Name = $"{typeof(TSourceType).GraphQLName()}Input";
+            Name = $"{typeof(TSourceType).DataQLName()}Input";
             Field<GuidGraphType>("Id");
         }
 
@@ -51,10 +53,13 @@ namespace Orckestra.Composer.Recipes.GraphQL.Types
                 throw new ArgumentNullException(nameof(source));
 
 
-            object obj;
+            var obj = new DataInput<TSourceType>()
+            {
+                PropertyBag = new Dictionary<string, object>()
+            };
             try
             {
-                obj = DataFacade.BuildNew<TSourceType>();
+                obj.Data = DataFacade.BuildNew<TSourceType>();
                 //NOTE: may be more simple
                 //Type generatedType = DataTypeTypesManager.GetDataTypeEmptyClass(typeof(T));
                 //IData data = (IData)Activator.CreateInstance(generatedType, new object[] { });
@@ -83,7 +88,11 @@ namespace Orckestra.Composer.Recipes.GraphQL.Types
                 if (propertyInfo != null && propertyInfo.CanWrite)
                 {
                     object value = ObjectExtensions.GetPropertyValue(item.Value, propertyInfo.PropertyType, field?.ResolvedType);
-                    propertyInfo.SetValue(obj, value, null); //issue: this works even if propertyInfo is ValueType and value is null
+                    propertyInfo.SetValue(obj.Data, value, null); //issue: this works even if propertyInfo is ValueType and value is null
+                }
+                else
+                {
+                    obj.PropertyBag[item.Key] = item.Value;
                 }
             }
 

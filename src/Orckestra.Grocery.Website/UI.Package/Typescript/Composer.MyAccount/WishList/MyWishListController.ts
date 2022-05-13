@@ -2,66 +2,79 @@
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='./WishListController.ts' />
+///<reference path='../../Composer.Product/ProductEvents.ts' />
 
 module Orckestra.Composer {
 
     export class MyWishListController extends Orckestra.Composer.WishListController {
+        protected VueWishList: Vue;
 
         public initialize() {
 
             super.initialize();
-            this.registerSubscriptions();
-        }
 
-        protected registerSubscriptions(): void {
-            this.eventHub.subscribe(ProductEvents.WishListUpdated, (e: IEventInformation) => this.onWishListUpdated(e));
-        }
+            const vueId = this.context.container.data("vueid");
+            const self = this;
 
+            this.VueWishList = new Vue({
+                el: '#' + vueId,
 
-        public copyShareUrl(actionContext: IControllerActionContext) {
-            var shareUrl = $('#txtShareUrl');
-            var succeed;
+                data: {
+                    Items: [],
+                    ...self.context.viewModel
+                },
+                mounted() {
+                },
+                computed: {
+                    Total() {
+                        return this.Items.length;
+                    }
+                },
+                methods: {
+                    addToCart(item) {
+                        const price = item.IsOnSale ? item.ListPrice : item.DefaultListPrice;
 
-            shareUrl.focus().select();
+                        item.Loading = true;
+                        this.Items = [...this.Items];
 
-            try {
-                succeed = document.execCommand('copy');
-            } catch (e) {
-                succeed = false;
-            }
+                        self.eventHub.publish('wishListLineItemAddingToCart', {
+                            data: self.getProductDataForAnalytics(
+                                item.ProductId,
+                                item.VariantId,
+                                item.ProductSummary.DisplayName,
+                                price,
+                                item.ProductSummary.Brand,
+                                item.ProductSummary.CategoryId
+                            )
+                        });
 
-            this.eventHub.publish('wishListCopyingShareUrl', {
-                data: {}
+                        self._cartService.addLineItem(item.ProductId, price, item.VariantId, 1, null, item.RecurringOrderProgramName)
+                            .then(() => {
+                                item.Loading = false;
+                                this.Items = [...this.Items];
+                            })
+                    },
+                    copyShareUrl(shareUrl) {
+                        (navigator as any).clipboard.writeText(shareUrl);
+
+                        self.eventHub.publish('wishListCopyingShareUrl', {
+                            data: {}
+                        });
+                    },
+                    deleteLineItem(lineItemId) {
+                        const item = this.Items.find(x => x.Id === lineItemId)
+                        if(item) {
+                            item.Removing = true;
+                            this.Items = [...this.Items];
+                        }
+
+                        self._wishListService.removeLineItem(lineItemId)
+                            .then(wishList => {
+                                this.Items = this.Items.filter(x => x.Id !== lineItemId)
+                            })
+                    }
+                }
             });
-
-            return succeed;
-        }
-
-        public deleteLineItem(actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
-            var lineItemId: string = <any>context.data('lineitemid');
-            var container = context.closest('.wishlist-tile');
-
-            container.addClass('is-loading');
-            this._wishListService.removeLineItem(lineItemId)
-                .then(wishList => {
-                    container.parent().remove();
-                })
-                .fin(() => {
-                    container.removeClass('is-loading');
-                });
-        }
-
-        protected onWishListUpdated(e: IEventInformation): void {
-            this.renderWishListQuantity(e.data);
-
-            if (e.data.TotalQuantity === 0) {
-                this.context.window.location.reload();
-            }
-        }
-
-        protected renderWishListQuantity(wishList): void {
-            this.render('WishListQuantity', wishList);
         }
 
         protected getListNameForAnalytics(): string {

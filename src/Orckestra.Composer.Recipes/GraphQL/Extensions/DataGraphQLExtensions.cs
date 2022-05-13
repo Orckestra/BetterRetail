@@ -3,6 +3,7 @@ using GraphQL;
 using GraphQL.Types;
 using System;
 using System.Linq;
+using Orckestra.Composer.Recipes.GraphQL.Types;
 
 namespace Orckestra.Composer.Recipes.GraphQL.Extensions
 {
@@ -13,16 +14,23 @@ namespace Orckestra.Composer.Recipes.GraphQL.Extensions
         /// </summary>
         /// <typeparam name="TSourceType"></typeparam>
         /// <param name="objectGraphType"></param>
-        /// <param name="idSelector"></param>
+        /// <param name="getId"></param>
         public static void Field<TSourceType>(this ObjectGraphType<object> objectGraphType,
-            Func<TSourceType, Guid> idSelector)
+            Func<TSourceType, Guid> getId)
             where TSourceType : class, IData
         {
-            Type type = typeof(TSourceType);
-            objectGraphType.Field<AutoRegisteringObjectGraphType<TSourceType>>(
-                GetFieldName<TSourceType>(),
+            objectGraphType.Field<TSourceType, DataObjectGraphType<TSourceType>>(getId);
+        }
+
+        public static void Field<TSourceType, TGraphType>(this ObjectGraphType<object> objectGraphType,
+            Func<TSourceType, Guid> idSelector)
+            where TSourceType : class, IData
+            where TGraphType : ObjectGraphType<TSourceType>
+        {
+            objectGraphType.Field<TGraphType>(
+                typeof(TSourceType).DataQLName(),
                 arguments: new QueryArguments(new QueryArgument<GuidGraphType>
-                { Name = "id" }),
+                    { Name = "id" }),
                 resolve: (context) =>
                 {
                     using (var connection = new DataConnection(PublicationScope.Unpublished))
@@ -42,34 +50,56 @@ namespace Orckestra.Composer.Recipes.GraphQL.Extensions
         public static void FieldList<TSourceType>(this ObjectGraphType<object> objectGraphType)
             where TSourceType : class, IData
         {
-
-            objectGraphType.Field<ListGraphType<AutoRegisteringObjectGraphType<TSourceType>>>(
-                GetFieldName<TSourceType>(true),
-            arguments: new QueryArguments(new QueryArgument<IntGraphType>
-            { Name = "startingIndex", DefaultValue = 0 },
-            new QueryArgument<IntGraphType>
-            { Name = "maximumItems", DefaultValue = 100 }),
-            resolve: (context) =>
-            {
-                using (var connection = new DataConnection(PublicationScope.Unpublished))
-                {
-                    var start = context.GetArgument<int>("startingIndex");
-                    var count = context.GetArgument<int>("maximumItems");
-                    return connection.Get<TSourceType>().Skip(start).Take(count);
-                }
-            });
+            objectGraphType.FieldList<TSourceType, DataObjectGraphType<TSourceType>>();
         }
 
-        private static string GetFieldName<TSourceType>(bool multiple = false)
+        /// <summary>
+        /// Adds a field with a list of specified IData
+        /// </summary>
+        /// <typeparam name="TSourceType"></typeparam>
+        /// <typeparam name="TGraphType"></typeparam>
+        /// <param name="objectGraphType"></param>
+        public static void FieldList<TSourceType, TGraphType>(this ObjectGraphType<object> objectGraphType)
+            where TSourceType : class, IData
+            where TGraphType: ObjectGraphType<TSourceType>
         {
-            var name = typeof(TSourceType).Name;
+            objectGraphType.Field<ListGraphType<TGraphType>>(
+                typeof(TSourceType).DataQLNameList(),
+                arguments: new QueryArguments(new QueryArgument<IntGraphType>
+                        { Name = "startingIndex", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType>
+                        { Name = "maximumItems", DefaultValue = 100 }),
+                resolve: (context) =>
+                {
+                    using (var connection = new DataConnection(PublicationScope.Unpublished))
+                    {
+                        var start = context.GetArgument<int>("startingIndex");
+                        var count = context.GetArgument<int>("maximumItems");
+                        return connection.Get<TSourceType>().Skip(start).Take(count);
+                    }
+                });
+        }
 
-            if (name.StartsWith("I") && name.Length > 1 && Char.IsUpper(name, 1))
+        public static string DataQLName(this Type type)
+        {
+            var name = type.GraphQLName();
+
+            if (name.StartsWith("I") && name.Length > 1 && char.IsUpper(name, 1))
             {
                 name = name.Substring(1);
             }
 
-            return multiple ? $"{name}Items" : name;
+            return name.ToCamelCase();
+        }
+
+        public static string DataQLNameList(this Type type)
+        {
+            return $"{type.DataQLName()}Items";
+        }
+
+        public static string DataQLId(this Type type)
+        {
+            return $"{type.DataQLName()}Id";
         }
     }
 }

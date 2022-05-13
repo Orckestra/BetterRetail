@@ -30,16 +30,14 @@
         <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="Product.ImageUrl"
              v-bind:alt="Product.FullDisplayName"
              onerror="imgError(this)" />
-        @BuildBanner()
+        @ProductHelpers.PromotionalBanner()
     </a>
-  
-    @BuildRibbon()
+
+    @ProductHelpers.PromotionalRibbon()
     <div v-if="'InWishList' in Product" class="product-tile-wishlist">
         @AddToWishList()
     </div>
-    <ul v-if="Product.ProductBadgeMap" class="product-tile-badges list-unstyled">
-        <li v-for="item in Product.ProductBadgeMap"><img v-bind:src="`/UI.Package/Images/badge/${item.Key}.svg`" v-bind:alt="item.Value" /></li>
-    </ul>
+    @ProductHelpers.ProductBadges()
 
     <div class="product-tile-information">
         <div class="product-tile-text">
@@ -62,8 +60,9 @@
                class="p text-default-font">
                 {{Product.DisplayName}}
             </a>
-
-            @ProductHelpers.DisplayFormat()
+            <div v-if="Product.Format" class="product-tile-format">
+                {{Product.Format}}
+            </div>
         </div>
         @ProductHelpers.PriceBasedOnUnitMeasure()
         @if (ShowAddToCartButton)
@@ -76,20 +75,6 @@
 
 
 </div>
-
-@helper BuildRibbon()
-{
-    <div class="product-tile-ribbon-holder">
-        <div v-if="Product.PromotionalRibbon" class="product-tile-ribbon ribbon-top-right">
-            <span v-bind:class="[Product.PromotionalRibbonBackgroundColor, Product.PromotionalRibbonTextColor]">{{Product.PromotionalRibbon}}</span>
-        </div>
-    </div>
-}
-
-@helper BuildBanner()
-{
-    <div v-if="Product.PromotionalBanner" class="product-tile-banner"><span v-bind:class="[Product.PromotionalBannerBackgroundColor, Product.PromotionalBannerTextColor, 'w-100','p-1']">{{Product.PromotionalBanner}}</span></div>
-}
 
 @helper ProductPrice()
 {

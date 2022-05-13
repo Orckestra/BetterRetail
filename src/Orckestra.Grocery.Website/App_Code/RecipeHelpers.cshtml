@@ -1,0 +1,67 @@
+﻿@using Composite.AspNet.Razor
+@using System.Web.Mvc
+
+@helper SearchTile(string vueBinding = "contentItem", bool showLikeIcon = true, bool showDeleteIcon = false)
+{
+    <div class="card h-100 recipe-tile">
+        @TileImage(vueBinding)
+        @if (showLikeIcon)
+        {
+            <div class="product-tile-recipelist">
+                <a data-qa="add-to-recipe-list" title="@Html.Localize("MyAccount", "H_AddToRecipeList")" v-on:click="setFavorite(@(vueBinding).id, @(vueBinding).isFavorite)" class="add-to-recipelist">
+                    <i class="fa" v-bind:class="{'fa-heart text-danger' : @(vueBinding).isFavorite, 'fa-heart-o': !@(vueBinding).isFavorite}"></i>
+                </a>
+            </div>
+        }
+        @if (showDeleteIcon)
+        {
+            <div class="recipe-tile-delete d-block d-sm-none">
+                <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheRecipeFavoritesList")"
+                        class="btn btn-secondary bg-white text-secondary"
+                        v-on:click="removeFavorite(@(vueBinding).id)"
+                        data-qa="recipe-product-delete">
+                    <span class="fa fa-times fa-lg"></span>
+                </button>
+            </div>
+        }
+        @TileInfo(vueBinding)
+    </div>
+}
+
+@helper TileInfo(string vueBinding = "contentItem")
+{
+
+    <div class="card-body d-flex flex-column justify-content-between">
+        <div class="card-title">
+            <h3 class="h5"><a v-bind:href="@(vueBinding).DetailsUrl" v-html="@(vueBinding).Title"></a></h3>
+        </div>
+        <span class="recipe-info-table">
+            <span v-if="@(vueBinding).difficulty" class="recipe-info-table-cell">
+                <span class="fa fa-spoon recipe-info-icon"></span>
+                <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
+                <span class="recipe-info-value">{{@(vueBinding).difficulty}}</span>
+            </span>
+
+            <span v-if="@(vueBinding).hasTime" class="recipe-info-table-cell">
+                <span class="fa fa-blender recipe-info-icon"></span>
+                <span class="recipe-info-type">@Html.Localize("Recipes", "L_TotalTime")</span>
+                <span class="recipe-info-value">{{@(vueBinding).cookingTime + @(vueBinding).preparationTime}} @Html.Localize("Recipes", "L_Minutes")</span>
+            </span>
+
+            <span v-if="@(vueBinding).servings" class="recipe-info-table-cell">
+                <span class="fa fa-chart-pie recipe-info-icon"></span>
+                <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
+                <span class="recipe-info-value">{{@(vueBinding).servings}}</span>
+            </span>
+        </span>
+    </div>
+}
+
+@helper TileImage(string vueBinding = "contentItem")
+{
+    <a v-if="@(vueBinding).ImageUrl" v-bind:href="@(vueBinding).DetailsUrl">
+        <span class="recipe-tile-media">
+            <img class="card-img-top" v-bind:src="@(vueBinding).ImageUrl + '?h=200'" v-bind:alt="@(vueBinding).Title" />
+        </span>
+    </a>
+}

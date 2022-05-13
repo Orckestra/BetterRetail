@@ -25,69 +25,134 @@
   <div id="app">
     <div class="m-3 flex">
       <div class="flex-grow">
-        <h2>{{recipe.title}}</h2>
+        <h1 class="m-0">{{recipe.title}}</h1>
       </div>
       <div class="flex-none">
-        <button v-on:click="addIngedient" class="btn-secondary w-24 mx-4">Add</button>
+        <button v-on:click="addList" class="btn-secondary w-24 mx-4">Add List</button>
         <button type="submit" class="btn-primary w-24" v-on:click="saveIngredients" :disabled="!isDirty">Save</button>
       </div>
     </div>
     <div class="m-3 flex justify-end">
-      
+
     </div>
-    <div>
-      <table class="table-default outborder-0 w-full">
-        <thead>
-          <tr>
-            <th class="w-2"></th>
-            <th class="w-1/4">Title</th>
-            <th class="w-1/4">Sku</th>
-            <th class="w-1/4">Keyword</th>
-            <th></th>
-            <th class="w-2"></th>
-          </tr>
-        </thead>
-        <tbody tag="tbody" v-model="ingredients" is='draggable' group='items' handle=".handle" @("@end")="onDragEnd"
-          v-bind="dragOptions">
-          <tr v-for="(ingredient, index) in ingredients" :key="index">
-            <td><i class="handle cursor-move">
+    <div is='draggable' v-model="ingredientsListItems" handle=".listHandle" @("@")end="onListDragEnd">
+      <div v-for="(list, listIndex) in ingredientsListItems" :key="listIndex"
+        class="accordion-item bg-white border-t border-gray-400">
+
+        <h2 class="accordion-header mb-0 border-b border-gray-300 flex bg-gray-200">
+          <div class="flex-grow overflow-hidden">
+            <button class="
+        accordion-button
+        flex flex-row
+        py-4
+        px-5
+        text-base text-gray-800 text-left
+
+        border-0
+        rounded-none
+        transition
+        focus:outline-none
+      " type="button" v-on:click="toogleList(listIndex)">
+              <div class="w-8"><i class="listHandle cursor-move block my-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray" width="18px" height="18px">
                     <path d="M0 0h24v24H0V0z" fill="none" />
                     <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
                   </svg>
-              </i>
-            </td>
-            <td class="py-4">
-              <input v-model="ingredients[index].title" v-validate="'required'" :name="'title' + index"  placeholder="" type="text" class="mt-1 block w-full">
-            </td>
-            <td>
-              <input v-model="ingredients[index].sKU" placeholder="" type="text" class="mt-1 block w-full">
-            </td>
-            <td>
-              <input v-model="ingredients[index].keyword" placeholder="" type="text" class="mt-1 block w-full">
-            </td>
-            <td></td>
-            <td>
-              <button v-on:click="removeIngedient(index)" class="btn" title="Delete Ingredient">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21"
-                  height="21" viewBox="0 0 21 21">
-                  <path fill="#333" fill-rule="evenodd"
-                    d="M20.0375,2.625 L14.35,2.625 L14.35,0.4375 C14.35,0.175 14.175,0 13.9125,0 L6.9125,0 C6.65,0 6.475,0.175 6.475,0.4375 L6.475,2.625 L0.7875,2.625 C0.525,2.625 0.35,2.8 0.35,3.0625 C0.35,3.325 0.525,3.5 0.7875,3.5 L2.975,3.5 L2.975,20.5625 C2.975,20.825 3.15,21 3.4125,21 L17.4125,21 C17.675,21 17.85,20.825 17.85,20.5625 L17.85,3.5 L20.0375,3.5 C20.3,3.5 20.475,3.325 20.475,3.0625 C20.475,2.8 20.3,2.625 20.0375,2.625 Z M7.35,0.875 L13.475,0.875 L13.475,2.625 L7.35,2.625 L7.35,0.875 Z M16.975,20.125 L3.85,20.125 L3.85,3.5 L16.975,3.5 L16.975,20.125 Z M6.9125,16.625 C7.175,16.625 7.35,16.45 7.35,16.1875 L7.35,6.5625 C7.35,6.3 7.175,6.125 6.9125,6.125 C6.65,6.125 6.475,6.3 6.475,6.5625 L6.475,16.1875 C6.475,16.45 6.65,16.625 6.9125,16.625 Z M10.4125,16.625 C10.675,16.625 10.85,16.45 10.85,16.1875 L10.85,6.5625 C10.85,6.3 10.675,6.125 10.4125,6.125 C10.15,6.125 9.975,6.3 9.975,6.5625 L9.975,16.1875 C9.975,16.45 10.2375,16.625 10.4125,16.625 Z M13.9125,16.625 C14.175,16.625 14.35,16.45 14.35,16.1875 L14.35,6.5625 C14.35,6.3 14.175,6.125 13.9125,6.125 C13.65,6.125 13.475,6.3 13.475,6.5625 L13.475,16.1875 C13.475,16.45 13.65,16.625 13.9125,16.625 Z" />
+                </i></div>
+              <div v-if="collapsed[listIndex]" class="w-8 mt-1"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg"
+                  width="10" height="10" viewBox="0 0 10 10">
+                  <polyline fill="none" stroke="#999" stroke-linecap="round" stroke-linejoin="round"
+                    points="9 3 5 7 1 3" />
+                </svg></div>
+              <div v-else class="w-8 mt-1"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="10"
+                  height="10" viewBox="0 0 10 10">
+                  <polyline fill="none" stroke="#999" stroke-linecap="round" stroke-linejoin="round"
+                    points="9 3 5 7 1 3" transform="rotate(-180 5 5)" />
                 </svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </div>
 
+              <div class="px-4 w-96">{{list.title}}</div>
+              <div v-show="collapsed[listIndex]" class="w-1/4">
+                <div class="w-full  text-gray-400 text-xs truncate">{{list.ingredientItems.map(i =>
+                  i.title).join(', ')}}</div>
+              </div>
+            </button>
+
+          </div>
+          <div class="flex-none w-20">
+            <button v-on:click="removeList(listIndex)" class="btn my-2 mx-4 flex-none bg-white" title="Delete List">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                <path fill="#333" fill-rule="evenodd"
+                  d="M20.0375,2.625 L14.35,2.625 L14.35,0.4375 C14.35,0.175 14.175,0 13.9125,0 L6.9125,0 C6.65,0 6.475,0.175 6.475,0.4375 L6.475,2.625 L0.7875,2.625 C0.525,2.625 0.35,2.8 0.35,3.0625 C0.35,3.325 0.525,3.5 0.7875,3.5 L2.975,3.5 L2.975,20.5625 C2.975,20.825 3.15,21 3.4125,21 L17.4125,21 C17.675,21 17.85,20.825 17.85,20.5625 L17.85,3.5 L20.0375,3.5 C20.3,3.5 20.475,3.325 20.475,3.0625 C20.475,2.8 20.3,2.625 20.0375,2.625 Z M7.35,0.875 L13.475,0.875 L13.475,2.625 L7.35,2.625 L7.35,0.875 Z M16.975,20.125 L3.85,20.125 L3.85,3.5 L16.975,3.5 L16.975,20.125 Z M6.9125,16.625 C7.175,16.625 7.35,16.45 7.35,16.1875 L7.35,6.5625 C7.35,6.3 7.175,6.125 6.9125,6.125 C6.65,6.125 6.475,6.3 6.475,6.5625 L6.475,16.1875 C6.475,16.45 6.65,16.625 6.9125,16.625 Z M10.4125,16.625 C10.675,16.625 10.85,16.45 10.85,16.1875 L10.85,6.5625 C10.85,6.3 10.675,6.125 10.4125,6.125 C10.15,6.125 9.975,6.3 9.975,6.5625 L9.975,16.1875 C9.975,16.45 10.2375,16.625 10.4125,16.625 Z M13.9125,16.625 C14.175,16.625 14.35,16.45 14.35,16.1875 L14.35,6.5625 C14.35,6.3 14.175,6.125 13.9125,6.125 C13.65,6.125 13.475,6.3 13.475,6.5625 L13.475,16.1875 C13.475,16.45 13.65,16.625 13.9125,16.625 Z" />
+              </svg></button>
+          </div>
+        </h2>
+        <div v-show="!collapsed[listIndex]">
+          <div class="flex flex-row divide-x divide-gray-300 p-2 ml-8 mb-3">
+            <div class="px-4">
+              <label class="block text-gray-400 text-xs mb-2">List Title</label>
+              <input class="w-96" v-model="list.title" type="text" v-validate="'required'" />
+            </div>
+            <div class="px-4">
+              <label class="block text-gray-400 text-xs mb-2">Hide Title</label>
+              <input v-model="list.hideTitle" type="checkbox" />
+            </div>
+            <div class="px-4">
+              <button v-on:click="addIngedient(listIndex)" class="btn-primary mt-5">Add Ingredient</button>
+            </div>
+          </div>
+          <table class="table-default outborder-0 w-full border-t border-gray-300">
+            <thead>
+              <tr>
+                <th class="w-2"></th>
+                <th class="w-1/4">Title</th>
+                <th class="w-1/4">Sku</th>
+                <th class="w-1/4">Keyword</th>
+                <th></th>
+                <th class="w-2"></th>
+              </tr>
+            </thead>
+            <tbody tag="tbody" v-model="list.ingredientItems" is='draggable' handle=".handle" v-bind="dragOptions">
+              <tr v-for="(ingredient, index) in list.ingredientItems" :key="index">
+                <td><i class="handle cursor-move">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="gray" width="18px" height="18px">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                    </svg>
+                  </i>
+                </td>
+                <td class="py-4">
+                  <input v-model="list.ingredientItems[index].title" v-validate="'required'" :name="'title' + index"
+                    placeholder="" type="text" class="mt-1 block w-full">
+                </td>
+                <td>
+                  <input v-model="list.ingredientItems[index].sKU" placeholder="" type="text" class="mt-1 block w-full">
+                </td>
+                <td>
+                  <input v-model="list.ingredientItems[index].keyword" placeholder="" type="text"
+                    class="mt-1 block w-full">
+                </td>
+                <td></td>
+                <td>
+                  <button v-on:click="removeIngedient(listIndex, index)" class="btn mx-1 bg-white"
+                    title="Delete Ingredient">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                      <path fill="#333" fill-rule="evenodd"
+                        d="M20.0375,2.625 L14.35,2.625 L14.35,0.4375 C14.35,0.175 14.175,0 13.9125,0 L6.9125,0 C6.65,0 6.475,0.175 6.475,0.4375 L6.475,2.625 L0.7875,2.625 C0.525,2.625 0.35,2.8 0.35,3.0625 C0.35,3.325 0.525,3.5 0.7875,3.5 L2.975,3.5 L2.975,20.5625 C2.975,20.825 3.15,21 3.4125,21 L17.4125,21 C17.675,21 17.85,20.825 17.85,20.5625 L17.85,3.5 L20.0375,3.5 C20.3,3.5 20.475,3.325 20.475,3.0625 C20.475,2.8 20.3,2.625 20.0375,2.625 Z M7.35,0.875 L13.475,0.875 L13.475,2.625 L7.35,2.625 L7.35,0.875 Z M16.975,20.125 L3.85,20.125 L3.85,3.5 L16.975,3.5 L16.975,20.125 Z M6.9125,16.625 C7.175,16.625 7.35,16.45 7.35,16.1875 L7.35,6.5625 C7.35,6.3 7.175,6.125 6.9125,6.125 C6.65,6.125 6.475,6.3 6.475,6.5625 L6.475,16.1875 C6.475,16.45 6.65,16.625 6.9125,16.625 Z M10.4125,16.625 C10.675,16.625 10.85,16.45 10.85,16.1875 L10.85,6.5625 C10.85,6.3 10.675,6.125 10.4125,6.125 C10.15,6.125 9.975,6.3 9.975,6.5625 L9.975,16.1875 C9.975,16.45 10.2375,16.625 10.4125,16.625 Z M13.9125,16.625 C14.175,16.625 14.35,16.45 14.35,16.1875 L14.35,6.5625 C14.35,6.3 14.175,6.125 13.9125,6.125 C13.65,6.125 13.475,6.3 13.475,6.5625 L13.475,16.1875 C13.475,16.45 13.65,16.625 13.9125,16.625 Z" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-
   </div>
 
 
   <script type="text/javascript">
-
-
+    const omitTypeName = ({ __typename, ...i }) => i;
 
     Vue.use(VeeValidate, {
       classes: true,
@@ -109,48 +174,49 @@
       defaultClient: apolloClient,
     })
 
-
     const INGREDIENTS_QUERY = Apollo.gql`
-{
-  recipe(id: "${recipeId}") {
+query ($recipeId: Guid){
+  recipe(id: $recipeId){
     title
+    ingredientsListItems {
+      id
+      title
+      hideTitle
+      order
+      ingredientItems {
+        id
+        title
+        keyword
+        sKU
+        order
+      }
+    }
   }
-  ingredients(ingredientsList:"${ingredientsListId}") {
-     id
-     title
-     keyword
-     sKU
-     order
-     ingredientsList
-   }
 }
 `
 
     const INGREDIENTS_MUTATION = Apollo.gql`
-mutation ($ingredientsList: Guid, $ingredients: [IIngredientInput]){
-  updateIngredients(
-    ingredientsList:$ingredientsList,
-    ingredients: $ingredients
-  ),
+mutation($recipeId: Guid, $ingredientsListItems: [ingredientsListInput]){
+  updateRecipeIngredients(
+    recipeId: $recipeId
+    ingredientsListItems: $ingredientsListItems
+  )
 }
 `
 
     const app = new Vue({
       el: '#app',
       data: {
-        ingredients: [],
+        ingredientsListItems: [],
+        collapsed: {},
+        hides: {},
         recipe: {},
         isDirty: false,
         loading: 0,
         isLoadModification: false, // workarround
       },
-      computed: {
-        orderedIngridients: function () {
-          return _.orderBy(this.users, 'name')
-        }
-      },
       watch: {
-        ingredients: {
+        ingredientsListItems: {
           handler: function (data) {
             if (!this.isLoadModification) {
               this.isDirty = true;
@@ -163,12 +229,20 @@ mutation ($ingredientsList: Guid, $ingredients: [IIngredientInput]){
       },
       apolloProvider,
       apollo: {
-        ingredients: {
+        recipe: {
           query: INGREDIENTS_QUERY,
           loadingKey: 'loading',
+          variables: {
+            recipeId: recipeId,
+          },
 
           result({ data }) {
-            this.ingredients = _.orderBy(data.ingredients.map(({ __typename, ...i }) => i), "order");
+            this.ingredientsListItems = _.orderBy(data.recipe.ingredientsListItems.map(omitTypeName)
+              .map(d => ({
+                ...d,
+                ingredientItems: _.orderBy(d.ingredientItems.map(omitTypeName), "order")
+              }))
+              , "order");
             this.recipe = data.recipe;
             this.isLoadModification = true;
             this.isDirty = false;
@@ -176,17 +250,32 @@ mutation ($ingredientsList: Guid, $ingredients: [IIngredientInput]){
         },
       },
       methods: {
-        addIngedient() {
-          this.ingredients = [...this.ingredients, { ingredientsList: ingredientsListId }];
+        toogleList(accordtionId) {
+          this.$set(this.collapsed, accordtionId, !this.collapsed[accordtionId]);
         },
-        removeIngedient(indexToRemove) {
-          this.ingredients = this.ingredients.filter((_, i) => i !== indexToRemove);
+        addList() {
+          this.collapsed = this.ingredientsListItems.reduce((acc, rec, index) => ({ ...acc, [index + 1]: !!this.collapsed[index] }), {})
+          this.ingredientsListItems.splice(0, 0, { ingredientItems: [{}], hideTitle: false });
         },
-        onDragEnd() {
-          this.ingredients = this.ingredients.map((d, index) => ({ ...d, order: index }));
+        removeList(indexToRemove) {
+          this.ingredientsListItems = this.ingredientsListItems.filter((_, i) => i !== indexToRemove);
+          this.collapsed = this.ingredientsListItems.reduce((acc, rec, index) => ({ ...acc, [index]: !!this.collapsed[index >= indexToRemove ? index + 1 : index] }), {})
         },
+        onListDragEnd({ newIndex, oldIndex }) {
+          const shift = newIndex > oldIndex ? 1 : -1
 
-
+          this.collapsed = this.ingredientsListItems.reduce((acc, rec, index) => ({
+            ...acc,
+            [index]: !!this.collapsed[index < newIndex && index < oldIndex || index > newIndex && index > oldIndex ? index :
+              index == newIndex ? oldIndex : index + shift]
+          }), {})
+        },
+        addIngedient(listIndex) {
+          this.ingredientsListItems[listIndex].ingredientItems = [{}, ...this.ingredientsListItems[listIndex].ingredientItems ?? []];
+        },
+        removeIngedient(listIndex, indexToRemove) {
+          this.ingredientsListItems[listIndex].ingredientItems = this.ingredientsListItems[listIndex].ingredientItems.filter((_, i) => i !== indexToRemove);
+        },
 
         saveIngredients() {
 
@@ -197,12 +286,16 @@ mutation ($ingredientsList: Guid, $ingredients: [IIngredientInput]){
                 mutation: INGREDIENTS_MUTATION,
                 // Parameters
                 variables: {
-                  ingredientsList: ingredientsListId,
-                  ingredients: this.ingredients.map((d, i) => ({ ...d, order: i }))
+                  recipeId: recipeId,
+                  ingredientsListItems: this.ingredientsListItems.map(omitTypeName).map((d, i) =>
+                  ({
+                    ...d, order: i, ingredientItems: d.ingredientItems.map(omitTypeName).map(
+                      (ii, iindex) => ({ ...ii, order: iindex }))
+                  }))
                 },
 
               }).then((data) => {
-                return this.$apollo.queries.ingredients.refetch();
+                return this.$apollo.queries.recipe.refetch();
               }).catch((error) => {
                 console.error(error)
               })
@@ -254,7 +347,7 @@ mutation ($ingredientsList: Guid, $ingredients: [IIngredientInput]){
     }
 
     input[type='text'].invalid {
-       border-color: #A40000;
+      border-color: #A40000;
     }
   </style>
 

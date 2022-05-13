@@ -86,17 +86,20 @@
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.9.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.4.5.0\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.0.0\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.4.5.0\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.RestClient, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Client.5.0.0\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.4.5.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.5.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    </Reference>
+    <Reference Include="Orckestra.Search.WebsiteSearch, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMSPackages.Orckestra.Search.WebsiteSearch.1.0.8\lib\net461\Orckestra.Search.WebsiteSearch.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.Client.5.9.0\lib\net45\ServiceStack.Client.dll</HintPath>
@@ -156,7 +159,9 @@
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Api\RecipesController.cs" />
     <Compile Include="Controllers\GraphQLController.cs" />
+    <Compile Include="DataTypes\IRecipeSettingsMeta.cs" />
     <Compile Include="DataTypes\IRecipe.cs" />
     <Compile Include="DataTypes\IRecipeMealType.cs" />
     <Compile Include="DataTypes\IIngredientsList.cs" />
@@ -167,7 +172,11 @@
     <Compile Include="DataTypes\ICuisineType.cs" />
     <Compile Include="GraphQL\Extensions\DataGraphQLExtensions.cs" />
     <Compile Include="GraphQL\Interfaces\IRecipeSchema.cs" />
-    <Compile Include="GraphQL\Types\IngredientsInputGraphType.cs" />
+    <Compile Include="GraphQL\Types\DataInput.cs" />
+    <Compile Include="GraphQL\Types\DataObjectGraphType.cs" />
+    <Compile Include="GraphQL\Types\IngredientInputGraphType.cs" />
+    <Compile Include="GraphQL\Types\RecipeGraphType.cs" />
+    <Compile Include="GraphQL\Types\IngredientsListInputGraphType.cs" />
     <Compile Include="IRecipeUrlProvider.cs" />
     <Compile Include="GraphQL\RecipesMutation.cs" />
     <Compile Include="GraphQL\RecipesQuery.cs" />
@@ -175,14 +184,23 @@
     <Compile Include="GraphQL\Types\DataInputObjectGraphType.cs" />
     <Compile Include="GraphQL\Types\IngredientGraphType.cs" />
     <Compile Include="GraphQL\Types\IngredientsListGraphType.cs" />
+    <Compile Include="Parameters\GetCustomerRecipeFavoriteSearchResultsParam.cs" />
+    <Compile Include="Parameters\UpdateFavoriteParam.cs" />
+    <Compile Include="Parameters\GetCustomerRecipeFavoritesParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecipesMainMenuItemsProvider.cs" />
+    <Compile Include="RecipesPlugin.cs" />
     <Compile Include="RecipeUrlProvider.cs" />
+    <Compile Include="Requests\SearchRecipesRequest.cs" />
     <Compile Include="Search\RecipeDataFieldProcessorProvider.cs" />
     <Compile Include="Services\IRecipesViewService.cs" />
     <Compile Include="Services\RecipesViewService.cs" />
+    <Compile Include="Settings\IRecipeSettings.cs" />
+    <Compile Include="Settings\RecipeSettings.cs" />
     <Compile Include="StartupHandler.cs" />
+    <Compile Include="ViewModels\FavoritesViewModel.cs" />
     <Compile Include="ViewModels\IngredientsListViewModel.cs" />
+    <Compile Include="ViewModels\RecipeSearchResultsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -191,6 +209,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj">
+      <Project>{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}</Project>
+      <Name>Orckestra.Composer.Cart</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.CompositeC1.DataTypes\Orckestra.Composer.CompositeC1.DataTypes.csproj">
       <Project>{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}</Project>
       <Name>Orckestra.Composer.CompositeC1.DataTypes</Name>
@@ -202,6 +224,10 @@
     <ProjectReference Include="..\Orckestra.Composer.ContentSearch\Orckestra.Composer.ContentSearch.csproj">
       <Project>{460EACA2-1EDB-46BC-A508-F784E4A4DA97}</Project>
       <Name>Orckestra.Composer.ContentSearch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
+      <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
+      <Name>Orckestra.Composer.Search</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}</Project>

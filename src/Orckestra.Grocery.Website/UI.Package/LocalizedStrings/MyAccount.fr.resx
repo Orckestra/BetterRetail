@@ -189,6 +189,9 @@
   <data name="H_RemoveFromTheWishList" xml:space="preserve">
     <value>Retirer de la liste de souhaits</value>
   </data>
+  <data name="H_RemoveFromTheRecipeFavoritesList" xml:space="preserve">
+    <value>Supprimer de la liste des favoris de recettes</value>
+  </data>
   <data name="H_WishListInHeaderTitle" xml:space="preserve">
     <value>Liste de souhaits</value>
   </data>
@@ -406,6 +409,9 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="T_MyAddresses" xml:space="preserve">
     <value>Mes adresses</value>
   </data>
+  <data name="T_MyRecipeFavorites" xml:space="preserve">
+    <value>Mes recettes préférées </value>
+  </data>
   <data name="T_MyCreditCard" xml:space="preserve">
     <value>Mes cartes de crédit</value>
   </data>
@@ -459,6 +465,9 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   </data>
   <data name="T_WishListCount" xml:space="preserve">
     <value>produit(s)</value>
+  </data>
+  <data name="T_RecipeListCount" xml:space="preserve">
+    <value>recette(s)</value>
   </data>
   <data name="H_RecurringCartDetails" xml:space="preserve">
     <value>Voir les détails</value>

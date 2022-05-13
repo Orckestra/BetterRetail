@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Grocery.Website
             host.RegisterExceptionFiltersForApiControllers(typeof(AggregatedComposerExceptionFilter), typeof(ComposerExceptionFilter));
 
             host.Register<RecipesMainMenuItemsProvider, IMainMenuItemsProvider>();
-
+            host.Register<GroceryMyAccountViewService, IMyAccountViewService>();
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
             
             RegisterPaymentProviders();

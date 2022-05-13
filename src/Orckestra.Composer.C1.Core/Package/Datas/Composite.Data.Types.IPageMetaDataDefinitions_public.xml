@@ -17,4 +17,5 @@
   <Add Id="d7556156-df78-4bc3-b4ec-2d7010e225c7" DefiningItemId="f64fe76f-bb5a-4b6d-9499-e81762f25db6" Name="ProductPreviewMode" Label="Product Preview Mode" MetaDataContainerId="eb210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="3ea8c217-614f-4397-831e-7d6b314ff558" StartLevel="0" Levels="100000" />
 
   <Add Id="5edc0edf-2a46-4665-9919-fe131aeab263" DefiningItemId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" Name="Grocery Settings" Label="Grocery Settings" MetaDataContainerId="12210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="4f16a00c-b156-45b1-86db-cdfca8ca27b4" StartLevel="0" Levels="0" />
+  <Add Id="7e0c4452-778b-465d-83b7-3a4edc1f1d25" DefiningItemId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" Name="Recipe Settings" Label="Recipe Settings" MetaDataContainerId="12210a75-be25-401f-b0d4-b3787bce36fa" MetaDataTypeId="4f16a00c-b156-45b1-86db-cdfca8ca2780" StartLevel="0" Levels="0" />
 </Data>

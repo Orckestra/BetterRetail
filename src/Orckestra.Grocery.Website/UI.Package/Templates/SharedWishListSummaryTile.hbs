@@ -1,4 +1,4 @@
-<div class="wishlist-tile  product-tile d-flexh-100">
+<div class="wishlist-tile  product-tile d-flex h-100">
     <a class="product-tile-media" href="{{ProductUrl}}">
         <img class="img-fluid m-auto" src="{{ImageUrl}}" alt="{{ProductSummary.FullDisplayName}}" onerror="this.onerror=null; this.src='{{FallbackImageUrl}}'" />
         {{!-- TODO Add Banner to ViewModel --}}
@@ -20,15 +20,13 @@
             </div>
         </div>
     {{/if}}
-    {{!-- TODO Add Badge to ViewModel
-    {{#if ProductBadgeMap}}
+    {{#if ProductBadgeValues}}
         <ul class="product-tile-badges list-unstyled">
-            {{#each ProductBadgeMap}}
+            {{#each ProductBadgeValues}}
                 <li><img src="/UI.Package/Images/badge/{{@key}}.svg" alt="{{this}}" /></li>
             {{/each}}
         </ul>
     {{/if}}
-    --}}
     <div class="product-tile-information">
         <div class="product-tile-text">
             {{#if ProductSummary.Brand}}
@@ -41,21 +39,9 @@
             {{/if}}
             <a class="p text-default-font" data-qa="wishlist-product-title" href="{{ProductUrl}}" title="{{ProductSummary.DisplayName}}" data-productId="{{ProductId}}">{{ProductSummary.DisplayName}}</a>
             {{!-- TODO Add Unit Values to ViewModel --}}
-            {{#if HasUnitValues}}
+            {{#if Format}}
                 <div class="product-tile-format">
-                    {{#if IsUnit}}
-                        {{#if IsWeightedProduct}}
-                            <span> {{Localize 'ProductPage' 'L_Approx'}} {{ProductUnitSize}}{{ProductUnitMeasure}} {{Localize 'General' 'L_EachAbbrev'}}</span>
-                        {{else}}
-                            <span>{{ProductUnitSize}}{{ProductUnitMeasure}}</span>
-                        {{/if}}
-                    {{else}}
-                        {{#if IsWeightedProduct}}
-                            <span>{{ProductUnitQuantity}} x {{Localize 'ProductPage' 'L_Approx'}} {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
-                        {{else}}
-                            <span>{{ProductUnitQuantity}} x {{ProductUnitSize}}{{ProductUnitMeasure}}</span>
-                        {{/if}}
-                    {{/if}}
+                    {{Format}}
                 </div>
             {{/if}}
         </div>

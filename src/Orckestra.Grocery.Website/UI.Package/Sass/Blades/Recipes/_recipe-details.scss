@@ -1,7 +1,9 @@
 .recipe {
     &-action-bar {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
 
         .btn + .btn {
             margin-left: $spacer;

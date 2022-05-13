@@ -344,6 +344,7 @@
     <Content Include="App_Code\ProductSepcificationHelpers.cshtml" />
     <Content Include="App_Code\ImageHelpers.cshtml" />
     <Content Include="App_Code\ContentSearchHelpers.cshtml" />
+    <Content Include="App_Code\RecipeHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -455,6 +456,9 @@
     <Content Include="App_Data\Razor\Composer\ContentSearch\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\Results.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\MultiKeywords.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\WishList.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\Recipes\MyFavorites.cshtml" />
+    <Content Include="App_Data\Razor\Grocery\Recipes\StructuredData.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

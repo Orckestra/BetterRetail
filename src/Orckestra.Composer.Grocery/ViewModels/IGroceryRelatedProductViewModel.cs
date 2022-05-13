@@ -47,9 +47,20 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// <summary>
         /// Gets or sets the product Badges
         /// </summary>
-        string ProductBadges { get; set; }
+        [MapTo("ProductBadges")]
+        string ProductBadgesKeys { get; set; }
+
+        [Lookup(LookupType.Product, "ProductBadges")]
+        [MapTo("ProductBadges")]
+        string ProductBadgesLookup { get; set; }
+
         Dictionary<string, string> ProductBadgeValues { get; set; }
 
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon Value
+        /// </summary>
+        [MapTo("PromotionalRibbon")]
+        string PromotionalRibbonValue { get; set; }
         /// <summary>
         /// Gets or sets the product Promotional Ribbon
         /// </summary>
@@ -66,6 +77,13 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// </summary>
         string PromotionalRibbonTextColor { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner Value
+        /// </summary>
+        [MapTo("PromotionalBanner")]
+        string PromotionalBannerValue { get; set; }
+
         /// <summary>
         /// Gets or sets the product Promotional Banner
         /// </summary>
@@ -81,5 +99,10 @@ namespace Orckestra.Composer.Grocery.ViewModels
         /// Gets or sets the product Promotional Banner Text Color
         /// </summary>
         string PromotionalBannerTextColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Format
+        /// </summary>
+        string Format { get; set; }
     }
 }

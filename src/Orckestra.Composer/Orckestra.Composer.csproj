@@ -273,6 +273,7 @@
     <Compile Include="Parameters\GetCustomerByEmailParam.cs" />
     <Compile Include="Parameters\GetCustomerByIdParam.cs" />
     <Compile Include="Parameters\GetCustomerByUsernameParam.cs" />
+    <Compile Include="Parameters\GetCustomProfilesParam.cs" />
     <Compile Include="Parameters\GetFooterParam.cs" />
     <Compile Include="Parameters\GetProductDefinitionParam.cs" />
     <Compile Include="Parameters\GetProductParam.cs" />
@@ -306,7 +307,9 @@
     <Compile Include="Providers\IRegexRulesProvider.cs" />
     <Compile Include="Providers\RegexRulesProvider.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="Repositories\CustomProfilesRepository.cs" />
     <Compile Include="Repositories\ICustomerRepository.cs" />
+    <Compile Include="Repositories\ICustomProfilesRepository.cs" />
     <Compile Include="Repositories\IProductRepository.cs" />
     <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />

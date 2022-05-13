@@ -4,6 +4,7 @@
     <cms:binding name="Image" type="System.String" />
     <cms:binding name="Title" type="System.String" />
     <cms:binding name="UrlTitle" type="System.String" optional="true" />
+    <cms:binding name="Keywords" type="System.String" optional="true" />
     <cms:binding name="MealType" type="System.Guid" />
     <cms:binding name="Description" type="System.String" />
     <cms:binding name="Instructions" type="System.String" />
@@ -77,6 +78,11 @@
               <ff:StaticMethodCall Type="&lt;t n=&quot;Composite.Plugins.Functions.WidgetFunctionProviders.StandardWidgetFunctionProvider.DataReference.NullableDataReferenceSelectorWidgetFunction`1, Composite, Version=6.11.7982.26191, Culture=neutral, PublicKeyToken=null&quot;&gt;&#xD;&#xA;  &lt;t n=&quot;Orckestra.Composer.Recipes.DataTypes.ICuisineType,Orckestra.Composer.Recipes&quot; /&gt;&#xD;&#xA;&lt;/t&gt;" Method="GetOptions" Parameters="Orckestra.Composer.Recipes.DataTypes.ICuisineType,Orckestra.Composer.Recipes" />
             </KeySelector.Options>
           </KeySelector>
+          <TextBox Label="Keywords" Help="Keywords used by search engines" SpellCheck="true">
+            <TextBox.Text>
+              <cms:bind source="Keywords" />
+            </TextBox.Text>
+          </TextBox>
         </FieldGroup>
         
         <FieldGroup Label="Summary Information">

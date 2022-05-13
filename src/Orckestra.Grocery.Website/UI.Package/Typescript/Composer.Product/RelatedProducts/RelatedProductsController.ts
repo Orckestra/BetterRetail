@@ -41,12 +41,6 @@ module Orckestra.Composer {
                                     product.Quantity = cartItem ? cartItem.Quantity : 0;
                                     product.LineItemId = cartItem ? cartItem.Id : undefined;
 
-                                    if (product.ProductBadgeValues) {
-                                        product.ProductBadgeMap = Object.keys(product.ProductBadgeValues)
-                                            .map((key) => ({ Key: key, Value: product.ProductBadgeValues[key] }));
-                                    }
-
-                                    product.HasUnitValues = PriceHelper.HasUnitValues(product);
                                     product.PricePerUnit = PriceHelper.PricePerUnit(product.IsOnSale ? product.DisplaySpecialPrice :product.DisplayListPrice,
                                         product.ProductUnitQuantity,
                                         product.ProductUnitSize,

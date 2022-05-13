@@ -5,6 +5,11 @@
 /// <reference path='../Utils/UrlHelper.ts' />
 /// <reference path='./SearchParams.ts' />
 /// <reference path='./Constants/ContentSearchEvents.ts' />
+///<reference path='../Composer.Grocery/Recipes/Sevices/IRecipeFavoritesService.ts' />
+///<reference path='../Composer.Grocery/Recipes/Sevices/RecipeFavoritesService.ts' />
+///<reference path='../Repositories/RecipeFavoritesRepository.ts' />
+///<reference path='../Composer.MyAccount/Common/IMembershipService.ts' />
+///<reference path='../Composer.MyAccount/Common/MembershipService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -12,9 +17,18 @@ module Orckestra.Composer {
     export class ContentSearchResultsController extends Orckestra.Composer.Controller {
         protected vueSearchResults: Vue;
         protected searchRepository: ISearchRepository = new SearchRepository();
+        protected recipeFavoritesService: IRecipeFavoritesService = new RecipeFavoritesService(new RecipeFavoritesRepository());
+        protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
 
         public initialize() {
             super.initialize();
+
+            let authenticatedPromise = this.membershipService.isAuthenticated();
+            let favPromise = this.recipeFavoritesService.getRecipeFavoritesSummary();
+            Q.all([authenticatedPromise, favPromise]).spread((authVm, { FavoriteIds }) => this.initializeVueComponent(authVm, FavoriteIds));
+        }
+
+        private initializeVueComponent(authVm, favorites) {
             const { SearchResults, PagesCount, Total, DataTypes } = this.context.viewModel;
             const SelectedSortBy = this.context.container.data('selected-sort');
             const AvailableSortBys = this.context.container.data('available-sort');
@@ -22,10 +36,10 @@ module Orckestra.Composer {
             const currentSite = this.context.container.data('current-site') === 'True';
             const isRecipe = this.context.container.data('is-recipes') === 'True';
             let difficulties = this.context.container.data('difficulties');
-            difficulties = difficulties && difficulties.reduce((acumm, item) => {
-                acumm[item[0].Id] = item[0].Title;
-                return acumm;
-            },{});
+            difficulties = difficulties && difficulties.reduce((accum, item) => {
+                item.forEach(x => accum[x.Id] = x.Title)
+                return accum;
+            }, {});
 
             this.sendContentSearchResultsForAnalytics(Total);
 
@@ -45,14 +59,15 @@ module Orckestra.Composer {
                         PreviousPage: false,
                         NextPage: false,
                     },
-                    isLoading: false
+                    isLoading: false,
+                    RecipeFavorites: favorites,
+                    IsAuthenticated: authVm.IsAuthenticated,
                 },
                 mounted() {
                     this.Pagination = this.getPagination(PagesCount);
-                    this.SearchResults = this.mapSearchResults(this.SearchResults);
+
+                    this.SearchResults = this.mapSearchResults(SearchResults);
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, this.onSearchResultsLoaded);
-                },
-                computed: {
                 },
                 methods: {
                     getPagination(count): any {
@@ -60,27 +75,27 @@ module Orckestra.Composer {
                         return ({
                             PagesCount: count,
                             CurrentPage: currentPage,
-                            PreviousPage:  currentPage > 1,
-                            NextPage:  currentPage < count
+                            PreviousPage: currentPage > 1,
+                            NextPage: currentPage < count
                         });
                     },
                     previousPage(): void {
                         const queryString = SearchParams.previousPage();
-                        this.loadSearchResults({queryString});
+                        this.loadSearchResults({ queryString });
                     },
                     nextPage(): void {
                         const queryString = SearchParams.nextPage();
-                        this.loadSearchResults({queryString});
+                        this.loadSearchResults({ queryString });
                     },
                     toPage(page: any): void {
                         const queryString = SearchParams.toPage(page);
-                        this.loadSearchResults({queryString});
+                        this.loadSearchResults({ queryString });
                     },
                     sortingChanged(sortBy, sortOrder): void {
                         const queryString = SearchParams.changeSorting(sortBy, sortOrder);
-                        this.loadSearchResults({queryString});
+                        this.loadSearchResults({ queryString });
                     },
-                    loadSearchResults({queryString}): void {
+                    loadSearchResults({ queryString }): void {
                         SearchParams.pushState(queryString);
                         const currentTab = SearchParams.getLastSegment();
 
@@ -90,37 +105,39 @@ module Orckestra.Composer {
                             self.eventHub.publish(ContentSearchEvents.SearchResultsLoaded, { data: result });
                         });
                     },
-                    onSearchResultsLoaded({data}): void {
+                    onSearchResultsLoaded({ data }): void {
                         const { SearchResults, PagesCount, Total } = data.ActiveTab;
 
                         this.Pagination = this.getPagination(PagesCount);
-                        this.SearchResults = this.mapSearchResults(SearchResults);
 
+                        this.SearchResults = this.mapSearchResults(SearchResults);
                         this.TotalCount = Total;
                         this.SelectedSortBy = data.SelectedSortBy;
 
                         self.sendContentSearchResultsForAnalytics(Total);
                     },
                     mapSearchResults(searchResults) {
-                        return searchResults && searchResults.map(item => {
-                            if(isRecipe) {
-                                const hasTime = item.FieldsBag["IRecipe.CookingTime"] != null || item.FieldsBag["IRecipe.PreparationTime"] != null
-                                const cookingTime = Number(item.FieldsBag["IRecipe.CookingTime"]) || 0;
-                                const preparationTime = Number(item.FieldsBag["IRecipe.PreparationTime"]) || 0;
-                                const difficulty = difficulties[item.FieldsBag["IRecipe.Difficulty"]]
-                                const servings = item.FieldsBag["IRecipe.Servings"];
+                        if (isRecipe) {
+                            return self.recipeFavoritesService.mapSearchResults(searchResults, difficulties, this.RecipeFavorites);
+                        }
+                        return searchResults;
+                    },
+                    setFavorite(itemId, isFavorite) {
+                        if (!this.IsAuthenticated) {
+                            return self.recipeFavoritesService.redirectToSignIn();
+                        }
 
-                                return {
-                                    hasTime,
-                                    cookingTime,
-                                    preparationTime,
-                                    difficulty,
-                                    servings,
-                                    ...item
-                                }
-                            }
-                            return item;
-                        });
+                        const elementIndex = this.SearchResults.findIndex((obj => obj.id == itemId));
+                        this.SearchResults[elementIndex].isFavorite = !isFavorite;
+                        if (isFavorite) {
+                            self.recipeFavoritesService.removeFavorite(itemId);
+                            this.RecipeFavorites = this.RecipeFavorites.filter(function (item) {
+                                return item != itemId
+                            });
+                        } else {
+                            self.recipeFavoritesService.addFavorite(itemId);
+                            this.RecipeFavorites.push(itemId);
+                        }
                     }
                 }
             });
