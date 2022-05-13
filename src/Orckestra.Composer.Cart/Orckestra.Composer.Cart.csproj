@@ -257,6 +257,7 @@
     <Compile Include="ViewModels\CartProductSummaryViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
+    <Compile Include="ViewModels\CustomerPaymentMethodsViewModel.cs" />
     <Compile Include="ViewModels\GroupedLineItemDetailViewModel.cs" />
     <Compile Include="ViewModels\Order\EditingOrderViewModel.cs" />
     <Compile Include="Providers\Order\CancellationStatus.cs" />
@@ -271,7 +272,6 @@
     <Compile Include="ViewModels\CompleteCheckoutViewModel.cs" />
     <Compile Include="ViewModels\CouponsViewModel.cs" />
     <Compile Include="ViewModels\CouponViewModel.cs" />
-    <Compile Include="ViewModels\CustomerPaymentMethodListViewModel.cs" />
     <Compile Include="ViewModels\CustomerSummaryViewModel.cs" />
     <Compile Include="ViewModels\GetGuestOrderViewModel.cs" />
     <Compile Include="ViewModels\GetPaymentMethodsViewModel.cs" />
