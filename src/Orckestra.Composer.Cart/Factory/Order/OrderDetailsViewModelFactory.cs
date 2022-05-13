@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Orckestra.Composer.Cart.Extensions;
+﻿using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels;
@@ -10,8 +6,15 @@ using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -31,6 +34,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
         protected virtual ITaxViewModelFactory TaxViewModelFactory { get; private set; }
         protected virtual ILineItemViewModelFactory LineItemViewModelFactory { get; private set; }
         protected virtual IRewardViewModelFactory RewardViewModelFactory { get; private set; }
+        protected virtual ICurrencyProvider CurrencyProvider { get; private set; }
 
         public OrderDetailsViewModelFactory(
             ILocalizationProvider localizationProvider,
@@ -42,29 +46,21 @@ namespace Orckestra.Composer.Cart.Factory.Order
             IShippingTrackingProviderFactory shippingTrackingProviderFactory,
             ITaxViewModelFactory taxViewModelFactory,
             ILineItemViewModelFactory lineItemViewModelFactory,
-            IRewardViewModelFactory rewardViewModelFactory)
+            IRewardViewModelFactory rewardViewModelFactory,
+            ICurrencyProvider currencyProvider)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
-            if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
-            if (countryService == null) { throw new ArgumentNullException("countryService"); }
-            if (paymentProviderFactory == null) { throw new ArgumentNullException("paymentProviderFactory"); }
-            if (shippingTrackingProviderFactory == null) { throw new ArgumentNullException("shippingTrackingProviderFactory"); }
-            if (taxViewModelFactory == null) { throw new ArgumentNullException("taxViewModelFactory"); }
-            if (lineItemViewModelFactory == null) { throw new ArgumentNullException("lineItemViewModelFactory"); }
-            if (rewardViewModelFactory == null) { throw new ArgumentNullException("rewardViewModelFactory"); }
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            CountryService = countryService ?? throw new ArgumentNullException(nameof(countryService));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
+            PaymentProviderFactory = paymentProviderFactory ?? throw new ArgumentNullException(nameof(paymentProviderFactory));
+            ShippingTrackingProviderFactory = shippingTrackingProviderFactory ?? throw new ArgumentNullException(nameof(shippingTrackingProviderFactory));
+            TaxViewModelFactory = taxViewModelFactory ?? throw new ArgumentNullException(nameof(taxViewModelFactory));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            RewardViewModelFactory = rewardViewModelFactory ?? throw new ArgumentNullException(nameof(rewardViewModelFactory));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
 
-            LocalizationProvider = localizationProvider;
-            ViewModelMapper = viewModelMapper;
-            CountryService = countryService;
-            ProductUrlProvider = productUrlProvider;
-            CartViewModelFactory = cartViewModelFactory;
-            PaymentProviderFactory = paymentProviderFactory;
-            ShippingTrackingProviderFactory = shippingTrackingProviderFactory;
-            TaxViewModelFactory = taxViewModelFactory;
-            LineItemViewModelFactory = lineItemViewModelFactory;
-            RewardViewModelFactory = rewardViewModelFactory;
         }
 
         /// <summary>
@@ -74,16 +70,16 @@ namespace Orckestra.Composer.Cart.Factory.Order
         /// <returns></returns>
         public virtual OrderDetailViewModel CreateViewModel(CreateOrderDetailViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.Order == null) { throw new ArgumentException("param.Order"); }
-            if (param.OrderStatuses == null) { throw new ArgumentException("param.OrderStatuses"); }
-            if (param.ShipmentStatuses == null) { throw new ArgumentException("param.ShipmentStatuses"); }
-            if (param.OrderChanges == null) { throw new ArgumentException("param.OrderChanges"); }
-            if (param.ProductImageInfo == null) { throw new ArgumentException("param.ProductImageInfo"); }
-            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException("param.ImageUrls"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl"); }
-            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException("param.CountryCode"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Order == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order)), nameof(param)); }
+            if (param.OrderStatuses == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.OrderStatuses)), nameof(param)); }
+            if (param.ShipmentStatuses == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ShipmentStatuses)), nameof(param)); }
+            if (param.OrderChanges == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.OrderChanges)), nameof(param)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo)), nameof(param)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CountryCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CountryCode)), nameof(param)); }
 
             var viewModel = new OrderDetailViewModel();
             var shipments = GetActiveShipments(param.Order);
@@ -97,7 +93,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             viewModel.ShippingMethod = GetShippingMethodViewModel(param);
             viewModel.Payments = GetPaymentViewModels(param);
             viewModel.OrderSummary = CartViewModelFactory.GetOrderSummaryViewModel(param.Order.Cart, param.CultureInfo);
-            viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s=>s.Taxes).ToList(), param.CultureInfo).ToList();
+            viewModel.OrderSummary.Taxes = TaxViewModelFactory.CreateTaxViewModels(shipments.SelectMany(s => s.Taxes).ToList(), param.CultureInfo).ToList();
             MapAdditionalFees(viewModel, param);
 #pragma warning restore 618
 
@@ -110,33 +106,75 @@ namespace Orckestra.Composer.Cart.Factory.Order
             return viewModel;
         }
 
+        public virtual LightOrderDetailViewModel CreateLightViewModel(CreateOrderDetailViewModelParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
+            if (param.Order == null) { throw new ArgumentException(nameof(param.Order)); }
+            if (param.OrderStatuses == null) { throw new ArgumentException(nameof(param.OrderStatuses)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(nameof(param.ProductImageInfo)); }
+
+            var viewModel = new LightOrderDetailViewModel();
+            viewModel.OrderInfos = GetOrderInfosViewModel(param);
+            viewModel.Shipments = GetShipmentViewModels(param);
+
+            var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
+                {
+                    {"id", param.Order.OrderNumber}
+                });
+
+            viewModel.Url = orderDetailUrl;
+
+            return viewModel;
+        }
+
         protected virtual OrderDetailInfoViewModel GetOrderInfosViewModel(CreateOrderDetailViewModelParam param)
         {
-            if (param.Order.Cart.Total == null) { throw new ArgumentNullException("param.Order.Cart.Total"); }
+            if (param.Order.Cart.Total == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order.Cart.Total)), nameof(param)); }
 
             var orderInfos = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(param.Order, param.CultureInfo);
 
-            orderInfos.OrderStatus = param.OrderStatuses[param.Order.OrderStatus];
+            orderInfos.OrderStatus = GetOrderStatusDisplayName(param);
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
-            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, param.CultureInfo);
+            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
+            orderInfos.HasOwnDraft = HasOwnDraft(param);
 
             return orderInfos;
+        }
+
+        protected virtual bool HasOwnDraft(CreateOrderDetailViewModelParam param)
+        {
+            var draftCartName = param.Order.Id.GetDraftCartName();
+            if (draftCartName == null) return false;
+
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => d.Name == draftCartName);
+            return orderDraft != null && orderDraft.IsCurrentApplicationOwner();
+        }
+
+        protected virtual string GetOrderStatusDisplayName(CreateOrderDetailViewModelParam param)
+        {
+            return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "General",
+                Key = $"L_OrderStatus_{param.Order.OrderStatus}",
+                CultureInfo = param.CultureInfo
+            });
         }
 
         protected virtual List<OrderChangeViewModel> GetOrderChangesViewModel(IEnumerable<OrderHistoryItem> orderChanges, CultureInfo cultureInfo, params string[] historyCategories)
         {
             var history = new List<OrderChangeViewModel>();
-            var historyCategoriesList = historyCategories.ToList();
+            var hashSet = new HashSet<string>(historyCategories, StringComparer.InvariantCultureIgnoreCase);
 
-            var changes = orderChanges.Where(h => historyCategoriesList.FindIndex(x => x.Equals(h.Category, StringComparison.InvariantCultureIgnoreCase)) >= 0);
-
-            foreach (var change in changes)
+            foreach (var change in orderChanges)
             {
-                var changeVm = MapOrderChangeViewModel(change, cultureInfo);
-                history.Add(changeVm);
+                if (hashSet.Contains(change.Category))
+                {
+                    var changeVm = MapOrderChangeViewModel(change, cultureInfo);
+                    history.Add(changeVm);
+                }
             }
-
             return history;
         }
 
@@ -145,10 +183,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
         {
             Shipment shipment = GetActiveShipments(param.Order).FirstOrDefault();
 
-            if (shipment == null)
-            {
-                return new AddressViewModel();
-            }
+            if (shipment == null) { return new AddressViewModel(); }
 
             // ReSharper disable once PossibleNullReferenceException (The address can be null we will create one)
             return CartViewModelFactory.GetAddressViewModel(shipment.Address, param.CultureInfo);
@@ -157,15 +192,9 @@ namespace Orckestra.Composer.Cart.Factory.Order
         [Obsolete("This function does not support multiple shipments. Use GetAddressViewModel instead")]
         protected virtual AddressViewModel GetBillingAddressViewModel(CreateOrderDetailViewModelParam param)
         {
-            var validPayments = param.Order.Cart.Payments.Where(x => !x.IsVoided()).ToList();
-            var payment = validPayments.FirstOrDefault() ?? param.Order.Cart.Payments.FirstOrDefault();
-
-            if (payment == null)
-            {
-                return null;
-            }
-
-            return CartViewModelFactory.GetAddressViewModel(payment.BillingAddress, param.CultureInfo);
+            var validPayment = param.Order.Cart.Payments.Where(x => !x.IsVoided()).FirstOrDefault();
+            var payment = validPayment ?? param.Order.Cart.Payments.FirstOrDefault();
+            return payment == null ? null : CartViewModelFactory.GetAddressViewModel(payment.BillingAddress, param.CultureInfo);
         }
 
         protected virtual List<OrderShipmentDetailViewModel> GetShipmentViewModels(CreateOrderDetailViewModelParam param)
@@ -183,7 +212,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual OrderChangeViewModel MapOrderChangeViewModel(OrderHistoryItem orderHistoryItem, CultureInfo cultureInfo)
         {
-           var orderChangeVm = ViewModelMapper.MapTo<OrderChangeViewModel>(orderHistoryItem, cultureInfo);
+            var orderChangeVm = ViewModelMapper.MapTo<OrderChangeViewModel>(orderHistoryItem, cultureInfo);
 
             return orderChangeVm;
         }
@@ -193,6 +222,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             var shipmentVm = new OrderShipmentDetailViewModel();
 
             var index = param.Order.Cart.Shipments.IndexOf(shipment);
+
             if (index >= 0)
             {
                 shipmentVm.Index = (index + 1).ToString();
@@ -200,7 +230,8 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
             if (shipment.FulfillmentScheduledTimeBeginDate.HasValue)
             {
-                shipmentVm.ScheduledShipDate = LocalizationHelper.LocalizedFormat("General", "ShortDateFormat", shipment.FulfillmentScheduledTimeBeginDate.Value, param.CultureInfo);
+                shipmentVm.ScheduledShipDate =
+                    LocalizationHelper.LocalizedFormat("General", "ShortDateFormat", shipment.FulfillmentScheduledTimeBeginDate.Value, param.CultureInfo);
             }
 
             shipmentVm.LineItems = LineItemViewModelFactory.CreateViewModel(new CreateListOfLineItemDetailViewModelParam
@@ -234,9 +265,28 @@ namespace Orckestra.Composer.Cart.Factory.Order
                     shipmentVm.ShipmentStatus = shipmentStatusLookup;
                 }
 
-                if (shipmentVm.History.Any(h => h.NewValue.Equals(shipment.Status)))
+                string shipmentStatusDate = null;
+                foreach (var el in shipmentVm.History)
                 {
-                    shipmentVm.ShipmentStatusDate = shipmentVm.History.OrderByDescending(x => x.Date).First(h => h.NewValue.Equals(shipment.Status)).Date;
+                    if (!el.NewValue.Equals(shipment.Status)) { continue; }
+
+                    if (shipmentStatusDate == null)
+                    {
+                        shipmentStatusDate = el.Date;
+                    }
+                    else
+                    {
+                        int cIndex = string.Compare(shipmentStatusDate, el.Date);
+                        if (cIndex < 0)
+                        {
+                            shipmentStatusDate = el.Date;
+                        }
+                    }
+                }
+
+                if (shipmentStatusDate != null)
+                {
+                    shipmentVm.ShipmentStatusDate = shipmentStatusDate;
                 }
             }
             else
@@ -245,20 +295,19 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 shipmentVm.ShipmentStatus = string.Empty;
                 shipmentVm.ShipmentStatusDate = string.Empty;
             }
-            
+
             shipmentVm.ShippingMethod = GetShippingMethodViewModel(shipment, param);
+            shipmentVm.FulfillmentScheduleReservationNumber = shipment.FulfillmentScheduleReservationNumber;
+            shipmentVm.FulfillmentLocationId = shipment.FulfillmentLocationId;
             return shipmentVm;
         }
 
         [Obsolete("This function does not support multiple shipments. Use the overloaded GetShippingMethodViewModel with shipment instead")]
         protected virtual OrderShippingMethodViewModel GetShippingMethodViewModel(CreateOrderDetailViewModelParam param)
         {
-            if (param.Order.Cart.Shipments == null) { throw new ArgumentNullException("param.Order.Cart.Shipments"); }
+            if (param.Order.Cart.Shipments == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order.Cart.Shipments)), nameof(param)); }
 
-            var shipments = GetActiveShipments(param.Order);
-
-            var shipment = shipments.FirstOrDefault();
-
+            var shipment = GetActiveShipments(param.Order).FirstOrDefault();
             var shippingMethodVm = GetShippingMethodViewModel(shipment, param);
 
             return shippingMethodVm;
@@ -266,12 +315,9 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual OrderShippingMethodViewModel GetShippingMethodViewModel(Shipment shipment, CreateOrderDetailViewModelParam param)
         {
-            if (param.Order.Cart.Shipments == null) { throw new ArgumentNullException("param.Order.Cart.Shipments"); }
+            if (param.Order.Cart.Shipments == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Order.Cart.Shipments)), nameof(param)); }
 
-            if (shipment == null)
-            {
-                return new OrderShippingMethodViewModel();
-            }
+            if (shipment == null) { return new OrderShippingMethodViewModel(); }
 
             var shippingMethodVm = ViewModelMapper.MapTo<OrderShippingMethodViewModel>(shipment.FulfillmentMethod, param.CultureInfo);
 
@@ -283,6 +329,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                     Key = "L_Free",
                     CultureInfo = param.CultureInfo
                 });
+
                 shippingMethodVm.Cost = freeLabel;
             }
 
@@ -295,7 +342,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
         {
             var paymentVMs = new List<OrderSummaryPaymentViewModel>();
             var validPayments = param.Order.Cart.Payments.Where(x => !x.IsVoided()).ToList();
-            var payments = validPayments.Any() ? validPayments : param.Order.Cart.Payments.ToList();
+            var payments = validPayments.Any() ? validPayments : param.Order.Cart.Payments;
 
             foreach (var payment in payments)
             {
@@ -309,7 +356,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 {
                     model = new OrderSummaryPaymentViewModel();
                 }
-                
+
                 paymentVMs.Add(model);
             }
 
@@ -326,14 +373,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
 
         protected virtual IEnumerable<Shipment> GetActiveShipments(Overture.ServiceModel.Orders.Order order)
         {
-            if (order.OrderStatus.Equals(_orderStatusCanceled))
-            {
-                return order.Cart.Shipments;
-            }
-            else
-            {
-                return order.Cart.GetActiveShipments();
-            }
+            return order.OrderStatus.Equals(_orderStatusCanceled) ? order.Cart.Shipments : order.Cart.GetActiveShipments();
         }
     }
 }

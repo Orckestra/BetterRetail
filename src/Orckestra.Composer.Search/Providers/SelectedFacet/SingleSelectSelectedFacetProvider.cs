@@ -12,8 +12,7 @@ namespace Orckestra.Composer.Search.Providers.SelectedFacet
 
         public SingleSelectSelectedFacetProvider(IFacetLocalizationProvider facetLocalizationProvider)
         {
-            if (facetLocalizationProvider == null) { throw new ArgumentNullException("facetLocalizationProvider"); }
-            FacetLocalizationProvider = facetLocalizationProvider;
+            FacetLocalizationProvider = facetLocalizationProvider ?? throw new ArgumentNullException(nameof(facetLocalizationProvider));
         }
 
 
@@ -34,26 +33,21 @@ namespace Orckestra.Composer.Search.Providers.SelectedFacet
         public IEnumerable<Facets.SelectedFacet> CreateSelectedFacetList(SearchFilter filter, FacetSetting setting,
             CultureInfo cultureInfo)
         {
-            if (filter == null)
-            {
-                throw new ArgumentNullException("filter");
-            }
-            if (setting == null)
-            {
-                throw new ArgumentNullException("setting");
-            }
+            if (filter == null) { throw new ArgumentNullException(nameof(filter)); }
+            if (setting == null) { throw new ArgumentNullException(nameof(setting)); }
+
             if (!setting.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase))
             {
                 throw new ArgumentException(
-                    string.Format(
-                        "The specified setting is for the facet '{0}', whereas the filter is for the facet '{1}'",
-                        setting.FieldName, filter.Name), "setting");
+                    string.Format("The specified setting is for the facet '{0}', whereas the filter is for the facet '{1}'",
+                    setting.FieldName, filter.Name), nameof(setting));
             }
+
             if (setting.FacetType != FacetType)
             {
                 throw new ArgumentException(
-                    string.Format("The facetResult is defined as '{0}' which does not match '{1}'", setting.FacetType,
-                        FacetType), "setting");
+                    string.Format("The facetResult is defined as '{0}' which does not match '{1}'", 
+                    setting.FacetType, FacetType), nameof(setting));
             }
 
             return new List<Facets.SelectedFacet>

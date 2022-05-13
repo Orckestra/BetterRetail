@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http.Formatting;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
@@ -92,7 +91,8 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             ViewModelMetadataRegistry.Current = MetadataRegistry.Object;
             ViewModelMapper = new ViewModelMapper(MetadataRegistry.Object,
-                _container.GetMock<IViewModelPropertyFormatter>().Object, _container.GetMock<ILookupService>().Object, _container.GetMock<ILocalizationProvider>().Object);
+                _container.GetMock<IViewModelPropertyFormatter>().Object, _container.GetMock<ILookupService>().Object, _container.GetMock<ILocalizationProvider>().Object,
+                _container.GetMock<ICurrencyProvider>().Object);
         }
 
         private void ConfigureViewModelMetadata(Type viewModelType, Type extendedModelType = null)
@@ -166,7 +166,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
             var service = _container.CreateInstance<CheckoutService>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => service.RegisterCartUpdateOperation<CustomerSummaryViewModel>(operationName, UpdateCustomerCustom, GetRandom.PositiveInt(100)));
+            Assert.Throws<ArgumentException>(() => service.RegisterCartUpdateOperation<CustomerSummaryViewModel>(operationName, UpdateCustomerCustom, GetRandom.PositiveInt(100)));
         }
 
         [Test]

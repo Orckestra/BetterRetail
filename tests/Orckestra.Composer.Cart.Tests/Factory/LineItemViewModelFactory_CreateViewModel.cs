@@ -14,6 +14,7 @@ using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 
@@ -30,10 +31,17 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             Container = new AutoMocker();
             var mapper = Container.GetMock<IViewModelMapper>();
             mapper.Setup(m => m.MapTo<LineItemDetailViewModel>(It.IsAny<LineItem>(), It.IsAny<CultureInfo>())).Returns<LineItem, CultureInfo>(
-                (li, ci) => new LineItemDetailViewModel { ListPrice = li.CurrentPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), DefaultListPrice = li.DefaultPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture) });
+                (li, ci) => new LineItemDetailViewModel { CurrentPrice = li.CurrentPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture), DefaultPrice = li.DefaultPrice.GetValueOrDefault().ToString(CultureInfo.InvariantCulture) });
             Container.GetMock<ILocalizationProvider>()
                 .Setup(m => m.GetLocalizedString(It.IsAny<GetLocalizedParam>()))
                 .Returns("{0:C}");
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            Container.Use(contextStub);
+
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            Container.Use(currencyProvider);
         }
 
         [Test]
@@ -97,7 +105,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         }
 
         [Test]
-        public void WHEN_ListPrice_Is_Less_Than_DefaultListPrice_IsOnSale_SHOULD_Be_True()
+        public void WHEN_ListPrice_Is_Less_Than_DefaultPrice_IsOnSale_SHOULD_Be_True()
         {
             var factory = Container.CreateInstance<LineItemViewModelFactory>();
             var param = new CreateListOfLineItemDetailViewModelParam()
@@ -116,7 +124,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
         }
 
         [Test]
-        public void WHEN_ListPrice_Is_Greater_Than_DefaultListPrice_IsOnSale_SHOULD_Be_False()
+        public void WHEN_ListPrice_Is_Greater_Than_DefaultPrice_IsOnSale_SHOULD_Be_False()
         {
 
             var factory = Container.CreateInstance<LineItemViewModelFactory>();
@@ -173,17 +181,18 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             //Assert
             vm.Should().NotBeNullOrEmpty();
             vm.Should().HaveSameCount(param.LineItems);
+            var collection = vm.ToList();
 
-            for (int i = 0; i < vm.ToList().Count; i++)
+            for (int i = 0; i < collection.Count; i++)
             {
-                var liVm = vm.ToList()[i];
+                var liVm = collection[i];
 
                 liVm.Should().NotBeNull();
                 liVm.Id.Should().Be(lineItem.Id);
                 liVm.ProductId.Should().Be(lineItem.ProductId);
                 liVm.VariantId.Should().Be(lineItem.VariantId);
-                liVm.ListPrice.Should().NotBeNullOrWhiteSpace();
-                liVm.DefaultListPrice.Should().NotBeNullOrWhiteSpace();
+                liVm.CurrentPrice.Should().NotBeNullOrWhiteSpace();
+                liVm.DefaultPrice.Should().NotBeNullOrWhiteSpace();
                 liVm.Quantity.Should().Be(lineItem.Quantity);
                 liVm.Total.Should().NotBeNullOrWhiteSpace();
 

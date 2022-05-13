@@ -38,6 +38,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         protected IPaymentRepository PaymentRepository { get; private set; }
         protected virtual ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected virtual ILocalizationProvider LocalizationProvider { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
         /// <summary>
         /// Type of Overture Payment Provider.
@@ -50,15 +51,12 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         public string ProviderName { get; set; }
 
         public MonerisCanadaPaymentProvider(IPaymentRepository paymentRepository, ICartViewModelFactory cartViewModelFactory, 
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
         {
-            if (paymentRepository == null) { throw new ArgumentNullException("paymentRepository"); }
-            if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-
-            PaymentRepository = paymentRepository;
-            CartViewModelFactory = cartViewModelFactory;
-            LocalizationProvider = localizationProvider;
+            PaymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         /// <summary>
@@ -69,10 +67,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         /// <returns></returns>
         public Task<Overture.ServiceModel.Orders.Cart> InitializePaymentAsync(Overture.ServiceModel.Orders.Cart cart, InitializePaymentParam param)
         {
-            PaymentMethodType paymentMethodType;
-
-            if (!string.IsNullOrWhiteSpace(param.PaymentType) &&
-                Enum.TryParse(param.PaymentType, out paymentMethodType))
+            if (!string.IsNullOrWhiteSpace(param.PaymentType) && Enum.TryParse(param.PaymentType, out PaymentMethodType paymentMethodType))
             {
                 if (paymentMethodType == PaymentMethodType.SavedCreditCard)
                 {
@@ -101,20 +96,12 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         /// <returns>URL to capture the payment information.</returns>
         public virtual string GetCapturePaymentUrl(Overture.ServiceModel.Orders.Payment payment, CultureInfo cultureInfo)
         {
-            if (payment.PaymentMethod == null || 
-                payment.PaymentMethod.PropertyBag == null || 
-                !payment.PaymentMethod.PropertyBag.ContainsKey(HostedCardTokenizationUrl))
-            {
-                return null;
-            }
+            if (payment.PaymentMethod == null || payment.PaymentMethod.PropertyBag == null || 
+                !payment.PaymentMethod.PropertyBag.ContainsKey(HostedCardTokenizationUrl)) { return null;  }
 
             var url = payment.PaymentMethod.PropertyBag[HostedCardTokenizationUrl].ToString();
 
-            Uri rawCaptureUri;
-            if (!Uri.TryCreate(url, UriKind.Absolute, out rawCaptureUri))
-            {
-                return null;    //TODO: Throw here instead.
-            }
+            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri rawCaptureUri)) { return null; } //TODO: Throw here instead.
 
             var queryString = rawCaptureUri.ParseQueryString();
             var finalQueryString = FilterQueryString(queryString, cultureInfo);
@@ -145,9 +132,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         /// </summary>
         /// <param name="viewModel">The ViewModel to augment.</param>
         /// <param name="payment">The payment.</param>
-        public virtual void AugmentViewModel(ActivePaymentViewModel viewModel, Overture.ServiceModel.Orders.Payment payment)
-        {
-        }
+        public virtual void AugmentViewModel(ActivePaymentViewModel viewModel, Overture.ServiceModel.Orders.Payment payment) { }
 
         public virtual OrderSummaryPaymentViewModel BuildOrderSummaryPaymentViewModel(Overture.ServiceModel.Orders.Payment payment, CultureInfo cultureInfo)
         {
@@ -177,7 +162,6 @@ namespace Orckestra.Composer.Cart.Providers.Payment
                 }
                 else
                 {
-
                     if (payment.PaymentMethod.PropertyBag.ContainsKey(CreditCardPaymentProperties.CreditCardNumberLastDigitsKey))
                     {
                         creditCartNumber = payment.PaymentMethod.PropertyBag[CreditCardPaymentProperties.CreditCardNumberLastDigitsKey].ToString();
@@ -195,11 +179,9 @@ namespace Orckestra.Composer.Cart.Providers.Payment
                 }
             }
 
-            DateTime expirationDate;
             bool hasExpired = false;
-            if (DateTime.TryParse(expiryDate, out expirationDate))
+            if (DateTime.TryParse(expiryDate, out DateTime expirationDate))
             {
-
                 hasExpired = expirationDate < DateTime.UtcNow;
             }
 
@@ -214,7 +196,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
             };
 
             paymentVm.BillingAddress = CartViewModelFactory.GetAddressViewModel(payment.BillingAddress, cultureInfo);
-            paymentVm.Amount = LocalizationProvider.FormatPrice((decimal)payment.Amount, cultureInfo);
+            paymentVm.Amount = LocalizationProvider.FormatPrice(payment.Amount, CurrencyProvider.GetCurrency());
 
             return paymentVm;
         }

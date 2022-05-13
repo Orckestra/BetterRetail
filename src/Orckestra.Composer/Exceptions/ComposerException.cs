@@ -5,6 +5,7 @@ using System.Net;
 using Orckestra.Composer.ViewModels;
 using ServiceStack;
 using ServiceStack.Validation;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Exceptions
 {
@@ -17,10 +18,7 @@ namespace Orckestra.Composer.Exceptions
 
         public ComposerException(string errorCode)
         {
-            if (string.IsNullOrWhiteSpace(errorCode))
-            {
-                throw new ArgumentException("The error code cannot be null or whitespace", nameof(errorCode));
-            }
+            if (string.IsNullOrWhiteSpace(errorCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(errorCode)); }
 
             Errors = new List<ErrorViewModel>
             {
@@ -40,9 +38,7 @@ namespace Orckestra.Composer.Exceptions
 
         public ComposerException(List<ErrorViewModel> errors)
         {
-            if (errors == null) throw new ArgumentNullException(nameof(errors));
-
-            Errors = errors;
+            Errors = errors ?? throw new ArgumentNullException(nameof(errors));
         }
 
         /// <summary>
@@ -50,22 +46,16 @@ namespace Orckestra.Composer.Exceptions
         /// </summary>
         public void ThrowIfAnyError()
         {
-            if (Errors.Any())
-            {
-                throw this;
-            }
+            if (Errors.Any()) { throw this; }
         }
 
         public override string Message
         {
             get
             {
-                if (Errors.Count == 0)
-                {
-                    return "No errors";
-                }
-
-                return string.Join(Environment.NewLine,
+                return Errors.Count == 0
+                    ? "No errors"
+                    : string.Join(Environment.NewLine,
                     Errors.Select(e => $"Error code '{e.ErrorCode ?? "<undefined>"}': {e.ErrorMessage}"));
             }
         }

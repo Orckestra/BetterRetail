@@ -187,7 +187,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var group = specificationViewModel.Groups.First();
             group.Title.ShouldBeEquivalentTo("group 1");
 
-            var textAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Text");
+            var textAttribute = group.Attributes.Find(x => x.Title == "attr Text");
             textAttribute.Should().NotBeNull();
             textAttribute.Value.ShouldBeEquivalentTo("test2");
         }
@@ -233,7 +233,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var group = specificationViewModel.Groups.First();
             group.Title.ShouldBeEquivalentTo("group 1");
 
-            var textAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Text");
+            var textAttribute = group.Attributes.Find(x => x.Title == "attr Text");
             textAttribute.Should().NotBeNull();
             textAttribute.Value.ShouldBeEquivalentTo("test1");
         }
@@ -313,27 +313,27 @@ namespace Orckestra.Composer.Product.Tests.Services
             var group = specificationViewModel.Groups.First();
             group.Title.ShouldBeEquivalentTo("group 1");
 
-            var textAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Text");
+            var textAttribute = group.Attributes.Find(x => x.Title == "attr Text");
             textAttribute.Should().NotBeNull();
             textAttribute.Value.ShouldBeEquivalentTo("test1");
 
-            var booleanAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Boolean");
+            var booleanAttribute = group.Attributes.Find(x => x.Title == "attr Boolean");
             booleanAttribute.Should().NotBeNull();
             booleanAttribute.Value.ShouldBeEquivalentTo("True");
 
-            var currencyAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Currency");
+            var currencyAttribute = group.Attributes.Find(x => x.Title == "attr Currency");
             currencyAttribute.Should().NotBeNull();
             currencyAttribute.Value.ShouldBeEquivalentTo(string.Format("{0}", 10.5));
 
-            var datetimeAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Datetime");
+            var datetimeAttribute = group.Attributes.Find(x => x.Title == "attr Datetime");
             datetimeAttribute.Should().NotBeNull();
             datetimeAttribute.Value.ShouldBeEquivalentTo(datetimeNow.ToShortDateString());
 
-            var decimalAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Decimal");
+            var decimalAttribute = group.Attributes.Find(x => x.Title == "attr Decimal");
             decimalAttribute.Should().NotBeNull();
             decimalAttribute.Value.ShouldBeEquivalentTo(string.Format("{0}", 10.5));
 
-            var numberAttribute = group.Attributes.FirstOrDefault(x => x.Title == "attr Number");
+            var numberAttribute = group.Attributes.Find(x => x.Title == "attr Number");
             numberAttribute.Should().NotBeNull();
             numberAttribute.Value.ShouldBeEquivalentTo("10");
         }

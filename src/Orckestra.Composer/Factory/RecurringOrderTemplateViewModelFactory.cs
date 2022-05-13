@@ -1,4 +1,9 @@
-﻿using Orckestra.Composer.Country;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using Orckestra.Composer.Country;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Helper;
 using Orckestra.Composer.Parameters;
@@ -17,11 +22,7 @@ using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Metadata;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Factory
 {
@@ -53,6 +54,7 @@ namespace Orckestra.Composer.Factory
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
 
         public RecurringOrderTemplateViewModelFactory(
@@ -67,7 +69,8 @@ namespace Orckestra.Composer.Factory
             IProductPriceViewService productPriceViewService,
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersRepository recurringOrderRepository)
+            IRecurringOrdersRepository recurringOrderRepository,
+            ICurrencyProvider currencyProvider)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -81,25 +84,29 @@ namespace Orckestra.Composer.Factory
             RecurringScheduleUrlProvider = recurringScheduleUrlProvider ?? throw new ArgumentNullException(nameof(recurringScheduleUrlProvider));
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrderRepository = recurringOrderRepository ?? throw new ArgumentNullException(nameof(recurringOrderRepository));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         public virtual async Task<RecurringOrderTemplatesViewModel> CreateRecurringOrderTemplatesViewModel(CreateRecurringOrderTemplatesViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
-            if (param.ProductImageInfo == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo)); }
-            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo.ImageUrls)); }
-            if (param.ScopeId == null) { throw new ArgumentNullException(nameof(param.ScopeId)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo)), nameof(param)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
+            if (param.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ScopeId)), nameof(param)); }
 
-            var vm = new RecurringOrderTemplatesViewModel();
-
-            vm.RecurringOrderTemplateViewModelList = await CreateTemplateGroupedShippingAddress(new CreateTemplateGroupedShippingAddressParam { 
-                ListOfRecurringOrderLineItems = param.ListOfRecurringOrderLineItems,
-                CultureInfo = param.CultureInfo,
-                ProductImageInfo = param.ProductImageInfo,
-                BaseUrl = param.BaseUrl,
-                CustomerId = param.CustomerId,
-                ScopeId = param.ScopeId}).ConfigureAwait(false);
+            var vm = new RecurringOrderTemplatesViewModel
+            {
+                RecurringOrderTemplateViewModelList = await CreateTemplateGroupedShippingAddress(new CreateTemplateGroupedShippingAddressParam
+                {
+                    ListOfRecurringOrderLineItems = param.ListOfRecurringOrderLineItems,
+                    CultureInfo = param.CultureInfo,
+                    ProductImageInfo = param.ProductImageInfo,
+                    BaseUrl = param.BaseUrl,
+                    CustomerId = param.CustomerId,
+                    ScopeId = param.ScopeId
+                }).ConfigureAwait(false)
+            };
 
             foreach (var template in vm.RecurringOrderTemplateViewModelList)
             {
@@ -112,11 +119,11 @@ namespace Orckestra.Composer.Factory
         public virtual async Task<RecurringOrderTemplateViewModel> CreateRecurringOrderTemplateDetailsViewModel(CreateRecurringOrderTemplateDetailsViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
-            if (param.ProductImageInfo == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo)); }
-            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo.ImageUrls)); }
-            if (param.ScopeId == null) { throw new ArgumentNullException(nameof(param.ScopeId)); }
-            if (param.RecurringOrderLineItem == null) { throw new ArgumentNullException(nameof(param.RecurringOrderLineItem)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo)), nameof(param)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
+            if (param.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ScopeId)), nameof(param)); }
+            if (param.RecurringOrderLineItem == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.RecurringOrderLineItem)), nameof(param)); }
 
             var vm = new RecurringOrderTemplateViewModel();
             
@@ -149,11 +156,11 @@ namespace Orckestra.Composer.Factory
         public virtual async Task<List<RecurringOrderTemplateViewModel>> CreateTemplateGroupedShippingAddress(CreateTemplateGroupedShippingAddressParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.ListOfRecurringOrderLineItems == null) { throw new ArgumentNullException(nameof(param.ListOfRecurringOrderLineItems)); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
-            if (param.ProductImageInfo == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo)); }
-            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo.ImageUrls)); }
-            if (param.ScopeId == null) { throw new ArgumentNullException(nameof(param.ScopeId)); }
+            if (param.ListOfRecurringOrderLineItems == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ListOfRecurringOrderLineItems)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo)), nameof(param)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
+            if (param.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ScopeId)), nameof(param)); }
 
             var groups = param.ListOfRecurringOrderLineItems.RecurringOrderLineItems.GroupBy(grp => grp.ShippingAddressId);
 
@@ -168,10 +175,11 @@ namespace Orckestra.Composer.Factory
 
             foreach (var group in groups)
             {
-                var templateViewModel = new RecurringOrderTemplateViewModel();
+                var templateViewModel = new RecurringOrderTemplateViewModel
+                {
+                    ShippingAddress = await MapShippingAddress(group.Key, param.CultureInfo).ConfigureAwait(false)
+                };
 
-                templateViewModel.ShippingAddress = await MapShippingAddress(group.Key, param.CultureInfo).ConfigureAwait(false);
-                 
                 var tasks = group.Select(g => MapToTemplateLineItemViewModel(new MapToTemplateLineItemViewModelParam
                 {
                     RecurringOrderlineItem =  g,
@@ -192,29 +200,13 @@ namespace Orckestra.Composer.Factory
             return itemList;
         }
 
-        //TODO: rename to GetCustomerAsync if used, directly return customer without await
-        protected virtual async Task<Customer> GetCustomer(Guid customerId, string scopeId)
-        {
-            var getCustomerRequest = new GetCustomerRequest
-            {
-                CustomerId = customerId,
-                ScopeId = scopeId
-            };
-
-            var customer = await OvertureClient.SendAsync(getCustomerRequest).ConfigureAwait(false);
-
-            return customer;
-        }
-
-
-
         public virtual async Task<RecurringOrderTemplateLineItemViewModel> MapToTemplateLineItemViewModel(MapToTemplateLineItemViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.RecurringOrderlineItem == null) { throw new ArgumentNullException(nameof(param.RecurringOrderlineItem)); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
-            if (param.BaseUrl == null) { throw new ArgumentNullException(nameof(param.BaseUrl)); }
-            if (param.RecurringScheduleUrl == null) { throw new ArgumentNullException(nameof(param.RecurringScheduleUrl)); }
+            if (param.RecurringOrderlineItem == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.RecurringOrderlineItem)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.BaseUrl == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.BaseUrl)), nameof(param)); }
+            if (param.RecurringScheduleUrl == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.RecurringScheduleUrl)), nameof(param)); }
 
             var recrurringLineItem = param.RecurringOrderlineItem;
 
@@ -225,7 +217,7 @@ namespace Orckestra.Composer.Factory
                 vm.IsValid = true;
             }
 
-            if (param.ImageDictionnary.TryGetValue(Tuple.Create(recrurringLineItem.ProductId, recrurringLineItem.VariantId), out ProductMainImage mainImage))
+            if (param.ImageDictionnary.TryGetValue((recrurringLineItem.ProductId, recrurringLineItem.VariantId), out ProductMainImage mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;
@@ -240,19 +232,17 @@ namespace Orckestra.Composer.Factory
                 IncludeRelationships = false,
                 IncludeVariants = true
             };
+
             var getProductResponse = await OvertureClient.SendAsync(getProductRequest).ConfigureAwait(false);
 
-            if (getProductResponse == null ||
-                (getProductResponse != null && recrurringLineItem.VariantId != string.Empty
-                && recrurringLineItem.VariantId != null && 
-                getProductResponse.Variants.SingleOrDefault(v => v.Id == recrurringLineItem.VariantId) == null))
+            if (getProductResponse == null || (getProductResponse != null && recrurringLineItem.VariantId != string.Empty
+                && recrurringLineItem.VariantId != null 
+                && getProductResponse.Variants.SingleOrDefault(v => v.Id == recrurringLineItem.VariantId) == null))
             {
                 var deleteRecurringLineItem = new DeleteRecurringOrderLineItemsRequest
                 {
                     CustomerId = recrurringLineItem.CustomerId,
-                    RecurringOrderLineItemIds = new List<Guid> {
-                        recrurringLineItem.RecurringOrderLineItemId,
-                    },
+                    RecurringOrderLineItemIds = new List<Guid> { recrurringLineItem.RecurringOrderLineItemId },
                     ScopeId = recrurringLineItem.ScopeId
                 };
                 await OvertureClient.SendAsync(deleteRecurringLineItem);
@@ -265,15 +255,18 @@ namespace Orckestra.Composer.Factory
             vm.FormattedNextOccurence = vm.NextOccurence == DateTime.MinValue
                     ? string.Empty
                     : string.Format(param.CultureInfo, "{0:D}", vm.NextOccurence);
+
             vm.NextOccurenceValue = vm.NextOccurence == DateTime.MinValue
                     ? string.Empty
                     : vm.NextOccurence.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
             vm.Id = recrurringLineItem.RecurringOrderLineItemId;
-            vm.ProductSummary = new RecurringProductSummaryViewModel();
-            vm.ProductSummary.DisplayName = ProductHelper.GetProductOrVariantDisplayName(getProductResponse, variant, param.CultureInfo);
-            
-            var productsPricesVm = await ProductPriceViewService.CalculatePricesAsync(new GetProductsPriceParam()
+            vm.ProductSummary = new RecurringProductSummaryViewModel
+            {
+                DisplayName = ProductHelper.GetProductOrVariantDisplayName(getProductResponse, variant, param.CultureInfo)
+            };
+
+            var productsPricesVm = await ProductPriceViewService.CalculatePricesAsync(new GetProductsPriceParam
             {
                 CultureInfo = param.CultureInfo,
                 Scope = recrurringLineItem.ScopeId,
@@ -297,14 +290,12 @@ namespace Orckestra.Composer.Factory
             }
             vm.IsOnSale = string.CompareOrdinal(vm.DefaultListPrice, vm.ListPrice) != 0;
 
-
-            decimal price;
-            var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, param.CultureInfo.NumberFormat, out price);
+            var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, param.CultureInfo.NumberFormat, out decimal price);
             if (conv)
             {
-                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
+                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency());
 
-                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, param.CultureInfo);
+                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency());
             }
 
             //Adding brand display name
@@ -334,7 +325,6 @@ namespace Orckestra.Composer.Factory
                 SKU = recrurringLineItem.Sku
             });
 
-
             var recurringScheduleEditUrl = RecurringScheduleUrlProvider.GetRecurringScheduleDetailsUrl(new GetRecurringScheduleDetailsUrlParam
             {
                 CultureInfo = param.CultureInfo,
@@ -353,14 +343,9 @@ namespace Orckestra.Composer.Factory
 
         protected virtual string GetProductOrVariantListPrice(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture)
         {
-            if (variant != null)
-            {
-                return LocalizationProvider.FormatPrice(variant.ListPrice.Value, culture);
-            }
-            else
-            {
-                return LocalizationProvider.FormatPrice(product.ListPrice.Value, culture);
-            }
+            return variant != null
+                ? LocalizationProvider.FormatPrice(variant.ListPrice.Value, CurrencyProvider.GetCurrency())
+                : LocalizationProvider.FormatPrice(product.ListPrice.Value, CurrencyProvider.GetCurrency());
         }
 
         //TODO: rename to MapShippingAddressAsync if used
@@ -379,10 +364,7 @@ namespace Orckestra.Composer.Factory
         /// <returns></returns>
         public virtual RecurringOrderTemplateAddressViewModel GetAddressViewModel(Address address, CultureInfo cultureInfo)
         {
-            if (address == null)
-            {
-                return new RecurringOrderTemplateAddressViewModel();
-            }
+            if (address == null) { return new RecurringOrderTemplateAddressViewModel(); }
 
             var addressViewModel = ViewModelMapper.MapTo<RecurringOrderTemplateAddressViewModel>(address, cultureInfo);
 
@@ -422,16 +404,13 @@ namespace Orckestra.Composer.Factory
 
                         if (program != null)
                         {
-                            var frequency = program.Frequencies.FirstOrDefault(f => string.Equals(f.RecurringOrderFrequencyName, lineitem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
+                            var frequency = program.Frequencies.Find(f => string.Equals(f.RecurringOrderFrequencyName, lineitem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
 
                             if (frequency != null)
                             {
-                                var localization = frequency.Localizations.FirstOrDefault(l => string.Equals(l.CultureIso, culture.Name, StringComparison.OrdinalIgnoreCase));
+                                var localization = frequency.Localizations.Find(l => string.Equals(l.CultureIso, culture.Name, StringComparison.OrdinalIgnoreCase));
 
-                                if (localization != null)
-                                    lineitem.RecurringOrderFrequencyDisplayName = localization.DisplayName;
-                                else
-                                    lineitem.RecurringOrderFrequencyDisplayName = frequency.RecurringOrderFrequencyName;
+                                lineitem.RecurringOrderFrequencyDisplayName = localization != null ? localization.DisplayName : frequency.RecurringOrderFrequencyName;
                             }
                         }
                         var programViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, culture);
@@ -444,10 +423,7 @@ namespace Orckestra.Composer.Factory
 
         public virtual RecurringOrderShippingMethodViewModel GetShippingMethodViewModel(FulfillmentMethodInfo fulfillmentMethodInfo, CultureInfo cultureInfo)
         {
-            if (fulfillmentMethodInfo == null)
-            {
-                return null;
-            }
+            if (fulfillmentMethodInfo == null) { return null; }
 
             var shippingMethodViewModel = ViewModelMapper.MapTo<RecurringOrderShippingMethodViewModel>(fulfillmentMethodInfo, cultureInfo);
 

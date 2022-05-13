@@ -2,9 +2,12 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Utils;
+using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.Services
 {
@@ -17,13 +20,15 @@ namespace Orckestra.Composer.Services
         protected ICountryCodeProvider CountryCodeProvider { get; }
         protected IWebsiteContext WebsiteContext { get; }
         protected EncryptionUtility EncryptionUtility { get; }
+        protected IScopeRepository ScopeRepository { get; }
 
         public ComposerContext(
             ICookieAccessor<ComposerCookieDto> cookieAccessor,
             IScopeProvider scopeProvider,
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IScopeRepository scopeRepository)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
@@ -31,9 +36,42 @@ namespace Orckestra.Composer.Services
             CountryCodeProvider = countryCodeProvider ?? throw new ArgumentNullException(nameof(countryCodeProvider));
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
             EncryptionUtility = new EncryptionUtility();
-
+            ScopeRepository = scopeRepository ?? throw new ArgumentNullException(nameof(scopeRepository));
             SetAuthenticated();
         }
+
+        private Scope _scopeItem = null;
+        public Scope ScopeItem
+        {
+            get
+            {
+                InitializeScopeItem();
+                return _scopeItem;
+            }
+            set
+            {
+                _scopeItem = value;
+            }
+        }
+
+        public string ScopeCurrencyIso
+        {
+            get { return ScopeItem.CurrencyIso; }
+        }
+
+        private void InitializeScopeItem()
+        {
+            if (_scopeItem == null)
+            {
+                var p = new GetScopeParam
+                {
+                    Scope = Scope
+                };
+                _scopeItem = ScopeRepository.GetScopeAsync(p).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            }
+        }
+
 
         /// <summary>
         /// The Country
@@ -238,6 +276,43 @@ namespace Orckestra.Composer.Services
                     bool IsAuthenticated = HttpContextBase.User?.Identity.IsAuthenticated ?? false;
                     return isCurrentWebsite && IsAuthenticated;
                 });
+            }
+        }
+
+        private string _editingCartName;
+
+        /// <summary>
+        /// Edititing cart has the name as the id of the order
+        /// </summary>
+        public string EditingCartName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_editingCartName))
+                {
+                    var dto = CookieAccessor.Read();
+                    if (dto.EncryptedEditingOrderId != null)
+                    {
+                        _editingCartName = EncryptionUtility.Decrypt(dto.EncryptedEditingOrderId);
+                    }
+                }
+                
+                return _editingCartName;
+            }
+            set
+            {
+                _editingCartName = value;
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.EncryptedEditingOrderId = _editingCartName == default ? null : EncryptionUtility.Encrypt(_editingCartName);
+                CookieAccessor.Write(dto);
+            }
+        }
+
+        public bool IsEditingOrder
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(EditingCartName);
             }
         }
     }

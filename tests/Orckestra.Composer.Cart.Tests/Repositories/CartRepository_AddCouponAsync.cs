@@ -109,7 +109,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         }
 
         [Test]
-        public void WHEN_CultureInfo_is_null_SHOULD_throw_ArgumentNullException()
+        public void WHEN_CultureInfo_is_null_SHOULD_throw_ArgumentException()
         {
             //Arrange
             var p = new CouponParam()
@@ -123,7 +123,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var sut = Container.CreateInstance<CartRepository>();
 
             //Act
-            var ex = Assert.ThrowsAsync<ArgumentNullException>(() => sut.AddCouponAsync(p));
+            var ex = Assert.ThrowsAsync<ArgumentException>(() => sut.AddCouponAsync(p));
 
             //Assert
             ex.ParamName.Should().ContainEquivalentOf("param");

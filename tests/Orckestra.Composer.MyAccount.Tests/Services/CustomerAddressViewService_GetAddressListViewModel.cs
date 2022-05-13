@@ -8,6 +8,8 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.Services;
@@ -60,8 +62,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Scope = GetRandom.String(32),
                 CustomerId = Guid.NewGuid(),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = GetRandom.String(32)
             };
 
@@ -69,7 +69,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
 
             //Assert
             viewModel.Should().NotBeNull("This view model should never be null");
-            viewModel.AddAddressUrl.ShouldBeEquivalentTo(param.AddAddressUrl);
+            viewModel.AddAddressUrl.Should().NotBeNullOrEmpty();
             viewModel.Addresses.First().AddressName.ShouldBeEquivalentTo(address.AddressName);
         }
 
@@ -96,8 +96,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             {
                 Scope = GetRandom.String(32),
                 CustomerId = Guid.NewGuid(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CultureInfo = cultureInfo,
                 CountryCode = GetRandom.String(32)
             };
@@ -122,8 +120,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Scope = scope,
                 CustomerId = Guid.NewGuid(),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = GetRandom.String(32)
             };
 
@@ -147,8 +143,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Scope = GetRandom.String(32),
                 CustomerId = Guid.NewGuid(),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = countryCode
             };
 
@@ -168,8 +162,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             {
                 Scope = GetRandom.String(32),
                 CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                EditAddressBaseUrl = GetRandom.String(32),
                 CountryCode = GetRandom.String(32)
             };
 
@@ -180,46 +172,5 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             ex.Message.Should().ContainEquivalentOf("CustomerId");
         }
 
-        [Test]
-        public void WHEN_AddAddressUrl_is_Null_SHOULD_throw_ArgumentException()
-        {
-            //Arrange
-            var customerAddressViewService = _container.CreateInstance<CustomerAddressViewService>();
-            var param = new GetAddressListViewModelParam
-            {
-                Scope = GetRandom.String(32),
-                CustomerId = Guid.NewGuid(),
-                CultureInfo = TestingExtensions.GetRandomCulture(),
-                EditAddressBaseUrl = GetRandom.String(32),
-                CountryCode = GetRandom.String(32)
-            };
-
-            //Act
-            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.GetAddressListViewModelAsync(param));
-
-            //Assert
-            ex.Message.Should().ContainEquivalentOf("AddAddressUrl");
-        }
-
-        [Test]
-        public void WHEN_EditAddressBaseUrl_is_Null_SHOULD_throw_ArgumentException()
-        {
-            //Arrange
-            var customerAddressViewService = _container.CreateInstance<CustomerAddressViewService>();
-            var param = new GetAddressListViewModelParam
-            {
-                Scope = GetRandom.String(32),
-                CustomerId = Guid.NewGuid(),
-                CultureInfo = TestingExtensions.GetRandomCulture(),
-                AddAddressUrl = GetRandom.String(32),
-                CountryCode = GetRandom.String(32)
-            };
-
-            //Act
-            var ex = Assert.ThrowsAsync<ArgumentException>(() => customerAddressViewService.GetAddressListViewModelAsync(param));
-
-            //Assert
-            ex.Message.Should().ContainEquivalentOf("EditAddressBaseUrl");
-        }
     }
 }

@@ -29,5 +29,12 @@ namespace Orckestra.Composer.Search.Repositories
         /// criteria.Scope
         /// </exception>
         Task<ProductSearchResult> SearchProductAsync(SearchCriteria criteria);
+
+        /// <summary>
+        /// Get independent product counts for each configured category facet
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
+        Task<ProductSearchResult> GetCategoryFacetCountsAsync(SearchCriteria criteria);
     }
 }

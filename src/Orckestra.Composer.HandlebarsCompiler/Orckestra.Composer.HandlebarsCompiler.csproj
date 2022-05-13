@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Orckestra.Composer.HandlebarsCompiler</RootNamespace>
     <AssemblyName>Orckestra.Composer.HandlebarsCompiler</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -69,40 +69,39 @@
     <Compile Include="StartupHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Composite, Version=6.8.7271.23834, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Composite.dll</HintPath>
+    <Reference Include="Composite, Version=6.12.8122.18346, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Composite.Workflows, Version=6.8.7271.23837, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Composite.Workflows.dll</HintPath>
+    <Reference Include="Composite.Workflows, Version=6.12.8122.18350, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Jurassic, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Jurassic.3.0.0\lib\net45\Jurassic.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\C1CMS.Assemblies.6.8.7271.23834\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Practices.ObjectBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -130,7 +129,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -148,10 +146,6 @@
     <ProjectReference Include="..\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Orckestra.Composer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj">
-      <Project>{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}</Project>
-      <Name>Orckestra.Composer.CompositeC1</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

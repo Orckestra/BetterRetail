@@ -29,8 +29,6 @@ namespace Orckestra.Composer.Search.Helpers
         private readonly IList<SearchSortBy> _searchSortBy;
         private readonly Func<CreateSearchPaginationParam<TParam>, string> _generateUrl;
 
-
-
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
@@ -39,11 +37,8 @@ namespace Orckestra.Composer.Search.Helpers
         /// <param name="generateUrl"></param>
         public SearchSortByResolver(ILocalizationProvider localizationProvider, IList<SearchSortBy> searchSortBy, Func<CreateSearchPaginationParam<TParam>, string> generateUrl)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (generateUrl == null) { throw new ArgumentNullException("generateUrl"); }
-
-            _localizationProvider = localizationProvider;
-            _generateUrl = generateUrl;
+            _localizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            _generateUrl = generateUrl ?? throw new ArgumentNullException(nameof(generateUrl));
             _searchSortBy = searchSortBy;
 
         }
@@ -63,13 +58,9 @@ namespace Orckestra.Composer.Search.Helpers
         /// </summary>
         /// <param name="param">The query criteria.</param>
         /// <param name="searchResultsViewModel">The search results view model.</param>
-        private void ResolveProductAvailableSortBy(TParam param,
-            ProductSearchResultsViewModel searchResultsViewModel)
+        private void ResolveProductAvailableSortBy(TParam param, ProductSearchResultsViewModel searchResultsViewModel)
         {
-
-
             searchResultsViewModel.SelectedSortBy = GetSelectedSortBy(param.Criteria);
-
             searchResultsViewModel.AvailableSortBys = GetAvailableSortBys(param);
         }
 
@@ -79,9 +70,8 @@ namespace Orckestra.Composer.Search.Helpers
         /// <returns></returns>
         private SelectedSortBy GetSelectedSortBy(SearchCriteria criteria)
         {
-            var selectedSortByConfig =
-                _searchSortBy
-                                   .FirstOrDefault(c => c.Field == criteria.SortBy && c.Direction == criteria.SortDirection);
+            var selectedSortByConfig = _searchSortBy
+                .FirstOrDefault(c => c.Field == criteria.SortBy && c.Direction == criteria.SortDirection);
 
             selectedSortByConfig = selectedSortByConfig ?? _searchSortBy.First();
 
@@ -113,7 +103,7 @@ namespace Orckestra.Composer.Search.Helpers
 
             foreach (var sortByConfig in _searchSortBy)
             {
-                criteriaToBuildSortByUrls.Criteria.SortBy        = sortByConfig.Field;
+                criteriaToBuildSortByUrls.Criteria.SortBy = sortByConfig.Field;
                 criteriaToBuildSortByUrls.Criteria.SortDirection = sortByConfig.Direction;
 
                 sortBys.Add(new SortBy
@@ -124,6 +114,7 @@ namespace Orckestra.Composer.Search.Helpers
                         Key         = sortByConfig.LocalizationKey,
                         CultureInfo = criteriaToBuildSortByUrls.Criteria.CultureInfo,
                     }),
+
                     Url = _generateUrl(new CreateSearchPaginationParam<TParam>()
                     {
                         SearchParameters = criteriaToBuildSortByUrls

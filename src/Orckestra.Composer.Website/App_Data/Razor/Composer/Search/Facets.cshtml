@@ -1,0 +1,78 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Search.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Saerch Facets"; }
+    }
+
+    public ISearchRequestContext SearchRequestContext { get; set; }
+
+    public ProductSearchResultsViewModel ProductSearchResults
+    {
+        get
+        {
+            return SearchRequestContext.ProductsSearchViewModel.ProductSearchResults;
+        }
+    }
+}
+
+@{
+    var facetSettings = SearchRequestContext.ProductsSearchViewModel.FacetSettings;
+    var categoryFacetValuesTree = facetSettings?.CategoryFacetValuesTree;
+    var isCategoryTreeView = categoryFacetValuesTree != null;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+    <div id="facetsModal" class="facets-modal">
+        <div class="facets-modal-dialog">
+            <div class="facets-modal-content">
+                @FacetHelpers.FacetsModalHeader()
+                <div class="facets-modal-body">
+                    <div class="overlay"></div>
+                    <div data-oc-controller="Product.FacetSearch"
+                         data-context="@facetSettings.JsonContext"
+                         data-corrected-search-term="@ProductSearchResults.CorrectedSearchTerms">
+
+                        <form id="vueSearchFacets" name="searchFacets" v-cloak="true">
+
+                            @FacetHelpers.PromotedFacetValues()
+
+                            @FacetHelpers.CategoryFactesTree($"{Html.Localize("General", "L_All")}  {SearchRequestContext.SearchQuery}")
+
+                            <div v-for="facet in Facets" v-if="facet.IsDisplayed" v-bind:key="facet.FieldName + facet.FacetType"
+                                 class="card  bg-light  mb-3  facets-card"
+                                 v-bind:data-facetfieldname="facet.FieldName"
+                                 v-bind:data-facettype="facet.FacetType"
+                                 v-bind:data-min="facet.StartValue"
+                                 v-bind:data-max="facet.EndValue"
+                                 v-bind:data-step="facet.GapSize"
+                                 data-max-label="@Html.Localize("List-Search", "L_RangeAll")">
+                                <div class="card-header">
+                                    <a data-toggle="collapse"
+                                       v-bind:data-target="'#' + facet.FieldName"
+                                       aria-expanded="true"
+                                       v-bind:aria-controls="facet.FieldName">
+                                        {{facet.Title}}
+                                        <span class="down"><i class="fa fa-angle-down" /></span>
+                                        <span class="up"><i class="fa fa-angle-up" /></span>
+                                    </a>
+                                </div>
+                                <div v-bind:id="facet.FieldName" class="card-body collapse show">
+                                    @FacetHelpers.RenderFacet()
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @FacetHelpers.FacetsModalFooter()
+            </div>
+        </div>
+    </div>
+</body>
+</html>

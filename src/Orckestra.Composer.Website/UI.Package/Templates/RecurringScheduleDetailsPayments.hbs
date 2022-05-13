@@ -1,14 +1,10 @@
-<div data-templateid="RecurringScheduleDetailsPayments" class="card">
+<div data-templateid="RecurringScheduleDetailsPayments" class="card bg-light  mt-3">
     {{#if IsLoading}}
         {{>Loading}}
     {{else}}
-        <div class="card-header">
-            <div class="row">
-                <div class="col-10">
-                    <h5>{{localize 'MyAccount' 'T_PaymentMethod' }}</h5>
-                </div>
-            </div>
-        </div>
+        <h3 class="card-header">
+            {{localize 'MyAccount' 'T_PaymentMethod' }}
+        </h3>
         <div class="card-body">            
             {{#if_gt SavedCreditCards.length 0}}
                 <div id="moneris-saved-credit-cards" class="moneris-panel">

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Providers;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -14,15 +14,10 @@ namespace Orckestra.Composer.Repositories
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public ProductSettingsRepository(
-            IOvertureClient overtureClient,
-            ICacheProvider cacheProvider)
+        public ProductSettingsRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -32,7 +27,7 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public virtual async Task<ProductSettings> GetProductSettings(string scope)
         {
-            if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException("scope"); }
+            if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scope)); }
 
             var productSettingsCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductSettings);
             productSettingsCacheKey.AppendKeyParts(scope);

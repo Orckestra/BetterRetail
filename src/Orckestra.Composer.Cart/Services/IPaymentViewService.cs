@@ -16,8 +16,15 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param">Parameters used to retrieve the payment providers.</param>
         /// <returns></returns>
         Task<IEnumerable<PaymentProviderViewModel>> GetPaymentProvidersAsync(GetPaymentProvidersParam param);
-        
-         /// <summary>
+
+        /// <summary>
+        /// Get the Active Payment methods available for a cart.
+        /// </summary>
+        /// <param name="param">GetPaymentMethodsParam</param>
+        /// <returns>A List of PaymentMethodViewModel</returns>
+        Task<SingleCheckoutPaymentViewModel> GetSingleCheckoutPaymentAsync(GetPaymentMethodsParam param);
+
+        /// <summary>
         /// Get the Active Payment methods available for a cart.
         /// </summary>
         /// <param name="param">GetPaymentMethodsParam</param>
@@ -30,6 +37,8 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param">Parameters used to Update the payment method of the cart.</param>
         /// <returns>ViewModel representing the initialized Active Payment.</returns>
         Task<CheckoutPaymentViewModel> UpdatePaymentMethodAsync(UpdatePaymentMethodParam param);
+
+        Task<ActivePaymentViewModel> UpdateActivePaymentMethodAsync(UpdatePaymentMethodParam param);
 
         /// <summary>
         /// Get the associated active payment for the specified cart
@@ -48,7 +57,7 @@ namespace Orckestra.Composer.Cart.Services
         /// Returns the Saved Credit card for a customer and providers
         /// To be used in recurring orders menu
         /// </summary>
-        Task<CustomerPaymentMethodListViewModel> GetCustomerPaymentMethodListViewModelAsync(GetCustomerPaymentMethodListViewModelParam param);
+        Task<CustomerPaymentMethodsViewModel> GetCustomerPaymentMethodsViewModelAsync(GetCustomerPaymentMethodListViewModelParam param);
 
         /// <summary>
         /// Updates the payment method for a recurring cart 

@@ -8,6 +8,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -16,9 +17,7 @@ namespace Orckestra.Composer.Cart.Services
         protected virtual ICartRepository CartRepository { get; private set; }
         protected virtual IInventoryLocationProvider InventoryLocationProvider { get; private set; }
 
-        public FixCartService(
-            ICartRepository cartRepository,
-            IInventoryLocationProvider inventoryLocationProvider)
+        public FixCartService(ICartRepository cartRepository, IInventoryLocationProvider inventoryLocationProvider)
         {
             CartRepository = cartRepository;
             InventoryLocationProvider = inventoryLocationProvider;
@@ -32,11 +31,12 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns></returns>
         public virtual async Task<ProcessedCart> FixCartAsync(FixCartParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.Cart == null) { throw new ArgumentException("param.Cart"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }
+            if (param.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ScopeId)), nameof(param)); }
 
-          param.Cart = await AddPaymentIfRequired(param).ConfigureAwait(false);
-          param.Cart = await SetFulfillmentLocationIfRequired(param);
+            param.Cart = await AddPaymentIfRequired(param).ConfigureAwait(false);
+            param.Cart = await SetFulfillmentLocationIfRequired(param);
 
             return param.Cart;
         }
@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Services
                 var fulfillmentLocation =
                     await InventoryLocationProvider.GetFulfillmentLocationAsync(new GetFulfillmentLocationParam
                     {
-                        Scope = cart.ScopeId
+                        Scope = param.ScopeId
                     }).ConfigureAwait(false);
 
                 var shipment = cart.Shipments.FirstOrDefault() ?? new Shipment();
@@ -80,7 +80,7 @@ namespace Orckestra.Composer.Cart.Services
                     CultureInfo = new CultureInfo(cart.CultureName),
                     FulfillmentLocationId = fulfillmentLocation.Id,
                     CustomerId = cart.CustomerId,
-                    FulfillmentMethodName = shipment.FulfillmentMethod == null ? null : shipment.FulfillmentMethod.Name,
+                    FulfillmentMethodName = shipment.FulfillmentMethod?.Name,
                     FulfillmentScheduleMode = shipment.FulfillmentScheduleMode,
                     FulfillmentScheduledTimeBeginDate = shipment.FulfillmentScheduledTimeBeginDate,
                     FulfillmentScheduledTimeEndDate = shipment.FulfillmentScheduledTimeEndDate,
@@ -88,8 +88,7 @@ namespace Orckestra.Composer.Cart.Services
                     Id = shipment.Id,
                     ScopeId = cart.ScopeId,
                     ShippingAddress = shipment.Address,
-                    ShippingProviderId =
-                        shipment.FulfillmentMethod == null ? Guid.Empty : shipment.FulfillmentMethod.ShippingProviderId
+                    ShippingProviderId = shipment.FulfillmentMethod == null ? Guid.Empty : shipment.FulfillmentMethod.ShippingProviderId
                 }).ConfigureAwait(false);
             }
 
@@ -103,10 +102,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>True if the first shipment contains at least one valid payment.</returns>
         protected virtual bool HasAnyValidPayment(ProcessedCart cart)
         {
-            if (cart.Payments == null)
-            {
-                return false;
-            }
+            if (cart.Payments == null) { return false; }
 
             bool hasValidPayment = cart.Payments.Any(p => !p.IsVoided());
             return hasValidPayment;
@@ -119,10 +115,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns></returns>
         protected virtual bool HasValidFulfillmentLocation(ProcessedCart cart)
         {
-            if (cart.Shipments == null || !cart.Shipments.Any())
-            {
-                return false;
-            }
+            if (cart.Shipments == null || !cart.Shipments.Any()) { return false; }
 
             var hasValidFulfillmentLocation = cart.Shipments.First().FulfillmentLocationId != Guid.Empty;
             return hasValidFulfillmentLocation;

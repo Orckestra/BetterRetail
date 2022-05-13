@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Factory;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.Utils;
-using System.Web;
-using Orckestra.Composer.Logging;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -21,11 +20,8 @@ namespace Orckestra.Composer.Product.Services
 
         public ProductViewService(IProductViewModelFactory productViewModelFactory, IProductUrlProvider productUrlProvider)
         {
-            if (productViewModelFactory == null) { throw new ArgumentNullException("productViewModelFactory"); }
-            if (productUrlProvider == null) { throw new ArgumentNullException("productUrlProvider"); }
-
-            ProductViewModelFactory = productViewModelFactory;
-            ProductUrlProvider = productUrlProvider;
+            ProductViewModelFactory = productViewModelFactory ?? throw new ArgumentNullException(nameof(productViewModelFactory));
+            ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
         }
 
         protected virtual string GetPageTitle(ProductViewModel product)

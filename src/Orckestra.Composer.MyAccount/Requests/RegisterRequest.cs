@@ -22,6 +22,11 @@ namespace Orckestra.Composer.MyAccount.Requests
         public string LastName { get; set; }
 
         /// <summary>
+        /// Phone number of a user
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
         /// (Mandatory)
         /// A unique Email address to bind to the new User account
         /// </summary>

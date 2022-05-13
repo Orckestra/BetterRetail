@@ -1,0 +1,27 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Search.Context
+@using Orckestra.Composer.Search
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Category Browsing Selected Facets"; }
+    }
+    public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+}
+
+@{
+    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
+    if (categoryBrowsingViewModel == null)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = categoryBrowsingViewModel.FacetSettings, LandingPageUrls = categoryBrowsingViewModel.LandingPageUrls })
+</body>
+</html>

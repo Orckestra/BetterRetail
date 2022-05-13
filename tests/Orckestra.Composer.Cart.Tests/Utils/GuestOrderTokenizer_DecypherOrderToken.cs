@@ -3,6 +3,9 @@ using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Utils;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Cart.Tests.Utils
 {
@@ -15,14 +18,13 @@ namespace Orckestra.Composer.Cart.Tests.Utils
         [TestCase(null)]
         public void WHEN_token_is_invalid_SHOULD_throw_ArgumentException(string token)
         {
-            //Arrange
-            
             //Act
-            var ex = Assert.Throws<ArgumentException>(() => GuestOrderTokenizer.DecypherOrderToken(token));
+            Expression<Func<OrderToken>> expression = () => GuestOrderTokenizer.DecypherOrderToken(token);
+            var exception = Assert.Throws<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            ex.Should().NotBeNull();
-            ex.ParamName.Should().NotBeNullOrWhiteSpace();
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace());
         }
 
         [Test]

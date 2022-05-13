@@ -10,9 +10,9 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Factory;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -54,11 +54,25 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The ShippingMethodsViewModel</returns>
         public async virtual Task<ShippingMethodsViewModel> GetShippingMethodsAsync(GetShippingMethodsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+
+            var shippingMethods = await GetFulfillmentMethods(param).ConfigureAwait(false);
+
+            if (shippingMethods == null) { return null; }
+
+            var shippingMethodViewModels = shippingMethods
+                .Select(sm => CartViewModelFactory.GetShippingMethodViewModel(sm, param.CultureInfo))
+                .ToList();
+
+            return new ShippingMethodsViewModel
+            {
+                ShippingMethods = shippingMethodViewModels
+            };
+        }
+
+        public async virtual Task<ShippingMethodTypesViewModel> GetShippingMethodTypesAsync(GetShippingMethodsParam param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var shippingMethods = await GetFulfillmentMethods(param).ConfigureAwait(false);
 
@@ -67,13 +81,33 @@ namespace Orckestra.Composer.Cart.Services
                 return null;
             }
 
-            var shippingMethodViewModels = shippingMethods
-                .Select(sm => CartViewModelFactory.GetShippingMethodViewModel(sm, param.CultureInfo)).ToList();
+            var shippingMethodTypeViewModels = shippingMethods
+                .Select(sm => CartViewModelFactory.GetShippingMethodViewModel(sm, param.CultureInfo))
+                .Where(FilterShippingMethodView)
+                .GroupBy(sm => sm.FulfillmentMethodType)
+                .Select(type => CartViewModelFactory.GetShippingMethodTypeViewModel(type.Key, type.ToList(), param.CultureInfo))
+                .OrderBy(OrderShippingMethodTypeView)
+                .ToList();
 
-            return new ShippingMethodsViewModel
+            return new ShippingMethodTypesViewModel
             {
-                ShippingMethods = shippingMethodViewModels
+                ShippingMethodTypes = shippingMethodTypeViewModels
             };
+        }
+
+        public virtual bool FilterShippingMethodView(ShippingMethodViewModel sippingMethod)
+        {
+            return sippingMethod.FulfillmentMethodType == FulfillmentMethodType.Shipping || sippingMethod.FulfillmentMethodType == FulfillmentMethodType.PickUp;
+        }
+
+        public virtual int OrderShippingMethodTypeView(ShippingMethodTypeViewModel sippingMethodType)
+        {
+            switch(sippingMethodType.FulfillmentMethodType)
+            {
+                case FulfillmentMethodType.Shipping: return 0;
+                case FulfillmentMethodType.PickUp: return 1;
+                default: return 2;
+            }
         }
 
         /// <summary>
@@ -83,11 +117,12 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The ShippingMethodsViewModel</returns>
         public async virtual Task<ShippingMethodsViewModel> GetRecurringCartShippingMethodsAsync(GetShippingMethodsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+
             //misleading method name, creates a cart if it does not exist, not just a "get" call
             await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -97,7 +132,7 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 Scope = param.Scope
             }).ConfigureAwait(false);
-            
+
             return await GetShippingMethodsAsync(param);
         }
 
@@ -108,7 +143,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public async Task<CartViewModel> SetCheapestShippingMethodAsync(SetCheapestShippingMethodParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -144,7 +179,6 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = cart.ScopeId,
                 Shipments = cart.Shipments,
                 Status = cart.Status
-
             });
         }
 
@@ -155,9 +189,9 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns></returns>
         public virtual async Task<ShippingMethodViewModel> EstimateShippingAsync(EstimateShippingParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
-            if (param.Cart == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Cart"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }
 
             var shippingMethods = await GetShippingMethodsForShippingEstimationAsync(param);
             var selectedMethod = GetCheapestShippingMethodViewModel(shippingMethods);
@@ -189,21 +223,13 @@ namespace Orckestra.Composer.Cart.Services
 
         protected virtual FulfillmentMethod GetCheapestShippingMethodViewModel(IEnumerable<FulfillmentMethod> shippingMethods)
         {
-            var cheapestShippingMethod =
-               shippingMethods.OrderBy(sm => sm.Cost).First();
-
+            var cheapestShippingMethod = shippingMethods.Aggregate((curMin, x) => x.Cost < curMin.Cost ? x : curMin);
             return cheapestShippingMethod;
         }
 
         protected virtual Shipment GetShipment(Overture.ServiceModel.Orders.Cart cart)
         {
-            var shipment = cart.Shipments.FirstOrDefault();
-
-            if (shipment == null)
-            {
-                throw new InvalidDataException("No shipment was found in Cart.");
-            }
-
+            var shipment = cart.Shipments.FirstOrDefault() ?? throw new InvalidDataException("No shipment was found in Cart.");
             return shipment;
         }
 
@@ -214,16 +240,13 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The ShippingMethodsViewModel</returns>
         public async virtual Task<RecurringOrdersTemplatesShippingMethodsViewModel> GetShippingMethodsScopeAsync(GetShippingMethodsScopeParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
             var fulfillmentMethods = await FulfillmentMethodRepository.GetFulfillmentMethods(param.Scope).ConfigureAwait(false);
 
-            if (fulfillmentMethods == null)
-            {
-                return null;
-            }
+            if (fulfillmentMethods == null) { return null; }
 
             var shippingMethodViewModels = fulfillmentMethods.FulfillmentMethods
                 .Select(sm => RecurringOrderTemplateViewModelFactory.GetShippingMethodViewModel(sm, param.CultureInfo)).ToList();
@@ -236,10 +259,9 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> UpdateRecurringOrderCartShippingMethodAsync(UpdateRecurringOrderCartShippingMethodParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return GetEmptyRecurringOrderCartViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new CartViewModel();
 
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -248,15 +270,9 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 CartName = param.CartName
-
             }).ConfigureAwait(false);
 
-            if (cart.Shipments == null || !cart.Shipments.Any())
-            {
-                throw new InvalidOperationException("No shipment was found in the cart.");
-            }
-
-            var shipment = cart.Shipments.First();
+            var shipment = cart.Shipments?.FirstOrDefault() ?? throw new InvalidOperationException("No shipment was found in the cart.");
 
             var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
             {
@@ -272,10 +288,8 @@ namespace Orckestra.Composer.Cart.Services
             var fulfillmentMethod = fulfillmentMethods.SingleOrDefault(f => f.ShippingProviderId == param.ShippingProviderId.ToGuid() &&
                     string.Equals(f.Name, param.ShippingMethodName, StringComparison.InvariantCultureIgnoreCase));
 
-            if(fulfillmentMethod == null)
-                throw new InvalidOperationException($"The fulfillmentMethod ({param.ShippingProviderId}) was not found.");
-
-            shipment.FulfillmentMethod = fulfillmentMethod;
+            shipment.FulfillmentMethod = fulfillmentMethod 
+                ?? throw new InvalidOperationException($"The fulfillmentMethod ({param.ShippingProviderId}) was not found.");
 
             var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
 
@@ -288,11 +302,6 @@ namespace Orckestra.Composer.Cart.Services
             });
 
             return vm;
-        }
-
-        protected virtual CartViewModel GetEmptyRecurringOrderCartViewModel()
-        {
-            return  new CartViewModel();
         }
     }
 }

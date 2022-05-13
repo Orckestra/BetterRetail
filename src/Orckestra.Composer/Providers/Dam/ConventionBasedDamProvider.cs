@@ -1,14 +1,14 @@
-using Orckestra.Composer.Enums;
-using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Utils;
-using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.ExperienceManagement.Configuration.Settings;
-using Orckestra.Overture.ServiceModel.Products;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Enums;
+using Orckestra.Composer.Repositories;
+using Orckestra.ExperienceManagement.Configuration;
+using Orckestra.ExperienceManagement.Configuration.Settings;
+using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Providers.Dam
 {
@@ -52,25 +52,17 @@ namespace Orckestra.Composer.Providers.Dam
 
         public virtual string GetFallbackImageUrl()
         {
-            if (string.IsNullOrEmpty(_productMediaSettings?.MediaFallbackImageName))
-                return GetLocalFallbackImageUrl();
+            if (string.IsNullOrEmpty(_productMediaSettings?.MediaFallbackImageName)) return GetLocalFallbackImageUrl();
+
             return GetMediaFallbackImageUrl(_productMediaSettings);
         }
 
         public virtual async Task<List<ProductMainImage>> GetProductMainImagesAsync(GetProductMainImagesParam param)
         {
-            if (param == null)
-            {
-                throw new ArgumentNullException("param", "The method parameter is required.");
-            }
-            if (string.IsNullOrWhiteSpace(param.ImageSize))
-            {
-                throw new ArgumentException("The image size is required.");
-            }
-            if (param.ProductImageRequests == null)
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProductImageRequests"), "param");
-            }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ImageSize)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ImageSize)), nameof(param)); }
+            if (param.ProductImageRequests == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageRequests)), nameof(param)); }
+
             if (param.ProductImageRequests.Any(request => string.IsNullOrWhiteSpace(request.ProductId)))
             {
                 throw new ArgumentException("The product id must be specified for each ProductImageRequests object.");
@@ -90,33 +82,15 @@ namespace Orckestra.Composer.Providers.Dam
 
         public virtual async Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param)
         {
-            if (param == null)
-            {
-                throw new ArgumentNullException("param", "The method parameter is required.");
-            }
-            if (string.IsNullOrWhiteSpace(param.ImageSize))
-            {
-                throw new ArgumentException("The image size is required.");
-            }
-            if (string.IsNullOrWhiteSpace(param.ThumbnailImageSize))
-            {
-                throw new ArgumentException("The thumbnail image size is required.");
-            }
-            if (string.IsNullOrWhiteSpace(param.ProductZoomImageSize))
-            {
-                throw new ArgumentException("The product zoom image size is required.");
-            }
-            if (string.IsNullOrWhiteSpace(param.ProductId))
-            {
-                throw new ArgumentException("The product id is required.");
-            }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ImageSize)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ImageSize)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ThumbnailImageSize)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ThumbnailImageSize)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductZoomImageSize)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductZoomImageSize)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
 
             _productMediaSettings = await ProductMediaSettingsRepository.GetProductMediaSettings().ConfigureAwait(false);
 
-            if (IsProductHaveMedia(param.MediaSet, param.VariantMediaSet, param.Variants))
-            {
-                return GetAllProductMediaImages(param);
-            }
+            if (IsProductHaveMedia(param.MediaSet, param.VariantMediaSet, param.Variants)) { return GetAllProductMediaImages(param); }
 
             return GetAllProductLocalImages(param);
         }
@@ -149,9 +123,7 @@ namespace Orckestra.Composer.Providers.Dam
 
                 if (param.Variants != null)
                 {
-                    result.AddRange(
-                        param.Variants.Select(variantKey => CreateAllProductImages(param, variantKey.Id, sequenceNumber))
-                    );
+                    result.AddRange(param.Variants.Select(variantKey => CreateAllProductImages(param, variantKey.Id, sequenceNumber)));
                 }
 
             }
@@ -215,19 +187,27 @@ namespace Orckestra.Composer.Providers.Dam
         {
             return new AllProductImages
             {
-                ImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ImageSize) : "",
-                ThumbnailUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ThumbnailImageSize) : "",
-                ProductZoomImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize) : "",
+                ImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ImageSize) : string.Empty,
+                ThumbnailUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ThumbnailImageSize) : string.Empty,
+                ProductZoomImageUrl = productMedia != null ? GetSizedImageUrl(productMedia, mediaSettings, param.ProductZoomImageSize) : string.Empty,
                 ProductId = param.ProductId,
                 VariantId = variantId,
                 SequenceNumber = productMedia?.Position ?? 0,
                 FallbackImageUrl = GetFallbackImageUrl(),
                 Alt = productMedia?.Title,
+                Selected = productMedia?.IsCover ?? false,
             };
         }
 
-        protected virtual string GetMediaFallbackImageUrl(MediaSettings mediaSettings) => mediaSettings.MediaServerUrl + mediaSettings.MediaFallbackImageName;
-        protected virtual string GetImageUrl(string imagePath, MediaSettings mediaSettings) => imagePath.Replace("~/", mediaSettings.MediaServerUrl);
+        protected virtual string GetMediaFallbackImageUrl(MediaSettings mediaSettings)
+        {
+            return mediaSettings.MediaServerUrl + mediaSettings.MediaFallbackImageName;
+        }
+
+        protected virtual string GetImageUrl(string imagePath, MediaSettings mediaSettings)
+        {
+            return imagePath.Replace("~/", mediaSettings.MediaServerUrl);
+        }
 
         protected virtual string GetSizedImageUrl(ProductMedia productMedia, MediaSettings mediaSettings, string size)
         {
@@ -235,8 +215,7 @@ namespace Orckestra.Composer.Providers.Dam
             {
                 var resizedImage = productMedia.ResizedInstances.FirstOrDefault(resizedImg => resizedImg.Size == size);
 
-                if (resizedImage != null)
-                    return GetImageUrl(resizedImage.Url, mediaSettings);
+                if (resizedImage != null) return GetImageUrl(resizedImage.Url, mediaSettings);
             }
 
             return GetImageUrl(productMedia.Url, mediaSettings);
@@ -259,8 +238,10 @@ namespace Orckestra.Composer.Providers.Dam
             return result;
         }
 
-        protected virtual IEnumerable<ProductMedia> FilterImages(IEnumerable<ProductMedia> productMedias) =>
-            productMedias?.Where(x => x.MediaType == nameof(MediaTypeEnum.Image)).Where(x => x.IsRemoved != true);
+        protected virtual IEnumerable<ProductMedia> FilterImages(IEnumerable<ProductMedia> productMedias)
+        {
+            return productMedias?.Where(x => x.MediaType == nameof(MediaTypeEnum.Image) && x.IsRemoved != true);
+        }
 
         protected virtual IEnumerable<ProductMedia> GetVariantMediaSet(List<VariantMediaSet> variantMediaSet, Variant variant)
         {
@@ -284,10 +265,9 @@ namespace Orckestra.Composer.Providers.Dam
 
         public virtual string GetMediaImageUrl(Product product, string variantId)
         {
-            if (product == null)
-                return null;
+            if (product == null) return null;
 
-            var variant = !string.IsNullOrEmpty(variantId) ? product.Variants?.FirstOrDefault(v => v.Id.ToLower() == variantId.ToLower()) : null;
+            var variant = !string.IsNullOrEmpty(variantId) ? product.Variants?.Find(v => v.Id.ToLower() == variantId.ToLower()) : null;
 
             var variantMediaSet = GetVariantMediaSet(product.VariantMediaSet, variant);
             var mediaSet = variantMediaSet.Any() ? variantMediaSet : FilterImages(product.MediaSet);
@@ -295,7 +275,7 @@ namespace Orckestra.Composer.Providers.Dam
             return mediaSet?
                 .Where(m => m.IsCover == true)
                 .Select(m => m.Url)
-                .LastOrDefault() ?? (IsProductHaveMedia(product.MediaSet, product.VariantMediaSet, product.Variants) ? "" : null);
+                .LastOrDefault() ?? (IsProductHaveMedia(product.MediaSet, product.VariantMediaSet, product.Variants) ? string.Empty : null);
         }
 
         protected virtual ProductMainImage GetProductMainMediaImage(ProductImageRequest request)

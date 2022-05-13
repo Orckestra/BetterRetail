@@ -4,16 +4,21 @@ using Composite.Core.Application;
 using Composite.Core.Xml;
 using Composite.Data;
 using Composite.Data.DynamicTypes;
+using Composite.Data.Types;
 using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.Website.Controllers;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.HttpModules;
 using Orckestra.Composer.Logging;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search;
+using Orckestra.Composer.Website.Controllers;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
+using System;
+using System.Linq;
+using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -26,6 +31,8 @@ namespace Orckestra.Composer.Website
         private static IComposerHost _host;
         public static void Start()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             DynamicModuleUtility.RegisterModule(typeof(SecurityModule));
             SetUpSearchConfiguration();
         }
@@ -37,6 +44,8 @@ namespace Orckestra.Composer.Website
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             LogProvider.SetCurrentLogProvider(C1LogProvider.Instance);
@@ -56,7 +65,52 @@ namespace Orckestra.Composer.Website
             RegisterFunctions(functions);
             RegisterFunctionRoutes(functions);
 
+            DataEvents<IPage>.OnAfterAdd += UpdateAfterPageChanged;
+
             log.Info("Application Started");
+        }
+
+
+        /// <summary>
+        /// Do some updates when C1 page is added, for example clear Categories Cache
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="dataEventArgs"></param>
+        private static void UpdateAfterPageChanged(object sender, DataEventArgs dataEventArgs)
+        {
+            var page = dataEventArgs.Data as IPage;
+            if (page == null) return;
+
+            ClearCategoriesCache(page);
+        }
+
+        private static void ClearCategoriesCache(IPage data)
+        {
+            if (data.PageTypeId != CategoryPages.CategoryPageTypeId) return;
+
+            Guid homepageId = GetHomePageId(data);
+            using (var con = new DataConnection())
+            {
+                var meta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+                if (meta == null) return;
+
+                var categoryRepository = Composite.Core.ServiceLocator.GetService<ICategoryRepository>();
+                categoryRepository.ClearCategoriesCache(meta.Scope);
+            }
+        }
+
+        private static Guid GetHomePageId(IPage data)
+        {
+            Guid homepageId = Guid.Empty;
+            Guid pageId = data.Id;
+
+            while (pageId != Guid.Empty)
+            {
+                homepageId = pageId;
+                pageId = PageManager.GetParentId(pageId);
+            }
+
+            return homepageId;
         }
 
         private static void RegisterFunctions(FunctionCollection functions)
@@ -64,26 +118,12 @@ namespace Orckestra.Composer.Website
             functions.AutoDiscoverFunctions(typeof(StartupHandler).Assembly);
 
             functions.RegisterAction<HeaderController>("GeneralErrors", "Composer.Header.GeneralErrors");
-            functions.RegisterAction<HeaderController>("LanguageSwitch", "Composer.Header.LanguageSwitch");
-            functions.RegisterAction<HeaderController>("Breadcrumb", "Composer.General.Breadcrumb");
             functions.RegisterAction<HeaderController>("PageHeader", "Composer.Header.PageHeader");
 
             functions.RegisterAction<SearchController>("PageHeader", "Composer.Search.PageHeader");
-            functions.RegisterAction<SearchController>("Index", "Composer.Search.Index");
-            functions.RegisterAction<SearchController>("SearchFacets", "Composer.Search.Facets");
-            functions.RegisterAction<SearchController>("Breadcrumb", "Composer.Search.Breadcrumb");
-            functions.RegisterAction<SearchController>("LanguageSwitch", "Composer.Search.LanguageSwitch");
-            functions.RegisterAction<SearchController>("SelectedSearchFacets", "Composer.Search.SelectedSearchFacets");
 
-            functions.RegisterAction<BrowsingCategoriesController>("LanguageSwitch", "Composer.BrowsingCategories.LanguageSwitch");
-            functions.RegisterAction<BrowsingCategoriesController>("Summary", "Composer.BrowsingCategories.Summary");
-            functions.RegisterAction<BrowsingCategoriesController>("Index", "Composer.BrowsingCategories.Results");
-            functions.RegisterAction<BrowsingCategoriesController>("Facets", "Composer.BrowsingCategories.Facets");
-            functions.RegisterAction<BrowsingCategoriesController>("SelectedSearchFacets", "Composer.BrowsingCategories.SelectedFacets");
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
-            functions.RegisterAction<ProductController>("LanguageSwitch", "Composer.Product.LanguageSwitch");
-            functions.RegisterAction<ProductController>("Breadcrumb", "Composer.Product.Breadcrumb");
             functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
                 .AddParameter("merchandiseTypes",
                     typeof(string),
@@ -125,10 +165,6 @@ namespace Orckestra.Composer.Website
                     label: "Background style",
                     helpText: "Specify the style of this block background");
 
-            functions.RegisterAction<CartController>("CartSummary", "Composer.Cart.CartSummary");
-            functions.RegisterAction<CartController>("OrderSummary", "Composer.Cart.OrderSummary");
-            functions.RegisterAction<CartController>("Coupons", "Composer.Cart.Coupons");
-
             functions.RegisterAction<CartController>("Minicart", "Composer.Cart.Minicart").AddParameter(
                 "notificationTimeInSeconds",
                 typeof(int),
@@ -138,24 +174,9 @@ namespace Orckestra.Composer.Website
                 helpText: "Notification time of the minicart when an item is added/updated in cart (in seconds)."
             );
 
-            functions.RegisterAction<CheckoutController>("GuestCustomerInfo", "Composer.Checkout.GuestCustomerInfo");
-            functions.RegisterAction<CheckoutController>("ShippingAddress", "Composer.Checkout.ShippingAddress");
-            functions.RegisterAction<CheckoutController>("ShippingMethod", "Composer.Checkout.ShippingMethod");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
-            functions.RegisterAction<CheckoutController>("CheckoutOrderSummary", "Composer.Checkout.CheckoutOrderSummary");
-            functions.RegisterAction<CheckoutController>("CheckoutFinalStepOrderSummary", "Composer.Checkout.CheckoutFinalStepOrderSummary");
-            functions.RegisterAction<CheckoutController>("CheckoutComplete", "Composer.Checkout.CheckoutComplete");
-            functions.RegisterAction<CheckoutController>("ShippingAddressRegistered", "Composer.Checkout.ShippingAddressRegistered");
-            functions.RegisterAction<CheckoutController>("BillingAddress", "Composer.Checkout.BillingAddress");
-            functions.RegisterAction<CheckoutController>("BillingAddressRegistered", "Composer.Checkout.BillingAddressRegistered");
-            functions.RegisterAction<CheckoutController>("Breadcrumb", "Composer.Checkout.Breadcrumb");
-            functions.RegisterAction<CheckoutController>("ConfirmationBreadcrumb", "Composer.Checkout.ConfirmationBreadcrumb");
-            functions.RegisterAction<CheckoutController>("LanguageSwitch", "Composer.Checkout.LanguageSwitch");
-            functions.RegisterAction<CheckoutController>("CompleteCheckoutOrderSummary", "Composer.Checkout.CompleteCheckoutOrderSummary");
-            functions.RegisterAction<CheckoutController>("CheckoutPayment", "Composer.Checkout.CheckoutPayment");
-            functions.RegisterAction<CheckoutController>("CheckoutNavigation", "Composer.Checkout.CheckoutNavigation");
-
+  
             functions.RegisterAction<MembershipController>("SignInHeaderBlade", "Composer.Membership.SignInHeader");
             functions.RegisterAction<MembershipController>("ReturningCustomerBlade", "Composer.Membership.ReturningCustomer");
             functions.RegisterAction<MembershipController>("NewCustomerBlade", "Composer.Membership.NewCustomer");
@@ -166,12 +187,8 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<MyAccountController>("AccountHeader", "Composer.MyAccount.AccountHeader");
             functions.RegisterAction<MyAccountController>("UpdateAccount", "Composer.MyAccount.UpdateAccount");
-            functions.RegisterAction<MyAccountController>("AddressList", "Composer.MyAccount.AddressList");
             functions.RegisterAction<MyAccountController>("CreateAddress", "Composer.MyAccount.CreateAddress");
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
-            functions.RegisterAction<MyAccountController>("CurrentOrders", "Composer.MyAccount.CurrentOrders");
-            functions.RegisterAction<MyAccountController>("PastOrders", "Composer.MyAccount.PastOrders");
-            functions.RegisterAction<MyAccountController>("OrderDetails", "Composer.MyAccount.OrderDetails");
             functions.RegisterAction<MyAccountController>("WishList", "Composer.MyAccount.WishList")
                 .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty");
             functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule");
@@ -185,19 +202,14 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<WishListController>("SharedWishListTitle", "Composer.WishList.SharedTitle");
 
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
-            functions.RegisterAction<OrderController>("OrderDetails", "Composer.Order.OrderDetails");
 
-            functions.RegisterAction<StoreLocatorController>("Index", "Composer.Store.Locator")
-                .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
             functions.RegisterAction<StoreLocatorController>("StoreDetails", "Composer.Store.Details", "Store Details")
                 .AddParameter("zoom", typeof(int), false, label: "Map Zoom Level", helpText: "Define the resolution of the map view. Zoom levels between 0 and 21+. Default is 14 (streets).");
-            functions.RegisterAction<StoreLocatorController>("Breadcrumb", "Composer.Store.Breadcrumb");
             functions.RegisterAction<StoreLocatorController>("PageHeader", "Composer.Store.PageHeader");
             functions.RegisterAction<StoreLocatorController>("StoreDirectory", "Composer.Store.Directory");
             functions.RegisterAction<StoreLocatorController>("StoreLocatorInHeader", "Composer.Store.LocatorInHeader");
             functions.RegisterAction<StoreLocatorController>("StoreInventory", "Composer.Store.Inventory")
                 .AddParameter("pagesize", typeof(int), false, label: "Page Size", helpText: "The max count of the items to show in the list.");
-            functions.RegisterAction<StoreLocatorController>("LanguageSwitch", "Composer.StoreLocator.LanguageSwitch");
             functions.RegisterAction<PageNotFoundController>("PageNotFoundAnalytics", "Composer.PageNotFound.Analytics");
         }
 
@@ -218,6 +230,8 @@ namespace Orckestra.Composer.Website
 
         public static void ConfigureServices(IServiceCollection collection)
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             _host = new ComposerHost();
             _host.LoadPlugins();
             foreach(var type in _host.RegisteredInterfaces)

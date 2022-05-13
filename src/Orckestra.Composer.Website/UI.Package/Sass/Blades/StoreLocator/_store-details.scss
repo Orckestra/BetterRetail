@@ -23,10 +23,21 @@
     }
   }
 
+  .store-tile{
+      &.pin-in-title {
+        .store-tile-title {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .store-address {
+            padding-left: 25px;
+        }
+      }
+  }
+
  .static-map-pin {
      position: absolute;
-     top: 50%;
-     left: 50%;
      margin-top: -50px;
      margin-left: -13px;
      height: 50px;
@@ -37,6 +48,24 @@
      line-height: 29px;
      color: #fff;
      z-index: 1000;
+ }
+
+ .store-tile-map {
+     position: relative;
+
+     .static-map-pin {
+        top: 50%;
+        left: 50%;
+     }
+ }
+
+ .store-tile-title {
+
+    .static-map-pin {
+        left: 5px;
+        top: 45px;
+        height: 45px;
+     }
  }
 
 .store-open-hour {

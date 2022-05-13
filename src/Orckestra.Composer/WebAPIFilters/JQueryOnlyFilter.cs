@@ -28,15 +28,7 @@ namespace Orckestra.Composer.WebAPIFilters
 
         private bool IsValidRequestHeader(HttpRequestHeaders headers)
         {
-            var hasValidRequestHeader = false;
-            IEnumerable<string> headerTokens = null;
-
-            if (headers.TryGetValues("X-Requested-With", out headerTokens))
-            {
-                hasValidRequestHeader = headerTokens.FirstOrDefault() != null;
-            }
-
-            return hasValidRequestHeader;
+            return headers.TryGetValues("X-Requested-With", out IEnumerable<string> headerTokens) ? headerTokens.Any() : false;
         }
     }
 }

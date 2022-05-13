@@ -11,12 +11,14 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.ForTests.Mock;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -54,6 +56,14 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             .Setup(r => r.ResolveProvider(It.IsAny<string>()))
             .Returns(new FakePaymentProvider());
 
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            _container.Use(contextStub);
+
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
+
             _container.GetMock<IShippingTrackingProviderFactory>()
               .Setup(r => r.ResolveProvider(It.IsAny<string>()))
           .Returns(new FakeShippingTrackingProvider());
@@ -73,12 +83,12 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             vm.Should().NotBeNull();
             vm.OrderInfos.Should().NotBeNull();
             vm.OrderInfos.OrderNumber.ShouldAllBeEquivalentTo(order.OrderNumber);
-            vm.OrderInfos.OrderStatus.ShouldAllBeEquivalentTo("In Progress");
+            vm.OrderInfos.OrderStatus.Should().NotBeNullOrEmpty();
             vm.OrderSummary.Should().NotBeNull();
             vm.Payments.Should().NotBeNull();
-            vm.Payments.Count().ShouldBeEquivalentTo(2);
+            vm.Payments.Count.ShouldBeEquivalentTo(2);
             vm.Shipments.Should().NotBeNull();
-            vm.Shipments.Count().ShouldBeEquivalentTo(2);
+            vm.Shipments.Count.ShouldBeEquivalentTo(2);
             vm.ShippingAddress.Should().NotBeNull();
             vm.BillingAddress.Should().NotBeNull();
             vm.ShippingMethod.Should().NotBeNull();
@@ -97,35 +107,8 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             //Assert
             vm.Should().NotBeNull();
             vm.BillingAddress.Should().NotBeNull();
-            vm.Payments.Count().ShouldBeEquivalentTo(2);
+            vm.Payments.Count.ShouldBeEquivalentTo(2);
             vm.Payments.ForEach(payment => payment.BillingAddress.Should().NotBeNull());
-        }
-
-        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order)
-        {
-            return new CreateOrderDetailViewModelParam
-            {
-                CultureInfo = new CultureInfo("en-US"),
-                OrderStatuses = new Dictionary<string, string>
-                {
-                    {"InProgress", "In Progress"},
-                    {"Canceled" , "Canceled"}
-                },
-                CountryCode = GetRandom.String(32),
-                BaseUrl = GetRandom.String(32),
-                Order = order,
-                ProductImageInfo = new ProductImageInfo
-                {
-                    ImageUrls = new List<ProductMainImage>()
-                },
-                ShipmentsNotes = new Dictionary<Guid, List<string>>(),
-                OrderChanges = new List<OrderHistoryItem>(),
-                ShipmentStatuses = new Dictionary<string, string>
-                {
-                    {"InProgress", "In Progress"},
-                    {"Canceled" , "Canceled"}
-                }
-            };
         }
 
         protected Overture.ServiceModel.Orders.Order CreateOrder(string orderStatus, string paymentStatus)
@@ -212,6 +195,33 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
                 }
             };
 
+        }
+
+        protected CreateOrderDetailViewModelParam CreateOrderDetailViewModelParam(Overture.ServiceModel.Orders.Order order)
+        {
+            return new CreateOrderDetailViewModelParam
+            {
+                CultureInfo = new CultureInfo("en-US"),
+                OrderStatuses = new Dictionary<string, string>
+                {
+                    {"InProgress", "In Progress"},
+                    {"Canceled" , "Canceled"}
+                },
+                CountryCode = GetRandom.String(32),
+                BaseUrl = GetRandom.String(32),
+                Order = order,
+                ProductImageInfo = new ProductImageInfo
+                {
+                    ImageUrls = new List<ProductMainImage>()
+                },
+                ShipmentsNotes = new Dictionary<Guid, List<string>>(),
+                OrderChanges = new List<OrderHistoryItem>(),
+                ShipmentStatuses = new Dictionary<string, string>
+                {
+                    {"InProgress", "In Progress"},
+                    {"Canceled" , "Canceled"}
+                }
+            };
         }
 
     }

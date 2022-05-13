@@ -25,7 +25,7 @@
         pageCurrent = 1;
     }
 
-    int articlesCount = ArticleData.List.Count();
+    int articlesCount = articles.Count;
 
     var pageCount = (articlesCount + PageSize - 1) / PageSize;
     var articlesList = articles.Skip(PageSize * (pageCurrent - 1)).Take(PageSize);
@@ -108,12 +108,16 @@
 
 @helper Tags(string tags)
 {
-    List<string> articleTags = tags.Split(',').Where(t => !string.IsNullOrEmpty(t)).Select(t => t).ToList();
+    string[] articleTags = tags.Split(',');
 
     <small class="text-muted">
         <span class="glyphicon glyphicon-tags"></span>
         @foreach (var tag in articleTags)
         {
+            if (string.IsNullOrEmpty(tag))
+            {
+                continue;
+            }
             <span>@tag</span>
         }
     </small>

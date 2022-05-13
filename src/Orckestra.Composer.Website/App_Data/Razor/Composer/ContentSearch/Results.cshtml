@@ -1,0 +1,67 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Newtonsoft.Json
+@using Orckestra.Composer.ContentSearch.DataTypes
+@using Orckestra.Composer.ContentSearch.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Content Search Page Results"; }
+    }
+
+    [FunctionParameter(Label = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Label}", Help = "${Orckestra.Search.WebsiteSearch,SearchResults.CurrentSite.Help}", DefaultValue = true)]
+    public bool CurrentSite { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ISortOption SelectedSortBy { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public IList<ISortOption> AvailableSortBys { get; set; }
+
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ContentSearchTabViewModel Tab { get; set; }
+
+
+    string vueId = "vueContentSearchResults" + Guid.NewGuid().ToString("N");
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div class="search-results"
+         data-oc-controller="ContentSearch.SearchResults"
+         data-context="@JsonConvert.SerializeObject(Tab, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-available-sort="@JsonConvert.SerializeObject(AvailableSortBys, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-selected-sort="@JsonConvert.SerializeObject(SelectedSortBy, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-items-count="@(Tab.SearchResults.Count)"
+         data-current-site="@(CurrentSite)"
+         data-vueid="@vueId"
+         id="@vueId"
+         v-cloak="true">
+
+        <div class="row filters-row mb-4" v-if="TotalCount > 0">
+            <div class="col-6 d-lg-none">
+                @SearchHelpers.ShowFacetsCollapseBtn()
+            </div>
+            <div class="col-6">
+                @ContentSearchHelpers.SortBy()
+            </div>
+            <div class="col-6 d-none d-lg-block" v-if="Pagination.PagesCount > 1">
+                @SearchHelpers.PaginationDropdownByCount()
+            </div>
+        </div>
+
+        <div class="row">
+            <div v-for="(contentItem, index) in SearchResults" class="col-12 col-sm-4 mb-4">
+                @ContentSearchHelpers.ContentSearchEntry()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 d-block pt-2" v-if="Pagination.PagesCount > 1">
+                @SearchHelpers.PaginationByCount()
+            </div>
+        </div>
+    </div>
+</body>
+</html>

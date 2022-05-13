@@ -1,34 +1,17 @@
 .store-locator {
- 
-   .map {
+  [v-cloak] { display:none; }
+
+  .map {
         height: 340px;
         margin-bottom: 15px;
         background: #E5E3DF;
     }
 }
 
-.store-locator-search {
-  margin: 20px 0 5px 0;
-  position: relative;
-  
-  .form-control {
-      padding-right: 35px;
-      margin-bottom: 10px;
-  }
-  
-  .fa-search {
-      position: absolute;
-      right: 24px;
-      top: 10px;
-  }
-  
-  .btn {
-      margin-left: 10px;
-  } 
-  
-  .label-or {
-      margin-left: -10px;
-  }
+.store-locator-search-icon {
+  position: absolute;
+  right: 24px;
+  top: 10px;
 }
 
 .store-locator-info {
@@ -82,10 +65,6 @@
        height: 40px;
        margin-bottom: 0;
    } 
-}
-
-.store-tile-img {
-    position: relative;
 }
 
 .store-tile-body-top {

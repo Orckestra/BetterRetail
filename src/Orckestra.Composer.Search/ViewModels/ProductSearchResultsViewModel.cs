@@ -27,6 +27,11 @@ namespace Orckestra.Composer.Search.ViewModels
         public IList<ProductSearchViewModel> SearchResults { get; set; }
 
         /// <summary>
+        /// Get or set independent product counts for category facets
+        /// </summary>
+        public CategoryFacetCounts CategoryFacetCounts { get; set; }
+
+        /// <summary>
         /// Gets or sets the facet groups.
         /// </summary>
         /// <value>

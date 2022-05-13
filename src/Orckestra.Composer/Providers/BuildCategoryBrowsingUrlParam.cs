@@ -13,7 +13,7 @@ namespace Orckestra.Composer.Providers
         {
             get
             {
-                return Criteria == null ? null : Criteria.CultureInfo;
+                return Criteria?.CultureInfo;
             }
             set
             {
@@ -29,7 +29,7 @@ namespace Orckestra.Composer.Providers
         {
             get
             {
-                return Criteria == null ? null : Criteria.BaseUrl;
+                return Criteria?.BaseUrl;
             }
             set
             {

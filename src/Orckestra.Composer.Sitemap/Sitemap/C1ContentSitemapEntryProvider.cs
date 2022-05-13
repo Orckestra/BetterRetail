@@ -1,12 +1,12 @@
-﻿using Orckestra.Composer.Sitemap;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Orckestra.Composer.Sitemap.Models;
-using System.Globalization;
 using System.Web;
 using Composite.AspNet;
+using Orckestra.Composer.Sitemap;
+using Orckestra.Composer.Sitemap.Models;
 using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
@@ -18,11 +18,8 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 
         public C1ContentSitemapEntryProvider(IC1ContentSitemapPageExcludeProvider pageToExcludeProvider, IC1ContentSitemapDataTypesIncluder dynamicPagesEntryProvider)
         {
-            Guard.NotNull(pageToExcludeProvider, nameof(pageToExcludeProvider));
-            Guard.NotNull(dynamicPagesEntryProvider, nameof(dynamicPagesEntryProvider));
-
-            _pageToExcludeProvider = pageToExcludeProvider;
-            _dynamicPagesEntryProvider = dynamicPagesEntryProvider;
+            _pageToExcludeProvider = pageToExcludeProvider ?? throw new ArgumentNullException(nameof(pageToExcludeProvider));
+            _dynamicPagesEntryProvider = dynamicPagesEntryProvider ?? throw new ArgumentNullException(nameof(dynamicPagesEntryProvider));
         }
 
         public Task<IEnumerable<SitemapEntry>> GetEntriesAsync(SitemapParams sitemapParams, CultureInfo culture, int offset, int count)
@@ -33,8 +30,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             //    <add name="CompositeC1" type="Composite.AspNet.CompositeC1SiteMapProvider, Composite" />
             //  </providers>
             //</siteMap>
-            var provider = SiteMap.Provider as CmsPageSiteMapProvider;
-            if (provider == null)
+            if (!(SiteMap.Provider is CmsPageSiteMapProvider provider))
             {
                 throw new Exception("SiteMap provider is not configured in Web.config to use Composite.AspNet.CompositeC1SiteMapProvider.");
             }
@@ -49,7 +45,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             var rootNodes = provider.GetRootNodes().ToList();
 
             // Get root node associated to culture and website
-            var rootNode = rootNodes.FirstOrDefault(node => node.Culture.Equals(culture) && node.Page?.Id == sitemapParams.Website);
+            var rootNode = rootNodes.Find(node => node.Culture.Equals(culture) && node.Page?.Id == sitemapParams.Website);
 
             var pageIdsToExclude = _pageToExcludeProvider.GetPageIdsToExclude(sitemapParams.Website, culture);
             var allNodes = rootNode?.GetAllNodes()

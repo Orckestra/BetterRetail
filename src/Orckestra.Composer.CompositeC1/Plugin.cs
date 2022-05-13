@@ -22,6 +22,9 @@ using Orckestra.Composer.Search.Context;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.ExperienceManagement.Configuration.Settings;
 using Orckestra.Composer.CompositeC1.Services.PreviewMode;
+using Orckestra.Composer.CompositeC1.Providers.Breadcrumb;
+using Orckestra.Composer.CompositeC1.Providers.LanguageSwitch;
+using Orckestra.Composer.Cart.Providers.Order;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -39,6 +42,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<RecurringOrdersSettings, IRecurringOrdersSettings>(ComponentLifestyle.PerRequest);
             host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
             host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);
+            host.Register<EmptyFulfillmentContext, IFulfillmentContext>(ComponentLifestyle.Singleton);
             host.Register<AntiCookieTamperingExcluder, IAntiCookieTamperingExcluder>();
             host.Register<Providers.ScopeProvider, IScopeProvider>(ComponentLifestyle.PerRequest);
             host.Register<Providers.ProductUrlProvider, IProductUrlProvider>(ComponentLifestyle.PerRequest);
@@ -54,7 +58,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<CategoryBrowsingUrlProvider, ICategoryBrowsingUrlProvider>();
             host.Register<CartUrlProvider, ICartUrlProvider>();
             host.Register<MyAccountUrlProvider, IMyAccountUrlProvider>();
-            host.Register<WishListUrlProvider, IWishListUrlProvider>();            
+            host.Register<WishListUrlProvider, IWishListUrlProvider>();
             host.Register<RecurringScheduleUrlProvider, IRecurringScheduleUrlProvider>();
             host.Register<RecurringCartUrlProvider, IRecurringCartUrlProvider>();
             host.Register<CategoryPageService, ICategoryBrowsingService>();
@@ -79,9 +83,33 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<Scheduler, IScheduler>(ComponentLifestyle.Singleton);
 
             host.Register<ProductContext, IProductContext>(ComponentLifestyle.PerRequest);
+            host.Register<StoreContext, IStoreContext>(ComponentLifestyle.PerRequest);
             host.Register<LazyFunctionCallDataProvider, ILazyFunctionCallDataProvider>();
+            host.Register<BaseSearchCriteriaProvider, IBaseSearchCriteriaProvider>();
+
+            host.Register<EditingOrderProvider, IEditingOrderProvider>();
+            RegisterBreadcrumProviders(host);
+            RegisterLanguageSwitchProviders(host);
 
             host.RegisterApiControllers(typeof(Plugin).Assembly);
+        }
+
+        private static void RegisterBreadcrumProviders(IComposerHost host)
+        {
+            host.Register<BreadcrumbContext, IBreadcrumbContext>(ComponentLifestyle.PerRequest);
+            host.Register<BreadcrumbProvider, IBreadcrumbProvider>();
+            host.Register<ProductBreadcrumbProvider, IBreadcrumbProvider>();
+            host.Register<StoreBreadcrumbProvider, IBreadcrumbProvider>();
+            host.Register<ChekoutBreadcrumbProvider, IBreadcrumbProvider>();
+            host.Register<SearchBreadcrumbProvider, IBreadcrumbProvider>();
+        }
+
+        private static void RegisterLanguageSwitchProviders(IComposerHost host)
+        {
+            host.Register<LanguageSwitchContext, ILanguageSwitchContext>(ComponentLifestyle.PerRequest);
+            host.Register<LanguageSwitchProvider, ILanguageSwitchProvider>();
+            host.Register<ProductLanguageSwitchProvider, ILanguageSwitchProvider>();
+            host.Register<StoreLanguageSwitchProvider, ILanguageSwitchProvider>();
         }
     }
 }

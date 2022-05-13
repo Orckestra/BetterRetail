@@ -1,0 +1,26 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Search.Context;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Category Browsing Page Results"; }
+    }
+    public IBrowseCategoryRequestContext BrowsingRequestContext { get; set; }
+}
+
+@{
+    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
+    if (categoryBrowsingViewModel == null)
+    {
+        return;
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    @Function("Composer.Search.BaseSearchResults", new { Results = categoryBrowsingViewModel })
+</body>
+</html>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
-  <Add Id="7a8cecf3-d345-4869-b955-272aee117c06" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" MethodName="GetFacetOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetFacetOptions" />
-  <Add Id="f096e317-7994-4479-ad42-a313a1a88bd1" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" MethodName="GetSearchableDataTypeOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetSearchableDataTypeOptions" />
+  <Add Id="7a8cecf3-d345-4869-b955-272aee117c06" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade, Orckestra.Search.WebsiteSearch" MethodName="GetFacetOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetFacetOptions" />
+  <Add Id="f096e317-7994-4479-ad42-a313a1a88bd1" Type="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade, Orckestra.Search.WebsiteSearch" MethodName="GetSearchableDataTypeOptions" Namespace="Orckestra.Search.WebsiteSearch.WebsiteSearchFacade" UserMethodName="GetSearchableDataTypeOptions" />
 </Data>

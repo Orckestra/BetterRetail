@@ -17,11 +17,8 @@ namespace Orckestra.Composer.Product.Repositories
 
         public RelationshipRepository(IOvertureClient overtureClient, IProductRequestFactory productRequestFactory)
         {
-            if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
-            if (productRequestFactory == null) { throw new ArgumentNullException(nameof(productRequestFactory)); }
-
-            _overtureClient = overtureClient;
-            _productRequestFactory = productRequestFactory;
+            _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            _productRequestFactory = productRequestFactory ?? throw new ArgumentNullException(nameof(productRequestFactory));
         }
 
         public virtual Task<ProductSearchResult> GetProductInSameCategoryAsync(GetProductsInSameCategoryParam getProductsInSameCategoryParam)
@@ -40,6 +37,7 @@ namespace Orckestra.Composer.Product.Repositories
             request.CultureName = getProductsInSameCategoryParam.CultureInfo.Name;
             request.InventoryLocationIds = getProductsInSameCategoryParam.InventoryLocationIds;
             request.ScopeId = getProductsInSameCategoryParam.Scope;
+            request.AvailabilityDate = getProductsInSameCategoryParam.AvailabilityDate;
 
             var sortDefinitions = BuildQuerySortings(getProductsInSameCategoryParam.SortBy, getProductsInSameCategoryParam.SortDirection);
 
@@ -76,10 +74,7 @@ namespace Orckestra.Composer.Product.Repositories
 
         protected virtual QuerySorting BuildQuerySortings(string sortBy, string sortDirection)
         {
-            if (string.IsNullOrWhiteSpace(sortBy))
-            {
-                return null;
-            }
+            if (string.IsNullOrWhiteSpace(sortBy)) { return null; }
 
             var sortDirectionEnum =
                 string.IsNullOrWhiteSpace(sortDirection) ||

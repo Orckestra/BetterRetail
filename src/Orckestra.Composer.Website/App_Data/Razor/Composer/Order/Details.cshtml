@@ -1,0 +1,567 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.Cart.Services.Order;
+@using Orckestra.Composer.Cart.Parameters.Order;
+@using Orckestra.Composer.Utils;
+@using Orckestra.Composer.Cart.ViewModels.Order;
+@using Orckestra.Composer.Cart.ViewModels;
+@using System.Xml.Linq;
+@using System.Linq;
+@using Orckestra.Composer.Cart.Utils;
+@using Orckestra.Composer.Providers;
+@using System.Collections.Specialized;
+
+@functions {
+    public OrderDetailViewModel Order { get; set; }
+}
+
+@{
+    if (Order == null)
+    {
+        return;
+    }
+}
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div id="vueOrderDetails" class="order-details">
+        @OrderDetails(Order)
+
+        @OrderShipments(Order)
+
+        @OrderAddress(Order)
+
+        @OrderCartDetails(Order)
+
+        @OrderPayment(Order)
+
+        <div class="row">
+            <div class="col-12 col-sm-6 offset-sm-6">
+                @OrderSummary(Order)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper OrderDetails(OrderDetailViewModel order)
+{
+    <div class="card  bg-light">
+        <h3 class="card-header">
+            @Html.Localize("MyAccount", "T_OrderDetails")
+        </h3>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4 class="m-0">
+                                @Html.Localized("MyAccount", "L_OrderedOn", order.OrderInfos.OrderDate)
+                            </h4>
+                        </div>
+                        @if (order.OrderInfos.IsOrderEditable)
+                        {
+                            <div class="col-sm-6 text-sm-right">
+                                <ul class="nav-pills full float-right m-0">
+                                    <li>
+                                        <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
+                                            @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
+                                            {
+                                                @Html.Localize("MyAccount", "B_ContinueEditing")
+                                            }
+                                            else
+                                            {
+                                                @Html.Localize("MyAccount", "B_EditOrder")
+                                            }
+                                        </a>
+
+                                    </li>
+                                    @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
+                                    {
+                                        <li>
+                                            <a href="#" class="cta" v-bind:class="{'disabled': Loading}" v-on:click.prevent="cancelEditingOrder('@Order.OrderInfos.OrderNumber')">
+                                                @Html.Localize("MyAccount", "B_CancelEditing")
+                                            </a>
+                                        </li>
+
+                                    }
+                                    @if (order.OrderInfos.IsOrderCancelable && !order.OrderInfos.IsBeingEdited && !order.OrderInfos.HasOwnDraft)
+                                    {
+                                        <li>
+                                            <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="cancelOrderConfirm($event, @order.OrderInfos.OrderNumber)">
+                                                @Html.Localize("MyAccount", "B_CancelOrder")
+                                            </a>
+                                        </li>
+
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-8">
+                            <p class="mb-1">
+                                @Html.Localized("MyAccount", "L_OrderNumber", order.OrderInfos.OrderNumber)
+                            </p>
+                            @{
+                                var status = order.OrderInfos.OrderStatusRaw;
+                                var statusCss = status == "InProgress" ? "text-warning" :
+                                    status == "Canceled" ? "text-danger" : "text-success";
+                            }
+                            <p class="@statusCss  m-0">
+
+                                @if (order.OrderInfos.IsOrderPendingCancellation)
+                                {
+                                    <strong>@Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a> )</strong>
+                                }
+                                else
+                                {
+                                    <strong> @order.OrderInfos.OrderStatus</strong>
+                                }
+
+
+                            </p>
+                        </div>
+                        <div class="col-12 col-sm-4 text-right">
+                            @Html.Localize("MyAccount", "L_Total"):
+                            <h5>@order.OrderInfos.PricePaid</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @OrdersHelper.CancelOrderConfirmationModal()
+}
+
+@helper OrderShipments(OrderDetailViewModel order)
+{
+    foreach (var shipping in order.Shipments)
+    {
+        var status = shipping.ShipmentStatusName;
+        var statusCss = status == Constants.OrderStatus.Fulfilled ? "text-success" :
+            status == "Canceled" ? "text-danger" : "text-warning";
+        <div class="card  bg-light  mt-4">
+            <h3 class="card-header">
+                @Html.Localize("MyAccount", "L_Shipping")
+            </h3>
+            <div class="card-body">
+                <h4>@shipping.ShippingMethod.DisplayName</h4>
+                <p>@shipping.ShippingMethod.Cost</p>
+                <div class="@statusCss">
+                    @if (status == Constants.OrderStatus.Fulfilled)
+                    {
+                        <span class="fa fa-check-circle"> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate) </span>
+                    }
+                    else if (status == Constants.OrderStatus.Canceled)
+                    {
+                        <span class="fa fa-times-circle"> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)</span>
+                    }
+                    else
+                    {
+                        <span class="fa fa-clock-o"> @Html.Localize("MyAccount", "L_OrderInProgress")</span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@helper OrderAddress(OrderDetailViewModel order)
+{
+    <div class="card  bg-light  mt-4">
+        <h3 class="card-header">
+            @Html.Localize("MyAccount", "T_Addresses")
+        </h3>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <h4>@Html.Localize("MyAccount", "T_ShippingAddress")</h4>
+                    @foreach (var shipping in order.Shipments)
+                    {
+                        @AddressPreview(shipping.ShippingAddress)
+                    }
+                </div>
+                <div class="col-12 col-sm-6">
+                    <h4>@Html.Localize("MyAccount", "T_BillingAddress")</h4>
+                    @foreach (var payment in order.Payments)
+                    {
+                        var billingAddress = payment.BillingAddress;
+                        @AddressPreview(billingAddress)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper OrderPayment(OrderDetailViewModel order)
+{
+    <div class="card  bg-light  mt-4">
+        <h3 class="card-header">
+            @Html.Localize("MyAccount", "T_PaymentMethod")
+        </h3>
+        <div class="card-body">
+            @foreach (var payment in order.Payments)
+            {
+                if (!string.IsNullOrEmpty(payment.PaymentMethodName))
+                {
+                    <div class="row payment">
+                        <div class="col-4  col-md-4  col-lg-4">
+                            @if (!string.IsNullOrEmpty(payment.CreditCardNumber))
+                            {
+                                <img src="~/UI.Package/Images/creditcards/@(payment.PaymentMethodName).png"
+                                     alt="@payment.PaymentMethodName" class="img-fluid" />
+                            }
+                            else
+                            {
+                                <img src="~/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid" />
+                            }
+                        </div>
+                        <div class="col-8  col-md-8  col-lg-8">
+                            <h5>
+                                @Html.Localize("MyAccount", "L_PaymentMethod")
+                            </h5>
+                            <p>
+                                @if (!string.IsNullOrEmpty(payment.CreditCardNumber))
+                                {
+                                    @Html.Localize("MyAccount", "L_CreditCardNumber")
+                                    @payment.CreditCardNumber
+                                    <br />
+                                    @Html.Localize("MyAccount", "L_CreditCardExpires")
+                                    @payment.ExpiryDate
+                                }
+                                else
+                                {
+                                    @payment.PaymentMethodName
+                                }
+
+                            </p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-center">
+                        @Html.Localize("General", "P_PaymentLoadErrorMessage")
+                    </p>
+                }
+            }
+        </div>
+    </div>
+}
+
+@helper OrderCartDetails(OrderDetailViewModel order)
+{
+    var shipment = order.Shipments.FirstOrDefault();
+    if (shipment == null)
+    {
+        return;
+    }
+    var index = 0;
+    <div class="card bg-light mt-4">
+        <h3 class="card-header">
+            @Html.Localize("MyAccount", "L_OrderLineItemProductsTitle")
+        </h3>
+        <div class="card-body">
+            @foreach (var item in shipment.LineItems)
+            {
+                index++;
+                if (item.IsGiftItem)
+                {
+                    <div class="row pt-0 giftitem">
+                        <i class="fa fa-gift" />
+                        <p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                    </div>
+                }
+                <div class="row  pt-3  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
+                    @if (item.Rewards != null && item.Rewards.Count > 0)
+                    {
+                        <div class="col-12 order-1  text-center">
+                            <div class="promotion">
+                                @foreach (var reward in item.Rewards)
+                                {
+                                    <em>
+                                        @reward.Description<br />
+                                    </em>
+                                }
+                            </div>
+                        </div>
+                    }
+                    <div class="col-2 col-sm-1  order-2">
+                        <a href="@item.ProductUrl">
+                            <img src="@item.ImageUrl"
+                                 class="img-fluid"
+                                 alt="Thumbnail"
+                                 onerror="this.onerror = null;this.src = '@item.FallbackImageUrl';" />
+                        </a>
+                    </div>
+                    <div class="col-8 col-sm-4  order-3">
+                        <div>
+                            <strong>@item.ProductSummary.Brand</strong>
+                            <p class="mb-2">@item.ProductSummary.DisplayName</p>
+                            @if (!string.IsNullOrEmpty(item.VariantId))
+                            {
+                                <p class="mb-2 mb-sm-0">
+                                    @string.Join(" | ", item.KeyVariantAttributesList.Select(i => i.Value).ToArray())
+                                </p>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-2  text-center d-none d-sm-block order-4">
+                        @if (item.IsOnSale)
+                        {
+                            <p>
+                                <del>@item.DefaultPrice</del><br />
+                                <strong class="text-danger">@item.CurrentPrice</strong>
+                            </p>
+                        }
+                        else
+                        {
+                            <p>@item.DefaultPrice</p>
+                        }
+                    </div>
+                    <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
+                        <span class="d-inline d-sm-none">
+                            @Html.Localize("CheckoutProcess", "L_QuantityMobile")
+                        </span> @item.Quantity
+                    </div>
+                    <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
+                        @if (item.IsPriceDiscounted)
+                        {
+                            <del>@item.TotalWithoutDiscount</del><br />
+                            <strong class="text-danger">@item.Total</strong>
+                        }
+                        else
+                        {
+                            <strong>@item.Total</strong>
+                        }
+                        @if (!string.IsNullOrEmpty(item.SavingsTotal))
+                        {
+                            <br />
+                            <small>
+                                <span class="text-success">@Html.Localize("ShoppingCart", "L_LineItemSavings") </span>
+                                <span class="text-success">@item.SavingsTotal</span>
+                            </small>
+                        }
+                        <em class="additional-fees d-block small">
+                            @foreach (var fee in item.AdditionalFees)
+                            {
+                                <span class="block">
+                                    + @fee.DisplayName @fee.Amount
+                                    @if (fee.Taxable)
+                                    {
+                                        @Html.Localize("ShoppingCart", "L_PlusTaxes")
+                                    }
+                                    @fee.CalculationRule}}
+                                </span>
+                            }
+                        </em>
+                    </div>
+                    @if (string.IsNullOrEmpty(item.RecurringOrderProgramName)
+                         && item.RecurringOrderProgramFrequencies != null &&
+                         item.RecurringOrderProgramFrequencies.Count > 0)
+                    {
+                        <div class="col-12  offset-2 offset-sm-1  order-8  mt-2">
+                            <div class="cart-recurring-cta js-cartRecurringCta">
+                                <img src="~/UI.Package/Images/recurring.svg"
+                                     class="recurring-icon"
+                                     alt="@Html.Localize("General", "L_RecurringProduct")"
+                                     title="@Html.Localize("General", "L_RecurringProduct")" />
+                                @if (!string.IsNullOrEmpty(item.RecurringOrderFrequencyName))
+                                {
+                                    <span>@item.RecurringOrderFrequencyDisplayName</span>
+                                }
+                                else
+                                {
+                                    @Html.Localize("ProductPage", "L_RecurringFrequencyOnce")
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                if (item.IsSubstituted)
+                {
+                    <div class="row alert-danger small">
+                        <div class="col-12">
+                            <div class="text-center p-1">
+                                @Html.Localize("MyAccount", "L_SubstituteOrderItem")
+                            </div>
+                        </div>
+                    </div>
+                }
+                if (item.IsUnavailable)
+                {
+                    <div class="row alert-danger small ">
+                        <div class="col-12">
+                            <div class="text-center p-1">
+                                @Html.Localize("MyAccount", "L_UnavailableOrderItem")
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}
+
+@helper OrderSummary(OrderDetailViewModel order)
+{
+    var addShippingFeeSummary = order.OrderSummary.ShipmentAdditionalFeeSummaryList.Where(t => !t.Taxable).ToList();
+    var taxableAddShippingFeeSummary = order.OrderSummary.ShipmentAdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
+    var addFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => !t.Taxable).ToList();
+    var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
+
+    <div class="card bg-light mt-4">
+        <h3 class="card-header  bg-primary border-primary  text-white">
+            @Html.Localize("ShoppingCart", "T_OrderSummary")
+        </h3>
+        <div class="card-body">
+            @if (order.OrderSummary.Rewards != null &&
+                 order.OrderSummary.Rewards.Count > 0)
+            {
+                <p class="promotion  mb-2  text-center  d-block">
+                    @foreach (var reward in order.OrderSummary.Rewards)
+                    {
+                        <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br />
+                    }
+                </p>
+            }
+            <div class="row mb-2">
+                <div class="col-6  col-md-7">
+                    @Html.Localize("MyAccount", "L_Subtotal")
+                </div>
+                <div class="col-6  col-md-5  text-right">
+                    <span data-qa="checkout-order-summary-subtotal">
+                        @order.OrderSummary.SubTotal
+                    </span>
+                </div>
+
+            </div>
+            @foreach (var feeSummary in taxableAddShippingFeeSummary)
+            {
+                <div class="row  mb-2">
+                    @FeeSummary(feeSummary)
+                </div>
+            }
+            @foreach (var feeSummary in taxableAddFeeSummary)
+            {
+                <div class="row  mb-2">
+                    @FeeSummary(feeSummary)
+                </div>
+            }
+
+            @if (order.OrderSummary.IsShippingTaxable)
+            {
+                @OrderSummaryShipping(order)
+            }
+
+            @foreach (var tax in order.OrderSummary.Taxes)
+            {
+                <div class="row  mb-2">
+                    <div class="col-7">
+                        @tax.DisplayName
+                        @if (!string.IsNullOrEmpty(tax.Percentage))
+                        {
+                            <span>(@tax.Percentage)</span>
+                        }
+                    </div>
+                    <div class="col-5  text-right">
+                        @tax.DisplayTaxTotal
+                    </div>
+                </div>
+            }
+
+            @foreach (var feeSummary in addShippingFeeSummary)
+            {
+                <div class="row  mb-2">
+                    @FeeSummary(feeSummary)
+                </div>
+            }
+
+            @foreach (var feeSummary in addFeeSummary)
+            {
+                <div class="row  mb-2">
+                    @FeeSummary(feeSummary)
+                </div>
+            }
+
+            @if (!order.OrderSummary.IsShippingTaxable)
+            {
+                @OrderSummaryShipping(order)
+            }
+
+            <div class="row mb-2">
+                <div class="col-6  col-md-7">
+                    <h4>@Html.Localize("MyAccount", "L_Total")</h4>
+                </div>
+                <div class="col-6  col-md-5  text-right">
+                    <h4>@order.OrderSummary.Total</h4>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(order.OrderSummary.SavingsTotal))
+            {
+                <div class="row  mb-2">
+                    <div class=" col-12 ">
+                        <div class="alert alert-success bg-white text-center text-success  m-0">
+                            <span>
+                                @Html.Localize("MyAccount", "L_Savings")
+                                &#160;
+                                @order.OrderSummary.SavingsTotal
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@helper AddressPreview(AddressViewModel address)
+{
+    <div>
+        <span data-qa="order-address-fullname">
+            @address.FirstName @address.LastName
+        </span>
+        @if (!string.IsNullOrEmpty(address.Line2))
+        {
+            <span data-qa="order-address-line2">@address.Line2</span><br />
+        }
+        <span data-qa="order-address-line1">@address.Line1</span><br />
+        <span data-qa="order-address-city">@address.City</span>,
+        <span data-qa="order-address-region">@address.RegionName</span>,
+        <span data-qa="order-address-postalcode">@address.PostalCode</span><br />
+        <span data-qa="order-address-phone">@address.PhoneNumber</span>
+    </div>
+}
+
+@helper FeeSummary(AdditionalFeeSummaryViewModel fee)
+{
+    <div class="col-6  col-md-7">
+        <p>@fee.GroupName</p>
+    </div>
+    <div class="col-6  col-md-5  text-right">
+        @fee.TotalAmount
+    </div>
+}
+
+@helper OrderSummaryShipping(OrderDetailViewModel order)
+{
+    <div class="row  mb-2">
+        <div class="col-6  col-md-7">
+            <span>
+                @Html.Localized("ShoppingCart", "L_ShippingBasedOn", order.ShippingAddress.PostalCode)
+            </span>
+        </div>
+        <div class="col-6  col-md-5  text-right">
+            <span>
+                @order.OrderSummary.Shipping
+            </span>
+        </div>
+    </div>
+}

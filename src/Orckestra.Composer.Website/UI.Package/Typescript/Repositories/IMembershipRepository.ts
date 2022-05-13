@@ -44,5 +44,15 @@ module Orckestra.Composer {
          * If the current user is authenticated or not
          */
         isAuthenticated(): Q.Promise<any>;
+
+        /**
+        * If user with this username exist
+        */
+        isUserExist(email: string): Q.Promise<any>;
+
+        /**
+        * Get user meta data to dispay status/name andurls
+        */
+        userMetadata(): Q.Promise<any>
     }
 }

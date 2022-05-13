@@ -1,4 +1,5 @@
-﻿using Composite.Core;
+﻿using System;
+using Composite.Core;
 using Composite.Core.Threading;
 using Orckestra.Composer.Cart.Parameters.WishList;
 using Orckestra.Composer.Cart.Providers.WishList;
@@ -6,7 +7,7 @@ using Orckestra.Composer.Cart.Utils;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
-using System;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
 {
@@ -18,9 +19,7 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
 
         public WishListUrlProvider(IPageService pageService, IWebsiteContext websiteContext, ISiteConfiguration siteConfiguration)
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-
-            PageService = pageService;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             WebsiteContext = websiteContext;
             SiteConfiguration = siteConfiguration;
         }
@@ -30,18 +29,11 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
         /// </summary>
         public virtual string GetWishListUrl(GetWishListUrlParam parameters)
         {
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
+
             using (ThreadDataManager.EnsureInitialize())
             {
-                if (parameters == null)
-                {
-                    throw new ArgumentNullException("parameters");
-                }
-                if (parameters.CultureInfo == null)
-                {
-                    throw new ArgumentException("parameters.CultureInfo is required", "parameters");
-                }
-
-
                 var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 if (pagesConfiguration == null) return null;
 
@@ -54,24 +46,15 @@ namespace Orckestra.Composer.Mvc.Sample.Providers.UrlProvider
         /// </summary>
         public virtual string GetSignInUrl(GetWishListUrlParam parameters)
         {
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
+
             using (ThreadDataManager.EnsureInitialize())
             {
-                if (parameters == null)
-                {
-                    throw new ArgumentNullException("parameters");
-                }
-                if (parameters.CultureInfo == null)
-                {
-                    throw new ArgumentException("parameters.CultureInfo is required", "parameters");
-                }
-
                 var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
                 var signInPath = PageService.GetPageUrl(pagesConfiguration.LoginPageId, parameters.CultureInfo);
 
-                if (string.IsNullOrWhiteSpace(parameters.ReturnUrl))
-                {
-                    return signInPath;
-                }
+                if (string.IsNullOrWhiteSpace(parameters.ReturnUrl)) { return signInPath; }
 
                 var urlBuilder = new UrlBuilder(signInPath);
                 urlBuilder["ReturnUrl"] = GetReturnUrl(parameters); // url builder will encode the query string value

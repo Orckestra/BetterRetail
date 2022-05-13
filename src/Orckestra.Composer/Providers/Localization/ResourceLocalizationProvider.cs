@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Kernel;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture.Caching;
+
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -31,6 +32,7 @@ namespace Orckestra.Composer.Providers.Localization
 
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
             VirtualPathProvider = environment.VirtualPathProvider;
+
             LocalizationRepository = new ResxLocalizationRepository(environment);
         }
 
@@ -59,10 +61,7 @@ namespace Orckestra.Composer.Providers.Localization
         /// <returns>Tree of most relevant localized values</returns>
         public Task<LocalizationTree> GetLocalizationTreeAsync(CultureInfo culture)
         {
-            if (culture == null)
-            {
-                throw new ArgumentNullException("culture");
-            }
+            if (culture == null) { throw new ArgumentNullException(nameof(culture)); }
 
             CacheKey localizationTreeCacheKey = new CacheKey(CacheConfigurationCategoryNames.LocalizationTree)
             {
@@ -71,7 +70,7 @@ namespace Orckestra.Composer.Providers.Localization
 
             var value = CacheProvider.GetOrAddAsync(localizationTreeCacheKey, async () =>
             {
-                string folderPhysicalPath = "";
+                string folderPhysicalPath = string.Empty;
                 LocalizationTree tree = new LocalizationTree(culture);
 
                 foreach (var categoryName in LocalizationRepository.GetAllCategories())
@@ -148,20 +147,9 @@ namespace Orckestra.Composer.Providers.Localization
         /// </exception>
         public string GetLocalizedString(GetLocalizedParam param)
         {
-            if (string.IsNullOrWhiteSpace(param.Category))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Category"), "param");
-            }
-
-            if (string.IsNullOrWhiteSpace(param.Key))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Key"), "param");
-            }
-
-            if (param.CultureInfo == null || string.IsNullOrWhiteSpace(param.CultureInfo.Name))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Culture"), "param");
-            }
+            if (string.IsNullOrWhiteSpace(param.Category)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Category)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Key)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Key)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CultureInfo?.Name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CultureInfo.Name)), nameof(param)); }
 
             return GetLocalizedStringAsync(param).Result;
         }
@@ -173,13 +161,10 @@ namespace Orckestra.Composer.Providers.Localization
         /// <returns></returns>
         private async Task<string> GetLocalizedStringAsync(GetLocalizedParam param)
         {
-            LocalizationCategory category;
-            string value;
-
             LocalizationTree tree = await GetLocalizationTreeAsync(param.CultureInfo).ConfigureAwait(false);
 
-            if (tree.LocalizedCategories.TryGetValue(param.Category.ToLowerInvariant(), out category)
-             && category.LocalizedValues.TryGetValue(param.Key, out value))
+            if (tree.LocalizedCategories.TryGetValue(param.Category.ToLowerInvariant(), out LocalizationCategory category)
+             && category.LocalizedValues.TryGetValue(param.Key, out string value))
             {
                 return value;
             }

@@ -1,0 +1,10 @@
+﻿@using Composite.AspNet.Razor
+
+@helper LoadingSpinner(bool isSmall = false)
+{
+    <span class="loading-spinner">
+        <span class="spinner-border @(isSmall ? "spinner-border-sm" : "")" role="status">
+            <span class="sr-only">@Html.Localize("General", "L_Loading")</span>
+        </span>
+    </span>
+}

@@ -21,5 +21,8 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="param"></param>
         /// <returns>The Order</returns>
         Task<CompleteCheckoutViewModel> CompleteCheckoutAsync(CompleteCheckoutParam param);
+
+        Task<CompleteCheckoutViewModel> MapOrderToCompleteCheckoutViewModel(Overture.ServiceModel.Orders.Order order,
+            CompleteCheckoutParam param);
     }
 }

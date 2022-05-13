@@ -6,6 +6,9 @@ using NUnit.Framework;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Tests.Mock;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Tests.Localization
 {
@@ -134,17 +137,17 @@ namespace Orckestra.Composer.Tests.Localization
         [Test]
         public void WHEN_culture_is_null_SHOULD_throw_invalid_argument_exception()
         {
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var param = new GetLocalizedParam
             {
-                _localizationProvider.GetLocalizedString(new GetLocalizedParam
-                {
-                    Category = "ResxLocalizationTest",
-                    Key      = "PageTitle"
-                });
-            });
+                Category = "ResxLocalizationTest",
+                Key = "PageTitle"
+            };
 
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("Culture");
+            Expression<Func<string>> expression = () => _localizationProvider.GetLocalizedString(param);
+            var exception = Assert.Throws<ArgumentException>(() => expression.Compile().Invoke());
+
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CultureInfo.Name)));
         }
 
         [Test]

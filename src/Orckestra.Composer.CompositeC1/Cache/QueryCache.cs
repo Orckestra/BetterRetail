@@ -14,11 +14,10 @@ namespace Orckestra.Composer.CompositeC1.Cache
 		private readonly Expression<Func<TDataType, TPropertyType>> _propertyGetter;
 		private Func<TDataType, TPropertyType> _compiledExpression;
 		private readonly bool _typeIsLocalizable;
+		private readonly object _locker = new object();
 
 		public QueryCache(Expression<Func<TDataType, TPropertyType>> propertyGetter) :
-			this("Unnamed cache", propertyGetter, 1000)
-		{
-		}
+			this("QueryCache_" + typeof(TDataType).Name, propertyGetter, 10000) { }
 
 		public QueryCache(string name, Expression<Func<TDataType, TPropertyType>> propertyGetter, int size)
 		{
@@ -34,14 +33,10 @@ namespace Orckestra.Composer.CompositeC1.Cache
 
 		private void OnDataChanged(object sender, DataEventArgs dataeventargs)
 		{
-			var data = dataeventargs.Data as TDataType;
-			if (data == null)
-			{
-				return;
-			}
+			if (!(dataeventargs.Data is TDataType data)) { return; }
 
 			string cacheKey = GetCacheKey(GetKey(data));
-			lock (this)
+			lock (_locker)
 			{
 				_innerCache.Remove(cacheKey);
 			}
@@ -59,7 +54,8 @@ namespace Orckestra.Composer.CompositeC1.Cache
 				result = cacheRecord.Value;
 			}
 			else
-				lock (this)
+			{
+				lock (_locker)
 				{
 					cacheRecord = _innerCache.Get(cacheKey);
 					if (cacheRecord != null)
@@ -76,24 +72,19 @@ namespace Orckestra.Composer.CompositeC1.Cache
 						_innerCache.Add(cacheKey, new ExtendedNullable<TDataType> { Value = result });
 					}
 				}
+			}
 
 			return result == null || forReadOnlyUsage ? result : DataWrappingFacade.Wrap(result);
 		}
 
 		public TDataType this[TPropertyType key]
 		{
-			get
-			{
-				return Get(key, false);
-			}
+			get { return Get(key, false); }
 		}
 
 		private TPropertyType GetKey(TDataType dataItem)
 		{
-			if (_compiledExpression == null)
-			{
-				_compiledExpression = _propertyGetter.Compile();
-			}
+			if (_compiledExpression == null) { _compiledExpression = _propertyGetter.Compile(); }
 
 			return _compiledExpression.Invoke(dataItem);
 		}

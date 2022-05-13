@@ -6,7 +6,7 @@ namespace Orckestra.Composer.Cart.Parameters
     /// <summary>
     /// Parameters for adding an item to the cart
     /// </summary>
-    public class AddLineItemParam
+    public class AddLineItemParam : BaseCartParam
     {
         /// <summary>
         /// The ScopeId where to find the cart
@@ -64,5 +64,11 @@ namespace Orckestra.Composer.Cart.Parameters
         /// The name of the recurring order program.
         /// </summary>
         public string RecurringOrderProgramName { get; set; }
+
+        public AddLineItemParam Clone()
+        {
+            var param = (AddLineItemParam)MemberwiseClone();
+            return param;
+        }
     }
 }

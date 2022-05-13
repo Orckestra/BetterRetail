@@ -71,7 +71,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         }
 
         [Test]
-        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_remove_selected_facet_for_non_multiselect_facet_types_from_result()
+        public async Task WHEN_overture_returns_facets_in_search_results_SHOULD_not_remove_selected_facet_for_non_multiselect_facet_types_from_result()
         {
             // Arrange
             var param = new SearchCriteria()
@@ -92,9 +92,9 @@ namespace Orckestra.Composer.Search.Tests.Repository
             var result = await _sut.SearchProductAsync(param);
 
             // Assert
-            var facetToVerify = result.Facets.FirstOrDefault(facet => facet.FieldName == SomeSingleFacetFieldName);
+            var facetToVerify = result.Facets.Find(facet => facet.FieldName == SomeSingleFacetFieldName);
 
-            facetToVerify.Should().BeNull();
+            facetToVerify.Should().NotBeNull();
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
             var result = await _sut.SearchProductAsync(param);
 
             // Assert
-            var facetToVerify = result.Facets.FirstOrDefault(facet => facet.FieldName == SomeMultiFacetFieldName);
+            var facetToVerify = result.Facets.Find(facet => facet.FieldName == SomeMultiFacetFieldName);
 
             facetToVerify.Should().NotBeNull();
         }
@@ -146,12 +146,12 @@ namespace Orckestra.Composer.Search.Tests.Repository
             var result = await _sut.SearchProductAsync(param);
 
             // Assert
-            var singleFacetToVerify = result.Facets.FirstOrDefault(facet => facet.FieldName == SomeSingleFacetFieldName);
+            var singleFacetToVerify = result.Facets.Find(facet => facet.FieldName == SomeSingleFacetFieldName);
 
             singleFacetToVerify.Should().NotBeNull();
 
 
-            var multiFacetToVerify = result.Facets.FirstOrDefault(facet => facet.FieldName == SomeMultiFacetFieldName);
+            var multiFacetToVerify = result.Facets.Find(facet => facet.FieldName == SomeMultiFacetFieldName);
 
             multiFacetToVerify.Should().NotBeNull();
         }

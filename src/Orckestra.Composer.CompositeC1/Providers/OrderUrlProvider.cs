@@ -16,16 +16,14 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public OrderUrlProvider(IPageService pageService, IWebsiteContext wbsiteContext, ISiteConfiguration siteConfiguration)
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-
-            PageService = pageService;
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             WebsiteContext = wbsiteContext;
             SiteConfiguration = siteConfiguration;
         }
 
         public string GetOrderDetailsBaseUrl(CultureInfo cultureInfo)
         {
-            if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
  
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             if (pagesConfiguration == null) return null;
@@ -36,7 +34,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public string GetOrderHistoryUrl(GetOrderUrlParameter param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
             if (pagesConfiguration == null) return null;
@@ -47,7 +45,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public string GetGuestOrderDetailsUrl(CultureInfo cultureInfo)
         {
-            if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             if (pagesConfiguration == null) return null;
@@ -58,7 +56,7 @@ namespace Orckestra.Composer.CompositeC1.Providers
 
         public string GetFindMyOrderUrl(CultureInfo cultureInfo)
         {
-            if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(cultureInfo, WebsiteContext.WebsiteId);
             if (pagesConfiguration == null) return null;

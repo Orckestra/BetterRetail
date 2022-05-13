@@ -1,7 +1,7 @@
 /// <reference path="./bootstrap/bootstrap.d.ts" />
 /// <reference path="./jquery/jquery.d.ts" />
 /// <reference path="./jasmine/jasmine.d.ts" />
-/// <reference path="./lodash/lodash.d.ts" />
+/// <reference path="./lodash/lodash-4.d.ts" />
 /// <reference path="./q/Q.d.ts" />
 /// <reference path="./sinon/sinon.d.ts" />
 /// <reference path="./handlebars/handlebars.d.ts" />
@@ -12,7 +12,8 @@
 /// <reference path="./googlemaps/google.maps.d.ts" />
 /// <reference path="./googlemaps/google.maps.markerwithlabel.d.ts" />
 /// <reference path="./bootstrap-datepicker/bootstrap-datepicker.d.ts" />
-/// <reference path="./typeahead/typeahead.d.ts" />
+/// <reference path="./vue/index.d.ts" />
+/// <reference path="./vue-autosuggest/index.d.ts" />
 
 // Very barebones interface for jasmine.Ajax as there is currently no d.ts file on DefinitelyTyped.
 declare module jasmine {

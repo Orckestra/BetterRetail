@@ -1,10 +1,8 @@
-﻿using Composite.Core.Application;
+﻿using System.Web.Hosting;
+using Composite.Core.Application;
 using Composite.Data.DynamicTypes;
-using Composite.Search.Crawling;
 using Microsoft.Extensions.DependencyInjection;
 using Orckestra.Composer.ContentSearch.DataTypes;
-using Orckestra.Composer.ContentSearch.Search;
-using Orckestra.Composer.ContentSearch.Services;
 
 namespace Orckestra.Composer.ContentSearch
 {
@@ -13,8 +11,7 @@ namespace Orckestra.Composer.ContentSearch
     {
         public static void ConfigureServices(IServiceCollection collection)
         {
-            collection.AddSingleton<ISearchDocumentBuilderExtension>(new MediaSearchDocumentBuilderExtension());
-            collection.AddTransient<IContentSearchViewService, ContentSearchViewService>();
+            if (!HostingEnvironment.IsHosted) return;
         }
 
         public static void OnBeforeInitialize()

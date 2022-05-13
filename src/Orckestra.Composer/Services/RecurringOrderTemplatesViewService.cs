@@ -9,10 +9,11 @@ using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Requests;
 using Orckestra.Composer.Services.Lookup;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Services
 {
@@ -25,8 +26,6 @@ namespace Orckestra.Composer.Services
         protected ILookupService LookupService { get; private set; }
         protected IImageService ImageService { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
-
-
 
         public RecurringOrderTemplatesViewService(IRecurringOrdersRepository recurringOrdersRepository, 
             IViewModelMapper viewModelMapper,
@@ -45,13 +44,12 @@ namespace Orckestra.Composer.Services
         }
         public virtual async Task<bool> GetIsPaymentMethodUsedInRecurringOrders(GetIsPaymentMethodUsedInRecurringOrdersRequest request)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return false;
+            if (!RecurringOrdersSettings.Enabled) return false;
 
-            if (request.ScopeId == null) { throw new ArgumentNullException(nameof(request.ScopeId)); }
-            if (request.CustomerId == null) { throw new ArgumentNullException(nameof(request.CustomerId)); }
-            if (request.CultureInfo == null) { throw new ArgumentNullException(nameof(request.CultureInfo)); }
-            if (request.PaymentMethodId == null) { throw new ArgumentNullException(nameof(request.PaymentMethodId)); }
+            if (request.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(request.ScopeId)), nameof(request)); }
+            if (request.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(request.CustomerId)), nameof(request)); }
+            if (request.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(request.CultureInfo)), nameof(request)); }
+            if (request.PaymentMethodId == null) { throw new ArgumentException(GetMessageOfNull(nameof(request.PaymentMethodId)), nameof(request)); }
 
             var listOfRecurringOrderLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(request.ScopeId, request.CustomerId).ConfigureAwait(false);
 
@@ -59,10 +57,7 @@ namespace Orckestra.Composer.Services
             {
                 foreach (var item in listOfRecurringOrderLineItems.RecurringOrderLineItems ?? Enumerable.Empty<RecurringOrderLineItem>())
                 {
-                    if (item.PaymentMethodId == request.PaymentMethodId.ToGuid())
-                    {
-                        return true;
-                    }
+                    if (item.PaymentMethodId == request.PaymentMethodId.ToGuid()) { return true; }
                 }
             }
 
@@ -71,13 +66,12 @@ namespace Orckestra.Composer.Services
 
         public virtual async Task<RecurringOrderTemplatesViewModel> GetRecurringOrderTemplatesViewModelAsync(GetRecurringOrderTemplatesParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return new RecurringOrderTemplatesViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new RecurringOrderTemplatesViewModel();
 
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CultureInfo)), nameof(param)); }
-            if (param.Scope == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.Scope)), nameof(param)); }
-            if (param.CustomerId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param)); }
+            if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
 
             var listOfRecurringOrderLineItems = await RecurringOrderRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId).ConfigureAwait(false);
                  
@@ -96,7 +90,7 @@ namespace Orckestra.Composer.Services
         protected virtual async Task<RecurringOrderTemplatesViewModel> CreateTemplatesViewModelAsync(CreateRecurringOrderTemplatesViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.ListOfRecurringOrderLineItems == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.ListOfRecurringOrderLineItems)), nameof(param)); }
+            if (param.ListOfRecurringOrderLineItems == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ListOfRecurringOrderLineItems)), nameof(param)); }
 
             param.ProductImageInfo = new ProductImageInfo
             {
@@ -119,10 +113,9 @@ namespace Orckestra.Composer.Services
 
         public virtual async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemQuantityAsync(UpdateRecurringOrderTemplateLineItemQuantityParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return new RecurringOrderTemplatesViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new RecurringOrderTemplatesViewModel();
 
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             //TODO: To be determined if we update the carts
 
@@ -139,10 +132,9 @@ namespace Orckestra.Composer.Services
 
         public virtual async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplateLineItemAsync(RemoveRecurringOrderTemplateLineItemParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return new RecurringOrderTemplatesViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new RecurringOrderTemplatesViewModel();
 
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             await RecurringOrderRepository.RemoveRecurringOrderTemplateLineItem(param).ConfigureAwait(false);
 
@@ -155,10 +147,9 @@ namespace Orckestra.Composer.Services
 
         public virtual async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItemsAsync(RemoveRecurringOrderTemplateLineItemsParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return new RecurringOrderTemplatesViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new RecurringOrderTemplatesViewModel();
 
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             await RecurringOrderRepository.RemoveRecurringOrderTemplateLineItems(param).ConfigureAwait(false);
 
@@ -172,10 +163,9 @@ namespace Orckestra.Composer.Services
 
         public virtual async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return new RecurringOrderTemplatesViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new RecurringOrderTemplatesViewModel();
 
-            if (param == null) throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param)));
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             var listOfRecurringOrderLineItems = await RecurringOrderRepository.UpdateRecurringOrderTemplateLineItemAsync(param).ConfigureAwait(false);
 
@@ -191,23 +181,19 @@ namespace Orckestra.Composer.Services
 
         public virtual async Task<RecurringOrderTemplateViewModel> GetRecurringOrderTemplateDetailViewModelAsync(GetRecurringOrderTemplateDetailParam param)
         {
-            if (!RecurringOrdersSettings.Enabled)
-                return new RecurringOrderTemplateViewModel();
+            if (!RecurringOrdersSettings.Enabled) return new RecurringOrderTemplateViewModel();
 
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CustomerId == null) { throw new ArgumentException(nameof(param.CustomerId)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(nameof(param.CultureInfo)); }
-            if (param.RecurringOrderLineItemId == null) { throw new ArgumentException(nameof(param.RecurringOrderLineItemId)); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(nameof(param.Scope)); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
+            if (param.CustomerId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CustomerId)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.RecurringOrderLineItemId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.RecurringOrderLineItemId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var template = await RecurringOrderRepository.GetRecurringOrderTemplateDetails(param).ConfigureAwait(false);
 
             //Check if template is one of the current customer.
-            if (template == null || template.CustomerId != param.CustomerId)
-            {
-                return null;
-            }
+            if (template == null || template.CustomerId != param.CustomerId) { return null; }
 
             var vm = await CreateTemplateDetailsViewModelAsync(new CreateRecurringOrderTemplateDetailsViewModelParam
             {
@@ -224,7 +210,7 @@ namespace Orckestra.Composer.Services
         protected virtual async Task<RecurringOrderTemplateViewModel> CreateTemplateDetailsViewModelAsync(CreateRecurringOrderTemplateDetailsViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.RecurringOrderLineItem == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.RecurringOrderLineItem)), nameof(param)); }
+            if (param.RecurringOrderLineItem == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.RecurringOrderLineItem)), nameof(param)); }
 
             param.ProductImageInfo = new ProductImageInfo
             {

@@ -10,6 +10,8 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Services;
+using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -29,29 +31,23 @@ namespace Orckestra.Composer.Cart.Services
             IFixCartService fixCartService,
             IImageService imageService)
         {
-            if (wishListRepository == null) { throw new ArgumentNullException("wishListRepository"); }
-            if (lineItemViewModelFactory == null) { throw new ArgumentNullException("lineItemViewModelFactory"); }
-            if (wishListUrlProvider == null) { throw new ArgumentNullException("wishListUrlProvider"); }
-            if (fixCartService == null) { throw new ArgumentNullException("fixCartService"); }
-            if (imageService == null) { throw new ArgumentNullException("imageService"); }
-
-            WishListRepository = wishListRepository;
-            LineItemViewModelFactory = lineItemViewModelFactory;
-            WishListUrlProvider = wishListUrlProvider;
-            FixCartService = fixCartService;
-            ImageService = imageService;
+            WishListRepository = wishListRepository ?? throw new ArgumentNullException(nameof(wishListRepository));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
+            WishListUrlProvider = wishListUrlProvider ?? throw new ArgumentNullException(nameof(wishListUrlProvider));
+            FixCartService = fixCartService ?? throw new ArgumentNullException(nameof(fixCartService));
+            ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
         }
 
         public virtual async Task<WishListSummaryViewModel> AddLineItemAsync(AddLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException("param.ProductId is required", "param"); }
-            if (param.Quantity <= 0) { throw new ArgumentException("param.Quantity is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
+            if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var wishList = await WishListRepository.AddLineItemAsync(param).ConfigureAwait(false);
 
@@ -65,13 +61,13 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<WishListSummaryViewModel> RemoveLineItemAsync(RemoveLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var wishList = await WishListRepository.RemoveLineItemAsync(param).ConfigureAwait(false);
 
@@ -85,23 +81,20 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<WishListViewModel> GetWishListViewModelAsync(GetCartParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var wishList = await WishListRepository.GetWishListAsync(param).ConfigureAwait(false);
             var fixedWishlist = await FixCartService.SetFulfillmentLocationIfRequired(new FixCartParam
             {
-                Cart = wishList
+                Cart = wishList,
+                ScopeId = param.Scope
             }).ConfigureAwait(false);
 
-            if (wishList == null)
-            {
-                return null;
-            }
+            if (wishList == null) { return null; }
 
             return await CreateWishListViewModelAsync(new CreateWishListViewModelParam()
             {
@@ -111,20 +104,24 @@ namespace Orckestra.Composer.Cart.Services
             });
         }
 
+        protected virtual Task<ProcessedCart> FixWishList(ProcessedCart wishList)
+        {
+            return FixCartService.SetFulfillmentLocationIfRequired(new FixCartParam
+            {
+                Cart = wishList
+            });
+        }
         public virtual async Task<WishListSummaryViewModel> GetWishListSummaryViewModelAsync(GetCartParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
 
             var wishList = await WishListRepository.GetWishListAsync(param).ConfigureAwait(false);
 
-            if (wishList == null)
-            {
-                return null;
-            }
+            if (wishList == null) { return null; }
 
             return CreateSummaryWishListViewModel(new CreateWishListViewModelParam
             {
@@ -164,6 +161,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo
             };
+
             viewModel.SignInUrl = WishListUrlProvider.GetSignInUrl(getUrlParam);
             viewModel.ShareUrl = viewModel.TotalQuantity == 0 ? string.Empty: WishListUrlProvider.GetShareUrl(new GetShareWishListUrlParam
             {

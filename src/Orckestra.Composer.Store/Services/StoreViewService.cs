@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
+using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Store.Extentions;
@@ -9,12 +14,9 @@ using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Store.Repositories;
 using Orckestra.Composer.Store.ViewModels;
-using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.Utils;
-using System.Web;
-using Orckestra.Composer.Logging;
-using System.Collections.Generic;
-using System.Linq;
+using Orckestra.Composer.ViewModels;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Store.Services
 {
@@ -26,32 +28,32 @@ namespace Orckestra.Composer.Store.Services
         protected IStoreRepository StoreRepository { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IStoreUrlProvider StoreUrlProvider { get; private set; }
+		public IGoogleSettings GoogleSettings { get; }
 
         public StoreViewService(
             IStoreRepository storeRepository,
             IStoreViewModelFactory storeViewModelFactory,
             ILocalizationProvider localizationProvider,
-            IStoreUrlProvider storeUrlProvider)
+			IStoreUrlProvider storeUrlProvider,
+			IGoogleSettings googleSettings)
         {
             StoreViewModelFactory = storeViewModelFactory;
             StoreRepository = storeRepository;
             LocalizationProvider = localizationProvider;
             StoreUrlProvider = storeUrlProvider;
+			GoogleSettings = googleSettings ?? throw new ArgumentNullException(nameof(googleSettings));
         }
 
-        public virtual async Task<StoreViewModel> GetStoreViewModelAsync(GetStoreParam param)
+        public virtual async Task<StoreViewModel> GetStoreViewModelAsync(GetStoreByNumberParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentNullException("scope"); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
-            if (string.IsNullOrWhiteSpace(param.StoreNumber)) { throw new ArgumentNullException("storeNumber"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentNullException("baseUrl"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.StoreNumber)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.StoreNumber)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var overtureStore = await StoreRepository.GetStoreByNumberAsync(param).ConfigureAwait(false);
-            if (overtureStore == null)
-            {
-                return null;
-            }
+            if (overtureStore == null) { return null; }
 
             var createVmParam = new CreateStoreViewModelParam
             {
@@ -73,24 +75,10 @@ namespace Orckestra.Composer.Store.Services
             return storeViewModel;
         }
 
-        public virtual async Task<PageHeaderViewModel> GetPageHeaderViewModelAsync(
-            GetStorePageHeaderViewModelParam param)
+        public virtual PageHeaderViewModel GetPageHeaderViewModel(StoreViewModel store, GetStorePageHeaderViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("storepageheaderparam");}
-
-            var store = await GetStoreViewModelAsync(new GetStoreParam
-            {
-                StoreNumber = param.StoreNumber,
-                CultureInfo = param.CultureInfo,
-                Scope = param.Scope,
-                BaseUrl = param.BaseUrl
-
-            }).ConfigureAwait(false);
-
-            if (store == null)
-            {
-                return null;
-            }
+            if (param == null) { throw new ArgumentNullException(nameof(param));}
+            if (store == null) { return null; }
 
             var vm = new PageHeaderViewModel
             {
@@ -120,14 +108,12 @@ namespace Orckestra.Composer.Store.Services
             if (HttpContext.Current == null)
             {
                 Log.Error("HttpContext.Current is null");
-
                 return relativeUri;
             }
 
             try
             {
                 var baseUri = RequestUtils.GetBaseUrl(HttpContext.Current.Request.Url);
-
                 var url = new Uri(baseUri, relativeUri);
 
                 return url.ToString();
@@ -149,11 +135,10 @@ namespace Orckestra.Composer.Store.Services
                 CultureInfo = param.CultureInfo,
                 Key = "M_Description"
             });
-            if (!string.IsNullOrWhiteSpace(template) && template.Contains("{0}"))
-            {
-                return string.Format(template, store.LocalizedDisplayName);
-            }
-            return template;
+
+            return !string.IsNullOrWhiteSpace(template) && template.Contains("{0}")
+                ? string.Format(template, store.LocalizedDisplayName)
+                : template;
         }
 
         public virtual async Task<List<StoreViewModel>> GetStoresForInStorePickupViewModelAsync(GetStoresForInStorePickupViewModelParam param)
@@ -182,5 +167,28 @@ namespace Orckestra.Composer.Store.Services
 
             return new List<StoreViewModel>();
         }
+		public virtual async Task<List<StoreViewModel>> GetAllStoresViewModelAsync(GetStoresParam param)
+		{
+			var overtureStores = await StoreRepository.GetStoresAsync(param).ConfigureAwait(false);
+			IEnumerable<Overture.ServiceModel.Customers.Stores.Store> stores = overtureStores.Results;
+
+			if (stores == null) return new List<StoreViewModel>();
+
+			stores = stores.Where(s => s.IsActive && s.FulfillmentLocation != null && s.FulfillmentLocation.IsActive);
+
+			if (param.SearchPoint != null)
+			{
+				stores = stores.FilterSortStoresByDistanceToCustomer(GoogleSettings, param.SearchPoint);
+			}
+
+			var vm = stores.Select(s => StoreViewModelFactory.CreateStoreViewModel(new CreateStoreViewModelParam
+			{
+				BaseUrl = param.BaseUrl,
+				CultureInfo = param.CultureInfo,
+				Store = s,
+				SearchPoint = param.SearchPoint
+			})).ToList();
+			return vm;
+		}
     }
 }

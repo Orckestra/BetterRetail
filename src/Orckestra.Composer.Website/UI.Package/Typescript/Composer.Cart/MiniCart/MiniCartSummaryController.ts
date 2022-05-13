@@ -12,7 +12,7 @@ module Orckestra.Composer {
 
     export class MiniCartSummaryController extends Orckestra.Composer.Controller {
 
-        private cartService: CartService = new CartService(new CartRepository(), this.eventHub);
+        private cartService: ICartService = CartService.getInstance();
         private cacheProvider: ICacheProvider = CacheProvider.instance();
         private timer: number;
 
@@ -55,7 +55,7 @@ module Orckestra.Composer {
                     scrollTop: $('[data-lineitem-id="' + scrollToLineItemKey + '"]', miniCartContainer).position().top
                 }, 1000);
 
-                this.timer = setTimeout(function(){
+                this.timer = setTimeout(function() {
                     miniCartContainer.removeClass('displayMiniCart');
                 }, notificationTime);
             }
@@ -65,7 +65,7 @@ module Orckestra.Composer {
             let miniCartContainer = $(this.context.container);
 
             miniCartContainer.addClass('d-none');
-            setTimeout(function(){
+            setTimeout(function() {
                 miniCartContainer.removeClass('d-none');
             }, 250);
 

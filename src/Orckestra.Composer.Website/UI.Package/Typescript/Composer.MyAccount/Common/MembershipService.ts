@@ -93,5 +93,13 @@ module Orckestra.Composer {
 
             return this.membershipRepository.isAuthenticated();
         }
+
+        /**
+        * If user with this username exist
+        */
+        public isUserExist(email: string): Q.Promise<any> {
+
+            return this.membershipRepository.isUserExist(email);
+        }
     }
 }

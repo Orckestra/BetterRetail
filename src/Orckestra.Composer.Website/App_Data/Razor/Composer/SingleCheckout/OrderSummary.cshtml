@@ -1,0 +1,128 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Order Summary"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="SingleCheckout.OrderSummary"
+         class="checkout-step-container  active-step"
+         v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
+
+        <div class="card  mb-4 w-100 sps-order-summary sps  sps--abv" data-sps-offset="100">
+            @GeneralHelpers.LoadingSpinner()
+
+            <h3 class="card-header bg-primary border-primary  text-white">
+                @Html.Localize("ShoppingCart", "T_OrderSummary")
+            </h3>
+            <div class="card-body  bg-light" v-cloak="true">
+                @OrderSummaryHelpers.Rewards()
+
+                @OrderSummaryHelpers.SubTotal()
+
+                @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
+
+                @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
+
+                <div v-if="OrderSummary.IsShippingTaxable">
+                    @Shipping()
+                </div>
+
+                @OrderSummaryHelpers.Taxes()
+
+                @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
+
+                @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
+
+                <div v-if="!OrderSummary.IsShippingTaxable">
+                    @Shipping()
+                </div>
+
+                @Totals()
+
+                @OrderSummaryHelpers.SavingsTotal()
+
+                @OrderSummaryHelpers.AdditionalFeesMessage()
+
+                @PalceOrderBtn()
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper Rewards()
+{
+    <div v-if="OrderSummary.Rewards.length" class="text-center">
+        <p class="promotion  mb-2">
+            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}<br/></em>
+        </p>
+    </div>
+}
+
+@helper SubTotal()
+{
+    <div class="row mb-2">
+        <div class="col-6  col-md-7">
+            @Html.Localize("MyAccount", "L_Subtotal")
+        </div>
+        <div class="col-6  col-md-5  text-right">
+            <span data-qa="checkout-order-summary-subtotal">
+                {{OrderSummary.SubTotal}}
+            </span>
+        </div>
+    </div>
+}
+
+@helper Totals()
+{
+    <div class="row mb-2">
+        <div class="col-6  col-md-7">
+            <h4>@Html.Localize("MyAccount", "L_Total")</h4>
+        </div>
+        <div class="col-6  col-md-5  text-right">
+            <div v-if="IsLoading &amp;&amp; !Mode.CompleteCheckoutLoading">
+                @GeneralHelpers.LoadingSpinner()
+            </div>
+            <h4 v-else="v-else" v-text="OrderSummary.Total" data-qa="checkout-order-summary-total"></h4>
+        </div>
+    </div>
+}
+
+
+@helper Shipping()
+{
+    <div v-if="IsShippingEstimatedOrSelected" class="row  mb-2">
+        <div class="col-6  col-md-7">
+            <span v-if="ShippingAddress">
+                @Html.Localized("ShoppingCart", "L_ShippingBasedOn", "{{ShippingAddress.PostalCode}}")
+            </span>
+        </div>
+        <div class="col-6  col-md-5  text-right">
+            <span data-qa="checkout-order-summary-shipping-fee">
+                {{OrderSummary.Shipping}}
+            </span>
+        </div>
+    </div>
+}
+
+
+@helper PalceOrderBtn()
+{
+    <div class="row  mb-2">
+        <div class="col-12">
+            <button class="btn btn-success  w-100  text-uppercase"
+                    data-qa="chechout-place-order-btn"
+                    v-bind:disabled="!OrderCanBePlaced"
+                    v-on:click="processCompleteCheckout()">
+                @Html.Localize("CheckoutProcess", "F_PlaceOrder")
+            </button>
+        </div>
+    </div>
+}

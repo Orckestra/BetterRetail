@@ -20,6 +20,8 @@ namespace Orckestra.Composer.Store.ViewModels
 
         public string Number { get; set; }
 
+        public string ScopeId { get; set; }
+
         public string PhoneNumber { get; set; }
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace Orckestra.Composer.Store.ViewModels
 
         public double DestinationToSearchPoint { get; set; }
 
+        public string LengthMeasureUnit { get; set; }
         public int SearchIndex { get; set; }
 
         public string GoogleDirectionsLink { get; set; }
@@ -53,5 +56,11 @@ namespace Orckestra.Composer.Store.ViewModels
 
         [MapTo("DisplayName")]
         public Dictionary<string, string> LocalizedDisplayNames { get; set; }
+
+        public bool SupportPickUp { get; set; }
+
+        public bool SupportDelivery { get; set; }
+
+        public string InventoryLocationId { get; set; }
     }
 }

@@ -1,10 +1,12 @@
-﻿using Composite.Core.Application;
+﻿using System;
+using Composite.Core.Application;
 using Microsoft.Extensions.DependencyInjection;
 using Orckestra.Composer.CompositeC1.Sitemap;
 using Orckestra.Composer.Sitemap.EventHandlers;
 using Orckestra.Composer.Sitemap.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Web.Hosting;
+using Composite.Core;
 using Orckestra.Composer.Sitemap.Config;
 
 namespace Orckestra.Composer.Sitemap
@@ -19,11 +21,15 @@ namespace Orckestra.Composer.Sitemap
 
         public static void OnInitialized()
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             SitemapEventRegistrator.Initialize();
         }
 
         public static void ConfigureServices(IServiceCollection collection)
         {
+            if (!HostingEnvironment.IsHosted) return;
+
             var sitemapConfiguration = new C1SitemapConfiguration();
             collection.AddSingleton<IC1SitemapConfiguration>(container => sitemapConfiguration);
 

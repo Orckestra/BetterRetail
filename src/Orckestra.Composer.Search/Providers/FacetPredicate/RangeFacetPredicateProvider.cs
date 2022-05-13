@@ -1,6 +1,6 @@
 ﻿using System;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
 
 namespace Orckestra.Composer.Search.Providers.FacetPredicate
@@ -13,20 +13,10 @@ namespace Orckestra.Composer.Search.Providers.FacetPredicate
         /// <param name="filter">Filter to create the facet predicate from.</param>
         public Overture.ServiceModel.Search.FacetPredicate CreateFacetPredicate(SearchFilter filter)
         {
-            if (filter == null)
-            {
-                throw new ArgumentNullException("filter");
-            }
+            if (filter == null) { throw new ArgumentNullException(nameof(filter)); }
+            if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(filter.Name)), nameof(filter)); }
 
-            if (string.IsNullOrWhiteSpace(filter.Name))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter");
-            }
-
-            if (string.IsNullOrWhiteSpace(filter.Value))
-            {
-                return null;
-            }
+            if (string.IsNullOrWhiteSpace(filter.Value)) { return null; }
 
             var valueRanges = filter.Value.Split(SearchConfiguration.FacetRangeValueSplitter);
 
@@ -36,9 +26,7 @@ namespace Orckestra.Composer.Search.Providers.FacetPredicate
 
             // TODO: A SEG request (#2259) was sent to Overture to fix this as a range facet predicate always needs the maximum value to be set.
             // In the meantime, we have to pass "*" if the maximum value is not set in the search filter
-            var maximumValue = valueRanges.Length > 1 && !string.IsNullOrWhiteSpace(valueRanges[1])
-                ? valueRanges[1]
-                : "*";
+            var maximumValue = valueRanges.Length > 1 && !string.IsNullOrWhiteSpace(valueRanges[1]) ? valueRanges[1] : "*";
 
             var facetPredicate = new Overture.ServiceModel.Search.FacetPredicate
             {

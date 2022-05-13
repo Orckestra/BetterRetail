@@ -1,10 +1,17 @@
-﻿using Orckestra.Composer.Search.Services;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Search;
+using Orckestra.Composer.Search.Providers;
+using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Services;
 using Orckestra.Composer.SearchQuery.ViewModels;
 using Orckestra.Composer.Services;
-using System;
-using System.Threading.Tasks;
+using Orckestra.Composer.Utils;
+using Orckestra.Overture.ServiceModel.SearchQueries;
 
 namespace Orckestra.Composer.SearchQuery.Context
 {
@@ -12,36 +19,89 @@ namespace Orckestra.Composer.SearchQuery.Context
     {
         protected IComposerContext ComposerContext { get; private set; }
         protected ISearchQueryViewService SearchQueryViewService { get; private set; }
-        protected ISearchViewService SearchViewService { get; private set; }
+        protected ISearchUrlProvider SearchUrlProvider { get; }
+        protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
 
-        protected SearchQueryViewModel ViewModel { get; set; }
+        private SearchQueryViewModel _viewModel { get; set; }
+        private SearchQueryViewModel _topResultsViewModel { get; set; }
+        protected HttpRequestBase Request { get; private set; }
+        public virtual string SortBy => Request[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
+        public virtual string SortDirection => Request[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
 
-        public SearchQueryContext(IComposerContext composerContext, ISearchQueryViewService searchQueryViewService, ISearchViewService searchViewService)
+        public virtual int CurrentPage
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (searchQueryViewService == null) { throw new ArgumentNullException("searchQueryViewService"); }
-            if (searchViewService == null) { throw new ArgumentNullException("searchViewService"); }
-
-            ComposerContext = composerContext;
-            SearchQueryViewService = searchQueryViewService;
-            SearchViewService = searchViewService;
+            get
+            {
+                return int.TryParse(Request[SearchRequestParams.Page], out int page) && page > 0 ? page : 1;
+            }
         }
 
-        public async Task<SearchQueryViewModel> GetSearchQueryViewModelAsync(GetSearchQueryViewModelParams param)
+        public SearchQueryContext(IComposerContext composerContext,
+            ISearchQueryViewService searchQueryViewService,
+            ISearchUrlProvider searchUrlProvider,
+            HttpRequestBase request,
+            IBaseSearchCriteriaProvider baseSearchCriteriaProvider)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            SearchQueryViewService = searchQueryViewService ?? throw new ArgumentNullException(nameof(searchQueryViewService));
+            Request = request ?? throw new ArgumentNullException(nameof(request));
+            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
+            BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider)); ;
+        }
 
-            if (ViewModel != null)
+        public async Task<SearchQueryViewModel> GetSearchQueryViewModelAsync(SearchQueryType queryType, string queryName)
+        {
+            if (_viewModel != null && _viewModel.QueryName == queryName && _viewModel.QueryType == queryType) { return _viewModel; }
+            var criteria = BuildProductsSearchCriteria();
+            var param = new GetSearchQueryViewModelParams
             {
-                return ViewModel;
+                QueryName = queryName,
+                QueryType = queryType,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                Criteria = criteria,
+                InventoryLocationIds = criteria.InventoryLocationIds
+            };
+
+            _viewModel = await SearchQueryViewService.GetSearchQueryViewModelAsync(param).ConfigureAwait(false);
+
+            return _viewModel;
+        }
+
+        public async Task<SearchQueryViewModel> GetTopSearchQueryViewModelAsync(SearchQueryType queryType, string queryName, int pageSize)
+        {
+            if (_topResultsViewModel != null && _topResultsViewModel.QueryName == queryName && _topResultsViewModel.QueryType == queryType) { return _topResultsViewModel; }
+
+            var criteria = BuildProductsSearchCriteria();
+            criteria.NumberOfItemsPerPage = pageSize;
+            var param = new GetSearchQueryViewModelParams
+            {
+                QueryName = queryName,
+                QueryType = queryType,
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                Criteria = criteria,
+                InventoryLocationIds = criteria.InventoryLocationIds
+            };
+
+            _topResultsViewModel = await SearchQueryViewService.GetSearchQueryViewModelAsync(param).ConfigureAwait(false);
+            if (_topResultsViewModel.ProductSearchResults.Pagination != null)
+            {
+                _topResultsViewModel.ProductSearchResults.Pagination.TotalNumberOfPages = 1;
+                _topResultsViewModel.ProductSearchResults.Pagination.NextPage = null;
             }
 
-            param.Scope = ComposerContext.Scope;
-            param.CultureInfo = ComposerContext.CultureInfo;
+            return _topResultsViewModel;
+        }
 
-            ViewModel = await SearchQueryViewService.GetSearchQueryViewModelAsync(param).ConfigureAwait(false);
+        protected virtual SearchCriteria BuildProductsSearchCriteria()
+        {
+            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(null, RequestUtils.GetBaseUrl(Request).ToString(), true, CurrentPage).Result;
+            criteria.SortBy = SortBy;
+            criteria.SortDirection = SortDirection;
 
-            return ViewModel;
+            criteria.SelectedFacets.AddRange(SearchUrlProvider.BuildSelectedFacets(Request.QueryString));
+            return criteria;
         }
     }
 }

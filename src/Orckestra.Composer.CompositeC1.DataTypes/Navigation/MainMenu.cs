@@ -51,9 +51,9 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Navigation
         [ImmutableFieldId("aeeca1ba-507f-4775-822a-20aaded7eff1")]
         [FormRenderingProfile(WidgetFunctionMarkup = @"<f:widgetfunction xmlns:f=""http://www.composite.net/ns/function/1.0"" name=""Composite.Widgets.String.UrlComboBox"" />",
             Label = "Link", HelpText = "Specifies the URL of the menu item. The link can be a page from your website (internal link) or any external page that you want to display on the website header.  When linked to your web site page, the link will be displayed only if the page is published and live.")]
-        [StoreFieldType(PhysicalStoreFieldType.String, 128, IsNullable = true)]
+        [StoreFieldType(PhysicalStoreFieldType.String, 256, IsNullable = true)]
         [FieldPosition(2)]
-        [NullStringLengthValidator(0, 128)]
+        [NullStringLengthValidator(0, 256)]
         [DefaultFieldStringValue("")]
         string Url { get; set; }
      
@@ -87,5 +87,12 @@ namespace Orckestra.Composer.CompositeC1.DataTypes.Navigation
         [ForeignKey(typeof(CssStyle), nameof(DataTypes.CssStyle.Id), AllowCascadeDeletes = true)]
         Nullable<Guid> CssStyle { get; set; }
 
+        [ImmutableFieldId("775447a2-4009-4631-811d-71ce4ef85f1a")]
+        [FormRenderingProfile(Label = "Css Class Name", HelpText = "Specify the css class name to apply to this item.")]
+        [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
+        [FieldPosition(7)]
+        [StringSizeValidator(0, 64)]
+        [DefaultFieldStringValue("")]
+        string CssClassName { get; set; }
     }
 }

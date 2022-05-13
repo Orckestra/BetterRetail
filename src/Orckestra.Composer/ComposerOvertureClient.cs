@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Cache;
 using System.Threading.Tasks;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Logging;
+using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture;
+using Orckestra.Overture.RestClient;
 using ServiceStack;
 using ServiceStack.Validation;
-using System.Configuration;
-using System.Linq;
-using Orckestra.Overture.RestClient;
-using Orckestra.ExperienceManagement.Configuration;
-using System.Net.Cache;
 
 namespace Orckestra.Composer
 {
@@ -24,9 +23,7 @@ namespace Orckestra.Composer
 
         private ComposerOvertureClient(IOvertureClient client)
         {
-            if (client == null) throw new ArgumentNullException(nameof(client));
-
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         public TResponse Send<TResponse>(IReturn<TResponse> request)
@@ -147,24 +144,18 @@ namespace Orckestra.Composer
 
         private void HandleException(Exception e, object request)
         {
-            if (e is ValidationError)
+            if (e is ValidationError vError)
             {
-                var vError = (ValidationError)e;
-
                 Log.ErrorException($"{GetRequestErrorDescription(request)} ErrorCode: {vError.ErrorCode}, ErrorMessage: {vError.ErrorMessage}", vError);
                 ComposerException.Create(vError).ThrowIfAnyError();
             }
-            else if (e is WebServiceException)
+            else if (e is WebServiceException wsException)
             {
-                var wsException = (WebServiceException)e;
-
                 Log.ErrorException($"{GetRequestErrorDescription(request)} ErrorCode: {wsException.ErrorCode}, ErrorMessage: {wsException.ErrorMessage}", wsException);
                 ComposerException.Create(wsException).ThrowIfAnyError();
             }
-            else if (e is WebException)
+            else if (e is WebException webException)
             {
-                var webException = (WebException)e;
-
                 Log.ErrorException($"{GetRequestErrorDescription(request)} {e.Message}", e);
                 ComposerException.Create(webException).ThrowIfAnyError();
             }
@@ -173,11 +164,10 @@ namespace Orckestra.Composer
 
         private IDisposable MeasureExecutionTime(object request)
         {
+            if (!(ComposerHost.Current?.IsInitialized ?? false)) { return null; }
+
             var collector = ComposerHost.Current.TryResolve<IPerformanceDataCollector>();
-            if (collector == null)
-            {
-                return null;
-            }
+            if (collector == null) { return null; }
 
             string description = "OCS API Call: ";
             if (request is IEnumerable)

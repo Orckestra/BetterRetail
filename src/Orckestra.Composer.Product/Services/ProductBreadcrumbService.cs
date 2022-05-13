@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Composer.ViewModels.Breadcrumb;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -22,40 +23,32 @@ namespace Orckestra.Composer.Product.Services
 
         public ProductBreadcrumbService(ICategoryViewService categoryViewService, ILocalizationProvider localizationProvider, ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider)
         {
-            if (categoryViewService == null) { throw new ArgumentNullException("categoryViewService"); }
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (categoryBrowsingUrlProvider == null) { throw new ArgumentNullException("categoryBrowsingUrlProvider"); }
-
-            CategoryViewService = categoryViewService;
-            LocalizationProvider = localizationProvider;
-            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider;
+            CategoryViewService = categoryViewService ?? throw new ArgumentNullException(nameof(categoryViewService));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
         }
 
 
         /// <summary>
         /// Creates a <see cref="BreadcrumbViewModel"/> for a given product.
         /// </summary>
-        /// <param name="parameters">Parameters to generate the ViewModel.</param>
+        /// <param name="param">Parameters to generate the ViewModel.</param>
         /// <returns></returns>
-        public virtual async Task<BreadcrumbViewModel> CreateBreadcrumbAsync(GetProductBreadcrumbParam parameters)
+        public virtual async Task<BreadcrumbViewModel> CreateBreadcrumbAsync(GetProductBreadcrumbParam param)
         {
-            AssertParameters(parameters);
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
-            var categoriesPath = await GetCategoryViewModelsAsync(parameters.CategoryId, parameters.Scope, parameters.CultureInfo).ConfigureAwait(false);
-            var vm = CreateBreadcrumbViewModel(parameters, categoriesPath);
+            if (!string.IsNullOrWhiteSpace(param.CategoryId) && string.IsNullOrWhiteSpace(param.Scope))
+            {
+                throw new ArgumentException($"{nameof(param.Scope)} must not be null or whitespace if {nameof(param.CategoryId)} is defined.",
+                    nameof(param));
+            }
+
+            var categoriesPath = await GetCategoryViewModelsAsync(param.CategoryId, param.Scope, param.CultureInfo).ConfigureAwait(false);
+            var vm = CreateBreadcrumbViewModel(param, categoriesPath);
 
             return vm;
-        }
-
-        protected virtual void AssertParameters(GetProductBreadcrumbParam parameters)
-        {
-            if (parameters == null) { throw new ArgumentNullException("parameters"); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "parameters"); }
-
-            if (!string.IsNullOrWhiteSpace(parameters.CategoryId))
-            {
-                if (string.IsNullOrWhiteSpace(parameters.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("scope must not be null or whitespace if the category is defined."), "parameters"); }
-            }
         }
 
         protected virtual Task<CategoryViewModel[]> GetCategoryViewModelsAsync(string categoryId, string scope, CultureInfo cultureInfo)
@@ -79,7 +72,7 @@ namespace Orckestra.Composer.Product.Services
         {
             var breadcrumbViewModel = new BreadcrumbViewModel
             {
-                ActivePageName = parameters.ProductName
+                ActivePageName = HttpUtility.HtmlEncode(parameters.ProductName)
             };
 
             var stack = new Stack<BreadcrumbItemViewModel>();

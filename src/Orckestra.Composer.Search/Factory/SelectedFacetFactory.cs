@@ -6,10 +6,9 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
-using Orckestra.Composer.Search.Providers.Facet;
 using Orckestra.Composer.Search.Providers.SelectedFacet;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Factory
 {
@@ -21,8 +20,7 @@ namespace Orckestra.Composer.Search.Factory
          public SelectedFacetFactory(IDependencyResolver dependencyResolver, ISelectedFacetProviderRegistry selectedFacetProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
-            if (selectedFacetProviderRegistry == null) { throw new ArgumentNullException("selectedFacetProviderRegistry"); }
-            SelectedFacetProviderRegistry = selectedFacetProviderRegistry;
+            SelectedFacetProviderRegistry = selectedFacetProviderRegistry ?? throw new ArgumentNullException(nameof(selectedFacetProviderRegistry));
             FacetConfigContext = facetConfigContext;
         }
 
@@ -31,16 +29,13 @@ namespace Orckestra.Composer.Search.Factory
         /// </summary>
          public virtual IEnumerable<SelectedFacet> CreateSelectedFacet(SearchFilter filter, CultureInfo cultureInfo)
         {
-            if (filter == null) { throw new ArgumentNullException("filter"); }
-            if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }
+            if (filter == null) { throw new ArgumentNullException(nameof(filter)); }
+            if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(filter.Name)), nameof(filter)); }
 
             var setting = FacetConfigContext.GetFacetSettings()
-                .FirstOrDefault(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
+                .Find(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
 
-            if (setting == null)
-            {
-                return Enumerable.Empty<SelectedFacet>();
-            }
+            if (setting == null) { return Enumerable.Empty<SelectedFacet>(); }
 
             Type factoryType = SelectedFacetProviderRegistry.ResolveProviderType(setting.FacetType.ToString());
 

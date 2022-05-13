@@ -7,7 +7,7 @@ namespace Orckestra.Composer.Cart.Extensions
     {
         public static string RemoveWhitespaces(this string value)
         {
-            if (value == null) { throw new ArgumentNullException("value"); }
+            if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
             return Regex.Replace(value, @"\s+", string.Empty);
         }

@@ -1,0 +1,99 @@
+﻿@using System.Collections
+@using Composite.Data
+@using Composite.Data.Types
+@using Orckestra.Media.AutoImageResizing
+@using Orckestra.Media.AutoImageResizing.Helpers
+
+
+@helper PictureTag(DataReference<IImageFile> Image, string cssClass = null, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0)
+{
+    if (widthBreakpoints == null)
+    {
+        widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints;
+    }
+
+    if (maxWidth == 0)
+    {
+        maxWidth = AutoImageResizingConfiguration.MaxWidth;
+    }
+
+    var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
+    <picture>
+        @foreach (var widthBreakpoint in widthBreakpoints.OrderBy(item => item))
+        {
+            var mediaRule = $"(max-width: {widthBreakpoint}px)";
+            foreach (var mediaType in imageSupportFormats)
+            {
+                if (ImageFormatSupportHelper.IsSupported(mediaType))
+                {
+                    var imageUrl = AutoImageResizingHelper.GetResizedImageUrl(Image, widthBreakpoint, mediaType);
+                    <source srcset="@imageUrl" media="@mediaRule" type="@mediaType" />
+                }
+            }
+        }
+        @{
+            var imageData = Image.Data;
+            var title = imageData.Title;
+            var altText = imageData.Description;
+        }
+
+        <img src="@AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null)"
+             @if (!string.IsNullOrWhiteSpace(title)) { <text> title="@title" </text> }
+             @if (!string.IsNullOrWhiteSpace(altText)) { <text> alt="@altText" </text> }
+             @if (!string.IsNullOrWhiteSpace(cssClass)) { <text> class="@cssClass" </text> } />
+    </picture>
+}
+
+@helper ResponsiveBackgroundImageStyles(string containerId, DataReference<IImageFile> Image, IEnumerable<int> widthBreakpoints = null, int maxWidth = 0)
+{
+    if (widthBreakpoints == null) { widthBreakpoints = AutoImageResizingConfiguration.WidthBreakpoints; }
+    if (maxWidth == 0) { maxWidth = AutoImageResizingConfiguration.MaxWidth; }
+    var imageSupportFormats = AutoImageResizingConfiguration.ImageFormats;
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+        <style type="text/css">
+            #@containerId {
+                @BackgroundImageStyle(Image, maxWidth)
+                background-repeat: no-repeat;}
+        @{
+            var breakpoints =  widthBreakpoints.OrderByDescending(item => item).ToList();
+
+            if (breakpoints.Any() && !(breakpoints.Count == 1 && breakpoints[0] == maxWidth))
+            {
+                foreach (var widthBreakpoint in breakpoints)
+                {
+                    @: @@media (max-width: @(widthBreakpoint)px) { #@containerId { @BackgroundImageStyle(Image, widthBreakpoint) }}
+                }
+            }
+        }
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
+}
+
+@helper BackgroundImageStyle(DataReference<IImageFile> Image, int maxWidth)
+{
+    var defaultImageUrl = AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth > 0 ? (int?)maxWidth : null);
+
+    <text>background-image: url('@defaultImageUrl');</text>
+
+    if (maxWidth > 0)
+    {
+        var supportedImageFormats = AutoImageResizingConfiguration.ImageFormats.Where(ImageFormatSupportHelper.IsSupported);
+
+        var urls = supportedImageFormats.ToDictionary(
+            mediaType => mediaType,
+            mediaType => AutoImageResizingHelper.GetResizedImageUrl(Image, maxWidth, mediaType));
+        var urlSet = string.Join(", ", supportedImageFormats.Select(mediaType =>
+             $"url(\"{urls[mediaType]}\") type(\"{mediaType}\")"));
+
+        <text>
+            background-image: -webkit-image-set(@urlSet);
+            background-image: image-set(@urlSet);
+        </text>
+    }
+}
+

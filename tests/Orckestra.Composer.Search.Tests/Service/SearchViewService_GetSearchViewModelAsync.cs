@@ -160,13 +160,13 @@ namespace Orckestra.Composer.Search.Tests.Service
         }
 
         [Test]
-        public void WHEN_culture_info_is_null_SHOULD_throw_argument_null_exception()
+        public void WHEN_culture_info_is_null_SHOULD_throw_argument_exception()
         {
             // Arrange
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetSearchViewModelAsync(
                 new SearchCriteria
                 {
                     Keywords = "any",
@@ -183,7 +183,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetSearchViewModelAsync(
                 new SearchCriteria
                 {
                     Keywords = "any",
@@ -200,7 +200,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             SearchViewService service = _container.CreateInstance<SearchViewService>();
 
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => service.GetSearchViewModelAsync(
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetSearchViewModelAsync(
                 new SearchCriteria
                 {
                     Keywords = "any",
@@ -244,7 +244,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(0);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(0);
         }
 
         [Test]
@@ -268,7 +268,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(1);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(1);
         }
 
         [Test]
@@ -290,7 +290,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.IsAllRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.IsAllRemovable.Should().BeFalse();
         }
 
         //[Test]

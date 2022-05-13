@@ -24,6 +24,7 @@ namespace Orckestra.Composer.ViewModels.Home
         public MenuTypeEnum MenuType { get; set; }
 
         public string CssClass { get; set; }
+        public string CssClassName { get; set; }
 
         public IEnumerable<IMenuEntryViewModel> Children { get; set; }
 

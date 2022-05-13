@@ -38,6 +38,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         public IList<IPaymentMethodViewModel> PaymentMethods { get; set; }
 
         /// <summary>
+        /// The List of PaymentProviderViewModel.
+        /// </summary>
+        public IList<PaymentProviderViewModel> PaymentProviders { get; set; }
+
+        /// <summary>
         /// Determines if the control is loading.
         /// </summary>
         public bool IsLoading { get; set; }
@@ -46,6 +51,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// ViewModel of the active payment.
         /// </summary>
         public ActivePaymentViewModel ActivePaymentViewModel { get; set; }
+
+        /// <summary>
+        /// ViewModel of credit card trust image.
+        /// </summary>
+        public ImageViewModel CreditCardTrustImage { get; set; }
 
         public bool HaveMonerisPaymentProvider
         {
@@ -104,6 +114,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         public CheckoutPaymentViewModel()
         {
             PaymentMethods = new List<IPaymentMethodViewModel>();
+            PaymentProviders = new List<PaymentProviderViewModel>();
         }
     }
 }

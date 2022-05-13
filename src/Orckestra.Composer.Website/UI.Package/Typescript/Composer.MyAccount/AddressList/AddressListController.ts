@@ -13,7 +13,7 @@ module Orckestra.Composer {
     //TODO refactor modal : create a generic modal service
     export class AddressListController extends Orckestra.Composer.MyAccountController {
 
-        private deleteModalElementSelector: string= '#confirmationModal';
+        private deleteModalElementSelector: string = '#confirmationModal';
         private uiModal: UIModal;
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());

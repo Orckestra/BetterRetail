@@ -66,7 +66,7 @@ module Orckestra.Composer {
                 .done(null, (error) => {
                     console.log(error);
                 });
-        };
+        }
 
         public confirmModal() {
             this.confirmDeferred.resolve(true);

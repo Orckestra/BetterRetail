@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
@@ -8,15 +10,15 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.Repositories;
-using Orckestra.Composer.Product.Services;
 using Orckestra.Composer.Product.Tests.Mock;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Tests.Services
 {
@@ -38,6 +40,12 @@ namespace Orckestra.Composer.Product.Tests.Services
         public async Task WHEN_ProductId_Is_Valid_With_Variants_SHOULD_Return_List_Of_Products_Prices_With_Variants()
         {
             //Arrange
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            _container.Use(contextStub);
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductAndVariantPrices());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 
@@ -87,6 +95,12 @@ namespace Orckestra.Composer.Product.Tests.Services
         public async Task WHEN_ProductId_With_NoVariant_Is_Valid_SHOULD_Return_List_Of_One_Products_Prices_With_No_Variant()
         {
             //Arrange
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            _container.Use(contextStub);
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 
@@ -121,15 +135,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 
-            //Act
-            var action = new Action(async () => await productService.CalculatePricesAsync(new GetProductsPriceParam()));
-
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => productService.CalculatePricesAsync(null));
+            Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(null);
+            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("getProductPriceParam");
-
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [Test]
@@ -149,10 +160,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => productService.CalculatePricesAsync(param));
+            Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("getProductPriceParam");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullEmpty(nameof(param.Scope)));
         }
 
         [Test]
@@ -172,10 +185,12 @@ namespace Orckestra.Composer.Product.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => productService.CalculatePricesAsync(param));
+            Expression<Func<Task<ProductsPricesViewModel>>> expression = () => productService.CalculatePricesAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("getProductPriceParam");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression).First().Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         #region Mock
@@ -230,7 +245,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 }
             });
 
-            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>()))
+            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<DateTime?>()))
                                  .ReturnsAsync(productPriceList)
                                  .Verifiable();
 
@@ -251,7 +266,7 @@ namespace Orckestra.Composer.Product.Tests.Services
                 VariantPrices = new List<VariantPrice>()
             });
 
-            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>()))
+            productRepositoryMock.Setup(repo => repo.CalculatePricesAsync(It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<DateTime?>()))
                                  .ReturnsAsync(productPriceList)
                                  .Verifiable();
 

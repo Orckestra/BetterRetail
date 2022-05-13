@@ -1,5 +1,4 @@
-﻿using Orckestra.Composer.Utils;
-using System;
+﻿using System;
 using System.IO;
 
 namespace Orckestra.Composer.Sitemap.Config
@@ -11,11 +10,8 @@ namespace Orckestra.Composer.Sitemap.Config
 
         public SitemapGeneratorConfig(string sitemapDirectory, string workingDirectory)
         {
-            Guard.NotNullOrWhiteSpace(sitemapDirectory, nameof(sitemapDirectory));
-            Guard.NotNullOrWhiteSpace(workingDirectory, nameof(workingDirectory));
-
-            _sitemapDirectory = sitemapDirectory;
-            _workingDirectory = workingDirectory;
+            _sitemapDirectory = sitemapDirectory ?? throw new ArgumentNullException(nameof(sitemapDirectory));
+            _workingDirectory = workingDirectory ?? throw new ArgumentNullException(nameof(workingDirectory));
         }
 
         public string GetSitemapDirectory(Guid website)

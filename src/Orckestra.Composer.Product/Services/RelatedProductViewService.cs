@@ -9,10 +9,10 @@ using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Search.Repositories;
-using Orckestra.Composer.Utils;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -27,20 +27,18 @@ namespace Orckestra.Composer.Product.Services
             IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
             IInventoryLocationProvider inventoryLocationProvider,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IFulfillmentContext fulfillmentContext)
 
-            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings)
-        {          
-        }
+            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext) { }
 
         protected override async Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(GetProductIdentifiersParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param argument passed to GetRelatedProductIds missing required CultureInfo property");}
-            if (param.MerchandiseTypes == null) { throw new ArgumentException("param argument passed to GetRelatedProductIds missing required MerchandiseTypes property");}
-            if (param.MerchandiseTypes.Length == 0) { throw new ArgumentException("param.MerchandiseTypes must contain at least one element"); }
-            if (param.ProductId == null) { throw new ArgumentException("param argument passed to GetRelatedProductIds missing required ProductId property");}
-            if (param.Scope == null) { throw new ArgumentException("param argument passed to GetRelatedProductIds missing required MerchandiseType property");}
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) {throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param));}
+            if (param.MerchandiseTypes == null || !param.MerchandiseTypes.Any()) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.MerchandiseTypes)), nameof(param));}
+            if (param.ProductId == null) {throw new ArgumentException(GetMessageOfNull(nameof(param.ProductId)), nameof(param));}
+            if (param.Scope == null) {throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param));}
 
             var getProductParam = new GetProductParam
             {
@@ -66,8 +64,9 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual async Task<IEnumerable<ProductIdentifier>> GetSameCategoryProductIdentifier(GetProductIdentifiersParam getProductIdentifiersParam, string categoryId)
         {
-            Guard.NotNull(getProductIdentifiersParam, nameof(getProductIdentifiersParam));
-            Guard.NotNullOrWhiteSpace(categoryId, nameof(categoryId));
+            if (getProductIdentifiersParam == null) { throw new ArgumentNullException(nameof(getProductIdentifiersParam)); }
+            if (string.IsNullOrWhiteSpace(categoryId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(categoryId)); }
+
             var sameCategoryProductIdentifier = new List<ProductIdentifier>();
             var productInSameCategoryParam = new GetProductsInSameCategoryParam()
             {
@@ -77,7 +76,8 @@ namespace Orckestra.Composer.Product.Services
                 MaxItems = getProductIdentifiersParam.MaxItems,
                 SortBy = "score",
                 InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync(),
-                CurrentProductId = getProductIdentifiersParam.ProductId
+                CurrentProductId = getProductIdentifiersParam.ProductId,
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
             };
 
             var sameCategoryProducts = await RelationshipRepository.GetProductInSameCategoryAsync(productInSameCategoryParam).ConfigureAwait(false);

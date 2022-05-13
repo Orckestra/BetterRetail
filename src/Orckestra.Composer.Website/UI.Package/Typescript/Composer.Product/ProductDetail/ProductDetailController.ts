@@ -1,13 +1,20 @@
 ///<reference path='../Product/ProductController.ts' />
+///<reference path='../ProductEvents.ts' />
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
 
 module Orckestra.Composer {
+
+    enum RecurringMode  {
+        Single = 'Single',
+        Recurring = 'Recurring'
+    }
+
     export class ProductDetailController extends Orckestra.Composer.ProductController {
 
         protected concern: string = 'productDetail';
 
         private selectedRecurringOrderFrequencyName: string;
-        private recurringMode: string = 'single';
+        private recurringMode: RecurringMode;
 
         public initialize() {
 
@@ -20,17 +27,296 @@ module Orckestra.Composer {
                 loadingIndicatorSelector: '.loading-indicator-pricediscount'
             });
 
-            var addToCartBusy: UIBusyHandle = this.asyncBusy({
-                msDelay: 300,
-                loadingIndicatorSelector: '.loading-indicator-inventory'
-            });
-
             Q.when(this.calculatePrice()).done(() => {
                 priceDisplayBusy.done();
-
                 this.notifyAnalyticsOfProductDetailsImpression();
             });
-            Q.when(this.renderData()).done(() => addToCartBusy.done());
+
+            let $recurringOrderContainer = this.context.container.find('[data-recurring-mode]');
+            this.recurringMode = $recurringOrderContainer.data('recurring-mode');
+            this.selectedRecurringOrderFrequencyName = $recurringOrderContainer.data('recurring-order-frequency');
+
+            let { Sku } = this.context.viewModel;
+            var availableToSellPromise = this.inventoryService.isAvailableToSell(Sku);
+            let getCartPromise = this.cartService.getFreshCart();
+            let authenticatedPromise = this._membershipService.isAuthenticated();
+            let getWishListPromise = this._wishListService.getWishListSummary();
+            Q.all([availableToSellPromise, getCartPromise, authenticatedPromise, getWishListPromise])
+                .spread((isAvailableToSell, cartVm, authVm, wishListVm) => {
+                    this.initAddToCartWithQtyInCartVueComponent(isAvailableToSell, cartVm, authVm);
+                    this.initAddToCartWithQtyVueComponent(isAvailableToSell, cartVm, authVm);
+                    this.initAddToWishListVueComponent(authVm, wishListVm);
+                })
+
+        }
+
+        protected initAddToCartWithQtyInCartVueComponent(isAvailableToSell, cartVm, authVm) {
+            let elId = 'vueAddToCartWithQuantityInCart';
+            let el = document.getElementById(elId);
+            if(!el) return;
+            let product = this.context.viewModel;
+            let self: ProductDetailController = this;
+            let addToCartWithQuantity = new Vue({
+                el: '#' + elId,
+                data: {
+                    IsAuthenticated: authVm.IsAuthenticated,
+                    Cart: cartVm,
+                    Product: product,
+                    IsUnavailable: false,
+                    IsAvailableToSell: isAvailableToSell,
+                    Loading: false
+                },
+                mounted() {
+                    self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                    self.eventHub.subscribe(self.concern + 'SelectedVariantIdChanged', this.onSelectedVariantIdChanged);
+                },
+                computed: {
+                    CartItem() {
+                        if (!this.Cart) return null;
+                        var item = _.find(this.Cart.LineItemDetailViewModels, (i: any) =>
+                            i.ProductId === this.Product.productId && i.VariantId == this.Product.selectedVariantId);
+                        return item;
+                    },
+                    Quantity() {
+                        return this.CartItem ? this.CartItem.Quantity : 0;
+                    },
+                    IsUnavailableVariant() {
+                        return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
+                    },
+                    DecrementDisabled() {
+                        return !this.CartItem || this.Loading || (this.Cart.QuantityRange && this.CartItem.Quantity <= this.Cart.QuantityRange.Min);
+                    },
+                    IncrementDisabled() {
+                        return !this.CartItem || this.Loading || (this.Cart.QuantityRange && this.CartItem.Quantity >= this.Cart.QuantityRange.Max);
+                    },
+                    AddToCartDisabled() {
+                        return this.Loading ||
+                            !this.Product.DefaultListPrice ||
+                            !this.IsAvailableToSell ||
+                            this.IsUnavailableVariant ||
+                            (!this.IsAuthenticated && self.recurringMode === RecurringMode.Recurring);
+                    }
+
+                },
+                methods: {
+                    onCartUpdated(result) {
+                        this.Cart = result.data;
+                    },
+                    onSelectedVariantIdChanged(result) {
+                        let { selectedSku } = result.data;
+                        self.inventoryService.isAvailableToSell(selectedSku)
+                            .then(isAvailableToSell => this.IsAvailableToSell = isAvailableToSell);
+                    },
+                    addItemToCart(event: JQueryEventObject) {
+                        if (this.Loading) return;
+
+                        this.Loading = true;
+                        self.publishProductDataForAnalytics(self.context.viewModel, ProductEvents.LineItemAdding);
+
+                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
+                        let { ProductId, selectedVariantId, ListPrice } = this.Product;
+
+                        self.cartService.addLineItem(ProductId, ListPrice, selectedVariantId, 1,
+                            FrequencyName, RecurringProgramName)
+                            .then(() => {
+                                self.onAddLineItemSuccess();
+                                }, (reason: any) => {
+                                self.onAddLineItemFailed(reason);
+                                throw reason;
+                            })
+                            .fin(() => this.Loading = false);
+
+                    },
+                    updateItemQuantity(quantity: number) {
+                        if (this.Loading || !this.CartItem) return;
+
+                        if(this.Cart.QuantityRange) {
+                            const {Min, Max} = this.Cart.QuantityRange;
+                            quantity = Math.min(Math.max(Min, quantity), Max);
+                        }
+
+                        if(quantity == this.Quantity) {
+                            //force update vue component
+                            this.Cart = { ...this.Cart };
+                            return;
+                        }
+
+                        let analyticEventName = quantity > this.Quantity ? ProductEvents.LineItemAdding : ProductEvents.LineItemRemoving;
+                        this.CartItem.Quantity = quantity;
+
+                        if (this.Quantity < 1) {
+                            this.Loading = true; // disable ui immediately when we will delete  the line item
+                        }
+
+                        self.publishProductDataForAnalytics(self.context.viewModel, analyticEventName);
+
+                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
+                        let { ProductId, selectedVariantId } = this.Product;
+
+                        if (!this.debounceUpdateItem) {
+                            this.debounceUpdateItem = _.debounce(() => {
+
+                                this.Loading = true;
+                                let updatePromise = this.Quantity > 0 ?
+                                    self.cartService.updateLineItem(this.CartItem.Id, this.Quantity,
+                                        ProductId, FrequencyName, RecurringProgramName) :
+                                    self.cartService.deleteLineItem(this.CartItem.Id, ProductId);
+
+                                updatePromise
+                                    .then((cart: any) => {
+                                        self.onAddLineItemSuccess({ Quantity: this.Quantity, Cart: cart, ProductId, selectedVariantId });
+                                    }, (reason: any) => {
+                                        self.onAddLineItemFailed(reason);
+                                        throw reason;
+                                    })
+                                    .fin(() => this.Loading = false);
+
+                            }, 400);
+                        }
+
+                        this.debounceUpdateItem();
+                    }
+                }
+            })
+        }
+
+        protected initAddToCartWithQtyVueComponent(isAvailableToSell, cartVm, authVm) {
+            let elId = 'vueAddToCartWithQuantity';
+            let el = document.getElementById(elId);
+            if(!el) return;
+            let product = this.context.viewModel;
+            let self: ProductDetailController = this;
+            let addToCartWithQuantity = new Vue({
+                el: '#' + elId,
+                data: {
+                    IsAuthenticated: authVm.IsAuthenticated,
+                    Product: product,
+                    Cart: cartVm,
+                    Quantity: cartVm.QuantityRange.Min,
+                    IsUnavailable: false,
+                    IsAvailableToSell: isAvailableToSell,
+                    Loading: false
+                },
+                mounted() {
+                    self.eventHub.subscribe(self.concern + 'SelectedVariantIdChanged', this.onSelectedVariantIdChanged);
+                },
+                computed: {
+                    IsUnavailableVariant() {
+                        return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
+                    },
+                    DecrementDisabled() {
+                        return this.Loading || (this.Cart.QuantityRange && this.Quantity <= this.Cart.QuantityRange.Min);
+                    },
+                    IncrementDisabled() {
+                        return this.Loading || (this.Cart.QuantityRange && this.Quantity >= this.Cart.QuantityRange.Max);
+                    },
+                    AddToCartDisabled() {
+                        return this.Loading ||
+                            !this.Product.DefaultListPrice ||
+                            !this.IsAvailableToSell ||
+                            this.IsUnavailableVariant ||
+                            (!this.IsAuthenticated && self.recurringMode === RecurringMode.Recurring);
+                    }
+                },
+                methods: {
+                    onSelectedVariantIdChanged(result) {
+                        let { selectedSku } = result.data;
+                        self.inventoryService.isAvailableToSell(selectedSku)
+                            .then(isAvailableToSell => this.IsAvailableToSell = isAvailableToSell);
+                    },
+                    addItemToCart(event: JQueryEventObject) {
+                        if (this.Loading) return;
+
+                        this.Loading = true;
+                        self.publishProductDataForAnalytics(self.context.viewModel, ProductEvents.LineItemAdding);
+
+                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
+                        let { ProductId, selectedVariantId, ListPrice } = this.Product;
+
+                        self.cartService.addLineItem(ProductId, ListPrice, selectedVariantId, this.Quantity,
+                            FrequencyName, RecurringProgramName)
+                            .then(() => {
+                                self.onAddLineItemSuccess();
+                            }, (reason: any) => {
+                                self.onAddLineItemFailed(reason);
+                                throw reason;
+                            })
+                            .fin(() => {
+                                this.Loading = false; 
+                                this.Quantity = this.Cart.QuantityRange.Min;
+                            });
+
+                    },
+                    updateQuantity(quantity: any) {
+                        if (this.Cart.QuantityRange) {
+                            const { Min, Max } = this.Cart.QuantityRange;
+                            this.Quantity = Math.min(Math.max(Min, quantity), Max);
+                        }
+                    }
+                }
+            })
+        }
+
+        protected initAddToWishListVueComponent(authVm, wishListVm) {
+            let elId = 'vueAddProductToWishList';
+            let el = document.getElementById(elId);
+            if(!el) return;
+            let product = this.context.viewModel;
+            let self: ProductDetailController = this;
+            let vueWishList = new Vue({
+                el: '#' + elId,
+                data: {
+                    IsAuthenticated: authVm.IsAuthenticated,
+                    Product: product,
+                    WishList: wishListVm,
+                    Loading: false
+                },
+                mounted() {
+                    self.eventHub.subscribe(ProductEvents.WishListUpdated, this.onWishListUpdated);
+                },
+                computed: {
+                    WishListItem() {
+                        return _.find(this.WishList.Items, (i: any) =>
+                            i.ProductId === this.Product.productId && i.VariantId == this.Product.selectedVariantId);
+                    },
+                    IsUnavailableVariant() {
+                        return $.isArray(this.Product.allVariants) && !this.Product.selectedVariantId;
+                    }
+                },
+                methods: {
+                    onWishListUpdated(result) {
+                        this.WishList = result.data;
+                    },
+                    addLineItemToWishList() {
+                        if (this.Loading) return;
+
+                        if (!this.IsAuthenticated) {
+                            return self.redirectToSignInBeforeAddToWishList();
+                        }
+
+                        this.Loading = true;
+                        let { DisplayName, ProductId, selectedVariantId, ListPrice, RecurringOrderProgramName } = this.Product;
+                        self.eventHub.publish('wishListLineItemAdding', {
+                            data: { DisplayName, ListPrice: ListPrice }
+                        });
+
+                        self._wishListService.addLineItem(ProductId, selectedVariantId, 1, null, RecurringOrderProgramName)
+                            .fin(() => this.Loading = false);
+                    },
+
+                    removeLineItemFromWishList() {
+                        if (this.Loading) return;
+
+                        if (!this.IsAuthenticated) {
+                            return self.redirectToSignInBeforeAddToWishList();
+                        }
+
+                        this.Loading = true;
+                        self._wishListService.removeLineItem(this.WishListItem.Id)
+                            .fin(() => this.Loading = false);
+                    }
+                }
+            })
         }
 
         protected getListNameForAnalytics(): string {
@@ -52,10 +338,7 @@ module Orckestra.Composer {
         }
 
         protected publishProductImpressionEvent(data: any) {
-            this.eventHub.publish('productDetailsRendered',
-                {
-                    data: data
-                });
+            this.eventHub.publish('productDetailsRendered', { data });
         }
 
         protected onSelectedVariantIdChanged(e: IEventInformation) {
@@ -73,8 +356,6 @@ module Orckestra.Composer {
                     $el.addClass('d-none');
                 }
             });
-
-            this.renderData().done();
         }
 
         protected handleHiddenImages(el) {
@@ -91,28 +372,8 @@ module Orckestra.Composer {
         }
 
         protected onPricesChanged(e: IEventInformation) {
-
-            if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
-                this.render('PriceDiscount', null);
-            } else {
-                this.render('PriceDiscount', e.data);
-            }
-        }
-
-        protected renderUnavailableAddToCart(): Q.Promise<void> {
-
-            return Q.fcall(() => this.render('AddToCartProductDetail', {IsUnavailable: true}));
-        }
-
-        protected renderAvailableAddToCart(): Q.Promise<void> {
-
-            var sku: string = this.context.viewModel.Sku;
-
-            return this.inventoryService.isAvailableToSell(sku)
-                .then(result => {
-                    this.render('AddToCartProductDetail', {IsAvailableToSell: result});
-                    this.renderRecurringAddToCartProductDetailFrequency();
-                });
+            let vm = this.isProductWithVariants() && this.isSelectedVariantUnavailable() ? null : e.data;
+            this.render('PriceDiscount', vm);
         }
 
         public selectKva(actionContext: IControllerActionContext) {
@@ -152,49 +413,10 @@ module Orckestra.Composer {
                 pathArray[prevVariantIdIndex] = variantId;
             }
 
-            let builtPath = window.location.protocol
-            + '//'
-            + window.location.host
-            + this.productService.buildUrlPath(pathArray);
+            let {protocol, host} = window.location;
+            let builtPath = `${protocol}//${host}${this.productService.buildUrlPath(pathArray)}`;
 
             history.replaceState( {} , null, builtPath);
-        }
-
-        protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
-
-            var quantity = {
-                Min: quantityAdded.Min,
-                Max: quantityAdded.Max,
-                Value: quantityAdded.Min
-            };
-
-            return this.renderAvailableQuantity(quantity);
-        }
-
-        private renderRecurringAddToCartProductDetailFrequency() {
-            let loc = LocalizationProvider.instance(),
-                recurringBubblePitch = ((loc.getLocalizedString('ProductPage', 'L_RecurringBubblePitch'))),
-                availableFrequencies = this.context.viewModel.RecurringOrderFrequencies || [];
-
-            if (!this.selectedRecurringOrderFrequencyName && availableFrequencies.length > 0) {
-                this.selectedRecurringOrderFrequencyName = availableFrequencies[0].RecurringOrderFrequencyName;
-            }
-
-            this.inventoryService.isAvailableToSell(this.context.viewModel.Sku)
-                .then(result => {
-                    if (this.context.viewModel.IsRecurringOrderEligible && result) {
-                        this.render('ProductRecurringFrequency', {
-                            recurringMode: this.recurringMode,
-                            isAvailableForRecurring: this.context.viewModel.IsRecurringOrderEligible,
-                            availableFrequencies: availableFrequencies.map(freq => ({
-                                recurringOrderFrequencyName: freq.RecurringOrderFrequencyName,
-                                displayName: freq.DisplayName
-                            })),
-                            selectedRecurringOrderFrequencyName: this.selectedRecurringOrderFrequencyName,
-                            recurringBubblePitch: recurringBubblePitch
-                        });
-                    }
-                });
         }
 
         public onRecurringOrderFrequencySelectChanged(actionContext: IControllerActionContext) {
@@ -214,9 +436,12 @@ module Orckestra.Composer {
             this.recurringMode = actionContext.elementContext.val();
         }
 
-        public addToCartButtonClick(actionContext: IControllerActionContext) {
-            let frequencyName = this.recurringMode === 'single' ? null : this.selectedRecurringOrderFrequencyName;
-            this.addLineItem(actionContext, frequencyName, this.context.viewModel.RecurringOrderProgramName);
+        protected getRecurringData(): any {
+
+            let FrequencyName = this.recurringMode === RecurringMode.Single ? null : this.selectedRecurringOrderFrequencyName;
+            let RecurringProgramName = this.context.viewModel.RecurringOrderProgramName;
+
+            return { FrequencyName, RecurringProgramName };
         }
     }
 }

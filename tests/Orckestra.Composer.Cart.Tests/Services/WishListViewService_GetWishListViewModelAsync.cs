@@ -15,6 +15,10 @@ using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
+using Orckestra.Composer.Cart.ViewModels;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -31,30 +35,96 @@ namespace Orckestra.Composer.Cart.Tests.Services
             _container.Use(CreateLineItemService());
         }
 
-        [TestCase(null, "en-CA", "WishList", "randomCustomerId", "param.Scope")]
-        [TestCase("", "en-CA", "WishList", "randomCustomerId", "param.Scope")]
-        [TestCase("Canada", null, "WishList", "randomCustomerId", "param.CultureInfo")]
-        [TestCase("Canada", "en-CA", null, "randomCustomerId", "param.CartName")]
-        [TestCase("Canada", "en-CA", "", "randomCustomerId", "param.CartName")]
-        [TestCase("Canada", "en-CA", "WishList", null, "param.CustomerId")]
-        public void WHEN_Param_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope, string cultureName, string cartName, string customerId, string paramName)
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" \t\r\n")]
+        public void WHEN_Scope_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string scope)
         {
             // Arrange
             var service = _container.CreateInstance<WishListViewService>();
             var param = new GetCartParam
             {
                 Scope = scope,
-                CultureInfo = string.IsNullOrWhiteSpace(cultureName) ? null : CultureInfo.GetCultureInfo(cultureName),
-                CustomerId = string.IsNullOrWhiteSpace(customerId) ? Guid.Empty : GetRandom.Guid(),
+                CultureInfo = CultureInfo.GetCultureInfo("en-CA"),
+                CustomerId = Guid.NewGuid(),
+                CartName = "WishList"
+            };
+
+            // Act
+            Expression<Func<Task<WishListViewModel>>> expression = () => service.GetWishListViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
+        }
+
+        public void WHEN_CultureInfo_Is_Null_SHOULD_Throw_ArgumentException()
+        {
+            // Arrange
+            var service = _container.CreateInstance<WishListViewService>();
+            var param = new GetCartParam
+            {
+                Scope = "Canada",
+                CultureInfo = null,
+                CustomerId = Guid.NewGuid(),
+                CartName = "WishList"
+            };
+
+            // Act
+            Expression<Func<Task<WishListViewModel>>> expression = () => service.GetWishListViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" \t\r\n")]
+        public void WHEN_CartName_Is_NullOrWhitespace_SHOULD_Throw_ArgumentException(string cartName)
+        {
+            // Arrange
+            var service = _container.CreateInstance<WishListViewService>();
+            var param = new GetCartParam
+            {
+                Scope = "Canada",
+                CultureInfo = CultureInfo.GetCultureInfo("en-CA"),
+                CustomerId = Guid.NewGuid(),
                 CartName = cartName
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.GetWishListViewModelAsync(param));
+            Expression<Func<Task<WishListViewModel>>> expression = () => service.GetWishListViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain(paramName);
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
+        }
+
+        public void WHEN_CustomerId_Is_Empty_SHOULD_Throw_ArgumentException()
+        {
+            // Arrange
+            var service = _container.CreateInstance<WishListViewService>();
+            var param = new GetCartParam
+            {
+                Scope = "Canada",
+                CultureInfo = CultureInfo.GetCultureInfo("en-CA"),
+                CustomerId = Guid.Empty,
+                CartName = "WishList"
+            };
+
+            // Act
+            Expression<Func<Task<WishListViewModel>>> expression = () => service.GetWishListViewModelAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
+
+            //Assert
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.CustomerId)));
         }
 
         [Test]

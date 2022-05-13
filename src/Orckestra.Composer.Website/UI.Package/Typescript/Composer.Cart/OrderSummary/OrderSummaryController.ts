@@ -1,112 +1,107 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='../../Mvc/Controller.ts' />
-///<reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='../../Repositories/CartRepository.ts' />
-///<reference path='../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 ///<reference path='../../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../Composer.Analytics/Analytics/GoogleAnalyticsPlugin.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
+///<reference path='../CartSummary/CartStateService.ts' />
 ///<reference path='./OrderSummaryService.ts' />
+///<reference path='../OrderHistory/Services/OrderService.ts' />
 
 module Orckestra.Composer {
 
     export class OrderSummaryController extends Orckestra.Composer.Controller {
 
-        private cacheProvider: ICacheProvider = CacheProvider.instance();
-        private cartService: ICartService = new CartService(new CartRepository(), this.eventHub);
+        private cartService: ICartService = CartService.getInstance();
+        private cartStateService: ICartStateService = CartStateService.getInstance();
+        protected orderService = new OrderService();
         private orderSummaryService: OrderSummaryService = new OrderSummaryService(this.cartService, this.eventHub);
-        private postalCodeModal : any;
-        private postalCodeInput : any;
 
         public initialize() {
             super.initialize();
-            this.registerSubscriptions();
-        }
+            let self: OrderSummaryController = this;
 
-        private registerSubscriptions() {
+            let cartOrderSummaryMixins = {
+                data: {
+                    EstimateShippingPostalCode: undefined,
+                    PostalCodeEmpty: false,
+                    PostalCodeMalformed: false
+                },
+                methods: {
+                    openEstimateShippingModal() {
+                        this.postalCodeModal = $('#postalCodeModal');
+                        this.postalCodeModal.modal('show');
+                    },
+                    closeModal() {
+                        this.postalCodeModal.modal('hide');
+                        this.postalCodeModal.off('shown.bs.modal');
+                    },
+                    estimateShipping(postalCodePattern) {
 
-            this.eventHub.subscribe('cartUpdated', e => this.render('OrderSummary', e.data));
-        }
+                        if (!this.EstimateShippingPostalCode) {
+                            this.PostalCodeEmpty = true;
+                            return;
+                        }
 
-        public openModal(actionContext: IControllerActionContext) {
+                        let postalCode = this.EstimateShippingPostalCode.toUpperCase();
 
-            this.postalCodeModal = $('#postalCodeModal');
-            this.postalCodeInput = $('#postalCode');
-            this.clearForm();
+                        if (postalCodePattern) {
+                            let postalCodeRegexPattern = new RegExp(postalCodePattern.toString());
+                            this.PostalCodeMalformed = postalCodeRegexPattern.test(postalCode);
+                            if (!this.PostalCodeMalformed) {
+                                return;
+                            }
+                        }
 
-            //Due to how HTML5 defines its semantics, the autofocus HTML attribute has no effect in Bootstrap modals
-            //http://getbootstrap.com/javascript/#modals
-            this.postalCodeModal.on('shown.bs.modal', () => {
-                this.postalCodeInput.focus();
-            });
+                        this.Mode.Loading = true;
+                        self.orderSummaryService.setCheapestShippingMethodUsing(postalCode)
+                            .then((data: any) => {
+                                this.closeModal();
+                                return data;
+                            }, (reason: any) => {
+                                ErrorHandler.instance().outputErrorFromCode('PostalCodeUpdateFailed');
+                            })
+                            .fin(() => this.Mode.Loading = false);
 
-            this.postalCodeModal.modal('show');
-        }
+                    },
+                    cancelEditOrder() {
+                        this.Mode.Loading = true;
+                        self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
+                            .fin(() => this.Mode.Loading = false);
+                    },
+                    saveEditOrder() {
+                        this.Mode.Loading = true;
+                        self.orderService.saveEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
+                            .fin(() => this.Mode.Loading = false);
+                    },
+                    proceedToCheckout() {
+                        let nextStepUrl = this.OrderSummary.CheckoutUrlTarget;
+                        if (!nextStepUrl) {
+                            throw 'No next step Url was defined.';
+                        }
 
-        private clearForm() {
+                        AnalyticsPlugin.setCheckoutOrigin('Checkout');
 
-            this.postalCodeInput.val('');
-            this.render('EstimateShippingValidationForm', { PostalCodeMalformed: false, PostalCodeEmpty: false });
-            return;
-        }
-
-        private closeModal(actionContext: IControllerActionContext) {
-
-            this.postalCodeModal.modal('hide');
-            this.postalCodeModal.off('shown.bs.modal');
-        }
-
-        public estimateShipping(actionContext: IControllerActionContext) {
-
-            var formContext = actionContext.elementContext,
-                formValues = (<ISerializeObjectJqueryPlugin>formContext).serializeObject(),
-                postalCode = formValues.postalCode.toUpperCase(),
-                postalCodePattern = formContext.data('regex'),
-                postalCodeRegexPattern = new RegExp(postalCodePattern.toString()),
-                result = postalCodeRegexPattern.test(postalCode),
-                busyHandle: UIBusyHandle;
-
-            actionContext.event.preventDefault();
-
-            if (!result) {
-                if (postalCode === '') {
-                    return this.render('EstimateShippingValidationForm', { PostalCodeEmpty: true });
-                } else {
-                    return this.render('EstimateShippingValidationForm', { PostalCodeMalformed: true, PostalCode: formValues.postalCode });
+                        this.Mode.Loading = true;
+                        self.orderSummaryService.cleanCart().done(() => {
+                            window.location.href = nextStepUrl;
+                        }, reason => {
+                            console.error('Error while proceeding to Checkout', reason);
+                            ErrorHandler.instance().outputErrorFromCode('ProceedToCheckoutFailed');
+                        });
+                    },
+                    removeInvalidLineItems() {
+                        this.Mode.Loading = true;
+                        self.cartService.invalidateCache();
+                        self.orderSummaryService.cleanCart()
+                            .then(cart => 
+                                self.eventHub.publish(CartEvents.CartUpdated, { data: cart })
+                        ).fin(() => this.Mode.Loading = false);
+                    }
                 }
-            }
+            };
 
-            busyHandle = this.asyncBusy();
-
-            this.orderSummaryService.setCheapestShippingMethodUsing(postalCode)
-                .then((data: any) => {
-                    this.closeModal(actionContext);
-                    return data;
-                }, (reason: any) => {
-                    ErrorHandler.instance().outputErrorFromCode('PostalCodeUpdateFailed');
-                })
-                .fin(() => busyHandle.done());
-        }
-
-        public proceedToCheckout(actionContext: IControllerActionContext): void {
-
-            var nextStepUrl: string = actionContext.elementContext.data('nextstepurl').toString();
-
-            if (!nextStepUrl) {
-                throw 'No next step Url was defined.';
-            }
-
-            AnalyticsPlugin.setCheckoutOrigin('Checkout');
-
-            var busy: UIBusyHandle = this.asyncBusy();
-
-            this.orderSummaryService.cleanCart().done(() => {
-                window.location.href = nextStepUrl;
-            }, reason => {
-                console.error('Error while proceeding to Checkout', reason);
-                ErrorHandler.instance().outputErrorFromCode('ProceedToCheckoutFailed');
-                busy.done();
-            });
+            this.cartStateService.VueCartMixins.push(cartOrderSummaryMixins);
         }
     }
 }

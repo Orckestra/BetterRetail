@@ -19,11 +19,10 @@ namespace Orckestra.Composer.ViewEngine.HandleBarsHelpers
                 throw new HandlebarsException($"{{{{{HelperName}}}}} helper must have exactly three arguments");
             }
 
-            bool useCurrentCulture;
             string format = "{" + (arguments[1] ?? string.Empty) + "}";
 
             var outputResponse = FormatValue(arguments[0], format,
-                bool.TryParse((arguments[2] ?? string.Empty).ToString(), out useCurrentCulture) && useCurrentCulture);
+                bool.TryParse((arguments[2] ?? string.Empty).ToString(), out bool useCurrentCulture) && useCurrentCulture);
 
             output.WriteSafeString(outputResponse);
         }

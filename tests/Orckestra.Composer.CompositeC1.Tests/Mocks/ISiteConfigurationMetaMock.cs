@@ -38,6 +38,8 @@ namespace Orckestra.Composer.CompositeC1.Tests.Mocks
         public Guid? FindMyOrderPageId { get; set; }
         public string CreditCardsTrustIconId { get; set; }
         public string CheckoutSteps { get; set; }
+        public Guid? CheckoutPageId { get; set; }
+        public Guid? CheckoutConfirmationPageId { get; set; }
         public string CheckoutNavigation { get; set; }
         public string FieldName { get; set; }
         public Guid Id { get; set; }

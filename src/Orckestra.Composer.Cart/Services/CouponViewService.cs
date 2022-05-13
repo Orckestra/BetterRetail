@@ -11,8 +11,8 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Marketing;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -43,9 +43,7 @@ namespace Orckestra.Composer.Cart.Services
         {
             if(coupons == null) { return Enumerable.Empty<string>(); }
 
-            return from c in coupons
-                where c.CouponState != CouponState.Ok
-                select c.CouponCode;
+            return from c in coupons where c.CouponState != CouponState.Ok select c.CouponCode;
         }
 
         /// <summary>
@@ -107,7 +105,7 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The lightweight CartViewModel</returns>
         public virtual async Task<CartViewModel> RemoveCouponAsync(CouponParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
@@ -145,9 +143,9 @@ namespace Orckestra.Composer.Cart.Services
 
         protected virtual async Task<CartViewModel> CreateCartViewModelAsync(CreateCartViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.Cart == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Cart"), "param"); }
-            if (param.BaseUrl == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BaseUrl"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }
+            if (param.BaseUrl == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.BaseUrl)), nameof(param)); }
 
             param.ProductImageInfo = new ProductImageInfo
             {

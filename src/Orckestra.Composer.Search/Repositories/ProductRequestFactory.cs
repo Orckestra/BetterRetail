@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Search;
-using Orckestra.Overture.ServiceModel.Search;
-using ServiceStack;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Repositories
 {
@@ -21,7 +19,7 @@ namespace Orckestra.Composer.Search.Repositories
         /// <exception cref="System.ArgumentException">scope id cannot be null or empty;scopeId</exception>
         public virtual SearchAvailableProductsRequest CreateProductRequest(string scopeId)
         {
-            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException("scope id cannot be null or empty", "scopeId"); }
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scopeId)); }
 
             var request = new SearchAvailableProductsRequest
             {
@@ -40,11 +38,10 @@ namespace Orckestra.Composer.Search.Repositories
         /// <exception cref="System.ArgumentException">criteria.Scope cannot be null or empty;criteria.Scope</exception>
         public virtual SearchAvailableProductsBaseRequest CreateProductRequest(SearchCriteria criteria)
         {
-            if (criteria == null) { throw new ArgumentException("criteria cannot be null", "criteria"); }
-            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException("scope cannot be null or empty", "criteria.Scope"); }
+            if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
-            var categoryCriteria = criteria as CategorySearchCriteria;
-            if (categoryCriteria != null && !categoryCriteria.CategoryHasFacets)
+            if (criteria is CategorySearchCriteria categoryCriteria)
             {
                 return new SearchAvailableProductsByCategoryRequest()
                 {
@@ -52,12 +49,47 @@ namespace Orckestra.Composer.Search.Repositories
                     CategoryName = categoryCriteria.CategoryId
                 };
             }
+            else if (criteria is SearchBySkusCriteria searchBySkusCriteria)
+            {
+                var request = new SearchAvailableProductsRequest
+                {
+                    Query = CreateQuery(searchBySkusCriteria)
+                };
+
+                return request;
+            }
+
             return CreateProductRequest(criteria.Scope);
+        }
+
+        protected virtual Query CreateQuery(SearchBySkusCriteria searchBySkusCriteria)
+        {
+            var skus = searchBySkusCriteria.Skus.Select(s => $"Sku:{s}").ToList();
+            var customExpr = String.Join(" OR ", skus);
+
+            return new Query
+            {
+                Filter = new FilterGroup
+                {
+                    BinaryOperator = BinaryOperator.And,
+                    Filters = new List<Filter>
+                    {
+                        new Filter
+                        {
+                            Member = "Sku",
+                            CustomExpression = customExpr,
+                            Operator = Operator.Custom
+                        }
+                    }
+                }
+
+            };
+
         }
 
         protected virtual Query CreateQuery(string scopeId)
         {
-            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException("scope id cannot be null or empty", "scopeId"); }
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scopeId)); }
 
             return new Query
             {

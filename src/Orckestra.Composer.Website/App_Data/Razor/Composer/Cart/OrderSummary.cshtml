@@ -1,0 +1,178 @@
+﻿@inherits RazorFunction
+@using Orckestra.Composer.Cart
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Cart Order Summary"; }
+    }
+}
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Cart.OrderSummary">
+        <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" class="card">
+            <h3 class="card-header" data-qa="order-summary-title">
+                @Html.Localize("ShoppingCart", "T_OrderSummary")
+            </h3>
+            <div class="card-body">
+                @OrderSummaryHelpers.Rewards()
+
+                @OrderSummaryHelpers.SubTotal()
+
+                @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
+
+                @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
+
+                <div v-if="OrderSummary.IsShippingEstimatedOrSelected">
+                    <div v-if="OrderSummary.IsShippingTaxable">
+                        @OrderSummaryHelpers.Shipping()
+                    </div>
+                </div>
+
+                @OrderSummaryHelpers.Taxes()
+
+                @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
+
+                @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
+
+                <div v-if="OrderSummary.IsShippingEstimatedOrSelected">
+                    <div v-if="!OrderSummary.IsShippingTaxable">
+                        @OrderSummaryHelpers.Shipping()
+                    </div>
+                </div>
+                <div v-else="else">
+                    @EstimateShipping()
+                </div>
+
+                @OrderSummaryHelpers.Totals()
+
+                @OrderSummaryHelpers.SavingsTotal()
+
+                @OrderSummaryHelpers.AdditionalFeesMessage()
+
+                <div v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'">
+                    <div v-if="Cart.InvalidLineItemCount > 0" class="text-danger">
+                        @Html.Localize("ShoppingCart", "L_RemoveUnavailableItems")
+                    </div>
+
+                    @CheckoutBtn()
+                </div>
+
+                <div v-if="Cart.CartType == '@CartConfiguration.OrderDraftCartType'">
+                    <div class="row mb-2" v-if="Cart.InvalidLineItemCount > 0">
+                        <div class="col-12">
+                            <button v-on:click="removeInvalidLineItems" v-bind:disabled="IsLoading"
+                                    class="btn w-100 text-uppercase alert-danger text-danger">
+                                @Html.Localize("ShoppingCart", "B_RemoveUnavailableProducts")
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <button v-on:click="cancelEditOrder" v-bind:disabled="IsLoading"
+                                    class="btn btn-secondary w-100  text-uppercase">
+                                @Html.Localize("General", "B_Cancel")
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button v-on:click="saveEditOrder" v-bind:disabled="IsLoading || Cart.InvalidLineItemCount > 0"
+                                    class="btn btn-success w-100 text-uppercase">
+                                @Html.Localize("General", "B_Update")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @EstimateShippingModal()
+    </div>
+</body>
+</html>
+
+@helper EstimateShipping()
+{
+    <div class="row">
+        <div class="col-6  col-md-7"><p> @Html.Localize("ShoppingCart", "H_ShippingTaxes")</p></div>
+        <div class="col-6  col-md-5  text-right">
+            <a v-on:click.prevent="openEstimateShippingModal">@Html.Localize("ShoppingCart", "B_ShippingTaxesEstimation")</a>
+        </div>
+    </div>
+}
+
+@helper CheckoutBtn()
+{
+    <div class="row  mb-2">
+        <div class="col-12">
+            <button class="btn btn-success  w-100  text-uppercase"
+                    data-qa="order-summary-checkout-btn"
+                    v-on:click="proceedToCheckout()">
+                @Html.Localize("ShoppingCart", "B_Checkout")
+            </button>
+        </div>
+    </div>
+}
+
+@helper EstimateShippingModal()
+{
+    <!-- Estimate Shipping Modal -->
+    <div id="postalCodeModal" class="modal  fade" role="dialog">
+        <div class="modal-dialog  modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                        <span class="fa fa-times-circle"></span>
+                    </button>
+
+                    <form name="estimateShipping"
+                          v-on:submit.prevent="estimateShipping(Cart.ShippingAddress.PostalCodeRegexPattern)"
+                          method="post" autocomplete="on">
+                        <div class="form-group">
+                            <label for="postalCode">@Html.Localize("ShoppingCart", "F_PostalCode")</label>
+                            <div class="input-group">
+                                <input type="text"
+                                       required="required"
+                                       class="form-control"
+                                       id="postalCode"
+                                       name="postalCode"
+                                       v-model="EstimateShippingPostalCode"
+                                       placeholder="@Html.Localize("ShoppingCart","F_PostalCodeWatermark")" />
+                                <span class="input-group-append">
+                                    <button type="submit" class="btn   btn-outline-secondary">
+                                        @Html.Localize("ShoppingCart", "B_ShippingTaxesEstimation")
+                                        <span v-if="IsLoading" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <div v-if="PostalCodeMalformed" class="alert  alert-danger">
+                        <div class="multiline-message">
+                            <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                            <span>@Html.Localize("ShoppingCart", "F_PostalCodeErrorBegin")</span>
+                            <span>{{PostalCode}}</span>
+                            <span>@Html.Localize("ShoppingCart", "F_PostalCodeErrorEnd")</span>
+                        </div>
+                    </div>
+                    <div v-if="PostalCodeEmpty" class="alert  alert-danger">
+                        <div class="multiline-message">
+                            <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                            <span>@Html.Localize("ShoppingCart", "F_EmptyPostalCodeError")</span>
+                        </div>
+                    </div>
+                    <div class="multiline-message">
+                        <span class="fa  fa-info-circle  multiline-message-icon"></span>
+                        <div>
+                            @Html.Localize("ShoppingCart", "F_PostalCodeIndication")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

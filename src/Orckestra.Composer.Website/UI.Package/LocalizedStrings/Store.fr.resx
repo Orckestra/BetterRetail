@@ -204,4 +204,7 @@
   <data name="T_OpenHours" xml:space="preserve">
     <value>Heures d'ouverture</value>
   </data>
+  <data name="L_MyLocationError" xml:space="preserve">
+    <value>Pour utiliser votre emplacement, veuillez activer l’option dans votre navigateur.</value>
+  </data>
 </root>

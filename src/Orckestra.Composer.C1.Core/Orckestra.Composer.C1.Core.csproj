@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Package.C1</RootNamespace>
     <AssemblyName>Package.C1</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,11 +37,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Solution Items\SharedAssemblyInfo.cs">
@@ -52,6 +48,7 @@
     <Content Include="Composer.Core.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.ICompositionContainers_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IDataItemTreeAttachmentPoint_publi.xml" />
+    <Content Include="Package\Datas\Composite.Data.Types.IFolderWhiteList_administrated.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMediaFileDatas_public.xml" />
     <Content Include="Package\Datas\Composite.Data.Types.IMediaFolderDatas_public.xml" />
@@ -68,6 +65,7 @@
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_public.xml" />
     <Content Include="Package\install.xml" />
+    <Content Include="Package\Composite.config.xsl" />
     <Content Include="Package\Web.config.xsl" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +95,7 @@ mkdir %25TempPath%25
 
 Robocopy %25ProjectDir%25Package %25TempPath%25 /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "robots*.txt" /NJH /NDL /NS /NC /NP
+Robocopy %25WebProjectPath%25 %25TempPath%25 "ApplicationInsights.config" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "Web.config" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "error.html" /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25 %25TempPath%25 "Global.asax" /NJH /NDL /NS /NC /NP

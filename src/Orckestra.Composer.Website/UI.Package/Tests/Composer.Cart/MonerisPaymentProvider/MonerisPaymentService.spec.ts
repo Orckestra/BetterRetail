@@ -1,6 +1,6 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
-///<reference path='../../../Typescript/Composer.Cart/MonerisPaymentProvider/MonerisPaymentService.ts' />
-///<reference path='../../../Typescript/Composer.Cart/MonerisPaymentProvider/ICreateVaultTokenOptions.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/MonerisPaymentService.ts' />
+///<reference path='../../../Typescript/Composer.SingleCheckout/Payment/MonerisPaymentProvider/ICreateVaultTokenOptions.ts' />
 
 (() => {
     'use strict';

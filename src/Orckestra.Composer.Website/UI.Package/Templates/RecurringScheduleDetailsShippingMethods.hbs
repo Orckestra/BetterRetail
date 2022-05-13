@@ -1,14 +1,10 @@
-<div data-templateid="RecurringScheduleDetailsShippingMethods" class="card">
+<div data-templateid="RecurringScheduleDetailsShippingMethods" class="card  bg-light mt-3">
     {{#if IsLoading}}
         {{>Loading}}
     {{else}}
-        <div class="card-header">
-            <div class="row">
-                <div class="col-10">
-                    <h5>{{localize 'MyAccount' 'T_ShippingMethod' }}</h5>
-                </div>
-            </div>
-        </div>
+        <h3 class="card-header">
+          {{localize 'MyAccount' 'T_ShippingMethod' }}
+        </h3>
         <div class="card-body">
             {{#if ShippingMethods}}
             {{!-- <p>{{localize 'CheckoutProcess' 'F_ShippingSelection'}}</p> --}}

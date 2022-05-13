@@ -1,4 +1,5 @@
-﻿using System;
+using Orckestra.Composer.Store.Models;
+using System;
 using System.Globalization;
 
 namespace Orckestra.Composer.Store.Parameters
@@ -18,5 +19,14 @@ namespace Orckestra.Composer.Store.Parameters
         public int PageNumber { get; set; }
 
         public bool IncludeExtraInfo { get; set; } = false;
+
+        public Coordinate SearchPoint { get; set; }
+
+        public GetStoresParam Clone()
+        {
+            var param = (GetStoresParam)MemberwiseClone();
+            param.SearchPoint = this.SearchPoint?.Clone();
+            return param;
+        }
     }
 }

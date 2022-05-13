@@ -1,16 +1,15 @@
-﻿using Orckestra.Composer.Logging;
-using Orckestra.Composer.Sitemap.Config;
-using Orckestra.Composer.Utils;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Logging;
+using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Models;
-using System;
 using Orckestra.ExperienceManagement.Configuration;
-using Composite.Data;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Sitemap
 {
@@ -41,9 +40,9 @@ namespace Orckestra.Composer.Sitemap
 
             var stopwatch = Stopwatch.StartNew();
 
-            Guard.NotNullOrWhiteSpace(baseUrl, nameof(baseUrl));
-            Guard.NotNullOrEmpty(cultures, nameof(cultures));
-            if (website == Guid.Empty) throw new ArgumentNullException(nameof(website));
+            if (string.IsNullOrWhiteSpace(baseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(baseUrl)); }
+            if (cultures == null || cultures.Length == 0) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(cultures)); }
+            if (website == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(), nameof(website)); }
 
             lock (_exclusiveLock)
             {
@@ -93,13 +92,15 @@ namespace Orckestra.Composer.Sitemap
                                             }
                                         }
                                     }
-                                    catch (Exception e) {
+                                    catch (Exception e) 
+                                    {
                                         Log.Error(e.ToString());
                                     }
 
                                 }));
                             }
                         }
+                        //TODO: process exeption
                         catch (ArgumentException) { }
                     }
 

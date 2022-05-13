@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Utils
 {
@@ -42,7 +43,7 @@ namespace Orckestra.Composer.Utils
 
         public static Uri GetUriFromString(string url)
         {
-            if (String.IsNullOrWhiteSpace(url)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("url"), "url"); }
+            if (string.IsNullOrWhiteSpace(url)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(url)); }
 
             var isAbsoluteUrl = IsAbsoluteUrl(url);
 
@@ -66,8 +67,9 @@ namespace Orckestra.Composer.Utils
         /// <returns></returns>
         public static string AppendQueryString(string url, NameValueCollection query)
         {
-            if (string.IsNullOrWhiteSpace(url)) { throw new ArgumentException("url cannot be null nor whitespace", "url"); }
-            if (query == null) { throw new ArgumentNullException("query"); }
+            if (string.IsNullOrWhiteSpace(url)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(url)); }
+            if (query == null) { throw new ArgumentNullException(nameof(query)); }
+
             var isAbsoluteUrl = IsAbsoluteUrlRegex.IsMatch(url);
 
             var uri = isAbsoluteUrl
@@ -82,9 +84,9 @@ namespace Orckestra.Composer.Utils
 
         public static string ToUrlString(NameValueCollection queryString)
         {
-            if (queryString == null) { throw new ArgumentNullException("queryString"); }
-            var urlBuilder = new StringBuilder();
+            if (queryString == null) { throw new ArgumentNullException(nameof(queryString)); }
 
+            var urlBuilder = new StringBuilder();
             for (int i = 0; i < queryString.Count; i++)
             {
                 var symbol = i == 0 ? "?" : "&";

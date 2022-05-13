@@ -6,10 +6,10 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Services
 {
@@ -20,35 +20,41 @@ namespace Orckestra.Composer.Services
         protected IViewModelMapper ViewModelMapper { get; }
         protected IScopeViewService ScopeViewService { get; }
 
-        public ProductPriceViewService(IProductRepository productRepository, ILocalizationProvider localizationProvider, IViewModelMapper viewModelMapper,
-            IScopeViewService scopeViewService)
-        {
-            if (productRepository == null) { throw new ArgumentNullException(nameof(productRepository)); }
-            if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
-            if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
-            if (scopeViewService == null) { throw new ArgumentNullException(nameof(scopeViewService)); }
+        protected IFulfillmentContext FulfillmentContext { get; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
-            ProductRepository = productRepository;
-            LocalizationProvider = localizationProvider;
-            ViewModelMapper = viewModelMapper;
-            ScopeViewService = scopeViewService;
+        public ProductPriceViewService(IProductRepository productRepository, 
+            ILocalizationProvider localizationProvider,
+            IViewModelMapper viewModelMapper,
+            IScopeViewService scopeViewService, 
+            IFulfillmentContext fulfillmentContext,
+            ICurrencyProvider currencyProvider)
+        {
+            ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         /// <summary>
         /// Gets the products prices view model asynchronous.
         /// </summary>
-        /// <param name="getProductPriceParam">The get product price parameter.</param>
+        /// <param name="param">The get product price parameter.</param>
         /// <returns></returns>
-        public virtual async Task<ProductsPricesViewModel> CalculatePricesAsync(GetProductsPriceParam getProductPriceParam)
+        public virtual async Task<ProductsPricesViewModel> CalculatePricesAsync(GetProductsPriceParam param)
         {
-            ValidateProductsPriceInputParam(getProductPriceParam);
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.ProductIds == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductIds)), nameof(param)); }
+            if (string.IsNullOrEmpty(param.Scope)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
-            var productsPriceTask = ProductRepository.CalculatePricesAsync(getProductPriceParam.ProductIds,
-                getProductPriceParam.Scope);
+            var productsPriceTask = ProductRepository.CalculatePricesAsync(param.ProductIds, param.Scope, FulfillmentContext.AvailabilityAndPriceDate);
             var currencyTask = ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
-                Scope = getProductPriceParam.Scope,
-                CultureInfo = getProductPriceParam.CultureInfo
+                Scope = param.Scope,
+                CultureInfo = param.CultureInfo
             });
 
             await Task.WhenAll(productsPriceTask, currencyTask).ConfigureAwait(false);
@@ -56,39 +62,12 @@ namespace Orckestra.Composer.Services
             //var productsPrice = await ProductRepository.CalculatePricesAsync(getProductPriceParam.ProductIds, getProductPriceParam.Scope).ConfigureAwait(false);
             var vm = CreateProductsPricesViewModel(new CreateProductPriceViewModelParam
             {
-                CultureInfo = getProductPriceParam.CultureInfo,
+                CultureInfo = param.CultureInfo,
                 ProductPrices = await productsPriceTask,
                 CurrencyViewModel = await currencyTask
             });
 
             return vm;
-        }
-
-        /// <summary>
-        /// Validates the products price input parameter.  Throws exceptions for each param invalud value.
-        /// </summary>
-        /// <param name="getProductPriceParam">The get product price parameter.</param>
-        protected virtual void ValidateProductsPriceInputParam(GetProductsPriceParam getProductPriceParam)
-        {
-            if (getProductPriceParam == null)
-            {
-                throw new ArgumentNullException(nameof(getProductPriceParam));
-            }
-
-            if (getProductPriceParam.ProductIds == null)
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProductIds"), nameof(getProductPriceParam));
-            }
-
-            if (string.IsNullOrEmpty(getProductPriceParam.Scope))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), nameof(getProductPriceParam));
-            }
-
-            if (getProductPriceParam.CultureInfo == null)
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(getProductPriceParam));
-            }
         }
 
         /// <summary>
@@ -99,8 +78,8 @@ namespace Orckestra.Composer.Services
         protected virtual ProductsPricesViewModel CreateProductsPricesViewModel(CreateProductPriceViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(param)); }
-            if (param.ProductPrices == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProductPrices"), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductPrices == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductPrices)), nameof(param)); }
 
             var viewModel = new ProductsPricesViewModel()
             {
@@ -141,7 +120,7 @@ namespace Orckestra.Composer.Services
             var vm = ViewModelMapper.MapTo<ProductPriceViewModel>(productPrice, cultureInfo);
 
             vm.IsPriceDiscounted = IsPriceDiscounted(productPrice.Pricing.Price, productPrice.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, cultureInfo);
+            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, CurrencyProvider.GetCurrency());
             vm.VariantPrices = new List<VariantPriceViewModel>();
 
             return vm;
@@ -158,7 +137,7 @@ namespace Orckestra.Composer.Services
             var vm = ViewModelMapper.MapTo<VariantPriceViewModel>(variantPriceEntry, cultureInfo);
 
             vm.IsPriceDiscounted = IsPriceDiscounted(variantPriceEntry.Pricing.Price, variantPriceEntry.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, cultureInfo);
+            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, CurrencyProvider.GetCurrency());
 
             return vm;
         }

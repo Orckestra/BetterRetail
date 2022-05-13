@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer.C1CMS.Queries.Package</RootNamespace>
     <AssemblyName>Orckestra.Composer.C1CMS.Queries.Package</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -23,6 +23,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,21 +43,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +58,14 @@
     <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Grid.cshtml" />
     <Content Include="packages.config" />
     <Content Include="Package\App_Data\Razor\Composer\Components\Queries\ProductSet\Generic\Top.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Facets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\SelectedFacets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Facets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\SelectedFacets.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Results.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Results.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\Merchandising\Top.cshtml" />
+    <Content Include="Package\App_Data\Razor\Composer\Queries\ProductSet\Top.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

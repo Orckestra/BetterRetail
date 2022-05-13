@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using Orckestra.Composer.ActionFilters;
 using Orckestra.Overture;
 
 namespace Orckestra.Composer.Kernel
@@ -54,7 +55,7 @@ namespace Orckestra.Composer.Kernel
             }
             else
             {
-                throw new ArgumentOutOfRangeException("lifestyle");
+                throw new ArgumentOutOfRangeException(nameof(lifestyle), lifestyle, null);
             }
         }
 
@@ -125,6 +126,10 @@ namespace Orckestra.Composer.Kernel
         public void RegisterApiControllers(Assembly assembly)
         {
             _containerBuilder.RegisterApiControllers(assembly);
+
+            _containerBuilder.RegisterType(typeof(AppInsightsActionFilter))
+                .AsWebApiActionFilterFor<ApiController>()
+                .SingleInstance();
         }
 
         public void RegisterExceptionFiltersForApiControllers(params Type[] filterTypes)

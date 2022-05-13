@@ -5,6 +5,7 @@ using Orckestra.Composer.Configuration;
 using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.Providers.MonerisPayment.ServiceModel;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
@@ -38,11 +39,8 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </exception>
         public VaultProfileRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException(nameof(overtureClient)); }
-            if (cacheProvider == null) { throw new ArgumentNullException(nameof(cacheProvider)); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -70,13 +68,13 @@ namespace Orckestra.Composer.Cart.Repositories
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
-            if (string.IsNullOrWhiteSpace(param.CardHolderName)) { throw new ArgumentException("CardHolderName may not be null or whitespace.", nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("CartName may not be null or whitespace.", nameof(param)); }
-            if (param.CustomerId.Equals(Guid.Empty)) { throw new ArgumentException("CustomerId may not be an empty guid.", nameof(param)); }
-            if (param.PaymentId.Equals(Guid.Empty)) { throw new ArgumentException("PaymentId may not be an empty guid.", nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.VaultTokenId)) { throw new ArgumentException("TemporaryToken may not be null or whitespace.", nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.IpAddress)) { throw new ArgumentException("IPAddress may not be null or whitespace.", nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException("ScopeId may not be null or whitespace.", nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CardHolderName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CardHolderName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.PaymentId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.VaultTokenId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.VaultTokenId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.IpAddress)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.IpAddress)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
 
             var request = new CreateCartPaymentVaultProfileRequest
             {

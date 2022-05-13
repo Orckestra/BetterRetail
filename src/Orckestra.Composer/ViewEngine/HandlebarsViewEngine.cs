@@ -7,9 +7,10 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using HandlebarsDotNet;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture.Caching;
 using static Orckestra.Composer.ComposerConfiguration;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.ViewEngine
 {
@@ -31,12 +32,12 @@ namespace Orckestra.Composer.ViewEngine
         /// <param name="cacheProvider">The cache provider holding reusable items</param>
         public HandlebarsViewEngine(ICacheProvider cacheProvider)
         {
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+
             ViewLocationFormats = HandlebarsViewEngineConfiguration.ViewLocationFormats.ToArray();
             PartialViewLocationFormats = ViewLocationFormats;
             ViewLocationCache = new DefaultViewLocationCache(TimeSpan.FromDays(1));
-
             _handlebars = Handlebars.Create(Handlebars.Configuration);
-            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -111,8 +112,7 @@ namespace Orckestra.Composer.ViewEngine
                     result = FindPartialView(controllerContext, templateName, false);
                 }
 
-                HandlebarsView view = result.View as HandlebarsView;
-                if (view != null)
+                if (result.View is HandlebarsView view)
                 {
                     _handlebars.RegisterTemplate(templateName, view.CompiledTemplate);
 
@@ -250,15 +250,8 @@ namespace Orckestra.Composer.ViewEngine
 
         private void ValidateRegisterHelper(IHandlebarsHelper helper)
         {
-            if (helper == null)
-            {
-                throw new ArgumentNullException("helper");
-            }
-
-            if (string.IsNullOrEmpty(helper.HelperName))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("HelperName"), "helper");
-            }
+            if (helper == null) { throw new ArgumentNullException(nameof(helper)); }
+            if (string.IsNullOrEmpty(helper.HelperName)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(helper.HelperName)), nameof(helper)); }
 
             if (_handlebars.Configuration.Helpers.ContainsKey(helper.HelperName) ||
                 _handlebars.Configuration.BlockHelpers.ContainsKey(helper.HelperName))
@@ -269,15 +262,8 @@ namespace Orckestra.Composer.ViewEngine
 
         private void ValidateRegisterHelper(IHandlebarsBlockHelper helper)
         {
-            if (helper == null)
-            {
-                throw new ArgumentNullException("helper");
-            }
-
-            if (string.IsNullOrEmpty(helper.HelperName))
-            {
-                throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("HelperName"), "helper");
-            }
+            if (helper == null) { throw new ArgumentNullException(nameof(helper)); }
+            if (string.IsNullOrEmpty(helper.HelperName)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(helper.HelperName)), nameof(helper)); }
 
             if (_handlebars.Configuration.Helpers.ContainsKey(helper.HelperName) ||
                 _handlebars.Configuration.BlockHelpers.ContainsKey(helper.HelperName))

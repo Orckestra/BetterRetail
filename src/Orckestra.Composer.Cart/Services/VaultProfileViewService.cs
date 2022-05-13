@@ -17,17 +17,12 @@ namespace Orckestra.Composer.Cart.Services
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected IPaymentProviderFactory PaymentProviderFactory { get; private set; }
 
-
         public VaultProfileViewService(IVaultProfileRepository vaultProfileRepository, IViewModelMapper viewModelMapper, 
             IPaymentProviderFactory paymentProviderFactory)
         {
-            if (vaultProfileRepository == null) { throw new ArgumentNullException("vaultProfileRepository"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (paymentProviderFactory == null) { throw new ArgumentNullException("paymentProviderFactory"); }
-
-            VaultProfileRepository = vaultProfileRepository;
-            ViewModelMapper = viewModelMapper;
-            PaymentProviderFactory = paymentProviderFactory;
+            VaultProfileRepository = vaultProfileRepository ?? throw new ArgumentNullException(nameof(vaultProfileRepository));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            PaymentProviderFactory = paymentProviderFactory ?? throw new ArgumentNullException(nameof(paymentProviderFactory));
         }
 
         public virtual async Task<MonerisAddVaultProfileViewModel> AddCreditCardAsync(AddCreditCardParam addCreditCardParam)
@@ -38,8 +33,7 @@ namespace Orckestra.Composer.Cart.Services
             return vm;
         }
 
-        protected virtual MonerisAddVaultProfileViewModel MapModelToViewModel(VaultProfileCreationResult model,
-            CultureInfo cultureInfo)
+        protected virtual MonerisAddVaultProfileViewModel MapModelToViewModel(VaultProfileCreationResult model, CultureInfo cultureInfo)
         {
             var vm = ViewModelMapper.MapTo<MonerisAddVaultProfileViewModel>(model, cultureInfo);
 

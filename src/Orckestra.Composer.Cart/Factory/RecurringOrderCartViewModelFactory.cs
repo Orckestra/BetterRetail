@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;
@@ -13,6 +11,8 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -34,28 +34,21 @@ namespace Orckestra.Composer.Cart.Factory
             IRecurringScheduleUrlProvider recurringScheduleUrlProvider,
             ILineItemViewModelFactory lineItemViewModelFactory)
         {
-            if (cartViewModelFactory == null) { throw new ArgumentNullException(nameof(cartViewModelFactory)); }
-            if (viewModelMapper == null) { throw new ArgumentNullException(nameof(viewModelMapper)); }
-            if (composerContext == null) { throw new ArgumentNullException(nameof(composerContext)); }
-            if (recurringCartUrlProvider == null) { throw new ArgumentNullException(nameof(recurringCartUrlProvider)); }
-            if (recurringScheduleUrlProvider == null) { throw new ArgumentNullException(nameof(recurringScheduleUrlProvider)); }
-            if (lineItemViewModelFactory == null) { throw new ArgumentNullException(nameof(lineItemViewModelFactory)); }
-
-            CartViewModelFactory = cartViewModelFactory;
-            ViewModelMapper = viewModelMapper;
-            ComposerContext = composerContext;
-            RecurringCartUrlProvider = recurringCartUrlProvider;
-            RecurringScheduleUrlProvider = recurringScheduleUrlProvider;
-            LineItemViewModelFactory = lineItemViewModelFactory;
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            RecurringCartUrlProvider = recurringCartUrlProvider ?? throw new ArgumentNullException(nameof(recurringCartUrlProvider));
+            RecurringScheduleUrlProvider = recurringScheduleUrlProvider ?? throw new ArgumentNullException(nameof(recurringScheduleUrlProvider));
+            LineItemViewModelFactory = lineItemViewModelFactory ?? throw new ArgumentNullException(nameof(lineItemViewModelFactory));
         }
 
         public virtual CartViewModel CreateRecurringOrderCartViewModel(CreateRecurringOrderCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
-            if (param.ProductImageInfo == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo)); }
-            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo.ImageUrls)); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo)), nameof(param)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var vm = CartViewModelFactory.CreateCartViewModel(new CreateCartViewModelParam
             {
@@ -74,7 +67,6 @@ namespace Orckestra.Composer.Cart.Factory
             FillRecurringScheduleUrl(roCartVm, param.CultureInfo);
 
             roCartVm.Name = param.Cart.Name;
-
             vm.Context["Name"] = roCartVm.Name;           
 
             return vm;
@@ -130,20 +122,16 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 if (RecurringOrderCartHelper.IsRecurringOrderLineItemValid(lineitem))
                 {
-                    var program = recurringOrderPrograms.FirstOrDefault(p => string.Equals(p.RecurringOrderProgramName, lineitem.RecurringOrderProgramName, StringComparison.OrdinalIgnoreCase));
+                    var program = recurringOrderPrograms.Find(p => string.Equals(p.RecurringOrderProgramName, lineitem.RecurringOrderProgramName, StringComparison.OrdinalIgnoreCase));
 
                     if (program != null)
                     {
-                        var frequency = program.Frequencies.FirstOrDefault(f => string.Equals(f.RecurringOrderFrequencyName, lineitem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
+                        var frequency = program.Frequencies.Find(f => string.Equals(f.RecurringOrderFrequencyName, lineitem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
 
                         if (frequency != null)
                         {
-                            var localization = frequency.Localizations.FirstOrDefault(l => string.Equals(l.CultureIso, culture.Name, StringComparison.OrdinalIgnoreCase));
-
-                            if (localization != null)
-                                lineitem.RecurringOrderFrequencyDisplayName = localization.DisplayName;
-                            else
-                                lineitem.RecurringOrderFrequencyDisplayName = frequency.RecurringOrderFrequencyName;
+                            var localization = frequency.Localizations.Find(l => string.Equals(l.CultureIso, culture.Name, StringComparison.OrdinalIgnoreCase));
+                            lineitem.RecurringOrderFrequencyDisplayName = localization != null ? localization.DisplayName : frequency.RecurringOrderFrequencyName;
                         }
                     }
                 }
@@ -153,10 +141,10 @@ namespace Orckestra.Composer.Cart.Factory
         public virtual LightRecurringOrderCartViewModel CreateLightRecurringOrderCartViewModel(CreateLightRecurringOrderCartViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentNullException(nameof(param.CultureInfo)); }
-            if (param.ProductImageInfo == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo)); }
-            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentNullException(nameof(param.ProductImageInfo.ImageUrls)); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(nameof(param.BaseUrl)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductImageInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo)), nameof(param)); }
+            if (param.ProductImageInfo.ImageUrls == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductImageInfo.ImageUrls)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
             
             var vm = ViewModelMapper.MapTo<LightRecurringOrderCartViewModel>(param.Cart, param.CultureInfo);
             
@@ -180,13 +168,12 @@ namespace Orckestra.Composer.Cart.Factory
 
             vm.IsAuthenticated = ComposerContext.IsAuthenticated;
 
-            return vm;
-            
+            return vm;   
         }
 
         protected virtual string GetRecurringCartDetailUrl(CultureInfo cultureInfo, string cartName)
         {
-            string recurringCartsPageUrl = RecurringCartUrlProvider.GetRecurringCartsUrl(new GetRecurringCartsUrlParam
+            _ = RecurringCartUrlProvider.GetRecurringCartsUrl(new GetRecurringCartsUrlParam
             {
                 CultureInfo = cultureInfo
             });

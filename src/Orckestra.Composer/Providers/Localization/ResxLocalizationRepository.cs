@@ -9,6 +9,7 @@ using System.Web.Hosting;
 using System.Xml;
 using Orckestra.Composer.Kernel;
 using Orckestra.Composer.TypeExtensions;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -22,7 +23,7 @@ namespace Orckestra.Composer.Providers.Localization
 
         public ResxLocalizationRepository(IComposerEnvironment environment)
         {
-            if (environment == null) { throw new ArgumentNullException("environment"); }
+            if (environment == null) { throw new ArgumentNullException(nameof(environment)); }
 
             _virtualPathProvider = environment.VirtualPathProvider;
 
@@ -40,10 +41,7 @@ namespace Orckestra.Composer.Providers.Localization
         /// <exception cref="System.ArgumentException">The resource directory  + resxDirectoryName +  does not exists.</exception>
         private void EnsureResxDirectoryExists(string resxDirectoryName)
         {
-            if (string.IsNullOrEmpty(resxDirectoryName))
-            {
-                throw new ArgumentNullException("resxDirectoryName");
-            }
+            if (string.IsNullOrEmpty(resxDirectoryName)) { throw new ArgumentException(GetMessageOfNullEmpty(), nameof(resxDirectoryName)); }
 
             if (!_virtualPathProvider.DirectoryExists(resxDirectoryName))
             {
@@ -75,7 +73,7 @@ namespace Orckestra.Composer.Providers.Localization
         /// <returns>CategoryName or Empty if none found</returns>
         private string FindCategoryFromFilename(VirtualFile file)
         {
-            Match m = _regexSource.Match(file.Name ?? "");
+            Match m = _regexSource.Match(file.Name ?? string.Empty);
 
             var value = m.Success 
                 ? m.Groups["category"].Value 
@@ -95,12 +93,15 @@ namespace Orckestra.Composer.Providers.Localization
         /// <returns>Sorted List of resx FullFilenames to find keys for the (Category,Culture) tuple</returns>
         public List<VirtualFile> GetPrioritizedSources(string categoryName, CultureInfo culture)
         {
-            var allFiles      = RecursivelyFindAllResxFiles();
+            var allFiles = RecursivelyFindAllResxFiles();
             var resolvedNames = ResolveConfiguredFilenamePatterns(categoryName, culture);
 
             List<VirtualFile> sources =
-                resolvedNames.Join(allFiles, name => name, fileInfo => fileInfo.Name, (name,fileInfo) => fileInfo, StringComparer.InvariantCultureIgnoreCase)
-                             .ToList();
+                resolvedNames.Join(allFiles, 
+                    name => name, 
+                    fileInfo => fileInfo.Name, 
+                    (name,fileInfo) => fileInfo, StringComparer.InvariantCultureIgnoreCase)
+                .ToList();
 
             return sources;
         }
@@ -159,11 +160,11 @@ namespace Orckestra.Composer.Providers.Localization
                 XmlReader reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
 
                 //Initiate the marker at the first data element;
-                while (await reader.ReadToFollowingAsync("data", "").ConfigureAwait(false))
+                while (await reader.ReadToFollowingAsync("data", string.Empty).ConfigureAwait(false))
                 {
                     string key = reader.GetAttribute("name");
                     if (!string.IsNullOrEmpty(key) &&
-                     await reader.ReadToDescendantAsync("value", "").ConfigureAwait(false))
+                     await reader.ReadToDescendantAsync("value", string.Empty).ConfigureAwait(false))
                     {
                         await reader.MoveToContentAsync().ConfigureAwait(false);
                         string value = reader.ReadString();

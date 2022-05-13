@@ -1,23 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
+using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -37,7 +43,9 @@ namespace Orckestra.Composer.Cart.Services
         protected ICountryService CountryService { get; private set; }
         protected IRegionCodeProvider RegionCodeProvider { get; private set; }
         protected IImageService ImageService { get; private set; }
-
+        protected ICategoryRepository CategoryRepository { get; private set; }
+        protected ILocalizationProvider LocalizationProvider { get; private set; }
+        protected IEditingOrderProvider EditingOrderProvider { get; private set; }
 
         /// <summary>
         /// CartService constructor
@@ -53,37 +61,32 @@ namespace Orckestra.Composer.Cart.Services
         /// <param name="regionCodeProvider">The <see cref="IRegionCodeProvider"/></param>
         /// <param name="imageService">The <see cref="IImageService"/></param>
         public CartService(
-            ICartRepository cartRepository, 
-            IDamProvider damProvider, 
+            ICartRepository cartRepository,
+            IDamProvider damProvider,
             ICartViewModelFactory cartViewModelFactory,
             ICouponViewService couponViewService,
-            ILookupService lookupService, 
+            ILookupService lookupService,
             ILineItemService lineItemService,
             IFixCartService fixCartService,
             ICountryService countryService,
             IRegionCodeProvider regionCodeProvider,
-            IImageService imageService)
+            IImageService imageService,
+            ICategoryRepository categoryRepository,
+            ILocalizationProvider localizationProvider,
+            IEditingOrderProvider editingOrderprovider)
         {
-            if (cartRepository == null) { throw new ArgumentNullException("cartRepository"); }
-            if (damProvider == null) { throw new ArgumentNullException("damProvider"); }
-            if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
-            if (couponViewService == null) { throw new ArgumentNullException("couponViewService"); }
-            if (lookupService == null) { throw new ArgumentNullException("lookupService"); }
-            if (lineItemService == null) { throw new ArgumentNullException("lineItemService"); }
-            if (fixCartService == null) { throw new ArgumentNullException("fixCartService"); }
-            if (countryService == null) { throw new ArgumentNullException("fixCartService"); }
-            if (regionCodeProvider == null) { throw new ArgumentNullException("regionCodeProvider"); }
-            if (imageService == null) { throw new ArgumentNullException("imageService"); }
-
-            CartRepository = cartRepository;
-            CartViewModelFactory = cartViewModelFactory;
-            CouponViewService = couponViewService;
-            LookupService = lookupService;
-            LineItemService = lineItemService;
-            FixCartService = fixCartService;
-            CountryService = countryService;
-            RegionCodeProvider = regionCodeProvider;
-            ImageService = imageService;
+            CartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
+            CouponViewService = couponViewService ?? throw new ArgumentNullException(nameof(couponViewService));
+            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            LineItemService = lineItemService ?? throw new ArgumentNullException(nameof(lineItemService));
+            FixCartService = fixCartService ?? throw new ArgumentNullException(nameof(fixCartService));
+            CountryService = countryService ?? throw new ArgumentNullException(nameof(fixCartService));
+            RegionCodeProvider = regionCodeProvider ?? throw new ArgumentNullException(nameof(regionCodeProvider));
+            ImageService = imageService ?? throw new ArgumentNullException(nameof(imageService));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            EditingOrderProvider = editingOrderprovider ?? throw new ArgumentNullException(nameof(editingOrderprovider));
         }
 
         /// <summary>
@@ -101,25 +104,61 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The Lightweight CartViewModel</returns>
         public async virtual Task<CartViewModel> AddLineItemAsync(AddLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException("param.ProductId is required", "param"); }
-            if (param.Quantity <= 0) { throw new ArgumentException("param.Quantity is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ProductId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ProductId)), nameof(param)); }
+            if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            ProcessedCart cart;
 
-            var cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
-
-            var fixedCart = await FixCartService.FixCartAsync(new FixCartParam
+            try
             {
-                Cart = cart
-            }).ConfigureAwait(false);
+                //If editing order, and line item exists, updating it instead
+                if (param.CartType == CartConfiguration.OrderDraftCartType)
+                {
+                    var existingLineItem = await GetExistingLineItem(param).ConfigureAwait(false);
+                    if (existingLineItem != null)
+                    {
+                        var updateLineItemParam = new UpdateLineItemParam
+                        {
+                            BaseUrl = param.BaseUrl,
+                            CartName = param.CartName,
+                            CartType = param.CartType,
+                            ScopeId = param.Scope,
+                            CultureInfo = param.CultureInfo,
+                            CustomerId = param.CustomerId,
+                            LineItemId = existingLineItem.Id,
+                            Quantity = param.Quantity + existingLineItem.Quantity,
+                            RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
+                            RecurringOrderProgramName = param.RecurringOrderProgramName
+                        };
+                        return await UpdateLineItemAsync(updateLineItemParam).ConfigureAwait(false);
+                    }
+                }
+
+                cart = await CartRepository.AddLineItemAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
+                throw;
+            }
+
+            if (cart.CartType != CartConfiguration.OrderDraftCartType)
+            {
+                cart = await FixCartService.FixCartAsync(new FixCartParam
+                {
+                    Cart = cart,
+                    ScopeId = param.Scope
+                }).ConfigureAwait(false);
+            }
 
             var vmParam = new CreateCartViewModelParam
             {
-                Cart = fixedCart,
+                Cart = cart,
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl
@@ -130,6 +169,23 @@ namespace Orckestra.Composer.Cart.Services
             return viewModel;
         }
 
+        private async Task<LineItem> GetExistingLineItem(AddLineItemParam param)
+        {
+            var getCartParam = new GetCartParam
+            {
+                CartName = param.CartName,
+                Scope = param.Scope,
+                CultureInfo = param.CultureInfo,
+                CustomerId = param.CustomerId,
+                CartType = param.CartType,
+                BaseUrl = param.BaseUrl
+            };
+
+            var cart = await CartRepository.GetCartAsync(getCartParam).ConfigureAwait(false);
+
+            return cart?.GetLineItems()?.Find(x => x.ProductId == param.ProductId && x.VariantId == param.VariantId && !x.IsGiftItem);
+        }
+
         /// <summary>
         /// Remove line item to the cart.
         /// </summary>
@@ -137,19 +193,29 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The Lightweight CartViewModel</returns>
         public async virtual Task<CartViewModel> RemoveLineItemAsync(RemoveLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            ProcessedCart cart;
 
-            var cart = await CartRepository.RemoveLineItemAsync(param).ConfigureAwait(false);
+            try
+            {
+                cart = await CartRepository.RemoveLineItemAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
+                throw;
+            }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
                 Scope = param.Scope,
@@ -175,21 +241,32 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The Lightweight CartViewModel</returns>
         public async virtual Task<CartViewModel> UpdateLineItemAsync(UpdateLineItemParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException("param.ScopeId is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.LineItemId == Guid.Empty) { throw new ArgumentException("param.LineItemId is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
-            if (param.Quantity < 1) { throw new ArgumentException("param.Quantity must be greater than 0", "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException("param.BaseUrl is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.ScopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.ScopeId)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.LineItemId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.LineItemId)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.Quantity < 1) { throw new ArgumentOutOfRangeException(nameof(param), param.Quantity, GetMessageOfZeroNegative(nameof(param.Quantity))); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
-            var cart = await CartRepository.UpdateLineItemAsync(param).ConfigureAwait(false);
+            ProcessedCart cart;
+
+            try
+            {
+                cart = await CartRepository.UpdateLineItemAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
+                throw;
+            }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
                 Scope = param.ScopeId
@@ -204,7 +281,7 @@ namespace Orckestra.Composer.Cart.Services
             };
 
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
-            
+
             return viewModel;
         }
 
@@ -215,17 +292,17 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns></returns>
         public virtual async Task<CartViewModel> UpdateCartAsync(UpdateCartViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param"); }
-            if (param.Coupons == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Coupons"), "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
-            if (param.Shipments == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Shipments"), "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CustomerId"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BaseUrl"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.BillingCurrency)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BillingCurrency"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartName"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartType)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CartType"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.Status)){ throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Status"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Coupons == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Coupons)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.Shipments == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Shipments)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BillingCurrency)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BillingCurrency)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartType)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartType)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Status)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Status)), nameof(param)); }
 
             var updatedCart = await CartRepository.UpdateCartAsync(param).ConfigureAwait(false);
 
@@ -246,7 +323,7 @@ namespace Orckestra.Composer.Cart.Services
             };
 
             var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
-            
+
             return viewModel;
         }
 
@@ -257,17 +334,27 @@ namespace Orckestra.Composer.Cart.Services
         /// <returns>The Lightweight CartViewModel</returns>
         public virtual async Task<CartViewModel> GetCartViewModelAsync(GetCartParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param", "param is required"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope is required", "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required", "param"); }
-            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException("param.CartName is required", "param"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId is required", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            ProcessedCart cart;
 
-            var cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);            
+            try
+            {
+                cart = await CartRepository.GetCartAsync(param).ConfigureAwait(false);
+            }
+            catch (ComposerException ex)
+            {
+                ClearEditModeIfCartDraftDoesNotExist(param.CartType, ex);
+                throw;
+            }
 
             await CartRepository.RemoveCouponsAsync(new RemoveCouponsParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CustomerId = param.CustomerId,
                 Scope = param.Scope,
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList()
@@ -286,13 +373,23 @@ namespace Orckestra.Composer.Cart.Services
             return viewModel;
         }
 
+        private void ClearEditModeIfCartDraftDoesNotExist(string cartType, ComposerException ex)
+        {
+            if (ex.Errors?.FirstOrDefault(e => e.ErrorCode == "CartDoesNotExist") != null &&
+                cartType == CartConfiguration.OrderDraftCartType &&
+                EditingOrderProvider.IsEditMode())
+            {
+                EditingOrderProvider.ClearEditMode();
+            }
+        }
+
         //TODO: Would it be possible to add cache here too without too much problem?
         //TODO: Because it is called 3 times when you retrieve the Cart
-        protected virtual async Task<CartViewModel> CreateCartViewModelAsync(CreateCartViewModelParam param)
+        public virtual async Task<CartViewModel> CreateCartViewModelAsync(CreateCartViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.Cart == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Cart"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BaseUrl"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             param.ProductImageInfo = new ProductImageInfo
             {
@@ -310,16 +407,84 @@ namespace Orckestra.Composer.Cart.Services
 
             var vm = CartViewModelFactory.CreateCartViewModel(param);
 
+            if (CartConfiguration.GroupCartItemsByPrimaryCategory)
+            {
+                vm.GroupedLineItemDetailViewModels = await GetGroupedLineItems(vm, param).ConfigureAwait(false);
+            }
+
             return vm;
+        }
+
+        protected virtual async Task<List<GroupedLineItemDetailViewModel>> GetGroupedLineItems(CartViewModel vm, CreateCartViewModelParam param)
+        {
+            var categoryTree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+            {
+                Scope = param.Cart.ScopeId
+            }).ConfigureAwait(false);
+
+            return vm.LineItemDetailViewModels?
+                .Select(li =>
+                {
+                    Category topLevelCategory = null;
+                    if (!string.IsNullOrWhiteSpace(li.ProductSummary.CategoryId))
+                    {
+                        var categories = categoryTree.BuildPathFromTree(li.ProductSummary.CategoryId);
+                        topLevelCategory = categories?.LastOrDefault(c => c.Id != "Root");
+                    }
+
+                    li.ProductSummary.TopLevelCategoryId = topLevelCategory?.Id ?? "Root";
+                    li.ProductSummary.TopLevelCategoryName = topLevelCategory?.DisplayName?.GetLocalizedValue(param.CultureInfo.Name)
+                        ?? LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+                        {
+                            Category = "CheckoutProcess",
+                            Key = "L_UndefinedLineItemCategory",
+                            CultureInfo = param.CultureInfo
+                        });
+
+                    return li;
+
+                })
+                .GroupBy(li => li.ProductSummary.TopLevelCategoryId)
+                .Select(lineItemsGroup =>
+                {
+                    var li = lineItemsGroup.First();
+                    return new GroupedLineItemDetailViewModel
+                    {
+                        TopLevelCategoryId = lineItemsGroup.Key,
+                        TopLevelCategoryName = li.ProductSummary.TopLevelCategoryName,
+                        LineItemDetailViewModels = lineItemsGroup.ToList(),
+                        Quantity = lineItemsGroup.Sum(l => l.Quantity)
+                    };
+                }
+                ).OrderBy(c => c.TopLevelCategoryId == "Root").ThenBy(c => c.TopLevelCategoryName).ToList();
         }
 
         public virtual async Task<CartViewModel> RemoveInvalidLineItemsAsync(RemoveInvalidLineItemsParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) throw new ArgumentNullException(nameof(param));
+
+            var cart = await ProcessInvalidLineItemsRemovalAsync(param).ConfigureAwait(false);
+
+            var vmParam = new CreateCartViewModelParam
+            {
+                Cart = cart,
+                CultureInfo = param.CultureInfo,
+                BaseUrl = param.BaseUrl
+            };
+
+            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
+
+            return viewModel;
+        }
+
+        public virtual async Task<ProcessedCart> ProcessInvalidLineItemsRemovalAsync(RemoveInvalidLineItemsParam param)
+        {
+            if (param == null) throw new ArgumentNullException(nameof(param));
 
             var cart = await CartRepository.GetCartAsync(new GetCartParam
             {
                 CartName = param.CartName,
+                CartType = param.CartType,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 ExecuteWorkflow = param.ExecuteWorkflow,
@@ -334,6 +499,7 @@ namespace Orckestra.Composer.Cart.Services
                 var p = new RemoveLineItemsParam
                 {
                     CartName = param.CartName,
+                    CartType = param.CartType,
                     CultureInfo = param.CultureInfo,
                     CustomerId = param.CustomerId,
                     Scope = param.Scope,
@@ -348,21 +514,12 @@ namespace Orckestra.Composer.Cart.Services
                 cart = await CartRepository.RemoveLineItemsAsync(p).ConfigureAwait(false);
             }
 
-            var vmParam = new CreateCartViewModelParam
-            {
-                Cart = cart,
-                CultureInfo = param.CultureInfo,
-                BaseUrl = param.BaseUrl
-            };
-
-            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
-
-            return viewModel;
+            return cart;
         }
 
         public virtual async Task<CartViewModel> UpdateShippingAddressPostalCodeAsync(UpdateShippingAddressPostalCodeParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             ProcessedCart cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -374,12 +531,7 @@ namespace Orckestra.Composer.Cart.Services
 
             }).ConfigureAwait(false);
 
-            if (cart.Shipments == null || !cart.Shipments.Any())
-            {
-                throw new InvalidOperationException("No shipment was found in the cart.");
-            }
-
-            Shipment shipment = cart.Shipments.First();
+            var shipment = cart?.Shipments.FirstOrDefault() ?? throw new InvalidOperationException("No shipment was found in the cart.");
 
             await MapShippingAddressPostalCodeToShipmentAsync(param, shipment);
 
@@ -413,13 +565,17 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             country.Validate(param.PostalCode);
-            
+
             if (shipment.Address == null)
             {
                 shipment.Address = new Address { PropertyBag = new PropertyBag() };
             }
 
-            shipment.Address.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
+            if (shipment.Address.PropertyBag != null)
+            {
+                shipment.Address.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
+            }
+
             shipment.Address.PostalCode = param.PostalCode;
             shipment.Address.CountryCode = country.IsoCode;
             shipment.Address.RegionCode = GetRegionCodeBasedOnPostalCode(param.PostalCode, param.CountryCode);
@@ -427,7 +583,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<CartViewModel> UpdateBillingAddressPostalCodeAsync(UpdateBillingAddressPostalCodeParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             ProcessedCart cart = await CartRepository.GetCartAsync(new GetCartParam
             {
@@ -439,19 +595,16 @@ namespace Orckestra.Composer.Cart.Services
 
             }).ConfigureAwait(false);
 
-            if (cart.Payments == null || cart.Payments.Any(x => x.IsVoided()))
-            {
-                throw new InvalidOperationException("There is no valid payment from which we can get or set the billing address");
-            }
+            var payment = cart.Payments?.Find(x => !x.IsVoided())
+            ?? throw new InvalidOperationException("There is no valid payment from which we can get or set the billing address");
 
-            var payment = cart.Payments.First(x => !x.IsVoided());
             if (payment.BillingAddress == null)
             {
                 payment.BillingAddress = new Address() { PropertyBag = new PropertyBag() };
             }
 
             await MapBillingAddressPostalCodeToPaymentAsync(param, payment);
-            
+
             return await UpdateCartAsync(new UpdateCartViewModelParam
             {
                 BaseUrl = param.BaseUrl,
@@ -474,10 +627,10 @@ namespace Orckestra.Composer.Cart.Services
 
         public virtual async Task<IPaymentMethodViewModel> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)
         {
-            if (param == null) { throw new ArgumentNullException(nameof(param), ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param))); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.CustomerId)), nameof(param.CustomerId)); }
-            if (param.PaymentMethodId == Guid.Empty) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.PaymentMethodId)), nameof(param.PaymentMethodId)); }
-            if (String.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage(nameof(param.PaymentProviderName)), nameof(param.PaymentProviderName)); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (param.PaymentMethodId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.PaymentMethodId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.PaymentProviderName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PaymentProviderName)), nameof(param)); }
 
             var paymentMethod = await CartRepository.SetDefaultCustomerPaymentMethod(param).ConfigureAwait(false);
 
@@ -507,7 +660,8 @@ namespace Orckestra.Composer.Cart.Services
 
             country.Validate(param.PostalCode);
 
-            payment.BillingAddress.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
+            if (payment.BillingAddress.PropertyBag != null)
+                payment.BillingAddress.PropertyBag[AddressBookIdPropertyBagKey] = Guid.Empty; // because the updated address will not correspond to any registered address
             payment.BillingAddress.PostalCode = param.PostalCode;
             payment.BillingAddress.CountryCode = country.IsoCode;
             payment.BillingAddress.RegionCode = GetRegionCodeBasedOnPostalCode(param.PostalCode, param.CountryCode);
@@ -515,12 +669,8 @@ namespace Orckestra.Composer.Cart.Services
 
         protected virtual string GetRegionCodeBasedOnPostalCode(string postalCode, string countryCode)
         {
-            var region = RegionCodeProvider.GetRegion(postalCode, countryCode);
-            if (region == null)
-            {
+            var region = RegionCodeProvider.GetRegion(postalCode, countryCode) ??
                 throw new ArgumentException("Cannot resolve a Region based on this Postal Code", "postalCode");
-            }
-
             return region;
         }
     }

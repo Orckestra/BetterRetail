@@ -8,6 +8,10 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.ForTests;
+using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -82,11 +86,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.RemoveLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => cartRepository.RemoveLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]
@@ -105,11 +110,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.RemoveLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => cartRepository.RemoveLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CultureInfo");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNull(nameof(param.CultureInfo)));
         }
 
         [Test]
@@ -128,11 +134,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.RemoveLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => cartRepository.RemoveLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CustomerId");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.CustomerId)));
         }
 
         [TestCase(null)]
@@ -153,11 +160,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.RemoveLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => cartRepository.RemoveLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.CartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
 
         [Test]
@@ -176,11 +184,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => cartRepository.RemoveLineItemAsync(param));
+            Expression<Func<Task<ProcessedCart>>> expression = () => cartRepository.RemoveLineItemAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("param.LineItemId");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfEmpty(nameof(param.LineItemId)));
         }
 
         [Test]

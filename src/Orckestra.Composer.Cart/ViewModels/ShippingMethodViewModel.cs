@@ -55,5 +55,10 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Gets or sets the flag to indicate if the shipping method is a ship to store
         /// </summary>
         public bool IsShipToStoreType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the flag to indicate if the shipping method is default selected
+        /// </summary>
+        public bool IsSelected { get; set; }
     }
 }

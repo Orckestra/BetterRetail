@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.ViewModels;
 
@@ -19,12 +20,12 @@ namespace Orckestra.Composer.MyAccount.Services
         CreateAccountViewModel GetCreateAccountViewModel(GetCreateAccountViewModelParam param);
 
         /// <summary>
-        /// Get the view Model to display the Sign In Header
+        /// Get the view Model to display the User information in the Header
         /// </summary>
         /// <returns>
-        /// The view model to display the Sign In Header
+        /// The view model to display the User information in the Header
         /// </returns>
-        Task<SignInHeaderViewModel> GetSignInHeaderModel(GetSignInHeaderParam param);
+        Task<UserMetadataViewModel> GetUserMetadataModel(GetUserMetadataParam param);
 
         /// <summary>
         /// Get the view Model to display a Reset Password Form and Form result
@@ -95,5 +96,25 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <param name="param"></param>
         /// <returns></returns>
         LoginViewModel GetLoginViewModel(GetLoginViewModelParam param);
+
+        /// <summary>
+        /// Return true if the user exist
+        /// </summary>
+        /// <param name="param">Builder params <see cref="GetCustomerByEmailParam"/></param>
+        /// <returns>
+        /// The view model is user exist
+        /// </returns>
+        Task<IsUserExistViewModel> GetIsUserExistViewModelAsync(GetCustomerByEmailParam getCustomerByEmailParam);
+
+        /// <summary>
+        /// Set rules for password validation
+        /// </summary>
+        /// <param name="viewModel">viewModel for update <see cref="PasswordPatternViewModel"/></param>
+        void SetPasswordValidationRules(PasswordPatternViewModel viewModel);
+
+        /// <summary>
+        /// Clears customer information from the context.
+        /// </summary>
+        void LogOutCustomer();
     }
 }

@@ -15,5 +15,6 @@ namespace Orckestra.Composer.Services
         Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems);
         Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list);
         Task<List<ProductMainImage>> GetImageUrlsAsync(RecurringOrderLineItem lineItem);
+        Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId)> products);
     }
 }

@@ -23,6 +23,7 @@
 @import "Blades/CartSummary/_promotions.scss";
 @import "Blades/CheckoutCommon/_checkout-navigation.scss";
 @import "Blades/CheckoutCommon/_order-summary-affix.scss";
+@import "Blades/SingleCheckout/checkout-page";
 @import "Blades/MiniCart/_minicart-summary.scss";
 @import "Blades/MonerisPaymentProvider/_moneris.scss";
 @import "Blades/OrderHistory/_compact-order.scss";
@@ -36,7 +37,8 @@
 @import "Blades/StoreLocator/_store-locator.scss";
 @import "Blades/WishList/_wishlist-tile.scss";
 @import "Blades/WishList/_wishlist.scss";
-  
+@import "Blades/LineItems/_line-items.scss";
+
 /**
  * Composer bootstrap overrides
 */
@@ -55,13 +57,14 @@
 @import "Overrides/_tooltip.scss";
 @import "Overrides/_type.scss";
 @import "Overrides/_well.scss";
- 
+
 /**
  * Composer custom components
  */
 @import "Custom/_additional-fees.scss";
 @import "Custom/_affix.scss";
 @import "Custom/_anchor.scss";
+@import "Custom/_backgrounds.scss";
 @import "Custom/_bleed.scss";
 @import "Custom/_button-groups.scss";
 @import "Custom/_carousel.scss";
@@ -85,3 +88,6 @@
 @import "Custom/Responsive/_text-align.scss";
 @import "Custom/Search/_product-tile.scss";
 @import "Custom/Search/_facets.scss";
+@import "Custom/Search/_content-tabs.scss";
+@import "Custom/_loading.scss";
+@import "Custom/_page-summary.scss";

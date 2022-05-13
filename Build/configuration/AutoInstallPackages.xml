@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup>
+  <radio>
+    <packages>
+      <!-- Auto create categories and menu  -->
+      <package id="bf69b0fa-67c6-4c83-9341-fad58a8ab42b" url="../../output/artifacts/Orckestra.Composer.C1.PreConfiguration.zip"/>
+    </packages>
+  </radio>
+</setup>

@@ -25,10 +25,12 @@ public class CakeConfig : ICakeConfig
     private readonly ICakeContext _context;
     private readonly ConfigurationBuilder _builder = new ConfigurationBuilder();
     private string _rootPath;
+    private readonly string _environment;
     
-    public CakeConfig(ICakeContext context)
+    public CakeConfig(ICakeContext context, string environment = null)
     {
         _context = context;
+        _environment = environment;
     }
 
     public void AddFile(string filePath)
@@ -57,6 +59,14 @@ public class CakeConfig : ICakeConfig
 
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (var prop in rootProperties)
+            result[prop.Key] = prop.Value;
+
+
+        var envProperties = config.GetChildren().Where(x => x.Key == "environments").Select(
+          x => x.GetChildren().Where(d => d.Key == _environment).Select(d => d.GetChildren()).FirstOrDefault()
+        ).FirstOrDefault();
+
+        foreach (var prop in envProperties ?? Enumerable.Empty<IConfigurationSection>())
             result[prop.Key] = prop.Value;
 
         return result;
@@ -140,9 +150,9 @@ public class CakeConfig : ICakeConfig
     }
 };
 
-public ICakeConfig CreateCakeConfig()
+public ICakeConfig CreateCakeConfig(string environment = null)
 {
-    return new CakeConfig(Context);
+    return new CakeConfig(Context, environment);
 }
 
 public interface ICakeConfig

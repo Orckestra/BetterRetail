@@ -198,6 +198,9 @@
   <data name="L_AdditionalFeesGenericMessage" xml:space="preserve">
     <value>Des frais supplémentaires peuvent être facturés en cas de colis surdimensionnés.</value>
   </data>
+  <data name="L_EditCartBannerMessage" xml:space="preserve">
+    <value>Vous modifiez actuellement la commande « {0} »</value>
+  </data>
   <data name="L_EmptyShoppingCart" xml:space="preserve">
     <value>Il n'y a aucun produit dans votre panier d'achat</value>
   </data>
@@ -287,5 +290,14 @@
   </data>
   <data name="Title.CartNotFound" xml:space="preserve">
     <value>Le panier n'a pas été trouvé</value>
+  </data>
+  <data name="F_RemoveItem" xml:space="preserve">
+    <value>Retirer l'objet</value>
+  </data>
+  <data name="L_GiftItem" xml:space="preserve">
+    <value>Votre cadeau gratuit</value>
+  </data>
+  <data name="B_RemoveUnavailableProducts" xml:space="preserve">
+    <value>Supprimer les produits indisponibles</value>
   </data>
 </root>

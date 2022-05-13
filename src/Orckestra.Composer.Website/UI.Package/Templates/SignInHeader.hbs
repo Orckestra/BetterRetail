@@ -1,5 +1,5 @@
 <a data-templateid="SignInHeader"
-   {{#if IsLoggedIn}}
+   {{#if IsAuthenticated}}
    {{#if IsOnMyAccount}} class="nav-link logged-in" {{else}} class="nav-link"  {{/if}} 
    data-qa="login-my-account" href="{{Url}}" title="{{localize 'MyAccount' 'L_MyAccount'}}"
    {{else}}
@@ -8,7 +8,7 @@
 >
     <span class="fa  fa-user  fa-lg  sps--blw-show-inline-block"></span>&#160;
     {{#unless IsLoading }}
-        {{#if IsLoggedIn}}
+        {{#if IsAuthenticated}}
             <span class="d-none d-xl-inline sps--blw-hidden">{{localize 'MyAccount' 'L_MyAccount'}}</span>
         {{else}}
             <span class="d-none d-xl-inline sps--blw-hidden">{{localize 'MyAccount' 'L_SignIn'}}</span>

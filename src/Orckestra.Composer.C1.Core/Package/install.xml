@@ -31,11 +31,16 @@
         <File sourceFilename="~\Bin\ServiceStack.Client.dll" targetFilename="~\Bin\ServiceStack.Client.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Interfaces.dll" targetFilename="~\Bin\ServiceStack.Interfaces.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Text.dll" targetFilename="~\Bin\ServiceStack.Text.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Memory.dll" targetFilename="~\Bin\System.Memory.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Net.Http.Formatting.dll" targetFilename="~\Bin\System.Net.Http.Formatting.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\System.Web.Http.dll" targetFilename="~\Bin\System.Web.Http.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\System.Web.Http.WebHost.dll" targetFilename="~\Bin\System.Web.Http.WebHost.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Web.Helpers.dll" targetFilename="~\Bin\System.Web.Helpers.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Runtime.CompilerServices.Unsafe.dll" targetFilename="~\Bin\System.Runtime.CompilerServices.Unsafe.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Numerics.Vectors.dll" targetFilename="~\Bin\System.Numerics.Vectors.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Buffers.dll" targetFilename="~\Bin\System.Buffers.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" targetFilename="~\Bin\Microsoft.Practices.EnterpriseLibrary.SemanticLogging.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.Configuration.ConfigurationBuilders.Base.dll" targetFilename="~\Bin\Microsoft.Configuration.ConfigurationBuilders.Base.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.dll" targetFilename="~\Bin\Orckestra.Composer.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.Cart.dll" targetFilename="~\Bin\Orckestra.Composer.Cart.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.MyAccount.dll" targetFilename="~\Bin\Orckestra.Composer.MyAccount.dll" allowOverwrite="true" />
@@ -48,11 +53,21 @@
         <File sourceFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" targetFilename="~\Bin\Orckestra.Composer.CompositeC1.DataTypes.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" targetFilename="~\Bin\Orckestra.Composer.ContentSearch.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" targetFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" targetFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Jurassic.dll" targetFilename="~\Bin\Jurassic.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\NUglify.dll" targetFilename="~\Bin\NUglify.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.Agent.Intercept.dll" targetFilename="~\Bin\Microsoft.AI.Agent.Intercept.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.DependencyCollector.dll" targetFilename="~\Bin\Microsoft.AI.DependencyCollector.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.PerfCounterCollector.dll" targetFilename="~\Bin\Microsoft.AI.PerfCounterCollector.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.ServerTelemetryChannel.dll" targetFilename="~\Bin\Microsoft.AI.ServerTelemetryChannel.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.Web.dll" targetFilename="~\Bin\Microsoft.AI.Web.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AI.WindowsServer.dll" targetFilename="~\Bin\Microsoft.AI.WindowsServer.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.ApplicationInsights.dll" targetFilename="~\Bin\Microsoft.ApplicationInsights.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" targetFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" />
       </Files>
     </mi:Add>
 
@@ -62,6 +77,7 @@
         <File sourceFilename="~\robots.prd.txt" targetFilename="~\robots.prd.txt" allowOverwrite="true" />
         <File sourceFilename="~\Global.asax" targetFilename="~\Global.asax" allowOverwrite="true" />
         <File sourceFilename="~\error.html" targetFilename="~\error.html" allowOverwrite="true" />
+        <File sourceFilename="~\ApplicationInsights.config" targetFilename="~\ApplicationInsights.config" allowOverwrite="true" />
       </Files>
       <Directories>
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />
@@ -120,6 +136,9 @@
         <Type type="Composite.Data.Types.IGeneratedTypeWhiteList,Composite">
           <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IGeneratedTypeWhiteLists_administrated.xml" />
         </Type>
+        <Type type="Composite.Data.Types.IFolderWhiteList,Composite">
+          <Data dataScopeIdentifier="administrated" dataFilename="~\Datas\Composite.Data.Types.IFolderWhiteList_administrated.xml" />
+        </Type>
         <Type type="Composite.Data.Types.IMethodBasedFunctionInfo,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
         </Type>
@@ -129,6 +148,7 @@
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.FileXslTransformationPackageFragmentUninstaller, Composite">
       <XslFiles>
         <XslFile pathXml="~\Web.config" installXsl="~\Web.config.xsl" />
+        <XslFile pathXml="~\App_Data\Composite\Composite.config" installXsl="~\Composite.config.xsl" />
       </XslFiles>
     </mi:Add>
 

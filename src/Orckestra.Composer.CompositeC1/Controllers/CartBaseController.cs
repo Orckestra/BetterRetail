@@ -1,10 +1,8 @@
-﻿using Composite.Data;
-using Orckestra.Composer.Cart.ViewModels;
+﻿using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Services.Breadcrumb;
 using System;
 using System.Web.Mvc;
 using ActionResult = System.Web.Mvc.ActionResult;
@@ -16,60 +14,15 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IComposerContext ComposerContext { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
         protected IPageService PageService { get; private set; }
-        protected IBreadcrumbViewService BreadcrumbViewService { get; private set; }
 
         protected CartBaseController(
             IComposerContext composerContext,
             ICartUrlProvider cartUrlProvider,
-            IPageService pageService,
-            IBreadcrumbViewService breadcrumbViewService)
+            IPageService pageService)
         {
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (cartUrlProvider == null) { throw new ArgumentNullException("cartUrlProvider"); }
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (breadcrumbViewService == null) { throw new ArgumentNullException("breadcrumbViewService"); }
-
-            ComposerContext = composerContext;
-            CartUrlProvider = cartUrlProvider;
-            PageService = pageService;
-            BreadcrumbViewService = breadcrumbViewService;
-        }
-
-        public virtual ActionResult CartSummary()
-        {
-            var cartViewModel = GetCartViewModel();
-
-            if (cartViewModel == null) { return View("CartSummaryBlade", (CartViewModel) null); }
-
-            SetCurrentStepContext(cartViewModel);
-
-            return View("CartSummaryBlade", cartViewModel);
-        }
-
-        protected virtual void SetCurrentStepContext(CartViewModel cartViewModel)
-        {
-            var page = PageService.GetPage(SitemapNavigator.CurrentPageId);
-            var checkoutSteps = PageService.GetCheckoutStepPages(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo);
-
-            if (checkoutSteps != null && checkoutSteps.Contains(SitemapNavigator.CurrentPageId.ToString()))
-            {
-                cartViewModel.Context["CurrentStep"] = checkoutSteps.FindIndex(a => a == SitemapNavigator.CurrentPageId.ToString());
-            }
-
-        }
-
-        public virtual ActionResult OrderSummary()
-        {
-            var cartViewModel = GetCartViewModel();
-
-            return View("OrderSummaryBlade", cartViewModel);
-        }
-
-        public virtual ActionResult Coupons()
-        {
-            var cartViewModel = GetCartViewModel();
-
-            return View("CouponsBlade", cartViewModel);
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
         }
 
         protected virtual CartViewModel GetCartViewModel()
@@ -98,17 +51,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             };
 
             return View(minicartViewModel);
-        }
-
-        public virtual ActionResult Breadcrumb()
-        {
-            var breadcrumbViewModel = BreadcrumbViewService.CreateBreadcrumbViewModel(new GetBreadcrumbParam
-            {
-                CurrentPageId = SitemapNavigator.CurrentPageId.ToString(),
-                CultureInfo = ComposerContext.CultureInfo
-            });
-
-            return View(breadcrumbViewModel);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Orckestra.Composer.SearchQuery.Parameters;
-using Orckestra.Overture;
-using Orckestra.Overture.ServiceModel.Products.Inventory;
-using Orckestra.Overture.ServiceModel.Requests.Products.Inventory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.SearchQuery.Parameters;
+using Orckestra.Overture;
+using Orckestra.Overture.ServiceModel.Products.Inventory;
+using Orckestra.Overture.ServiceModel.Requests.Products.Inventory;
 
 namespace Orckestra.Composer.SearchQuery.Repositories
 {
@@ -13,12 +13,7 @@ namespace Orckestra.Composer.SearchQuery.Repositories
     {
         public InventoryRepository(IOvertureClient overtureClient)
         {
-            if (overtureClient == null)
-            {
-                throw new ArgumentNullException("overtureClient");
-            }
-
-            OvertureClient = overtureClient;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
         }
 
         protected IOvertureClient OvertureClient { get; set; }
@@ -33,12 +28,9 @@ namespace Orckestra.Composer.SearchQuery.Repositories
             };
 
             var result = await OvertureClient.SendAsync(request).ConfigureAwait(false);
-            if (param.InventoryLocationIds != null && param.InventoryLocationIds.Count > 0)
-            {
-                return result.Where(d => d.Identifier != null && param.InventoryLocationIds.Contains(d.Identifier.InventoryLocationId)).ToList();
-            }
-
-            return result;
+            return param.InventoryLocationIds != null && param.InventoryLocationIds.Count > 0
+                ? result.Where(d => d.Identifier != null && param.InventoryLocationIds.Contains(d.Identifier.InventoryLocationId)).ToList()
+                : result;
         }
     }
 }

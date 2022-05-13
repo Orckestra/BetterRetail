@@ -7,6 +7,9 @@ using FluentAssertions;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Utils;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Tests.Util
 {
@@ -23,12 +26,11 @@ namespace Orckestra.Composer.Tests.Util
             //Arrange
 
             //Act
-            var ex = Assert.Throws<ArgumentException>(() => UrlFormatter.GetUriFromString(url));
+            Expression<Func<Uri>> expression = () => UrlFormatter.GetUriFromString(url);
+            var exception = Assert.Throws<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            ex.Should().NotBeNull();
-            ex.ParamName.Should().NotBeNullOrWhiteSpace();
-            ex.Message.Should().ContainEquivalentOf("url");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [TestCase("https://google.ca")]

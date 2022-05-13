@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.Factory;
@@ -20,6 +14,13 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Factory
 {
@@ -36,6 +37,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
+        protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -48,7 +50,8 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrdersRepository recurringOrdersRepository,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings,
-            IProductSpecificationsViewService productSpecificationsViewService)
+            IProductSpecificationsViewService productSpecificationsViewService,
+            IMyAccountUrlProvider myAccountUrlProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -61,15 +64,16 @@ namespace Orckestra.Composer.Product.Factory
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings;
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), nameof(param)); }
-            if (param.ProductId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProductId"), nameof(param)); }
-            if (param.Scope == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), nameof(param)); }
-            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BaseUrl"), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.ProductId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductId)), nameof(param)); }
+            if (param.Scope == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.BaseUrl)), nameof(param)); }
 
             var product = await ProductRepository.GetProductAsync(param).ConfigureAwait(false);
 
@@ -78,7 +82,8 @@ namespace Orckestra.Composer.Product.Factory
             var productDefinition = await ProductRepository.GetProductDefinitionAsync(new GetProductDefinitionParam
             {
                 Name = product.DefinitionName,
-                CultureInfo = param.CultureInfo});
+                CultureInfo = param.CultureInfo
+            });
 
             if (productDefinition == null) { return null; }
 
@@ -89,7 +94,8 @@ namespace Orckestra.Composer.Product.Factory
             var currency = await ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
                 CultureInfo = param.CultureInfo,
-                Scope = param.Scope});
+                Scope = param.Scope
+            });
 
             var productViewModel = CreateViewModel(new CreateProductDetailViewModelParam
             {
@@ -132,7 +138,6 @@ namespace Orckestra.Composer.Product.Factory
                 return vm;
             }
 
-           
             vm.IsRecurringOrderEligible = recurringOrdersEnabled;
             vm.Context["IsRecurringOrderEligible"] = recurringOrdersEnabled;
 
@@ -150,11 +155,11 @@ namespace Orckestra.Composer.Product.Factory
         protected virtual ProductViewModel CreateViewModel(CreateProductDetailViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.Product == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Product"), nameof(param)); }
-            if (param.ProductDefinition == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("ProductDefinition"), nameof(param)); }
-            if (param.ProductLookups == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("param.ProductLookups"), nameof(param)); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("param.CultureInfo"), nameof(param)); }
-            if (string.IsNullOrEmpty(param.BaseUrl)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("BaseUrl"), nameof(param)); }
+            if (param.Product == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Product)), nameof(param)); }
+            if (param.ProductDefinition == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductDefinition)), nameof(param)); }
+            if (param.ProductLookups == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ProductLookups)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (string.IsNullOrEmpty(param.BaseUrl)) { throw new ArgumentException(GetMessageOfNullEmpty(nameof(param.BaseUrl)), nameof(param)); }
 
             var productDetailViewModel = ViewModelMapper.MapTo<ProductViewModel>(param.Product, param.CultureInfo);
 
@@ -163,13 +168,14 @@ namespace Orckestra.Composer.Product.Factory
             var productDisplayName = productDetailViewModel.DisplayName ?? string.Empty;
 
             var allVariantsVm = GetVariantViewModels(
-                param.Product.Variants, 
-                param.ProductDefinition.VariantProperties, 
-                productDisplayName, 
+                param.Product.Variants,
+                param.ProductDefinition.VariantProperties,
+                productDisplayName,
                 param.CultureInfo,
                 vvm => InitializeVariantImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, vvm),
                 vvm => InitializeVariantSpecificaton(param.Product, param.ProductDefinition, vvm)
             ).ToList();
+
             productDetailViewModel.Variants = allVariantsVm;
             var selectedVariantVm = GetSelectedVariantViewModel(param.VariantId, allVariantsVm);
 
@@ -193,13 +199,19 @@ namespace Orckestra.Composer.Product.Factory
 
             productDetailViewModel.Price = param.Product.ListPrice;
 
-            productDetailViewModel.ProductDetailUrl = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
-            {                
+            productDetailViewModel.Url = ProductUrlProvider.GetProductUrl(new GetProductUrlParam
+            {
                 CultureInfo = param.CultureInfo,
                 ProductId = param.Product.Id,
                 VariantId = param.VariantId,
                 SKU = param.Product.Sku,
                 ProductName = productDisplayName
+            });
+
+            productDetailViewModel.CreateAccountUrl = MyAccountUrlProvider.GetCreateAccountUrl(new BaseUrlParameter
+            {
+                CultureInfo = param.CultureInfo,
+                ReturnUrl = productDetailViewModel.Url
             });
 
             SetViewModelContext(productDetailViewModel, selectedVariantVm, allVariantsVm);
@@ -211,18 +223,7 @@ namespace Orckestra.Composer.Product.Factory
             productDetailViewModel.Description = FixHtml(productDetailViewModel.Description);
 
             productDetailViewModel.DefinitionName = param.ProductDefinition.Name;
-
-            if (ProductConfiguration.IsQuantityDisplayed &&
-                ProductConfiguration.MinQuantity >= 1 &&
-                ProductConfiguration.MaxQuantity >= ProductConfiguration.MinQuantity)
-            {
-                productDetailViewModel.Quantity = new ProductQuantityViewModel
-                {
-                    Min = ProductConfiguration.MinQuantity,
-                    Max = ProductConfiguration.MaxQuantity,
-                    Value = ProductConfiguration.MinQuantity
-                };
-            }
+            productDetailViewModel.Quantity = QuantityConfiguration.GetProductQuantity();
 
             productDetailViewModel.Currency = param.Currency;
             productDetailViewModel.Specifications = ProductSpecificationsViewService.GetProductSpecificationsViewModel(new GetProductSpecificationsParam
@@ -236,10 +237,7 @@ namespace Orckestra.Composer.Product.Factory
 
         protected virtual string FixHtml(string html)
         {
-            if (html == null)
-            {
-                return null;
-            }
+            if (html == null) { return null; }
 
             html = Regex.Replace(html, "<br>", "<br/>", RegexOptions.IgnoreCase);
             html = Regex.Replace(html, "&", "&#38;", RegexOptions.IgnoreCase);
@@ -261,7 +259,7 @@ namespace Orckestra.Composer.Product.Factory
             ProductViewModel productViewModel)
         {
             var images = BuildImages(productId, null, productViewModel.DisplayName, productImages, cultureInfo).ToList();
-            var selectedImage = images.FirstOrDefault(i => i.Selected) ?? images.FirstOrDefault();
+            var selectedImage = images.Find(i => i.Selected) ?? images.FirstOrDefault();
 
             productViewModel.Images = images;
             productViewModel.SelectedImage = selectedImage;
@@ -291,10 +289,12 @@ namespace Orckestra.Composer.Product.Factory
             foreach (var variant in validVariants)
             {
                 var variantVm = ViewModelMapper.MapTo<VariantViewModel>(variant, cultureInfo);
-                
-                if(string.IsNullOrEmpty(variantVm.DisplayName))
+
+                if (string.IsNullOrEmpty(variantVm.DisplayName))
+                {
                     variantVm.DisplayName = displayName;
-                
+                }
+
                 variantVm.Kvas = variant.PropertyBag
                     .Join(kvaPropertieNames, bagEntry => bagEntry.Key,
                         kvaPropertyName => kvaPropertyName,
@@ -322,7 +322,7 @@ namespace Orckestra.Composer.Product.Factory
             VariantViewModel variantViewModel)
         {
             var images = BuildImages(productId, variantViewModel.Id, variantViewModel.DisplayName, productImages, cultureInfo).ToList();
-            var selectedImage = images.FirstOrDefault(i => i.Selected) ?? images.FirstOrDefault();
+            var selectedImage = images.Find(i => i.Selected) ?? images.FirstOrDefault();
 
             variantViewModel.Images = images;
             variantViewModel.SelectedImage = selectedImage;
@@ -397,7 +397,7 @@ namespace Orckestra.Composer.Product.Factory
                 productViewModel.SelectedVariantId = selectedVariantVm.Id;
                 productViewModel.Sku = selectedVariantVm.Sku;
                 productViewModel.DisplayName = selectedVariantVm.DisplayName;
-                productViewModel.ListPrice = selectedVariantVm.ListPrice;
+                productViewModel.DisplayListPrice = selectedVariantVm.DisplayListPrice;
                 productViewModel.Images = selectedVariantVm.Images;
                 productViewModel.SelectedImage = selectedVariantVm.SelectedImage;
                 productViewModel.FallbackImageUrl = selectedVariantVm.FallbackImageUrl;
@@ -414,16 +414,26 @@ namespace Orckestra.Composer.Product.Factory
 
             if (selectedVariantVm != null)
             {
-                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.ListPrice, v.Id, v.Kvas, v.Sku } );
+                productViewModel.Context["allVariants"] = allVariantsVm.Select(v => new { v.DisplayListPrice, v.Id, v.Kvas, v.Sku });
                 productViewModel.Context["selectedVariantId"] = selectedVariantVm.Id;
                 productViewModel.Context["displayedVariantId"] = selectedVariantVm.Id;
             }
 
             //Some additionnal Context Required by JS
-
+            productViewModel.Context["Brand"] = productViewModel.Brand;
+            productViewModel.Context["DisplayName"] = productViewModel.DisplayName;
             productViewModel.Context["CategoryId"] = productViewModel.CategoryId;
             productViewModel.Context["Sku"] = productViewModel.Sku;
             productViewModel.Context["keyVariantAttributeItems"] = productViewModel.KeyVariantAttributeItems;
+            productViewModel.Context["CreateAccountUrl"] = productViewModel.CreateAccountUrl;
+            productViewModel.Context["Weight"] = productViewModel.Weight;
+            productViewModel.Context["WeightUOM"] = productViewModel.WeightUOM;
+            productViewModel.Context["ItemFormat"] = productViewModel.ItemFormat;
+            productViewModel.Context["SellingMethod"] = productViewModel.SellingMethod;
+            productViewModel.Context["UnitOfMeasure"] = productViewModel.UnitOfMeasure;
+            productViewModel.Context["IsUnit"] = productViewModel.IsUnit;
+            productViewModel.Context["IsUnitMeasure"] = productViewModel.IsUnitMeasure;
+            productViewModel.Context["IsApproxUnit"] = productViewModel.IsApproxUnit;
 
             // Transfer custom properties that might have been added
             foreach (var property in productViewModel.Bag)
@@ -559,8 +569,7 @@ namespace Orckestra.Composer.Product.Factory
                 }
 
                 //BindSelected
-                object selectedValue;
-                if (kvaParam.SelectedKvas.TryGetValue(property.PropertyName, out selectedValue))
+                if (kvaParam.SelectedKvas.TryGetValue(property.PropertyName, out object selectedValue))
                 {
                     var item = items.FirstOrDefault(i => i.Value.Equals(selectedValue));
                     if (item != null)
@@ -582,7 +591,7 @@ namespace Orckestra.Composer.Product.Factory
 
             kvas = DisableMissingKvas(kvaParam, kvas);
 
-            return EnableKvasInStock(kvaParam, kvas); 
+            return EnableKvasInStock(kvaParam, kvas);
         }
 
         private List<KeyVariantAttributeItem> DisableMissingKvas(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
@@ -609,7 +618,7 @@ namespace Orckestra.Composer.Product.Factory
         }
 
         protected virtual List<KeyVariantAttributeItem> EnableKvasInStock(GenerateKvaItemsParam kvaParam, List<KeyVariantAttributeItem> kvas)
-        {            
+        {
             //Enable available kvas
             foreach (var kva in kvaParam.SelectedKvas)
             {
@@ -678,31 +687,30 @@ namespace Orckestra.Composer.Product.Factory
                 .Where(pi => string.Equals(pi.ProductId, productId, StringComparison.InvariantCultureIgnoreCase))
                 .Where(pi => string.Equals(pi.VariantId, variantId, StringComparison.InvariantCultureIgnoreCase))
                 .OrderBy(pi => pi.SequenceNumber)
-                .Select(pi => {
+                .Select(pi =>
+                {
                     var image = ViewModelMapper.MapTo<ProductDetailImageViewModel>(pi, cultureInfo);
                     if (string.IsNullOrEmpty(image.Alt))
                         image.Alt = defaultAlt;
                     return image;
-                });
+                }).ToList();
 
-            var productDetailImageViewModels = SetFirstImageSelected(images);
+            if (!images.Any(image => image.Selected))
+            {
+                SetFirstImageSelected(images);
+            }
 
-            return productDetailImageViewModels;
+            return images;
         }
 
-        protected static IEnumerable<ProductDetailImageViewModel> SetFirstImageSelected(
-          IEnumerable<ProductDetailImageViewModel> imageViewModels)
+        protected static void SetFirstImageSelected(IEnumerable<ProductDetailImageViewModel> imageViewModels)
         {
-            // convert the IEnumerable to an array so that changes to the .First() element are persisted
-            var productDetailImageViewModels = imageViewModels as ProductDetailImageViewModel[] ?? imageViewModels.ToArray();
-            var firstImage = productDetailImageViewModels.FirstOrDefault();
+            var firstImage = imageViewModels.FirstOrDefault();
 
-            // set Selected = true on the first image so it's thumbnail is active
             if (firstImage != null)
             {
                 firstImage.Selected = true;
             }
-            return productDetailImageViewModels;
         }
 
         /// <summary>

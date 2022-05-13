@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Context;
-using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Providers.FacetPredicate;
-using Orckestra.Composer.Utils;
 using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
 
 namespace Orckestra.Composer.Search.Factory
@@ -19,8 +17,7 @@ namespace Orckestra.Composer.Search.Factory
         public FacetPredicateFactory(IDependencyResolver dependencyResolver, IFacetPredicateProviderRegistry facetPredicateProviderRegistry, IFacetConfigurationContext facetConfigContext)
             : base(dependencyResolver)
         {
-            if (facetPredicateProviderRegistry == null) { throw new ArgumentNullException("facetPredicateProviderRegistry"); }
-            FacetPredicateProviderRegistry = facetPredicateProviderRegistry;
+            FacetPredicateProviderRegistry = facetPredicateProviderRegistry ?? throw new ArgumentNullException(nameof(facetPredicateProviderRegistry));
             FacetConfigContext = facetConfigContext;
         }
 
@@ -29,22 +26,34 @@ namespace Orckestra.Composer.Search.Factory
         /// </summary>
         public virtual FacetPredicate CreateFacetPredicate(SearchFilter filter)
         {
-            if (filter == null) { throw new ArgumentNullException("filter"); }
-            if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Name"), "filter"); }
+            if (filter == null) { throw new ArgumentNullException(nameof(filter)); }
+            if (string.IsNullOrWhiteSpace(filter.Name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(filter.Name)), nameof(filter)); }
 
-            var setting = FacetConfigContext.GetFacetSettings()
-                    .FirstOrDefault(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
+            var setting = FacetConfigContext.GetFacetSettings().Find(s => s.FieldName.Equals(filter.Name, StringComparison.OrdinalIgnoreCase));
 
-            if (setting == null)
-            {
-                return null;
-            }
+            if (setting == null) { return null; }
 
             Type factoryType = FacetPredicateProviderRegistry.ResolveProviderType(setting.FacetType.ToString());
 
             var instance = GetProviderInstance(factoryType);
 
             return instance.CreateFacetPredicate(filter);
+        }
+
+        public virtual FacetPredicate CreateFacetPredicate(string facetName, string facetValue)
+        {
+            if (string.IsNullOrWhiteSpace(facetName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facetName))); }
+            if (string.IsNullOrWhiteSpace(facetValue)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(facetValue))); }
+
+            var setting = FacetConfigContext.GetFacetSettings().Find(s => s.FieldName.Equals(facetName, StringComparison.OrdinalIgnoreCase));
+
+            var facetType = setting == null ? Orckestra.Composer.Search.Facets.FacetType.MultiSelect.ToString() : setting.FacetType.ToString();
+
+            Type factoryType = FacetPredicateProviderRegistry.ResolveProviderType(facetType);
+
+            var instance = GetProviderInstance(factoryType);
+
+            return instance.CreateFacetPredicate(new SearchFilter() { Name = facetName, Value = facetValue });
         }
     }
 }

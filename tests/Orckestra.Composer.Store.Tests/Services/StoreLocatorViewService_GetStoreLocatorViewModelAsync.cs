@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Store.Factory;
 using Orckestra.Composer.Store.Models;
 using Orckestra.Composer.Store.Parameters;
@@ -36,6 +36,7 @@ namespace Orckestra.Composer.Store.Tests.Services
             _container.Use(CreateStoreUrlProvider());
             _container.Use(CreateStoreRepository(StoresNumbers));
             _container.Use(CreateStoreViewModelFactory(StoresNumbers));
+            _container.GetMock<IGoogleSettings>().Setup(c => c.StoresAvailabilityDistance).Returns(decimal.MaxValue);
         }
 
         [Test]
@@ -57,25 +58,22 @@ namespace Orckestra.Composer.Store.Tests.Services
         [TestCase(null, "http://foo.com")]
         [TestCase(null, "http://foo.com")]
         [TestCase(null, null)]
-        public void WHEN_RequiredParams_Is_Null_SHOULD_Throw_Argument_Null_Exception(string scope,
-            string baseUrl)
+        public void WHEN_ParamsProperty_Is_Null_SHOULD_Throw_Argument_Exception(string scope, string baseUrl)
         {
             //Arrange
             var service = _container.CreateInstance<StoreLocatorViewService>();
-
-            //Act
-            Func<Task> asyncFunction = async () =>
+            var param = new GetStoreLocatorViewModelParam
             {
-                await service.GetStoreLocatorViewModelAsync(new GetStoreLocatorViewModelParam
-                {
-                    Scope = scope,
-                    BaseUrl = baseUrl,
-                    CultureInfo = CultureInfo.CreateSpecificCulture("en-CA")
-                });
+                Scope = scope,
+                BaseUrl = baseUrl,
+                CultureInfo = CultureInfo.CreateSpecificCulture("en-CA")
             };
 
+            //Act
+            Func<Task> asyncFunction = async () => { await service.GetStoreLocatorViewModelAsync(param); };
+
             //Assert
-            asyncFunction.ShouldThrow<ArgumentNullException>();
+            asyncFunction.ShouldThrow<ArgumentException>();
         }
 
         [Test]
@@ -175,7 +173,8 @@ namespace Orckestra.Composer.Store.Tests.Services
                 BaseUrl = "http://foo.com",
                 IncludeMarkers = false,
                 PageNumber = 1,
-                PageSize = 4
+                PageSize = 4,
+                IncludeNearestStoreCoordinate = true
             };
         }
 

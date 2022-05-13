@@ -84,7 +84,7 @@ namespace Orckestra.Composer.ViewModels
                     {
                         IList viewModels =
                             (IList) Activator.CreateInstance(typeof (List<>).MakeGenericType(typeof(Dictionary<string, object>)));
-                        foreach (IBaseViewModel current in ((IList) viewModel))
+                        foreach (IBaseViewModel current in (IList) viewModel)
                         {
                             var currentDic = current.ToDictionary();
                             viewModels.Add(currentDic);
@@ -114,16 +114,16 @@ namespace Orckestra.Composer.ViewModels
                 if (typeof (IBaseViewModel).IsAssignableFrom(property.PropertyType))
                 {
                     var getter = new ViewModelProperty
-        {
+                    {
                         Getter = property.DelegateForGetPropertyValue(Flags.InstancePublic),
                         PropertyInfo = property
                     };
                     getters.Add(getter);
-        }
+                }
                 else if (listType != null && typeof (IBaseViewModel).IsAssignableFrom(listType.GetGenericArguments()[0]))
                 {
                     var getter = new ViewModelProperty
-        {
+                    {
                         Getter = property.DelegateForGetPropertyValue(Flags.InstancePublic),
                         PropertyInfo = property,
                         ListModelType = listType.GetGenericArguments()[0],
@@ -138,11 +138,8 @@ namespace Orckestra.Composer.ViewModels
         private object GetPropertyMetadataValue(IPropertyMetadata propertyMetadata)
         {
             var value = propertyMetadata.GetValue(this);
-            var model = value as BaseViewModel;
-            
-            return model != null ? model.ToDictionary() : value;
+            return value is BaseViewModel model ? model.ToDictionary() : value;
         }
-
 
         /// <summary>
         ///     Converts the current instance of view model to an extension version of this model of type <typeparamref name="T" />

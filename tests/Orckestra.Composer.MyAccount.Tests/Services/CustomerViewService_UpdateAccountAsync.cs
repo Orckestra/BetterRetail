@@ -6,8 +6,9 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.MyAccount.Parameters;
-using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.MyAccount.Tests.Mock;
 using Orckestra.Composer.MyAccount.ViewModels;
@@ -39,7 +40,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             mockedCustomerRepository.Setup(r => r.UpdateUserAsync(It.IsAny<UpdateUserParam>())).ReturnsAsync(customer);
 
             _container.Use(mockedCustomerRepository);
-
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
             //Act
@@ -52,7 +52,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 Email = GetRandom.String(32),
                 FirstName = GetRandom.String(32),
                 LastName = GetRandom.String(32),
-                PreferredLanguage = GetRandom.String(4),
+                PreferredLanguage = "en-US",
             });
 
             //Assert

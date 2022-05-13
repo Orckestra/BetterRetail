@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture;
@@ -11,6 +12,7 @@ using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Products;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Repositories
 {
@@ -25,11 +27,8 @@ namespace Orckestra.Composer.Repositories
 
         public CategoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
-            if (overtureClient == null) { throw new ArgumentNullException("overtureClient"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            OvertureClient = overtureClient;
-            CacheProvider = cacheProvider;
+            OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
         /// <summary>
@@ -37,21 +36,33 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param">The parameter.</param>
         /// <returns>List of categories.</returns>
-        public async virtual Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
+        public virtual async Task<List<Category>> GetCategoriesAsync(GetCategoriesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Category)
             {
                 Scope = param.Scope
             };
 
-            var result = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(new GetCategoriesV2Request
+            var result = await CacheProvider.GetOrAddAsync(cacheKey, 
+                () => OvertureClient.SendAsync(new GetCategoriesV2Request
             {
                 ScopeId = param.Scope
-            }));
+            })).ConfigureAwait(false);
+
             return result?.Categories;
+        }
+
+        public void ClearCategoriesCache(string scope)
+        {
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Category)
+            {
+                Scope = scope
+            };
+
+            CacheProvider.Remove(cacheKey);
         }
 
         /// <summary>
@@ -61,8 +72,8 @@ namespace Orckestra.Composer.Repositories
         /// <returns></returns>
         public Task<Tree<Category, string>> GetCategoriesTreeAsync(GetCategoriesParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope may not be null or whitespace", "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             return GetCategoriesTreeAsync(param.Scope);
         }
@@ -77,35 +88,16 @@ namespace Orckestra.Composer.Repositories
         /// <exception cref="System.ArgumentNullException">param</exception>
         public async Task<List<Category>> GetCategoriesPathAsync(GetCategoriesPathParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Scope"), "param"); }
-            if (string.IsNullOrWhiteSpace(param.CategoryId)) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CategoryId"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.CategoryId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CategoryId)), nameof(param)); }
 
             var categoriesTree = await GetCategoriesTreeAsync(param.Scope).ConfigureAwait(false);
 
-            return BuildPathFromTree(categoriesTree, param.CategoryId);
+            return categoriesTree.BuildPathFromTree(param.CategoryId);
         }
 
-        private static List<Category> BuildPathFromTree(Tree<Category, string> categoriesTree, string categoryId)
-        {
-            TreeNode<Category> categoryNode;
-            if (!categoriesTree.TryGetValue(categoryId, out categoryNode))
-            {
-                throw new ArgumentException("categoryId doesn't exist", "categoryId");
-            }
-
-            var path = new List<Category>();
-
-            path.Add(categoryNode.Value);
-            while (categoryNode.HasParent)
-            {
-                categoryNode = categoryNode.Parent;
-                path.Add(categoryNode.Value);
-            }
-
-            return path;
-        }
-
+   
         private async Task<Tree<Category, string>> GetCategoriesTreeAsync(string scope)
         {
             var categories = await GetCategoriesAsync(new GetCategoriesParam
@@ -113,39 +105,10 @@ namespace Orckestra.Composer.Repositories
                 Scope = scope
             }).ConfigureAwait(false);
 
-            // TODO: Remove that method once OCS provide correct value for PrimaryParentCategoryId
-            // TODO: (SB does OCS return the correct value now? 02/06/15)
-            FixMissingPrimaryParentCategoryIds(categories);
-
             return new Tree<Category, string>(categories, category => category.Id, category => category.PrimaryParentCategoryId, StringComparer.InvariantCultureIgnoreCase);
         }
 
-        private void FixMissingPrimaryParentCategoryIds(List<Category> categories)
-        {
-            // Create dictionary based on category inner id
-            var categoriesIdLookup = new Dictionary<int, Category>();
-            foreach (var category in categories)
-            {
-                object itemId;
-                if (category.PropertyBag.TryGetValue(PropertyBagItemId, out itemId))
-                {
-                    categoriesIdLookup[(int)itemId] = category;
-                }
-            }
-
-            // Set each category's PrimaryParentCategoryId based on inner ids
-            foreach (var category in categories)
-            {
-                object parentCategoryId;
-                if (category.PropertyBag.TryGetValue(PropertyBagParentItemId, out parentCategoryId))
-                {
-                    var parentCategory = categoriesIdLookup[(int)parentCategoryId];
-                    category.PrimaryParentCategoryId = parentCategory.Id;
-                }
-            }
-        }
-
-        public virtual Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
+         public virtual Task<List<Facet>> GetCategoryProductCount(string scopeId, string cultureName)
         {
             var request = GetProductsAdvancedSearchRequest(scopeId, cultureName, "CategoryAutoSuggest");
             return Task.FromResult(OvertureClient.Send(request).Facets);

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Providers.RegionCode
 {
     public class RegionCodeProvider : IRegionCodeProvider
     {
-        private List<CanadaRegionPostalCode> _canadaPostalCodes;
-        private List<UnitedStatesRegionPostalCode> _usPostalCodes;
+        private CanadaRegionPostalCode[] _canadaPostalCodes;
+        private UnitedStatesRegionPostalCode[] _usPostalCodes;
 
         public RegionCodeProvider()
         {
@@ -25,55 +25,35 @@ namespace Orckestra.Composer.Providers.RegionCode
             {
                 return GetUnitedStatesRegion(code, countryCode);
             }
-            else
-            {
-                throw new ArgumentException("This country is not supported");
-            }
+            throw new ArgumentException("This country is not supported");
         }
 
         private string GetUnitedStatesRegion(string code, string countryCode)
         {
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                throw new ArgumentException("The postal/zip code is missing");
-            }
+            if (string.IsNullOrWhiteSpace(code)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(code)); }
 
-            int zipCode;
-
-            var succcessful = int.TryParse(code, out zipCode);
+            var succcessful = int.TryParse(code, out int zipCode);
 
             if (!succcessful)
             {
                 throw new ArgumentException("The zip code is in an invalid format");
             }
 
-            var stateList = (
+            var state = (
                 from usPostalCode
                 in _usPostalCodes
                 where zipCode >= usPostalCode.PostalCodeMinRange && zipCode <= usPostalCode.PostalCodeMaxRange
-                select usPostalCode.Code).ToList();
-
-            var distinctStates = stateList.Distinct();
-
-            if (distinctStates.ToList().Count > 1)
-            {
-                throw new ArgumentException("There's more than one state that correspond to this zipcode");
-            }
-
-            var state = stateList.FirstOrDefault();
+                select usPostalCode.Code).Distinct().SingleOrDefault();
 
             return MergeRegions(countryCode, state);
         }
 
         private string GetCanadaRegion(string postalCode, string countryCode)
         {
-            if (string.IsNullOrWhiteSpace(postalCode))
-            {
-                throw new ArgumentException("The postal/zip code is missing");
-            }
-
+            if (string.IsNullOrWhiteSpace(postalCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(postalCode)); }
+            
             var firstChar = postalCode[0];
-
+            //if char is lowercase?
             if (!firstChar.IsAlpha())
             {
                 throw new ArgumentException("The postal code should begin with a letter");
@@ -90,7 +70,7 @@ namespace Orckestra.Composer.Providers.RegionCode
 
         private void BuildCanadaRegion()
         {
-            _canadaPostalCodes = new List<CanadaRegionPostalCode>
+            _canadaPostalCodes = new CanadaRegionPostalCode[19]
             {
                 new CanadaRegionPostalCode("NL", 'A'),
                 new CanadaRegionPostalCode("NS", 'B'),
@@ -120,7 +100,7 @@ namespace Orckestra.Composer.Providers.RegionCode
 
         private void BuildUsRegion()
         {
-            _usPostalCodes = new List<UnitedStatesRegionPostalCode>
+            _usPostalCodes = new UnitedStatesRegionPostalCode[65]
             {
                 new UnitedStatesRegionPostalCode("AL", 35000, 36999),
                 new UnitedStatesRegionPostalCode("AK", 99500, 99999),
@@ -200,7 +180,7 @@ namespace Orckestra.Composer.Providers.RegionCode
     {
         public static bool IsAlpha(this char c)
         {
-            return ((c >= 'A') && (c <= 'Z'));
+            return (c >= 'A') && (c <= 'Z');
         }
     }
 }

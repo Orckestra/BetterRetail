@@ -95,30 +95,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        [OutputCache(Duration = 0, NoStore = true)]
-        public virtual ActionResult AddressList()
-        {
-            var urlParam = new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            };
-            var addAddressUrl = MyAccountUrlProvider.GetAddAddressUrl(urlParam);
-            var editAddressBaseUrl = MyAccountUrlProvider.GetUpdateAddressBaseUrl(urlParam);
-
-            var viewModel = CustomerAddressViewService.GetAddressListViewModelAsync(new GetAddressListViewModelParam
-            {
-                CustomerId = ComposerContext.CustomerId,
-                CultureInfo = ComposerContext.CultureInfo,
-                Scope = ComposerContext.Scope,
-                AddAddressUrl = addAddressUrl,
-                EditAddressBaseUrl = editAddressBaseUrl,
-                CountryCode = ComposerContext.CountryCode
-            }).Result;
-
-            return View("AddressListBlade", viewModel);
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult CreateAddress()
         {
             var viewModel = CustomerAddressViewService.GetCreateAddressViewModelAsync(new GetCreateAddressViewModelAsyncParam
@@ -153,43 +129,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             }
 
             return View("EditAddressBlade", vm);
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult CurrentOrders()
-        {
-            return View("CurrentOrdersContainer", GetOrderHistoryViewModel());
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult PastOrders()
-        {
-            return View("PastOrdersContainer", GetOrderHistoryViewModel());
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult OrderDetails(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            var vm = OrderHistoryViewService.GetOrderDetailViewModelAsync(new GetCustomerOrderParam
-            {
-                OrderNumber = id,
-                CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CountryCode = ComposerContext.CountryCode,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
-
-            if (vm == null)
-            {
-                return new HttpUnauthorizedResult();
-            }
-            return View("OrderDetailsContainer", vm);
         }
 
         [AuthorizeAndRedirect]

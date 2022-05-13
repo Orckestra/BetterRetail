@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
@@ -10,6 +9,8 @@ using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+
 
 namespace Orckestra.Composer.Repositories
 {
@@ -112,9 +113,8 @@ namespace Orckestra.Composer.Repositories
             {
                 lineitem.RecurringOrderFrequencyName = param.RecurringOrderFrequencyName;
 
-                var newDate = param.NextOccurence;
                 var nextOccurenceWithTime = lineitem.NextOccurence;
-                newDate = new DateTime(param.NextOccurence.Year, param.NextOccurence.Month, param.NextOccurence.Day,
+                var newDate = new DateTime(param.NextOccurence.Year, param.NextOccurence.Month, param.NextOccurence.Day,
                                         nextOccurenceWithTime.Hour, nextOccurenceWithTime.Minute, nextOccurenceWithTime.Second, DateTimeKind.Utc);
                 
                 lineitem.NextOccurence = newDate;
@@ -142,8 +142,8 @@ namespace Orckestra.Composer.Repositories
         public virtual Task<RecurringOrderLineItem> GetRecurringOrderTemplateDetails(GetRecurringOrderTemplateDetailParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.Scope == null) { throw new ArgumentNullException(nameof(param.Scope)); }
-            if (param.RecurringOrderLineItemId == null) { throw new ArgumentNullException(nameof(param.RecurringOrderLineItemId)); }
+            if (param.Scope == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Scope)), nameof(param)); }
+            if (param.RecurringOrderLineItemId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.RecurringOrderLineItemId)), nameof(param)); }
 
             var getRecurringOrderLineItemsForCustomerRequest = new GetRecurringOrderLineItemRequest()
             {

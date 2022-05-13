@@ -11,7 +11,7 @@ using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using ServiceStack;
-
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Repositories
 {
@@ -37,8 +37,8 @@ namespace Orckestra.Composer.Search.Repositories
         public virtual async Task<ProductSearchResult> SearchProductAsync(SearchCriteria criteria)
         {
             if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
-            if (criteria.CultureInfo == null) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.CultureInfo)}"); }
-            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException($"{nameof(criteria)}.{nameof(criteria.Scope)}"); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
             var request = CreateSearchRequest(criteria);
 
@@ -58,46 +58,22 @@ namespace Orckestra.Composer.Search.Repositories
                 FacetSettings = FacetConfigContext.GetFacetSettings()
             };
 
-            results.Facets = RemoveSelectedFacetsFromFacets(param);
-
             return results;
         }
 
 
         protected virtual async Task<ProductSearchResult> ExecuteProductSearchRequestAsync(SearchAvailableProductsBaseRequest request)
         {
-            var returnProductSerachResult = request as IReturn<ProductSearchResult>;
-            if (returnProductSerachResult != null)
+            if (request is IReturn<ProductSearchResult> returnProductSerachResult)
             {
                 return await OvertureClient.SendAsync(returnProductSerachResult).ConfigureAwait(false);
             }
-            var returnSearchAvailableProductsByCategoryResponse =
-                request as IReturn<SearchAvailableProductsByCategoryResponse>;
-            if (returnSearchAvailableProductsByCategoryResponse != null)
+
+            if (request is IReturn<SearchAvailableProductsByCategoryResponse> returnSearchAvailableProductsByCategoryResponse)
             {
                 return await OvertureClient.SendAsync(returnSearchAvailableProductsByCategoryResponse).ConfigureAwait(false);
             }
             return null;
-        }
-
-        protected virtual List<Facet> RemoveSelectedFacetsFromFacets(RemoveSelectedFacetsFromFacetsParam param)
-        {
-            var strippedFacets = new List<Facet>();
-            var facets = param.Facets;
-            var selectedFacets = param.SelectedFacets;
-            var facetSettings = param.FacetSettings;
-
-            foreach (var facet in facets)
-            {
-                var facetSetting = facetSettings.FirstOrDefault(setting => setting.FieldName == facet.FieldName);
-
-                if (facetSetting?.FacetType == Facets.FacetType.MultiSelect || selectedFacets.FirstOrDefault(selectedFacet => selectedFacet.Name == facet.FieldName) == null)
-                {
-                    strippedFacets.Add(facet);
-                }
-            }
-
-            return strippedFacets;
         }
 
         protected virtual SearchAvailableProductsBaseRequest CreateSearchRequest(SearchCriteria criteria)
@@ -115,6 +91,7 @@ namespace Orckestra.Composer.Search.Repositories
             request.FacetPredicates = BuildFacetPredicates(criteria);
             request.InventoryLocationIds = criteria.InventoryLocationIds;
             request.AutoCorrect = criteria.AutoCorrect;
+            request.AvailabilityDate = criteria.AvailabilityDate;
 
             var sortDefinitions = BuildQuerySortings(criteria);
 
@@ -167,14 +144,10 @@ namespace Orckestra.Composer.Search.Repositories
 
         protected virtual QuerySorting BuildQuerySortings(SearchCriteria criteria)
         {
-            if (string.IsNullOrWhiteSpace(criteria.SortBy))
-            {
-                return null;
-            }
+            if (string.IsNullOrWhiteSpace(criteria.SortBy)) { return null; }
 
-            var sortDirection =
-                (string.IsNullOrWhiteSpace(criteria.SortDirection) ||
-                (criteria.SortDirection.Equals("asc", StringComparison.InvariantCultureIgnoreCase)))
+            var sortDirection = 
+                string.IsNullOrWhiteSpace(criteria.SortDirection) || criteria.SortDirection.Equals("asc", StringComparison.InvariantCultureIgnoreCase)
                 ? SortDirection.Ascending
                 : SortDirection.Descending;
 
@@ -183,6 +156,42 @@ namespace Orckestra.Composer.Search.Repositories
                 Direction = sortDirection,
                 PropertyName = criteria.SortBy
             };
+        }
+
+        public virtual Task<ProductSearchResult> GetCategoryFacetCountsAsync(SearchCriteria criteria)
+        {
+            if (criteria == null) { throw new ArgumentNullException(nameof(criteria)); }
+            if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
+            if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
+
+            var request = ProductRequestFactory.CreateProductRequest(criteria.Scope);
+            
+            request.Query.IncludeTotalCount = true;
+            request.Query.MaximumItems = 0;
+            request.Query.StartingIndex = 0;
+            request.CultureName = criteria.CultureInfo.Name;
+            request.SearchTerms = criteria.Keywords;
+            request.ScopeId = criteria.Scope;
+            request.IncludeFacets = criteria.IncludeFacets;
+          
+            var facetsForCounts = FacetConfigContext.GetFacetSettings()
+                .Where(fs => fs.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                .Select(f => f.FieldName.Replace("_Facet", ""));
+            var facets = GetFacetFieldNameToQuery(criteria);
+            facets.AddRange(facetsForCounts);
+            request.Facets = facets;
+            if (criteria.SelectedFacets != null)
+            {
+                request.FacetPredicates = criteria.SelectedFacets
+                        .Where(sf => !sf.Name.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                        .Select(FacetPredicateFactory.CreateFacetPredicate)
+                        .Where(fp => fp != null).ToList();
+            }
+            request.InventoryLocationIds = criteria.InventoryLocationIds;
+            request.AutoCorrect = criteria.AutoCorrect;
+            request.AvailabilityDate = criteria.AvailabilityDate;
+
+            return ExecuteProductSearchRequestAsync(request);
         }
     }
 }

@@ -103,7 +103,7 @@ module Orckestra.Composer {
              * it was created to workaround a bug with IE8 that had memory leaks
              * when a circular reference was made with a dom element (ie event + update of the dom element)
              * see : http://com.hemiola.com/2009/11/23/memory-leaks-in-ie8/
-             * and : http://stackoverflow.com/questions/3083196/in-internet-explorer-why-does-memory-leak-stay-even-when-navigating-away-from 
+             * and : http://stackoverflow.com/questions/3083196/in-internet-explorer-why-does-memory-leak-stay-even-when-navigating-away-from
              */
             $(window).on('beforeunload', () => {
                 controllers.forEach(controller => controller.dispose());

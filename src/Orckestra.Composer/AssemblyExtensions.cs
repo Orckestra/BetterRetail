@@ -19,8 +19,7 @@ namespace Orckestra.Composer
 
             string targetAssemblyName = referencedAssembly.GetName().Name;
 
-            return assembly.GetName().Name == targetAssemblyName
-                   || assembly.GetReferencedAssemblies().Any(r => r.Name == targetAssemblyName);
+            return assembly.GetName().Name == targetAssemblyName || assembly.GetReferencedAssemblies().Any(r => r.Name == targetAssemblyName);
         }
 
         public static IEnumerable<Type> SafeConcretTypesOf<TOf>(this Assembly assembly)
@@ -30,10 +29,7 @@ namespace Orckestra.Composer
 
         public static IEnumerable<Type> SafeGetTypes(this _Assembly assembly)
         {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("assembly");
-            }
+            if (assembly == null) { throw new ArgumentNullException(nameof(assembly)); }
 
             try
             {
@@ -41,10 +37,7 @@ namespace Orckestra.Composer
             }
             catch (ReflectionTypeLoadException ex)
             {
-                if (IgnoreExceptions)
-                {
-                    return new List<Type>();
-                }
+                if (IgnoreExceptions) { return new List<Type>(); }
 
                 var builder = new StringBuilder();
 

@@ -6,6 +6,7 @@
 /// <reference path='./IAnalyticsSearchFilters.ts' />
 /// <reference path='../../Plugins/IPlugin.ts' />
 /// <reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
+/// <reference path='../../Composer.Product/ProductEvents.ts' />
 
 module Orckestra.Composer {
     export class AnalyticsPlugin implements IAnalyticsPlugin, IPlugin {
@@ -32,11 +33,11 @@ module Orckestra.Composer {
          * Binds all the events for Analytics
          */
         public registerSubscriptions() {
-            this.eventHub.subscribe('lineItemAdding', (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(ProductEvents.LineItemAdding, (eventInfo: IEventInformation) => {
                 this.onLineItemAdding(eventInfo);
             });
 
-            this.eventHub.subscribe('lineItemRemoving', (eventInfo: IEventInformation) => {
+            this.eventHub.subscribe(ProductEvents.LineItemRemoving, (eventInfo: IEventInformation) => {
                 this.onLineItemRemoving(eventInfo);
             });
 
@@ -58,6 +59,10 @@ module Orckestra.Composer {
 
             this.eventHub.subscribe('searchResultRendered', (eventInfo: IEventInformation) => {
                 this.onSearchResultRendered(eventInfo);
+            });
+
+            this.eventHub.subscribe('contentSearchResultRendered', (eventInfo: IEventInformation) => {
+                this.onContentSearchResultRendered(eventInfo);
             });
 
             this.eventHub.subscribe('relatedProductsLoaded', (eventInfo: IEventInformation) => {
@@ -168,7 +173,7 @@ module Orckestra.Composer {
                 if (facetKey.indexOf('category') !== -1) {
                     facetKey = 'category';
                 }
-            };
+            }
 
             let searchFilters: IAnalyticsSearchFilters = {
                 facetKey: facetKey,
@@ -423,7 +428,7 @@ module Orckestra.Composer {
                     var analyticsProduct: IAnalyticsProduct = {
                         id: product.ProductId,
                         name: product.DisplayName,
-                        price: this.trimPriceAndUnlocalize(product.Pricing.IsOnSale ? product.Pricing.Price : product.Pricing.ListPrice),
+                        price: this.trimPriceAndUnlocalize(product.IsOnSale ? product.Price : product.ListPrice),
                         brand: product.Brand,
                         category: product.CategoryId,
                         list: data.ListName,
@@ -437,6 +442,16 @@ module Orckestra.Composer {
             }
 
             this.sendEvent('event', 'Search Results', 'Rendered', data.Keywords, data.TotalCount);
+        }
+
+        protected onContentSearchResultRendered(eventInfo: IEventInformation): void {
+            if (!eventInfo) {
+                return;
+            }
+
+            const { data: { Keywords, TotalCount, CurrentTab } } = eventInfo
+
+            this.sendEvent('event', `${CurrentTab} Content Search Results`, 'Rendered', Keywords, TotalCount);
         }
 
         /**
@@ -476,25 +491,25 @@ module Orckestra.Composer {
                 return;
             }
 
-            var data = eventInfo.data;
+            const {Index, PageNumber, MaxItemsPerPage, Product, ListName} = eventInfo.data;
 
-            var position: number = data.Index + 1;
+            var position: number = Index + 1;
 
-            if (data.MaxItemsPerPage && data.PageNumber) {
-                position = position + (data.MaxItemsPerPage * (parseInt(data.PageNumber, 10) - 1));
+            if (MaxItemsPerPage && PageNumber) {
+                position = position + (MaxItemsPerPage * (parseInt(PageNumber, 10) - 1));
             }
 
             var product: IAnalyticsProduct = {
-                id: data.Product.ProductId,
-                name: data.Product.DisplayName,
-                price: this.trimPriceAndUnlocalize(data.Product.Price || data.Product.Pricing.Price),
-                brand: data.Product.Brand,
-                category: data.Product.CategoryId,
+                id: Product.ProductId,
+                name: Product.DisplayName,
+                price: this.trimPriceAndUnlocalize(Product.IsOnSale ? Product.Price : Product.ListPrice),
+                brand: Product.Brand,
+                category: Product.CategoryId,
                 position: position
             };
 
             //var products: IAnalyticsProduct[] = [product];
-            this.productClick(product, data.ListName);
+            this.productClick(product, ListName);
         }
 
         /**

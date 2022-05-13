@@ -16,8 +16,8 @@ namespace Orckestra.Composer.ViewModels
 
         public string Format(object value, IPropertyMetadata propertyMetadata, CultureInfo cultureInfo)
         {
-            if (propertyMetadata == null) { throw new ArgumentNullException("propertyMetadata"); }
-            if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (propertyMetadata == null) { throw new ArgumentNullException(nameof(propertyMetadata)); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             if (value == null) { return null; }
 

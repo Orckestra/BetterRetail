@@ -36,7 +36,6 @@ namespace Orckestra.Composer.Cart
             host.Register<CheckoutBreadcrumbViewService, ICheckoutBreadcrumbViewService>();
             host.Register<VaultProfileRepository, IVaultProfileRepository>();
             host.Register<VaultProfileViewService, IVaultProfileViewService>();
-            host.Register<CheckoutNavigationViewService, ICheckoutNavigationViewService>();
 
             host.Register<OrderRepository, IOrderRepository>();
             host.Register<OrderHistoryViewService, IOrderHistoryViewService>();

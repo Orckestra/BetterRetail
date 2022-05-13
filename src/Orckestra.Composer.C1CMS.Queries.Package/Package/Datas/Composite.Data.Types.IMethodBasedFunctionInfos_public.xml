@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
-  <Add Id="5b201c90-af5e-4d9e-b18b-e71c87c6f781" Type="Orckestra.Composer.C1CMS.Queries.QueryFacade" MethodName="GetSearchQueryList" Namespace="Composer.SearchQuery.Functions" UserMethodName="GetSearchQueryList" />
+  <Add Id="5b201c90-af5e-4d9e-b18b-e71c87c6f781" Type="Orckestra.Composer.C1CMS.Queries.QueryFacade, Orckestra.Composer.C1CMS.Queries" MethodName="GetSearchQueryList" Namespace="Composer.SearchQuery.Functions" UserMethodName="GetSearchQueryList" />
 </Data>

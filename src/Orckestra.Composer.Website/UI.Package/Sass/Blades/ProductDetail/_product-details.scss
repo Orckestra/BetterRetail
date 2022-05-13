@@ -1,4 +1,10 @@
 .product-details {
+  .add-to-wishlist {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9;
+  }
 }
 
 .product-details-thumbnail {
@@ -73,10 +79,9 @@
 
   &-trigger {
     display: block;
-    height: 100%;
     left: 0;
     position: absolute;
-    top: 0;
+    bottom: 50px;
     width: 100%;
   }
 }

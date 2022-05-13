@@ -8,7 +8,6 @@ namespace Orckestra.Composer.Cart.Requests
         [Required]
         public Dictionary<string, string> UpdatedCart { get; set; }
 
-        [Required]
         public int? CurrentStep { get; set; }
     }
 }

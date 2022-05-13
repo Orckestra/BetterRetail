@@ -17,17 +17,18 @@
       <Element Label="Navigation" Id="NavElem" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
         <Actions>
         </Actions>
-
         <Children>
 
-          <Element Label="Header" Id="Header" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+          <Element Label="Main Menu" Id="Header" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
             <Actions>
               <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+              <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.IMainMenuProviderConfiguration" Label="Add External Menu Items Provider"/>
             </Actions>
             <Children>
               <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" >
                 <Actions>
                   <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+                  <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Image"/>
                   <EditDataAction/>
                   <DeleteDataAction/>
                 </Actions>
@@ -40,9 +41,27 @@
                 </OrderBy>
 
                 <Children>
+                  <Element Label="Images" Id="ImagesLevel1">
+                    <Actions>
+                      <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Image"/>
+                    </Actions>
+                    <Children>
+                      <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="image" 
+							BrowserImage="~/Renderers/ShowMedia.ashx?src=${C1:Data:Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage:ImageSource}&amp;mw=500">
+                        <Actions>
+                          <EditDataAction/>
+                          <DeleteDataAction/>
+                        </Actions>
+                        <Filters>
+                          <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" ReferenceFieldName="MenuItemParentId" />
+                        </Filters>
+                      </DataElements>
+                    </Children>
+                  </Element>
                   <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" >
                     <Actions>
                       <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
+                      <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Image"/>
                       <EditDataAction/>
                       <DeleteDataAction/>
                     </Actions>
@@ -54,6 +73,23 @@
                     </OrderBy>
 
                     <Children>
+                      <Element Label="Images" Id="ImagesLevel2">
+                        <Actions>
+                          <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Image"/>
+                        </Actions>
+                        <Children>
+                          <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="image" 
+							BrowserImage="~/Renderers/ShowMedia.ashx?src=${C1:Data:Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage:ImageSource}&amp;mw=500">
+                            <Actions>
+                              <EditDataAction/>
+                              <DeleteDataAction/>
+                            </Actions>
+                            <Filters>
+                              <ParentIdFilter ParentType="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" ReferenceFieldName="MenuItemParentId" />
+                            </Filters>
+                          </DataElements>
+                        </Children>
+                      </Element>
                       <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" >
                         <Actions>
                           <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
@@ -68,6 +104,7 @@
                         </OrderBy>
 
                         <Children>
+
                           <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" >
                             <Actions>
                               <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.MainMenu" Label="Add Main Menu Item"/>
@@ -98,6 +135,7 @@
                             </Children>
 
                           </DataElements>
+
                         </Children>
 
                       </DataElements>
@@ -106,28 +144,17 @@
                   </DataElements>
                 </Children>
               </DataElements>
-              <Element Label="Images" Id="ImageNavigation" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.IMainMenuProviderConfiguration" Icon="settings">
                 <Actions>
-                  <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Label="Add Navigation Image"/>
+                  <EditDataAction Label="Edit Main Menu Items Provider"/>
+                  <DeleteDataAction Label="Delete Main Menu Items Provider"/>
                 </Actions>
-                <Children>
-                  <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.NavigationImage" Icon="pagetype-pagetype">
-                    <Actions>
-                      <EditDataAction/>
-                      <DeleteDataAction/>
-                    </Actions>
-                    <Filters>
-
-                    </Filters>
-                    <OrderBy>
-
-                    </OrderBy>
-                  </DataElements>
-                </Children>
-              </Element>
+                <Filters>
+                  <ParentIdFilter ParentType="Composite.Data.Types.IPage" ReferenceFieldName="PageId" />
+                </Filters>
+              </DataElements>
             </Children>
           </Element>
-
 
           <Element Label="Sticky Header" Id="StickyHeader" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
             <Actions>
@@ -170,9 +197,6 @@
             </Children>
           </Element>
 
-
-
-
           <Element Label="Footer" Id="Footer" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
             <Actions>
               <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.Footer" Label="Add Footer Item"/>
@@ -212,7 +236,6 @@
             </Children>
           </Element>
 
-
           <Element Label="Footer Optional Links" Id="FooterOptionLink" Icon="pagetype-pagetype-rootfolder" OpenedIcon="pagetype-pagetype-rootfolder-open">
             <Actions>
               <AddDataAction Type="Orckestra.Composer.CompositeC1.DataTypes.Navigation.FooterOptionalLink" Label="Add Footer Optional Link"/>
@@ -232,7 +255,6 @@
               </DataElements>
             </Children>
           </Element>
-
 
         </Children>
       </Element>

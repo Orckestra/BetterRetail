@@ -9,6 +9,8 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Store.Parameters;
+using Orckestra.Composer.Store.Repositories;
 
 namespace Orckestra.Composer.CompositeC1.Services.PreviewMode
 {
@@ -17,16 +19,18 @@ namespace Orckestra.Composer.CompositeC1.Services.PreviewMode
         protected ICacheStore<Guid, string> Cache { get; }
         protected IDataQueryService DataQueryService { get; }
         protected IProductRepository ProductRepository { get; }
+        protected IStoreRepository StoreRepository { get; }
         protected ISearchRepository SearchRepository { get; }
         protected HttpContextBase HttpContext { get; }
         protected IComposerContext ComposerContext { get; }
 
         public PreviewModeService(HttpContextBase httpContext, ICacheService cacheService, IDataQueryService dataQueryService,
-            IProductRepository productRepository, ISearchRepository searchRepository, IComposerContext composerContext)
+            IProductRepository productRepository, IStoreRepository storeRepository, ISearchRepository searchRepository, IComposerContext composerContext)
         {
             HttpContext = httpContext;
             DataQueryService = dataQueryService;
             ProductRepository = productRepository;
+            StoreRepository = storeRepository;
             SearchRepository = searchRepository;
             ComposerContext = composerContext;
             Cache = cacheService.GetStoreWithDependencies<Guid, string>("Preview Mode", new CacheDependentEntry<IPreviewModeMeta>());
@@ -36,6 +40,12 @@ namespace Orckestra.Composer.CompositeC1.Services.PreviewMode
         {
             var pageId = HttpContext.GetCurrentPageId();
             return Cache.GetOrAdd(pageId.GetValueOrDefault(), _ => LoadProductId(pageId));
+        }
+
+        public virtual string GetStoreNumber()
+        {
+            var pageId = HttpContext.GetCurrentPageId();
+            return Cache.GetOrAdd(pageId.GetValueOrDefault(), _ => LoadStoreNumber());
         }
 
         protected virtual string LoadProductId(Guid? pageId)
@@ -81,6 +91,19 @@ namespace Orckestra.Composer.CompositeC1.Services.PreviewMode
             }).GetAwaiter().GetResult();
 
             return product != null;
+        }
+
+        protected virtual string LoadStoreNumber()
+        {
+            var stores = StoreRepository.GetStoresAsync(new GetStoresParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                IncludeExtraInfo = false,
+                PageSize = 1
+            }).GetAwaiter().GetResult();
+
+            return stores?.Results.FirstOrDefault()?.Number;
         }
     };
 }

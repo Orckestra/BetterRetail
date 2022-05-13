@@ -53,5 +53,11 @@ namespace Orckestra.Composer.MyAccount.Parameters
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
 
+        /// <summary>
+        /// (Optional)
+        /// The PhoneNumber for the User account
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
     }
 }

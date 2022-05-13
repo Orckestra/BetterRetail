@@ -126,5 +126,10 @@ namespace Orckestra.Composer.Cart.Tests.Mock
         {
             throw new NotImplementedException();
         }
+
+        public Task<ProcessedCart> AddLineItemsAsync(AddLineItemsParam param) => throw new NotImplementedException();
+        public Task<HttpWebResponse> DeleteCartAsync(DeleteCartParam param) => throw new NotImplementedException();
+        public Task<List<LineItem>> GetLineItemsAsync(GetLineItemsParam param) => throw new NotImplementedException();
+
     }
 }

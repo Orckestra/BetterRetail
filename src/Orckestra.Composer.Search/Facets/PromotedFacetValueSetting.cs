@@ -1,4 +1,5 @@
 ﻿using System;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Facets
 {
@@ -6,10 +7,7 @@ namespace Orckestra.Composer.Search.Facets
     {
         public PromotedFacetValueSetting(string title)
         {
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                throw new ArgumentNullException("title");
-            }
+            if (string.IsNullOrWhiteSpace(title)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(title)); }
             Title = title;
         }
 

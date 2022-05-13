@@ -10,10 +10,7 @@ namespace Orckestra.Composer.ViewModels
     {
         public PropertyMetadataBase(PropertyInfo propertyInfo)
         {
-	        if (propertyInfo == null)
-	        {
-	            throw new ArgumentNullException("propertyInfo");
-	        }
+	        if (propertyInfo == null) { throw new ArgumentNullException(nameof(propertyInfo)); }
 
 			var displayNameAttr = propertyInfo.GetCustomAttribute<DisplayNameAttribute>(true);
 

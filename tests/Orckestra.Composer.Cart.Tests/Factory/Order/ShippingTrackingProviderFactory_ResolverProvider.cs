@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
@@ -8,6 +9,7 @@ using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Providers.ShippingTracking;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Overture;
+using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.Cart.Tests.Factory.Order
 {
@@ -33,10 +35,11 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             var sut = _container.CreateInstance<ShippingTrackingProviderFactory>();
 
             //Act
-            var exception = Assert.Throws<ArgumentException>(() => sut.ResolveProvider(name));
+            Expression<Func<IShippingTrackingProvider>> expression = () => sut.ResolveProvider(name);
+            var exception = Assert.Throws<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeEquivalentTo("name");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
         }
 
         [Test]

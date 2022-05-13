@@ -1,0 +1,136 @@
+@using Composite.AspNet.Razor
+
+@helper CompactOrderDetails(bool IsPastOrders = false)
+{
+    <div v-for="order in Orders" class="card mb-2" v-bind:key="order.Id">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h5 class="m-0"> @Html.Localized("MyAccount", "L_OrderedOn", "{{order.OrderInfos.OrderDate}}")</h5>
+                </div>
+                <div class="col-sm-7">
+                    <ul class="nav-pills full mt-2 m-sm-0 p-0 float-sm-right">
+                        @if (!IsPastOrders)
+                        {
+                        <template v-if="order.OrderInfos.IsOrderEditable">
+                            <li>
+                                <a v-on:click.prevent="editOrder(order.OrderInfos.OrderNumber)"
+                                   v-bind:class="{'disabled': Loading}" class="cta" href="#">
+                                    <span v-if="order.OrderInfos.IsBeingEdited || order.OrderInfos.HasOwnDraft">@Html.Localize("MyAccount", "B_ContinueEditing")</span>
+                                    <span v-else="else">@Html.Localize("MyAccount", "B_EditOrder")</span>
+                                </a>
+                            </li>
+                            <li v-if="order.OrderInfos.IsBeingEdited || order.OrderInfos.HasOwnDraft">
+                                <a v-on:click.prevent="cancelEditingOrder(order.OrderInfos.OrderNumber)"
+                                   class="cta" href="#" v-bind:class="{'disabled': Loading}">
+                                    @Html.Localize("MyAccount", "B_CancelEditing")
+                                </a>
+                            </li>
+                            <li v-if="order.OrderInfos.IsOrderCancelable &amp;&amp; !order.OrderInfos.IsBeingEdited &amp;&amp; !order.OrderInfos.HasOwnDraft">
+                                <a v-on:click.prevent="cancelOrderConfirm($event, order.OrderInfos.OrderNumber)"
+                                   class="cta" href="#">
+                                    <span>@Html.Localize("MyAccount", "B_CancelOrder")</span>
+                                </a>
+                            </li>
+                        </template>
+                        }
+                        <li>
+                            <a v-bind:href="order.Url" class="cta">
+                                @Html.Localize("MyAccount", "H_OrderDetail")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    @Html.Localized("MyAccount", "L_OrderNumber", "{{order.OrderInfos.OrderNumber}}")
+                    @if (!IsPastOrders)
+                    {
+                        <p v-if="order.ShipmentSummaries.length">
+                            <span class="text-aldi-gray-error" v-if="order.ShipmentSummaries[0].ScheduledShipDate">
+                                @Html.Localized("MyAccount", "L_ScheduledShipping", "{{order.ShipmentSummaries[0].ScheduledShipDate}}")
+                            </span>
+                            <span v-if="order.ShipmentSummaries[0].TrackingInfo">
+                                <br />
+                                <a v-bind:href="order.ShipmentSummaries[0].TrackingInfo.Url">
+                                    @Html.Localize("MyAccount", "H_OrderTracking")
+                                </a>
+                            </span>
+                        </p>
+                    }
+                    <br />
+                    <span class="compact-order-status"
+                          v-bind:class="{'text-warning' : order.OrderInfos.OrderStatusRaw == 'InProgress',
+                          'text-danger': order.OrderInfos.OrderStatusRaw == 'Canceled',
+                          'text-success': order.OrderInfos.OrderStatusRaw == 'Completed'}">
+                        <template  v-if="order.OrderInfos.IsOrderPendingCancellation">
+                            @Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a>)
+                        </template>
+                        <template  v-else="v-else">
+                            {{ order.OrderInfos.OrderStatus }}
+                        </template>
+                    </span>
+
+                </div>
+                <div class="col-sm-4 text-sm-right">Total: <h5>{{order.OrderInfos.PricePaid}}</h5></div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper CancelOrderConfirmationModal()
+{
+    <div class="modal" id="cancelOrderModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@Html.Localize("General", "T_Confirmation")</h4>
+                    <button type="button" class="close" data-dismiss="modal" title="@Html.Localize("General", "B_Close")"><span class="fa fa-times-circle"></span></button>
+                </div>
+                <div class="modal-body">
+                    @Html.Localized("MyAccount", "L_ConfirmCancelOrder", "{{OrderNumber}}")
+                </div>
+                <div class="modal-footer">
+                    <button class="btn   btn-outline-secondary  modal--cancel" type="button">@Html.Localize("General", "B_No")</button>
+                    <button class="btn  btn-primary  modal--confirm" type="button">@Html.Localize("General", "B_Yes")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@helper OrderHistoryPagination()
+{
+    <div v-if="Pagination &amp;&amp; Pagination.Pages.length > 1" class="clearfix mt-4" v-cloak="true">
+        <ul class="float-right  pagination">
+            <li v-if="Pagination.PreviousPage.PageNumber" class="page-item">
+                <a class="page-link"
+                   data-qa="order-pagination-previous"
+                   href="#"
+                   v-on:click.prevent="getOrders(Pagination.PreviousPage.PageNumber)">{{Pagination.PreviousPage.DisplayName}}</a>
+            </li>
+            <li v-else="else" class="disabled page-item">
+                <a class="page-link">
+                    {{Pagination.PreviousPage.DisplayName}}
+                </a>
+            </li>
+            <li v-for="page in Pagination.Pages" class="page-item" v-bind:class="{'active': page.IsCurrentPage }">
+                <a v-if="page.IsCurrentPage" class="page-link">{{page.DisplayName}}</a>
+                <a v-else="else" class="page-link" href="#" v-on:click.prevent="getOrders(page.PageNumber)">{{page.DisplayName}}</a>
+            </li>
+            <li v-if="Pagination.NextPage.PageNumber" class="page-item">
+                <a class="page-link"
+                   data-qa="order-pagination-next"
+                   href="#"
+                   v-on:click.prevent="getOrders(Pagination.NextPage.PageNumber)">{{Pagination.NextPage.DisplayName}}</a>
+            </li>
+            <li v-else="else" class="disabled page-item">
+                <a class="page-link">{{Pagination.NextPage.DisplayName}}</a>
+            </li>
+        </ul>
+    </div>
+}

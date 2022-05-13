@@ -4,15 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.MyAccount.Parameters;
-using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.ViewModels;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Composer.Parameters;
 using Orckestra.Overture.ServiceModel.Customers;
-using Orckestra.Overture.ServiceModel.Products.Inventory;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -22,26 +24,25 @@ namespace Orckestra.Composer.MyAccount.Services
     /// </summary>
     public class CustomerViewService : ICustomerViewService
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ICustomerRepository CustomerRepository { get; private set; }
         protected ICultureService CultureService { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
+        protected IRegexRulesProvider RegexRulesProvider { get; }
 
         public CustomerViewService(
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
             ICultureService cultureService,
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider,
+            IRegexRulesProvider regexRulesProvider)
         {
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (customerRepository == null) { throw new ArgumentNullException("customerRepository"); }
-            if (cultureService == null) { throw new ArgumentNullException("cultureService"); }
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-
-            ViewModelMapper = viewModelMapper;
-            CustomerRepository = customerRepository;
-            CultureService = cultureService;
-            LocalizationProvider = localizationProvider;
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
+            CultureService = cultureService ?? throw new ArgumentNullException(nameof(cultureService));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
         }
 
         /// <summary>
@@ -51,10 +52,10 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         public async virtual Task<AccountHeaderViewModel> GetAccountHeaderViewModelAsync(GetAccountHeaderViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -70,10 +71,10 @@ namespace Orckestra.Composer.MyAccount.Services
 
         public virtual async Task<AccountStatusViewModel> GetAccountStatusViewModelAsync(GetAccountStatusViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -89,7 +90,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
             var vm = new AccountStatusViewModel
             {
-                Status  = GetAccountStatus(customer.AccountStatus)
+                Status = GetAccountStatus(customer.AccountStatus)
             };
 
             return vm;
@@ -102,10 +103,10 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         public async virtual Task<UpdateAccountViewModel> GetUpdateAccountViewModelAsync(GetUpdateAccountViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -124,14 +125,14 @@ namespace Orckestra.Composer.MyAccount.Services
         /// <returns></returns>
         public async virtual Task<UpdateAccountViewModel> UpdateAccountAsync(UpdateAccountParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.CustomerId == Guid.Empty) { throw new ArgumentException("param.CustomerId"); }
-            if (string.IsNullOrWhiteSpace(param.Email)) { throw new ArgumentException("param.Email"); }
-            if (string.IsNullOrWhiteSpace(param.FirstName)) { throw new ArgumentException("param.FirstName"); }
-            if (string.IsNullOrWhiteSpace(param.LastName)) { throw new ArgumentException("param.LastName"); }
-            if (string.IsNullOrWhiteSpace(param.PreferredLanguage)) { throw new ArgumentException("param.PreferredLanguage"); }
-            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException("param.Scope"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.CustomerId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Email)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Email)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.FirstName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.FirstName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.LastName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.LastName)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.PreferredLanguage)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.PreferredLanguage)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
 
             var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
             {
@@ -140,10 +141,7 @@ namespace Orckestra.Composer.MyAccount.Services
                 CultureInfo = param.CultureInfo
             }).ConfigureAwait(false);
 
-            if (customer == null)
-            {
-                return null;
-            }
+            if (customer == null) { return null; }
 
             UpdateCustomerInfo(customer, param);
 
@@ -171,40 +169,64 @@ namespace Orckestra.Composer.MyAccount.Services
             customer.FirstName = updateParam.FirstName;
             customer.LastName = updateParam.LastName;
             customer.Language = updateParam.PreferredLanguage;
+            customer.PhoneNumber = updateParam.PhoneNumber;
         }
 
-        protected virtual UpdateAccountViewModel GetUpdateAccountViewModel(
-            GetUpdateAccountViewModelParam param,
-            Customer customer)
+        protected virtual UpdateAccountViewModel GetUpdateAccountViewModel(GetUpdateAccountViewModelParam param, Customer customer)
         {
             var viewModel = ViewModelMapper.MapTo<UpdateAccountViewModel>(customer, param.CultureInfo);
 
             viewModel.Status = param.Status.HasValue ? param.Status.Value.ToString("G") : string.Empty;
             viewModel.ReturnUrl = param.ReturnUrl;
             viewModel.Languages = GetPreferredLanguageViewModel(param.CultureInfo, customer.Language);
+            viewModel.PhoneNumberRegEx = RegexRulesProvider.GetPhoneNumberRegex();
 
             return viewModel;
         }
 
-        protected virtual List<PreferredLanguageViewModel> GetPreferredLanguageViewModel(
-            CultureInfo currentCulture,
-            string customerLanguage)
+        protected virtual List<PreferredLanguageViewModel> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
         {
             var allcultures = CultureService.GetAllSupportedCultures();
+            CultureInfo customerCultureInfo = null;
 
-            return (from culture in allcultures
-                    let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
-                    {
-                        CultureInfo = currentCulture,
-                        Category = "General",
-                        Key = culture.DisplayName
-                    })
-                    select new PreferredLanguageViewModel
-                    {
-                        DisplayName = displayName,
-                        IsoCode = culture.Name,
-                        IsSelected = customerLanguage == culture.Name
-                    }).ToList();
+            var languages = (from culture in allcultures
+                             let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+                             {
+                                 CultureInfo = currentCulture,
+                                 Category = "General",
+                                 Key = culture.DisplayName
+                             })
+                             select new PreferredLanguageViewModel
+                             {
+                                 DisplayName = displayName,
+                                 IsoCode = culture.Name,
+                                 IsSelected = customerLanguage == culture.Name
+                             }).ToList();
+
+            if (!languages.Any(item => item.IsSelected))
+            {
+                try
+                {
+                    customerCultureInfo = CultureInfo.GetCultureInfo(customerLanguage);
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = string.Format("Culture not found: {0}", customerLanguage);
+                    Log.ErrorException(errorMessage, ex);
+                }
+
+                if (customerCultureInfo != null)
+                {
+                    var affinityCultureName = CultureService.GetAffinityCulture(customerCultureInfo)?.Name;
+                    if (string.IsNullOrEmpty(affinityCultureName)) return languages;
+
+                    var affinityLanguage = languages.FirstOrDefault(item => affinityCultureName == item.IsoCode);
+
+                    if (affinityLanguage != null)
+                        affinityLanguage.IsSelected = true;
+                }
+            }
+            return languages;
         }
 
         protected virtual AccountStatusEnum GetAccountStatus(AccountStatus status)

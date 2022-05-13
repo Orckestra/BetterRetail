@@ -17,6 +17,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Search.Services
 {
@@ -26,55 +27,42 @@ namespace Orckestra.Composer.Search.Services
     public class CategoryBrowsingViewService : BaseSearchViewService<BrowsingSearchParam>, ICategoryBrowsingViewService
     {
         public override SearchType SearchType => SearchType.Browsing;
-
-        protected ICategoryRepository CategoryRepository { get; }
         protected ICategoryBrowsingUrlProvider CategoryBrowsingUrlProvider { get; }
+        protected IFulfillmentContext FulfillmentContext { get; }
 
-        public CategoryBrowsingViewService(
-            ISearchRepository searchRepository,
-            IViewModelMapper viewModelMapper,
+        public CategoryBrowsingViewService(ISearchRepository searchRepository,
             IDamProvider damProvider,
             ILocalizationProvider localizationProvider,
-            IProductUrlProvider productUrlProvider,
             ISearchUrlProvider searchUrlProvider,
             ICategoryRepository categoryRepository,
             ICategoryBrowsingUrlProvider categoryBrowsingUrlProvider,
             IFacetFactory facetFactory,
             ISelectedFacetFactory selectedFacetFactory,
-            IPriceProvider priceProvider,
             IComposerContext composerContext,
-            IProductSettingsViewService productSettings,
-            IScopeViewService scopeViewService,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IFulfillmentContext fulfillmentContext,
+            IProductSearchViewModelFactory productSearchViewModelFactory)
 
-            : base(
-            searchRepository,
-            viewModelMapper,
+            : base(searchRepository,
             damProvider,
             localizationProvider,
-            productUrlProvider,
             searchUrlProvider,
             facetFactory,
             selectedFacetFactory,
-            priceProvider,
             composerContext,
-            productSettings,
-            scopeViewService,
-            recurringOrdersSettings
-            )
-        {
-            if (categoryRepository == null) { throw new ArgumentNullException(nameof(categoryRepository)); }
-            if (categoryBrowsingUrlProvider == null) { throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider)); }
+            productSearchViewModelFactory,
+            categoryRepository)
 
-            CategoryRepository = categoryRepository;
-            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider;
+        {
+            CategoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            CategoryBrowsingUrlProvider = categoryBrowsingUrlProvider ?? throw new ArgumentNullException(nameof(categoryBrowsingUrlProvider));
+            FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
         }
 
         public virtual async Task<CategoryBrowsingViewModel> GetCategoryBrowsingViewModelAsync(GetCategoryBrowsingViewModelParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
-            if (param.CategoryId == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CategoryId")); }
-            if (param.SelectedFacets == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("SelectedFacets")); }
+            if (param.CategoryId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CategoryId)), nameof(param)); }
+            if (param.SelectedFacets == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.SelectedFacets)), nameof(param)); }
 
             var node = await GetCurrentCategoryNodeAsync(param).ConfigureAwait(false);
             var landingPageUrls = GetLandingPageUrls(node, param);
@@ -83,17 +71,78 @@ namespace Orckestra.Composer.Search.Services
             {
                 CategoryId = param.CategoryId,
                 CategoryName = param.CategoryName,
-                SelectedFacets = await GetSelectedFacetsAsync(param).ConfigureAwait(false),
+                FacetSettings = new FacetSettingsViewModel()
+                {
+                    SelectedFacets = await GetSelectedFacetsAsync(param).ConfigureAwait(false),
+                },
                 ProductSearchResults = await GetProductSearchResultsAsync(param).ConfigureAwait(false),
-                ChildCategories = await GetChildCategoriesAsync(param).ConfigureAwait(false),
-                LandingPageUrls = landingPageUrls
+                LandingPageUrls = landingPageUrls,
+                ListName = "Category Browsing"
             };
+
+            viewModel.FacetSettings.CategoryFacetValuesTree = await BuildCategoryFacetValuesTree(viewModel.ProductSearchResults.Facets,
+                viewModel.FacetSettings.SelectedFacets,
+                viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
+            if (viewModel.FacetSettings.CategoryFacetValuesTree != null)
+            {
+                var categoryRoot = CategoryRootNode(viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes, param.CategoryId);
+                viewModel.FacetSettings.CategoryFacetValuesTree.TotalCount = categoryRoot != null ? categoryRoot.Quantity : 0;
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes = categoryRoot?.ChildNodes;
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+                viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
+            }
+
+            // Json context for Facets
+            viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+            viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
+            viewModel.FacetSettings.Context["PromotedFacetValues"] = viewModel.ProductSearchResults.PromotedFacetValues;
 
             return viewModel;
         }
 
-        protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode,
-            GetCategoryBrowsingViewModelParam param)
+        private CategoryFacetValuesTreeNode CategoryRootNode(List<CategoryFacetValuesTreeNode> nodes, string categoryId)
+        {
+            if (nodes == null) return null;
+            var rootCategory = nodes.FirstOrDefault(c => c.CategoryId == categoryId);
+            if (rootCategory == null)
+            {
+                foreach (var childNode in nodes)
+                {
+                    rootCategory = CategoryRootNode(childNode.ChildNodes, categoryId);
+                    if (rootCategory != null)
+                    {
+                        break;
+                    }
+                }
+            }
+            return rootCategory;
+        }
+
+        private void BuildCategoryUrlsForTreeNode(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)
+        {
+            node.CategoryUrl = GetCategoryUrl(node.CategoryId, param);
+            node.ChildNodes?.ForEach(childNode => BuildCategoryUrlsForTreeNode(param, childNode));
+        }
+
+        /// <summary>
+        /// Category Browse page allows filter by facets but we can't filter by sibling category facets.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="node"></param>
+        /// 
+        private void CleanSiblingFacets(GetCategoryBrowsingViewModelParam param, CategoryFacetValuesTreeNode node)
+        {
+            var selected = node.ChildNodes?.FirstOrDefault(c => c.IsSelected && c.CategoryId == param.CategoryId);
+            if(selected != null)
+            {
+                node.ChildNodes = node.ChildNodes.Where(c => c.CategoryId == param.CategoryId).ToList();
+            }
+
+            node.ChildNodes?.ForEach(childNode => CleanSiblingFacets(param, childNode));
+        }
+
+        protected virtual List<string> GetLandingPageUrls(TreeNode<Category> startNode, GetCategoryBrowsingViewModelParam param)
         {
             var urlStack = new Stack<string>();
             var currentNode = startNode;
@@ -101,7 +150,7 @@ namespace Orckestra.Composer.Search.Services
             while (currentNode != null && !IsCategoryFacetSystem(currentNode.Value, currentNode.GetLevel()))
             {
                 var url = GetParentPageUrl(currentNode, param);
-                urlStack.Push(url ?? String.Empty);
+                urlStack.Push(url ?? string.Empty);
 
                 currentNode = currentNode.Parent;
             }
@@ -136,8 +185,7 @@ namespace Orckestra.Composer.Search.Services
         protected virtual async Task<SelectedFacets> GetSelectedFacetsAsync(GetCategoryBrowsingViewModelParam param)
         {
             List<SearchFilter> selectedCategories = await GetSelectedCategoriesAsync(param).ConfigureAwait(false);
-            List<SearchFilter> selectedFacets = param.SelectedFacets;
-            List<SearchFilter> allFacets = selectedCategories.Concat(selectedFacets).ToList();
+            List<SearchFilter> allFacets = selectedCategories.Concat(param.SelectedFacets).ToList();
 
             return FlattenFilterList(allFacets, param.CultureInfo);
         }
@@ -148,7 +196,7 @@ namespace Orckestra.Composer.Search.Services
 
             return selectedCategories.Select((category, i) => new SearchFilter
             {
-                Name = String.Format("CategoryLevel{0}_Facet", i + 1),
+                Name = string.Format("CategoryLevel{0}_Facet", i + 1),
                 Value = category.DisplayName.GetLocalizedValue(ComposerContext.CultureInfo.Name),
                 IsSystem = IsCategoryFacetSystem(category, i)
             }).ToList();
@@ -181,12 +229,9 @@ namespace Orckestra.Composer.Search.Services
                 Scope = ComposerContext.Scope
             }).ConfigureAwait(false);
 
-            if (tree.ContainsKey(param.CategoryId))
-            {
-                return tree[param.CategoryId];
-            }
+            if (tree.ContainsKey(param.CategoryId)) { return tree[param.CategoryId]; }
 
-            throw new InvalidOperationException(String.Format("{0} does not exist in the retrieved category tree", param.CategoryId));
+            throw new InvalidOperationException(string.Format("{0} does not exist in the retrieved category tree", param.CategoryId));
         }
 
         protected virtual async Task<ProductSearchResultsViewModel> GetProductSearchResultsAsync(GetCategoryBrowsingViewModelParam param)
@@ -200,7 +245,6 @@ namespace Orckestra.Composer.Search.Services
             };
 
             ProductSearchResultsViewModel model = await SearchAsync(searchParam).ConfigureAwait(false);
-            model.Facets = GetFacetsWithoutCategoryFacets(model.Facets);
 
             return model;
         }
@@ -209,9 +253,10 @@ namespace Orckestra.Composer.Search.Services
         {
             var criteria = new CategorySearchCriteria
             {
-                NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
+                NumberOfItemsPerPage = param.NumberOfItemsPerPage,
                 IncludeFacets = true,
                 InventoryLocationIds = param.InventoryLocationIds,
+                AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate,
                 StartingIndex = (param.Page - 1) * SearchConfiguration.MaxItemsPerPage, // The starting index is zero-based.
                 SortBy = param.SortBy,
                 SortDirection = param.SortDirection,
@@ -231,46 +276,6 @@ namespace Orckestra.Composer.Search.Services
             criteria.SelectedFacets.AddRange(selectedFacets);
 
             return criteria;
-        }
-
-        protected virtual List<Facet> GetFacetsWithoutCategoryFacets(IList<Facet> facets)
-        {
-            return facets.Where(facet => !IsCategoryFacet(facet)).ToList();
-        }
-
-        protected virtual bool IsCategoryFacet(Facet facet)
-        {
-            return facet.FieldName != null && facet.FieldName.StartsWith("CategoryLevel");
-        }
-
-        protected virtual async Task<List<ChildCategoryViewModel>> GetChildCategoriesAsync(GetCategoryBrowsingViewModelParam param)
-        {
-            List<TreeNode<Category>> children = await GetCategoryChildrenAsync(param).ConfigureAwait(false);
-
-            //If the category has no URL, it probably means there is no item for it in the CMS yet...
-            var childCategories = children
-                .Select(childCategory => CreateChildCategoryViewModel(childCategory.Value, param))
-                .Where(childCategory => !String.IsNullOrWhiteSpace(childCategory.Url)).ToList();
-
-            return childCategories;
-        }
-
-        protected virtual async Task<List<TreeNode<Category>>> GetCategoryChildrenAsync(GetCategoryBrowsingViewModelParam param)
-        {
-            Tree<Category, string> tree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
-            {
-                Scope = ComposerContext.Scope
-            }).ConfigureAwait(false);
-
-            return tree[param.CategoryId].Children;
-        }
-
-        protected virtual ChildCategoryViewModel CreateChildCategoryViewModel(Category category, GetCategoryBrowsingViewModelParam param)
-        {
-            string title = category.DisplayName.GetLocalizedValue(ComposerContext.CultureInfo.Name);
-            var url = GetCategoryUrl(category.Id, param);
-
-            return new ChildCategoryViewModel { Title = title, Url = url};
         }
 
         protected virtual string GetCategoryUrl(string categoryId, GetCategoryBrowsingViewModelParam param, bool isAllProductsPage = false)
@@ -307,13 +312,10 @@ namespace Orckestra.Composer.Search.Services
         {
             foreach (var filter in cloneParam.CategoryFilters)
             {
-                if (filter == null)
-                {
-                    continue;
-                }
+                if (filter == null) { continue; }
 
                 var categoryFilter = cloneParam.Criteria.SelectedFacets
-                    .FirstOrDefault(f => filter.Name == f.Name && filter.Value == f.Value);
+                    .Find(f => filter.Name == f.Name && filter.Value == f.Value);
 
                 if (categoryFilter != null)
                 {

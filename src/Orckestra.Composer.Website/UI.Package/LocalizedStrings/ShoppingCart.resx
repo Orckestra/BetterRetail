@@ -190,13 +190,16 @@
     <value>Learn more</value>
   </data>
   <data name="H_ShippingTaxes" xml:space="preserve">
-    <value>Shipping &amp;amp; taxes</value>
+    <value>Shipping &amp; taxes</value>
   </data>
   <data name="L_AdditionalFees" xml:space="preserve">
     <value>Additional fees</value>
   </data>
   <data name="L_AdditionalFeesGenericMessage" xml:space="preserve">
     <value>Additional fees may apply in case of oversized packages.</value>
+  </data>
+  <data name="L_EditCartBannerMessage" xml:space="preserve">
+    <value>You are currently editing Order “{0}”</value>
   </data>
   <data name="L_EmptyShoppingCart" xml:space="preserve">
     <value>There is no product in your cart.</value>
@@ -287,5 +290,14 @@
   </data>
   <data name="Title.CartNotFound" xml:space="preserve">
     <value>Cart was not found</value>
+  </data>
+  <data name="F_RemoveItem" xml:space="preserve">
+    <value>Remove Item</value>
+  </data>
+  <data name="L_GiftItem" xml:space="preserve">
+    <value>Your free gift</value>
+  </data>
+  <data name="B_RemoveUnavailableProducts" xml:space="preserve">
+    <value>Remove unavailable products</value>
   </data>
 </root>

@@ -2,6 +2,7 @@
 using System.Reflection;
 using Moq;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 
@@ -20,12 +21,12 @@ namespace Orckestra.Composer.Product.Tests.Mock
 
             var formatterMock = new Mock<IViewModelPropertyFormatter>();
             formatterMock.Setup(m => m.Format(It.IsAny<object>(), It.IsNotNull<IPropertyMetadata>(), It.IsAny<CultureInfo>()))
-                .Returns((object value, IPropertyMetadata meta, CultureInfo culture) => value == null ? null : value.ToString());
+                .Returns((object value, IPropertyMetadata meta, CultureInfo culture) => value?.ToString());
 
             var lookupServiceMock = new Mock<ILookupService>();
             var localizationProviderMock = new Mock<ILocalizationProvider>();
-
-            var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object);
+            var currencyProviderMock = new Mock<ICurrencyProvider>();
+            var mapper = new ViewModelMapper(registry, formatterMock.Object, lookupServiceMock.Object, localizationProviderMock.Object, currencyProviderMock.Object);
             return mapper;
         }
     }

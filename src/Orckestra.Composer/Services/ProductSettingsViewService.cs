@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.ViewModels;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Services
 {
@@ -27,8 +28,8 @@ namespace Orckestra.Composer.Services
         /// <returns></returns>
         public virtual async Task<ProductSettingsViewModel> GetProductSettings(string scope, CultureInfo cultureInfo)
         {
-            if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException("scope"); }
-            if (cultureInfo == null) { throw new ArgumentNullException("cultureInfo"); }
+            if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scope)); }
+            if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
             var overtureProductSettings = await ProductSettingsRepository.GetProductSettings(scope);
             var productSettingsViewModel = ViewModelMapper.MapTo<ProductSettingsViewModel>(overtureProductSettings, cultureInfo);

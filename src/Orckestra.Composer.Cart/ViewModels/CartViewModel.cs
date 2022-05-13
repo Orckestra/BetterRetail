@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Orckestra.Composer.Cart.Helper;
-using Orckestra.Composer.Helper;
+﻿using Orckestra.Composer.Cart.Helper;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.ViewModels;
+using System;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.Cart.ViewModels
 {
@@ -37,6 +37,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         public List<LineItemDetailViewModel> LineItemDetailViewModels { get; set; }
 
         /// <summary>
+        /// Grouped LineItems by Primary Parent Category
+        /// </summary>
+        public List<GroupedLineItemDetailViewModel> GroupedLineItemDetailViewModels { get; set; }
+
+        /// <summary>
         /// The order summary at the right of the cart where is the total and subtotal
         /// </summary>
         public OrderSummaryViewModel OrderSummary { get; set; }
@@ -45,6 +50,8 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The homepage Url
         /// </summary>
         public string HomepageUrl { get; set; }
+
+        public string ForgotPasswordUrl { get; set; }
 
         /// <summary>
         /// Displays the discounts on the cart.
@@ -66,6 +73,11 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The ShippingMethod of the first shipment.
         /// </summary>
         public ShippingMethodViewModel ShippingMethod { get; set; }
+
+        /// <summary>
+        /// The address of the store of the first shipment.
+        /// </summary>
+        public Guid? PickUpLocationId { get; set; }
 
         /// <summary>
         /// The Customer info.
@@ -103,14 +115,22 @@ namespace Orckestra.Composer.Cart.ViewModels
         public bool IsLoading { get; set; }
 
         /// <summary>
+        /// Cart Type
+        /// </summary>
+        public string CartType { get; set; }
+
+        /// <summary>
         /// Indicates if the cart contains recurring lineitems
         /// </summary>
-        public bool HasRecurringLineitems {
+        public bool HasRecurringLineitems
+        {
             get
             {
                 return RecurringOrderCartHelper.IsCartContainsRecurringOrderItems(LineItemDetailViewModels);
             }
         }
+
+        public ProductQuantityViewModel QuantityRange => QuantityConfiguration.GetProductQuantity();
 
         public CartViewModel()
         {

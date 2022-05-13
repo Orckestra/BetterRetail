@@ -7,6 +7,7 @@ namespace Orckestra.Composer.Store.ViewModels
     {
         public string Name { get; set; }
 
+        public string Number { get; set; }
         public string Telephone { get; set; }
 
         public string StreetAddress { get; set; }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Security;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.MyAccount.Requests;
@@ -38,18 +39,22 @@ namespace Orckestra.Composer.MyAccount.Api
         protected virtual IFormsAuthenticationProxy FormsAuthentication { get; set; }
         public virtual IWebsiteContext WebsiteContext { get; set; }
 
+        public IEditingOrderProvider EditingOrderProvider { get; set; }
+
         public MembershipController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IMembershipViewService membershipViewService,
             IComposerContext composerContext,
             ISiteConfiguration siteConfiguration,
-            IWebsiteContext websiteContext)
+            IWebsiteContext websiteContext,
+            IEditingOrderProvider editingOrderProvider)
         {
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             MembershipViewService = membershipViewService ?? throw new ArgumentNullException(nameof(membershipViewService));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration)); ;
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
 
             FormsAuthentication = new StaticFormsAuthenticationProxy();
         }
@@ -131,10 +136,11 @@ namespace Orckestra.Composer.MyAccount.Api
 
             if (!logoutRequest.PreserveCustomerInfo)
             {
-                InvalidateCustomerCookie();
+                MembershipViewService.LogOutCustomer();
             }
 
             FormsAuthentication.SignOut();
+            EditingOrderProvider.ClearEditMode();
 
             response.ReturnUrl = logoutRequest.ReturnUrl;
             if (string.IsNullOrWhiteSpace(response.ReturnUrl) || !UrlFormatter.IsReturnUrlValid(RequestUtils.GetBaseUrl(Request).ToString(), response.ReturnUrl))
@@ -148,14 +154,6 @@ namespace Orckestra.Composer.MyAccount.Api
             return Ok(response);
         }
 
-        /// <summary>
-        /// Remove information relative to the Customer himself
-        /// </summary>
-        protected virtual void InvalidateCustomerCookie()
-        {
-            ComposerContext.CustomerId = Guid.Empty;
-            ComposerContext.IsGuest = true;
-        }
 
         /// <summary>
         /// Create the Account based on the Request
@@ -193,6 +191,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Email = registerRequest.Email,
                 FirstName = registerRequest.FirstName,
                 LastName = registerRequest.LastName,
+                PhoneNumber = registerRequest.PhoneNumber,
                 PasswordQuestion = registerRequest.PasswordQuestion,
                 PasswordAnswer = registerRequest.PasswordAnswer,
                 ReturnUrl = returnUrl,
@@ -318,15 +317,15 @@ namespace Orckestra.Composer.MyAccount.Api
         }
 
         /// <summary>
-        /// Get the mini sign-in viewmodel in the header
+        /// Get the mini user metadata viewmodel in the header
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet]
-        [ActionName("signin")]
-        public virtual async Task<IHttpActionResult> SignIn()
+        [ActionName("usermetadata")]
+        public virtual async Task<IHttpActionResult> UserMetadata()
         {
-            var getSignInHeaderParam = new GetSignInHeaderParam
+            var getParam = new GetUserMetadataParam
             {
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -335,9 +334,9 @@ namespace Orckestra.Composer.MyAccount.Api
                 EncryptedCustomerId = ComposerContext.GetEncryptedCustomerId()
             };
 
-            var signInHeaderViewModel = await MembershipViewService.GetSignInHeaderModel(getSignInHeaderParam);
+            var vm = await MembershipViewService.GetUserMetadataModel(getParam);
 
-            return Ok(signInHeaderViewModel);
+            return Ok(vm);
         }
 
         /// <summary>
@@ -355,6 +354,27 @@ namespace Orckestra.Composer.MyAccount.Api
             };
 
             return Ok(vm);
+        }
+
+
+        /// <summary>
+        /// Return true if the user exist
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [ActionName("isExist")]
+        public virtual async Task<IHttpActionResult> IsUserExist(string email)
+        {
+            var getCustomerByEmailParam = new GetCustomerByEmailParam
+            {
+                CultureInfo = ComposerContext.CultureInfo,
+                Scope = ComposerContext.Scope,
+                Email = email
+            };
+
+            var isUserExistViewModel = await MembershipViewService.GetIsUserExistViewModelAsync(getCustomerByEmailParam);
+            return Ok(isUserExistViewModel);
         }
     }
 }

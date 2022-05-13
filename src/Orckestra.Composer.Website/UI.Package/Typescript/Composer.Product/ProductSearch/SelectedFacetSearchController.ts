@@ -7,62 +7,112 @@
 /// <reference path='./Services/ISearchService.ts' />
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='./UrlHelper.ts' />
+/// <reference path='../../Composer.ContentSearch/SearchParams.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
-    interface SerializeObject extends JQuery {
-        serializeObject(): any;
-    }
-
     export class SelectedFacetSearchController extends Orckestra.Composer.Controller {
+        protected vueSelectedSearchFacets: Vue;
 
         public initialize() {
             super.initialize();
-        }
+            const self = this;
 
-        public removeSelectedFacet(actionContext: IControllerActionContext) {
-            var removeFacetButton = actionContext.elementContext;
-
-            actionContext.event.preventDefault();
-            actionContext.event.stopPropagation();
-
-            this.eventHub.publish('facetRemoved', {
+            this.vueSelectedSearchFacets = new Vue({
+                el: '#vueSelectedSearchFacets',
+                components: {
+                },
                 data: {
-                    facetFieldName: removeFacetButton.data('facetfieldname'),
-                    facetValue: removeFacetButton.data('facetvalue'),
-                    facetType: removeFacetButton.data('facettype'),
-                    facetLandingPageUrl: removeFacetButton.data('facetlandingpageurl')
-                }
-            });
-        }
+                    ...this.context.viewModel,
+                    LandingPageUrls: this.context.container.data('landingpageurls') || []
+                },
+                mounted() {
+                    self.eventHub.subscribe(SearchEvents.FacetsLoaded, this.onFacetsLoaded);
+                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, this.onFacetsLoaded);
+                },
+                computed: {
+                },
+                methods: {
+                    onFacetsLoaded({data}) {
+                        this.Facets = data.FacetSettings.SelectedFacets.Facets;
+                        this.IsAllRemovable = data.FacetSettings.SelectedFacets.IsAllRemovable;
+                        this.LandingPageUrls = data.LandingPageUrls || [];
+                    },
+                    clearSelectedFacets(landingPageUrl) {
+                        self.eventHub.publish(SearchEvents.FacetsCleared, { data: { landingPageUrl } });
+                    },
+                    removeSelectedFacet(facet, index) {
+                        const categoryFacetFiledNamePrefix = 'CategoryLevel';
+                        const categoryTreeRef = facet.FieldName.startsWith(categoryFacetFiledNamePrefix) && facet.FieldName;
+                        const facetLandingPageUrl = categoryTreeRef && this.LandingPageUrls.length > index && this.LandingPageUrls[index];
 
-        public clearSelectedFacets(actionContext: IControllerActionContext) {
-            var clearFacetsButton = actionContext.elementContext;
+                        if(facetLandingPageUrl || !categoryTreeRef) {
+                            if(categoryTreeRef) {
+                                // case, when remove category facet with landing page url and sub-categories selected
+                                const getLevel = (f) => {
+                                    const match = f.FieldName.match(/CategoryLevel(\d+)_Facet/);
+                                    return match && match[1];
+                                }
+                                const level = getLevel(facet);
+                                const data = this.Facets.filter(f => getLevel(f) > level).map(f => ({
+                                    facetFieldName: f.FieldName,
+                                    facetType: f.FacetType,
+                                    facetValue: f.Value,
+                                }))
 
-            actionContext.event.preventDefault();
-            actionContext.event.stopPropagation();
+                                self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
+                            }
 
-            this.eventHub.publish('facetsCleared', {
-               data: { landingPageUrl: clearFacetsButton.data('landingpageurl') }
-            });
-        }
+                            self.eventHub.publish(SearchEvents.FacetRemoved, {
+                                data: {
+                                    facetFieldName: facet.FieldName,
+                                    facetValue: facet.Value,
+                                    facetType: facet.FacetType,
+                                    facetLandingPageUrl: facetLandingPageUrl
+                                }
+                            });
+                        } else if(categoryTreeRef) {
+                            switch (facet.FacetType) {
+                                case 'MultiSelect': {
+                                    const currentFacets: any = [];
+                                    SearchParams.getSearchParams().forEach(a => currentFacets.push(a));
 
-        public addSingleSelectCategory(actionContext: IControllerActionContext) {
-            var singleSelectCategory = actionContext.elementContext,
-                anchorContext = actionContext.elementContext,
-                facetFieldName = anchorContext.data('facetfieldname'),
-                facetValue = anchorContext.data('facetvalue');
+                                    const data = {
+                                        facetKey: facet.FieldName,
+                                        facetValue: facet.Value,
+                                        //    pageType,
+                                        filter: this.Facets.reduce((filter, f) => {
+                                            if (f.Value !== facet.Value && currentFacets.includes(f.FieldName)) {
+                                                filter[f.FieldName] = f.FacetType === 'MultiSelect' ?
+                                                    (filter[f.FieldName] || []).concat(f.Value) : f.Value;
+                                            }
+                                            return filter;
+                                        }, {})
+                                    };
 
-            actionContext.event.preventDefault();
-            actionContext.event.stopPropagation();
+                                    self.eventHub.publish(SearchEvents.MultiFacetChanged, {data});
+                                    break;
+                                }
+                                case 'SingleSelect':
+                                default:
+                                    //remove also all child categories
+                                    const parentCategoryElement = $('#categoriesTree').find('div[data-facetfieldname="' + categoryTreeRef + '"]');
+                                    const checkedItems = parentCategoryElement.find('input:checked');
+                                    const data = [];
+                                    checkedItems.each(index => {
+                                        let el = $(checkedItems[index]);
+                                        data.push({
+                                            facetFieldName: el.attr('name').replace('[]',''),
+                                            facetValue: el.attr('value'),
+                                            facetType: el.data('type')
+                                        })
+                                    });
 
-            this.eventHub.publish('singleCategoryAdded', {
-                data: {
-                    categoryUrl: singleSelectCategory.data('categoryurl'),
-                    facetKey: facetFieldName,
-                    facetValue: facetValue,
-                    pageType: UrlHelper.resolvePageType()
+                                    self.eventHub.publish(SearchEvents.FacetsRemoved, { data });
+                            }
+                        }
+                    }
                 }
             });
         }

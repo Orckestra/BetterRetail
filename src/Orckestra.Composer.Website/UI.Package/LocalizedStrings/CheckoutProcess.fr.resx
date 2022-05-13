@@ -204,6 +204,9 @@
   <data name="L_DeliveryDaysNumber" xml:space="preserve">
     <value> jours</value>
   </data>
+  <data name="L_Selected" xml:space="preserve">
+    <value>CHOISI</value>
+  </data>
   <data name="L_EmailConfirmation" xml:space="preserve">
     <value>Le courriel de confirmation sera envoyé à l'adresse courriel</value>
   </data>
@@ -226,7 +229,7 @@
     <value>Votre carte de crédit sera débitée une fois la commande soumise</value>
   </data>
   <data name="L_OrderConfirmation" xml:space="preserve">
-    <value>Confirmation de la commande</value>
+    <value>Confirmation de commande</value>
   </data>
   <data name="L_Products" xml:space="preserve">
     <value>Articles</value>
@@ -247,10 +250,10 @@
     <value>Type :</value>
   </data>
   <data name="L_VerificationNumber" xml:space="preserve">
-    <value>Numéro de vérification</value>
+    <value>CVV</value>
   </data>
   <data name="L_YourOrderNumber" xml:space="preserve">
-    <value>Votre numéro de commande :</value>
+    <value>Votre commande #{0} est passée.</value>
   </data>
   <data name="Quantity" xml:space="preserve">
     <value>Quantité</value>
@@ -283,7 +286,7 @@
     <value>Se connecter</value>
   </data>
   <data name="T_ThankYou" xml:space="preserve">
-    <value>Merci pour votre commande,</value>
+    <value>Merci</value>
   </data>
   <data name="T_SelectCreditCart" xml:space="preserve">
     <value>Sélectionner une carte de crédit</value>
@@ -291,7 +294,40 @@
   <data name="B_AddCreditCard" xml:space="preserve">
     <value>Utiliser une autre carte de crédit</value>
   </data>
-  <data name="L_ExpirationDateForm" xml:space="preserve">
-    <value>Date d'expiration (mmaa)</value>
+  <data name="F_PlaceOrder" xml:space="preserve">
+    <value>Passer la commande</value>
+  </data>
+  <data name="H_OrderDetail" xml:space="preserve">
+    <value>Détails de la commande</value>
+  </data>
+  <data name="F_Continue" xml:space="preserve">
+    <value>Continuer</value>
+  </data>
+  <data name="F_Edit" xml:space="preserve">
+    <value>Éditer</value>
+  </data>
+  <data name="F_ReviewCart" xml:space="preserve">
+    <value>Revoir le panier</value>
+  </data>
+  <data name="L_SignInNow" xml:space="preserve">
+    <value>Déjà client?</value>
+  </data>
+  <data name="B_SignInNow" xml:space="preserve">
+    <value>Connectez-vous maintenant</value>
+  </data>
+  <data name="B_ContinueAsGuest" xml:space="preserve">
+    <value>Continuer en tant qu’invité</value>
+  </data>
+  <data name="L_AccountAlreadyExists" xml:space="preserve">
+    <value>Un compte existe déjà avec cette adresse e-mail.</value>
+  </data>
+  <data name="B_SignInNowAndSaveTime" xml:space="preserve">
+    <value>Connectez-vous et gagnez du temps!</value>
+  </data>
+  <data name="T_SaveInformation" xml:space="preserve">
+    <value>Enregistrez vos informations pour la prochaine fois</value>
+  </data>
+  <data name="L_CreateAccountForFastCheckout" xml:space="preserve">
+    <value>Créez un compte et profitez d'un paiement plus rapide, accédez à l'historique des achats, aux listes de souhaits et plus encore.</value>
   </data>
 </root>

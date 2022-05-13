@@ -5,6 +5,7 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.ViewModels.Breadcrumb;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Services
 {
@@ -14,15 +15,13 @@ namespace Orckestra.Composer.Cart.Services
 
          public CheckoutBreadcrumbViewService(ILocalizationProvider localizationProvider)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-
-            LocalizationProvider = localizationProvider;
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
         }
 
         public virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetCheckoutBreadcrumbParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo is required"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
             var vm = new BreadcrumbViewModel
             {

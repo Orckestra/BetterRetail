@@ -25,6 +25,15 @@ namespace Orckestra.Composer.Cart.Factory
         ShippingMethodViewModel GetShippingMethodViewModel(FulfillmentMethod fulfillmentMethod, CultureInfo cultureInfo);
 
         /// <summary>
+        /// Gets a ShippingMethodTypeViewModel from an shippingMethods list.
+        /// </summary>
+        /// <param name="fulfillmentMethodType"></param>
+        /// <param name="shippingMethods"></param>
+        /// <param name="cultureInfo"></param>
+        /// <returns></returns>
+        ShippingMethodTypeViewModel GetShippingMethodTypeViewModel(FulfillmentMethodType fulfillmentMethodType, IList<ShippingMethodViewModel> shippingMethods, CultureInfo cultureInfo);
+
+        /// <summary>
         /// Gets a PaymentMethodViewModel from an Overture PaymentMethod object.
         /// </summary>
         /// <param name="paymentMethod"></param>

@@ -65,8 +65,7 @@ namespace Composer.LoadTest.Cookie
 
             string[] pack = cookieValue.Split(ValidSeparators, 2, StringSplitOptions.None);
             //Extract back the version (Item1)
-            int version;
-            if (!int.TryParse(pack.FirstOrDefault() ?? string.Empty, out version))
+            if (!int.TryParse(pack.FirstOrDefault() ?? string.Empty, out int version))
             {
                 version = 0;
             }

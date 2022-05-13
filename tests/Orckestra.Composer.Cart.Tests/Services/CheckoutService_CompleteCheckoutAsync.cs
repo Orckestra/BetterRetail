@@ -5,12 +5,17 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Orders;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using static Orckestra.Composer.Utils.ExpressionUtility;
+using Orckestra.Composer.Cart.ViewModels;
+using System.Linq.Expressions;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {
@@ -27,7 +32,7 @@ namespace Orckestra.Composer.Cart.Tests.Services
 
             _container.Use(ViewModelMapperFactory.Create());
             _container.Use(CartViewModelFactoryMock.Create());
-
+    
             var cartRepoMock = _container.GetMock<ICartRepository>();
             cartRepoMock.Setup(repo => repo.CompleteCheckoutAsync(It.IsNotNull<CompleteCheckoutParam>()))
                 .Returns((CompleteCheckoutParam p) =>
@@ -127,11 +132,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.CompleteCheckoutAsync(param));
+            Expression<Func<Task<CompleteCheckoutViewModel>>> expression = () => service.CompleteCheckoutAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("Scope");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.Scope)));
         }
 
         [Test]
@@ -190,11 +196,12 @@ namespace Orckestra.Composer.Cart.Tests.Services
             };
 
             // Act
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => service.CompleteCheckoutAsync(param));
+            Expression<Func<Task<CompleteCheckoutViewModel>>> expression = () => service.CompleteCheckoutAsync(param);
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => expression.Compile().Invoke());
 
             //Assert
-            exception.ParamName.Should().BeSameAs("param");
-            exception.Message.Should().Contain("CartName");
+            exception.ParamName.Should().BeEquivalentTo(GetParamsInfo(expression)[0].Name);
+            exception.Message.Should().StartWith(GetMessageOfNullWhiteSpace(nameof(param.CartName)));
         }
     }
 }

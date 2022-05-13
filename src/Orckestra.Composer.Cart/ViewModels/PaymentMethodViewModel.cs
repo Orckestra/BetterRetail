@@ -41,5 +41,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Indicate whether the card is valid or not.
         /// </summary>
         public bool IsValid => true;
+
+        public bool IsCreditCardPaymentMethod { get; set; }
     }
 }

@@ -15,6 +15,7 @@ using Orckestra.Composer.Country;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Marketing;
@@ -43,6 +44,13 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             Container = new AutoMocker();
 
             Container.Use(_mapper);
+            var contextStub = new Mock<IComposerContext>();
+            contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
+            Container.Use(contextStub);
+
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            Container.Use(currencyProvider);
             Container.Use(LocalizationProviderFactory.Create());
         }
 
@@ -126,7 +134,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var sut = Container.CreateInstance<CartViewModelFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => sut.CreateCartViewModel(p));
+            Assert.Throws<ArgumentException>(() => sut.CreateCartViewModel(p));
         }
 
         [Test]
@@ -146,7 +154,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var sut = Container.CreateInstance<CartViewModelFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => sut.CreateCartViewModel(p));
+            Assert.Throws<ArgumentException>(() => sut.CreateCartViewModel(p));
         }
 
         [Test]
@@ -169,7 +177,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var sut = Container.CreateInstance<CartViewModelFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => sut.CreateCartViewModel(p));
+            Assert.Throws<ArgumentException>(() => sut.CreateCartViewModel(p));
         }
 
         [Test]
@@ -619,7 +627,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             for (int i = 0; i < vm.Coupons.ApplicableCoupons.Count; i++)
             {
                 var currentReward = rewardList[i];
-                var applicableCoupon = vm.Coupons.ApplicableCoupons.FirstOrDefault(c => c.PromotionId == currentReward.PromotionId);
+                var applicableCoupon = vm.Coupons.ApplicableCoupons.Find(c => c.PromotionId == currentReward.PromotionId);
                 applicableCoupon.Should().NotBeNull();
                 applicableCoupon.PromotionId.Should().Be(currentReward.PromotionId);
                 applicableCoupon.Amount.Should().Be(currentReward.Amount);

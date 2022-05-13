@@ -3,11 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Services
 {
@@ -18,18 +17,8 @@ namespace Orckestra.Composer.Product.Services
 
         public CategoryViewService(IViewModelMapper viewModelMapper, ICategoryRepository categoryRepository)
         {
-            if (viewModelMapper == null)
-            {
-                throw new ArgumentNullException("viewModelMapper");
-            }
-
-            if (categoryRepository == null)
-            {
-                throw new ArgumentNullException("categoryRepository");
-            }
-
-            _viewModelMapper = viewModelMapper;
-            _categoryRepository = categoryRepository;
+            _viewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         /// <summary>
@@ -40,7 +29,7 @@ namespace Orckestra.Composer.Product.Services
         /// <exception cref="System.ArgumentNullException">param</exception>
         public virtual async Task<CategoryViewModel[]> GetCategoriesPathAsync(GetCategoriesPathParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var categoriesPath = await _categoryRepository.GetCategoriesPathAsync(param).ConfigureAwait(false);
             
@@ -56,9 +45,9 @@ namespace Orckestra.Composer.Product.Services
 
         protected virtual CategoryViewModel CreateCategoryViewModel(CreateCategoryViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.Category == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("Category"), "param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException(ArgumentNullMessageFormatter.FormatErrorMessage("CultureInfo"), "param"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.Category == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Category)), nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
 
             return _viewModelMapper.MapTo<CategoryViewModel>(param.Category, param.CultureInfo);
         }

@@ -4,6 +4,7 @@ using System.Web.Routing;
 using Composite.Core.Routing;
 using Composite.Core.WebClient;
 using Orckestra.Composer.Providers;
+using ServiceStack;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -17,6 +18,8 @@ namespace Orckestra.Composer.CompositeC1
             ApplicationLevelEventHandlers.Application_Start(sender, e);
 
             RegisterRoutes(RouteTable.Routes);
+
+            PclExport.Instance = new ComposerPclExport();
         }
 
         protected virtual void RegisterRoutes(RouteCollection routes)
@@ -66,14 +69,14 @@ namespace Orckestra.Composer.CompositeC1
         private bool HandleHttp404Exception(HttpApplication httpApplication)
         {
             var exception = httpApplication.Server.GetLastError();
-            var is404 = (exception is HttpException && ((HttpException)exception).GetHttpCode() == 404);
+            var is404 = IsHttp404(exception);
 
             if (is404)
             {
                 var httpContext = httpApplication.Context;
                 var pageNotFoundUrlProvider = ComposerHost.Current.Resolve<IPageNotFoundUrlProvider>();
                 httpContext.Response.StatusCode = 404;
-
+                Server.ClearError();
                 var url = httpContext.Request.Url.ToString();
                 var pageNotFoundUrl = pageNotFoundUrlProvider.Get404PageUrl(url);
                 httpContext.Response.Redirect(pageNotFoundUrl);
@@ -81,6 +84,12 @@ namespace Orckestra.Composer.CompositeC1
             }
 
             return false;
+        }
+
+        private bool IsHttp404(Exception ex)
+        {
+            if (ex == null) return false;
+            return (ex is HttpException httpException && httpException.GetHttpCode() == 404) || IsHttp404(ex.InnerException);
         }
     }
 }

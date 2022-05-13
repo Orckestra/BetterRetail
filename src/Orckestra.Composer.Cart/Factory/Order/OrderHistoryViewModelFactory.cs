@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using Orckestra.Composer.Cart.Parameters.Order;
+﻿using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.ViewModels.Order;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Orders;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Linq;
+using Orckestra.Composer.Cart.Providers.Order;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
+using Orckestra.Composer.Cart.Extensions;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
@@ -28,13 +32,9 @@ namespace Orckestra.Composer.Cart.Factory.Order
             IViewModelMapper viewModelMapper,
             IShippingTrackingProviderFactory shippingTrackingProviderFactory)
         {
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-            if (viewModelMapper == null) { throw new ArgumentNullException("viewModelMapper"); }
-            if (shippingTrackingProviderFactory == null) { throw new ArgumentNullException("shippingTrackingProviderFactory"); }
-
-            LocalizationProvider = localizationProvider;
-            ViewModelMapper = viewModelMapper;
-            ShippingTrackingProviderFactory = shippingTrackingProviderFactory;
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
+            ShippingTrackingProviderFactory = shippingTrackingProviderFactory ?? throw new ArgumentNullException(nameof(shippingTrackingProviderFactory));
         }
 
         /// <summary>
@@ -44,14 +44,14 @@ namespace Orckestra.Composer.Cart.Factory.Order
         /// <returns />
         public virtual OrderHistoryViewModel CreateViewModel(GetOrderHistoryViewModelParam param)
         {
-            if (param == null) { throw new ArgumentNullException("param"); }
-            if (param.CultureInfo == null) { throw new ArgumentException("param.CultureInfo"); }
-            if (param.OrderStatuses == null) { throw new ArgumentException("param.OrderStatuses"); }
-            if (string.IsNullOrWhiteSpace(param.OrderDetailBaseUrl)) { throw new ArgumentException("param.OrderDetailBaseUrl"); }
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
+            if (param.OrderStatuses == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.OrderStatuses)), nameof(param)); }
+            if (string.IsNullOrWhiteSpace(param.OrderDetailBaseUrl)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.OrderDetailBaseUrl)), nameof(param)); }
 
             OrderHistoryViewModel viewModel = null;
 
-            if (param.OrderResult != null && param.OrderResult.Results != null)
+            if (param.OrderResult?.Results != null)
             {
                 viewModel = new OrderHistoryViewModel
                 {
@@ -67,7 +67,6 @@ namespace Orckestra.Composer.Cart.Factory.Order
                 foreach (var rawOrder in param.OrderResult.Results)
                 {
                     var order = BuildLightOrderDetailViewModel(rawOrder, param);
-
                     viewModel.Orders.Add(order);
                 }
             }
@@ -234,18 +233,31 @@ namespace Orckestra.Composer.Cart.Factory.Order
         {
             var lightOrderVm = new LightOrderDetailViewModel();
             var orderInfo = ViewModelMapper.MapTo<OrderDetailInfoViewModel>(rawOrder, param.CultureInfo);
+            var orderId = Guid.Parse(rawOrder.Id);
 
-            orderInfo.OrderStatus = param.OrderStatuses[rawOrder.OrderStatus];
+            orderInfo.OrderStatus = GetOrderStatusDisplayName(rawOrder, param);
             orderInfo.OrderStatusRaw = rawOrder.OrderStatus;
+            orderInfo.IsOrderEditable = param.OrderEditingInfos != null  && param.OrderEditingInfos.ContainsKey(orderId) && param.OrderEditingInfos[orderId];
+
+            CancellationStatus orderCancellationStatusInfo = null;
+            if (param.OrderCancellationStatusInfos != null && param.OrderCancellationStatusInfos.ContainsKey(orderId))
+            {
+                orderCancellationStatusInfo = param.OrderCancellationStatusInfos[orderId];
+            }
+
+            orderInfo.IsOrderCancelable = orderCancellationStatusInfo?.CanCancel ?? false;
+            orderInfo.IsOrderPendingCancellation = orderCancellationStatusInfo?.CancellationPending ?? false;
+
+            orderInfo.IsBeingEdited = param.CurrentlyEditedOrderId == orderId;
+            orderInfo.HasOwnDraft = HasOwnDraft(param, orderId);
 
             var orderDetailUrl = UrlFormatter.AppendQueryString(param.OrderDetailBaseUrl, new NameValueCollection
                 {
                     {"id", rawOrder.OrderNumber}
                 });
             lightOrderVm.Url = orderDetailUrl;
-            
-            lightOrderVm.OrderInfos = orderInfo;
 
+            lightOrderVm.OrderInfos = orderInfo;
             lightOrderVm.ShipmentSummaries = new List<OrderShipmentSummaryViewModel>();
             if (rawOrder.ShipmentItems.Count > 0)
             {
@@ -269,6 +281,24 @@ namespace Orckestra.Composer.Cart.Factory.Order
             }
 
             return lightOrderVm;
+        }
+
+        protected virtual bool HasOwnDraft(GetOrderHistoryViewModelParam param, Guid orderId)
+        {
+            var orderDraft = param.OrderCartDrafts?.FirstOrDefault(d => Guid.Parse(d.Name) == orderId);
+            if (orderDraft == null) return false;
+            return orderDraft.IsCurrentApplicationOwner();
+        }
+
+
+        protected virtual string GetOrderStatusDisplayName(OrderItem rawOrder, GetOrderHistoryViewModelParam param)
+        {
+            return LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+            {
+                Category = "General",
+                Key = $"L_OrderStatus_{rawOrder.OrderStatus}",
+                CultureInfo = param.CultureInfo
+            });
         }
     }
 }

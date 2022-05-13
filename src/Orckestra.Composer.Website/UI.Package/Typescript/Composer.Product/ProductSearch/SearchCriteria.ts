@@ -12,6 +12,9 @@ module Orckestra.Composer {
         private _facetRegistry: IHashTable<string> = {};
         public keywords: string = '';
         public correctedSearchTerm: string;
+        public categoryId: string;
+        public queryName: string;
+        public queryType: string;
         public page: number = 1;
         public sortBy: string = '';
         public sortDirection: string = '';
@@ -23,8 +26,15 @@ module Orckestra.Composer {
         public initialize(options: ISearchCriteriaOptions) {
             this._facetRegistry = options.facetRegistry;
             this.correctedSearchTerm = options.correctedSearchTerm;
+            this.queryName = options.queryName;
+            this.queryType = options.queryType;
+            this.categoryId = options.categoryId;
 
             this.loadFromQuerystring(this._window.location.search);
+        }
+
+        public updateFacetRegistry(facetRegistry: IHashTable<string>): void {
+            this._facetRegistry = facetRegistry;
         }
 
         public loadFromQuerystring(querystring: string) {
@@ -63,7 +73,7 @@ module Orckestra.Composer {
                 queryBuilder.push(this.encodeQuerystringValue(this.sortDirection));
             }
 
-            if (!_.isEmpty(this.page) && this.page > 1) {
+            if (this.page > 1) {
                 queryBuilder.push('&page=');
                 queryBuilder.push(this.page.toString());
             }
@@ -91,6 +101,13 @@ module Orckestra.Composer {
         }
 
         public clearFacets() {
+            this.resetPaging();
+            this.selectedFacets = {};
+        }
+
+        public clearAll() {
+            this.sortBy = '';
+            this.sortDirection = '';
             this.resetPaging();
             this.selectedFacets = {};
         }
@@ -140,7 +157,7 @@ module Orckestra.Composer {
         private getSelectedFacetsArray(facetFieldName: string) : ISelectedFacet {
             var isSelectedFacetArray: boolean;
             var selectedFacet: any = this.selectedFacets[facetFieldName];
-            var selectedFacetArray: Array<string>;
+            var selectedFacetArray: Array<any>;
 
             if (_.isArray(selectedFacet)) {
                 isSelectedFacetArray = true;

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Composite.Core;
-using Composite.Data;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
@@ -11,6 +11,7 @@ using Orckestra.Composer.Providers.Checkout;
 using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
 using Orckestra.Overture.Caching;
+using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {
@@ -26,43 +27,53 @@ namespace Orckestra.Composer.CompositeC1.Providers
             IWebsiteContext websiteContext,
             ISiteConfiguration siteConfiguration)
         {
-            if (pageService == null) { throw new ArgumentNullException("pageService"); }
-            if (cacheProvider == null) { throw new ArgumentNullException("cacheProvider"); }
-
-            PageService = pageService;
-            CacheProvider = cacheProvider;
-            WebsiteContext = websiteContext;
-            SiteConfiguration = siteConfiguration;
-          
+            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
+            CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
+            SiteConfiguration = siteConfiguration ?? throw new ArgumentNullException(nameof(siteConfiguration));
         }
 
         public virtual string GetCartUrl(BaseUrlParameter parameters)
         {
-            if (parameters == null) { throw new ArgumentNullException("parameters"); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException("parameters.CultureInfo is required", "parameters"); }
-
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
             return PageService.GetPageUrl(pagesConfiguration.CartPageId, parameters.CultureInfo);
         }
 
+        public virtual string GetCheckoutConfirmationPageUrl(BaseUrlParameter parameters)
+        {
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
+
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
+            return PageService.GetPageUrl(pagesConfiguration.CheckoutConfirmationPageId, parameters.CultureInfo);
+        }
+
         public virtual string GetCheckoutSignInUrl(BaseUrlParameter parameters)
         {
-            if (parameters == null) { throw new ArgumentNullException("parameters"); }
-            if (parameters.CultureInfo == null) { throw new ArgumentException("parameters.CultureInfo is required", "parameters"); }
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(parameters.CultureInfo)), nameof(parameters)); }
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
             var signInPath = PageService.GetPageUrl(pagesConfiguration.CheckoutSignInPageId, parameters.CultureInfo);
 
-            if (string.IsNullOrWhiteSpace(parameters.ReturnUrl))
-            {
-                return signInPath;
-            }
+            if (string.IsNullOrWhiteSpace(parameters.ReturnUrl)) { return signInPath; }
 
             var urlBuilder = new UrlBuilder(signInPath);
             urlBuilder["ReturnUrl"] = GetReturnUrl(parameters); // url builder will encode the query string value
 
             return urlBuilder.ToString();
+        }
+
+        public virtual string GetCheckoutPageUrl(BaseUrlParameter parameters)
+        {
+            if (parameters == null) { throw new ArgumentNullException(nameof(parameters)); }
+            if (parameters.CultureInfo == null) { throw new ArgumentException($"{nameof(parameters.CultureInfo)} is required", nameof(parameters)); }
+
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(parameters.CultureInfo, WebsiteContext.WebsiteId);
+            return PageService.GetPageUrl(pagesConfiguration.CheckoutPageId, parameters.CultureInfo);
         }
 
         private static string GetReturnUrl(BaseUrlParameter parameters)
@@ -74,88 +85,24 @@ namespace Orckestra.Composer.CompositeC1.Providers
             return returnUrl.ToString();
         }
 
-        public virtual string GetCheckoutStepUrl(GetCheckoutStepUrlParam parameters)
+         public string GetHomepageUrl(BaseUrlParameter param)
         {
-            var stepUrls = GetCheckoutStepPageInfos(new BaseUrlParameter
-            {                
-                CultureInfo = parameters.CultureInfo,
-            });
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
-            if (!stepUrls.ContainsKey(parameters.StepNumber))
-            {
-                throw new ArgumentOutOfRangeException("parameters", "StepNumber is invalid");
-            }
-
-            return stepUrls[parameters.StepNumber].Url;
-        }
-
-        public virtual Dictionary<int, CheckoutStepPageInfo> GetCheckoutStepPageInfos(BaseUrlParameter parameters)
-        {
-            CacheKey cacheKey = new CacheKey(CacheConfigurationCategoryNames.CheckoutStepUrls)
-            {
-                CultureInfo = parameters.CultureInfo
-            };
-            cacheKey.AppendKeyParts(WebsiteContext.WebsiteId.ToString());
-
-            Dictionary<int, CheckoutStepPageInfo> stepUrls = CacheProvider.Get< Dictionary<int, CheckoutStepPageInfo>>(cacheKey);
-
-            if (stepUrls != null)
-                return stepUrls;
-
-            stepUrls = new Dictionary<int, CheckoutStepPageInfo>();
-
-            var items = PageService.GetCheckoutStepPages(WebsiteContext.WebsiteId, parameters.CultureInfo);
-            var navItems = PageService.GetCheckoutNavigationPages(WebsiteContext.WebsiteId, parameters.CultureInfo);
-            var index = 0;
-            foreach (var checkoutStepItem in items)
-            {
-                var pageGuid = Guid.Parse(checkoutStepItem);
-                stepUrls.Add(index, new CheckoutStepPageInfo
-                {
-                    Url = PageService.GetPageUrl(pageGuid, parameters.CultureInfo),
-                    IsDisplayedInHeader = navItems != null && navItems.Contains(checkoutStepItem),
-                    Title = PageService.GetPage(pageGuid, parameters.CultureInfo).MenuTitle,
-                    PageId = pageGuid
-                });
-                index++;
-            }
-
-            stepUrls = stepUrls.OrderBy(x => x.Key).ToDictionary(x => x.Key, y => y.Value);
-
-            CacheProvider.Set(cacheKey, stepUrls);
-
-            return stepUrls;
-        }
-
-        public virtual string GetCheckoutAddAddressUrl(BaseUrlParameter param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
-            var url = PageService.GetPageUrl(pagesConfiguration.CheckoutAddAddressPageId, param.CultureInfo);
-            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
-        }
-
-        public virtual string GetCheckoutUpdateAddressBaseUrl(BaseUrlParameter param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-
-            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
-            var url = PageService.GetPageUrl(pagesConfiguration.CheckoutUpdateAddressPageId, param.CultureInfo);
-            return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
-        }
-
-        public string GetHomepageUrl(BaseUrlParameter param)
-        {
-            if (param == null) { throw new ArgumentNullException("param"); }
-
-         
             var url = PageService.GetPageUrl(WebsiteContext.WebsiteId, param.CultureInfo);
             ///TODO - fix this
-            if (string.IsNullOrWhiteSpace(url))
-                return url;
+            if (string.IsNullOrWhiteSpace(url)) return url;
 
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
+        }
+
+        public string GetForgotPasswordPageUrl(BaseUrlParameter param)
+        {
+            if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (param.CultureInfo == null) { throw new ArgumentException($"{nameof(param.CultureInfo)} is required", nameof(param)); }
+
+            var pagesConfiguration = SiteConfiguration.GetPagesConfiguration(param.CultureInfo, WebsiteContext.WebsiteId);
+            return PageService.GetPageUrl(pagesConfiguration.ForgotPasswordPageId, param.CultureInfo);
         }
     }
 }

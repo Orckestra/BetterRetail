@@ -36,7 +36,7 @@ namespace Orckestra.Composer.CompositeC1.Cache
         private bool IsQueryStringOnlyComposedOfKeywords(NameValueCollection queries)
         {
             var isOnlyKeywords = queries.Count == 1 &&
-                                 String.Equals(queries.GetKey(0), "keywords", StringComparison.CurrentCultureIgnoreCase);
+                                 string.Equals(queries.GetKey(0), "keywords", StringComparison.CurrentCultureIgnoreCase);
 
             return isOnlyKeywords;
         }

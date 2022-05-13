@@ -25,6 +25,11 @@ namespace Orckestra.Composer.Cart
         public static string RecurringOrderCartType { get; set; } = "RecurringOrderCart";
 
         /// <summary>
+        ///     Get/Set the Order Draft Cart Type
+        /// </summary>
+        public static string OrderDraftCartType { get; set; } = "OrderDraft";
+
+        /// <summary>
         ///     Get/Set the Wishlist CartName to use for storing a Wishlist Cart in Overture
         /// </summary>
         public static string WishlistCartName { get; set; } = "Wishlist";
@@ -56,5 +61,10 @@ namespace Orckestra.Composer.Cart
             PaymentMethodType.CreditCard,
             PaymentMethodType.SavedCreditCard
         };
+
+        /// <summary>
+        /// If true, cart items will be grouped by product primary category
+        /// </summary>
+        public static bool GroupCartItemsByPrimaryCategory { get; set; }
     }
 }

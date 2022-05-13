@@ -20,7 +20,7 @@ namespace Orckestra.Composer
 
         internal IEnumerable<string> GetAssemblyFiles()
         {
-            return Directory.GetFiles(GetExecutingAssemblyPath() ?? "", "*.dll");
+            return Directory.GetFiles(GetExecutingAssemblyPath() ?? string.Empty, "*.dll");
         }
 
         /// <summary>
@@ -39,13 +39,9 @@ namespace Orckestra.Composer
         /// <returns>Assemblies that were loaded successfully.</returns>
         public virtual IEnumerable<_Assembly> SafeLoadAssemblies(string pattern)
         {
-            if (pattern == null)
-            {
-                throw new ArgumentNullException("pattern");
-            }
+            if (pattern == null) { throw new ArgumentNullException(nameof(pattern)); }
 
-            var assemblyFiles =
-                GetAssemblyFiles().Where(af => Regex.IsMatch(Path.GetFileName(af), pattern));
+            var assemblyFiles = GetAssemblyFiles().Where(af => Regex.IsMatch(Path.GetFileName(af), pattern));
 
             return LoadAssemblies(assemblyFiles);
         }
@@ -57,10 +53,7 @@ namespace Orckestra.Composer
         /// <returns>Assemblies that were loaded successfully.</returns>
         private IEnumerable<_Assembly> LoadAssemblies(IEnumerable<string> assemblyFileNames)
         {
-            if(assemblyFileNames == null) 
-            { 
-                throw new ArgumentNullException("assemblyFileNames"); 
-            }
+            if (assemblyFileNames == null) { throw new ArgumentNullException(nameof(assemblyFileNames)); }
 
             var loadedAssemblies = new List<_Assembly>();
             foreach (var assemblyFile in assemblyFileNames)

@@ -4,6 +4,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.ForTests;
@@ -38,8 +39,8 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelSerialization
 
             var lookupService = Container.GetMock<ILookupService>();
             var localizationProviderMock = Container.GetMock<ILocalizationProvider>();
-
-            ViewModelMapper = new Composer.ViewModels.ViewModelMapper(MetadataRegistry.Object, Dependency<IViewModelPropertyFormatter>().Object, lookupService.Object, localizationProviderMock.Object);
+            var currencyProviderMock = Container.GetMock<ICurrencyProvider>();
+            ViewModelMapper = new Composer.ViewModels.ViewModelMapper(MetadataRegistry.Object, Dependency<IViewModelPropertyFormatter>().Object, lookupService.Object, localizationProviderMock.Object, currencyProviderMock.Object);
 
             JsonFromStandardSerializer = JsonConvert.SerializeObject(ViewModelForSerialization, Formatting.Indented);
         }
@@ -49,7 +50,7 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelSerialization
         [Test]
         public void WHEN_deserializing_using_custom_composer_json_converter_all_properties_SHOULD_be_the_same_as_in_source_object()
         {
-            DeserializedTestViewModelForSerialization = JsonConvert.DeserializeObject<TestViewModelForSerialization>(JsonFromStandardSerializer, new Composer.ViewModels.ViewModelSerialization(ViewModelMapper, MetadataRegistry.Object));
+            DeserializedTestViewModelForSerialization = JsonConvert.DeserializeObject<TestViewModelForSerialization>(JsonFromStandardSerializer, new Composer.ViewModels.ViewModelSerialization(MetadataRegistry.Object));
 
             ViewModelForSerialization.ShouldBeEquivalentTo(DeserializedTestViewModelForSerialization);
             ViewModelForSerialization.TestNested.ShouldBeEquivalentTo(DeserializedTestViewModelForSerialization.TestNested);

@@ -22,18 +22,15 @@ namespace Orckestra.Composer.Cart.Providers.Payment
         protected virtual ILookupService LookupService { get; private set; }
         protected virtual ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected virtual ILocalizationProvider LocalizationProvider { get; private set; }
+        protected virtual ICurrencyProvider CurrencyProvider { get; private set; }
 
         public OnSitePOSPaymentProvider(ILookupService lookupService, ICartViewModelFactory cartViewModelFactory,
-            ILocalizationProvider localizationProvider)
+            ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
         {
-            if (lookupService == null) { throw new ArgumentNullException("lookupService"); }
-            if (cartViewModelFactory == null) { throw new ArgumentNullException("cartViewModelFactory"); }
-            if (localizationProvider == null) { throw new ArgumentNullException("localizationProvider"); }
-
-
-            CartViewModelFactory = cartViewModelFactory;
-            LocalizationProvider = localizationProvider;
-            LookupService = lookupService;
+            CartViewModelFactory = cartViewModelFactory ?? throw new ArgumentNullException(nameof(cartViewModelFactory));
+            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
+            LookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         /// <summary>
@@ -101,13 +98,13 @@ namespace Orckestra.Composer.Cart.Providers.Payment
 
             var paymentVm = new OrderSummaryPaymentViewModel
             {
-                FirstName = payment.BillingAddress == null ? null: payment.BillingAddress.FirstName,
-                LastName = payment.BillingAddress == null? null : payment.BillingAddress.LastName,
+                FirstName = payment.BillingAddress?.FirstName,
+                LastName = payment.BillingAddress?.LastName,
                 PaymentMethodName = paymentMethodDisplayName,
             };
 
             paymentVm.BillingAddress = CartViewModelFactory.GetAddressViewModel(payment.BillingAddress, cultureInfo);
-            paymentVm.Amount = LocalizationProvider.FormatPrice((decimal)payment.Amount, cultureInfo);
+            paymentVm.Amount = LocalizationProvider.FormatPrice((decimal)payment.Amount, CurrencyProvider.GetCurrency());
 
             return paymentVm;
         }

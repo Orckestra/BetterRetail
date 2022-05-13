@@ -33,6 +33,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected IComposerContext ComposerContext { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected ICurrencyProvider CurrencyProvider { get; private set; }
 
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
@@ -42,7 +43,8 @@ namespace Orckestra.Composer.Cart.Factory
             IRecurringOrdersRepository recurringOrderRepository,
             IComposerContext composerContext,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            ICurrencyProvider currencyProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
@@ -53,6 +55,7 @@ namespace Orckestra.Composer.Cart.Factory
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
 
         /// <summary>
@@ -60,15 +63,10 @@ namespace Orckestra.Composer.Cart.Factory
         /// </summary>
         public virtual IEnumerable<LineItemDetailViewModel> CreateViewModel(CreateListOfLineItemDetailViewModelParam param)
         {
-            if (param.LineItems == null)
-            {
-                yield break;
-            }
-
+            if (param.LineItems == null) { yield break; }
             var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageInfo.ImageUrls);
 
-            var processedCart = param.Cart as ProcessedCart;
-            var preMapAction = processedCart == null
+            var preMapAction = !(param.Cart is ProcessedCart processedCart)
                 ? new Action<LineItem>(li => { })
                 : li => LineItemValidationProvider.ValidateLineItem(processedCart, li);
 
@@ -87,9 +85,13 @@ namespace Orckestra.Composer.Cart.Factory
             }
         }
 
-        protected virtual LineItemDetailViewModel GetLineItemDetailViewModel(CreateLineItemDetailViewModelParam param)
+        public virtual LineItemDetailViewModel GetLineItemDetailViewModel(CreateLineItemDetailViewModelParam param)
         {
-            param.PreMapAction.Invoke(param.LineItem);
+            if (param.PreMapAction != null)
+            {
+                param.PreMapAction.Invoke(param.LineItem);
+            }
+
             var lineItem = param.LineItem;
 
             var vm = ViewModelMapper.MapTo<LineItemDetailViewModel>(lineItem, param.CultureInfo);
@@ -112,15 +114,14 @@ namespace Orckestra.Composer.Cart.Factory
 
             decimal lineItemsSavingTotal = decimal.Add(lineItem.DiscountAmount.GetValueOrDefault(0), lineItemsSavingSale);
 
-            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, param.CultureInfo);
+            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, CurrencyProvider.GetCurrency());
 
             vm.KeyVariantAttributesList = GetKeyVariantAttributes(new GetKeyVariantAttributesParam {
                 KvaValues = lineItem.KvaValues,
                 KvaDisplayValues = lineItem.KvaDisplayValues
             }).ToList();
 
-            ProductMainImage mainImage;
-            if (param.ImageDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out mainImage))
+            if (param.ImageDictionary.TryGetValue((lineItem.ProductId, lineItem.VariantId), out ProductMainImage mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;
@@ -138,7 +139,7 @@ namespace Orckestra.Composer.Cart.Factory
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
 
             //Because the whole class is not async, we call a .Result here
-            var map = MapRecurringOrderFrequencies(vm, lineItem, param.CultureInfo).Result;
+            _ = MapRecurringOrderFrequencies(vm, lineItem, param.CultureInfo).Result;
 
             return vm;
         }
@@ -168,24 +169,19 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 if (program != null)
                 {
-                    var frequency = program.Frequencies.FirstOrDefault(f => string.Equals(f.RecurringOrderFrequencyName, lineItem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
+                    var frequency = program.Frequencies
+                        .Find(f => string.Equals(f.RecurringOrderFrequencyName, lineItem.RecurringOrderFrequencyName, StringComparison.OrdinalIgnoreCase));
 
                     if (frequency != null)
                     {
-                        var localization = frequency.Localizations.FirstOrDefault(l => string.Equals(l.CultureIso, cultureInfo.Name, StringComparison.OrdinalIgnoreCase));
-
-                        if (localization != null)
-                            return localization.DisplayName;
-                        else
-                            return frequency.RecurringOrderFrequencyName;
+                        var localization = frequency.Localizations.Find(l => string.Equals(l.CultureIso, cultureInfo.Name, StringComparison.OrdinalIgnoreCase));
+                        return localization != null ? localization.DisplayName : frequency.RecurringOrderFrequencyName;
                     }
                 }
             }
             return string.Empty;
         }
         
-
-
         /// <summary>
         /// Gets the KeyVariant attributes from a line item.
         /// </summary>
@@ -208,10 +204,7 @@ namespace Orckestra.Composer.Cart.Factory
 
         protected virtual IEnumerable<AdditionalFeeViewModel> MapLineItemAdditionalFeeViewModel(LineItem lineItem, CultureInfo cultureInfo)
         {
-            if (lineItem.AdditionalFees == null)
-            {
-                yield break;
-            }
+            if (lineItem.AdditionalFees == null) { yield break; }
 
             foreach (var lineItemAdditionalFee in lineItem.AdditionalFees)
             {
@@ -233,15 +226,11 @@ namespace Orckestra.Composer.Cart.Factory
 
         public virtual IEnumerable<LightLineItemDetailViewModel> CreateLightViewModel(CreateLightListOfLineItemDetailViewModelParam param)
         {
-            if (param.LineItems == null)
-            {
-                yield break;
-            }
+            if (param.LineItems == null) { yield break; }
 
             var imgDictionary = LineItemHelper.BuildImageDictionaryFor(param.ImageInfo.ImageUrls);
 
-            var processedCart = param.Cart as ProcessedCart;
-            var preMapAction = processedCart == null
+            var preMapAction = !(param.Cart is ProcessedCart processedCart)
                 ? new Action<LineItem>(li => { })
                 : li => LineItemValidationProvider.ValidateLineItem(processedCart, li);
 
@@ -271,9 +260,8 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 vm.IsValid = true;
             }
-                        
-            ProductMainImage mainImage;
-            if (param.ImageDictionary.TryGetValue(Tuple.Create(lineItem.ProductId, lineItem.VariantId), out mainImage))
+
+            if (param.ImageDictionary.TryGetValue((lineItem.ProductId, lineItem.VariantId), out ProductMainImage mainImage))
             {
                 vm.ImageUrl = mainImage.ImageUrl;
                 vm.FallbackImageUrl = mainImage.FallbackImageUrl;

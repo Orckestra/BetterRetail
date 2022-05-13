@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.ForTests", "tests\Orckestra.ForTests\Orckestra.ForTests.csproj", "{B2BE051E-82D7-4643-BB56-98F161833E30}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - C1 CMS Packages", "4 - C1 CMS Packages", "{303355EE-E2EF-46D5-8B56-BE44E9F3D93D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - C1 CMS Packages", "3 - C1 CMS Packages", "{303355EE-E2EF-46D5-8B56-BE44E9F3D93D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CompositeC1", "src\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj", "{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}"
 EndProject
@@ -106,17 +106,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Website", "1 - Website"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Backend", "2 - Backend", "{B770DD6A-41C2-4576-80D9-58023319B204}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Frontend", "3 - Frontend", "{B2EB548A-B668-42D3-A646-C43E59D8BFCE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Tests", "4 - Tests", "{832CD4F4-EF5A-44B0-92FF-D159B6276AF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Tests", "5 - Tests", "{832CD4F4-EF5A-44B0-92FF-D159B6276AF7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1- Core", "1- Core", "{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.HandlebarsCompiler", "src\Orckestra.Composer.HandlebarsCompiler\Orckestra.Composer.HandlebarsCompiler.csproj", "{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.LoadTest", "tests\Orckestra.Composer.LoadTest\Orckestra.Composer.LoadTest.csproj", "{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.PreConfiguration.Package", "src\Orckestra.Composer.C1.PreConfiguration.Package\Orckestra.Composer.C1.PreConfiguration.Package.csproj", "{7BF11F55-B19D-4EE2-8B22-E533C6BBC861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.LoadTest.Tests", "tests\Orckestra.Composer.LoadTest.Tests\Orckestra.Composer.LoadTest.Tests.csproj", "{7501DDC4-8A28-4DF3-ADC6-5132D043E738}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.C1.PreConfiguration", "src\Orckestra.Composer.C1.PreConfiguration\Orckestra.Composer.C1.PreConfiguration.csproj", "{485808CC-75B2-4BF6-9B57-470D30B562D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Media.AutoImageResizing", "src\Orckestra.Media.AutoImageResizing\Orckestra.Media.AutoImageResizing.csproj", "{1C67610A-44C0-49BE-A75A-4482413E063A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.SearchQuery.Tests", "tests\Orckestra.Composer.SearchQuery.Tests\Orckestra.Composer.SearchQuery.Tests.csproj", "{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CustomerConditionProvider", "src\Orckestra.Composer.CustomerConditionProvider\Orckestra.Composer.CustomerConditionProvider.csproj", "{91EBDFE4-73C2-4812-A4E9-9FED337D2223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.CustomerConditionProvider.Package", "src\Orckestra.Composer.CustomerConditionProvider.Package\Orckestra.Composer.CustomerConditionProvider.Package.csproj", "{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}"
+	ProjectSection(ProjectDependencies) = postProject
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223} = {91EBDFE4-73C2-4812-A4E9-9FED337D2223}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -264,14 +273,30 @@ Global
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{485808CC-75B2-4BF6-9B57-470D30B562D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C67610A-44C0-49BE-A75A-4482413E063A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -318,8 +343,12 @@ Global
 		{91BA9F0C-A917-46A8-9165-C91CD540AE08} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 		{2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC} = {303355EE-E2EF-46D5-8B56-BE44E9F3D93D}
 		{3508A92E-CB4B-431D-BBDC-0AD5FABEC20C} = {4C9DCD77-1564-4C86-AD89-DCC674C54879}
-		{3AFCC15C-B3E7-4F44-9D67-44018FDFDABE} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
-		{7501DDC4-8A28-4DF3-ADC6-5132D043E738} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
+		{7BF11F55-B19D-4EE2-8B22-E533C6BBC861} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
+		{485808CC-75B2-4BF6-9B57-470D30B562D4} = {2290CF95-EF97-4E7A-ADD6-D902AD8DAAAC}
+		{1C67610A-44C0-49BE-A75A-4482413E063A} = {B770DD6A-41C2-4576-80D9-58023319B204}
+		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
+		{91EBDFE4-73C2-4812-A4E9-9FED337D2223} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
+		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

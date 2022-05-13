@@ -178,7 +178,7 @@
     <value>logout</value>
   </data>
   <data name="H_OrderDetail" xml:space="preserve">
-    <value>See details</value>
+    <value>See Details</value>
   </data>
   <data name="H_OrderTracking" xml:space="preserve">
     <value>Track your order</value>
@@ -262,16 +262,16 @@
     <value>Order</value>
   </data>
   <data name="L_OrderCancel" xml:space="preserve">
-    <value>&lt;span class="text-danger"&gt;&lt;span class="fa fa-times-circle"&gt;&lt;/span&gt; Cancelled &lt;/span&gt; on</value>
+    <value>Canceled on {0}</value>
   </data>
   <data name="L_OrderDelivered" xml:space="preserve">
-    <value>&lt;span class="text-success"&gt;&lt;span class="fa fa-check-circle"&gt;&lt;/span&gt; Delivered &lt;/span&gt; on</value>
+    <value>Delivered on {0}</value>
   </data>
   <data name="L_OrderedOn" xml:space="preserve">
     <value>Placed on {0}</value>
   </data>
   <data name="L_OrderInProgress" xml:space="preserve">
-    <value>&lt;span class="text-warning"&gt;&lt;span class="fa fa-clock-o"&gt;&lt;/span&gt; In Progress &lt;/span&gt;</value>
+    <value>In Progress</value>
   </data>
   <data name="L_OrderLineItemProductsTitle" xml:space="preserve">
     <value>Products</value>
@@ -374,7 +374,7 @@ Don't worry, you can still find great products to offer!</value>
     <value>Add an address</value>
   </data>
   <data name="T_Addresses" xml:space="preserve">
-    <value>Address</value>
+    <value>Addresses</value>
   </data>
   <data name="T_BillingAddress" xml:space="preserve">
     <value>Billing Address:</value>
@@ -466,9 +466,6 @@ Don't worry, you can still find great products to offer!</value>
   <data name="L_EstimatedTotal" xml:space="preserve">
     <value>Estimated total</value>
   </data>
-  <data name="T_Addresses" xml:space="preserve">
-    <value>Addresses</value>
-  </data>
   <data name="B_AddNewPayment" xml:space="preserve">
     <value>Add a credit card</value>
   </data>
@@ -483,5 +480,32 @@ Don't worry, you can still find great products to offer!</value>
   </data>
   <data name="T_ShippingAddress" xml:space="preserve">
     <value>Shipping Address:</value>
+  </data>
+  <data name="L_SubstituteOrderItem" xml:space="preserve">
+    <value>We’re sorry, this item was unavailable and has been substituted with the item below.</value>
+  </data>
+  <data name="L_UnavailableOrderItem" xml:space="preserve">
+    <value>We’re sorry, this item was unavailable and we were unable to make a substitute.</value>
+  </data>
+  <data name="B_EditOrder" xml:space="preserve">
+    <value>Edit Order</value>
+  </data>
+  <data name="B_ContinueEditing" xml:space="preserve">
+    <value>Continue Editing</value>
+  </data>
+  <data name="B_CancelEditing" xml:space="preserve">
+    <value>Cancel Editing</value>
+  </data>
+  <data name="L_ConfirmCancelOrder" xml:space="preserve">
+    <value>Are you sure you want to cancel this order {0}?</value>
+  </data>
+  <data name="T_PendingCancel" xml:space="preserve">
+    <value>Canceling in progress</value>
+  </data>
+  <data name="T_ReloadOrderStatus" xml:space="preserve">
+    <value>Reload page to check status</value>
+  </data>
+  <data name="B_CancelOrder" xml:space="preserve">
+    <value>Cancel Order</value>
   </data>
 </root>

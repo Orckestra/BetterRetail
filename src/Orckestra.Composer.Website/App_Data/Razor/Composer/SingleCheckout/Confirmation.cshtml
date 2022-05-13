@@ -1,0 +1,148 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Providers;
+@using Orckestra.Composer.Parameters;
+@using System.Threading;
+@using Composite.Core.WebClient.Renderings.Page;
+@using Orckestra.Composer.MyAccount.Services;
+@using Orckestra.Composer.MyAccount.ViewModels;
+
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Checkout Confirmation"; }
+    }
+
+    public ICartUrlProvider CartUrlProvider { get; set; }
+
+    public IComposerContext ComposerContext { get; set; }
+
+    public IMembershipViewService MembershipViewService { get; set; }
+
+    public override bool PreventFunctionOutputCaching { get { return true; } }
+    
+    [FunctionParameter(Label = "Confirmation Top Message")]
+    public XhtmlDocument confirmationTopMessage { get; set; }
+}
+
+@{
+    var isPreview = PageRenderer.RenderingReason == RenderingReason.C1ConsoleBrowserPageView;
+    var redirectUrl = isPreview ? null : CartUrlProvider.GetCartUrl(new BaseUrlParameter
+    {
+        CultureInfo = Thread.CurrentThread.CurrentCulture
+    });
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+    <script id="vuejs" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    @*CompleteCheckoutViewModel is used as model to render data with Vue Js *@
+    <div class="row">
+        <div class="col-lg-8">
+            <div id="vueCheckoutOrderConfirmation" v-if="Order"
+                 @if (!isPreview) { <text> v-cloak="true" </text> }
+                 data-oc-controller="SingleCheckout.OrderConfirmation"
+                 data-redirectUrl="@redirectUrl">
+
+                @Html.Raw(@confirmationTopMessage)
+
+                @DisplayOrderDetails()
+
+                @CreateAccountForm()
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@helper DisplayOrderDetails()
+{
+    <div class="card mt-4" data-qa="confirmation-order-details">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h3 class="m-0">@Html.Localize("MyAccount", "T_OrderSummary")</h3>
+                </div>
+                <div class="col-sm-4 text-sm-right">
+                    <a v-if="IsAuthenticated" data-qa="confirmation-order-details-link" v-bind:href="Order.Url" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
+                    <a v-else="v-else" data-qa="confirmation-order-details-link" href="#" v-on:click.prevent="findMyOrder" class="cta">@Html.Localize("CheckoutProcess", "H_OrderDetail")</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <p class="m-0" data-qa="confirmation-order-number">@Html.Localized("MyAccount", "L_OrderNumber", "{{Order.OrderInfos.OrderNumber}}")</p>
+                    <p data-qa="confirmation-order-status">
+                        <span class="text-warning font-weight-bold">{{Order.OrderInfos.OrderStatus}}</span>
+                    </p>
+                    <div class="row">
+                        <div class="col-4  col-sm-2" v-bind:key="item.id" v-for="(item, index) in LineItems">
+                            <img v-bind:src="item.ImageUrl" class="img-fluid" alt="thumbnail" xmlns:v-bind="v-bind"
+                                 v-bind:data-qa="'confirmation-item-preview-img-' + index" />
+                            <p class="text-center m-0">
+                                <strong v-bind:data-qa="'confirmation-item-preview-quantity-' + index">x{{item.Quantity}}</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-sm-right">
+                    @Html.Localize("MyAccount", "L_Total"): <strong class="h5" data-qa="confirmation-order-total">{{Order.OrderInfos.PricePaid}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper CreateAccountForm()
+{
+    var passwordPatternViewModel = new PasswordPatternViewModel();
+    MembershipViewService.SetPasswordValidationRules(passwordPatternViewModel);
+
+    <form v-if="ShowCreateAccountForm" class="mt-4" id="formCreateAccount" method="post"
+          data-password-pattern="@passwordPatternViewModel.PasswordRegexPattern"
+          data-password-length="@passwordPatternViewModel.MinRequiredPasswordLength">
+        <h3>@Html.Localize("CheckoutProcess", "T_SaveInformation")</h3>
+        <p>@Html.Localize("CheckoutProcess", "L_CreateAccountForFastCheckout")</p>
+        <div class="form-row align-items-end">
+            <div class="form-group col-md-6">
+                <label for="Password">@Html.Localize("Forms", "F_Password") *</label>
+                <input v-model="Password"
+                       id="Password"
+                       name="Password"
+                       data-qa="information-password-input"
+                       v-bind:disabled="IsLoading"
+                       v-on:input="onChangePassword"
+                       autocomplete="off"
+                       v-bind:type="ShowPassword ? 'text' : 'password'"
+                       class="form-control"
+                       required="required"
+                       data-parsley-errors-container=".password-errors"
+                       data-parsley-length="[@passwordPatternViewModel.MinRequiredPasswordLength, 256]"
+                       data-parsley-pattern="@passwordPatternViewModel.PasswordRegexPattern"
+                       @Html.ParsleyMessage("Forms", "F_PasswordRequiredError", "required-message")
+                       @Html.ParsleyMessage("Forms", "F_PasswordLengthError", "length-message")
+                       @Html.ParsleyMessage("Forms", "F_PasswordPatternError", "pattern-message", passwordPatternViewModel.MinRequiredNonAlphanumericCharacters)
+                       @Html.HelpBubble("Forms", "F_PasswordIndication", passwordPatternViewModel.MinRequiredPasswordLength) />
+            </div>
+            <div class="form-group p-2 col-auto">
+                <a href="#" role="button" v-on:click.prevent="showPasswordToggle" class="text-decoration-none">
+                    <strong v-if="ShowPassword"><i class="fa fa-eye-slash"></i> @Html.Localize("Forms", "L_HidePassword")</strong>
+                    <strong v-else="v-else"><i class="fa fa-eye"></i> @Html.Localize("Forms", "L_ShowPassword")</strong>
+                </a>
+            </div>
+            <div class="form-group col-12 password-errors mt-n2"></div>
+        </div>
+        @Forms.Validations.PasswordStrengthMessage("PasswordStrength")
+        <div class="row">
+            <div class="col-12 mt-3">
+                <button class="btn btn-success text-uppercase" v-on:click.prevent="createAccount" v-bind:disabled="IsLoading">
+                    @Html.Localize("MyAccount", "B_CreateAccount")
+                </button>
+            </div>
+        </div>
+    </form>
+}

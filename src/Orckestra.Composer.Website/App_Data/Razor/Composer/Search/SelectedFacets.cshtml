@@ -1,0 +1,22 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Search.Context;
+@using Orckestra.Composer.Search.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Selected Facets"; }
+    }
+
+    public ISearchRequestContext SearchRequestContext { get; set; }
+
+    SearchViewModel ProductsSearchViewModel => SearchRequestContext.ProductsSearchViewModel;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = ProductsSearchViewModel.FacetSettings })
+</body>
+</html>

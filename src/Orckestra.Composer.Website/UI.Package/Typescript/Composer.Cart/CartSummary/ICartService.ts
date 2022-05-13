@@ -17,7 +17,7 @@ module Orckestra.Composer {
          * This forces the repository to get a fresh cart from Composer,
          * because the cart will contain different property values for each checkout step.
          */
-        getFreshCart(): Q.Promise<any>;
+        getFreshCart(force?: boolean): Q.Promise<any>;
 
         /**
          * Add a line item to the cart of the current customer.
@@ -76,7 +76,7 @@ module Orckestra.Composer {
         /**
          * Complete the checkout, thereby clearing every item in the cart of the current customer.
          */
-        completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult>;
+        completeCheckout(currentStep?: number): Q.Promise<ICompleteCheckoutResult>;
 
         /**
          * Clear the Cart cache

@@ -1,19 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
-using Orckestra.Composer.Cart.Parameters;
+﻿using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.Cart.Requests;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Logging;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Orckestra.Composer.Cart.Api
 {
@@ -21,6 +22,7 @@ namespace Orckestra.Composer.Cart.Api
     [JQueryOnlyFilter]
     public class CartController : ApiController
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
         protected ICartService CartService { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected ICouponViewService CouponViewService { get; private set; }
@@ -28,6 +30,7 @@ namespace Orckestra.Composer.Cart.Api
         protected IShippingMethodViewService ShippingMethodService { get; private set; }
         protected ICartUrlProvider CartUrlProvider { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
+        protected virtual IEditingOrderProvider EditingOrderProvider { get; private set; }
 
         public CartController(
             ICartService cartService,
@@ -36,22 +39,17 @@ namespace Orckestra.Composer.Cart.Api
             ICouponViewService couponViewService,
             IShippingMethodViewService shippingMethodService,
             ICartUrlProvider cartUrlProvider,
-            IRecurringOrdersSettings recurringOrdersSettings)
+            IRecurringOrdersSettings recurringOrdersSettings,
+            IEditingOrderProvider editingOrderProvider)
         {
-            if (cartService == null) { throw new ArgumentNullException("cartService"); }
-            if (composerContext == null) { throw new ArgumentNullException("composerContext"); }
-            if (couponViewService == null) { throw new ArgumentNullException("couponViewService"); }
-            if (checkoutService == null) { throw new ArgumentNullException("checkoutService"); }
-            if (shippingMethodService == null) { throw new ArgumentNullException("shippingMethodService"); }
-            if (cartUrlProvider == null) { throw new ArgumentNullException("cartUrlProvider"); }
-
-            CartService = cartService;
-            ComposerContext = composerContext;
-            CouponViewService = couponViewService;
-            CheckoutService = checkoutService;
-            ShippingMethodService = shippingMethodService;
-            CartUrlProvider = cartUrlProvider;
-            RecurringOrdersSettings = recurringOrdersSettings;
+            CartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
+            CouponViewService = couponViewService ?? throw new ArgumentNullException(nameof(couponViewService));
+            CheckoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
+            ShippingMethodService = shippingMethodService ?? throw new ArgumentNullException(nameof(shippingMethodService));
+            CartUrlProvider = cartUrlProvider ?? throw new ArgumentNullException(nameof(cartUrlProvider));
+            RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
+            EditingOrderProvider = editingOrderProvider ?? throw new ArgumentNullException(nameof(editingOrderProvider));
         }
 
         /// <summary>
@@ -62,48 +60,36 @@ namespace Orckestra.Composer.Cart.Api
         [ActionName("getcart")]
         public virtual async Task<IHttpActionResult> GetCart()
         {
-
-            var homepageUrl = GetHomepageUrl();            
-
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
-            SetHomepageUrl(cartViewModel, homepageUrl);
-            SetEditCartUrl(cartViewModel);
-
             if (cartViewModel.OrderSummary != null)
             {
-                var checkoutUrlTarget = GetCheckoutUrl();
-                var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(new BaseUrlParameter
+                try
                 {
-                    CultureInfo = ComposerContext.CultureInfo
-                });
-                //Build redirect url in case of the customer try to access an unauthorized step.
-                var stepNumber = cartViewModel.OrderSummary.CheckoutRedirectAction.LastCheckoutStep;
-                if (!checkoutStepInfos.ContainsKey(stepNumber))
-                {
-                    return BadRequest("StepNumber is invalid");
+                    if (cartViewModel.IsCartEmpty || EditingOrderProvider.IsEditMode())
+                    {
+                        cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCartUrl();
+                    }
+                    else
+                    {
+                        //If the cart contains recurring items and user is not authenticated, redirect to sign in
+                        if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
+                        {
+                            cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = GetCheckoutSignInUrl();
+                        }
+                    }
                 }
-
-                var checkoutStepInfo = checkoutStepInfos[stepNumber];
-
-                //If the cart contains recurring items and user is not authenticated, redirect to sign in
-                if (RecurringOrdersSettings.Enabled && cartViewModel.HasRecurringLineitems && !ComposerContext.IsAuthenticated)
-                {
-                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutUrlTarget;
-                }
-                else
-                {
-                    cartViewModel.OrderSummary.CheckoutRedirectAction.RedirectUrl = checkoutStepInfo.Url;
-                }
-                cartViewModel.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
-                cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrlTarget;
+                catch (ArgumentException e) {
+                    Log.Error(e.ToString());
+                };
             }
 
             return Ok(cartViewModel);
@@ -120,19 +106,6 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (updateCartRequest == null) { return BadRequest("updateCartRequest is required"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
-            var getCartUrlParam = new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            };
-
-            var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
-
-            var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-            {                
-                CultureInfo = ComposerContext.CultureInfo,
-                StepNumber = updateCartRequest.CurrentStep.GetValueOrDefault() + 1
-            });
 
             var getCartParam = new GetCartParam
             {
@@ -151,22 +124,7 @@ namespace Orckestra.Composer.Cart.Api
                 UpdateValues = updateCartRequest.UpdatedCart
             };
 
-            var homepageUrl = GetHomepageUrl();
-
             var updateCartResultViewModel = await CheckoutService.UpdateCheckoutCartAsync(updateCheckoutCartParam);
-
-            SetHomepageUrl(updateCartResultViewModel.Cart, homepageUrl);
-            SetEditCartUrl(updateCartResultViewModel.Cart);
-
-            if (updateCartResultViewModel.Cart.OrderSummary != null)
-            {                
-                updateCartResultViewModel.Cart.OrderSummary.CheckoutStepUrls = checkoutStepInfos.Values.Select(x => x.Url).ToList();
-            }
-
-            if (!updateCartResultViewModel.HasErrors)
-            {
-                updateCartResultViewModel.NextStepUrl = nextStepUrl;
-            }
 
             return Ok(updateCartResultViewModel);
         }
@@ -188,6 +146,26 @@ namespace Orckestra.Composer.Cart.Api
             });
 
             return Ok(shippingMethodsViewModel);
+        }
+
+
+        /// <summary>
+        /// Get the shipping methods available for the current cart
+        /// </summary>
+        /// <returns>A Json representation of the Shipping methods</returns>
+        [HttpGet]
+        [ActionName("groupedshippingmethods")]
+        public virtual async Task<IHttpActionResult> GetGroupedShippingMethods()
+        {
+            var shippingMethodTypesViewModel = await ShippingMethodService.GetShippingMethodTypesAsync(new GetShippingMethodsParam
+            {
+                Scope = ComposerContext.Scope,
+                CultureInfo = ComposerContext.CultureInfo,
+                CustomerId = ComposerContext.CustomerId,
+                CartName = CartConfiguration.ShoppingCartName
+            });
+
+            return Ok(shippingMethodTypesViewModel);
         }
 
         /// <summary>
@@ -236,9 +214,6 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
-
             if (!request.UseCheapest)
             {
                 return new StatusCodeResult(HttpStatusCode.NotImplemented, this);
@@ -252,10 +227,6 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope
             });
-
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
 
             return Ok(vm);
         }
@@ -279,15 +250,13 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
-
             var vm = await CartService.AddLineItemAsync(new AddLineItemParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 ProductId = request.ProductId,
                 VariantId = request.VariantId,
                 Quantity = request.Quantity.GetValueOrDefault(),
@@ -295,10 +264,6 @@ namespace Orckestra.Composer.Cart.Api
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = request.RecurringOrderProgramName
             });
-
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
 
             return Ok(vm);
         }
@@ -315,22 +280,16 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
-
             var vm = await CartService.RemoveLineItemAsync(new RemoveLineItemParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
-
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
 
             return Ok(vm);
         }
@@ -347,25 +306,19 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("Missing Request Body"); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
-
             var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
             {
                 ScopeId = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = request.RecurringOrderProgramName
             });
-
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
 
             return Ok(vm);
         }
@@ -382,9 +335,6 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("No body was found on the request."); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
-
             var vm = await CartService.UpdateShippingAddressPostalCodeAsync(new UpdateShippingAddressPostalCodeParam
             {
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
@@ -395,10 +345,6 @@ namespace Orckestra.Composer.Cart.Api
                 PostalCode = request.PostalCode,
                 Scope = ComposerContext.Scope
             });
-
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
 
             return Ok(vm);
         }
@@ -415,9 +361,6 @@ namespace Orckestra.Composer.Cart.Api
             if (request == null) { return BadRequest("No body was found on the request."); }
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
-
             var vm = await CartService.UpdateBillingAddressPostalCodeAsync(new UpdateBillingAddressPostalCodeParam
             {
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
@@ -429,10 +372,6 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope
             });
 
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
-
             return Ok(vm);
         }
 
@@ -442,9 +381,6 @@ namespace Orckestra.Composer.Cart.Api
         public virtual async Task<IHttpActionResult> AddCouponAsync([FromBody]CouponRequest request)
         {
             if (request == null) { return BadRequest("No request found."); }
-
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
 
             var vm = await CouponViewService.AddCouponAsync(new CouponParam
             {
@@ -456,10 +392,6 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
-
             return Ok(vm);
         }
 
@@ -469,9 +401,6 @@ namespace Orckestra.Composer.Cart.Api
         public virtual async Task<IHttpActionResult> RemoveCouponAsync(CouponRequest request)
         {
             if (request == null) { return BadRequest("No request found."); }
-
-            var checkoutUrl = GetCheckoutUrl();
-            var homepageUrl = GetHomepageUrl();
 
             var vm = await CouponViewService.RemoveCouponAsync(new CouponParam
             {
@@ -483,10 +412,6 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             });
 
-            SetCheckoutUrl(vm, checkoutUrl);
-            SetHomepageUrl(vm, homepageUrl);
-            SetEditCartUrl(vm);
-
             return Ok(vm);
         }
 
@@ -497,92 +422,45 @@ namespace Orckestra.Composer.Cart.Api
         {
             var param = new RemoveInvalidLineItemsParam
             {
-                CartName = CartConfiguration.ShoppingCartName,
+                CartName = GetCartName(),
+                CartType = GetCartType(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             };
 
-            var cartViewModel = await CartService.RemoveInvalidLineItemsAsync(param);
+            var cartViewModel = await CartService.RemoveInvalidLineItemsAsync(param).ConfigureAwait(false);
 
             return Ok(cartViewModel);
         }
 
-        protected virtual string GetCheckoutUrl()
+        protected virtual string GetCheckoutSignInUrl()
         {
             var getCartUrlParam = new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo
             };
 
-            var checkoutStepInfos = CartUrlProvider.GetCheckoutStepPageInfos(getCartUrlParam);
-
-            var checkoutSignInUrl = CartUrlProvider.GetCheckoutSignInUrl(new BaseUrlParameter
-            {                
-                CultureInfo = ComposerContext.CultureInfo,
-                ReturnUrl = ComposerContext.IsAuthenticated ? null : checkoutStepInfos[1].Url
-            });
-
-            var checkoutUrlTarget = ComposerContext.IsAuthenticated ? checkoutStepInfos[1].Url : checkoutSignInUrl;
-
-            return checkoutUrlTarget;
+            return CartUrlProvider.GetCheckoutSignInUrl(getCartUrlParam);
         }
 
-        protected virtual void SetCheckoutUrl(CartViewModel cartViewModel, string checkoutUrl)
+        protected virtual string GetCartUrl()
         {
-            if (cartViewModel.OrderSummary != null)
+            var getCartUrlParam = new BaseUrlParameter
             {
-                cartViewModel.OrderSummary.CheckoutUrlTarget = checkoutUrl;
-            }
-        }
-
-        protected virtual string GetHomepageUrl()
-        {
-            var homepageUrl = CartUrlProvider.GetHomepageUrl(new BaseUrlParameter
-            {                
                 CultureInfo = ComposerContext.CultureInfo
-            });
+            };
 
-            return homepageUrl;
-        }
-
-        protected virtual void SetHomepageUrl(CartViewModel cartViewModel, string homepageUrl)
-        {
-            if (cartViewModel != null)
-            {
-                cartViewModel.HomepageUrl = homepageUrl;
-            }
-        }
-
-        protected void SetEditCartUrl(CartViewModel cartViewModel)
-        {
-            if (cartViewModel.OrderSummary != null)
-            {
-                var getCartUrlParam = new BaseUrlParameter
-                {
-                    CultureInfo = ComposerContext.CultureInfo
-                };
-
-                var cartUrl = CartUrlProvider.GetCartUrl(getCartUrlParam);
-
-                cartViewModel.OrderSummary.EditCartUrlTarget = cartUrl;
-            }
+            return CartUrlProvider.GetCartUrl(getCartUrlParam);
         }
 
         [ActionName("completecheckout")]
         [HttpPost]
         [ValidateModelState]
-        public virtual async Task<IHttpActionResult> CompleteCheckout(CompleteCheckoutRequest request)
+        public virtual async Task<IHttpActionResult> CompleteCheckout()
         {
-            if (request == null) { return BadRequest("No request body found."); }
-
-            var nextStepUrl = CartUrlProvider.GetCheckoutStepUrl(new GetCheckoutStepUrlParam
-            {                
-                CultureInfo = ComposerContext.CultureInfo,
-                StepNumber = request.CurrentStep + 1
-            });
-
+ 
             var checkoutViewModel = await CheckoutService.CompleteCheckoutAsync(new CompleteCheckoutParam
             {
                 CartName = CartConfiguration.ShoppingCartName,
@@ -592,7 +470,10 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
             });
 
-            checkoutViewModel.NextStepUrl = nextStepUrl;
+            checkoutViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
+                new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
+
+            checkoutViewModel.IsAuthenticated = ComposerContext.IsAuthenticated;
 
             return Ok(checkoutViewModel);
         }
@@ -610,8 +491,18 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo
             }).ConfigureAwait(false);
-            
+
             return Ok(shippingMethodsViewModel);
+        }
+
+        private string GetCartName()
+        {
+            return EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingCartName() : CartConfiguration.ShoppingCartName;
+        }
+
+        private string GetCartType()
+        {
+            return EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null;
         }
     }
 }

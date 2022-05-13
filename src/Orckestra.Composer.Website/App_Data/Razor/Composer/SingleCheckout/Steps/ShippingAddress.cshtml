@@ -1,0 +1,45 @@
+@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Shipping Address"; }
+    }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on" xmlns:v-slot="v-slot">
+<head>
+</head>
+<body>
+        <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddressRegistered">
+            <div is="transition-group" name="items-list">
+                <div v-for="(address, index) in RegisteredAddresses"
+                     v-bind:key="address.Id"
+                     class="border rounded p-3 mb-2 bg-white"
+                     v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId }">
+                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "SelectedShippingAddressId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
+                </div>
+            </div>
+            <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
+                @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
+                <button class="btn btn-primary mt-1"
+                        v-on:click="addShippingAddressToMyAddressBook()"
+                        v-bind:disabled="Mode.Loading"
+                        data-qa="shipping-save-address-link">
+                    @Html.Localize("MyAccount", "B_SaveNewAddress")
+                </button>
+            </div>
+
+            <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
+                    v-on:click="addNewAddressMode"
+                    v-bind:disabled="IsLoading"
+                    data-qa="shipping-add-address-link">
+                @Html.Localize("MyAccount", "B_AddNewAddress")
+            </button>
+        </div>
+
+        <div  v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddress">
+            @Forms.Address.Form("Cart.ShippingAddress", "addressForm")
+       </div>
+</body>
+</html>

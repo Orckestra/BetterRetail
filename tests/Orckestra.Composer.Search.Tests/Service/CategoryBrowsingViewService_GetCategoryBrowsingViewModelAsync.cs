@@ -25,7 +25,6 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Search;
-using ServiceStack.Text;
 using Facet = Orckestra.Overture.ServiceModel.Search.Facet;
 using FacetType = Orckestra.Composer.Search.Facets.FacetType;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
@@ -281,172 +280,6 @@ namespace Orckestra.Composer.Search.Tests.Service
         }
 
         [Test]
-        public async Task WHEN_category_has_no_child_SHOULD_view_model_contain_no_child_category()
-        {
-            // Arrange
-            var categories = new List<Category>
-            {
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level1_0" }})
-                }
-            };
-
-            SetupCategoryRepository(categories);
-            SetupCategoryUrlProvider();
-
-            CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
-
-            // Act
-            CategoryBrowsingViewModel model = await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
-            {
-                CategoryId = categories[0].Id,
-                SelectedFacets = new List<SearchFilter>()
-            });
-
-            // Assert
-            model.ChildCategories.Count.Should().Be(0);
-        }
-
-        [Test]
-        public async Task WHEN_category_has_one_child_SHOULD_view_model_contain_one_child_category()
-        {
-            // Arrange
-            var parentId = GetRandom.String(10);
-
-            var categories = new List<Category>
-            {
-                new Category
-                {
-                    Id = parentId,
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level1_0" }})
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_0" }}),
-                    PrimaryParentCategoryId = parentId
-                }
-            };
-
-            SetupCategoryRepository(categories);
-            SetupCategoryUrlProvider();
-
-            CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
-
-            // Act
-            CategoryBrowsingViewModel model = await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
-            {
-                CategoryId = parentId,
-                SelectedFacets = new List<SearchFilter>()
-            });
-
-            // Assert
-            model.ChildCategories.Count.Should().Be(1);
-        }
-
-        [Test]
-        public async Task WHEN_category_has_many_children_SHOULD_view_model_contain_many_child_categories()
-        {
-            // Arrange
-            var parentId = GetRandom.String(10);
-
-            var categories = new List<Category>
-            {
-                new Category
-                {
-                    Id = parentId,
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level1_0" }})
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_0" }}),
-                    PrimaryParentCategoryId = parentId
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_1" }}),
-                    PrimaryParentCategoryId = parentId
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_2" }}),
-                    PrimaryParentCategoryId = parentId
-                }
-            };
-
-            SetupCategoryRepository(categories);
-            SetupCategoryUrlProvider();
-
-            CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
-
-            // Act
-            CategoryBrowsingViewModel model = await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
-            {
-                CategoryId = parentId,
-                SelectedFacets = new List<SearchFilter>()
-            });
-
-            // Assert
-            model.ChildCategories.Count.Should().Be(3);
-        }
-
-        [Test]
-        public async Task WHEN_category_has_children_SHOULD_view_model_contain_child_categories_with_correct_title()
-        {
-            // Arrange
-            var parentId = GetRandom.String(10);
-
-            var categories = new List<Category>
-            {
-                new Category
-                {
-                    Id = parentId,
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level1_0" }})
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_0" }}),
-                    PrimaryParentCategoryId = parentId
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_1" }}),
-                    PrimaryParentCategoryId = parentId
-                },
-                new Category
-                {
-                    Id = GetRandom.String(10),
-                    DisplayName = new LocalizedString(new Dictionary<string, string> { { CultureName, "level2_2" }}),
-                    PrimaryParentCategoryId = parentId
-                }
-            };
-
-            SetupCategoryRepository(categories);
-            SetupCategoryUrlProvider();
-
-            CategoryBrowsingViewService service = _container.CreateInstance<CategoryBrowsingViewService>();
-
-            // Act
-            CategoryBrowsingViewModel model = await service.GetCategoryBrowsingViewModelAsync(new GetCategoryBrowsingViewModelParam
-            {
-                CategoryId = parentId,
-                SelectedFacets = new List<SearchFilter>()
-            });
-
-            // Assert
-            model.ChildCategories[0].Title.Should().Be(categories[1].DisplayName.GetLocalizedValue(CultureName));
-            model.ChildCategories[1].Title.Should().Be(categories[2].DisplayName.GetLocalizedValue(CultureName));
-            model.ChildCategories[2].Title.Should().Be(categories[3].DisplayName.GetLocalizedValue(CultureName));
-        }
-
-        [Test]
         public async Task WHEN_category_is_found_SHOULD_facet_type_is_single_select()
         {
             // Arrange
@@ -472,7 +305,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.First().FacetType.Should().Be(FacetType.SingleSelect);
+            model.FacetSettings.SelectedFacets.Facets.First().FacetType.Should().Be(FacetType.SingleSelect);
         }
 
         [Test]
@@ -501,7 +334,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(1);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(1);
         }
 
         [Test]
@@ -546,7 +379,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Count.Should().Be(3);
+            model.FacetSettings.SelectedFacets.Facets.Count.Should().Be(3);
         }
 
         [Test]
@@ -575,8 +408,8 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.First().IsRemovable.Should().BeFalse();
-            model.SelectedFacets.IsAllRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets.First().IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.IsAllRemovable.Should().BeFalse();
         }
 
         [Test]
@@ -621,11 +454,11 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets[0].IsRemovable.Should().BeFalse();
-            model.SelectedFacets.Facets[1].IsRemovable.Should().BeFalse();
-            model.SelectedFacets.Facets[2].IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets[0].IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets[1].IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets[2].IsRemovable.Should().BeFalse();
 
-            model.SelectedFacets.IsAllRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.IsAllRemovable.Should().BeFalse();
         }
 
         [Test]
@@ -670,7 +503,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.StartsWith("CategoryLevel"));
+            model.FacetSettings.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.StartsWith("CategoryLevel"));
         }
 
         [Test]
@@ -715,7 +548,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.EndsWith("_Facet"));
+            model.FacetSettings.SelectedFacets.Facets.Should().OnlyContain(facet => facet.FieldName.EndsWith("_Facet"));
         }
 
         [Test]
@@ -753,7 +586,7 @@ namespace Orckestra.Composer.Search.Tests.Service
             });
 
             // Assert
-            model.SelectedFacets.Facets.First(facet => facet.FieldName == expectedFacet.Name).IsRemovable.Should().BeFalse();
+            model.FacetSettings.SelectedFacets.Facets.First(facet => facet.FieldName == expectedFacet.Name).IsRemovable.Should().BeFalse();
         }
 
         [Test]

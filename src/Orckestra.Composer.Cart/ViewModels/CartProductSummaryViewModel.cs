@@ -21,7 +21,8 @@ namespace Orckestra.Composer.Cart.ViewModels
 
         [MapTo("Brand")]
         public string BrandId { get; set; }
-
+        public string TopLevelCategoryId { get; set; }
+        public string TopLevelCategoryName { get; set; }
 
     }
 }

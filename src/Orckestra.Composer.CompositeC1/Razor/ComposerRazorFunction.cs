@@ -1,5 +1,11 @@
 ﻿using Composite.AspNet.Razor;
+using Composite.Core;
 using Composite.Core.Instrumentation;
+using Composite.Core.Routing.Pages;
+using Composite.Data;
+using Orckestra.Composer.CompositeC1.Services;
+using Orckestra.ExperienceManagement.Configuration;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -11,6 +17,25 @@ namespace Composer.Razor
 {
     public abstract class ComposerRazorFunction : RazorFunction
     {
+        public void RedirectNotAuthorized()
+        {
+            var context = HttpContext.Current;
+
+            var websiteId = SitemapNavigator.CurrentHomePageId;
+            var userData = (context.User.Identity as System.Web.Security.FormsIdentity)?.Ticket.UserData;
+
+            bool authorized = context.User.Identity.IsAuthenticated && userData == websiteId.ToString();
+            if (authorized) return;
+
+            var siteConfiguration = ServiceLocator.GetService<ISiteConfiguration>();
+            var pageService = ServiceLocator.GetService<IPageService>();
+            var loginPageId = siteConfiguration.GetPagesConfiguration().LoginPageId;
+            var culture = C1PageRoute.PageUrlData?.LocalizationScope;
+            string loginUrl = pageService.GetPageUrl(loginPageId, culture);
+
+            context.Response.Redirect(loginUrl);
+        }
+
         public IHtmlString Partial(string viewName, object model)
         {
             return Partial(CreateController(Context), viewName, model);

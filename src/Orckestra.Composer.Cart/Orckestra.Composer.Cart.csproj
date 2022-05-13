@@ -9,13 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer.Cart</RootNamespace>
     <AssemblyName>Orckestra.Composer.Cart</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +55,9 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\PaymentExtensions.cs" />
     <Compile Include="Factory\CartViewModelFactory.cs" />
+    <Compile Include="Helper\LineItemsHelper.cs" />
+    <Compile Include="Parameters\AddLineItemsParam.cs" />
+    <Compile Include="Parameters\BaseCartParam.cs" />
     <Compile Include="Parameters\CreateLightListOfLineItemDetailViewModelParam.cs" />
     <Compile Include="Factory\IRecurringOrderCartViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderCartViewModelFactory.cs" />
@@ -84,16 +88,29 @@
     <Compile Include="Parameters\CreateLineItemDetailViewModelParam.cs" />
     <Compile Include="Parameters\CreateLightRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\CreateWishListViewModelParam.cs" />
+    <Compile Include="Parameters\DeleteCartParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodListViewModelParam.cs" />
     <Compile Include="Parameters\GetCustomerPaymentMethodsForProviderParam.cs" />
     <Compile Include="Parameters\GetKeyVariantAttributesParam.cs" />
     <Compile Include="Parameters\GetLightRecurringOrderCartListViewModelParam.cs" />
+    <Compile Include="Parameters\GetLineItemsParam.cs" />
     <Compile Include="Parameters\GetPaymentParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelFromCartsParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartsViewModelParam.cs" />
     <Compile Include="Parameters\GetRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\GetShippingMethodsScopeParam.cs" />
+    <Compile Include="Parameters\Order\AddShipmentFulfillmentMessagesParam.cs" />
+    <Compile Include="Parameters\Order\DeleteCartOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\CancelOrderParam.cs" />
+    <Compile Include="Parameters\Order\ChangeOrderDraftOwnershipParam.cs" />
+    <Compile Include="Parameters\Order\ChangeShipmentStatusParam.cs" />
+    <Compile Include="Parameters\Order\EditOrderParam.cs" />
     <Compile Include="Parameters\Order\GetOrderChangesParam.cs" />
+    <Compile Include="Parameters\Order\CreateCartOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\SubmitCartOrderDraftParam.cs" />
+    <Compile Include="Parameters\Order\GetOrderFulfillmentStateParam.cs" />
+    <Compile Include="Parameters\Order\UpdateOrderParam.cs" />
+    <Compile Include="Parameters\Order\UpdateOrderCustomerParam.cs" />
     <Compile Include="Parameters\RemoveRecurringCartLineItemParam.cs" />
     <Compile Include="Parameters\RescheduleRecurringCartParam.cs" />
     <Compile Include="Parameters\UpdateRecurringCartLineItemParam.cs" />
@@ -106,7 +123,11 @@
     <Compile Include="Parameters\CreateRecurringOrderCartViewModelParam.cs" />
     <Compile Include="Parameters\WishList\GetShareWishListUrlParam.cs" />
     <Compile Include="Parameters\WishList\GetWishListUrlParam.cs" />
+    <Compile Include="Providers\Order\IEditingOrderProvider.cs" />
+    <Compile Include="Providers\Order\EditingOrderProvider.cs" />
     <Compile Include="Providers\WishList\IWishListUrlProvider.cs" />
+    <Compile Include="Requests\GetGuestOrderRequest.cs" />
+    <Compile Include="Requests\GetOrderRequest.cs" />
     <Compile Include="Requests\GetLineItemRequest.cs" />
     <Compile Include="Parameters\AddPaymentParam.cs" />
     <Compile Include="Parameters\AddVaultProfileViewModel.cs" />
@@ -200,7 +221,6 @@
     <Compile Include="Requests\UpdateRecurringCartShippingMethodRequest.cs" />
     <Compile Include="Services\CartService.cs" />
     <Compile Include="Services\CheckoutBreadcrumbViewService.cs" />
-    <Compile Include="Services\CheckoutNavigationViewService.cs" />
     <Compile Include="Services\CheckoutService.cs" />
     <Compile Include="Services\CouponViewService.cs" />
     <Compile Include="Services\FixCartService.cs" />
@@ -208,7 +228,6 @@
     <Compile Include="Services\IRecurringOrderCartsViewService.cs" />
     <Compile Include="Services\IWishListViewService.cs" />
     <Compile Include="Services\ICheckoutBreadcrumbViewService.cs" />
-    <Compile Include="Services\ICheckoutNavigationViewService.cs" />
     <Compile Include="Services\IFixCartService.cs" />
     <Compile Include="Services\LineItemService.cs" />
     <Compile Include="Services\Order\IOrderHistoryViewService.cs" />
@@ -237,16 +256,21 @@
     <Compile Include="ViewModels\CartProductSummaryViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CheckoutNavigationViewModel.cs" />
+    <Compile Include="ViewModels\GroupedLineItemDetailViewModel.cs" />
+    <Compile Include="ViewModels\Order\EditingOrderViewModel.cs" />
+    <Compile Include="Providers\Order\CancellationStatus.cs" />
+    <Compile Include="ViewModels\PickedItemViewModel.cs" />
+    <Compile Include="ViewModels\PickUpAddressViewModel.cs" />
+    <Compile Include="ViewModels\SingleCheckoutPaymentViewModel.cs" />
     <Compile Include="ViewModels\CheckoutPaymentViewModel.cs" />
     <Compile Include="ViewModels\CheckoutRedirectActionViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSignInAsGuestViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSignInAsReturningViewModel.cs" />
     <Compile Include="ViewModels\CheckoutSignInViewModel.cs" />
-    <Compile Include="ViewModels\CompleteCheckoutLineItemViewModel.cs" />
     <Compile Include="ViewModels\CompleteCheckoutViewModel.cs" />
     <Compile Include="ViewModels\CouponsViewModel.cs" />
     <Compile Include="ViewModels\CouponViewModel.cs" />
-    <Compile Include="ViewModels\CustomerPaymentMethodListViewModel.cs" />
+    <Compile Include="ViewModels\CustomerPaymentMethodsViewModel.cs" />
     <Compile Include="ViewModels\CustomerSummaryViewModel.cs" />
     <Compile Include="ViewModels\GetGuestOrderViewModel.cs" />
     <Compile Include="ViewModels\GetPaymentMethodsViewModel.cs" />
@@ -290,7 +314,9 @@
     <Compile Include="ViewModels\SavedCreditCardPaymentViewModel.cs" />
     <Compile Include="ViewModels\SetCustomerDefaultPaymentMethodViewModel.cs" />
     <Compile Include="ViewModels\ShipmentAdditionalFeeViewModel.cs" />
+    <Compile Include="ViewModels\ShippingMethodTypesViewModel.cs" />
     <Compile Include="ViewModels\ShippingMethodsViewModel.cs" />
+    <Compile Include="ViewModels\ShippingMethodTypeViewModel.cs" />
     <Compile Include="ViewModels\ShippingMethodViewModel.cs" />
     <Compile Include="ViewModels\TaxViewModel.cs" />
     <Compile Include="ViewModels\SetShippingMethodViewModel.cs" />
@@ -302,9 +328,9 @@
     <Compile Include="ViewModels\WishListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
-      <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
-      <Name>Orckestra.Composer.Product</Name>
+    <ProjectReference Include="..\Orckestra.Composer.Store\Orckestra.Composer.Store.csproj">
+      <Project>{1407af7b-a1fe-4b52-906b-7503b6db0f2b}</Project>
+      <Name>Orckestra.Composer.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
@@ -319,47 +345,29 @@
     <None Include="Properties\PublishProfiles\Package.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Microsoft.ServiceBus.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.AsyncExtensions, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.AsyncExtensions.4.2.0\lib\net461\Orckestra.AsyncExtensions.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.3.0-beta0001\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.5.3.0-beta0001\lib\net461\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.4.2.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.3.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.4.2.0\lib\net45\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.3.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.4.2.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.5.3.0-beta0001\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.4.2.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.5.3.0-beta0001\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.2.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
-    </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.4.2.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
-    </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.4.2.0\lib\portable-net4+sl5+netcore45+wp8\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ServiceStack.Interfaces.5.9.0\lib\net45\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

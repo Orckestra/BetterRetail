@@ -11,15 +11,12 @@ namespace Orckestra.Composer.ViewModels
     {
 	    public InstancePropertyMetadata(PropertyInfo propertyInfo) : base(propertyInfo)
 	    {
-		    if (propertyInfo == null)
-		    {
-				throw new ArgumentNullException("propertyInfo");
-		    }
+		    if (propertyInfo == null) { throw new ArgumentNullException(nameof(propertyInfo)); }
 
 	        if (!propertyInfo.CanRead)
 	        {
                 throw new ArgumentException(string.Format("PropertyInfo '{0}' must have a getter.", propertyInfo.Name),
-                    "propertyInfo");
+                    nameof(propertyInfo));
 	        }
 
 		    Getter = propertyInfo.CanRead ? propertyInfo.DelegateForGetPropertyValue(Flags.InstancePublic) : null;
@@ -33,10 +30,7 @@ namespace Orckestra.Composer.ViewModels
         /// <returns>Instance of the value.</returns>
         public object GetValue(BaseViewModel viewModel)
         {
-            if (viewModel == null)
-            {
-                throw new ArgumentNullException("viewModel");
-            }
+            if (viewModel == null) { throw new ArgumentNullException(nameof(viewModel)); }
 
             var value = Getter.Invoke(viewModel);
             return value;
@@ -49,10 +43,7 @@ namespace Orckestra.Composer.ViewModels
         /// <param name="value">Value to set in the instance's property.</param>
         public void SetValue(BaseViewModel viewModel, object value)
         {
-            if (viewModel == null)
-            {
-                throw new ArgumentNullException("viewModel");
-            }
+            if (viewModel == null) { throw new ArgumentNullException(nameof(viewModel)); }
 
 			// We need to ignore value types, otherwise the Setter.Invoke will throw a NullReferenceException
             if (Setter == null || (value == null && PropertyType.IsValueType))

@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orckestra.Composer.MyAccount.Tests</RootNamespace>
     <AssemblyName>Orckestra.Composer.MyAccount.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -20,6 +20,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,9 +53,6 @@
       <HintPath>..\..\packages\FluentAssertions.3.3.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Microsoft.ServiceBus.dll</HintPath>
-    </Reference>
     <Reference Include="Moq, Version=4.2.1507.118, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
@@ -63,59 +61,36 @@
       <HintPath>..\..\packages\Moq.AutoMock.0.3.2.1\lib\net40\Moq.AutoMock.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.8.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.8.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.3.0-beta0001\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.4.2.0\lib\portable-net4+sl5+netcore45+wp8\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.3.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.4.2.0\lib\net452\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.3.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.4.2.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.4.2.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Client.Signed.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ServiceStack.Text.Signed.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ServiceStack.Interfaces.5.9.0\lib\net45\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo_ComposerWeightAttribute.cs" />
     <Compile Include="Mock\MockAddressFactory.cs" />
+    <Compile Include="Mock\MockCustomerFactory.cs" />
     <Compile Include="Mock\MockMembershipProviderFactory.cs" />
     <Compile Include="Mock\MockMembershipFactory.cs" />
-    <Compile Include="Mock\MockCustomerFactory.cs" />
     <Compile Include="Mock\MockHttpContext.cs" />
     <Compile Include="Mock\MockComposerContextFactory.cs" />
     <Compile Include="Mock\MockMyAccountUrlProviderFactory.cs" />
@@ -123,14 +98,7 @@
     <Compile Include="Repositories\CustomerAddressRepository_CreateAddressAsync.cs" />
     <Compile Include="Repositories\CustomerAddressRepository_DeleteAddressAsync.cs" />
     <Compile Include="Repositories\CustomerAddressRepository_UpdateAddressAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_ChangePasswordAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_ResetPasswordAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_SendResetPasswordInstructionsAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_CreateUserAsync.cs" />
     <Compile Include="Repositories\CustomerAddressRepository_GetCustomerAddressesAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_GetCustomerByIdAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_GetCustomerByTicketAsync.cs" />
-    <Compile Include="Repositories\CustomerRepository_UpdateUserAsync.cs" />
     <Compile Include="Services\CustomerAddressViewService_CreateAddressAsync.cs" />
     <Compile Include="Services\CustomerAddressViewService_DeleteAddressAsync.cs" />
     <Compile Include="Services\CustomerAddressViewService_GetAddressListViewModel.cs" />
@@ -142,7 +110,7 @@
     <Compile Include="Services\CustomerViewService_UpdateAccountAsync.cs" />
     <Compile Include="Services\MembershipViewService_GetChangePasswordViewModelAsync.cs" />
     <Compile Include="Services\MembershipViewService_GetCreateAccountViewModel.cs" />
-    <Compile Include="Services\MembershipViewService_GetSignInHeaderModel.cs" />
+    <Compile Include="Services\MembershipViewService_GetUserMetadataModel.cs" />
     <Compile Include="Services\MembershipViewService_GetLoginViewModel.cs" />
     <Compile Include="Services\MembershipViewService_ChangePasswordAsync.cs" />
     <Compile Include="Services\MembershipViewService_ResetPasswordAsync.cs" />

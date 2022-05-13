@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Factory;
 using Orckestra.Composer.Product.ViewModels;
@@ -81,63 +82,12 @@ namespace Orckestra.Composer.Product.Tests.Factories
             asyncFunction.ShouldThrow<ArgumentException>();
         }
 
-        [Test]
-        public async Task WHEN_Product_Has_Lookup_Values_SHOULD_Return_Lookup_Localized_Values()
-        {
-            
-            //Arrange
-            _container.Use(CreateProductRepositoryWithLookups());
-            _container.Use(CreateViewModelMapperTest());
-            _container.Use(CreateLookupService());
-
-            var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
-
-            //Act
-            var model = await productViewModelFactory.GetProductViewModel(new GetProductParam
-                {
-                    Scope = GetRandom.String(32),
-                    ProductId = GetRandom.String(32),
-                    CultureInfo = CultureInfo.CreateSpecificCulture("fr-CA"),
-                    BaseUrl = GetRandom.String(32),
-                });
-
-            //Assert
-            model.Bag.Should().NotBeNull();
-            model.Bag.Should().NotBeEmpty();
-            model.Bag["Lookup1"].Should().Be("Look Up 1 FR");
-            model.Bag["Size"].Should().Be("Medium|Small");
-        }
-
-        [Test]
-        public async Task WHEN_min_quantity_is_less_than_1_SHOULD_quantity_is_null()
-        {
-            //Arrange
-            ProductConfiguration.MinQuantity = 0;
-
-            _container.Use(CreateProductRepositoryWithLookups());
-            _container.Use(CreateViewModelMapperTest());
-            _container.Use(CreateLookupService());
-
-            var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
-
-            //Act
-            var model = await productViewModelFactory.GetProductViewModel(new GetProductParam
-            {
-                Scope = GetRandom.String(32),
-                ProductId = GetRandom.String(32),
-                CultureInfo = CultureInfo.CreateSpecificCulture("fr-CA"),
-                BaseUrl = GetRandom.String(32)
-            });
-
-            //Assert
-            model.Quantity.Should().BeNull();
-        }
-
+   
         [Test]
         public async Task WHEN_min_quantity_is_equal_to_1_SHOULD_quantity_is_not_null()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 1;
+            QuantityConfiguration.MinQuantity = 1;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -162,7 +112,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
         public async Task WHEN_min_quantity_is_greater_than_1_SHOULD_quantity_is_not_null()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 2;
+            QuantityConfiguration.MinQuantity = 2;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -187,8 +137,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
         public async Task WHEN_max_quantity_is_less_than_min_quantity_SHOULD_quantity_is_null()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 3;
-            ProductConfiguration.MaxQuantity = 2;
+            QuantityConfiguration.MinQuantity = 3;
+            QuantityConfiguration.MaxQuantity = 2;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -213,8 +163,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
         public async Task WHEN_max_quantity_is_equal_to_min_quantity_SHOULD_quantity_is_not_null()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 2;
-            ProductConfiguration.MaxQuantity = 2;
+            QuantityConfiguration.MinQuantity = 2;
+            QuantityConfiguration.MaxQuantity = 2;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -239,8 +189,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
         public async Task WHEN_max_quantity_is_equal_to_min_quantity_SHOULD_quantity_value_is_min_quantity()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 2;
-            ProductConfiguration.MaxQuantity = 2;
+            QuantityConfiguration.MinQuantity = 2;
+            QuantityConfiguration.MaxQuantity = 2;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -258,17 +208,17 @@ namespace Orckestra.Composer.Product.Tests.Factories
             });
 
             //Assert
-            model.Quantity.Min.Should().Be(ProductConfiguration.MinQuantity);
-            model.Quantity.Max.Should().Be(ProductConfiguration.MaxQuantity);
-            model.Quantity.Value.Should().Be(ProductConfiguration.MinQuantity);
+            model.Quantity.Min.Should().Be(QuantityConfiguration.MinQuantity);
+            model.Quantity.Max.Should().Be(QuantityConfiguration.MaxQuantity);
+            model.Quantity.Value.Should().Be(1);
         }
 
         [Test]
         public async Task WHEN_max_quantity_is_greater_than_min_quantity_SHOULD_quantity_is_not_null()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 1;
-            ProductConfiguration.MaxQuantity = 2;
+            QuantityConfiguration.MinQuantity = 1;
+            QuantityConfiguration.MaxQuantity = 2;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -293,8 +243,8 @@ namespace Orckestra.Composer.Product.Tests.Factories
         public async Task WHEN_max_quantity_is_greater_than_min_quantity_SHOULD_quantity_value_is_min_quantity()
         {
             //Arrange
-            ProductConfiguration.MinQuantity = 1;
-            ProductConfiguration.MaxQuantity = 2;
+            QuantityConfiguration.MinQuantity = 1;
+            QuantityConfiguration.MaxQuantity = 2;
 
             _container.Use(CreateProductRepositoryWithLookups());
             _container.Use(CreateViewModelMapperTest());
@@ -312,9 +262,9 @@ namespace Orckestra.Composer.Product.Tests.Factories
             });
 
             //Assert
-            model.Quantity.Min.Should().Be(ProductConfiguration.MinQuantity);
-            model.Quantity.Max.Should().Be(ProductConfiguration.MaxQuantity);
-            model.Quantity.Value.Should().Be(ProductConfiguration.MinQuantity);
+            model.Quantity.Min.Should().Be(QuantityConfiguration.MinQuantity);
+            model.Quantity.Max.Should().Be(QuantityConfiguration.MaxQuantity);
+            model.Quantity.Value.Should().Be(QuantityConfiguration.MinQuantity);
         }
 
         private Mock<IProductUrlProvider> CreateProductUrlProvider()
@@ -462,10 +412,10 @@ namespace Orckestra.Composer.Product.Tests.Factories
 
             var fakeProductDetailViewModel = new ProductViewModel();
 
-            fakeProductDetailViewModel.GetType()
+            /*fakeProductDetailViewModel.GetType()
                 .BaseType
                 .GetProperty("Bag")
-                .SetValue(fakeProductDetailViewModel, new Dictionary<string, object> { { "Lookup1", "LookupValue1" }, { "Size", "Medium|Small" } }, null);
+                .SetValue(fakeProductDetailViewModel, new Dictionary<string, object> { { "Lookup1", "LookupValue1" }, { "Size", "Medium|Small" } }, null);*/
 
             mapperMock
                 .Setup(mapper => mapper.MapTo<ProductViewModel>(It.IsAny<Overture.ServiceModel.Products.Product>(), It.IsAny<CultureInfo>()))

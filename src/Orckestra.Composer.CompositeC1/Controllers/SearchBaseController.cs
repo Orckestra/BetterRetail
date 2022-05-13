@@ -1,146 +1,17 @@
 ﻿using System;
-using System.Globalization;
 using System.Web.Mvc;
-using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Composer.Search.Services;
-using Orckestra.Composer.Search.ViewModels;
-using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
-using Orckestra.Composer.CompositeC1.Controllers.Helpers;
-using Composite.Data;
-using Orckestra.Composer.Search.RequestConstants;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
     public abstract class SearchBaseController : Controller
     {
-        protected IComposerContext ComposerContext { get; private set; }
-        protected IPageService PageService { get; private set; }
         protected ISearchRequestContext SearchRequestContext { get; private set; }
-        protected ILanguageSwitchService LanguageSwitchService { get; private set; }
-        protected ISearchBreadcrumbViewService SearchBreadcrumbViewService { get; private set; }
-        protected ISearchUrlProvider SearchUrlProvider { get; private set; }
 
-        protected SearchBaseController(
-            IComposerContext composerContext,
-            IPageService pageService,
-            ISearchRequestContext searchRequestContext,
-            ILanguageSwitchService languageSwitchService,
-            ISearchBreadcrumbViewService searchBreadcrumbViewService,
-            ISearchUrlProvider searchUrlProvider)
+        protected SearchBaseController(ISearchRequestContext searchRequestContext)
         {
-            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
-            PageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             SearchRequestContext = searchRequestContext ?? throw new ArgumentNullException(nameof(searchRequestContext));
-            LanguageSwitchService = languageSwitchService ?? throw new ArgumentNullException(nameof(languageSwitchService));
-            SearchBreadcrumbViewService = searchBreadcrumbViewService ?? throw new ArgumentNullException(nameof(searchBreadcrumbViewService));
-            SearchUrlProvider = searchUrlProvider ?? throw new ArgumentNullException(nameof(searchUrlProvider));
-        }
-
-        public virtual ActionResult Index(
-            [Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
-        {
-            if (!AreKeywordsValid(keywords))
-            {
-                return View("ProductsSearchResults");
-            }
-
-            var searchViewModel = SearchRequestContext.ProductsSearchViewModel;
-
-            searchViewModel.Context["SearchResults"] = searchViewModel.ProductSearchResults.SearchResults;
-            searchViewModel.Context["Keywords"] = searchViewModel.ProductSearchResults.Keywords;
-            searchViewModel.Context["TotalCount"] = searchViewModel.ProductSearchResults.TotalCount;
-            searchViewModel.Context["MaxItemsPerPage"] = SearchConfiguration.MaxItemsPerPage;
-            searchViewModel.Context["ListName"] = "Search Results";
-            searchViewModel.Context["PaginationCurrentPage"] = searchViewModel.ProductSearchResults.Pagination.CurrentPage;
-
-            return View("ProductsSearchResults", searchViewModel);
-        }
-
-        public virtual ActionResult SelectedSearchFacets(
-            [Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
-        {
-            var searchViewModel = GetSearchViewModel();
-            
-            return View("SelectedSearchFacets", searchViewModel);
-        }
-
-        public virtual ActionResult SearchFacets(
-			[Bind(Prefix = SearchRequestParams.Keywords)]string keywords, 
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1, 
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null, 
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = SearchRequestParams.DefaultSortDirection)
-        {
-            if (!AreKeywordsValid(keywords))
-            {
-                return View("SearchFacetsEmpty");
-            }
-
-            var searchViewModel = GetSearchViewModel();
-
-            return searchViewModel.ProductSearchResults.TotalCount == 0
-                ? View("SearchFacetsEmpty")
-                : View("SearchFacets", searchViewModel.ProductSearchResults);
-        }
- 
-        protected virtual bool AreKeywordsValid(string keywords)
-        {
-            return SearchControllerHelper.AreKeywordsValid(keywords);
-        }
-
-        protected virtual SearchViewModel GetSearchViewModel()
-        {
-                return SearchRequestContext.ProductsSearchViewModel;
-        }
-
-        public virtual ActionResult Breadcrumb(string keywords)
-        {
-            var breadcrumbViewModel = SearchBreadcrumbViewService.CreateBreadcrumbViewModel(new GetSearchBreadcrumbParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                HomeUrl = PageService.GetRendererPageUrl(SitemapNavigator.CurrentHomePageId, ComposerContext.CultureInfo),
-                Keywords = keywords
-            });
-
-            return View("Breadcrumb", breadcrumbViewModel);
-        }
-
-        public virtual ActionResult LanguageSwitch(string keywords, int page = 1, string sortBy = null, string sortDirection = null)
-        {
-            var languageSwitchViewModel = LanguageSwitchService.GetViewModel(cultureInfo =>
-                BuildUrl(cultureInfo, keywords, page, sortBy, sortDirection), ComposerContext.CultureInfo);
-
-            return View("LanguageSwitch", languageSwitchViewModel);
-        }
-
-        private string BuildUrl(CultureInfo cultureInfo, string keywords, int page, string sortBy, string sortDirection)
-        {
-            var searchUrl = SearchUrlProvider.BuildSearchUrl(new BuildSearchUrlParam
-            {
-                SearchCriteria = new SearchCriteria
-                {
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-                CultureInfo = cultureInfo,
-                Keywords = keywords,
-                //We have to return to page 1 because the number of results can be different from a language to another
-                Page = 1,
-                SortBy = sortBy,
-                SortDirection = sortDirection
-                }
-            });
-
-            return searchUrl;
         }
 
         public virtual ActionResult PageHeader(string keywords)

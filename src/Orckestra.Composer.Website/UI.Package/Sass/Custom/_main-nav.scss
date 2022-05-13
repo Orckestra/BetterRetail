@@ -42,6 +42,7 @@
 
     .nav-link  {
         position: relative;
+        text-transform: uppercase;
 
         &::after {
             content: unset;
@@ -185,6 +186,15 @@
             padding-bottom: 0;
         }
     }
+
+    &.sps--blw {
+        @include media-breakpoint-up(md) {
+          .main-nav-sticky {
+            display: block;
+            float: left;
+          }
+        }
+     }
 }
 
 ul.main-nav-sticky {
@@ -215,12 +225,6 @@ ul.main-nav-sticky {
                     width: 100%;
                 }
             }
-        }
-    }
-    @include media-breakpoint-up(md) {
-        .affix & {
-            display: block;
-            float: left;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Composite.Data.Types;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.ViewModels.Breadcrumb;
@@ -13,11 +14,9 @@ namespace Orckestra.Composer.CompositeC1.Services
         protected IPageService _pageService;
         protected ISiteConfiguration SiteConfiguration { get; private set; }
 
-
         public BreadcrumbViewService(IPageService pageService, ISiteConfiguration siteConfiguration)
         {
-            if (pageService == null) { throw new ArgumentNullException(nameof(pageService)); }
-            _pageService = pageService;
+            _pageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             SiteConfiguration = siteConfiguration;
         }
 
@@ -26,16 +25,12 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var pageId = new Guid(param.CurrentPageId);
-            var page = _pageService.GetPage(pageId, param.CultureInfo);
-
-            if (page == null)
-            {
-                throw new ArgumentException("Could not find any page matching this ID.", nameof(param.CurrentPageId));
-            }
+            var page = _pageService.GetPage(pageId, param.CultureInfo) ?? 
+                throw new InvalidOperationException("Could not find any page matching this ID.");
 
             var breadcrumbViewModel = new BreadcrumbViewModel
             {
-                ActivePageName = page.MenuTitle,
+                ActivePageName = HttpUtility.HtmlEncode(page.MenuTitle),
                 Items = CreateBreadcrumbItems(param, page)
             };
 
@@ -76,7 +71,6 @@ namespace Orckestra.Composer.CompositeC1.Services
 
             return itemVM;
         }
-
 
         protected virtual IEnumerable<BreadcrumbItemViewModel> UnrollStack(Stack<BreadcrumbItemViewModel> breadcrumbStack)
         {

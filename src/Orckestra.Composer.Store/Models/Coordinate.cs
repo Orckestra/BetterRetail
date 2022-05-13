@@ -24,5 +24,10 @@ namespace Orckestra.Composer.Store.Models
         {
             return Lat + "," + Lng;
         }
+
+        public Coordinate Clone()
+        {
+            return (Coordinate)MemberwiseClone();
+        }
     }
 }

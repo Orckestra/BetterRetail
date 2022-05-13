@@ -63,12 +63,22 @@ namespace Orckestra.Composer.Store.Factory
             if (param.SearchPoint != null && storeViewModel.Address.Latitude != null &&
                 storeViewModel.Address.Longitude != null)
             {
+                double earthRadius = GoogleMaps.GoogleMapsSettings.LengthMeasureUnit == Enums.LengthMeasureUnitEnum.km ? EarthRadiusMeasurement.Kilometers : EarthRadiusMeasurement.Miles;
                 storeViewModel.DestinationToSearchPoint = Math.Round(GeoCodeCalculator.CalcDistance(
                     storeViewModel.Address.Latitude.Value, storeViewModel.Address.Longitude.Value,
-                    param.SearchPoint.Lat, param.SearchPoint.Lng, EarthRadiusMeasurement.Kilometers), 2);
+                    param.SearchPoint.Lat, param.SearchPoint.Lng, earthRadius), 2);
+
+                storeViewModel.LengthMeasureUnit = GoogleMaps.GoogleMapsSettings.LengthMeasureUnit.ToString();
             }
 
             storeViewModel.Schedule = CreateStoreScheduleViewModel(param);
+
+            if (param.Store.FulfillmentLocation != null)
+            {
+                storeViewModel.SupportDelivery = param.Store.FulfillmentLocation.SupportDelivery;
+                storeViewModel.SupportPickUp = param.Store.FulfillmentLocation.SupportPickUp;
+                storeViewModel.InventoryLocationId = param.Store.FulfillmentLocation.InventoryLocationId;
+            }
 
             return storeViewModel;
         }
@@ -79,6 +89,7 @@ namespace Orckestra.Composer.Store.Factory
             var model = new StoreStructuredDataViewModel
             {
                 Name = store.Name,
+                Number = store.Number,
                 Telephone = store.PhoneNumber,
                 Url = StoreUrlProvider.GetStoreUrl(new GetStoreUrlParam()
                 {
@@ -156,24 +167,17 @@ namespace Orckestra.Composer.Store.Factory
 
         public virtual StorePageViewModel BuildNextPage(GetStorePageViewModelParam param)
         {
-            if (param.CurrentPageNumber < GetTotalPages(param.Total, param.PageSize))
-            {
-                return new StorePageViewModel
+            return param.CurrentPageNumber < GetTotalPages(param.Total, param.PageSize)
+                ? new StorePageViewModel
                 {
                     Page = param.CurrentPageNumber + 1
-                };
-            }
-
-            return null;
+                }
+                : null;
         }
 
         protected virtual StoreScheduleViewModel CreateStoreScheduleViewModel(CreateStoreViewModelParam param)
         {
-
-            if (param.Store.StoreSchedule == null)
-            {
-                return null;
-            }
+            if (param.Store.StoreSchedule == null) { return null; }
 
             var model = new StoreScheduleViewModel();
             var storeNowTime = DateTime.Now;
@@ -184,11 +188,10 @@ namespace Orckestra.Composer.Store.Factory
                 storeNowTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, storeTimeInfo);
             }
 
-            model.OpeningHours = GetOpeningHours(param, storeNowTime);
-            model.OpeningHourExceptions = GetOpeningHourExceptions(param, storeNowTime);
+            model.OpeningHours = GetOpeningHours(param.Store.StoreSchedule, param.CultureInfo, storeNowTime);
+            model.OpeningHourExceptions = GetOpeningHourExceptions(param.Store.StoreSchedule, param.CultureInfo, storeNowTime);
 
-            var todayOpeningTimes =
-                StoreScheduleProvider.GetOpeningTimes(param.Store.StoreSchedule, storeNowTime).ToList();
+            var todayOpeningTimes = StoreScheduleProvider.GetOpeningTimes(param.Store.StoreSchedule, storeNowTime).ToList();
             model.TodayOpeningTimes = todayOpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, param.CultureInfo)).ToList();
 
             model.IsOpenNow = IsTimeInIntervals(storeNowTime.TimeOfDay, todayOpeningTimes);
@@ -196,9 +199,9 @@ namespace Orckestra.Composer.Store.Factory
             return model;
         }
 
-        protected virtual List<DailyScheduleExceptionViewModel> GetOpeningHourExceptions(CreateStoreViewModelParam param, DateTime today)
+        protected virtual List<DailyScheduleExceptionViewModel> GetOpeningHourExceptions(FulfillmentSchedule schedule, CultureInfo cultureInfo, DateTime today)
         {
-            var exceptions = StoreScheduleProvider.GetOpeningHourExceptions(param.Store.StoreSchedule, today, 1);
+            var exceptions = StoreScheduleProvider.GetOpeningHourExceptions(schedule, today, 1);
 
             return exceptions.Select(
                 ex => ViewModelMapper.MapTo<DailyScheduleExceptionViewModel>(new
@@ -206,21 +209,21 @@ namespace Orckestra.Composer.Store.Factory
                     ex.StartDate,
                     ex.EndDate,
                     ex.IsClosed,
-                    OpeningTime = GetScheduleIntervalViewModel(ex.OpeningTime, param.CultureInfo)
-                }, param.CultureInfo))
+                    OpeningTime = GetScheduleIntervalViewModel(ex.OpeningTime, cultureInfo)
+                }, cultureInfo))
                 .ToList();
         }
 
-        protected virtual List<DailyScheduleViewModel> GetOpeningHours(CreateStoreViewModelParam param, DateTime today)
+        protected virtual List<DailyScheduleViewModel> GetOpeningHours(FulfillmentSchedule schedule, CultureInfo cultureInfo, DateTime today)
         {
-            return param.Store.StoreSchedule.OpeningHours.Select(oh =>
+            return schedule.OpeningHours.Select(oh =>
                 new DailyScheduleViewModel
                 {
-                    LocalizedDay = GetStoreOpenHoursLocalizedDayName(oh.Day, param.CultureInfo),
+                    LocalizedDay = GetStoreOpenHoursLocalizedDayName(oh.Day, cultureInfo),
                     IsDayToday = oh.Day == today.DayOfWeek,
                     IsClosed = oh.IsClosed,
                     IsOpenedAllDay = oh.IsOpenedAllDay,
-                    OpeningTimes = oh.OpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, param.CultureInfo)).ToList()
+                    OpeningTimes = oh.OpeningTimes.Select(ot => GetScheduleIntervalViewModel(ot, cultureInfo)).ToList()
                 }
                 ).ToList();
         }
@@ -274,7 +277,6 @@ namespace Orckestra.Composer.Store.Factory
                             IsoCode = overtureAddress.CountryCode
                         }).Result;
 
-
                         var regionName =
                             CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
                             {
@@ -286,15 +288,14 @@ namespace Orckestra.Composer.Store.Factory
                         addressViewModel.CountryName = !string.IsNullOrWhiteSpace(countryName)
                             ? countryName
                             : overtureAddress.CountryCode.ToUpper();
+
                         addressViewModel.RegionName = !string.IsNullOrWhiteSpace(regionName)
                             ? regionName
                             : overtureAddress.RegionCode;
                     }
                 }
             }
-
             return addressViewModel;
-
         }
 
 
@@ -314,12 +315,9 @@ namespace Orckestra.Composer.Store.Factory
                 CultureInfo = cultureInfo
             });
 
-            long phoneNumberAsInt;
-            if (localFormattingString != null && long.TryParse(phoneNumber, out phoneNumberAsInt))
-            {
-                return string.Format(cultureInfo, localFormattingString, phoneNumberAsInt);
-            }
-            return phoneNumber;
+            return localFormattingString != null && long.TryParse(phoneNumber, out long phoneNumberAsInt)
+                ? string.Format(cultureInfo, localFormattingString, phoneNumberAsInt)
+                : phoneNumber;
         }
 
         #region Google Maps Properties
@@ -336,43 +334,31 @@ namespace Orckestra.Composer.Store.Factory
         }
         protected virtual string GetGoogleStaticMapUrl(StoreAddressViewModel addressViewModel)
         {
-            if (addressViewModel == null) return null;
-
-           return GoogleMaps.GetStaticMapImgUrl(GoogleMapAddressParams(addressViewModel), "roadmap");
-
+            return addressViewModel == null 
+                ? null 
+                : GoogleMaps.GetStaticMapImgUrl(GoogleMapAddressParams(addressViewModel), "roadmap");
         }
 
         private string[] GoogleMapAddressParams(StoreAddressViewModel model)
         {
-            string[] arr;
-            if (model.Latitude != null && model.Longitude != null)
-            {
-                arr = new[]
+            return model.Latitude != null && model.Longitude != null
+                ? (new[]
                 {
                     ((double) model.Latitude).ToString("0.00000", CultureInfo.InvariantCulture),
                     ((double) model.Longitude).ToString("0.00000", CultureInfo.InvariantCulture)
-                };
-            }
-            else
-            {
-                arr = new[] {model.Line1, model.City, model.PostalCode, model.CountryName};
-            }
-            return arr;
+                })
+                : (new[] {model.Line1, model.City, model.PostalCode, model.CountryName});
         }
 
         #endregion
 
         protected bool IsTimeInIntervals(TimeSpan time, IEnumerable<ScheduleInterval> intervals)
         {
-            return
-                intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime)
-                    .FirstOrDefault();
+            return intervals.Select(interval => time >= interval.BeginingTime && time < interval.EndingTime).FirstOrDefault();
         }
         protected int GetTotalPages(int total, int pageSize)
         {
             return (int)Math.Ceiling((double)total / pageSize);
         }
-
-
     }
 }

@@ -2,32 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Web.UI.WebControls;
 using Composite.Data;
+using Orckestra.Composer.CompositeC1.Cache;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
+using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 using Orckestra.Composer.CompositeC1.Utils;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.ViewModels.Home;
 using Orckestra.Composer.ViewModels.MenuNavigation;
-using System.Web;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Mappers
 {
-
     public class NavigationMapper : INavigationMapper
     {
         private readonly GoogleAnalyticsNavigationUrlProvider _analyticsNavigationUrlHelper;
+        private static readonly QueryCache<NavigationImage, Guid> _navigationImageCache = new QueryCache<NavigationImage, Guid>(_ => _.MenuItemParentId);
 
         public NavigationMapper(GoogleAnalyticsNavigationUrlProvider analyticsNavigationUrlHelper)
         {
-            Guard.NotNull(analyticsNavigationUrlHelper, nameof(analyticsNavigationUrlHelper));
-
-            _analyticsNavigationUrlHelper = analyticsNavigationUrlHelper;
+            _analyticsNavigationUrlHelper = analyticsNavigationUrlHelper ?? throw new ArgumentNullException(nameof(analyticsNavigationUrlHelper));
         }
 
-        public virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(List<MainMenu> mainMenuItems, Guid? parentId = null)
+        public virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(List<MainMenuItemWrapper> mainMenuItems, Guid? parentId = null)
         {
             return mainMenuItems
                 .Where(x=> x.ParentId == parentId && C1Helper.IsUrlPagePublished(x.Url))
@@ -38,6 +34,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
                     Url = _analyticsNavigationUrlHelper.BuildUrl(li, mainMenuItems, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown),
                     Image = MapNavigationImage(GetNavigationImage(li.Id, new CultureInfo(li.SourceCultureName))),
                     CssClass = C1Helper.GetCssStyleValue(li.CssStyle),
+                    CssClassName = li.CssClassName,
                     UrlTarget = C1Helper.GetUrlTargetValue(li.Target), 
                     Children = MapMainMenuItems(mainMenuItems, li.Id),
                     MenuType = MenuTypeEnum.Principal
@@ -100,9 +97,9 @@ namespace Orckestra.Composer.CompositeC1.Mappers
 
         public virtual NavigationImage GetNavigationImage(Guid menuItemId, CultureInfo cultureInfo)
         {
-            using (DataConnection data = new DataConnection(cultureInfo))
+            using (new DataConnection(cultureInfo))
             {
-                return data.Get<NavigationImage>().FirstOrDefault(x => x.MenuItemParentId == menuItemId);
+                return _navigationImageCache[menuItemId];
             }
         }
     }
