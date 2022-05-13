@@ -9,5 +9,6 @@ namespace Orckestra.Composer.Cart.Parameters.Order {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int MinimumOrderedNumberOfTimes { get; set; }
+        public int TimeFrame { get; set; }
     }
 }

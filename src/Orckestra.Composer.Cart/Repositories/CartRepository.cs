@@ -538,7 +538,6 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
             };
 
-            CacheProvider.Remove(OrderRepository.CustomerOrderedProductsCacheKey(param.Scope, param.CustomerId));
             return OvertureClient.SendAsync(request);
         }
 

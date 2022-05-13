@@ -316,18 +316,18 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 MinimumOrderedNumberOfTimes = param.MinimumOrderedNumberOfTimes
             };
 
-            var cacheKey = CustomerOrderedProductsCacheKey(param.ScopeId, param.CustomerId);
+            var cacheKey = CustomerOrderedProductsCacheKey(param.ScopeId, param.CustomerId, param.MinimumOrderedNumberOfTimes, param.TimeFrame);
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        public static CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
+        public static CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId, int frequency, int timeframe)
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.CustomerOrderedProducts)
             {
                 Scope = scope
             };
 
-            key.AppendKeyParts(customerId);
+            key.AppendKeyParts(customerId, frequency, timeframe);
             return key;
         }
     }
