@@ -78,6 +78,8 @@ namespace Orckestra.Composer.Configuration
 
         public static string RecurringOrderPrograms = "RecurringOrderPrograms";
 
+        public static string CustomProfiles = "CustomProfiles";
+
         /// <summary>
         /// Cache used for the list of fulfillment methods for a scope
         /// </summary>
@@ -88,5 +90,7 @@ namespace Orckestra.Composer.Configuration
         public static string Providers = "Providers";
 
         public static string OrderSettings = "OrderSettings";
+
+        public static string CustomerOrderedProducts = "CustomerOrderedProducts";
     }
 }
