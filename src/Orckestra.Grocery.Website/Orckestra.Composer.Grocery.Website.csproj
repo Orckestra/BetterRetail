@@ -167,26 +167,26 @@
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.9.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.2.0-alpha0102\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.5.2.0-alpha0102\lib\net461\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.5.2.0-alpha0102\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.RestClient, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Client.5.4.0-alpha0051\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.2.0-alpha0102\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.2.0-alpha0102\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.5.2.0-alpha0102\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.5.4.0-alpha0051\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.5.2.0-alpha0102\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel.Requests, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.5.4.0-alpha0051\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -459,6 +459,7 @@
     <Content Include="App_Data\Razor\Composer\MyAccount\WishList.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\MyFavorites.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\StructuredData.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\MyUsuals.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
 using Orckestra.Overture;
@@ -25,7 +26,7 @@ namespace Orckestra.Composer.Cart.Repositories
     {
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
-
+        
         public CartRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
@@ -537,6 +538,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
             };
 
+            CacheProvider.Remove(OrderRepository.CustomerOrderedProductsCacheKey(param.Scope, param.CustomerId));
             return OvertureClient.SendAsync(request);
         }
 

@@ -13,6 +13,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Services;
 using Orckestra.Composer.SearchQuery.Services;
+using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Factory;
 using Orckestra.Overture;
 
@@ -40,6 +41,8 @@ namespace Orckestra.Composer.Grocery
             host.Register<GroceryProductSearchViewModelFactory, IProductSearchViewModelFactory>();
             host.Register<GroceryRelatedProductViewService, IRelatedProductViewService>();
             host.Register<GroceryLineItemViewModelFactory, ILineItemViewModelFactory>();
+            host.Register<MyUsualsViewService, IMyUsualsViewService>();
+            host.Register<MyUsualsSettings, IMyUsualsSettings>(ComponentLifestyle.PerRequest);
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(Plugin).Assembly);
             host.RegisterApiControllers(typeof(Plugin).Assembly);
         }

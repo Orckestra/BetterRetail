@@ -35,5 +35,8 @@ module Orckestra.Composer {
             return ComposerClient.post('/api/search/searchBySkus', { QueryString, Skus });
         }
 
+        public getMyUsualsSearchResults(QueryString): Q.Promise<any> {
+            return ComposerClient.post('/api/myUsuals/search', { QueryString });
+        }
     }
 }

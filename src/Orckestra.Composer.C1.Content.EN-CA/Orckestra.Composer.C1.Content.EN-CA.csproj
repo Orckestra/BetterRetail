@@ -73,6 +73,8 @@
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMetas_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMetas_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.ICuisineTypes_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IDietTypes_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Recipes.DataTypes.IDifficultys_public.xml" />

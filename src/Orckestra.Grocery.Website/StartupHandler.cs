@@ -24,6 +24,9 @@ using System;
 using Orckestra.Composer.Repositories;
 using System.Linq;
 using Orckestra.Composer.Grocery.DataTypes;
+using Orckestra.Composer.Cart.Repositories.Order;
+using Orckestra.Composer.Services;
+using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Grocery.Website
 {
@@ -71,8 +74,28 @@ namespace Orckestra.Composer.Grocery.Website
             DataEvents<IPage>.OnAfterAdd += UpdateAfterPageChanged;
 
             log.Info("Application Started");
+
+            DataEvents<DataTypes.IMyUsualsSettingsMeta>.OnAfterUpdate += CleanCacheAfterMyUsualsSettingsChanged;
         }
 
+        private static void CleanCacheAfterMyUsualsSettingsChanged(object sender, DataEventArgs dataEventArgs)
+        {
+            var data = dataEventArgs.Data as DataTypes.IMyUsualsSettingsMeta;
+            if (data == null) return;
+
+            var homepageId = GetHomePageId(Guid.Parse(data.MyUsualsPage.ToString()));
+
+            using (var con = new DataConnection())
+            {
+                var siteConfigurationMeta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
+
+                var composerContext = Composite.Core.ServiceLocator.GetService<IComposerContext>();
+                var cacheProvider = Composite.Core.ServiceLocator.GetService<ICacheProvider>();
+
+                cacheProvider.Remove(OrderRepository.CustomerOrderedProductsCacheKey(siteConfigurationMeta.Scope, composerContext.CustomerId));
+            }
+        }
+    
         /// <summary>
         /// Do some updates when C1 page is added, for example clear Categories Cache
         /// </summary>
@@ -90,7 +113,7 @@ namespace Orckestra.Composer.Grocery.Website
         {
             if (data.PageTypeId != CategoryPages.CategoryPageTypeId) return;
 
-            Guid homepageId = GetHomePageId(data);
+            Guid homepageId = GetHomePageId(data.Id);
             using (var con = new DataConnection())
             {
                 var siteConfigurationMeta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
@@ -110,10 +133,10 @@ namespace Orckestra.Composer.Grocery.Website
             }
         }
 
-        private static Guid GetHomePageId(IPage data)
+        private static Guid GetHomePageId(Guid id)
         {
             Guid homepageId = Guid.Empty;
-            Guid pageId = data.Id;
+            Guid pageId = id;
 
             while (pageId != Guid.Empty)
             {

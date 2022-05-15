@@ -2,6 +2,8 @@
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Grocery.Providers;
+using Orckestra.Composer.Grocery.Settings;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Recipes.Settings;
@@ -12,9 +14,11 @@ using System;
 
 namespace Orckestra.Composer.Grocery.Services
 {
-    public class GroceryMyAccountViewService: MyAccountViewService
+    public class GroceryMyAccountViewService : MyAccountViewService
     {
         private IRecipeSettings RecipeSettings { get; }
+        private IMyUsualsSettings MyUsualsSettings { get; }
+
         public GroceryMyAccountViewService(IComposerContext composerContext,
             IMyAccountUrlProvider myAccountUrlProvider,
             IOrderUrlProvider orderUrlProvider,
@@ -24,52 +28,57 @@ namespace Orckestra.Composer.Grocery.Services
             IWebsiteContext websiteContext,
             IRecurringOrdersSettings recurringOrdersSettings,
             ISiteConfiguration siteConfiguration,
-            IRecipeSettings recipeSettings)
-            : base(composerContext, 
+            IRecipeSettings recipeSettings,
+            IMyUsualsSettings myUsualsSettings)
+            : base(composerContext,
                 myAccountUrlProvider,
-                orderUrlProvider, 
+                orderUrlProvider,
                 wishListUrlProvider,
                 recurringScheduleUrlProvider,
-                pageService, 
+                pageService,
                 websiteContext,
-                recurringOrdersSettings, 
+                recurringOrdersSettings,
                 siteConfiguration)
         {
             RecipeSettings = recipeSettings ?? throw new ArgumentNullException(nameof(recipeSettings));
+            MyUsualsSettings = myUsualsSettings ?? throw new ArgumentNullException(nameof(myUsualsSettings));
         }
 
         public override MenuViewModel CreateMenu(string currentUrl)
         {
             var menu = base.CreateMenu(currentUrl);
-            menu.MenuItems.Add(GetFavoriteRecipesMenuItem(currentUrl));
+            menu.MenuItems.Add(GetMenuItem(currentUrl, MyUsualsSettings.MyUsualsPageId));
+            menu.MenuItems.Add(GetMenuItem(currentUrl, RecipeSettings.RecipeFavoritesPageId));
             return menu;
         }
 
-        protected virtual MenuItemViewModel GetFavoriteRecipesMenuItem(string currentUrl)
+        private MenuItemViewModel GetMenuItem(string currentUrl, Guid pageId)
         {
             var urlParam = new BaseUrlParameter
             {
                 CultureInfo = ComposerContext.CultureInfo
             };
             var currentPageId = new Guid(currentUrl);
-            var recipeFavoritesUrl = GetRecipeFavoriteUrl(urlParam);
-            var recipeFavoritesPage = PageService.GetPage(RecipeSettings.RecipeFavoritesPageId, ComposerContext.CultureInfo);
+            var url = GetUrl(urlParam, pageId);
+            var page = PageService.GetPage(pageId, ComposerContext.CultureInfo);
 
-            var recipeFavoritesMenuItem = new MenuItemViewModel
+            var menuItem = new MenuItemViewModel
             {
-                Name = recipeFavoritesPage.MenuTitle,
-                Url = recipeFavoritesUrl,
-                IsActive = currentPageId == RecipeSettings.RecipeFavoritesPageId
+                Name = page.MenuTitle,
+                Url = url,
+                IsActive = currentPageId == pageId
             };
-            return recipeFavoritesMenuItem;
+            return menuItem;
         }
 
-        private string GetRecipeFavoriteUrl(BaseUrlParameter param)
+        private string GetUrl(BaseUrlParameter param, Guid pageId)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
+            if (pageId == null) { throw new ArgumentNullException(nameof(pageId)); }
 
-            var url = PageService.GetPageUrl(RecipeSettings.RecipeFavoritesPageId, param.CultureInfo);
+            var url = PageService.GetPageUrl(pageId, param.CultureInfo);
             return UrlProviderHelper.BuildUrlWithParams(url, param.ReturnUrl);
         }
+
     }
 }

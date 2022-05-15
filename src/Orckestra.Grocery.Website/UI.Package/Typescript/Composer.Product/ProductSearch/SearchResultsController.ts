@@ -192,7 +192,7 @@ module Orckestra.Composer {
                         this.SearchResults = [...this.SearchResults];
                     },
                     sortingChanged(url: string): void {
-                        self.eventHub.publish(SearchEvents.SortingChanged, {data: {url}});
+                        self.eventHub.publish(SearchEvents.SortingChanged, { data: { url } });
                     },
                     addToCart(event: any, product: any): void {
                         const {
@@ -231,7 +231,7 @@ module Orckestra.Composer {
                     registerSubscriptions(): void {
                         self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
                     },
-                    onSearchRequested({data}): void {
+                    onSearchRequested({ data }): void {
                         const searchRequest = (!data.categoryId && data.queryName) ?
                             self.searchRepository.getQuerySearchResults(data.queryString, data.queryName, data.queryType) :
                             self.searchRepository.getSearchResults(data.queryString, data.categoryId);
@@ -298,7 +298,7 @@ module Orckestra.Composer {
         }
 
         protected sendSearchResultsForAnalytics(productSearchResults: any, listName: string, maxItemsPerPage: any): void {
-            const { Pagination: {CurrentPage}, SearchResults, Keywords, TotalCount} = productSearchResults;
+            const { Pagination: { CurrentPage }, SearchResults, Keywords, TotalCount } = productSearchResults;
 
             const searchResultsData = {
                 ProductSearchResults: SearchResults,

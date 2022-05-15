@@ -90,5 +90,7 @@ namespace Orckestra.Composer.Configuration
         public static string Providers = "Providers";
 
         public static string OrderSettings = "OrderSettings";
+
+        public static string CustomerOrderedProducts = "CustomerOrderedProducts";
     }
 }

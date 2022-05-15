@@ -511,4 +511,10 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="B_ContinueEditing" xml:space="preserve">
     <value>Continuer la modification</value>
   </data>
+  <data name="T_MyUsualsNoResults" xml:space="preserve">
+    <value>Aucun résultat trouvé</value>
+  </data>
+  <data name="T_SearchGrocery" xml:space="preserve">
+    <value>Search Grocery</value>
+  </data>
 </root>

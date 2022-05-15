@@ -42,7 +42,8 @@ module Orckestra.Composer {
          */
         getContentSearchResults(QueryString, CurrentTabPathInfo, IsCurrentSiteOnly): Q.Promise<any>;
 
-        getProductsSearchResults(QueryString, Skus): Q.Promise<any>
+        getProductsSearchResults(QueryString, Skus): Q.Promise<any>;
 
+        getMyUsualsSearchResults(QueryString): Q.Promise<any>;
     }
 }

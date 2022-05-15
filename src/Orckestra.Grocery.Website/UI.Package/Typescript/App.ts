@@ -55,6 +55,7 @@
 ///<reference path='./Composer.MyAccount/RecurringSchedule/MyRecurringScheduleDetailsController.ts' />
 ///<reference path='./Composer.MyAccount/RecurringCart/MyRecurringCartsController.ts' />
 ///<reference path='./Composer.MyAccount/RecurringCart/MyRecurringCartDetailsController.ts' />
+///<reference path='./Composer.MyAccount/MyUsuals/MyUsualsController.ts' />
 
 ///<reference path='./Composer.SingleCheckout/GuestCustomerInfoSingleCheckoutController.ts' />
 ///<reference path='./Composer.SingleCheckout/ShippingSingleCheckoutController.ts' />
@@ -163,6 +164,8 @@
                 { name: 'MyAccount.MyRecurringScheduleDetails', controller: Orckestra.Composer.MyRecurringScheduleDetailsController },
                 { name: 'MyAccount.MyRecurringCarts', controller: Orckestra.Composer.MyRecurringCartsController },
                 { name: 'MyAccount.MyRecurringCartDetails', controller: Orckestra.Composer.MyRecurringCartDetailsController },
+                { name: 'MyAccount.MyUsuals', controller: Orckestra.Composer.MyUsualsController },
+
 
                 { name: 'Orders.CurrentOrders', controller: Orckestra.Composer.CurrentOrdersController },
                 { name: 'Orders.PastOrders', controller: Orckestra.Composer.PastOrdersController },

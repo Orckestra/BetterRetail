@@ -35,4 +35,7 @@
 
   <Add Id="c9344cca-14e3-4430-95de-ea5949f62e10" TemplateId="bcd1d2ed-808b-4bf3-8394-b381cd5ce6fd" PageTypeId="67d26e71-a331-43c7-8a84-5a94234da4b6" Title="Recipes" MenuTitle="Recipes" UrlTitle="Recipes" FriendlyUrl="" Description="" ChangeDate="2022-02-23 14:21:36Z" ChangedBy="admin" CreationDate="2022-02-23 14:21:13Z" CreatedBy="admin" PublicationStatus="published" SourceCultureName="en-CA" />
   <Add Id="b430f190-8c1f-4708-9d26-7c9f4fe26091" TemplateId="fde5e0aa-8784-409b-9604-903c121ae474" PageTypeId="916a50c8-6044-46d0-8c47-13c88f8b0d25" Title="My Recipe Favorites" MenuTitle="My Recipe Favorites" UrlTitle="Recipe-Favorites" FriendlyUrl="" Description="" ChangeDate="2022-04-26 11:55:13Z" ChangedBy="admin" CreationDate="2022-04-26 11:54:11Z" CreatedBy="admin" PublicationStatus="published" SourceCultureName="en-CA" />
+
+  <Add Id="68472f36-f4a5-4422-9cd7-327c5e0725cf" TemplateId="fde5e0aa-8784-409b-9604-903c121ae474" PageTypeId="916a50c8-6044-46d0-8c47-13c88f8b0d25" Title="My Usuals" MenuTitle="My Usuals" UrlTitle="my-usuals" FriendlyUrl="" Description="" ChangeDate="2022-04-26 12:15:14Z" ChangedBy="admin" CreationDate="2019-04-17 17:40:31Z" PublicationStatus="published" SourceCultureName="en-CA" />
+
 </Data>

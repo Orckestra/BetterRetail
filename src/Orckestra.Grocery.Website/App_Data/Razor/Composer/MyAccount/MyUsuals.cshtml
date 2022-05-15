@@ -1,0 +1,78 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Providers
+@using Orckestra.Composer.Parameters
+@using System.Threading
+@using Orckestra.Composer.Grocery.Providers;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "My Usuals search results"; }
+    }
+
+    public IGroceryUrlProvider GroceryUrlProvider { get; set; }
+}
+
+@{
+    RedirectNotAuthorized();
+
+    var searchGroceryUrl = GroceryUrlProvider.GetSearchUrl(Thread.CurrentThread.CurrentCulture);
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="MyAccount.MyUsuals"
+         class="search-results" data-searchUrl="@searchGroceryUrl">
+        <div id="vueMyUsuals" class="card">
+            <div class="card-header  clearfix">
+                <h3 class="float-left">
+                    @Html.Localize("MyAccount", "T_MyUsuals")
+                </h3>
+                <div class="float-right m-0 lead">
+                    <strong><span class="navbar-count">{{TotalCount}}</span></strong>&#160;@Html.Localize("MyAccount", "T_MyUsualsCount")
+                </div>
+            </div>
+
+            <div class="card-body" v-cloak="true">
+                <div class="input-group mb-2">
+                    <input id="filter_keywords" type="text" class="form-control" v-on:input="updateKeyword($event.target.value)" placeholder="Filter products" />
+                    <div class="input-group-append absolute">
+                        <button class="btn btn-default" type="button" v-on:click="clearFilter">
+                            <span class="fa fa-times fa-sm"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" v-on:click="filterMyUsuals">
+                            <span class="fa  fa-search"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px">
+                    @GeneralHelpers.LoadingSpinner()
+                    <div class="row" v-if="MyUsualsResults.length > 0">
+                        <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
+                             class="col-lg-3 mb-2" data-qa="search-results">
+                            @Function("Composer.Search.Products.ProductTileVue")
+                        </div>
+                    </div>
+                    <div v-else-if="!Loading" class="w-100 text-center">
+                        <span>
+                            @Html.Localize("MyAccount", "T_MyUsualsNoResults")
+                            <a href="#"
+                               title="@Html.Localize("MyAccount", "T_SearchGrocery")"
+                               v-on:click="searchGrocery()">
+                                <u>@Html.Localize("MyAccount", "T_SearchGrocery")</u>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>
+
