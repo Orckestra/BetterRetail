@@ -313,7 +313,8 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 CustomerId = param.CustomerId,
                 StartDate = param.StartDate,
                 EndDate = param.EndDate,
-                MinimumOrderedNumberOfTimes = param.MinimumOrderedNumberOfTimes
+                MinimumOrderedNumberOfTimes = param.MinimumOrderedNumberOfTimes,
+                MaximumItems = param.MaximumItems
             };
 
             var cacheKey = CustomerOrderedProductsCacheKey(param.ScopeId, param.CustomerId);
