@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Search.Providers
         {
             return new SearchCriteria
             {
-                Keywords = string.IsNullOrWhiteSpace(searchTerms) ? searchTerms: searchTerms + "*",
+                Keywords = string.IsNullOrWhiteSpace(searchTerms) || searchTerms.EndsWith("*") ? searchTerms: searchTerms + "*",
                 NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                 IncludeFacets = includeFacets,
                 StartingIndex = (page - 1) * SearchConfiguration.MaxItemsPerPage,
