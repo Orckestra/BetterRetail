@@ -83,7 +83,7 @@ module Orckestra.Composer {
 
         private formatFacets(facets, selectedFacets) {
             return facets.map((facet) => {
-                const hits =  facet.Hits.map(hit => ({
+                const hits = facet.Hits.map(hit => ({
                     ...hit,
                     isSelected: selectedFacets.some(x => x.Key === hit.Key)
                 }))
@@ -92,6 +92,7 @@ module Orckestra.Composer {
                     ...facet,
                     visibleFacets: hits.slice(0, VisibleFacetsCount),
                     hiddenFacets: hits.slice(VisibleFacetsCount),
+                    idAttribute: facet.Label.replace(/\s/g, ''),
                 };
             })
         }

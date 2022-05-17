@@ -40,12 +40,12 @@
     <li id="vueMiniCart" data-oc-controller="Cart.MiniCart" v-cloak="true" class="nav-item position-relative">
         <a href="~/page(@pages.CartPageId)"
            data-qa="minicart-header"
-           class="nav-link minicart-header"
-           title="@Html.Localize("MiniCart", "H_MinicartTitle")">
-            <span class="fa  fa-shopping-cart"></span>&#160;
-            <span class="d-none d-xl-inline sps--blw-hidden">
+           class="nav-link minicart-header">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&#160;
+            <span class="d-none d-xl-inline sps--blw-hidden" aria-hidden="true">
                 @Html.Localize("MiniCart", "H_MinicartTitle")&#160;
             </span>
+            <span class="sr-only">@Html.Localize("MiniCart", "H_MinicartTitle")</span>
             <strong>
                 <span v-if="!Cart.IsCartEmpty" class="navbar-count" data-qa="minicart-count">
                     {{Cart.TotalQuantity}}
@@ -66,7 +66,7 @@
     <div id="minicart-summary" class="minicart-summary"
          data-notification-time="@(notificationTimeInSeconds * 1000)">
         <div class="minicart-summary-products">
-            <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+            <i class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none" aria-hidden="true"></i>
             <div v-if="Cart.IsCartEmpty" class="minicart-empty text-center">
                 <i>@Html.Localize("MiniCart", "L_EmptyMiniCart")</i>
             </div>
@@ -82,7 +82,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <span>
-                            {{Cart.TotalQuantity}}  @Html.Localize("MiniCart", "L_Items") |
+                            {{Cart.TotalQuantity}} @Html.Localize("MiniCart", "L_Items") |
                             <a v-bind:href="Cart.OrderSummary.EditCartUrlTarget" class="cta">
                                 @Html.Localize("MiniCart", "L_ViewCart")
                             </a>
@@ -142,7 +142,7 @@
             <div class="col-md-8">
                 <div class="minicart-line-item-text">
                     <strong v-if="item.ProductSummary.Brand"
-                            class="text-uppercase  product-tile-brand"
+                            class="text-uppercase product-tile-brand"
                             data-qa="minicart-product-brand">{{item.ProductSummary.Brand}}</strong>
                     <br v-if="item.ProductSummary.Brand" />
                     <a data-qa="minicart-product-title"
@@ -158,14 +158,14 @@
                     <span v-if="item.IsValid"> @Html.Localize("MiniCart", "L_Quantity") {{item.Quantity}}</span>
                     <div v-else="else" class="row push-top">
                         <div class="col-md-12 col-12 text-left">
-                            <span class="fa  fa-exclamation-triangle"></span>
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             <strong class="text-danger">@Html.Localized("MiniCart", "L_ProductOutOfStock", "{{item.Quantity}}")</strong>
                         </div>
                     </div>
                 </div>
 
                 <div v-if="item.IsValid" class="minicart-line-item-price">
-                    <span v-if="item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{item.Total}}</span>
+                    <span v-if="item.IsOnSale" class="h4 text-danger" data-qa="search-product-price">{{item.Total}}</span>
                     <span v-else="else" class="h4" data-qa="search-product-price">{{item.Total}}</span>
                 </div>
 
@@ -192,7 +192,7 @@
                            class="btn btn-success btn-block">
                             @Html.Localize("MiniCart", "L_ViewCart")
                         </a>
-                        <button type="button" class="btn  btn-outline-secondary btn-block"
+                        <button type="button" class="btn btn-outline-secondary btn-block"
                                 data-oc-click="onClose">
                             @Html.Localize("MiniCart", "B_ContinueShopping")
                         </button>

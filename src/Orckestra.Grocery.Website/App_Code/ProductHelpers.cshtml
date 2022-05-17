@@ -19,15 +19,17 @@
                     <div v-if="Quantity > 0 &amp;&amp; IsAvailableToSell">
                         <div class="input-group text-center">
                             <div class="input-group-prepend">
-                                <button class="btn   btn-secondary"
+                                <button class="btn btn-secondary"
                                         v-bind:disabled="DecrementDisabled"
                                         v-on:click="updateItemQuantity(Quantity - 1)"
                                         data-qa="product-quantity-decrease">
-                                    <span class="fa  fa-minus"></span>
+                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                    <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityDecrease")</span>
                                 </button>
                             </div>
 
-                            <input class="form-control  text-center" type="number"
+                            <label for="quantityField" class="sr-only">@Html.Localize("Accessibility", "L_Quantity")</label>
+                            <input id="quantityField" class="form-control text-center" type="number"
                                    min="0" max="99"
                                    v-bind:value="Quantity"
                                    v-bind:disabled="Loading"
@@ -37,11 +39,12 @@
                                    xmlns:v-bind="v-bind" />
 
                             <div class="input-group-append">
-                                <button class="btn   btn-secondary"
+                                <button class="btn btn-secondary"
                                         v-bind:disabled="IncrementDisabled"
                                         v-on:click="updateItemQuantity(Quantity + 1)"
                                         data-qa="product-quantity-increase">
-                                    <span class="fa  fa-plus"></span>
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityIncrease")</span>
                                 </button>
                             </div>
                         </div>
@@ -65,11 +68,13 @@
                                     v-bind:disabled="DecrementDisabled"
                                     v-on:click="updateQuantity(Quantity - 1)"
                                     data-qa="product-quantity-decrease">
-                                <span class="fa  fa-minus"></span>
+                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityDecrease")</span>
                             </button>
                         </div>
 
-                        <input class="form-control  text-center" type="number"
+                        <label for="quantityField" class="sr-only">@Html.Localize("Accessibility", "L_Quantity")</label>
+                        <input id="quantityField" class="form-control text-center" type="number"
                                min="0" max="99"
                                v-bind:value="Quantity"
                                v-bind:disabled="AddToCartDisabled"
@@ -79,11 +84,12 @@
                                xmlns:v-bind="v-bind" />
 
                         <div class="input-group-append">
-                            <button class="btn   btn-secondary"
+                            <button class="btn btn-secondary"
                                     v-bind:disabled="IncrementDisabled"
                                     v-on:click="updateQuantity(Quantity + 1)"
                                     data-qa="product-quantity-increase">
-                                <span class="fa  fa-plus"></span>
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityIncrease")</span>
                             </button>
                         </div>
                     </div>
@@ -98,10 +104,9 @@
 {
     <button class="btn btn-primary btn-block"
             v-bind:disabled="AddToCartDisabled"
-            title="@Html.Localize("General", "B_AddToCartProductDetail")"
             v-on:click="addItemToCart">
-        <span v-if="IsAvailableToSell" class="fa  fa-shopping-cart"></span>&#160;
-        <span v-if="!IsAvailableToSell" class="fa  fa-times"></span>&#160;
+        <i v-if="IsAvailableToSell" class="fa fa-shopping-cart" aria-hidden="true"></i>&#160;
+        <i v-if="!IsAvailableToSell" class="fa fa-times" aria-hidden="true"></i>&#160;
 
         <span v-if="IsUnavailableVariant">@Html.Localize("General", "B_AddToCartProductDetailUnavailable")</span>
         <span v-else="else">
@@ -118,18 +123,22 @@
          v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
         <div v-if="!IsUnavailableVariant" class="add-to-wishlist">
             <a v-if="WishListItem"
+               href="#"
                data-qa="product-remove-from-wishlist"
-               v-on:click="removeLineItemFromWishList"
-               title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
-               class="add-to-wishlist  text-danger">
-                <i class="fa  fa-2x  fa-heart"></i>
+               v-on:click.prevent="removeLineItemFromWishList"
+               class="add-to-wishlist text-danger"
+               role="button">
+                <i class="fa fa-2x fa-heart" aria-hidden="true"></i>
+                <span class="sr-only">@Html.Localize("MyAccount", "H_RemoveFromTheWishList")</span>
             </a>
             <a v-else="else"
+               href="#"
                data-qa="product-add-to-wishlist"
-               v-on:click="addLineItemToWishList"
-               title="@Html.Localize("MyAccount", "H_AddToWishList")"
-               class="add-to-wishlist">
-                <i class="fa  fa-2x  fa-heart-o"></i>
+               v-on:click.prevent="addLineItemToWishList"
+               class="add-to-wishlist"
+               role="button">
+                <i class="fa fa-2x fa-heart-o" aria-hidden="true"></i>
+                <span class="sr-only">@Html.Localize("MyAccount", "H_AddToWishList")</span>
             </a>
         </div>
     </div>
@@ -145,13 +154,16 @@
                 <button class="btn btn-secondary"
                         v-bind:disabled="Loading"
                         v-on:mouseup.stop="updateItemQuantity((@itemName), (@itemName).Quantity - 1)"
+                        v-on:keyup.enter="updateItemQuantity((@itemName), (@itemName).Quantity - 1)"
                         data-qa="product-quantity-decrease"
                         type="button">
-                    <span class="fa fa-minus"></span>
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                    <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityDecrease")</span>
                 </button>
             </div>
 
-            <input class="form-control  text-center btn-quantity" type="number"
+            <label v-bind:for="'quantityButtonField-' + (@itemName).ProductId" class="sr-only">@Html.Localize("Accessibility", "L_Quantity")</label>
+            <input v-bind:id="'quantityButtonField-' + (@itemName).ProductId" class="form-control text-center btn-quantity" type="number"
                    min="0" max="99"
                    v-bind:value="(@itemName).Quantity"
                    v-bind:disabled="@disabledInput"
@@ -164,9 +176,11 @@
                 <button class="btn btn-secondary"
                         v-bind:disabled="Loading"
                         v-on:mouseup.stop="updateItemQuantity((@itemName), (@itemName).Quantity + 1)"
+                        v-on:keyup.enter="updateItemQuantity((@itemName), (@itemName).Quantity + 1)"
                         data-qa="product-quantity-increase"
                         type="button">
-                    <span class="fa fa-plus"></span>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityIncrease")</span>
                 </button>
             </div>
         </div>
@@ -174,8 +188,9 @@
                 class="btn btn-primary btn-block text-uppercase"
                 v-bind:disabled="Loading"
                 data-qa="search-buy-now"
-                v-on:mouseup.stop="addToCart($event, (@itemName))">
-            <span class="fa  fa-shopping-cart"></span>&#160;
+                v-on:mouseup.stop="addToCart($event, (@itemName))"
+                v-on:keyup.enter="addToCart($event, (@itemName))">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&#160;
             @addToCartString
         </button>
     </div>
@@ -183,7 +198,7 @@
         <button class="btn btn-primary btn-block text-uppercase"
                 data-qa="search-buy-now"
                 disabled="disabled">
-            <span class="fa  fa-times"></span>&#160;
+            <i class="fa fa-times" aria-hidden="true"></i>&#160;
             @Html.Localize("General", "B_AddToCartProductDetailOOS")
         </button>
     </div>

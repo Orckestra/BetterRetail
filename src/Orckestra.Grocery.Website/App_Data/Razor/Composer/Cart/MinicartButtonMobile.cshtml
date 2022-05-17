@@ -21,9 +21,9 @@
     </head>
     <body>
         <div id="vueMiniCartButtonMobile" v-cloak="true" >
-            <a href="~/page(@pages.CartPageId)" class="d-block d-md-none nav-link"
-               title="@Html.Localize("MiniCart", "H_MinicartTitle")">
-                <i class="fa fa-shopping-cart"></i>
+            <a href="~/page(@pages.CartPageId)" class="d-block d-md-none nav-link">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <span class="sr-only">@Html.Localize("MiniCart", "H_MinicartTitle")</span>
                 <span v-if="!Cart.IsCartEmpty" class="badge badge-top-right badge-pill badge-danger">{{Cart.TotalQuantity}}</span>
             </a>
         </div>

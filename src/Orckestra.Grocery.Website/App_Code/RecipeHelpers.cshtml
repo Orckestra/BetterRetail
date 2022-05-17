@@ -7,15 +7,16 @@
         @TileImage(vueBinding)
         @if (showLikeIcon)
         {
-            <div class="product-tile-recipelist">
-                <a data-qa="add-to-recipe-list" title="@Html.Localize("MyAccount", "H_AddToRecipeList")" v-on:click="setFavorite(@(vueBinding).id, @(vueBinding).isFavorite)" class="add-to-recipelist">
-                    <i class="fa" v-bind:class="{'fa-heart text-danger' : @(vueBinding).isFavorite, 'fa-heart-o': !@(vueBinding).isFavorite}"></i>
-                </a>
-            </div>
+        <div class="product-tile-recipelist">
+            <button data-qa="add-to-recipe-list" v-on:click="setFavorite(@(vueBinding).id, @(vueBinding).isFavorite)" class="btn border-0 rounded-0 add-to-recipelist">
+                <i class="fa" v-bind:class="{'fa-heart text-danger' : @(vueBinding).isFavorite, 'fa-heart-o': !@(vueBinding).isFavorite}" aria-hidden="true"></i>
+                <span class="sr-only">@Html.Localize("MyAccount", "H_AddToRecipeList")</span>
+            </button>
+        </div>
         }
         @if (showDeleteIcon)
         {
-            <div class="recipe-tile-delete d-block d-sm-none">
+            <div class="recipe-tile-delete">
                 <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheRecipeFavoritesList")"
                         class="btn btn-secondary bg-white text-secondary"
                         v-on:click="removeFavorite(@(vueBinding).id)"

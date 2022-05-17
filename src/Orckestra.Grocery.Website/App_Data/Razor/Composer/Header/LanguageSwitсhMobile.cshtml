@@ -20,13 +20,16 @@
         <nav id="vueLanguageSwitchMobile" class="nav language-switch-links d-lg-none border-bottom">
             @foreach (var item in Model.Entries)
             {
-                if (!item.IsCurrent) {
+                if (!item.IsCurrent)
+                {
                     <a class="nav-link d-block"
-                   v-on:click="onLanguageSwitch"
-                   href="@item.Url"
-                   aria-selected="@(item.IsCurrent ? "true" : null)">@item.ShortDisplayName</a>
+                       v-on:click="onLanguageSwitch"
+                       href="@item.Url"
+                       lang="@item.ShortDisplayName">
+                        <span aria-hidden="true">@item.ShortDisplayName</span>
+                        <span class="sr-only">@item.DisplayName</span>
+                    </a>
                 }
-                
             }
         </nav>
     }

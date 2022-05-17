@@ -33,7 +33,7 @@
 
     if (summary == null)
     {
-        <div class="@(FullWidth ? "container-fluid": "")  page-summary"
+        <div class="@(FullWidth ? "container-fluid": "") page-summary"
              data-oc-controller="Product.SearchSummary"
              id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
              v-cloak="true">
@@ -82,7 +82,7 @@
                                 <a class="more collapsed"
                                    data-toggle="collapse"
                                    href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
-                                    @Html.Localize("General", "B_ViewMore") <i class="fa fa-angle-down" />
+                                    @Html.Localize("General", "B_ViewMore") <i class="fa fa-angle-down" aria-hidden="true"></i>
                                 </a>
                                 <div class="collapse" id="collapseDescription">
                                     @Html.Raw(summary.LongDescription)
@@ -90,7 +90,7 @@
                                 <a class="less collapsed"
                                    data-toggle="collapse"
                                    href="#collapseDescription" role="button" aria-expanded="true" aria-controls="collapseDescription">
-                                    @Html.Localize("General", "B_ViewLess") <i class="fa fa-angle-up" />
+                                    @Html.Localize("General", "B_ViewLess") <i class="fa fa-angle-up" aria-hidden="true"></i>
                                 </a>
                             </div>
                         }

@@ -62,7 +62,7 @@
                         @if (difficulty != null)
                         {
                             <div class="recipe-info-table-cell">
-                                <span class="fa fa-spoon recipe-info-icon"></span>
+                                <i class="fa fa-spoon recipe-info-icon" aria-hidden="true"></i>
                                 <span class="recipe-info-type">@Html.Localize("Recipes", "L_Difficulty")</span>
                                 <span class="recipe-info-value">@difficulty.Title</span>
                             </div>
@@ -70,7 +70,7 @@
                         @if (Item.PreparationTime.HasValue)
                         {
                             <div class="recipe-info-table-cell">
-                                <span class="fa fa-blender recipe-info-icon"></span>
+                                <i class="fa fa-blender recipe-info-icon" aria-hidden="true"></i>
                                 <span class="recipe-info-type">@Html.Localize("Recipes", "L_Preparation")</span>
                                 <span class="recipe-info-value">@Item.PreparationTime @Html.Localize("Recipes", "L_Minutes")</span>
                             </div>
@@ -78,7 +78,7 @@
                         @if (Item.CookingTime.HasValue)
                         {
                             <div class="recipe-info-table-cell">
-                                <span class="fa fa-fire-alt recipe-info-icon"></span>
+                                <i class="fa fa-fire-alt recipe-info-icon" aria-hidden="true"></i>
                                 <span class="recipe-info-type">@Html.Localize("Recipes", "L_CookingTime")</span>
                                 <span class="recipe-info-value">@Item.CookingTime @Html.Localize("Recipes", "L_Minutes")</span>
                             </div>
@@ -86,7 +86,7 @@
                         @if (!string.IsNullOrWhiteSpace(Item.Servings))
                         {
                             <div class="recipe-info-table-cell">
-                                <span class="fa fa-chart-pie recipe-info-icon"></span>
+                                <i class="fa fa-chart-pie recipe-info-icon" aria-hidden="true"></i>
                                 <span class="recipe-info-type">@Html.Localize("Recipes", "L_Serves")</span>
                                 <span class="recipe-info-value">@Item.Servings</span>
                             </div>
@@ -95,7 +95,7 @@
 
                     <div class="recipe-action-bar mt-2">
                         <div>@Html.Raw(Item.Description)</div>
-                        <button class="btn btn-outline-secondary text-nowrap"><span class="fa fa-print px-1"></span> @Html.Localize("Recipes", "L_Print")</button>
+                        <button class="btn btn-outline-secondary text-nowrap"><i class="fa fa-print px-1" aria-hidden="true"></i> @Html.Localize("Recipes", "L_Print")</button>
                     </div>
                 </div>
 
@@ -103,11 +103,12 @@
                     @if (!string.IsNullOrWhiteSpace(Item.Image))
                     {
                         <div class="recipe-img">
-                            <img src="/media(@Item.Image)?h=520"/>
+                            <img src="/media(@Item.Image)?h=520" />
                             <div class="recipe-like">
-                                <a data-qa="add-to-recipelist" title="@Html.Localize("MyAccount", "H_AddToRecipeList")" v-on:click="setFavorite" class="add-to-recipelist p-0">
-                                    <i class="fa" v-bind:class="{'fa-heart text-danger' : IsRecipeFavorite, 'fa-heart-o' : !IsRecipeFavorite}"></i>
-                                </a>
+                                <button data-qa="add-to-recipelist" v-on:click="setFavorite" class="btn border-0 rounded-0 p-0 add-to-recipelist">
+                                    <i class="fa" v-bind:class="{'fa-heart text-danger' : IsRecipeFavorite, 'fa-heart-o' : !IsRecipeFavorite}" aria-hidden="true"></i>
+                                    <span class="sr-only">@Html.Localize("MyAccount", "H_AddToRecipeList")</span>
+                                </button>
                             </div>
                         </div>
                     }
@@ -213,8 +214,8 @@
 @helper SelectAll()
 {
     <div class="form-group form-check mt-3">
-        <label class="form-check-label  font-weight-bold">
-            <input type="checkbox" class="form-check-input" name="all" v-model="SelectAll"/>
+        <label class="form-check-label font-weight-bold">
+            <input type="checkbox" class="form-check-input" name="all" v-model="SelectAll" />
             @Html.Localize("Recipes", "L_SelectAll")
         </label>
     </div>

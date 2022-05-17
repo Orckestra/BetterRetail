@@ -50,7 +50,7 @@
 
 @helper OrderDetails(OrderDetailViewModel order)
 {
-    <div class="card  bg-lighter">
+    <div class="card bg-lighter">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_OrderDetails")
         </h3>
@@ -66,7 +66,7 @@
                         @if (order.OrderInfos.IsOrderEditable)
                         {
                             <div class="col-sm-6 text-sm-right">
-                                <ul class="nav-pills full float-sm-right p-0 m-sm-0  my-2">
+                                <ul class="nav-pills full float-sm-right p-0 m-sm-0 my-2">
                                     <li>
                                         <a href="#" v-bind:class="{'disabled': Loading}" class="cta" v-on:click.prevent="editOrder('@Order.OrderInfos.OrderNumber')">
                                             @if (order.OrderInfos.HasOwnDraft || order.OrderInfos.IsBeingEdited)
@@ -115,7 +115,7 @@
                                 var statusCss = status == "InProgress" ? "text-warning" :
                                     status == "Canceled" ? "text-danger" : "text-success";
                             }
-                            <p class="@statusCss  m-0">
+                            <p class="@statusCss m-0">
                                 @if (order.OrderInfos.IsOrderPendingCancellation)
                                 {
                                     <strong>@Html.Localize("MyAccount", "T_PendingCancel") ( <a href="#" v-on:click.prevent="reload">@Html.Localize("MyAccount", "T_ReloadOrderStatus") </a> )</strong>
@@ -198,22 +198,22 @@
     <div class="mb-3 @statusCss">
         @if (status == "Fulfilled")
         {
-            <span class="fa fa-check-circle"></span> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate)
+            <i class="fa fa-check-circle" aria-hidden="true"></i> @Html.Localized("MyAccount", "L_OrderDelivered", @shipping.ShipmentStatusDate)
         }
         else if (status == "Canceled")
         {
-            <span class="fa fa-times-circle"></span> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)
+            <i class="fa fa-times-circle" aria-hidden="true"></i> @Html.Localized("MyAccount", "L_OrderCancel", @shipping.ShipmentStatusDate)
         }
         else
         {
-            <span class="fa fa-clock-o"></span> @Html.Localize("MyAccount", "L_OrderInProgress")
+            <i class="fa fa-clock-o" aria-hidden="true"></i> @Html.Localize("MyAccount", "L_OrderInProgress")
         }
     </div>
 }
 
 @helper OrderBillingAddress(OrderDetailViewModel order)
 {
-    <div class="card  bg-lighter  mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_BillingAddress")
         </h3>
@@ -233,7 +233,7 @@
 
 @helper OrderPayment(OrderDetailViewModel order)
 {
-    <div class="card  bg-lighter  mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_PaymentMethod")
         </h3>
@@ -243,7 +243,7 @@
                 if (!string.IsNullOrEmpty(payment.PaymentMethodName))
                 {
                     <div class="row payment">
-                        <div class="col-4  col-md-4  col-lg-4">
+                        <div class="col-4 col-md-4 col-lg-4">
                             @if (!string.IsNullOrEmpty(payment.CreditCardNumber))
                             {
                                 <img src="~/UI.Package/Images/creditcards/@(payment.PaymentMethodName).png"
@@ -254,7 +254,7 @@
                                 <img src="~/UI.Package/Images/payments/cash.png" alt="Cash" class="img-fluid" />
                             }
                         </div>
-                        <div class="col-8  col-md-8  col-lg-8">
+                        <div class="col-8 col-md-8 col-lg-8">
                             <h5>
                                 @Html.Localize("MyAccount", "L_PaymentMethod")
                             </h5>
@@ -301,13 +301,13 @@
                 if (item.IsGiftItem)
                 {
                     <div class="row pt-0 giftitem">
-                        <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                        <i class="fa fa-gift" aria-hidden="true"></i><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
                     </div>
                 }
-                <div class="row  pt-2  @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")">
+                <div class="row pt-2 @(index != shipment.LineItems.Count ? "border-bottom pb-2" : "")">
                     @if (item.Rewards != null && item.Rewards.Count > 0)
                     {
-                        <div class="col-12 order-1  text-center">
+                        <div class="col-12 order-1 text-center">
                             <div class="promotion">
                                 @foreach (var reward in item.Rewards)
                                 {
@@ -316,7 +316,7 @@
                             </div>
                         </div>
                     }
-                    <div class="col-2 col-sm-1  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
+                    <div class="col-2 col-sm-1 @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
                         <a href="@item.ProductUrl">
                             <img src="@item.ImageUrl"
                                  class="img-fluid"
@@ -325,7 +325,7 @@
                         </a>
                     </div>
                     <div class="col-10 col-sm-11">
-                        <div class="row  @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
+                        <div class="row @(item.IsUnavailable || item.IsSubstituted ? "disabled" : "")">
                             <div class="col-12 col-sm-5">
                                 <strong>@item.ProductSummary.Brand</strong>
                                 <p class="mb-2">@item.ProductSummary.DisplayName</p>
@@ -336,7 +336,7 @@
                                     </p>
                                 }
                             </div>
-                            <div class="col-sm-2  text-center d-none d-sm-block">
+                            <div class="col-sm-2 text-center d-none d-sm-block">
                                 @if (item.IsOnSale)
                                 {
                                     <p>
@@ -349,12 +349,12 @@
                                     <p>@item.DefaultPrice</p>
                                 }
                             </div>
-                            <div class="col-sm-3  text-left text-sm-center">
+                            <div class="col-sm-3 text-left text-sm-center">
                                 <span class="d-inline d-sm-none">
                                     @Html.Localize("CheckoutProcess", "L_QuantityMobile")
-                                </span>  @item.Quantity
+                                </span> @item.Quantity
                             </div>
-                            <div class="col-sm-2  text-left text-sm-center">
+                            <div class="col-sm-2 text-left text-sm-center">
                                 @if (item.IsPriceDiscounted)
                                 {
                                     <del>@item.TotalWithoutDiscount</del><br />
@@ -449,14 +449,14 @@
     var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
 
     <div class="card bg-lighter mt-4">
-        <h3 class="card-header  bg-primary text-white">
+        <h3 class="card-header bg-primary text-white">
             @Html.Localize("ShoppingCart", "T_OrderSummary")
         </h3>
         <div class="card-body">
             @if (order.OrderSummary.Rewards != null &&
                 order.OrderSummary.Rewards.Count > 0)
             {
-                <p class="promotion  mb-2  text-center  d-block">
+                <p class="promotion mb-2 text-center d-block">
                     @foreach (var reward in order.OrderSummary.Rewards)
                     {
                         <em>@(!string.IsNullOrEmpty(reward.Description) ? reward.Description : reward.PromotionName)</em><br />
@@ -464,10 +464,10 @@
                 </p>
             }
             <div class="row mb-2">
-                <div class="col-6  col-md-7">
+                <div class="col-6 col-md-7">
                     @Html.Localize("MyAccount", "L_Subtotal")
                 </div>
-                <div class="col-6  col-md-5  text-right">
+                <div class="col-6 col-md-5 text-right">
                     <span data-qa="checkout-order-summary-subtotal">
                         @order.OrderSummary.SubTotal
                     </span>
@@ -476,13 +476,13 @@
             </div>
             @foreach (var feeSummary in taxableAddShippingFeeSummary)
             {
-                <div class="row  mb-2">
+                <div class="row mb-2">
                     @FeeSummary(feeSummary)
                 </div>
             }
             @foreach (var feeSummary in taxableAddFeeSummary)
             {
-                <div class="row  mb-2">
+                <div class="row mb-2">
                     @FeeSummary(feeSummary)
                 </div>
             }
@@ -494,7 +494,7 @@
 
             @foreach (var tax in order.OrderSummary.Taxes)
             {
-                <div class="row  mb-2">
+                <div class="row mb-2">
                     <div class="col-7">
                         @tax.DisplayName
                         @if (!string.IsNullOrEmpty(tax.Percentage))
@@ -502,7 +502,7 @@
                             <span>(@tax.Percentage)</span>
                         }
                     </div>
-                    <div class="col-5  text-right">
+                    <div class="col-5 text-right">
                         @tax.DisplayTaxTotal
                     </div>
                 </div>
@@ -510,14 +510,14 @@
 
             @foreach (var feeSummary in addShippingFeeSummary)
             {
-                <div class="row  mb-2">
+                <div class="row mb-2">
                     @FeeSummary(feeSummary)
                 </div>
             }
 
             @foreach (var feeSummary in addFeeSummary)
             {
-                <div class="row  mb-2">
+                <div class="row mb-2">
                     @FeeSummary(feeSummary)
                 </div>
             }
@@ -528,19 +528,19 @@
             }
 
             <div class="row mb-2">
-                <div class="col-6  col-md-7">
+                <div class="col-6 col-md-7">
                     <h4 class="h3">@Html.Localize("MyAccount", "L_Total")</h4>
                 </div>
-                <div class="col-6  col-md-5  text-right">
+                <div class="col-6 col-md-5 text-right">
                     <h4 class="h3">@order.OrderSummary.Total</h4>
                 </div>
             </div>
 
             @if (!string.IsNullOrEmpty(order.OrderSummary.SavingsTotal))
             {
-                <div class="row  mb-2">
+                <div class="row mb-2">
                     <div class=" col-12 ">
-                        <div class="alert alert-success bg-white text-center text-success  m-0">
+                        <div class="alert alert-success bg-white text-center text-success m-0">
                             <span>
                                 @Html.Localize("MyAccount", "L_Savings")
                                 &#160;
@@ -578,21 +578,21 @@
 
 @helper FeeSummary(AdditionalFeeSummaryViewModel fee)
 {
-    <div class="col-6  col-md-7"><p>@fee.GroupName</p></div>
-    <div class="col-6  col-md-5  text-right">
+    <div class="col-6 col-md-7"><p>@fee.GroupName</p></div>
+    <div class="col-6 col-md-5 text-right">
         @fee.TotalAmount
     </div>
 }
 
 @helper OrderSummaryShipping(OrderDetailViewModel order)
 {
-    <div class="row  mb-2">
-        <div class="col-6  col-md-7">
+    <div class="row mb-2">
+        <div class="col-6 col-md-7">
             <span>
                 @Html.Localize("ShoppingCart", "L_ShippingFee")
             </span>
         </div>
-        <div class="col-6  col-md-5  text-right">
+        <div class="col-6 col-md-5 text-right">
             <span>
                 @order.OrderSummary.Shipping
             </span>

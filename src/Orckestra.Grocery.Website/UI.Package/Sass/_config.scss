@@ -37,11 +37,6 @@ $font-size-h6-sm: $h6-font-size;
 
 $col-md-3-width: 25%;
 $col-lg-2-width: 16.66667%;
-* {
-    [v-cloak] {
-        display: none;
-    }
-}
 
 // Recipe Tiles configuration
 $recipe-tile-height-xl: 165px !default;

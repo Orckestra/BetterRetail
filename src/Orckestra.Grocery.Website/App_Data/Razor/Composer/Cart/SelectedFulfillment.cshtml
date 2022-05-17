@@ -23,7 +23,8 @@
                 </a>
                 <h3 class="float-left m-0">
                     <i class="fa fa-sm mr-1"
-                       v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
+                       v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']"
+                       aria-hidden="true"/>
                     <span v-if="FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </h3>

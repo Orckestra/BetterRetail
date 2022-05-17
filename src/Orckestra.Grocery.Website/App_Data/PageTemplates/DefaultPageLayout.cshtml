@@ -25,8 +25,10 @@
         @Function("Composer.Header.Breadcrumb")
     </div>
     @Function("Composer.Header.GeneralErrors")
-    @Function("Composer.Layout.Helpers.InjectContainerElements",
-            new { Document = Body, InjectedContainerClassName = "container-md", DontApplyClassNameList = "container-fluid,c1-wide" })
+    <main id="maincontent">
+        @Function("Composer.Layout.Helpers.InjectContainerElements",
+                new { Document = Body, InjectedContainerClassName = "container-md", DontApplyClassNameList = "container-fluid,c1-wide" })
+    </main>
     @Function("Composer.Footer")
 </body>
 </html>

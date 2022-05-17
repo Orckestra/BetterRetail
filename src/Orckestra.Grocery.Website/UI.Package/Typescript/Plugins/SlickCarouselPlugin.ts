@@ -16,7 +16,8 @@ module Orckestra.Composer {
                 let slickInstance = $(element);
                 let slickOptions: any = {
                     arrows: true,
-                    centerMode: true,
+                    //There is an "active-slide" miscalculation when this is set to true that breaks the accessibility
+                    centerMode: false,
                     centerPadding: "0px",
                     responsive: [{
                         dots: false,

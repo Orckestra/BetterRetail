@@ -22,10 +22,10 @@
                         <span v-if="Mode.ChangeMode == 'store'">@Html.Localize("Grocery", "H_ChangeStoreModal")</span>
                         <span v-if="Mode.ChangeMode == 'slot'">@Html.Localize("Grocery", "H_ChangeTimeSlotModal")</span>
                     </h4>
-                    <div class="btn-close close" data-dismiss="modal" aria-label="Close">
-                        <span class="fa fa-times-circle"></span>
+                    <button type="button" class="btn-close close" data-dismiss="modal">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
                         <span class="sr-only">@Html.Localize("General", "B_Close")</span>
-                    </div>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div v-if="Mode.ChangeMode == 'method'">
@@ -63,7 +63,7 @@
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
         <div class="border p-2">
             <h5 class="m-0">
-                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" aria-hidden="true"></i>
                 <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                 <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
             </h5>
@@ -89,7 +89,7 @@
 
         <div class="input-group-append">
             <button v-if="PostalCode" class="btn bg-transparent border-top border-bottom" v-on:click="clearPostalCodeInput();">
-                <i class="fa fa-times" />
+                <i class="fa fa-times" aria-hidden="true"></i>
             </button>
             <button class="btn btn-primary text-uppercase"
                     v-on:click="findStores"
@@ -141,7 +141,7 @@
 
     @Function("Grocery.StoreSelector.TimeSlotCalendar", new { ContainerHeight = 250 })
 
-    <button class="btn btn-outline-primary btn-block text-uppercase  mt-3 modal--cancel" v-on:click="onClickNotNow">
+    <button class="btn btn-outline-primary btn-block text-uppercase mt-3 modal--cancel" v-on:click="onClickNotNow">
         @Html.Localize("Grocery", "B_NotNow")
     </button>
 }
@@ -163,7 +163,7 @@
                    v-bind:for="shippingMethod.FulfillmentMethodType + '-radio'">
                 <strong>
                     <i class="fa mr-1"
-                       v-bind:class="shippingMethod.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                       v-bind:class="shippingMethod.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" aria-hidden="true"></i>
                     <span v-if="shippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
                 </strong>

@@ -51,13 +51,13 @@
                     <ul class="nav navbar-nav w-100" role="menubar">
                         @foreach (var mainMenuEntry in mainMenu)
                         {
-                            <li class="nav-item dropdown main-nav-fw  @mainMenuEntry.CssClassName">
+                            <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName" role="none">
 
                                 @if (mainMenuEntry.HasChildren)
                                 {
                                     <a href="@mainMenuEntry.Url"
                                        data-qa="main-menu-category"
-                                       role="button"
+                                       role="menuitem"
                                        class="dropdown-toggle nav-link d-none d-md-block"
                                        aria-haspopup="true"
                                        target="@mainMenuEntry.UrlTarget"
@@ -68,27 +68,28 @@
 
                                     <a data-target="#menu-@(mainMenuEntry.GetHashCode())"
                                        data-qa="main-menu-category"
-                                       role="button"
+                                       role="menuitem"
                                        data-toggle="collapse"
                                        class="dropdown-toggle nav-link d-block d-md-none"
                                        aria-haspopup="true" aria-expanded="false" aria-controls="menu-@(mainMenuEntry.GetHashCode())" style="@mainMenuEntry.CssClass">
                                         @mainMenuEntry.DisplayName
-                                        <span class="fa fa-chevron-down" aria-hidden="true"></span>
-                                        <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                        <i class="fa fa-chevron-up" aria-hidden="true"></i>
                                     </a>
 
-                                    <ul id="menu-@(mainMenuEntry.GetHashCode())" class="dropdown-menu">
-                                        <li>
+                                    <ul id="menu-@(mainMenuEntry.GetHashCode())" class="dropdown-menu" role="menu">
+                                        <li role="none">
                                             @*Content container to add padding*@
                                             <div class="main-nav-content">
                                                 <div class="row">
                                                     <div class="col-xl-8">
-                                                        <ul class="nav-section list-unstyled flex-col">
+                                                        <ul class="nav-section list-unstyled flex-col" role="none">
                                                             <li class="main-nav-section d-lg-none">
                                                                 <a data-qa="main-menu-link"
                                                                    href="@(mainMenuEntry.Url)"
                                                                    target="@mainMenuEntry.UrlTarget"
-                                                                   class="d-md-block">
+                                                                   class="d-md-block"
+                                                                   role="menuitem">
                                                                     @Html.Localize("General", "B_ViewAll") @mainMenuEntry.DisplayName
                                                                 </a>
                                                             </li>
@@ -127,7 +128,8 @@
                                        data-qa="main-menu-category-link"
                                        target="@mainMenuEntry.UrlTarget"
                                        style="@mainMenuEntry.CssClass"
-                                       class="nav-link">
+                                       class="nav-link"
+                                       role="menuitem">
                                         @mainMenuEntry.DisplayName
                                     </a>
                                 }
@@ -150,7 +152,7 @@
     var childItems = menuEntry.Children as IEnumerable<HomeMainMenuEntryViewModel>;
     var curImgId = !string.IsNullOrEmpty(menuEntry.Image.ImageSource) ? menuEntry.GetHashCode() : parentMenuEntry.GetHashCode();
 
-    <li class="main-nav-section @menuEntry.CssClassName">
+    <li class="main-nav-section @menuEntry.CssClassName" role="none">
 
         @if (childItems.Any())
         {
@@ -159,20 +161,21 @@
                target="@menuEntry.UrlTarget"
                class="main-nav-section-title d-none d-md-block"
                style="font-weight:bold; @menuEntry.CssClass"
-               data-image="@curImgId">
+               data-image="@curImgId"
+               role="menuitem"
+               aria-haspopup="true">
                 @menuEntry.DisplayName
             </a>
             <a data-qa="main-menu-section"
                data-target="#subMenu-@(menuEntry.GetHashCode())"
                data-toggle="collapse"
-               aria-expanded="false"
-               aria-controls="subMenu-@(menuEntry.GetHashCode())"
-               role="button"
+               aria-haspopup="true" aria-expanded="false" aria-controls="subMenu-@(menuEntry.GetHashCode())"
+               role="menuitem"
                class="main-nav-section-title d-block d-md-none"
                style="font-weight:bold;">
                 @menuEntry.DisplayName
-                <span class="fa fa-chevron-down" aria-hidden="true"></span>
-                <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                <i class="fa fa-chevron-up" aria-hidden="true"></i>
             </a>
         }
         else
@@ -182,7 +185,8 @@
                target="@menuEntry.UrlTarget"
                class="main-nav-section-title"
                style="font-weight:bold; @menuEntry.CssClass"
-               data-image="@curImgId">
+               data-image="@curImgId"
+               role="menuitem">
                 @menuEntry.DisplayName
             </a>
         }
@@ -190,12 +194,13 @@
         @if (childItems.Any())
         {
 
-            <ul class="list-unstyled sub-collapse collapse" id="subMenu-@(menuEntry.GetHashCode())">
-                <li class="main-nav-subsection d-lg-none">
+            <ul class="list-unstyled sub-collapse collapse" id="subMenu-@(menuEntry.GetHashCode())" role="menu">
+                <li class="main-nav-subsection d-lg-none" role="none">
                     <a data-qa="main-menu-link"
                        href="@menuEntry.Url"
                        target="@menuEntry.UrlTarget"
-                       class="d-md-block d-lg-none">
+                       class="d-md-block d-lg-none"
+                       role="menuitem">
                         @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
                     </a>
                 </li>
@@ -205,12 +210,13 @@
 
                     if (!String.IsNullOrWhiteSpace(childItem.DisplayName))
                     {
-                        <li class="main-nav-subsection @childItem.CssClassName">
+                        <li class="main-nav-subsection @childItem.CssClassName" role="none">
                             <a data-qa="main-menu-link"
                                href="@childItem.Url"
                                target="@childItem.UrlTarget"
-                               class="d-md-block  @childItem.CssClass"
-                               data-image="@curChildImgId">
+                               class="d-md-block @childItem.CssClass"
+                               data-image="@curChildImgId"
+                               role="menuitem">
                                 @childItem.DisplayName
                             </a>
                         </li>

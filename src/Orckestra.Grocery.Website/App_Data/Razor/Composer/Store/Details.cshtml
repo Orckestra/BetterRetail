@@ -48,11 +48,11 @@
         <h1>@model.LocalizedDisplayName</h1>
         <div id="vueStoreDetails" class="row">
             <div class="col-12 col-sm-4">
-                <div class="store-info  card">
+                <div class="store-info card">
                     <div class="card-body">
                         @StoreAddress(model.Address)
                         <hr />
-                        <a href="@model.GoogleDirectionsLink" target="_blank" class="cta  ctaGoogleDir">
+                        <a href="@model.GoogleDirectionsLink" target="_blank" class="cta ctaGoogleDir">
                             @Html.Localize("Store", "H_Itinerary")
                         </a>
                         <hr />
@@ -66,11 +66,11 @@
                             <div v-if="IsCurrentStoreSelected">
                                 <div class="bg-success border border-success text-center p-1">
                                     <span class="text-white">
-                                        <i class="fa fa-check fa-lg"></i>
+                                        <i class="fa fa-check fa-lg" aria-hidden="true"></i>
                                         @Html.Localize("CheckoutProcess", "L_Selected")
                                     </span>
                                 </div>
-                                <a v-if="!IsDraftCart" class="btn btn-outline-secondary text-uppercase btn-block my-2" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                                <a v-if="!IsDraftCart" class="btn btn-outline-secondary text-uppercase btn-block my-2" href="#" v-on:click.prevent="changeStoreModal($event, 'store')" role="button">
                                     @Html.Localize("Grocery", "B_ChangeStore")
                                 </a>
                             </div>
@@ -120,10 +120,10 @@
     <h3 class="mt-3">@title</h3>
     foreach (var oh in schedule.OpeningHours)
     {
-        <div class="row  store-open-hour @(oh.IsDayToday && schedule.IsOpenNow && highlightToday ? "is-today alert-success": "")
+        <div class="row store-open-hour @(oh.IsDayToday && schedule.IsOpenNow && highlightToday ? "is-today alert-success": "")
               @(oh.IsDayToday && !schedule.IsOpenNow && highlightToday ? "is-today alert-danger": "")">
-            <div class="col-3  col-lg-4">@oh.LocalizedDay</div>
-            <div class="col-6  col-lg-6">
+            <div class="col-3 col-lg-4">@oh.LocalizedDay</div>
+            <div class="col-6 col-lg-6">
                 @if (oh.IsClosed)
                 {
                     <small class="store-open-hour">@Html.Localize("Store", "L_OpenHours_Closed")</small>
@@ -146,7 +146,7 @@
             @if (oh.IsDayToday && highlightToday)
             {
                 <div class="col-3 col-lg-2">
-                    <div class="schedule-status  text-uppercase">
+                    <div class="schedule-status text-uppercase">
                         @if (schedule.IsOpenNow)
                         {
                             @Html.Localize("Store", "L_StoreOpen")
@@ -169,8 +169,8 @@
     <h3 class="mt-3">@Html.Localize("Store", "T_OpenHourExceptions")</h3>
     foreach (var ohe in store.Schedule.OpeningHourExceptions)
     {
-        <div class="row  store-open-hour-exc">
-            <div class="col-6  col-lg-7">
+        <div class="row store-open-hour-exc">
+            <div class="col-6 col-lg-7">
                 @if (ohe.StartDate == ohe.EndDate)
                 {
                     @ohe.StartDate
@@ -180,7 +180,7 @@
                     @(ohe.StartDate + "-" + ohe.EndDate)
                 }
             </div>
-            <div class="col-6  col-lg-5">
+            <div class="col-6 col-lg-5">
                 @if (ohe.IsClosed)
                 {
                     @Html.Localize("Store", "L_OpenHours_Closed")
@@ -257,13 +257,13 @@
                    class="form-control" type="text"
                    placeholder="@Html.Localize("Store", "I_Placeholder")"
                    value="@postedAddress" />
-            <i class="fa fa-search text-muted store-locator-search-icon" />
+            <i class="fa fa-search text-muted store-locator-search-icon" aria-hidden="true"></i>
         </div>
         <span class="col-auto">- @Html.Localize("Store", "L_OrUseMyLocation") -</span>
         <div class="col-auto">
             <button v-on:click.prevent="currentLocationAction"
                     class="btn btn-primary geolocate-btn">
-                <i class="fa fa-crosshairs" />
+                <i class="fa fa-crosshairs" aria-hidden="true"></i>
                 @Html.Localize("Store", "B_UseMyLocation")
             </button>
         </div>
@@ -272,5 +272,5 @@
 
 @helper Map()
 {
-    <div id="map" class="map"></div>
+    <div id="map" class="map" aria-hidden="true"></div>
 }

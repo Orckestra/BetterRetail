@@ -97,7 +97,7 @@
 
                     @if (Model.IsProductZoomEnabled)
                     {
-                        <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
+                        <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block" role="button" aria-hidden="true" tabindex="-1">
                             <i class="fa fa-search-plus"></i>
                         </a>
                     }
@@ -128,7 +128,7 @@
 
 @helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden)
 {
-    <div class="col-3  col-lg-12"
+    <div class="col-3 col-lg-12"
          style="display: none;">
         <a href="#" class="thumbnail @(image.Selected ? "active": "")" style="display: none;">
             <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }

@@ -10,69 +10,72 @@
     public bool CurrentSite { get; set; }
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"  xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
 <head>
 </head>
 <body>
     <div data-oc-controller="ContentSearch.Facets"
          data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
          data-current-site="@(CurrentSite)"
-         id="vueContentSearchFacets" 
+         id="vueContentSearchFacets"
          v-cloak="true">
         <div v-if="SelectedFacets?.length" class="card facets-card mb-3 selected-facets">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
-                <a v-if="false" 
-                    class="float-right"
-                    data-qa="search-refiners-clear-all"
-                    v-on:click="clearSelectedFacets()">
+                <a v-if="false"
+                   class="float-right"
+                   data-qa="search-refiners-clear-all"
+                   v-on:click="clearSelectedFacets()">
                     @Html.Localize("List-Search", "B_ClearAll")
                 </a>
             </div>
-                <div class="card-body">
+            <div class="card-body">
                 <ul class="list-group">
                     <li v-for="(facet, index) in SelectedFacets"
                         class="list-group-item d-flex justify-content-between align-items-center">
                         {{facet.Label}}
                         <span class="badge badge-light">
                             <a class="float-right" data-qa="search-refiner-remove"
-                                v-on:click="removeSelectedFacet(facet.Key)"
-                                v-bind:title="facet.Label">
-                                <span class="fa  fa-times  fa-lg"></span>
+                               v-on:click="removeSelectedFacet(facet.Key)">
+                                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                                <span class="sr-only">@Html.Localize("Accessibility", "B_FacetRemove") {{facet.Label}}</span>
                             </a>
                         </span>
                     </li>
                 </ul>
             </div>
         </div>
-      
-        <div  v-for="(facet, index) in Facets" class="card  bg-lighter  mb-3  facets-card" >
+
+        <div v-for="(facet, index) in Facets" class="card bg-lighter mb-3 facets-card">
             <div class="card-header">
                 <a data-toggle="collapse"
-                   v-bind:data-target="'#' + facet.Label"
+                   v-bind:href="'#' + facet.idAttribute + 'Facet'"
+                   role="button"
                    aria-expanded="true"
-                   v-bind:aria-controls="facet.Label">
+                   v-bind:aria-controls="facet.idAttribute + 'Facet'">
                     {{facet.Label}}
-                    <span class="down"><i class="fa fa-angle-down" /></span>
-                    <span class="up"><i class="fa fa-angle-up" /></span>
+                    <span class="down"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    <span class="up"><i class="fa fa-angle-up" aria-hidden="true"></i></span>
                 </a>
             </div>
 
-            <div v-bind:id="facet.Label" class="card-body collapse show">
+            <div v-bind:id="facet.idAttribute + 'Facet'" class="card-body collapse show">
                 <div v-for="hit in facet.visibleFacets">
                     @FacetHit()
                 </div>
-            
+
                 <div v-if="facet.hiddenFacets.length">
                     <div v-bind:id="'moreHit' + index" class="collapse">
                         <div v-for="hit in facet.hiddenFacets">
                             @FacetHit()
                         </div>
                     </div>
-                    <a class="btn  btn-link"
+                    <a class="btn btn-link"
                        data-toggle="collapse"
-                       aria-expanded="false" 
-                       v-bind:data-target="'#moreHit' + index">
+                       v-bind:href="'#moreHit' + index"
+                       role="button"
+                       aria-expanded="false"
+                       v-bind:aria-controls="'moreHit' + index">
                         <span class="show-more">@Html.Localize("List-Search", "B_ShowMore")</span>
                         <span class="show-less">@Html.Localize("List-Search", "B_ShowLess")</span>
                     </a>
@@ -90,8 +93,7 @@
                class="form-check-input"
                type="checkbox"
                v-on:change="onFacetToggle($event, hit.Key)"
-               v-bind:checked="hit.isSelected"
-        />
+               v-bind:checked="hit.isSelected" />
         <label v-bind:for="hit.Key" class="form-check-label">
             {{hit.Label}} ({{hit.Count}})
         </label>

@@ -24,10 +24,12 @@
         <div class="container-md">
             @Function("Composer.Header.Breadcrumb")
         </div>
-        @Function("Composer.BrowsingCategories.Summary")
-        <div class="container-md">
-            @Markup(Body)
-        </div>
+        <main id="maincontent">
+            @Function("Composer.BrowsingCategories.Summary")
+            <div class="container-md">
+                @Markup(Body)
+            </div>
+        </main>
         @Function("Composer.Footer")
     </body>
 </html>

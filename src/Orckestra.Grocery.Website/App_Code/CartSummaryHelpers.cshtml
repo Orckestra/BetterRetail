@@ -56,10 +56,12 @@
             <button class="btn btn-remove btn-sm btn-dark"
                     v-bind:disabled="DecrementDisabled(item)"
                     v-on:click="updateItemQuantity(item, item.Quantity - 1)">
-                <span class="fa  fa-minus"></span>
+                <i class="fa fa-minus" aria-hidden="true"></i>
+                <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityDecrease")</span>
             </button>
         </div>
-        <input class="form-control  text-center rounded-0 btn-quantity" type="number"
+        <label v-bind:for="'quantityField-' + item.ProductId" class="sr-only">@Html.Localize("Accessibility", "L_Quantity")</label>
+        <input v-bind:id="'quantityField-' + item.ProductId" class="form-control  text-center rounded-0 btn-quantity" type="number"
                min="0" max="99"
                v-on:keyup="$event.target.value = $event.target.value.replace(/\D/g,'')"
                v-bind:value="item.Quantity"
@@ -71,7 +73,8 @@
             <button class="btn btn-add btn-sm btn-dark"
                     v-bind:disabled="IncrementDisabled(item)"
                     v-on:click="updateItemQuantity(item, item.Quantity + 1)">
-                <span class="fa  fa-plus"></span>
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityIncrease")</span>
             </button>
         </div>
     </div>
@@ -120,18 +123,17 @@
 {
     <button v-on:click="removeCartItem(item.Id)"
             v-bind:disabled="IsLoading"
-            title="@Html.Localize("ShoppingCart", "F_RemoveItem")"
-            class="btn btn-sm btn-outline-secondary"
-            aria-label="@Html.Localize("ShoppingCart", "F_RemoveItem")">
-        <span aria-hidden="true" class="fa  fa-times"></span>
+            class="btn btn-sm btn-outline-secondary">
+        <i aria-hidden="true" class="fa fa-times"></i>
+        <span class="sr-only">@Html.Localize("ShoppingCart", "F_RemoveItem")</span>
     </button>
 }
 
 @helper InvalideItemsMessage()
 {
-    <div class="alert alert-danger  text-danger">
+    <div class="alert alert-danger text-danger">
         <div class="multiline-message">
-            <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+            <i class="fa fa-exclamation-triangle multiline-message-icon" aria-hidden="true"></i>
             <span>
                 {{Cart.InvalidLineItemCount}}
                 @Html.Localize("ShoppingCart", "L_NoMoreAvailable")

@@ -25,7 +25,9 @@
     <div class="container-md">
         @Function("Composer.Header.Breadcrumb")
         @Function("Composer.Header.GeneralErrors")
-        @Markup(Body)
+        <main id="maincontent">
+            @Markup(Body)
+        </main>
     </div>
     @Function("Composer.Footer")
 </body>

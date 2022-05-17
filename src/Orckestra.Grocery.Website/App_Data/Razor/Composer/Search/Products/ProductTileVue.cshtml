@@ -28,7 +28,7 @@
        v-bind:data-productId="Product.ProductId"
        v-on:click="productClick(Product, index)">
         <img class="img-fluid m-auto" xmlns:v-bind="v-bind" v-bind:src="Product.ImageUrl"
-             v-bind:alt="Product.FullDisplayName"
+             v-bind:alt="Product.DisplayName"
              onerror="imgError(this)" />
         @ProductHelpers.PromotionalBanner()
     </a>
@@ -116,17 +116,17 @@
 @helper AddToWishList()
 {
     <span class="add-to-wishlist">
-        <a v-if="Product.InWishList" data-qa="product-remove-from-wishlist"
-           v-on:click="removeLineItemFromWishList(Product, $event)"
-           title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
-           class="add-to-wishlist p-0 text-danger">
-            <i class="fa  fa-heart"></i>
+        <a href="#" v-if="Product.InWishList" data-qa="product-remove-from-wishlist"
+           v-on:click.prevent="removeLineItemFromWishList(Product, $event)"
+           class="add-to-wishlist p-0 text-danger" role="button">
+            <i class="fa fa-heart" aria-hidden="true"></i>
+            <span class="sr-only">@Html.Localize("MyAccount", "H_RemoveFromTheWishList")</span>
         </a>
-        <a v-else="else" data-qa="product-add-to-wishlist"
-           v-on:click="addLineItemToWishList(Product, $event)"
-           title="@Html.Localize("MyAccount", "H_AddToWishList")"
-           class="add-to-wishlist  p-0 ">
-            <i class="fa  fa-heart-o"></i>
+        <a href="#" v-else="else" data-qa="product-add-to-wishlist"
+           v-on:click.prevent="addLineItemToWishList(Product, $event)"
+           class="add-to-wishlist p-0" role="button">
+            <i class="fa fa-heart-o" aria-hidden="true"></i>
+            <span class="sr-only">@Html.Localize("MyAccount", "H_AddToWishList")</span>
         </a>
     </span>
 }

@@ -85,8 +85,9 @@
                                 <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
                                         data-content="@Html.Localize("ProductPage", "L_RecurringBubblePitch")"
                                         data-html="true"
-                                        data-original-title="@Html.Localize("ProductPage", "L_RecurringBubblePitchTitle")">
-                                    <span class="fa fa-question-circle"></span>
+                                        data-original-title="@Html.Localize("ProductPage", "L_RecurringBubblePitchTitle")"
+                                        aria-label="@Html.Localize("ProductPage", "L_RecurringBubblePitch")">
+                                    <i class="fa fa-question-circle" aria-hidden="true"></i>
                                 </button>
                                 <select id="recurringOrderFrequencyNameSelect"
                                         class="recurring-orders-frequency-selection form-control"
@@ -133,7 +134,7 @@
                                     <div class="col-10 col-lg-9 form-group">
                                         <button data-qa="login-submit" type="submit" class="btn btn-primary">
                                             @Html.Localize("MyAccount", "L_SignIn")
-                                            <span class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none"></span>
+                                            <i class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none" aria-hidden="true"></i>
                                         </button>
                                         <a href="@($"{Model.CreateAccountUrl}?recurringmode={RecurringMode.Recurring.ToString()}")" role="button" class="btn btn-secondary">@Html.Localize("MyAccount", "B_CreateAccount")</a>
                                     </div>

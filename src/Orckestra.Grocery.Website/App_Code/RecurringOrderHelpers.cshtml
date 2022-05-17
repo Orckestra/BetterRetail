@@ -36,7 +36,7 @@
     <img src="~/UI.Package/Images/recurring.svg"
          class="recurring-icon"
          alt="@Html.Localize("General", "L_RecurringProduct")"
-         title="@Html.Localize("General", "L_RecurringProduct")" />
+         aria-hidden="true" />
 }
 
 @helper RecurringModes(string vueBinding)
@@ -79,8 +79,9 @@
                         <button class="btn" role="button" data-trigger="click" data-toggle="popover" data-placement="top" title=""
                                 data-content="@Html.Localize("ProductPage", "L_RecurringBubblePitch")"
                                 data-html="true"
-                                data-original-title="@Html.Localize("ProductPage", "L_RecurringBubblePitchTitle")">
-                            <span class="fa fa-question-circle"></span>
+                                data-original-title="@Html.Localize("ProductPage", "L_RecurringBubblePitchTitle")"
+                                aria-label="@Html.Localize("ProductPage", "L_RecurringBubblePitch")">
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>
                         </button>
                         <select id="recurringOrderFrequencyNameSelect"
                                 class="recurring-orders-frequency-selection form-control"

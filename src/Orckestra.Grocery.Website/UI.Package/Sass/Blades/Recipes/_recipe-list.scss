@@ -7,38 +7,47 @@
         margin-top: $spacer*4;
         margin-bottom: $spacer*3;
     }
+
     &-tile {
         border: solid 1px $gray-400;
+
         .recipe-info {
             &-icon {
                 font-size: 16px;
                 text-align: center;
+
                 .searchgrid & {
                     font-size: 14px;
                 }
             }
+
             &-type {
                 font-size: 16px;
                 font-weight: 600;
                 text-align: center;
+
                 .searchgrid & {
                     font-size: 12px;
                     margin-top: 2px;
                 }
             }
+
             &-value {
                 font-weight: 400;
                 text-align: center;
+
                 .searchgrid & {
                     font-size: 12px;
                     margin-top: 2px;
                 }
             }
+
             &-table {
                 margin: ($spacer*2) (-1*$spacer*2) (-1*$spacer*2);
                 border-radius: 0 0 $spacer $spacer;
             }
         }
+
         &-media {
             position: relative;
             display: block;
@@ -58,11 +67,13 @@
                 max-height: $recipe-tile-height-xl;
             }
             background-color: $recipe-tile-background;
-            >.card-img-top {
+
+            > .card-img-top {
                 @include media-breakpoint-up(sm) {
                     position: relative;
                 }
             }
+
             .recipe-info-table {
                 width: 100%;
                 height: 100%;
@@ -70,43 +81,57 @@
                 transition: top 0.5s ease-in-out;
                 background-color: rgba(0, 0, 0, 0.5);
                 border-radius: 0;
+
                 &-cell {
                     color: $white;
                     align-items: center;
                     justify-content: center;
                 }
-            }            
+            }
         }
-    }    
+    }
 }
+
 .product-tile-recipelist {
     position: absolute;
     top: 0;
     right: 0;
     z-index: 10;
 }
-a.add-to-recipelist{
-    text-decoration: none;
+
+.btn.add-to-recipelist {
     padding: 0.625rem;
-    display: inline-block;
     font-size: 20px;
-    line-height: 20px;
-    vertical-align: middle;
-    color: #333;
+    line-height: 1em;
     background-color: white;
 }
-.recipe-tile {
-    &:hover {
-        .recipe-tile-delete {
-            display:block !important;
-        }
-    }
-}
+
+
 .recipe-tile-delete {
     position: absolute;
     top: 0.625rem;
     right: 0.625rem;
     z-index: 10;
+
+    button {
+        //This hides the button but makes it still accessible through keyboard navigation
+        @include media-breakpoint-up(sm) {
+            transform: translate(0, -200%);
+        }
+        //Show button on focus
+        &:focus {
+            transform: translate(0, 0);
+        }
+    }
+}
+
+.recipe-tile {
+    &:hover {
+        //Show button on hover
+        .recipe-tile-delete button {
+            transform: translate(0, 0);
+        }
+    }
 }
 
 .recipelist-header-count {

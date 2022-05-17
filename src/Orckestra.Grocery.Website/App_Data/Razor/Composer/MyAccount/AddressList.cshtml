@@ -61,12 +61,12 @@
 
 @helper AddressItem(AddressListItemViewModel address)
 {
-    <div class="card  mb-3 @(address.IsPreferredShipping ? "bg-selected border-primary" : "")"
+    <div class="card mb-3 @(address.IsPreferredShipping ? "bg-selected border-primary" : "")"
          data-qa="address-@address.AddressName"
          data-address-id="@address.Id">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4 order-1  order-sm-2 text-lg-right">
+                <div class="col-md-4 order-1 order-sm-2 text-lg-right">
                     <h5>@address.AddressName</h5>
                     @if (address.IsPreferredShipping)
                     {
@@ -77,7 +77,7 @@
                     }
 
                 </div>
-                <div class="col-md-8  order-2  order-sm-1">
+                <div class="col-md-8 order-2 order-sm-1">
                     @address.FirstName
                     @address.LastName<br />
                     @address.Line1<br />
@@ -91,22 +91,22 @@
                     @address.PhoneNumber
                 </div>
 
-                <div class="col-12 order-3  text-right">
-                    <a class="btn  btn-link" data-qa="address-edit"
-                       href="@address.UpdateAddressUrl"
-                       title="@Html.Localize("MyAccount", "B_EditAddress")">
-                        <span class="fa  fa-pencil  fa-lg"></span>
+                <div class="col-12 order-3 text-right">
+                    <a class="btn btn-link focus-visible" data-qa="address-edit"
+                       href="@address.UpdateAddressUrl">
+                        <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+                        <span class="sr-only">@Html.Localize("MyAccount", "B_EditAddress")</span>
                     </a>
-                    <button type="button" class="btn  btn-link"
-                            data-qa="address-delete" data-oc-click="deleteAddressConfirm"
-                            title="@Html.Localize("MyAccount", "B_DeleteAddress")">
-                        <span class="far fa-trash-alt  fa-lg"></span>
+                    <button type="button" class="btn btn-link focus-visible"
+                            data-qa="address-delete" data-oc-click="deleteAddressConfirm">
+                        <i class="far fa-trash-alt fa-lg" aria-hidden="true"></i>
+                        <span class="sr-only">@Html.Localize("MyAccount", "B_DeleteAddress")</span>
                     </button>
 
                     @if (!address.IsPreferredShipping)
                     {
-                        <div class="text-right  mt-2">
-                            <button type="button" class="btn  btn-primary"
+                        <div class="text-right mt-2">
+                            <button type="button" class="btn btn-primary"
                                     data-qa="address-setdefault"
                                     data-oc-click="setDefaultAddress">
                                 @Html.Localize("MyAccount", "B_SetDefaultAddress")

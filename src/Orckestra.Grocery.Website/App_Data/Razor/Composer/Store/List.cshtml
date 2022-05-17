@@ -40,7 +40,7 @@
 
 @helper StoreTile()
 {
-    <div class="store-tile card h-100  @(ShowMap ? "": "pin-in-title" )">
+    <div class="store-tile card h-100 @(ShowMap ? "": "pin-in-title" )">
         @if (ShowMap)
         {
             @StoreMap()
@@ -71,9 +71,10 @@
 
 @helper StoreMap()
 {
-    <div class="store-tile-map">
+    <div class="store-tile-map" aria-hidden="true">
         <a v-bind:href="store.Url"
-           v-on:click="onTitleClick">
+           v-on:click="onTitleClick"
+           tabindex="-1">
             <img xmlns:v-bind="v-bind" alt="map" v-bind:src="store.GoogleStaticMapUrl + '&amp;size=380x120'"
                  class="w-100" v-bind:data-store-index="index" />
         </a>
@@ -136,7 +137,7 @@
         <div v-if="SelectedStoreId === store.Id"
              class="bg-success btn-sm border border-success">
             <span class="text-white text-nowrap">
-                <i class="fa fa-check fa-lg"></i>
+                <i class="fa fa-check fa-lg" aria-hidden="true"></i>
                 @Html.Localize("CheckoutProcess", "L_Selected")
             </span>
         </div>
@@ -151,6 +152,6 @@
 {
     <button class="btn btn-primary text-uppercase" v-on:click="loadNextStoresPage">
         @Html.Localize("Store", "B_ShowMore")
-        <span class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none"></span>
+        <i class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none" aria-hidden="true"></i>
     </button>
 }

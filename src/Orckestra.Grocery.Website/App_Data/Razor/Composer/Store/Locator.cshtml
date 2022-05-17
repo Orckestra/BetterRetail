@@ -53,7 +53,7 @@
         </div>
         <div class="container-md">
             <div class="row">
-                <div class="col-12  clearfix  store-locator-info">
+                <div class="col-12 clearfix store-locator-info">
                     <div id="store-locator-nearest" class="d-none float-lg-left float-xl-left">
                         @Html.Localize("Store", "L_NearestStore")
                     </div>
@@ -86,13 +86,13 @@
                    class="form-control" type="text"
                    placeholder="@Html.Localize("Store", "I_Placeholder")"
                    value="@postedAddress" />
-            <i class="fa fa-search text-muted store-locator-search-icon" />
+            <i class="fa fa-search text-muted store-locator-search-icon" aria-hidden="true"></i>
         </div>
         <span class="col-auto">- @Html.Localize("Store", "L_OrUseMyLocation") -</span>
         <div class="col-auto">
             <button v-on:click.prevent="currentLocationAction"
                     class="btn btn-primary geolocate-btn">
-                <i class="fa fa-crosshairs" />
+                <i class="fa fa-crosshairs" aria-hidden="true"></i>
                 @Html.Localize("Store", "B_UseMyLocation")
             </button>
         </div>

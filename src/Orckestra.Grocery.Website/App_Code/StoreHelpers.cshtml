@@ -49,8 +49,9 @@
             {
                 <div class="clearfix">
                     <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
-                        <i class="fa fa-edit d-inline d-sm-none"></i>
-                        <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
+                        <i class="fa fa-edit d-inline d-sm-none" aria-hidden="true"></i>
+                        <span class="d-none d-sm-inline" aria-hidden="true"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
+                        <span class="sr-only"> @Html.Localize("Grocery", "B_ChangeSlot")</span>
                     </a>
                 </div>
             }
@@ -58,7 +59,7 @@
         @if (showChangeLink)
         {
             <div v-else="v-else">
-                <button v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'"  v-on:click.prevent="changeStoreModal($event, 'slot')"
+                <button v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" v-on:click.prevent="changeStoreModal($event, 'slot')"
                         v-bind:disabled="!IsStoreSelected || @(vueBinding).TimeSlotLoading"
                         class="btn btn-block btn-primary">
                     @Html.Localize("Grocery", "B_BookYourSlot")
@@ -106,8 +107,9 @@
                 {
                     <div class="clearfix">
                         <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
-                            <i class="fa fa-edit d-inline d-sm-none"></i>
-                            <span class="d-none d-sm-inline"> @Html.Localize("Grocery", "B_ChangeStore")</span>
+                            <i class="fa fa-edit d-inline d-sm-none" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline" aria-hidden="true"> @Html.Localize("Grocery", "B_ChangeStore")</span>
+                            <span class="sr-only"> @Html.Localize("Grocery", "B_ChangeStore")</span>
                         </a>
                         <a class="cta float-left" v-bind:href="@(vueBinding).Store.Url">@Html.Localize("Store", "B_ViewStoreDetails")</a>
                     </div>
@@ -126,7 +128,7 @@
                 <div class="col-2 col-sm-2">
                     <div class="store-row-map" v-bind:style="{ 'background-image': 'url(' + @(vueBinding).GoogleStaticMapUrl + '&amp;size=200x200)' } ">
                         <a v-bind:href="@(vueBinding).Url" target="_blank"
-                           class="d-block position-relative  w-100  h-100">
+                           class="d-block position-relative w-100 h-100">
                             <div class="static-map-pin"></div>
                         </a>
                     </div>
@@ -143,7 +145,7 @@
                 </div>
             </div>
             <div class="col-4 col-sm-3">
-                <div class="p-2  h-100 position-relative">
+                <div class="p-2 h-100 position-relative">
                     <div class="text-right small"
                          v-if="@(vueBinding).DestinationToSearchPoint">
                         at {{@(vueBinding).DestinationToSearchPoint}} {{@(vueBinding).LengthMeasureUnit}}
@@ -161,7 +163,7 @@
         <div v-if="SelectedStoreId === @(vueBinding).Id"
              class="bg-success btn-sm border border-success">
             <span class="text-white text-nowrap">
-                <i class="fa fa-check fa-lg"></i>
+                <i class="fa fa-check fa-lg" aria-hidden="true"></i>
                 @Html.Localize("CheckoutProcess", "L_Selected")
             </span>
         </div>
@@ -177,27 +179,33 @@
 @helper StoreIcon(bool showTimeslotInformation = true)
 {
     <span class="d-none d-lg-inline">
-        <i class="fa fa-sm mr-1" v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
+        <i class="fa fa-sm mr-1" v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" aria-hidden="true" />
         <span v-if="Store">
-            <span class="d-none d-lg-inline">
-                {{Store.LocalizedDisplayName}}
-                @if (showTimeslotInformation)
-                {
-                    <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
-                    <span v-else-if="TimeSlotReservationTentative">&#160;|&#160;{{TimeSlotReservationDisplay}}</span>
-                }
-            </span>
-            <span class="d-lg-none">
-                @Html.Localize("Grocery", "B_BookStore")
-            </span>
+            {{Store.LocalizedDisplayName}}
+            @if (showTimeslotInformation)
+            {
+                <span v-if="SelectedFulfillment.TimeSlotLoading">@GeneralHelpers.LoadingSpinner(true)</span>
+                <span v-else-if="TimeSlotReservationTentative">&#160;|&#160;{{TimeSlotReservationDisplay}}</span>
+            }
         </span>
         <span v-else="v-else">@Html.Localize("Grocery", "B_BookStore")</span>
     </span>
 
     <span class="d-lg-none">
         <i class="fa fa-sm mr-1"
-           v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']" />
-        <span class="d-none d-sm-inline">
+           v-bind:class="[FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck']"
+           aria-hidden="true" />
+        @* Visible in sm/md, hidden from screen readers *@
+        <span class="d-none d-sm-inline" aria-hidden="true">
+            <span v-if="Store">
+                {{Store.LocalizedDisplayName}}
+            </span>
+            <span v-else="v-else">
+                @Html.Localize("Grocery", "B_BookStore")
+            </span>
+        </span>
+        @* For screen readers only, < lg *@
+        <span class="sr-only">
             <span v-if="Store">
                 {{Store.LocalizedDisplayName}}
             </span>
@@ -211,16 +219,17 @@
 @helper SelectedFulfillmentMethod()
 {
     <div v-if="SelectedFulfillment.FulfillmentMethodType" class="mb-2">
-        <div class="border-bottom bg-lighter p-3  mx-n3 mt-n3 d-flex ">
+        <div class="border-bottom bg-lighter p-3 mx-n3 mt-n3 d-flex ">
             <h5 class="m-0 flex-fill mr-4">
-                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" />
+                <i class="fa mr-1" v-bind:class="SelectedFulfillment.FulfillmentMethodType === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'" aria-hidden="true" />
                 <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                 <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
             </h5>
 
             <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta dark-blue flex-fill" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
-                <i class="fa fa-edit d-inline d-sm-none"></i>
-                <span class="d-none d-sm-inline">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
+                <i class="fa fa-edit d-inline d-sm-none" aria-hidden="true"></i>
+                <span class="d-none d-sm-inline" aria-hidden="true">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
+                <span class="sr-only">@Html.Localize("Grocery", "B_ChangeFulfillmentMethod")</span>
             </a>
         </div>
     </div>

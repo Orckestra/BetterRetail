@@ -30,14 +30,14 @@
                            v-if="Errors.AddressNameAlreadyInUseError">@Html.Localize("Errors", "L_NameAlreadyUsed")</p>
                     </div>
                     <!--TODO: div class="form-group form-check">
-            <input name="IsPreferredShipping"
-                   v-model="IsPreferredShipping"
-                   id="IsPreferredShipping"
-                   class="form-check-input"
-                   data-qa="editaddress-ispreferredshipping"
-                   type="checkbox" />
-            <label for="IsPreferredShipping" class="form-check-label">Html.Localize("Forms", "F_IsPreferredShipping")</label>
-        </div-->
+                        <input name="IsPreferredShipping"
+                               v-model="IsPreferredShipping"
+                               id="IsPreferredShipping"
+                               class="form-check-input"
+                               data-qa="editaddress-ispreferredshipping"
+                               type="checkbox" />
+                        <label for="IsPreferredShipping" class="form-check-label">Html.Localize("Forms", "F_IsPreferredShipping")</label>
+                    </div-->
                 }
                 <div class="form-group">
                     <label for="@(formId)FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
@@ -61,7 +61,7 @@
                     <input v-model="@(vueAddressBinding).LastName"
                            id="@(formId)LastName"
                            name="LastName"
-                            data-qa="address-lastname-input"
+                           data-qa="address-lastname-input"
                            v-bind:disabled="IsLoading"
                            class="form-control"
                            placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group">
                     <label for="@(formId)Line1">@Html.Localize("Forms", "F_Address") *</label>
-                    <input name="Line1" id="@(formId)Line1"  data-qa="address-line1-input"
+                    <input name="Line1" id="@(formId)Line1" data-qa="address-line1-input"
                            @Html.HelpBubble("Forms", "F_AddressIndication")
                            type="text"
                            v-bind:disabled="IsLoading"
@@ -92,18 +92,18 @@
                 <div v-if="Mode.AddingLine2Address" class="form-group">
                     <a href="#complementaryAddress"
                        data-toggle="collapse"
-                        data-qa="address-line2-link"
+                       data-qa="address-line2-link"
                        v-on:click="Mode.AddingLine2Address = !Mode.AddingLine2Address"
                        role="button"
                        aria-expanded="false"
                        aria-controls="complementaryAddress">
-                        <span class="fa-lg fa fa-plus-circle"></span>
+                        <i class="fa-lg fa fa-plus-circle" aria-hidden="true"></i>
                         @Html.Localize("Forms", "F_ComplementaryAddressAdd")
                     </a>
                 </div>
                 <div id="complementaryAddress" class="form-group" v-bind:class="{'collapse': Mode.AddingLine2Address}">
                     <label for="@(formId)Line2">@Html.Localize("Forms", "F_ComplementaryAddress")</label>
-                    <input name="Line2" id="@(formId)Line2"  data-qa="address-line2-input"
+                    <input name="Line2" id="@(formId)Line2" data-qa="address-line2-input"
                            @Html.HelpBubble("Forms", "F_ComplementaryAddressIndication")
                            type="text"
                            v-bind:disabled="IsLoading"
@@ -134,7 +134,7 @@
                 <div class="form-group">
                     <input type="hidden" name="CountryCode" v-model="@(vueAddressBinding).CountryCode" />
                     <label for="@(formId)RegionCode">@Html.Localize("Forms", "F_Province") *</label>
-                    <span class="loading-indicator-regions  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                    <i class="loading-indicator-regions fa fa-spin fa-fw fa-circle-o-notch d-none" aria-hidden="true"></i>
 
                     <select data-templateid="AddressRegionPicker" name="RegionCode" id="@(formId)RegionCode"
                             data-qa="address-province-selector"
@@ -185,7 +185,7 @@
                             </button>
                         </div>
                     }
-                    <div  class="form-group col-12 postalcode-errors mt-n2">
+                    <div class="form-group col-12 postalcode-errors mt-n2">
                         <span class="text-danger" v-if="Errors.PostalCodeError">@Html.Localize("Errors", "L_InvalidZipPostalCodeFormat")</span>
                     </div>
                 </div>

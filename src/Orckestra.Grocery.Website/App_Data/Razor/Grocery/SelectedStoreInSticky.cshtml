@@ -12,36 +12,37 @@
 <head>
 </head>
 <body>
-    <section id="vueSelectedStoreInSticky"
-          class="ml-auto d-none d-lg-inline sticky-show">
-            <li class="nav-item" v-if="!Store" v-cloak="v-cloak">
-                @if (CurrentPageNode.Id != HomePageNode.Id)
-                {
-                    <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
-                        @StoreHelpers.StoreIcon(false)
-                    </a>
-                }
-                else
-                {
-                    <a class="nav-link" href="#" v-on:click.prevent="navigateToStoreSelector">
-                        @StoreHelpers.StoreIcon(false)
-                    </a>
-                }
-            </li>
-            <li class="nav-item dropdown" v-else="v-else" v-cloak="v-cloak">
-                <a class="nav-link" data-toggle="dropdown">
+    <li id="vueSelectedStoreInSticky"
+        class="ml-auto d-none d-lg-inline sticky-show nav-item"  v-bind:class="{ dropdown: Store }"
+        v-cloak="v-cloak" role="none">
+        <div v-if="!Store">
+            @if (CurrentPageNode.Id != HomePageNode.Id)
+            {
+                <a class="nav-link" href="#" v-on:click.prevent="changeStoreModal($event, 'store')" role="menuitem">
                     @StoreHelpers.StoreIcon(false)
                 </a>
-                <div class="dropdown-menu selected-store-header p-3">
-                    @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
-                    <div v-if="Store">
-                        @StoreHelpers.SelectedFulfillmentMethod()
-                        @StoreHelpers.SelectedStorePreview("SelectedFulfillment")
-                        <hr />
-                        @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
-                    </div>
+            }
+            else
+            {
+                <a class="nav-link" href="#" v-on:click.prevent="navigateToStoreSelector" role="menuitem">
+                    @StoreHelpers.StoreIcon(false)
+                </a>
+            }
+        </div>
+        <div v-else="v-else">
+            <a class="nav-link" data-toggle="dropdown" role="menuitem">
+                @StoreHelpers.StoreIcon(false)
+            </a>
+            <div class="dropdown-menu selected-store-header p-3">
+                @Forms.Validations.ShowError("Errors.TimeSlotSelectionError")
+                <div v-if="Store">
+                    @StoreHelpers.SelectedFulfillmentMethod()
+                    @StoreHelpers.SelectedStorePreview("SelectedFulfillment")
+                    <hr />
+                    @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment")
                 </div>
-            </li>
-    </section>
+            </div>
+        </div>
+    </li>
 </body>
 </html>

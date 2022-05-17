@@ -75,7 +75,7 @@
                 data-toggle="dropdown" aria-expanded="true">
             {{SelectedSortBy.DisplayName}}
         </button>
-        <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
+        <div class="dropdown-menu dropdown-menu-sm-right dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
             <a v-for="sortBy in AvailableSortBys"
                class="dropdown-item"
                v-on:click="sortingChanged(sortBy.Url)">
@@ -88,16 +88,16 @@
 @helper PaginationDropdown()
 {
     <div class="pagination-dropdown" v-if="Pagination">
-        <ul class="pagination m-0  align-items-center justify-content-end">
+        <ul class="pagination m-0 align-items-center justify-content-end">
             <li class="page-item previous" v-bind:class="{ disabled: !Pagination.PreviousPage.Url }">
-                <a class="page-link" v-bind:title="Pagination.PreviousPage.DisplayName" v-on:click="sortingChanged(Pagination.PreviousPage.Url)">
-                    <i class="fa fa-arrow-circle-left"></i>&#160;{{Pagination.PreviousPage.DisplayName}}
+                <a href="#" class="page-link" v-on:click.prevent="sortingChanged(Pagination.PreviousPage.Url)" role="button" v-bind:aria-disabled="String(!Pagination.PreviousPage.Url)">
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&#160;{{Pagination.PreviousPage.DisplayName}}
                 </a>
             </li>
 
             <li class="page-item mx-2">
                 <div class="dropdown" v-if="Pagination.CurrentPage">
-                    <button class="btn btn-outline-secondary  dropdown-toggle" type="button" data-qa="page-select-toggle"
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-qa="page-select-toggle"
                             data-toggle="dropdown" aria-expanded="true">
                         @Html.Localize("List-Search", "L_PageInDropDown")&#160;{{Pagination.CurrentPage.DisplayName}}
                     </button>
@@ -115,8 +115,8 @@
                 </span>
             </li>
             <li class="page-item next ml-2" v-bind:class="{ disabled: !Pagination.NextPage.Url }">
-                <a class="page-link" v-bind:title="Pagination.NextPage.DisplayName" v-on:click="sortingChanged(Pagination.NextPage.Url)">
-                    {{Pagination.NextPage.DisplayName}}&#160;<i class="fa  fa-arrow-circle-right"></i>
+                <a href="#" class="page-link" v-on:click.prevent="sortingChanged(Pagination.NextPage.Url)" role="button" v-bind:aria-disabled="String(!Pagination.NextPage.Url)">
+                    {{Pagination.NextPage.DisplayName}}&#160;<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
@@ -127,13 +127,13 @@
 {
     <ul class="pager pagination" v-if="Pagination">
         <li v-if="Pagination.PreviousPage" class="page-item previous mr-auto" v-bind:class="{ disabled: !Pagination.PreviousPage.Url }">
-            <a class="page-link" data-qa="search-pagination-previous" v-on:click="sortingChanged(Pagination.PreviousPage.Url)">
-                <span class="fa fa-arrow-circle-left"></span> {{Pagination.PreviousPage.DisplayName}}
+            <a href="#" class="page-link" data-qa="search-pagination-previous" v-on:click.prevent="sortingChanged(Pagination.PreviousPage.Url)" role="button" v-bind:aria-disabled="String(!Pagination.PreviousPage.Url)">
+                <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> {{Pagination.PreviousPage.DisplayName}}
             </a>
         </li>
         <li v-if="Pagination.NextPage" class="page-item next" v-bind:class="{ disabled: !Pagination.NextPage.Url }">
-            <a class="page-link" data-qa="search-pagination-next" v-on:click="sortingChanged(Pagination.NextPage.Url)">
-                {{Pagination.NextPage.DisplayName}} <span class="fa fa-arrow-circle-right"></span>
+            <a href="#" class="page-link" data-qa="search-pagination-next" v-on:click.prevent="sortingChanged(Pagination.NextPage.Url)" role="button" v-bind:aria-disabled="String(!Pagination.NextPage.Url)">
+                {{Pagination.NextPage.DisplayName}} <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
@@ -143,16 +143,16 @@
 @helper PaginationDropdownByCount(string vueModel = "Pagination")
 {
     <div class="pagination-dropdown" v-if="@vueModel">
-        <ul class="pagination m-0  align-items-center justify-content-end">
+        <ul class="pagination m-0 align-items-center justify-content-end">
             <li class="page-item previous" v-bind:class="{ disabled: !@(vueModel).PreviousPage }">
                 <a class="page-link" title="@Html.Localize("List-Search", "B_Previous")" v-on:click="previousPage()">
-                    <i class="fa fa-arrow-circle-left"></i>&#160;@Html.Localize("List-Search", "B_Previous")
+                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&#160;@Html.Localize("List-Search", "B_Previous")
                 </a>
             </li>
 
             <li class="page-item mx-2">
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary  dropdown-toggle" type="button" data-qa="page-select-toggle"
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-qa="page-select-toggle"
                             data-toggle="dropdown" aria-expanded="true">
                         @Html.Localize("List-Search", "L_PageInDropDown")&#160;{{@(vueModel).CurrentPage}}
                     </button>
@@ -171,7 +171,7 @@
             </li>
             <li class="page-item next ml-2" v-bind:class="{ disabled: !@(vueModel).NextPage }">
                 <a class="page-link" title="@Html.Localize("List-Search", "B_Next")" v-on:click="nextPage()">
-                    @Html.Localize("List-Search", "B_Next")&#160;<i class="fa  fa-arrow-circle-right"></i>
+                    @Html.Localize("List-Search", "B_Next")&#160;<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
@@ -183,13 +183,13 @@
 {
     <ul class="pager pagination" v-if="@vueModel">
         <li class="page-item previous mr-auto" v-bind:class="{ disabled: !@(vueModel).PreviousPage }">
-            <a class="page-link" data-qa="search-pagination-previous" title="@Html.Localize("List-Search", "B_Previous")" v-on:click="previousPage()">
-                <span class="fa fa-arrow-circle-left"></span> @Html.Localize("List-Search", "B_Previous")
+            <a href="#" class="page-link" data-qa="search-pagination-previous" v-on:click.prevent="previousPage()" role="button" v-bind:aria-disabled="String(!@(vueModel).PreviousPage)">
+                <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> @Html.Localize("List-Search", "B_Previous")
             </a>
         </li>
         <li class="page-item next" v-bind:class="{ disabled: !@(vueModel).NextPage }">
-            <a class="page-link" data-qa="search-pagination-next" title="@Html.Localize("List-Search", "B_Next")" v-on:click="nextPage()">
-                @Html.Localize("List-Search", "B_Next") <span class="fa fa-arrow-circle-right"></span>
+            <a href="#" class="page-link" data-qa="search-pagination-next" v-on:click.prevent="nextPage()" role="button" v-bind:aria-disabled="String(!@(vueModel).NextPage)">
+                @Html.Localize("List-Search", "B_Next") <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </a>
         </li>
     </ul>
@@ -203,7 +203,7 @@
                 data-toggle="dropdown" aria-expanded="true">
             {{SelectedSortBy.Title}}
         </button>
-        <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
+        <div class="dropdown-menu dropdown-menu-sm-right dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
             <a v-for="sortBy in AvailableSortBys"
                class="dropdown-item"
                v-on:click="sortingChanged(sortBy.FieldName, sortBy.IsReverted ? 'desc' : 'asc')">
@@ -216,10 +216,10 @@
 @helper ShowFacetsCollapseBtn()
 {
     <button type="button"
-            class="btn  btn-outline-secondary btn-dropdown  w-100"
+            class="btn btn-outline-secondary btn-dropdown w-100"
             data-toggle="collapse"
             data-target="#leftCol" aria-expanded="false">
         @Html.Localize("List-Search", "B_FilterBy")
-        <span class="fa  fa-angle-down"></span>
+        <i class="fa fa-angle-down" aria-hidden="true"></i>
     </button>
 }

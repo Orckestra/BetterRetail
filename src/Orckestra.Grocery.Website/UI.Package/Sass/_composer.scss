@@ -108,3 +108,8 @@
 @import "Custom/_thin-scrollbar.scss";
 @import "Custom/_page-summary.scss";
 @import "Custom/_teaser-cta.scss";
+@import "Custom/_accessibility.scss";
+
+//Leave it here to make sure this is the last bunch of rules loaded,
+//so they will take precedence over any other !important
+@import "Custom/_high-precedence.scss";

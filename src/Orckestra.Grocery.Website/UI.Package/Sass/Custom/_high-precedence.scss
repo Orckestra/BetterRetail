@@ -1,0 +1,8 @@
+/* These rules must be the last to be added to the CSS so they can override any other !important */
+
+/* VueJS cloak */
+* {
+    [v-cloak] {
+        display: none !important;
+    }
+}

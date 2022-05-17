@@ -79,7 +79,7 @@
     <div class="card-deck">
         <div class="card">
             <div class="card-header">
-                <h3 class="m-0"><i class="fa fa-user fa-sm mr-2"></i>@Html.Localize("Grocery", "T_CustomerDetails")</h3>
+                <h3 class="m-0"><i class="fa fa-user fa-sm mr-2" aria-hidden="true"></i>@Html.Localize("Grocery", "T_CustomerDetails")</h3>
             </div>
             <div class="card-body">
                 <h6 class="mb-0">{{CustomerFirstName}} {{CustomerLastName}}</h6>
@@ -91,8 +91,8 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="m-0" v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'"><i class="fa fa-store-alt fa-sm mr-2"></i>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</h3>
-                <h3 class="m-0" v-else="else"><i class="fa fa-truck fa-sm mr-2"></i>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</h3>
+                <h3 class="m-0" v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'"><i class="fa fa-store-alt fa-sm mr-2" aria-hidden="true"></i>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</h3>
+                <h3 class="m-0" v-else="else"><i class="fa fa-truck fa-sm mr-2" aria-hidden="true"></i>@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</h3>
             </div>
             <div class="card-body">
                 <div v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">
@@ -114,7 +114,7 @@
         </div>
         <div class="card" v-if="OrderDetails.Shipments[0].ShippingMethod.FulfillmentMethodType != '@(FulfillmentMethodType.PickUp)'">
             <div class="card-header">
-                <h3 class="m-0"><i class="fa fa-store-alt fa-sm mr-2"></i>@Html.Localize("Grocery", "T_StoreInformation")</h3>
+                <h3 class="m-0"><i class="fa fa-store-alt fa-sm mr-2" aria-hidden="true"></i>@Html.Localize("Grocery", "T_StoreInformation")</h3>
             </div>
             <div class="card-body">
                 <h6 class="mb-2">{{Fulfillment.Store.LocalizedDisplayName}}</h6>
@@ -200,13 +200,13 @@
 
 @helper ShippingFee()
 {
-    <div class="row  mb-2">
-        <div class="col-6  col-md-7">
+    <div class="row mb-2">
+        <div class="col-6 col-md-7">
             <span>
                 @Html.Localize("ShoppingCart", "L_ShippingFee")
             </span>
         </div>
-        <div class="col-6  col-md-5  text-right">
+        <div class="col-6 col-md-5 text-right">
             <span>
                 {{OrderSummary.Shipping}}
             </span>
@@ -233,22 +233,22 @@
                  v-bind:key="item.Id"
                  v-bind:class="{'border-bottom pb-2': index != LineItems.length - 1, 'pt-3': index != 0, 'pt-1': index == 0}">
                 <div v-if="item.IsGiftItem" class="row pt-0 giftitem">
-                    <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                    <i class="fa fa-gift" aria-hidden="true"></i><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
                 </div>
                 <div class="row">
-                    <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
+                    <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1 text-center">
                         @CartSummaryHelpers.CartItemRewardsCell()
                     </div>
-                    <div class="col-2 col-sm-1  order-2">
+                    <div class="col-2 col-sm-1 order-2">
                         @CartSummaryHelpers.CartItemImageCell()
                     </div>
-                    <div class="col-8 col-sm-4  order-3">
+                    <div class="col-8 col-sm-4 order-3">
                         @CartSummaryHelpers.CartItemSummaryCell()
                     </div>
-                    <div class="col-sm-2  text-center d-none d-sm-block order-4">
+                    <div class="col-sm-2 text-center d-none d-sm-block order-4">
                         @CartSummaryHelpers.CartItemDefaultPriceCell()
                     </div>
-                    <div class="offset-2 offset-sm-0 2 col-sm-3 col-7  text-center text-sm-center order-6">
+                    <div class="offset-2 offset-sm-0 2 col-sm-3 col-7 text-center text-sm-center order-6">
                         <div class="text-center">
                             <p>{{item.Quantity}}</p>
                         </div>
@@ -295,8 +295,8 @@
             </div>
             <div class="form-group p-2 col-auto">
                 <a href="#" role="button" v-on:click.prevent="showPasswordToggle" class="text-decoration-none">
-                    <strong v-if="ShowPassword"><i class="fa fa-eye-slash"></i> @Html.Localize("Forms", "L_HidePassword")</strong>
-                    <strong v-else="v-else"><i class="fa fa-eye"></i> @Html.Localize("Forms", "L_ShowPassword")</strong>
+                    <strong v-if="ShowPassword"><i class="fa fa-eye-slash" aria-hidden="true"></i> @Html.Localize("Forms", "L_HidePassword")</strong>
+                    <strong v-else="v-else"><i class="fa fa-eye" aria-hidden="true"></i> @Html.Localize("Forms", "L_ShowPassword")</strong>
                 </a>
             </div>
             <div class="form-group col-12 password-errors mt-n2"></div>

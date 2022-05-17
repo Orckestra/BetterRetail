@@ -29,9 +29,9 @@
                                    placeholder=" @Html.Localize("ShoppingCart", "F_PromoCodeWatermark")" />
                             <span class="input-group-append">
                                 <button data-qa="coupons-submit" type="submit"
-                                        class="btn   btn-outline-secondary">
+                                        class="btn btn-outline-secondary">
                                     @Html.Localize("ShoppingCart", "B_ApplyPromoCode")
-                                    <span v-if="Mode.ApplyingCoupon" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
+                                    <i v-if="Mode.ApplyingCoupon" class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch" aria-hidden="true"></i>
                                 </button>
                             </span>
                         </div>
@@ -49,14 +49,15 @@
 {
     <div v-if="Coupons">
         <div v-for="msg in Coupons.Messages" >
-            <div v-bind:class="'alert  alert-' + msg.Level + ' alert-dismissible'">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span class="fa  fa-times"></span>
+            <div v-bind:class="'alert alert-' + msg.Level + ' alert-dismissible'" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <span class="sr-only">@Html.Localize("Accessibility", "B_AlertDismiss")</span>
                 </button>
                 <div class="multiline-message">
-                    <span v-if="msg.Level == 'danger'" class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
-                    <span v-if="msg.Level == 'warning'" class="fa  fa-info-circle  multiline-message-icon"></span>
-                    <span v-if="msg.Level == 'success'" class="fa  fa-check-circle  multiline-message-icon"></span>
+                    <i v-if="msg.Level == 'danger'" class="fa fa-exclamation-triangle multiline-message-icon" aria-hidden="true"></i>
+                    <i v-if="msg.Level == 'warning'" class="fa fa-info-circle multiline-message-icon" aria-hidden="true"></i>
+                    <i v-if="msg.Level == 'success'" class="fa fa-check-circle multiline-message-icon" aria-hidden="true"></i>
                     {{msg.Message}}
                 </div>
             </div>
@@ -69,7 +70,7 @@
         </div>
         <div v-else="else">
             <div class="multiline-message">
-                <span class="far  fa-comment  multiline-message-icon"></span>&#32;
+                <i class="far fa-comment multiline-message-icon" aria-hidden="true"></i>&#32;
                 <span>@Html.Localize("ShoppingCart", "F_PromoCodeIndication")</span>
             </div>
         </div>
@@ -80,15 +81,16 @@
 {
     <div class="form-group">
         <div class="row">
-            <div class="col-9  col-md-10  col-lg-9  col-xl-10">
-                <strong class="text-info  text-uppercase">{{coupon.CouponCode}}</strong>
+            <div class="col-9 col-md-10 col-lg-9 col-xl-10">
+                <strong class="text-info text-uppercase">{{coupon.CouponCode}}</strong>
                 {{coupon.DisplayText}}
             </div>
             <div class="col-3  col-md-2  col-lg-3  col-xl-2">
                 <button data-qa="coupons-delete"
-                        class="btn  btn-outline-secondary  float-right"
+                        class="btn btn-outline-secondary float-right"
                         v-on:click.prevent="removeCoupon(coupon.CouponCode)">
-                    <span class="fa  fa-times"></span>
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <span class="sr-only">@Html.Localize("Accessibility", "B_CouponRemove")</span>
                 </button>
             </div>
         </div>

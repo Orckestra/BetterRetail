@@ -16,7 +16,7 @@
 
         foreach (var childItem in menuEntry.Children.OfType<HomeMainMenuEntryViewModel>())
         {
-            maxLevel = Math.Max(maxLevel, @MenuDepthLevel(childItem, (pageLevel+1)));
+            maxLevel = Math.Max(maxLevel, @MenuDepthLevel(childItem, (pageLevel + 1)));
         }
 
         return maxLevel;
@@ -49,7 +49,7 @@
     });
 
     var mainMenu = MainMenuNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
-    
+
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
@@ -71,13 +71,13 @@
                                 {
                                     var maxlevel = @MenuDepthLevel(mainMenuEntry);
                                     var simpleDropdownClass = (maxlevel > 1) ? "" : "simple-dropdown";
-                                    <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName @simpleDropdownClass" tabindex="0" data-menu-level="@maxlevel">
+                                    <li class="nav-item dropdown main-nav-fw @mainMenuEntry.CssClassName @simpleDropdownClass" role="none" data-menu-level="@maxlevel">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category"
                                            target="@mainMenuEntry.UrlTarget"
-                                           role="button"
+                                           role="menuitem"
                                            class="dropdown-toggle nav-link d-none d-lg-block"
-                                           aria-haspopup="true"
+                                           aria-haspopup="true" aria-expanded="false" aria-controls="menu-@(mainMenuEntry.GetHashCode())"
                                            style="@mainMenuEntry.CssClass"
                                            @{ if (hasImage) { <text> data-imageid="@mainMenuEntry.GetHashCode()" </text>  }}>
                                             @mainMenuEntry.DisplayName
@@ -87,26 +87,28 @@
                                            href="@mainMenuEntry.Url"
                                            target="@mainMenuEntry.UrlTarget"
                                            data-qa="main-menu-category"
-                                           role="button"
+                                           role="menuitem"
                                            data-toggle="collapse"
                                            class="dropdown-toggle nav-link d-block d-lg-none"
-                                           aria-haspopup="true" aria-expanded="false" aria-controls="menu-@(mainMenuEntry.GetHashCode())" style="@mainMenuEntry.CssClass">
+                                           aria-haspopup="true" aria-expanded="false" aria-controls="menu-@(mainMenuEntry.GetHashCode())"
+                                           style="@mainMenuEntry.CssClass">
                                             @mainMenuEntry.DisplayName
-                                            <span class="fa fa-chevron-down" aria-hidden="true"></span>
-                                            <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                            <i class="fa fa-chevron-up" aria-hidden="true"></i>
                                         </a>
 
 
-                                        <ul id="menu-@(mainMenuEntry.GetHashCode())" class="dropdown-menu">
-                                            <li>
+                                        <ul id="menu-@(mainMenuEntry.GetHashCode())" class="dropdown-menu" role="menu">
+                                            <li role="none">
                                                 @* Content container to add padding *@
                                                 <div class="main-nav-content row no-gutters">
-                                                    <ul class="nav-section list-unstyled col-submenu">
-                                                        <li class="multi-nav-section">
+                                                    <ul class="nav-section list-unstyled col-submenu" role="none">
+                                                        <li class="multi-nav-section" role="none">
                                                             <a data-qa="main-menu-link"
                                                                href="@(mainMenuEntry.Url)"
                                                                target="@mainMenuEntry.UrlTarget"
-                                                               class="d-md-block d-lg-none main-nav-section-title font-weight-bold">
+                                                               class="d-md-block d-lg-none main-nav-section-title font-weight-bold"
+                                                               role="menuitem">
                                                                 @Html.Localize("General", "B_ViewAll") @mainMenuEntry.DisplayName
                                                             </a>
                                                         </li>
@@ -127,12 +129,13 @@
                                 }
                                 else
                                 {
-                                    <li class="nav-item main-nav-fw @mainMenuEntry.CssClassName" tabindex="0">
+                                    <li class="nav-item main-nav-fw @mainMenuEntry.CssClassName" role="none">
                                         <a href="@mainMenuEntry.Url"
                                            data-qa="main-menu-category-link"
                                            target="@mainMenuEntry.UrlTarget"
                                            style="@mainMenuEntry.CssClass"
-                                           class="nav-link">
+                                           class="nav-link"
+                                           role="menuitem">
                                             @mainMenuEntry.DisplayName
                                         </a>
 
@@ -164,7 +167,7 @@
 
     var collapseClass = (pageLevel == (maxLevel - 1)) ? "collapse" : "";
 
-    <li class="multi-nav-section @menuEntry.CssClassName" tabindex="0">
+    <li class="multi-nav-section @menuEntry.CssClassName" role="none">
 
         @if (childItems.Any())
         {
@@ -173,27 +176,27 @@
                target="@menuEntry.UrlTarget"
                class="main-nav-section-title d-none d-lg-flex justify-content-lg-between align-items-center"
                style="@menuEntry.CssClass"
+               role="menuitem"
                @{ if (hasImage) { <text> data-imageid="@menuEntry.GetHashCode()" </text>  }}>
                 @menuEntry.DisplayName
-                <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </a>
             <a data-qa="main-menu-section"
                data-target="#subMenu-@(menuEntry.GetHashCode())"
                data-toggle="@collapseClass"
-               aria-expanded="false"
-               aria-controls="subMenu-@(menuEntry.GetHashCode())"
-               role="button"
+               role="menuitem"
+               aria-haspopup="true" aria-expanded="false" aria-controls="subMenu-@(menuEntry.GetHashCode())"
                class="main-nav-section-title d-block d-lg-none"
                data-imageid="@curEntry.GetHashCode()">
                 @menuEntry.DisplayName
                 @if (pageLevel == (maxLevel - 1))
                 {
-                    <span class="fa fa-chevron-down" aria-hidden="true"></span>
-                    <span class="fa fa-chevron-up" aria-hidden="true"></span>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
                 }
                 else
                 {
-                    <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 }
             </a>
         }
@@ -204,6 +207,7 @@
                target="@menuEntry.UrlTarget"
                class="main-nav-section-title"
                style="@menuEntry.CssClass"
+               role="menuitem"
                data-imageid="@curEntry.GetHashCode()">
                 @menuEntry.DisplayName
             </a>
@@ -218,14 +222,15 @@
         {
             <div class="sub-nav dropdown-menu @collapseClass" id="subMenu-@(menuEntry.GetHashCode())">
                 <div class="sub-nav-content row no-gutters">
-                    <ul class="list-unstyled sub-collapse col-submenu">
+                    <ul class="list-unstyled sub-collapse col-submenu" role="menu">
                         @if (pageLevel < (maxLevel - 1))
                         {
-                            <li class="multi-nav-section">
+                            <li class="multi-nav-section" role="none">
                                 <a data-qa="main-menu-link"
                                    href="@menuEntry.Url"
                                    target="@menuEntry.UrlTarget"
-                                   class="d-md-block d-lg-none main-nav-section-title font-weight-bold">
+                                   class="d-md-block d-lg-none main-nav-section-title font-weight-bold"
+                                   role="menuitem">
                                     @Html.Localize("General", "B_ViewAll") @menuEntry.DisplayName
                                 </a>
                             </li>
@@ -239,9 +244,9 @@
                         }
                         @if (pageLevel < (maxLevel - 1))
                         {
-                            <li class="mobile-menu-back-item multi-nav-section d-lg-none" data-pageLevel="@pageLevel">
-                                <a class="menu-link mobile-menu-back-link" tabindex="0">
-                                    <span class="fa fa-chevron-left" aria-hidden="true"></span> @Html.Localize("General", "B_Back")
+                            <li class="mobile-menu-back-item multi-nav-section d-lg-none" data-pageLevel="@pageLevel" role="none">
+                                <a class="menu-link mobile-menu-back-link" role="menuitem">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i> @Html.Localize("General", "B_Back")
                                 </a>
                             </li>
                         }

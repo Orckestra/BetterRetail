@@ -1,30 +1,30 @@
 .slick-carousel {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  padding-top: 10px;
-  padding-right: 10px;
- 
-
-  .slick-list {
-    margin-right: -10px;
-    margin-left: -10px;
-  }
-
-  .slick-track {
-    display: flex;
-  }
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-right: 10px;
 
 
-  .slick-slide {
-    display: flex;
-    flex-direction: column;
-    max-width: unset;
-    margin: 0 10px;
-    vertical-align: top;
-  }
+    .slick-list {
+        margin-right: -10px;
+        margin-left: -10px;
+    }
 
-     .slick-arrow {
+    .slick-track {
+        display: flex;
+    }
+
+
+    .slick-slide {
+        display: flex;
+        flex-direction: column;
+        max-width: unset;
+        margin: 0 10px;
+        vertical-align: top;
+    }
+
+    .slick-arrow {
         font-size: 0;
         line-height: 0;
         position: absolute;
@@ -48,8 +48,8 @@
             font-size: 20px;
             background: rgba(gray("600"), 0.5);
             border-radius: 50%;
-            width:35px;
-            height:35px;
+            width: 35px;
+            height: 35px;
             line-height: 35px;
             color: #fff;
         }
@@ -58,33 +58,39 @@
             background: rgba(gray("600"), 0.7);
         }
 
-       &.slick-prev {
-             left: 10px;
+        &:focus:before {
+            background: rgba(gray("600"), 0.7);
+            border-color: red;
+            box-shadow: 0 0 0 0.2rem rgba(gray("800"), 0.7);
+        }
 
-             &:before {
-                content:'\f053';
+        &.slick-prev {
+            left: 10px;
+
+            &:before {
+                content: '\f053';
                 margin-right: 5px;
-             }
-         }
+            }
+        }
 
         &.slick-next {
-             right: 10px;
+            right: 10px;
 
-             &:before {
-                content:'\f054';
+            &:before {
+                content: '\f054';
                 margin-left: 5px;
-             }
-         }
-     }
+            }
+        }
+    }
 
-     .slick-dots {
-         @extend .clearfix;
-         list-style-type: none;
-         padding-left: 0;
-         text-align: center;
-         margin-bottom: 0;
+    .slick-dots {
+        @extend .clearfix;
+        list-style-type: none;
+        padding-left: 0;
+        text-align: center;
+        margin-bottom: 0;
 
-         li {
+        li {
             display: inline-block;
             margin-top: 20px;
 
@@ -103,5 +109,5 @@
                 background: theme-color("primary");
             }
         }
-     }
+    }
 }

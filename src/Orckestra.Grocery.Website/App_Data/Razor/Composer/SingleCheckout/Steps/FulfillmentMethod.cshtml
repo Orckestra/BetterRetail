@@ -14,7 +14,7 @@
 </head>
 <body>
     <div data-oc-controller="SingleCheckout.Shipping">
-        <div class="card  mt-4">
+        <div class="card mt-4">
             <div class="card-header">
                 <h3 class="float-left">
                     @Html.Localize("CheckoutProcess", "F_ShippingStepTitle")
@@ -27,14 +27,14 @@
                 @CheckoutHelpers.StepEditButton("shipping")
             </div>
             <transition-collapse>
-                <div class="card-body  bg-lighter" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
+                <div class="card-body bg-lighter" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
 
                     @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
                     <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
 
                     <div class="row">
                         <div class="col-6">
-                            <div class="border  rounded bg-white  p-3 clearfix">
+                            <div class="border rounded bg-white p-3 clearfix">
                                 <a class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
                                     @Html.Localize("Grocery", "B_ChangeFulfillmentMethod")
                                 </a>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="border  rounded bg-white  p-3">
+                            <div class="border rounded bg-white p-3">
                                 @TimeSlot_ActiveView()
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
 
-                <div v-show="step.displayContinueButton" class="card-body bg-lighter" key="disabledPreview"  v-cloak="true">
+                <div v-show="step.displayContinueButton" class="card-body bg-lighter" key="disabledPreview" v-cloak="true">
                     <div class="row disabled" v-if="Cart.ShippingMethod">
                         <div class="col-12 col-sm-6">
                             <strong v-if="IsShippingMethodType">
@@ -110,7 +110,7 @@
 {
     <div v-if="IsShippingMethodType">
         <h4 v-if="IsShippingMethodType">
-            <i class="fa fa-truck fa-sm mr-1" />
+            <i class="fa fa-truck fa-sm mr-1" aria-hidden="true"></i>
             @Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")
         </h4>
         @SelectedStorePreview()
@@ -121,7 +121,7 @@
 {
     <div v-if="IsPickUpMethodType" data-oc-controller="SingleCheckout.PickUpStoreAddress">
         <h4 v-if="IsPickUpMethodType">
-            <i class="fa fa-store-alt fa-sm mr-1" />
+            <i class="fa fa-store-alt fa-sm mr-1" aria-hidden="true"></i>
             @Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")
         </h4>
         @SelectedStorePreview()
@@ -152,7 +152,7 @@
 {
     <div class="clearfix">
         <h3 class="float-left">
-            <i class="far fa-clock fa-sm mr-1" />
+            <i class="far fa-clock fa-sm mr-1" aria-hidden="true"></i>
             @Html.Localize("Grocery", "T_TimeSlot")
         </h3>
     </div>

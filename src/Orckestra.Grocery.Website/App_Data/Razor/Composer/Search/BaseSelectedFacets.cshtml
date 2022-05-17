@@ -37,17 +37,18 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Product.SelectedSearchFacets" 
-         data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())" 
+    <div data-oc-controller="Product.SelectedSearchFacets"
+         data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())"
          data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)"
          id="vueSelectedSearchFacets" v-cloak="true">
         <div v-if="Facets.length" class="card facets-card mb-3 selected-facets">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
-                <a v-if="IsAllRemovable" 
+                <a v-if="IsAllRemovable"
                    class="float-right"
                    data-qa="search-refiners-clear-all"
-                   v-on:click="clearSelectedFacets(@FirstLandingPageUrl)">
+                   v-on:click="clearSelectedFacets(@FirstLandingPageUrl)"
+                   role="button">
                     @Html.Localize("List-Search", "B_ClearAll")
                 </a>
             </div>
@@ -58,12 +59,13 @@
                         {{facet.DisplayName}}
                         <span class="badge badge-light">
                             <a v-if="facet.IsRemovable"
-                                class="float-right" data-qa="search-refiner-remove"
-                                v-on:click="removeSelectedFacet(facet, index)"
-                                v-bind:title="facet.DisplayName">
-                                    <span class="fa  fa-times  fa-lg"></span>
+                               class="float-right" data-qa="search-refiner-remove"
+                               v-on:click="removeSelectedFacet(facet, index)"
+                               role="button">
+                                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                                <span class="sr-only">@Html.Localize("Accessibility", "B_FacetRemove") {{facet.DisplayName}}</span>
                             </a>
-                            <span v-else="v-else" class="float-right  fa  fa-times  fa-lg  text-muted"></span>
+                            <i v-else="v-else" class="float-right fa fa-times fa-lg text-muted" aria-hidden="true"></i>
                         </span>
                     </li>
                 </ul>

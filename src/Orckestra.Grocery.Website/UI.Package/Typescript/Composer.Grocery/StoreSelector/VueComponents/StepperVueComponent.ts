@@ -332,7 +332,8 @@ module Orckestra.Composer {
                           <button :disabled="!step.slotProps.passed"
                                   type="button"
                                   class="step-trigger p-0"
-                                  @click="navigateToStep(index)">
+                                  @click="navigateToStep(index)"
+                                  role="tab">
                             <div class="bs-stepper-circle"><span class="fa fa-2x " :class="{'fa-check': step.slotProps.passed}"></span></div>
                             <p class="d-none d-sm-block m-2 bs-stepper-title">{{step.title}}</p>
                             <p class="d-block d-sm-none m-mb-2 mt-2 bs-stepper-mobiletitle">{{step.mobileTitle}}</p>

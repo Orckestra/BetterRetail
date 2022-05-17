@@ -18,45 +18,43 @@
 <head>
 </head>
 <body>
-    <div class="row" id="accordion" role="tablist" aria-multiselectable="false">
-       @{int index = 0;}
-       @foreach (var footerEntity in footer)
+    <nav class="row" id="accordion">
+        @{int index = 0;}
+        @foreach (var footerEntity in footer)
         {
             <div class="col-sm-4 col-md-4 col-xl-3">
                 <div data-templateid="FooterNavList">
                     <ul class="nav nav-footer-entry list-unstyled collapse-mobile flex-column flex-sm-row">
                         <li class="nav-item">
-                            <h5 role="tab" id="@index">
+                            <h5 id="@index" class="nav-footer-title">
                                 @if (footerEntity.HasChildren)
                                 {
-                                    <a class="collapsed  d-block  d-sm-none"
+                                    <a class="collapsed d-block d-sm-none"
                                        role="button"
                                        data-toggle="collapse"
-                                       data-parent="#accordion"
                                        href="#footer-collapse-@index"
                                        aria-expanded="false"
                                        aria-controls="footer-collapse-@index"
                                        style="@footerEntity.CssClass">
                                         @footerEntity.DisplayName
-                                        <span class="float-right fa fa-chevron-down collapsed-icon"></span>
-                                        <span class="float-right fa fa-chevron-up expanded-icon"></span>
+                                        <i class="float-right fa fa-chevron-down collapsed-icon" aria-hidden="true"></i>
+                                        <i class="float-right fa fa-chevron-up expanded-icon" aria-hidden="true"></i>
                                     </a>
 
                                     if (!string.IsNullOrEmpty(footerEntity.Url))
                                     {
-                                        <a href="@footerEntity.Url" target="@footerEntity.UrlTarget" role="button"
-                                           class="d-none  d-sm-block"
-                                           style="@footerEntity.CssClass"
-                                           aria-haspopup="true">
+                                        <a href="@footerEntity.Url" target="@footerEntity.UrlTarget"
+                                           class="d-none d-sm-block"
+                                           style="@footerEntity.CssClass">
                                             @footerEntity.DisplayName
                                         </a>
                                     }
                                     else
                                     {
-                                        <a href="@footerEntity.Url" target="@footerEntity.UrlTarget" role="button"
-                                           class="footer-nolink d-none  d-sm-block"
-                                           style="@footerEntity.CssClass"
-                                           aria-haspopup="true">
+                                        @* TODO: Replace with span *@
+                                        <a href="@footerEntity.Url" target="@footerEntity.UrlTarget"
+                                           class="footer-nolink d-none d-sm-block"
+                                           style="@footerEntity.CssClass">
                                             @footerEntity.DisplayName
                                         </a>
                                     }
@@ -73,8 +71,9 @@
 
                             <ul class="nav nav-text nav-stacked nav-footer-list collapse flex-column flex-xs-row"
                                 id="footer-collapse-@index"
-                                role="tabpanel"
-                                aria-expanded="false">
+                                aria-expanded="false"
+                                aria-labelledby="@index"
+                                data-parent="#accordion">
                                 @foreach (var subFooterEntity in footerEntity.Children as IEnumerable<FooterEntryViewModel>)
                                 {
                                     <li class="nav-item">
@@ -95,14 +94,14 @@
             </div>
             index++;
         }
-		<div class="col-md-4 col-xl-3">
-			<div class="nav-footer-entry">
-				<h5 role="tab" >@Html.Localize("General", "L_FollowUs")</h5>
-				<f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
-					<f:param name="FeatureName" value="Social links" />
-				</f:function>
-			</div>
-		</div>
-    </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="nav-footer-entry">
+                <h5 class="nav-footer-title">@Html.Localize("General", "L_FollowUs")</h5>
+                <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
+                    <f:param name="FeatureName" value="Social links" />
+                </f:function>
+            </div>
+        </div>
+    </nav>
 </body>
 </html>

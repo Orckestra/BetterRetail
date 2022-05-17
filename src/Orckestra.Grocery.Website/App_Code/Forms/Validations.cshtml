@@ -4,7 +4,7 @@
 @helper SignInErrors(string vueStatusBinding)
 {
     <div v-if="@vueStatusBinding" class="alert alert-danger text-danger">
-        <span class="fa  fa-times-circle-o  fa-lg  pull-left mt-1"></span>&#32;
+        <i class="fa fa-times-circle-o fa-lg pull-left mt-1" aria-hidden="true"></i>&#32;
         <div v-if="@vueStatusBinding == 'RequiresApproval'">
             @Html.Localize("MyAccount", "L_SignInErrorRequiresApproval")
         </div>
@@ -20,7 +20,7 @@
 @helper SelectStoreError(string vueStatusBinding)
 {
     <div id="selectStoreError" v-if="@vueStatusBinding" class="alert alert-danger text-danger">
-        <span class="fa  fa-times-circle-o  fa-lg  pull-left mt-1"></span>&#32;
+        <i class="fa fa-times-circle-o fa-lg pull-left mt-1" aria-hidden="true"></i>&#32;
         <div>@Html.Localize("Errors", "L_SelectAStore")</div>
     </div>
 }
@@ -40,7 +40,7 @@
 @helper ShowError(string vueStatusBinding, string localizationKey)
 {
     <div v-if="@vueStatusBinding" class="alert alert-danger text-danger error-box">
-        <span class="fa  fa-times-circle-o  fa-lg  pull-left"></span>&#32;
+        <i class="fa fa-times-circle-o fa-lg pull-left" aria-hidden="true"></i>&#32;
         <div>@Html.Localize("Errors", @localizationKey)</div>
     </div>
 }
@@ -48,7 +48,7 @@
 @helper ShowError(string error)
 {
     <div v-if="@error" class="alert alert-danger text-danger error-box">
-        <span class="fa  fa-times-circle-o  fa-lg pull-left"></span>&#32;
+        <i class="fa fa-times-circle-o fa-lg pull-left" aria-hidden="true"></i>&#32;
         <div>{{@error}}</div>
     </div>
 }

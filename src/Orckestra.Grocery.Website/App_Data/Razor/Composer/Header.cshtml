@@ -20,6 +20,9 @@
 </head>
 <body>
     <header class="masthead masthead-with-mega-menu shadow-sm sps sticky-top">
+		<div id="skiptocontent">
+			<a href="#maincontent" class="bg-dark text-white border border-white p-1">@Html.Localize("Accessibility", "L_SkipToContent")</a>
+		</div>
         <div class="header">
             <nav class="navbar navbar-expand  navbar-dark p-0">
                 <div class="container-lg">
@@ -94,15 +97,17 @@
 
 @helper SearchIcon()
 {
-    <a class="nav-link" href="#" title="@Html.Localize("General", "Search")" data-focus-element="#search-input">
-        <span class="fa  fa-search"></span>
-    </a>
+<a class="nav-link" href="#" data-focus-element="#search-input">
+    <i class="fa fa-search" aria-hidden="true"></i>
+    <span class="sr-only">@Html.Localize("General", "Search")</span>
+</a>
 }
 
 @helper StoreLocatorLink(PagesConfiguration pages)
 {
-    <a class="nav-link" href="~/page(@pages.StoreListPageId)" title="@Html.Localize("Store", "L_StoreLocator")">
-        <span class="fas  fa-map-marker-alt"></span>&#160;
-        <span class="d-none d-md-inline sps--blw-hidden">@Html.Localize("Store", "L_StoreLocator")</span>
+    <a class="nav-link" href="~/page(@pages.StoreListPageId)">
+        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>&#160;
+        <span class="d-none d-md-inline sps--blw-hidden" aria-hidden="true">@Html.Localize("Store", "L_StoreLocator")</span>
+        <span class="sr-only">@Html.Localize("Store", "L_StoreLocator")</span>
     </a>
 }

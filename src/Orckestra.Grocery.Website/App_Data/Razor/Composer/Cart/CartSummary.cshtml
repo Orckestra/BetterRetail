@@ -60,7 +60,7 @@
     <div class="row">
         <div class="col-lg-6">
             <p>@Html.Localize("ShoppingCart", "L_EmptyShoppingCart")</p>
-            <a class="btn btn-primary  btn-block  btn-lg"
+            <a class="btn btn-primary btn-block btn-lg"
                data-qa="start-shopping"
                href="@HomePageNode.Url">
                 @Html.Localize("ShoppingCart", "B_StartShopping")
@@ -75,13 +75,13 @@
         <div class="col-9 col-sm-5 text-left">
             @Html.Localize("ShoppingCart", "T_ShoppingCart")
         </div>
-        <div class="col-sm-2  text-center d-none d-sm-block">
+        <div class="col-sm-2 text-center d-none d-sm-block">
             @Html.Localize("MyAccount", "L_UnitPrice")
         </div>
-        <div class="col-sm-3  text-center d-none d-sm-block">
+        <div class="col-sm-3 text-center d-none d-sm-block">
             @Html.Localize("MyAccount", "L_Quantity")
         </div>
-        <div class=" col-3 col-sm-2  text-center d-none d-sm-block">
+        <div class=" col-3 col-sm-2 text-center d-none d-sm-block">
             @Html.Localize("MyAccount", "L_Subtotal")
         </div>
     </div>
@@ -94,22 +94,22 @@
      v-bind:key="item.Id"
      v-bind:data-qa="'cart-item-' + index">
     <div v-if="item.IsGiftItem" class="row pt-0 giftitem">
-        <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+        <i class="fa fa-gift" aria-hidden="true"></i><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
     </div>
     <div class="row pt-3">
-        <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
+        <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1 text-center">
             @CartSummaryHelpers.CartItemRewardsCell()
         </div>
-        <div class="col-2 col-sm-1  order-2">
+        <div class="col-2 col-sm-1 order-2">
             @CartSummaryHelpers.CartItemImageCell()
         </div>
-        <div class="col-8 col-sm-4  order-3">
+        <div class="col-8 col-sm-4 order-3">
             @CartSummaryHelpers.CartItemSummaryCell()
         </div>
-        <div class="col-sm-2  text-center d-none d-sm-block order-4">
+        <div class="col-sm-2 text-center d-none d-sm-block order-4">
             @CartSummaryHelpers.CartItemDefaultPriceCell()
         </div>
-        <div class="offset-2 offset-sm-0 2 col-sm-3 col-7  text-center text-sm-center order-6">
+        <div class="offset-2 offset-sm-0 2 col-sm-3 col-7 text-center text-sm-center order-6">
             @CartSummaryHelpers.CartItemQuantityCell()
         </div>
         <div class="offset-2 offset-sm-0 col-sm-2 text-left text-sm-center order-7">
@@ -118,7 +118,7 @@
         <div class="col-2 d-block d-sm-none order-5">
             @CartSummaryHelpers.RemoveCartItemMobileBtn()
         </div>
-        <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8"
+        <div v-if="item.RecurringOrderProgramName" class="col-11 offset-2 offset-sm-1 order-8"
              data-oc-controller="Cart.ChangeRecurringFrequency">
             @RecurringOrderHelpers.CartItemRecurringOrderProgram("item")
         </div>

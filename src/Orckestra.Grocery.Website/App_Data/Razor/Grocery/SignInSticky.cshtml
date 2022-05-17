@@ -14,46 +14,54 @@
 <head>
 </head>
 <body>
-    <section id="vueSignInSticky" v-cloak="true"
-             class="d-none d-md-inline sticky-show">
-            <li v-if="IsAuthenticated"
-                class="nav-item dropdown"
-                v-cloak="true">
-                <a class="nav-link"
-                   data-qa="my-account-in-header"
-                   data-toggle="dropdown"
-                   v-bind:href="Url"
-                   title="@Html.Localize("MyAccount", "L_MyAccount")">
-                    <i class="fa fa-user"></i>&#160;
-                    <span class="d-none d-lg-inline">
-                        {{FirstName}} {{LastName}}
-                    </span>
-                </a>
-                <div class="dropdown-menu">
-                        <a v-bind:href="Url"
-                           class="dropdown-item"
-                           title="@Html.Localize("MyAccount", "L_MyAccount")">
-                            @Html.Localize("MyAccount", "L_MyAccount")
-                        </a>
-                        <a v-if="IsAuthenticated"
-                           data-qa="login-out"
-                           href="#"
-                           class="dropdown-item"
-                           v-on:click.prevent="fullLogout"
-                           title="@Html.Localize("MyAccount", "H_Logout")">
-                            @Html.Localize("MyAccount", "H_Logout")
-                        </a>
-                </div>
-            </li>
-            <li v-else="else" class="nav-item" v-cloak="true">
-                <a class="nav-link"
-                   data-qa="login-in"
-                   v-bind:href="Url"
-                   title="@Html.Localize("MyAccount", "L_SignIn")">
-                    <i class="fa fa-user"></i>&#160;
-                    @Html.Localize("MyAccount", "L_SignIn")
-                </a>
-            </li>
-    </section>
+    <li id="vueSignInSticky" v-cloak="true"
+        class="d-none d-md-inline sticky-show nav-item" v-bind:class="{ dropdown: IsAuthenticated }"
+        role="none">
+        <a v-if="IsAuthenticated"
+           id="signInStickyDropdownMenuLink"
+           class="nav-link"
+           data-qa="my-account-in-header"
+           data-toggle="dropdown"
+           v-bind:href="Url"
+           title="@Html.Localize("MyAccount", "L_MyAccount")"
+           role="menuitem" aria-haspopup="true" aria-expanded="false" aria-controls="signInStickyDropdown">
+            <i class="fa fa-user" aria-hidden="true"></i>&#160;
+            <span class="d-none d-lg-inline" aria-hidden="true">
+                {{FirstName}} {{LastName}}
+            </span>
+            <span class="sr-only">
+                {{FirstName}} {{LastName}}
+            </span>
+        </a>
+        <div v-if="IsAuthenticated"
+             aria-labelledby="signInStickyDropdownMenuLink"
+             id="signInStickyDropdown"
+             class="dropdown-menu"
+             role="menu">
+            <a v-bind:href="Url"
+               class="dropdown-item"
+               title="@Html.Localize("MyAccount", "L_MyAccount")"
+               role="menuitem">
+                @Html.Localize("MyAccount", "L_MyAccount")
+            </a>
+            <a v-if="IsAuthenticated"
+               data-qa="login-out"
+               href="#"
+               class="dropdown-item"
+               v-on:click.prevent="fullLogout"
+               title="@Html.Localize("MyAccount", "H_Logout")"
+               role="menuitem">
+                @Html.Localize("MyAccount", "H_Logout")
+            </a>
+        </div>
+        <a v-if="!IsAuthenticated"
+           class="nav-link"
+           data-qa="login-in"
+           v-bind:href="Url"
+           title="@Html.Localize("MyAccount", "L_SignIn")">
+            <i class="fa fa-user" aria-hidden="true"></i>&#160;
+            @Html.Localize("MyAccount", "L_SignIn")
+        </a>
+    </li>
 </body>
 </html>

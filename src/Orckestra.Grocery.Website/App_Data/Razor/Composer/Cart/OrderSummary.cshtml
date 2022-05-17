@@ -69,7 +69,7 @@
                     <div class="row">
                         <div class="col-6">
                             <button v-on:click="cancelEditOrder" v-bind:disabled="IsLoading"
-                                    class="btn btn-secondary w-100  text-uppercase">
+                                    class="btn btn-secondary w-100 text-uppercase">
                                 @Html.Localize("General", "B_Cancel")
                             </button>
                         </div>
@@ -91,8 +91,8 @@
 @helper EstimateShipping()
 {
     <div class="row">
-        <div class="col-6  col-md-7"><p> @Html.Localize("ShoppingCart", "H_ShippingTaxes")</p></div>
-        <div class="col-6  col-md-5  text-right">
+        <div class="col-6 col-md-7"><p> @Html.Localize("ShoppingCart", "H_ShippingTaxes")</p></div>
+        <div class="col-6 col-md-5 text-right">
             <a v-on:click.prevent="openEstimateShippingModal">@Html.Localize("ShoppingCart", "B_ShippingTaxesEstimation")</a>
         </div>
     </div>
@@ -102,11 +102,11 @@
 {
     <div class="row  mb-2">
         <div class="col-12">
-            <button class="btn btn-success  w-100  text-uppercase"
+            <button class="btn btn-success w-100 text-uppercase"
                     v-bind:disabled="CheckoutButtonDisabled"
                     data-qa="order-summary-checkout-btn"
                     v-on:click="proceedToCheckout()">
-                <i class="fa fa-lock pr-1"></i>
+                <i class="fa fa-lock pr-1" aria-hidden="true"></i>
                 @Html.Localize("ShoppingCart", "B_SecureCheckout")
             </button>
         </div>
@@ -116,13 +116,14 @@
 @helper EstimateShippingModal()
 {
     <!-- Estimate Shipping Modal -->
-    <div id="postalCodeModal" class="modal  fade" role="dialog">
-        <div class="modal-dialog  modal-sm">
+    <div id="postalCodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="close"
-                            data-dismiss="modal" aria-label="Close">
-                        <span class="fa fa-times-circle"></span>
+                            data-dismiss="modal">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        <span class="sr-only">@Html.Localize("Accessibility", "B_DialogClose")</span>
                     </button>
 
                     <form name="estimateShipping"
@@ -139,30 +140,30 @@
                                        v-model="EstimateShippingPostalCode"
                                        placeholder="@Html.Localize("ShoppingCart","F_PostalCodeWatermark")" />
                                 <span class="input-group-append">
-                                    <button type="submit" class="btn   btn-outline-secondary">
+                                    <button type="submit" class="btn btn-outline-secondary">
                                         @Html.Localize("ShoppingCart", "B_ShippingTaxesEstimation")
-                                        <span v-if="IsLoading" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
+                                        <i v-if="IsLoading" class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch" aria-hidden="true"></i>
                                     </button>
                                 </span>
                             </div>
                         </div>
                     </form>
-                    <div v-if="PostalCodeMalformed" class="alert  alert-danger">
+                    <div v-if="PostalCodeMalformed" class="alert alert-danger" role="alert">
                         <div class="multiline-message">
-                            <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                            <i class="fa fa-exclamation-triangle multiline-message-icon" aria-hidden="true"></i>
                             <span>@Html.Localize("ShoppingCart", "F_PostalCodeErrorBegin")</span>
                             <span>{{PostalCode}}</span>
                             <span>@Html.Localize("ShoppingCart", "F_PostalCodeErrorEnd")</span>
                         </div>
                     </div>
-                    <div v-if="PostalCodeEmpty" class="alert  alert-danger">
+                    <div v-if="PostalCodeEmpty" class="alert alert-danger" role="alert">
                         <div class="multiline-message">
-                            <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                            <i class="fa fa-exclamation-triangle multiline-message-icon" aria-hidden="true"></i>
                             <span>@Html.Localize("ShoppingCart", "F_EmptyPostalCodeError")</span>
                         </div>
                     </div>
                     <div class="multiline-message">
-                        <span class="fa  fa-info-circle  multiline-message-icon"></span>
+                        <i class="fa fa-info-circle multiline-message-icon" aria-hidden="true"></i>
                         <div>
                             @Html.Localize("ShoppingCart", "F_PostalCodeIndication")
                         </div>

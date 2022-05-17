@@ -90,8 +90,8 @@
                     <h3>@Html.Localize("Grocery", "T_FulfillmentMethod")</h3>
                     <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")</span>
                     <span v-else="else">@Html.Localize("Grocery", "T_FulfillmentMethodTitle_Shipping")</span>
-                    <div v-if="!IsDraftCart"  class="action">
-                        <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'method')">
+                    <div v-if="!IsDraftCart" class="action">
+                        <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'method')" role="button">
                             <span v-if="SelectedFulfillment.FulfillmentMethodType == '@(FulfillmentMethodType.PickUp)'">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToShipping")</span>
                             <span v-else="else">@Html.Localize("Grocery", "B_ChangeFulfillmentMethodToPickup")</span>
                         </a>
@@ -101,8 +101,8 @@
                     <h3>@Html.Localize("Grocery", "T_Store")</h3>
                     <strong>{{SelectedFulfillment.Store.LocalizedDisplayName}}</strong>
                     @StoreHelpers.StoreAddress("SelectedFulfillment.Store", false)
-                    <div v-if="!IsDraftCart"  class="action">
-                        <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                    <div v-if="!IsDraftCart" class="action">
+                        <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'store')" role="button">
                             @Html.Localize("Grocery", "B_ChangeStore")
                         </a>
                     </div>
@@ -111,7 +111,7 @@
                     <h3>@Html.Localize("Grocery", "T_TimeSlot")</h3>
                     @StoreHelpers.SelectedTimeSlotPreview("SelectedFulfillment", false, false)
                     <div v-if="!IsDraftCart" class="action">
-                        <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')">
+                        <a class="btn btn-primary" href="#" v-on:click.prevent="changeStoreModal($event, 'slot')" role="button">
                             @Html.Localize("Grocery", "B_ChangeSlot")
                         </a>
                     </div>
@@ -141,7 +141,8 @@
                            xmlns:v-bind="v-bind" />
                     <button class="btn bg-transparent input-icon"
                             v-on:click.prevent="clearPostalCodeInput(step)">
-                        <i class="fa fa-times" />
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <span class="sr-only">@Html.Localize("Accessibility", "B_ClearInput")</span>
                     </button>
                 </div>
             </div>
@@ -193,7 +194,8 @@
                        v-bind:class="[
                            shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : ''
                            || 'fa-truck'
-                       ]" />
+                       ]"
+                       aria-hidden="true"></i>
                     <span v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)'">
                         @Html.Localize("Grocery", "T_FulfillmentMethodTitle_PickUp")
                     </span>
@@ -259,7 +261,7 @@
 {
     if (!String.IsNullOrWhiteSpace(StartShoppingButtonURL))
     {
-        <a ref="startShoppingButton" class="btn btn-primary btn-block  text-uppercase"
+        <a ref="startShoppingButton" class="btn btn-primary btn-block text-uppercase"
            href="@StartShoppingButtonURL">
             @StartShoppingButtonText
         </a>

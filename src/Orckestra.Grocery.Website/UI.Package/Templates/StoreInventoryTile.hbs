@@ -1,32 +1,32 @@
-<div class="store-tile  card">
-   <div class="store-tile-map">
-       <a href="{{Url}}"><img alt="map" src="{{GoogleStaticMapUrl}}&amp;size=580x120" class="img-fluid" data-store-index="{{@index}}"/></a>
+<div class="store-tile card">
+    <div class="store-tile-map" aria-hidden="true">
+        <a href="{{Url}}" tabindex="-1"><img alt="map" src="{{GoogleStaticMapUrl}}&amp;size=580x120" class="img-fluid" data-store-index="{{@index}}"/></a>
         <div class="static-map-pin">{{SearchIndex}}</div>
-   </div>
-   <div class="card-body">
-        <div class="store-tile-body-top  clearfix">
+    </div>
+    <div class="card-body">
+        <div class="store-tile-body-top clearfix">
             {{#if DestinationToSearchPoint}}
                 <span>{{DestinationToSearchPoint}} km</span>
             {{/if}}
-            <a href="{{GoogleDirectionsLink}}" class="float-right  cta  ctaGoogleDir" target="_blank">{{localize 'Store' 'H_Itinerary'}}</a>
+            <a href="{{GoogleDirectionsLink}}" class="float-right cta ctaGoogleDir" target="_blank">{{localize 'Store' 'H_Itinerary'}}</a>
         </div>
         <div class="clearfix">
-            <h5 class="title  float-left"><a href="{{Url}}" title="{{LocalizedDisplayName}}">{{LocalizedDisplayName}}</a></h5>
+            <h5 class="title float-left"><a href="{{Url}}" title="{{LocalizedDisplayName}}">{{LocalizedDisplayName}}</a></h5>
             {{#with InventoryStatus}}
-            <h5 class="inventory-status  float-right  status-{{Status}}">
-                {{#if_eq Status 0}} 
-                {{localize 'Store' 'L_InventoryUnavailable'}}
-                {{else}}
-                {{DisplayName}}
-                {{/if_eq}}
-             </h5>
+                <h5 class="inventory-status float-right status-{{Status}}">
+                    {{#if_eq Status 0}}
+                        {{localize 'Store' 'L_InventoryUnavailable'}}
+                    {{else}}
+                        {{DisplayName}}
+                    {{/if_eq}}
+                </h5>
             {{/with}}
         </div>
         {{#with Address}}
-        {{> StoreAddress}}
+            {{> StoreAddress}}
         {{/with}}
-   </div>
-   <div class="clearfix  store-tile-bottom">
-       {{> StoresListSchedule}}
-   </div>
+    </div>
+    <div class="clearfix store-tile-bottom">
+        {{> StoresListSchedule}}
+    </div>
 </div>

@@ -139,7 +139,10 @@ module Orckestra.Composer {
                     </div>
                     <a class="btn-link  collapsed  font-weight-bold" 
                         data-toggle="collapse" 
-                        :data-target="'#onDemandFacets-' + currentNode.FieldName">
+                        :href="'#onDemandFacets-' + currentNode.FieldName"
+                        role="button"
+                        aria-expanded="false"
+                        :aria-controls="'onDemandFacets-' + currentNode.FieldName">
                         <span class="more">{{showmoretext}} <i class="fa fa-angle-down" /></span>
                         <span class="less">{{showlesstext}} <i class="fa fa-angle-up" /></span>
                     </a>

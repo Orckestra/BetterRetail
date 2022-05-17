@@ -11,12 +11,12 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="SingleCheckout.ReviewCart" class="card  mt-4">
+    <div data-oc-controller="SingleCheckout.ReviewCart" class="card mt-4">
         <div class="card-header">
             @Cart_Step_Header()
         </div>
 
-        <div v-if="CartEmpty" class="text-center alert alert-warning  m-0" v-cloak="true">
+        <div v-if="CartEmpty" class="text-center alert alert-warning m-0" v-cloak="true">
             <p>@Html.Localize("ShoppingCart", "L_EmptyShoppingCart")</p>
             <a href="@HomePageNode.Url" class="btn btn-primary">@Html.Localize("ShoppingCart", "B_StartShopping")</a>
         </div>
@@ -42,13 +42,13 @@
                 @Html.Localize("CheckoutProcess", "F_ReviewCart")
             </h3>
         </div>
-        <div v-if="step.active" class="col-sm-2  font-weight-bold text-center d-none d-sm-block">
+        <div v-if="step.active" class="col-sm-2 font-weight-bold text-center d-none d-sm-block">
             <span v-cloak="true">@Html.Localize("MyAccount", "L_UnitPrice")</span>
         </div>
-        <div v-if="step.active" class="col-sm-3  font-weight-bold text-center  d-none d-sm-block">
+        <div v-if="step.active" class="col-sm-3 font-weight-bold text-center d-none d-sm-block">
             <span v-cloak="true">@Html.Localize("MyAccount", "L_Quantity")</span>
         </div>
-        <div v-if="step.active" class="col-sm-2  font-weight-bold text-center  d-none d-sm-block" v-cloak="true">
+        <div v-if="step.active" class="col-sm-2 font-weight-bold text-center d-none d-sm-block" v-cloak="true">
             <span v-cloak="true">@Html.Localize("MyAccount", "L_Subtotal")</span>
         </div>
         <div v-if="step.displayContinueButton" class="col-7">
@@ -63,9 +63,9 @@
 @helper Cart_Step_ActiveMode()
 {
     <div v-if="Cart.InvalidLineItemCount > 0">
-        <div class="alert alert-danger  text-danger">
+        <div class="alert alert-danger text-danger">
             <div class="multiline-message">
-                <span class="fa  fa-exclamation-triangle  multiline-message-icon"></span>
+                <i class="fa fa-exclamation-triangle multiline-message-icon" aria-hidden="true"></i>
                 <span>
                     {{Cart.InvalidLineItemCount}}
                     @Html.Localize("ShoppingCart", "L_NoMoreAvailable")
@@ -80,31 +80,31 @@
              v-bind:key="item.Id"
              v-bind:data-qa="'cart-item-' + index">
             <div v-if="item.IsGiftItem" class="row pt-0 giftitem">
-                <i class="fa fa-gift" /><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
+                <i class="fa fa-gift" aria-hidden="true"></i><p>@Html.Localize("ShoppingCart", "L_GiftItem")</p>
             </div>
             <div class="row pt-3">
-                <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1  text-center">
+                <div v-if="item.Rewards &amp;&amp; item.Rewards.length" class="col-12 order-1 text-center">
                     @CartSummaryHelpers.CartItemRewardsCell()
                 </div>
-                <div class="col-2 col-sm-1  order-2">
+                <div class="col-2 col-sm-1 order-2">
                     @CartSummaryHelpers.CartItemImageCell()
                 </div>
-                <div class="col-8 col-sm-4  order-3">
+                <div class="col-8 col-sm-4 order-3">
                     @CartSummaryHelpers.CartItemSummaryCell()
                 </div>
-                <div class="col-sm-2  text-center d-none d-sm-block order-4">
+                <div class="col-sm-2 text-center d-none d-sm-block order-4">
                     @CartSummaryHelpers.CartItemDefaultPriceCell()
                 </div>
-                <div class="offset-2 offset-sm-0 2 col-sm-3  text-left text-sm-center  order-6">
+                <div class="offset-2 offset-sm-0 2 col-sm-3 text-left text-sm-center order-6">
                     @CartItemQuantityCell()
                 </div>
-                <div class="offset-2 offset-sm-0 col-sm-2  text-left text-sm-center  order-7">
+                <div class="offset-2 offset-sm-0 col-sm-2 text-left text-sm-center order-7">
                     @CartItemTotalCell()
                 </div>
                 <div class="col-2 d-block d-sm-none order-5">
                     @RemoveCartItemMobileBtn()
                 </div>
-                <div v-if="item.RecurringOrderProgramName" class="col-11  offset-2 offset-sm-1  order-8"
+                <div v-if="item.RecurringOrderProgramName" class="col-11 offset-2 offset-sm-1 order-8"
                      data-oc-controller="SingleCheckout.ChangeRecurringFrequency">
                     @RecurringOrderHelpers.CartItemRecurringOrderProgram("item")
                 </div>
@@ -118,7 +118,7 @@
     <div class="row">
         <div class="col-12 col-sm-8">
             <div class="row">
-                <div class="col-4  col-sm-2"
+                <div class="col-4 col-sm-2"
                      v-bind:class="{'border border-danger': !item.IsValid}"
                      v-bind:key="item.id"
                      v-for="(item, index) in Cart.LineItemDetailViewModels">
@@ -132,7 +132,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12  col-sm-4" data-qa="reviewcart-preview-subtotal">
+        <div class="col-12 col-sm-4" data-qa="reviewcart-preview-subtotal">
             <div class="float-sm-right">@Html.Localize("MyAccount", "L_Total"): <span class="h5">{{OrderSummary.SubTotal}}</span></div>
         </div>
     </div>
@@ -150,16 +150,18 @@
         <button class="btn btn-sm btn-dark"
                 v-bind:disabled="DecrementDisabled(item)"
                 v-on:click="updateItemQuantity(item.Id, 'decrement')">
-            <span class="fa  fa-minus"></span>
+            <i class="fa fa-minus" aria-hidden="true"></i>
+            <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityDecrease")</span>
         </button>
 
         <strong class="form-control rounded-0"
                 v-text="item.Quantity" v-bind:data-qa="'cart-item-quantity-' + index"> </strong>
 
-        <button class="btn  btn-sm btn-dark"
+        <button class="btn btn-sm btn-dark"
                 v-bind:disabled="IncrementDisabled(item)"
                 v-on:click="updateItemQuantity(item.Id, 'increment')">
-            <span class="fa  fa-plus"></span>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <span class="sr-only">@Html.Localize("Accessibility", "B_QuantityIncrease")</span>
         </button>
 
     </div>
@@ -206,6 +208,6 @@
             v-bind:disabled="IsLoading"
             class="btn btn-sm btn-outline-secondary"
             aria-label="@Html.Localize("ShoppingCart", "F_RemoveItem")">
-        <span aria-hidden="true" class="fa  fa-times"></span>
+        <i class="fa fa-times" aria-hidden="true"></i>
     </button>
 }

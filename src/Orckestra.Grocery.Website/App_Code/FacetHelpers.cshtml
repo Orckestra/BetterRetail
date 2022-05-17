@@ -67,12 +67,12 @@
            v-bind:data-type="facet.FacetType"
            v-bind:class="{'selected': facetValue.IsSelected}"
            data-oc-click="singleFacetChanged">
-            <i class="fa fa-check"></i>
+            <i class="fa fa-check" aria-hidden="true"></i>
             <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
         </a>
         <span v-else="else" class="facet-link"
               v-bind:class="{'selected': facetValue.IsSelected}">
-            <i class="fa fa-check"></i>
+            <i class="fa fa-check" aria-hidden="true"></i>
             <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
         </span>
     </div>
@@ -103,18 +103,18 @@
     <div class="form-group">
         <div class="row">
             <div class="col-6">
-                <input class="form-control  js-lowerValue" type="text" />
+                <input class="form-control js-lowerValue" type="text" aria-label="@Html.Localize("Accessibility", "L_LowerValue")" />
             </div>
             <div class="col-6">
-                <input class="form-control  js-higherValue" type="text" />
+                <input class="form-control js-higherValue" type="text" aria-label="@Html.Localize("Accessibility", "L_HigherValue")" />
             </div>
         </div>
     </div>
 
     <button type="submit"
             v-bind:data-facetfieldname="facet.FieldName"
-            data-oc-click="refineByRange" 
-            class="btn  btn-outline-secondary btn-block"
+            data-oc-click="refineByRange"
+            class="btn btn-outline-secondary btn-block"
             disabled="disabled">
         @Html.Localize("List-Search", "B_Apply")
     </button>
@@ -153,12 +153,15 @@
 
 @helper ShowMoreLessButton()
 {
-    <a v-if="facet.OnDemandFacetValues.length" class="btn-link  font-weight-bold"
+    <a v-if="facet.OnDemandFacetValues.length" class="btn-link font-weight-bold"
        v-bind:class="{'collapsed': IsValuesCollapsed(facet)}"
        data-toggle="collapse"
-       v-bind:data-target="'#onDemandFacets-' + facet.FieldName">
-        <span class="more">@Html.Localize("List-Search", "B_ShowMore") <i class="fa fa-angle-down" /></span>
-        <span class="less">@Html.Localize("List-Search", "B_ShowLess") <i class="fa fa-angle-up" /></span>
+       v-bind:href="'#onDemandFacets-' + facet.FieldName"
+       role="button"
+       aria-expanded="false"
+       v-bind:aria-controls="'onDemandFacets-' + facet.FieldName">
+        <span class="more">@Html.Localize("List-Search", "B_ShowMore") <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+        <span class="less">@Html.Localize("List-Search", "B_ShowLess") <i class="fa fa-angle-up" aria-hidden="true"></i></span>
     </a>
 }
 
@@ -184,28 +187,29 @@
 
 @helper FacetsModalCollapseBtn()
 {
-<section id="vueFacetsFilterBy" v-cloak="true">
-    <button type="button"
-            class="btn  btn-outline-secondary btn-dropdown  w-100 dropdown-toggle"
-            data-toggle="modal"
-            data-target="#facetsModal" aria-expanded="false">
-        <span v-if="FiltersCount">@Html.Localize("List-Search", "B_FiltersApplied") <span class="badge badge-dark">{{FiltersCount}}</span></span>
-        <span v-else="FiltersCount">@Html.Localize("List-Search", "B_FilterBy")</span>
-    </button>
-</section>
+    <section id="vueFacetsFilterBy" v-cloak="true">
+        <button type="button"
+                class="btn btn-outline-secondary btn-dropdown w-100 dropdown-toggle"
+                data-toggle="modal"
+                data-target="#facetsModal" aria-expanded="false">
+            <span v-if="FiltersCount">@Html.Localize("List-Search", "B_FiltersApplied") <span class="badge badge-dark">{{FiltersCount}}</span></span>
+            <span v-else="FiltersCount">@Html.Localize("List-Search", "B_FilterBy")</span>
+        </button>
+    </section>
 }
 
 @helper CategoryFactesTree(string rootTitle)
 {
-    <div id="categoriesTree" class="card bg-lighter  mb-3  facets-card">
+    <div id="categoriesTree" class="card bg-lighter mb-3 facets-card">
         <div class="card-header">
             <a data-toggle="collapse"
-               data-target="#categoryFacets"
+               href="#categoryFacets"
+               role="button"
                aria-expanded="true"
                aria-controls="categoryFacets">
                 @Html.Localize("List-Search", "L_RefinerCategories")
-                <span class="down"><i class="fa fa-angle-down" /></span>
-                <span class="up"><i class="fa fa-angle-up" /></span>
+                <span class="down"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                <span class="up"><i class="fa fa-angle-up" aria-hidden="true"></i></span>
             </a>
         </div>
         <div id="categoryFacets" class="card-body collapse show">

@@ -137,7 +137,7 @@
                                                 <del v-if="suggestion.item.IsOnSale">{{suggestion.item.DisplayListPrice}}</del>
                                             </div>
                                             <div class="product-tile-price">
-                                                <span v-if="suggestion.item.IsOnSale" class="h4  text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
+                                                <span v-if="suggestion.item.IsOnSale" class="h4 text-danger" data-qa="search-product-price">{{suggestion.item.DisplaySpecialPrice}}</span>
                                                 <span v-else="v-else" class="h4" data-qa="search-product-price">{{suggestion.item.DisplayListPrice}}</span>
                                             </div>
                                         </div>
@@ -181,9 +181,9 @@
                     <div class="input-group-append absolute">
                         <button data-qa="search-button"
                                 class="btn btn-default"
-                                title="@Html.Localize("List-Search", "B_Search")"
                                 type="submit">
-                            <span class="fa  fa-search"></span>
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            <span class="sr-only">@Html.Localize("List-Search", "B_Search")</span>
                         </button>
                     </div>
                 </div>

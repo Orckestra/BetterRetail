@@ -3,7 +3,7 @@
 /// <reference path='../../../Mvc/Controller.ts' />
 /// <reference path='../../../Mvc/IControllerActionContext.ts' />
 /// <reference path='../../../Mvc/IControllerContext.ts' />
-///<reference path='../../../Mvc/IControllerActionContext.ts' />
+/// <reference path='../../../Mvc/IControllerActionContext.ts' />
 /// <reference path='../../../Events/IEventHub.ts' />
 /// <reference path='../../../System/IDisposable.ts' />
 
@@ -11,11 +11,11 @@ module Orckestra.Composer {
     'use strict';
 
     export class SliderService implements IDisposable {
-        private sliderInstance: noUiSlider.noUiSlider;
+        private sliderInstance;
         private facetFieldName: string;
         private maxLabel: string;
-        private maxValue: string;
-        private minValue: string;
+        private maxValue: number;
+        private minValue: number;
         private step;
         private applyButtonContext: JQuery;
 
@@ -70,12 +70,12 @@ module Orckestra.Composer {
         }
 
         private initializeSlider(facetData) {
-            var sliderElement = this.context.find('.range').get(0);
-            var defaultRange = [this.minValue, this.maxValue];
-            var startRange = defaultRange;
-            var selectedRange;
-            var lowerRangeContext: JQuery  = this.context.find('.js-lowerValue');
-            var upperRangeContext: JQuery = this.context.find('.js-higherValue');
+            let sliderElement = this.context.find('.range').get(0);
+            let defaultRange = [this.minValue, this.maxValue];
+            let startRange = defaultRange;
+            let selectedRange;
+            let lowerRangeContext: JQuery = this.context.find('.js-lowerValue');
+            let upperRangeContext: JQuery = this.context.find('.js-higherValue');
 
             // TODO handle array or not array
             if (facetData) {
@@ -103,23 +103,21 @@ module Orckestra.Composer {
 
         }
 
-        private createSlider(startRange, sliderElement): noUiSlider.noUiSlider {
-           noUiSlider.create(sliderElement, {
+        private createSlider(startRange, sliderElement) {
+            return noUiSlider.create(sliderElement, {
                 start: startRange,
                 connect: true,
                 margin: this.step,
                 step: this.step,
                 range: {
-                    'min': this.minValue,
-                    'max': this.maxValue
+                    'min': [this.minValue],
+                    'max': [this.maxValue]
                 },
                 format: {
                     to: value => this.formatTo(value),
                     from: value => this.formatFrom(value)
                 }
             });
-
-            return (<noUiSlider.Instance>sliderElement).noUiSlider;
         }
 
         public getKey() {
@@ -127,7 +125,7 @@ module Orckestra.Composer {
         }
 
         public getValues() {
-            var values = <any[]>this.sliderInstance.get();
+            let values = <any[]>this.sliderInstance.get();
 
             if (values[1] === this.maxLabel) {
                 values[1] = undefined;

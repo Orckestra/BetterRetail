@@ -15,29 +15,27 @@
         class="d-md-none nav my-account-links border-bottom"  
         v-cloak="true">
         <li v-if="IsAuthenticated"
-            v-cloak="true"
             class="nav-item">
             <a class="nav-link d-inline-block"
                data-qa="my-account-in-header"
                v-bind:href="Url"
                title="@Html.Localize("MyAccount", "L_MyAccount")">
-                <i class="fa fa-user"></i>&#160;
+                <i class="fa fa-user" aria-hidden="true"></i>&#160;
                 {{FirstName}} {{LastName}}
             </a> -
             <a data-qa="login-out"
                href="#"
+               role="button"
                class="nav-link d-inline-block"
-               v-on:click.prevent="fullLogout"
-               title="@Html.Localize("MyAccount", "H_Logout")">
+               v-on:click.prevent="fullLogout">
                 @Html.Localize("MyAccount", "H_Logout")
             </a>
         </li>
-        <li v-else="else" class="nav-item" v-cloak="true">
+        <li v-else="else" class="nav-item">
             <a class="nav-link"
                data-qa="login-in"
-               v-bind:href="Url"
-               title="@Html.Localize("MyAccount", "L_SignIn")">
-                <i class="fa fa-user"></i>&#160;
+               v-bind:href="Url">
+                <i class="fa fa-user" aria-hidden="true"></i>&#160;
                 @Html.Localize("MyAccount", "L_SignIn")
             </a>
         </li>

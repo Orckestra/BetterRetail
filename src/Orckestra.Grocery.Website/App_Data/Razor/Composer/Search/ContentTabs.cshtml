@@ -110,7 +110,7 @@
 
     <div>
         <!-- Tab panes -->
-        <div class="tab-content mt-2">
+        <div id="content-tabpanel" class="tab-content mt-2" role="tabpanel">
             @if (currentTab != null)
             {
                 <div id="vueTabSearchSummary">
@@ -192,11 +192,12 @@
 
         </div>
 
-        <div v-if="Tabs?.length" class="container-fluid search-tabs bg-lighter  pt-2">
+        <div v-if="Tabs?.length" class="container-fluid search-tabs bg-lighter pt-2">
             <div class=" container">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li v-for="tab in Tabs" role="presentation" class="nav-item">
-                        <a v-bind:href="tab.TabUrl" class="nav-link" v-bind:class="{ active: tab.IsActive }">
+                    <li v-for="(tab, index) in Tabs" role="none" class="nav-item">
+                        <a v-bind:href="tab.TabUrl" class="nav-link" v-bind:class="{ active: tab.IsActive }"
+                           role="tab" v-bind:aria-selected="[tab.IsActive]" aria-controls="content-tabpanel">
                             {{tab.Title}} ({{tab.Total}})
                         </a>
                     </li>

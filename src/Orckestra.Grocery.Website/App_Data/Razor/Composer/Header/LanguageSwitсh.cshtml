@@ -9,8 +9,8 @@
     var Model = LanguageSwitchContext.ViewModel;
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"  
-      xmlns:v-bind="v-bind" 
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0"
+      xmlns:v-bind="v-bind"
       xmlns:v-on="v-on">
 <head>
     @* SEO Alternate Hreflang Tags *@
@@ -30,15 +30,18 @@
     {
         <ul id="vueLanguageSwitch"
             data-oc-controller="General.LanguageSwitch"
-            class="navbar-nav d-none d-lg-block">
-            <li class="nav-item dropdown" role="region" aria-label="Language selector">
+            class="navbar-nav d-none d-lg-block"
+            role="none">
+            <li class="nav-item dropdown" role="none">
                 <a href="@Model.CurrentLanguage.Url"
                    data-qa="language-selector"
-                   class="nav-link dropdown-toggle text-uppercase" data-toggle="dropdown">
-                    @Model.CurrentLanguage.ShortDisplayName
-                    <span class="sr-only">@Model.CurrentLanguage.DisplayName</span>
+                   id="langDropdownMenuLink"
+                   class="nav-link dropdown-toggle text-uppercase" data-toggle="dropdown"
+                   role="button" aria-haspopup="true" aria-expanded="false" aria-controls="langSwitchDropdown">
+                    <span aria-hidden="true">@Model.CurrentLanguage.ShortDisplayName</span>
+                    <span class="sr-only">@Model.CurrentLanguage.DisplayName, @Html.Localize("Accessibility", "B_SelectLanguage")</span>
                 </a>
-                <div class="dropdown-menu">
+                <div id="langSwitchDropdown" class="dropdown-menu" aria-labelledby="langDropdownMenuLink" role="listbox">
                     @{ var index = 0;
                         foreach (var item in Model.Entries)
                         {
@@ -46,6 +49,8 @@
                                v-on:click="onLanguageSwitch"
                                href="@item.Url"
                                data-qa="language-value-@index"
+                               lang="@item.ShortDisplayName"
+                               role="option"
                                aria-selected="@(item.IsCurrent ? "true" : null)">@item.DisplayName</a>
                             index++;
                         }
