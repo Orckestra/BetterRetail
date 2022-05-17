@@ -67,7 +67,8 @@ namespace Orckestra.Composer.Cart.Providers.LineItemValidation
 
         protected bool IsMessageForLineItem(ExecutionMessage message)
         {
-            var isForLineItem = message.PropertyBag.ContainsKey(EntityTypeKey)
+            var isForLineItem = message.PropertyBag != null
+                                && message.PropertyBag.ContainsKey(EntityTypeKey)
                                 && string.Equals(message.PropertyBag[EntityTypeKey].ToString(), "LineItem", StringComparison.InvariantCultureIgnoreCase)
                                 && message.PropertyBag.ContainsKey(LineItemIdKey)
                                 && !string.IsNullOrWhiteSpace(message.PropertyBag[LineItemIdKey].ToString());
