@@ -145,7 +145,7 @@ namespace Orckestra.Composer.Search.Services
                 CategoryFacetCounts = BuildCategoryFacetCounts(param),
                 Keywords = param.SearchParam.Criteria.Keywords,
                 TotalCount = param.SearchResult.TotalCount,
-                CorrectedSearchTerms = !string.IsNullOrWhiteSpace(corrected) & corrected.EndsWith("*") ? corrected.Remove(corrected.Length - 1) : corrected,
+                CorrectedSearchTerms = !string.IsNullOrWhiteSpace(corrected) && corrected.EndsWith("*") ? corrected.Remove(corrected.Length - 1) : corrected,
                 Suggestions = new List<Suggestion>()
             };
 
