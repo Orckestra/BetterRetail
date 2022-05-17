@@ -171,10 +171,13 @@
     <Compile Include="DataTypes\IDishType.cs" />
     <Compile Include="DataTypes\ICuisineType.cs" />
     <Compile Include="GraphQL\Extensions\DataGraphQLExtensions.cs" />
+    <Compile Include="GraphQL\Extensions\DataMutation.cs" />
+    <Compile Include="GraphQL\Extensions\LambdaExtensions.cs" />
     <Compile Include="GraphQL\Interfaces\IRecipeSchema.cs" />
     <Compile Include="GraphQL\Types\DataInput.cs" />
     <Compile Include="GraphQL\Types\DataObjectGraphType.cs" />
     <Compile Include="GraphQL\Types\IngredientInputGraphType.cs" />
+    <Compile Include="GraphQL\Types\RecipeInputGraphType.cs" />
     <Compile Include="GraphQL\Types\RecipeGraphType.cs" />
     <Compile Include="GraphQL\Types\IngredientsListInputGraphType.cs" />
     <Compile Include="IRecipeUrlProvider.cs" />

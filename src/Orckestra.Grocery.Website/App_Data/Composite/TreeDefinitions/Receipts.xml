@@ -12,6 +12,12 @@
       <AddDataAction Label="Add Dish Type" Type="Orckestra.Composer.Recipes.DataTypes.IDishType"/>
       <AddDataAction Label="Add Diet Type" Type="Orckestra.Composer.Recipes.DataTypes.IDietType"/>
       <AddDataAction Label="Add Cuisine Type" Type="Orckestra.Composer.Recipes.DataTypes.ICuisineType"/>
+
+      <CustomUrlAction Icon="generated-type-data-add"
+                       ViewLabel="Import Recipes"
+                       ViewToolTip="Import Recipes"
+                       Label="Import Recipes" Url="Composite/InstalledPackages/Orckestra.Composer.Recipes/ImportRecipes.cshtml?id=${C1:Data:Composite.Data.Types.IPage:Id}"
+                       ViewType="documentview" />
     </Actions>
     <Children>
       <DataElements Type="Orckestra.Composer.Recipes.DataTypes.IRecipeMealType" Label="${C1:Data:Orckestra.Composer.Recipes.DataTypes.IRecipeMealType:Title}" Icon="folder">

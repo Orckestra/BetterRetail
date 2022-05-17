@@ -1,0 +1,287 @@
+@inherits WebPage
+@{
+
+}
+<html>
+
+<head>
+</head>
+
+<body>
+    <link href="/Composite/InstalledPackages/Orckestra.Tools.C1CMSConsoleCss/index.css?v=1.0.1" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apollo-client-browser@1.9.0/dist/apollo-client.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-apollo@3.1.0/dist/vue-apollo.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuedraggable@2.24.3/dist/vuedraggable.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@("@")<3.0.0/dist/vee-validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
+
+    <script type="text/javascript">
+        const pageId = "@(Request["id"])";
+    </script>
+
+    <!-- App -->
+    <div id="app">
+        <div class="m-3 flex">
+            <div class="flex-grow">
+                <h1 class="m-0">Import Recipes</h1>
+            </div>
+
+        </div>
+        <div class="mx-3">
+            <label class="block text-gray-400 text-xs mb-2">Publish imported data</label>
+            <input v-model="publish" type="checkbox" />
+        </div>
+        <div class="m-3 flex ">
+            <input type="file" ref="file" v-on:change="onSelectFile" class="hidden" accept="application/json" />
+            <button class="btn-primary" v-on:click="importFile">
+                Import
+            </button>
+        </div>
+        <div class="mx-3">
+            <span v-if="commonError" class="error">{{commonError}}</span>
+        </div>
+        <div v-for="(recipe, index) in importResults" class="m-3 flex flex-col">
+            <strong>{{recipe.item.title || index}}</strong>
+            <span v-if="recipe.error" class="error">{{recipe.error}}</span>
+            <span v-else="v-else" class="success">{{recipe.isImported ? "Successfully imported" : "Valid"}}</span>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        Vue.use(VeeValidate, {
+            classes: true,
+            classNames: {
+                valid: 'valid',
+                invalid: 'invalid'
+            }
+        });
+
+        const apolloClient = new Apollo.lib.ApolloClient({
+            networkInterface: Apollo.lib.createNetworkInterface({
+                uri: '/composite/api/recipe/graphql/query',
+                transportBatching: true,
+            }),
+            connectToDevTools: true
+        })
+
+        const apolloProvider = new window["vue-apollo"].ApolloProvider({
+            defaultClient: apolloClient,
+        })
+
+        const INSERT_RECIPE_MUTATION = Apollo.gql`
+    mutation($pageId: Guid, $recipe: recipeInput, $ingredientsListItems: [ingredientsListInput], $publish: Boolean){
+        insertRecipe(pageId: $pageId, recipe: $recipe, ingredientsListItems: $ingredientsListItems, publish: $publish)
+    }
+    `
+
+        const GET_OR_ADD_REFERENCES_MUTATION = Apollo.gql`mutation($recipeId: Guid, 
+  $dish: String,
+  $diet: [String],
+  $difficulty: String,
+  $cuisine: String,
+  $meal: String,
+    ) {
+  getOrAddRecipeIDishType(
+    recipeId: $recipeId,
+    titles:  [$dish]
+  ),
+  getOrAddRecipeIDietType(
+    recipeId: $recipeId,
+    titles: $diet
+  ),
+  getOrAddRecipeIDifficulty(
+    recipeId: $recipeId,
+    titles: [$difficulty]
+  ),
+  getOrAddRecipeICuisineType(
+    recipeId: $recipeId,
+    titles: [$cuisine]
+  ),
+  getOrAddRecipeIRecipeMealType(
+    recipeId: $recipeId,
+    titles: [$meal]
+  ),
+}`
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                loading: 0,
+                publish: true,
+                commonError: null,
+
+                recipes: [],
+                selectedFile: null,
+
+                importResults: [],
+            },
+            watch: {
+            },
+            apolloProvider,
+            apollo: {
+            },
+            methods: {
+                onSelectFile() {
+                    this.commonError = null;
+
+                    this.selectedFile = this.$refs.file.files[0];
+                    if (this.selectedFile.type !== "application/json")
+                        return;
+
+                    let reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const parseResut = e.target.result.replace(/\r?\n|\r|\t/g, '');
+                            this.recipes = JSON.parse(parseResut)?.Recipes;
+                        } catch (e) {
+                            this.commonError = e.message;
+                            this.recipes = [];
+                        }
+
+                        this.recipes.reduce(
+                            (acc, recipe, index) => acc.then(totalResult => this.validateRecipe(recipe, index)
+                                .then(result => [...totalResult, result])),
+                            Promise.resolve([]))
+                            .then(result => {
+                                this.importResults = result;
+                                if (!this.importResults.some(x => x.error)) {
+                                    Promise.all(this.importResults.map(x => this.insertRecipe(x.item, x.ingredientsListItems)))
+                                        .then(result => this.importResults = result);
+                                }
+                            });
+                    }
+                    reader.readAsText(this.selectedFile);
+                },
+                importFile() {
+                    this.$refs.file.value = '';
+                    this.$refs.file.click();
+                },
+                async validateRecipe(recipe, index) {
+                    const result = {};
+
+                    try {
+                        this.validateField(recipe, "ID", "GUID", result);
+                        this.validateField(recipe, "Title", "REQUIRED", result);
+                        this.validateField(recipe, "Description", "HTML", result);
+                        this.validateField(recipe, "Instructions", "HTML", result);
+                        this.validateField(recipe, "Image", "REQUIRED", result);
+                        this.validateField(recipe, "PreparationTime", "INT", result);
+                        this.validateField(recipe, "CookingTime", "INT", result);
+                        this.validateField(recipe, "Keywords", null, result);
+                        this.validateField(recipe, "Servings", null, result);
+
+                        await this.validateReferences(recipe, result);
+
+                        result.date = new Date();
+                    } catch (e) {
+                        return { error: e, item: result }
+                    }
+
+                    
+
+                    const ingredientsListItems = (recipe.IngredientLists || []).map((list, index) => ({
+                        title: list.Title,
+                        hideTitle: !!list.HideTitle,
+                        order: index,
+                        ingredientItems: (list.Ingredients || []).map((i, idx) => ({ title: i.Title, keyword: i.Keyword, sKU: i.SKU, order: idx }))
+                    }));
+
+                    return { item: result, ingredientsListItems };
+                },
+
+                async validateReferences(recipe, result) {
+                    return await this.$apollo.mutate({
+                        mutation: GET_OR_ADD_REFERENCES_MUTATION,
+                        variables: {
+                            recipeId: recipe.ID,
+                            dish: recipe.DishType,
+                            diet: recipe.DietType.split(','),
+                            difficulty: recipe.Difficulty,
+                            cuisine: recipe.CuisineType,
+                            meal: recipe.MealType
+                        },
+                    }).then(({data}) => {
+                        result["dishType"] = data.getOrAddRecipeIDishType[0];
+                        result["dietType"] = data.getOrAddRecipeIDietType.join(',');
+                        result["difficulty"] = data.getOrAddRecipeIDifficulty[0];
+                        result["cuisineType"] = data.getOrAddRecipeICuisineType[0];
+                        result["mealType"] = data.getOrAddRecipeIRecipeMealType[0];
+                    }).catch((error) => {
+                        if(error.message)
+                        {
+                            throw  error.message.replace(/^GraphQL error: /,'');
+                        }
+                        throw error;
+                    })
+                },
+
+                validateField(recipe, field, type, result, options = []) {
+                    const camel = field.substr(0, 2).toLowerCase() + field.substr(2);
+                    switch (type) {
+                        case "GUID":
+                            if (!(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(recipe[field]))) {
+                                throw `"${field} not valid"`;
+                            } else {
+                                result[camel] = recipe[field];
+                            }
+                            break;
+                        case "REQUIRED":
+                            if (!recipe[field]) {
+                                throw `"${field} not valid"`;
+                            } else {
+                                result[camel] = recipe[field];
+                            }
+                            break;
+                        case "HTML":
+                            if (recipe[field]) {
+                                const node = new DOMParser().parseFromString(recipe[field], 'text/html');
+
+                                if (node.querySelector('parsererror')) {
+                                    throw `"${field} not valid"`;
+                                } else {
+                                    result[camel] = new XMLSerializer().serializeToString(node);
+                                }
+                            }
+                            break;
+                        case "INT":
+                            if (recipe[field] && isNaN(recipe[field])) {
+                                throw `"${field} not valid"`;
+                            }
+
+                            result[camel] = Number(recipe[field]);
+                            break;
+                        default:
+                            result[camel] = recipe[field] || "";
+                    }
+                },
+                insertRecipe(recipe, ingredientsListItems) {
+                    return this.$apollo.mutate({
+                        mutation: INSERT_RECIPE_MUTATION,
+                        variables: { pageId, recipe, ingredientsListItems, publish: this.publish },
+                    }).then((data) => {
+                        return { item: recipe, isImported: true };
+                    }).catch((error) => {
+                        return { item: recipe, error: error.message };
+                    })
+                }
+            }
+        })
+    </script>
+
+    <style>
+        .success {
+            color: darkseagreen;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+
+</body>
+
+</html>

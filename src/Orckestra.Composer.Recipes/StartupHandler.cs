@@ -38,7 +38,11 @@ namespace Orckestra.Composer.Recipes
 
             //GraphQL, NOTE: may be move to IRecipeDocumentExecuter and IRecipeDocumentWriter
             collection.AddSingleton<IDocumentExecuter, DocumentExecuter>();
-            collection.AddSingleton<IDocumentWriter>(new DocumentWriter(true, new ErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)));
+            collection.AddSingleton<IDocumentWriter>(new DocumentWriter(true, new ErrorInfoProvider(options =>
+            {
+                options.ExposeExceptionStackTrace = false;
+                options.ExposeCode = true;
+            })));
             collection.AddSingleton<IRecipeSchema>(provider => new RecipesSchema(new FuncServiceProvider(type => Get(provider, type))));
             collection.AddTransient<AutoRegisteringObjectGraphType<IIngredient>>();
         }
