@@ -74,28 +74,8 @@ namespace Orckestra.Composer.Grocery.Website
             DataEvents<IPage>.OnAfterAdd += UpdateAfterPageChanged;
 
             log.Info("Application Started");
-
-            DataEvents<DataTypes.IMyUsualsSettingsMeta>.OnAfterUpdate += CleanCacheAfterMyUsualsSettingsChanged;
         }
 
-        private static void CleanCacheAfterMyUsualsSettingsChanged(object sender, DataEventArgs dataEventArgs)
-        {
-            var data = dataEventArgs.Data as DataTypes.IMyUsualsSettingsMeta;
-            if (data == null) return;
-
-            var homepageId = GetHomePageId(Guid.Parse(data.MyUsualsPage.ToString()));
-
-            using (var con = new DataConnection())
-            {
-                var siteConfigurationMeta = con.Get<ISiteConfigurationMeta>().FirstOrDefault(item => item.PageId == homepageId);
-
-                var composerContext = Composite.Core.ServiceLocator.GetService<IComposerContext>();
-                var cacheProvider = Composite.Core.ServiceLocator.GetService<ICacheProvider>();
-
-                cacheProvider.Remove(OrderRepository.CustomerOrderedProductsCacheKey(siteConfigurationMeta.Scope, composerContext.CustomerId));
-            }
-        }
-    
         /// <summary>
         /// Do some updates when C1 page is added, for example clear Categories Cache
         /// </summary>

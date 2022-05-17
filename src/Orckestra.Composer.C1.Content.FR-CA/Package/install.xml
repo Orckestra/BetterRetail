@@ -82,6 +82,13 @@
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_public.xml" />
         </Type>
 
+        <Type type="Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMeta,Orckestra.Composer.Grocery">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMetas_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMeta,Orckestra.Composer.Grocery">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMetas_public.xml" />
+        </Type>
+
         <!-- Content Search -->
         <Type type="Orckestra.Composer.ContentSearch.DataTypes.ISortOption,Orckestra.Composer.ContentSearch">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.ContentSearch.DataTypes.ISortOptions_public.xml" />

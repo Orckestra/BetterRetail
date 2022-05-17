@@ -27,24 +27,27 @@ namespace Orckestra.Composer.Grocery.DataTypes
         Nullable<Guid> MyUsualsPage { get; set; }
         
         [ImmutableFieldId("2f18a475-2a83-4408-bfc6-8f4818b0b3ba")]
-        [FormRenderingProfile(Label = "Time Frame")]
+        [FormRenderingProfile(Label = "Time Frame", HelpText = "The time frame for considering frequently purchased products.")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
             "nstant.Integer\"><f:param name=\"Constant\" value=\"90\" /></f:function>")]
-        [StoreFieldType(PhysicalStoreFieldType.Integer, IsNullable=true)]
+        [StoreFieldType(PhysicalStoreFieldType.Integer)]
         [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Ut" +
             "ils.Validation.IntegerRangeValidation\">\r\n  <f:param name=\"min\" value=\"1\" />\r\n  <" +
             "f:param name=\"max\" value=\"365\" />\r\n</f:function>")]
         [FieldPosition(1)]
-        [NullIntegerRangeValidator(0, 2147483647)]
+        [NullIntegerRangeValidator(1, 2147483647)]
         Nullable<int> TimeFrame { get; set; }
         
         [ImmutableFieldId("3400f14e-24de-4913-83c9-72738be9e97a")]
-        [FormRenderingProfile(Label = "Frequency")]
+        [FormRenderingProfile(Label = "Frequency", HelpText = "The number of times a product was purchased.")]
+        [LazyFunctionProviedProperty("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Ut" +
+            "ils.Validation.IntegerRangeValidation\">\r\n  <f:param name=\"min\" value=\"1\" />\r\n  <" +
+            "f:param name=\"max\" value=\"10000\" />\r\n</f:function>")]
         [FunctionBasedNewInstanceDefaultFieldValue("<f:function xmlns:f=\"http://www.composite.net/ns/function/1.0\" name=\"Composite.Co" +
             "nstant.Integer\"><f:param name=\"Constant\" value=\"3\" /></f:function>")]
-        [StoreFieldType(PhysicalStoreFieldType.Integer, IsNullable=true)]
+        [StoreFieldType(PhysicalStoreFieldType.Integer)]
         [FieldPosition(2)]
-        [NullIntegerRangeValidator(0, 2147483647)]
+        [NullIntegerRangeValidator(1, 2147483647)]
         Nullable<int> Frequency { get; set; }
     }
 }

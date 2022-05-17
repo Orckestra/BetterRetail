@@ -25,19 +25,19 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="MyAccount.MyUsuals"
+    <div data-oc-controller="MyAccount.MyUsuals" 
          class="search-results" data-searchUrl="@searchGroceryUrl">
         <div id="vueMyUsuals" class="card">
             <div class="card-header  clearfix">
                 <h3 class="float-left">
                     @Html.Localize("MyAccount", "T_MyUsuals")
                 </h3>
-                <div class="float-right m-0 lead">
+                <div class="float-right m-0 lead" v-cloak="true">
                     <strong><span class="navbar-count">{{TotalCount}}</span></strong>&#160;@Html.Localize("MyAccount", "T_MyUsualsCount")
                 </div>
             </div>
 
-            <div class="card-body" v-cloak="true">
+            <div class="card-body">
                 <div class="input-group mb-2">
                     <input id="filter_keywords" type="text" class="form-control" v-on:input="updateKeyword($event.target.value)" placeholder="Filter products" />
                     <div class="input-group-append absolute">
@@ -49,7 +49,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px">
+                <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px" v-cloak="true">
                     @GeneralHelpers.LoadingSpinner()
                     <div class="row" v-if="MyUsualsResults.length > 0">
                         <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
@@ -70,8 +70,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </body>
 </html>

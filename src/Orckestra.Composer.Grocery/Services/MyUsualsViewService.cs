@@ -33,7 +33,8 @@ namespace Orckestra.Composer.Grocery.Services
                 CustomerId = param.CustomerId,
                 StartDate = startDate,
                 EndDate = endDate,
-                MinimumOrderedNumberOfTimes = MyUsualsSettings.Frequency
+                MinimumOrderedNumberOfTimes = MyUsualsSettings.Frequency,
+                MaximumItems = GroceryConfiguration.MaxOrderedProductsItems
             }).ConfigureAwait(false);
 
             var listSkus = response.OrderedProducts.Select(item => item.Sku).ToArray();

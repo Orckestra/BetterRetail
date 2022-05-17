@@ -68,6 +68,8 @@
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousels_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IGrocerySettingsMetas_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMetas_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.Grocery.DataTypes.IMyUsualsSettingsMetas_public.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.ExperienceManagement.Configuration.DataTypes.ISiteConfigurations_public.xml" />
     <Content Include="Package\install.xml" />

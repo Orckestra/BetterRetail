@@ -517,4 +517,7 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="T_SearchGrocery" xml:space="preserve">
     <value>Search Grocery</value>
   </data>
+  <data name="T_MyUsuals" xml:space="preserve">
+    <value>Mes achats habituels</value>
+  </data>
 </root>
