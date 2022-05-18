@@ -71,6 +71,20 @@ namespace Orckestra.Composer.Grocery
             set => SetOrRemove(nameof(SelectedDay), value?.ToString("O"));
         }
 
+        public TimeSpan? SelectedTime
+        {
+            get
+            {
+                if (!TryGetValue(nameof(SelectedTime), out var value))
+                    return null;
+
+                var time = TimeSpan.Parse(value);
+
+                return time;
+            }
+            set => SetOrRemove(nameof(SelectedTime), value.ToString());
+        }
+
         public FulfillmentMethodType? FulfillmentMethodType
         {
             get => TryGetValue(nameof(FulfillmentMethodType), out var value)

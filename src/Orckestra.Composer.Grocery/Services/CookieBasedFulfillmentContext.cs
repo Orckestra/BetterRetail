@@ -19,7 +19,7 @@ namespace Orckestra.Composer.Grocery.Services
             {
                 var cookieData = new ExtendedCookieData(cookieAccessor.Read());
 
-                return cookieData.SelectedDay;
+                return cookieData.SelectedDay?.Add(cookieData.SelectedTime ?? TimeSpan.Zero);
             });
         }
 

@@ -333,7 +333,7 @@ namespace Orckestra.Composer.Grocery.Providers
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.SlotId == default) throw new ArgumentException(GetMessageOfNull(nameof(param.SlotId)));
-
+            
             var cookieData = new ExtendedCookieData(CookieAccessor.Read());
             if (cookieData.TimeSlotReservationId != default || param.TimeSlotReservationId != default)
             {
@@ -359,10 +359,11 @@ namespace Orckestra.Composer.Grocery.Providers
                 }).ConfigureAwait(false);
 
                 var shipment = cart?.Shipments.FirstOrDefault();
-                if (!Guid.TryParse(shipment?.FulfillmentScheduleReservationNumber, out Guid timeSlotReservationId)) return null;
+                if (shipment == null || !Guid.TryParse(shipment.FulfillmentScheduleReservationNumber, out Guid timeSlotReservationId) || !shipment.FulfillmentScheduledTimeBeginDate.HasValue) return null;
 
                 cookieData.TimeSlotReservationId = timeSlotReservationId;
-                cookieData.SelectedDay = param.Day;
+                cookieData.SelectedDay = shipment.FulfillmentScheduledTimeBeginDate.Value.Date;
+                cookieData.SelectedTime = shipment.FulfillmentScheduledTimeBeginDate.Value.TimeOfDay;
                 CookieAccessor.Write(cookieData.Cookie);
 
                 return cart;

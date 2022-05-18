@@ -8,6 +8,7 @@
 ///<reference path='../../../Repositories/ISearchRepository.ts' />
 ///<reference path='../../../Repositories/SearchRepository.ts' />
 /// <reference path='../Constants/SearchEvents.ts' />
+///<reference path='../../../Composer.Grocery/FulfillmentEvents.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -159,6 +160,7 @@ module Orckestra.Composer {
             this._eventHub.subscribe(SearchEvents.FacetsModalOpened, this.facetsModalOpened.bind(this));
             this._eventHub.subscribe(SearchEvents.FacetsModalClosed, this.facetsModalClosed.bind(this));
             this._eventHub.subscribe(SearchEvents.SearchKeywordChanged, this.searchKeywordChanged.bind(this));
+            this._eventHub.subscribe(FulfillmentEvents.TimeSlotSelected, this.search.bind(this));
             
             $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
             $(FacetsModalId).on('click', '.modal--close',  this.facetsModalClosed.bind(this));
