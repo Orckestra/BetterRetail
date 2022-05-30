@@ -48,7 +48,7 @@
                             @FacetHelpers.PromotedFacetValues()
                             @if (isCategoryTreeView != null)
                             {
-                                @FacetHelpers.CategoryFactesTree(categoryBrowsingViewModel.CategoryName)
+                                @FacetHelpers.CategoryFactesTree(HttpUtility.HtmlEncode(categoryBrowsingViewModel.CategoryName))
                             }
                             <div v-for="facet in Facets" v-if="facet.IsDisplayed" v-bind:key="facet.FieldName + facet.FacetType"
                                  class="card  bg-lighter  mb-3  facets-card"
