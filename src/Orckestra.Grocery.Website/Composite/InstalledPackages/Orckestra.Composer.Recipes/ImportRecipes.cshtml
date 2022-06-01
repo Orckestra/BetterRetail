@@ -137,6 +137,10 @@
                         try {
                             const parseResut = e.target.result.replace(/\r?\n|\r|\t/g, '');
                             this.recipes = JSON.parse(parseResut)?.Recipes;
+
+                            if (!Array.isArray(this.recipes)) {
+                                throw { message: 'The importing file has wrong format. Recipe entries are absent.' }
+                            }
                         } catch (e) {
                             this.commonError = e.message;
                             this.recipes = [];
