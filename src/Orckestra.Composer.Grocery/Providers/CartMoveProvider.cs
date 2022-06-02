@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Grocery.Providers
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
-            if (param.ScopeFrom.Equals(param.ScopeTo, StringComparison.OrdinalIgnoreCase))
+            if (param.MoveFulfillment && param.ScopeFrom.Equals(param.ScopeTo, StringComparison.OrdinalIgnoreCase))
             {
                 //To update only shipment with new store since cart in same scope
                 var cart = await CartRepository.GetCartAsync(new GetCartParam
@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Grocery.Providers
 
                 var shipment = cart.Shipments?.FirstOrDefault();
 
-                return await UpdateShipment(param, shipment.Id, shipment).ConfigureAwait(false);
+                return await MoveFulfillment(param, shipment.Id, shipment).ConfigureAwait(false);
             }
 
             var getCurrentCartTask = CartRepository.GetCartAsync(new GetCartParam
@@ -66,25 +66,29 @@ namespace Orckestra.Composer.Grocery.Providers
             ProcessedCart currentCart = cartsResult[0], newCart = cartsResult[1];
 
             var currentLineItems = currentCart.GetLineItems();
-            await AddLineItems(param, currentLineItems);
+            if (currentLineItems != null && currentLineItems.Count > 0)
+            {
+                newCart = await AddLineItems(param, currentLineItems).ConfigureAwait(false);
+            }
 
             if (!newCart.Payments.Any(p => !p.IsVoided()))
             {
                 var oldPayment = currentCart.Payments?.Find(p => !p.IsVoided());
-                await AddPayment(param, oldPayment?.BillingAddress);
+                newCart = await AddPayment(param, oldPayment?.BillingAddress).ConfigureAwait(false);
             }
 
-            
-
-            var oldShipment = currentCart.Shipments?.FirstOrDefault();
-            var newShipment = newCart.Shipments?.FirstOrDefault()
-                ?? throw new InvalidOperationException("No shipment in a cart.");
-            var processedCart = await UpdateShipment(param, newShipment.Id, oldShipment).ConfigureAwait(false);
+            if (param.MoveFulfillment)
+            {
+                var prevShipment = currentCart.Shipments?.FirstOrDefault();
+                var newShipment = newCart.Shipments?.FirstOrDefault()
+                    ?? throw new InvalidOperationException("No shipment in a cart.");
+                newCart = await MoveFulfillment(param, newShipment.Id, prevShipment).ConfigureAwait(false);
+            }
 
             if (currentCart.Customer != null && !string.IsNullOrEmpty(currentCart.Customer.Email))
             {
-                processedCart.Customer = currentCart.Customer;
-                processedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(processedCart)).ConfigureAwait(false);
+                newCart.Customer = currentCart.Customer;
+                newCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(newCart)).ConfigureAwait(false);
             }
 
             await CartRepository.DeleteCartAsync(new DeleteCartParam
@@ -95,14 +99,14 @@ namespace Orckestra.Composer.Grocery.Providers
                 Scope = param.ScopeFrom
             }).ConfigureAwait(false);
 
-            return processedCart;
+            return newCart;
         }
 
-        private async Task<ProcessedCart> UpdateShipment(MoveCartParam param, Guid newShipmentId, Shipment oldShipment)
+        private async Task<ProcessedCart> MoveFulfillment(MoveCartParam param, Guid shipmentToId, Shipment shipmentFrom)
         {
-            var fulfillmentMethod = oldShipment?.FulfillmentMethod;
-            var isFulFillmentMethodChanged = fulfillmentMethod?.FulfillmentMethodType != param.FulfillementMethodType;
-            if (fulfillmentMethod == null || isFulFillmentMethodChanged)
+            var fulfillmentMethodToUpdate = shipmentFrom?.FulfillmentMethod;
+            var isFulFillmentMethodChanged = fulfillmentMethodToUpdate?.FulfillmentMethodType != param.FulfillementMethodType;
+            if (fulfillmentMethodToUpdate == null || isFulFillmentMethodChanged)
             {
                 var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(new GetShippingMethodsParam
                 {
@@ -113,22 +117,22 @@ namespace Orckestra.Composer.Grocery.Providers
                 }).ConfigureAwait(false);
 
                 // Selecting fulfillment method selected by customer, if it is available
-                fulfillmentMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == param.FulfillementMethodType);
+                fulfillmentMethodToUpdate = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == param.FulfillementMethodType);
 
                 // Selecting 'Pickup' fulfillment method, if it is available
-                if (fulfillmentMethod == null)
+                if (fulfillmentMethodToUpdate == null)
                 {
-                    fulfillmentMethod = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == FulfillmentMethodType.PickUp);
+                    fulfillmentMethodToUpdate = fulfillmentMethods.FirstOrDefault(method => method.FulfillmentMethodType == FulfillmentMethodType.PickUp);
                 }
             }
 
-            if (oldShipment!= null && Guid.TryParse(oldShipment.FulfillmentScheduleReservationNumber, out Guid reservationNumber))
+            if (shipmentFrom != null && Guid.TryParse(shipmentFrom.FulfillmentScheduleReservationNumber, out Guid reservationNumber))
             {
                 await TimeSlotRepository.DeleteFulfillmentLocationTimeSlotReservationByIdAsync(new BaseFulfillmentLocationTimeSlotReservationParam()
                 {
                     SlotReservationId = reservationNumber,
                     Scope = param.ScopeFrom,
-                    FulfillmentLocationId = oldShipment.FulfillmentLocationId
+                    FulfillmentLocationId = shipmentFrom.FulfillmentLocationId
                 }).ConfigureAwait(false);
             }
             var updateShipmentParam = new UpdateShipmentParam
@@ -136,14 +140,14 @@ namespace Orckestra.Composer.Grocery.Providers
                 CartName = CartConfiguration.ShoppingCartName,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                FulfillmentMethodName = fulfillmentMethod?.Name,
-                FulfillmentScheduledTimeBeginDate = oldShipment?.FulfillmentScheduledTimeBeginDate,
-                FulfillmentScheduledTimeEndDate = oldShipment?.FulfillmentScheduledTimeEndDate,
-                PropertyBag = oldShipment?.PropertyBag,
-                Id = newShipmentId,
+                FulfillmentMethodName = fulfillmentMethodToUpdate?.Name,
+                FulfillmentScheduledTimeBeginDate = shipmentFrom?.FulfillmentScheduledTimeBeginDate,
+                FulfillmentScheduledTimeEndDate = shipmentFrom?.FulfillmentScheduledTimeEndDate,
+                PropertyBag = shipmentFrom?.PropertyBag,
+                Id = shipmentToId,
                 ScopeId = param.ScopeTo,
-                ShippingAddress = string.IsNullOrEmpty(oldShipment?.Address?.City) || isFulFillmentMethodChanged ? null : oldShipment.Address,
-                ShippingProviderId = fulfillmentMethod?.ShippingProviderId ?? Guid.Empty
+                ShippingAddress = string.IsNullOrEmpty(shipmentFrom?.Address?.City) || isFulFillmentMethodChanged ? null : shipmentFrom.Address,
+                ShippingProviderId = fulfillmentMethodToUpdate?.ShippingProviderId ?? Guid.Empty
             };
 
             if (param.NewStore.FulfillmentLocation != null)
@@ -151,7 +155,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 updateShipmentParam.FulfillmentLocationId = param.NewStore.FulfillmentLocation.Id;
             }
 
-            if (fulfillmentMethod.FulfillmentMethodType == FulfillmentMethodType.PickUp)
+            if (fulfillmentMethodToUpdate.FulfillmentMethodType == FulfillmentMethodType.PickUp)
             {
                 updateShipmentParam.PickUpLocationId = param.NewStore.Id;
                 var storeAddress = param.NewStore.FulfillmentLocation.Addresses.FirstOrDefault();
@@ -176,23 +180,21 @@ namespace Orckestra.Composer.Grocery.Providers
             return await CartRepository.UpdateShipmentAsync(updateShipmentParam).ConfigureAwait(false);
         }
 
-        private async Task AddPayment(MoveCartParam param, Address billingAddress)
+        private Task<ProcessedCart> AddPayment(MoveCartParam param, Address billingAddress)
         {
-            await CartRepository.AddPaymentAsync(new AddPaymentParam
+            return CartRepository.AddPaymentAsync(new AddPaymentParam
             {
                 CartName = CartConfiguration.ShoppingCartName,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 Scope = param.ScopeTo,
                 BillingAddress = billingAddress
-            }).ConfigureAwait(false);
+            });
         }
 
-        private async Task AddLineItems(MoveCartParam param, List<LineItem> currentLineItems)
+        private Task<ProcessedCart> AddLineItems(MoveCartParam param, List<LineItem> currentLineItems)
         {
-            if (currentLineItems == null || currentLineItems.Count == 0) return;
-
-            await CartRepository.AddLineItemsAsync(new AddLineItemsParam
+            return CartRepository.AddLineItemsAsync(new AddLineItemsParam
             {
                 CartName = CartConfiguration.ShoppingCartName,
                 CultureInfo = param.CultureInfo,
@@ -206,7 +208,7 @@ namespace Orckestra.Composer.Grocery.Providers
                     VariantId = x.VariantId
                 }).ToList(),
                 Scope = param.ScopeTo
-            }).ConfigureAwait(false);
+            });
         }
     }
 }

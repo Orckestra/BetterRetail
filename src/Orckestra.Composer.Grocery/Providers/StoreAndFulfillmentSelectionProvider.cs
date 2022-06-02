@@ -544,6 +544,12 @@ namespace Orckestra.Composer.Grocery.Providers
             return store;
         }
 
+        /// <summary>
+        /// Recover fulfillment selection from Customer preferred store data
+        /// This method is used when Guest without selected fulfillment, decide to login.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         protected virtual async Task RecoverFulfillmentSelectionByCustomer(RecoverSelectionDataParam param)
         {
             if (param == null) throw new ArgumentException(GetMessageOfNull(nameof(param)));
@@ -568,6 +574,22 @@ namespace Orckestra.Composer.Grocery.Providers
                     IncludeAddresses = true,
                     IncludeSchedules = true
                 }).ConfigureAwait(false);
+
+                // When Guest, without selected fulfillment, but added items to the cart in default configured store scope, login
+                // we need to merge items from guest default scope to user preferred scope
+                if (param.GuestScope != null && param.GuestScope != preferredStore.ScopeId)
+                {
+                    await CartMoveProvider.MoveCart(new MoveCartParam
+                    {
+                        CultureInfo = param.CultureInfo,
+                        CustomerId = param.CustomerId,
+                        NewStore = preferredStore,
+                        ScopeFrom = param.GuestScope,
+                        ScopeTo = preferredStore.ScopeId,
+                        InventoryLocationId = preferredStore.FulfillmentLocation?.InventoryLocationId,
+                        MoveFulfillment = false,// we just need to move cart items
+                     }).ConfigureAwait(false);
+                }
 
                 await WriteStoreCartDataToCookie(preferredStore, param.CustomerId, param.IsAuthenticated, param.CultureInfo).ConfigureAwait(false);
             }

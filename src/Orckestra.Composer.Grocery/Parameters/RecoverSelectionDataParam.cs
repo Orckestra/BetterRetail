@@ -21,5 +21,10 @@ namespace Orckestra.Composer.Grocery.Parameters
         public Guid CustomerId { get; set; }
 
         public bool IsAuthenticated { get; set; }
+
+        /// <summary>
+        /// This property is to remember Guest Scope, which was before the Customer Logged In
+        /// </summary>
+        public string GuestScope { get; set; }
     }
 }

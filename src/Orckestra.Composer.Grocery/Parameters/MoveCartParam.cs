@@ -38,5 +38,10 @@ namespace Orckestra.Composer.Grocery.Parameters
         /// Fulfillment method type need to set up for the new Cart
         /// </summary>
         public FulfillmentMethodType? FulfillementMethodType { get; set; }
+
+        /// <summary>
+        /// If true then fulfillment data also will be moved for shipment
+        /// </summary>
+        public bool MoveFulfillment { get; set; } = true;
 	}
 }

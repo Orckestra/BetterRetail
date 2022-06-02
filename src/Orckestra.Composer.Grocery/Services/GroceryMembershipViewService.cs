@@ -37,7 +37,9 @@ namespace Orckestra.Composer.Grocery.Services
                 CustomerId = loginViewModel.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
                 IsAuthenticated = loginViewModel.IsSuccess,
-                CartName = CartConfiguration.ShoppingCartName
+                CartName = CartConfiguration.ShoppingCartName,
+                // remember Guest scope, to be able move cart from this scope
+                GuestScope = ComposerContext.Scope
             }).ConfigureAwait(false);
 
             return loginViewModel;
