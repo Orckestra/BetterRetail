@@ -11,6 +11,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -164,6 +165,10 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 CartName = CartConfiguration.ShoppingCartName
             });
+
+            shippingMethodTypesViewModel.ShippingMethodTypes = shippingMethodTypesViewModel.ShippingMethodTypes
+                .Where(method => CartConfiguration.AvailableShippingMethodTypes.Contains(method.FulfillmentMethodType))
+                .ToList();
 
             return Ok(shippingMethodTypesViewModel);
         }
