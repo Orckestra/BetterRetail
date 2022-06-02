@@ -66,5 +66,10 @@ namespace Orckestra.Composer.Cart
         /// If true, cart items will be grouped by product primary category
         /// </summary>
         public static bool GroupCartItemsByPrimaryCategory { get; set; }
+
+        /// <summary>
+        /// Available fulfillment method types
+        /// </summary>
+        public static FulfillmentMethodType[] AvailableShippingMethodTypes { get; set; } = new FulfillmentMethodType[] { FulfillmentMethodType.Shipping, FulfillmentMethodType.PickUp };
     }
 }

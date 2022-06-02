@@ -192,8 +192,7 @@
                 <strong>
                     <i class="fa mr-1"
                        v-bind:class="[
-                           shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : ''
-                           || 'fa-truck'
+                           shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)' ? 'fa-store-alt' : 'fa-truck'
                        ]"
                        aria-hidden="true"></i>
                     <span v-if="shippingMethod.FulfillmentMethodTypeString === '@(FulfillmentMethodType.PickUp)'">
