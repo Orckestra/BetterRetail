@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
             {
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = GetCartName(),
@@ -262,7 +262,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.AddLineItemAsync(new AddLineItemParam
             {
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = GetCartName(),
@@ -292,7 +292,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.RemoveLineItemAsync(new RemoveLineItemParam
             {
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
@@ -318,7 +318,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                ScopeId = ComposerContext.Scope,
+                ScopeId = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
@@ -436,7 +436,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartType = GetCartType(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             };
 
@@ -513,6 +513,11 @@ namespace Orckestra.Composer.Cart.Api
         private string GetCartType()
         {
             return EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null;
+        }
+
+        private string GetCartScopeId()
+        {
+            return EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingScopeId() : ComposerContext.Scope;
         }
     }
 }

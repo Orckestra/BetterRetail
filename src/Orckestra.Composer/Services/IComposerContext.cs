@@ -14,5 +14,6 @@ namespace Orckestra.Composer.Services
         string GetEncryptedCustomerId();
         string ScopeCurrencyIso { get; }
         string EditingCartName { get; set; }
+        string EditingScopeId { get; set; }
     }
 }
