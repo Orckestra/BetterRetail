@@ -44,6 +44,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
         void ClearEditMode();
 
         string GetCurrentEditingCartName();
+        string GetCurrentEditingScopeId();
 
         /// <summary>
         /// Create Cart Order Draft and set edit mode
