@@ -308,6 +308,31 @@ namespace Orckestra.Composer.Services
             }
         }
 
+        private string _editingScopeId;
+        /// <summary>
+        /// Editing Scope Id assigned to the current edited order scope id
+        /// </summary>
+        public string EditingScopeId
+        {
+            get
+            {
+                if (_editingScopeId == null)
+                {
+                    ComposerCookieDto dto = CookieAccessor.Read();
+                    _editingScopeId = dto.EditingScopeId;
+                }
+
+                return _editingScopeId;
+            }
+            set
+            {
+                _editingScopeId = value;
+                ComposerCookieDto dto = CookieAccessor.Read();
+                dto.EditingScopeId = _editingScopeId;
+                CookieAccessor.Write(dto);
+            }
+        }
+
         public bool IsEditingOrder
         {
             get
