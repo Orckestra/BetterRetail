@@ -132,11 +132,13 @@ namespace Orckestra.Composer.Cart.Providers.Order
             {
                 var ownedBySomeoneElseError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedBySomeoneElse);
                 var ownedByRequestedUserError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.IsOwnedByRequestedUser);
+                var cartAlreadyExistsError = ex.Errors?.FirstOrDefault(e => e.ErrorCode == Constants.ErrorCodes.CartAlreadyExists);
+
                 if (ownedBySomeoneElseError != null)
                 {
                     draftCart = await ChangeOwnership(order).ConfigureAwait(false);
                 }
-                else if (ownedByRequestedUserError != null)
+                else if (ownedByRequestedUserError != null || cartAlreadyExistsError != null)
                 {
                     draftCart = await CartRepository.GetCartAsync(new GetCartParam
                     {
@@ -160,6 +162,7 @@ namespace Orckestra.Composer.Cart.Providers.Order
 
             //Set Edit Mode
             ComposerContext.EditingCartName = draftCart.Name;
+            ComposerContext.EditingScopeId = order.ScopeId;
 
             return draftCart;
         }
@@ -266,11 +269,17 @@ namespace Orckestra.Composer.Cart.Providers.Order
         public virtual void ClearEditMode()
         {
             ComposerContext.EditingCartName = default;
+            ComposerContext.EditingScopeId = default;
         }
 
         public virtual string GetCurrentEditingCartName()
         {
             return ComposerContext.EditingCartName;
+        }
+
+        public virtual string GetCurrentEditingScopeId()
+        {
+            return ComposerContext.EditingScopeId;
         }
 
         public bool IsEditMode()
