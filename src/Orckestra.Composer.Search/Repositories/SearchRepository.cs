@@ -164,7 +164,7 @@ namespace Orckestra.Composer.Search.Repositories
             if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
             if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
-            var request = ProductRequestFactory.CreateProductRequest(criteria.Scope);
+            var request = ProductRequestFactory.CreateProductRequest(criteria);
             
             request.Query.IncludeTotalCount = true;
             request.Query.MaximumItems = 0;
