@@ -146,7 +146,7 @@ namespace Orckestra.Composer.Search.Repositories
         {
             if (string.IsNullOrWhiteSpace(criteria.SortBy)) { return null; }
 
-            var sortDirection = 
+            var sortDirection =
                 string.IsNullOrWhiteSpace(criteria.SortDirection) || criteria.SortDirection.Equals("asc", StringComparison.InvariantCultureIgnoreCase)
                 ? SortDirection.Ascending
                 : SortDirection.Descending;
@@ -164,8 +164,16 @@ namespace Orckestra.Composer.Search.Repositories
             if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
             if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
-            var request = ProductRequestFactory.CreateProductRequest(criteria);
-            
+            SearchAvailableProductsBaseRequest request;
+            if (criteria is SearchBySkusCriteria searchBySkusCriteria)
+            {
+                request = ProductRequestFactory.CreateProductRequest(criteria);
+            }
+            else
+            {
+                request = ProductRequestFactory.CreateProductRequest(criteria.Scope);
+            }
+
             request.Query.IncludeTotalCount = true;
             request.Query.MaximumItems = 0;
             request.Query.StartingIndex = 0;
