@@ -412,6 +412,9 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
   <data name="T_MyRecipeFavorites" xml:space="preserve">
     <value>Mes recettes préférées </value>
   </data>
+  <data name="T_RecipeFavorites" xml:space="preserve">
+    <value>Recettes préférées </value>
+  </data>
   <data name="T_MyCreditCard" xml:space="preserve">
     <value>Mes cartes de crédit</value>
   </data>

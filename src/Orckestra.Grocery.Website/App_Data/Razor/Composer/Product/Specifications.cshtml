@@ -25,10 +25,10 @@
 
         var splittedAttributeVal = attribute.Value.Split('|');
         var attributeVal =  splittedAttributeVal[0];
-        var attributePerсent = splittedAttributeVal.Count() == 2 ? splittedAttributeVal[1] : string.Empty;
+        var attributePercent = splittedAttributeVal.Count() == 2 ? splittedAttributeVal[1] : string.Empty;
         var title = attribute.Title;
 
-        return (attributeVal, attributePerсent, title);
+        return (attributeVal, attributePercent, title);
     }
 
     public (string val, string title) GetAttributeValue(List<SpecificationsAttributeViewModel> attributes, string propertyName)

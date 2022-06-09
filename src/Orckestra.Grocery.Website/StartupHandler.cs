@@ -7,7 +7,6 @@ using Composite.Data.DynamicTypes;
 using Composite.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Pages;
 using Orckestra.Composer.Grocery.Website.Controllers;
 using Orckestra.Composer.HttpModules;
@@ -24,9 +23,8 @@ using System;
 using Orckestra.Composer.Repositories;
 using System.Linq;
 using Orckestra.Composer.Grocery.DataTypes;
-using Orckestra.Composer.Cart.Repositories.Order;
-using Orckestra.Composer.Services;
-using Orckestra.Overture.Caching;
+using System.Collections.Generic;
+using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 
 namespace Orckestra.Composer.Grocery.Website
 {
@@ -202,6 +200,8 @@ namespace Orckestra.Composer.Grocery.Website
             {
                 collection.AddTransient(type, provider => AutofacDependencyResolver.Current.GetService(type));
             }
+
+            collection.AddTransient(typeof(IEnumerable<IMainMenuItemsProvider>), provider => AutofacDependencyResolver.Current.GetServices<IMainMenuItemsProvider>());
         }
 
     }

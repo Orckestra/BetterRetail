@@ -545,3 +545,13 @@ ul.main-nav-sticky {
         }
     }
 }
+
+.only-authorized {
+    display: none;
+}
+
+.is-authorized {
+    .only-authorized {
+        display: block;
+    }
+}

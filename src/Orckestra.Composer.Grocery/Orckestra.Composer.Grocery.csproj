@@ -184,6 +184,7 @@
     <Compile Include="Providers\GroceryUrlProvider.cs" />
     <Compile Include="Providers\IConverterProvider.cs" />
     <Compile Include="Providers\IGroceryUrlProvider.cs" />
+    <Compile Include="Providers\MyUsualsMainMenuItemsProvider.cs" />
     <Compile Include="Repositories\ITimeSlotRepository.cs" />
     <Compile Include="Repositories\SalesScopeCustomerAddressesRepository.cs" />
     <Compile Include="Repositories\SalesScopeFulfillmentMethodRepository.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="ViewModels\IGroceryOrderShipmentDetailViewModel.cs" />
     <Compile Include="ViewModels\IGroceryLineItemDetailViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductSearchViewModel.cs" />
+    <Compile Include="ViewModels\IGroceryUserMetadataViewModel.cs" />
     <Compile Include="ViewModels\IGroceryRelatedProductViewModel.cs" />
     <Compile Include="ViewModels\IGroceryProductViewModel.cs" />
     <Compile Include="ViewModels\StoreAndFulfillmentSelectionViewModel.cs" />
@@ -250,6 +252,10 @@
     <ProjectReference Include="..\Orckestra.Composer.Cart\Orckestra.Composer.Cart.csproj">
       <Project>{08F6FCB8-6065-4D31-B7DF-67FE67EE67E5}</Project>
       <Name>Orckestra.Composer.Cart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.CompositeC1.DataTypes\Orckestra.Composer.CompositeC1.DataTypes.csproj">
+      <Project>{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}</Project>
+      <Name>Orckestra.Composer.CompositeC1.DataTypes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.CompositeC1\Orckestra.Composer.CompositeC1.csproj">
       <Project>{3E42C35E-B19C-4ABE-80F8-FD268D44E11F}</Project>

@@ -24,7 +24,7 @@ module Orckestra.Composer {
             const ProductsCount = this.context.container.data('productstotal');
             const SuggestedTabs = this.context.container.data('suggestedtabs');
             const SearchQuery = this.context.container.data('searchquery');
-            const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms'); 
+            const CorrectedSearchTerms = this.context.container.data('correctedsearchterms'); 
             const IsProductTab = this.context.container.data('isproducttab') === 'True';
             const currentSite = this.context.container.data('current-site') === 'True';
             const self = this;

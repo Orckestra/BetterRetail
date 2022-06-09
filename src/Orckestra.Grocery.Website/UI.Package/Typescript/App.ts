@@ -78,6 +78,7 @@
 ///<reference path='./Composer.Grocery/Recipes/RecipeDetailsController.ts' />
 ///<reference path='./Composer.Grocery/Recipes/RecipeListController.ts' />
 ///<reference path='./Composer.Grocery/Recipes/RecipeMyFavoritesListController.ts' />
+///<reference path='./Composer.Grocery/MainMenuController.ts' />
 
 ///<reference path='./Composer.Cart/EditOrder/EditOrderBannerController.ts' />
 
@@ -185,6 +186,7 @@
                 { name: 'Grocery.RecipeDetails', controller: Orckestra.Composer.RecipeDetailsController },
                 {name: 'Grocery.RecipeList', controller: Orckestra.Composer.RecipeListController },
                 {name:'Grocery.RecipeMyFavoritesList',  controller: Orckestra.Composer.RecipeMyFavoritesListController},
+                { name: 'Grocery.MainMenu', controller: Orckestra.Composer.MainMenuController },
 
                 { name: 'PageNotFound.Analytics', controller: Orckestra.Composer.PageNotFoundAnalyticsController }
             ]

@@ -56,7 +56,7 @@ namespace Orckestra.Composer.Recipes
             Guid? parentId = null;
             MainMenuItemWrapper root = null;
 
-            if (configuration.PageId != null)
+            if (configuration.ParentPage != null)
             {
                 var page = DataFacade.GetData<IPage>().FirstOrDefault(p => p.Id == configuration.ParentPage);
                 if (page != null)

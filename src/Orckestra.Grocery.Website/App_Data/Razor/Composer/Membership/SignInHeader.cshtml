@@ -40,8 +40,15 @@
                class="dropdown-item">
                 @Html.Localize("MyAccount", "L_MyAccount")
             </a>
-            <a v-if="IsAuthenticated"
-               data-qa="login-out"
+            <a v-bind:href="MyUsualsUrl"
+               class="dropdown-item">
+                @Html.Localize("MyAccount", "T_MyUsuals")
+            </a>
+            <a v-bind:href="RecipeFavoritesUrl"
+               class="dropdown-item">
+                @Html.Localize("MyAccount", "T_RecipeFavorites")
+            </a>
+            <a data-qa="login-out"
                href="#"
                class="dropdown-item"
                v-on:click.prevent="fullLogout">

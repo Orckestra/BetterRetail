@@ -1,4 +1,4 @@
-﻿@inherits RazorFunction
+@inherits RazorFunction
 @using Orckestra.Composer.ViewModels.MenuNavigation
 @using Orckestra.Composer.ViewModels.Home;
 @using Orckestra.Composer.CompositeC1.Mappers;
@@ -49,14 +49,13 @@
     });
 
     var mainMenu = MainMenuNavigationMapper.MapMainMenuItems(mainMenuData) as IEnumerable<HomeMainMenuEntryViewModel>;
-
 }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind">
 <head>
 </head>
 <body>
-    <div class="main-nav multi-level nav-tabs">
+    <div data-oc-controller="Grocery.MainMenu" class="main-nav multi-level nav-tabs">
         <div class="container-lg">
             <nav class="navbar navbar-expand-lg megamenu">
                 <div id="main-nav-collapse" class="collapse navbar-collapse">
@@ -149,7 +148,7 @@
                         @Function("Grocery.SignInSticky")
                     </ul>
                     @Function("Composer.Membership.SignInHeaderMobile")
-                    @Function("Composer.Header.LanguageSwitсhMobile")
+                    @Function("Composer.Header.LanguageSwitchMobile")
                 </div>
             </nav>
         </div>

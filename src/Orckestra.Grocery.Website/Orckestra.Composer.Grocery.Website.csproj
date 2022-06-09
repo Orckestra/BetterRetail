@@ -432,9 +432,9 @@
     <Content Include="App_Data\Razor\Composer\Store\Details.cshtml" />
     <Content Include="App_Data\Razor\Composer\Cart\Minicart.cshtml" />
     <Content Include="App_Data\Razor\Composer\Header\Breadcrumb.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсh.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitch.cshtml" />
     <Content Include="App_Data\Razor\Composer\Membership\SignInHeaderMobile.cshtml" />
-    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitсhMobile.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Header\LanguageSwitchMobile.cshtml" />
     <Content Include="App_Data\Razor\Grocery\HeroBanner.cshtml" />
     <Content Include="App_Data\Razor\Grocery\TeaserCTA.cshtml" />
     <Content Include="App_Data\Razor\Composer\BrowsingCategories\Facets.cshtml" />

@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
   <Add Id="7128142a-f5f7-4760-a941-8e2f9c0adeb0" Provider="RecipesMainMenuItemsProvider" ParentPage="c9344cca-14e3-4430-95de-ea5949f62e10" Order="2" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" />
+  <Add Id="8e8e5b9b-2003-4fce-8078-3dc07c8d1e08" Provider="MyUsualsMainMenuItemsProvider" ParentPage="68472f36-f4a5-4422-9cd7-327c5e0725cf" Order="3" PageId="f3dbd28d-365f-4d3e-91c3-7b730b39b294" />
 </Data>

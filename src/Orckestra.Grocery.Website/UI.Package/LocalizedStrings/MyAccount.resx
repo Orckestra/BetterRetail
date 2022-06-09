@@ -420,6 +420,9 @@
   <data name="T_MyRecipeFavorites" xml:space="preserve">
     <value>My Recipe Favorites </value>
   </data>
+  <data name="T_RecipeFavorites" xml:space="preserve">
+    <value>Recipe Favorites </value>
+  </data>
   <data name="T_MyCreditCard" xml:space="preserve">
     <value>My credit cards</value>
   </data>

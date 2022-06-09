@@ -16,7 +16,7 @@ module Orckestra.Composer {
                 name: FacetTreeVueComponent.componentName,
                 components: {},
                 props: {
-                    nodeсlicked: {
+                    nodeclicked: {
                         type: Function,
                         required: false,
                     },
@@ -95,7 +95,7 @@ module Orckestra.Composer {
                             :data-categoryid="node.CategoryId"
                             :checked="node.IsSelected"
                             :data-selected="node.IsSelected"
-                            v-on:click="(event) => nodeсlicked(event, node.IsSelected)" 
+                            v-on:click="(event) => nodeclicked(event, node.IsSelected)" 
                         />
                         <input v-else-if="node.FacetType == 'SingleSelect'"
                             type="checkbox"
@@ -109,7 +109,7 @@ module Orckestra.Composer {
                             :data-categoryid="node.CategoryId"
                             :checked="node.IsSelected"
                             :data-selected="node.IsSelected"
-                            v-on:click="(event) => nodeсlicked(event, node.IsSelected)" 
+                            v-on:click="(event) => nodeclicked(event, node.IsSelected)" 
                         />
                         {{node.Title}} ({{node.Quantity}})
                     </label>
@@ -120,7 +120,7 @@ module Orckestra.Composer {
                         :key="childNode.CategoryId"
                         :node="childNode"
                         :parentnode="currentNode"
-                        :nodeсlicked="nodeсlicked"
+                        :nodeclicked="nodeclicked"
                         :showmoretext="showmoretext"
                         :showlesstext="showlesstext"
                         :categoryid="categoryid"   />              
@@ -131,7 +131,7 @@ module Orckestra.Composer {
                         :key="childNode.CategoryId"
                         :node="childNode"
                         :parentnode="currentNode"
-                        :nodeсlicked="nodeсlicked"
+                        :nodeclicked="nodeclicked"
                         :showmoretext="showmoretext"
                         :showlesstext="showlesstext"
                         :categoryid="categoryid"                  
