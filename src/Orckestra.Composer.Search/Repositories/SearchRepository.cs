@@ -164,15 +164,10 @@ namespace Orckestra.Composer.Search.Repositories
             if (criteria.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(criteria.CultureInfo)), nameof(criteria)); }
             if (string.IsNullOrWhiteSpace(criteria.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(criteria.Scope)), nameof(criteria)); }
 
-            SearchAvailableProductsBaseRequest request;
-            if (criteria is SearchBySkusCriteria searchBySkusCriteria)
+            var request = new SearchAvailableProductsRequest
             {
-                request = ProductRequestFactory.CreateProductRequest(criteria);
-            }
-            else
-            {
-                request = ProductRequestFactory.CreateProductRequest(criteria.Scope);
-            }
+                Query = criteria is SearchBySkusCriteria ? ProductRequestFactory.CreateQuery(criteria as SearchBySkusCriteria) : ProductRequestFactory.CreateQuery(criteria.Scope)
+            };
 
             request.Query.IncludeTotalCount = true;
             request.Query.MaximumItems = 0;
