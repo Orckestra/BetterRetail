@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using Orckestra.Composer.Cart.Parameters.Order;
-using Orckestra.Composer.Grocery.Parameters;
+using Orckestra.Composer.Grocery.Context;
 using Orckestra.Composer.Grocery.Services;
-using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Search.Request;
-using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.Services;
-using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 
 namespace Orckestra.Composer.Grocery.Api
@@ -32,6 +25,7 @@ namespace Orckestra.Composer.Grocery.Api
         protected IBaseSearchCriteriaProvider BaseSearchCriteriaProvider { get; private set; }
         protected IMyUsualsViewService MyUsualsViewService { get; private set; }
         public IScopeProvider ScopeProvider { get; private set; }
+        protected IMyUsualsContext MyUsualsContext { get; }
 
         public MyUsualsController(
             IComposerContext composerContext,
@@ -39,7 +33,8 @@ namespace Orckestra.Composer.Grocery.Api
             ISearchUrlProvider searchUrlProvider,
             IBaseSearchCriteriaProvider baseSearchCriteriaProvider,
             IMyUsualsViewService myUsualsViewService,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IMyUsualsContext myUsualsContext)
         {
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             SearchViewService = searchViewService ?? throw new ArgumentNullException(nameof(searchViewService));
@@ -47,6 +42,7 @@ namespace Orckestra.Composer.Grocery.Api
             BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider));
             MyUsualsViewService = myUsualsViewService ?? throw new ArgumentNullException(nameof(myUsualsViewService));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
+            MyUsualsContext = myUsualsContext ?? throw new ArgumentNullException(nameof(myUsualsContext));
         }
 
 
@@ -55,57 +51,39 @@ namespace Orckestra.Composer.Grocery.Api
         [ValidateModelState]
         public virtual async Task<IHttpActionResult> GetSearchResultsMyUsuals(GetSearchResultsRequest request)
         {
-            var listSkus = await MyUsualsViewService.GetMyUsualsProductSkusAsync(new GetCustomerOrderedProductsParam
+            var listSkus = MyUsualsContext.ListMyUsualsSkus;
+
+            if (listSkus == null || listSkus.Length == 0)
             {
-                ScopeId = ScopeProvider.DefaultScope,
-                CustomerId = ComposerContext.CustomerId
-            }).ConfigureAwait(false);
-
-            SearchViewModel viewModel;
-            if (listSkus.Length > 0)
-            {
-                var queryString = HttpUtility.ParseQueryString(request.QueryString ?? "");
-                var SelectedFacets = SearchUrlProvider.BuildSelectedFacets(queryString).ToList();
-                var Keywords = queryString[SearchRequestParams.Keywords];
-                var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
-                var IncludeFactes = true;
-
-                var searchCriteria = await BaseSearchCriteriaProvider.GetSearchCriteriaAsync(Keywords, BaseUrl, IncludeFactes).ConfigureAwait(false);
-                var searchBySkusCriteria = new SearchBySkusCriteria
-                {
-                    Skus = listSkus,
-                    Keywords = searchCriteria.Keywords,
-                    NumberOfItemsPerPage = listSkus.Length,
-                    StartingIndex = searchCriteria.StartingIndex,
-                    Page = searchCriteria.Page,
-                    BaseUrl = searchCriteria.BaseUrl,
-                    Scope = searchCriteria.Scope,
-                    CultureInfo = searchCriteria.CultureInfo,
-                    InventoryLocationIds = searchCriteria.InventoryLocationIds,
-                    AvailabilityDate = searchCriteria.AvailabilityDate,
-                    IncludeFacets = searchCriteria.IncludeFacets
-                };
-
-                searchBySkusCriteria.SelectedFacets.AddRange(SelectedFacets);
-
-                viewModel = await SearchViewService.GetSearchViewModelAsync(searchBySkusCriteria).ConfigureAwait(false);
-
-                if (IncludeFactes)
-                {
-                    viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
-                }
-            } 
-            else
-            {
-                viewModel = new SearchViewModel
-                {
-                    ProductSearchResults = new ProductSearchResultsViewModel
-                    {
-                        SearchResults = new List<ProductSearchViewModel>(),
-                        TotalCount = 0
-                    }
-                };
+                return Ok(MyUsualsContext.EmptyProductResultsViewModel);
             }
+
+            var criteria = await MyUsualsViewService.BuildProductsSearchCriteria(listSkus, request.QueryString).ConfigureAwait(false);
+
+            var viewModel = await SearchViewService.GetSearchViewModelAsync(criteria).ConfigureAwait(false);
+            viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
+
+            return Ok(viewModel);
+        }
+
+
+        [ActionName("getfacets")]
+        [HttpPost]
+        [ValidateModelState]
+        public virtual async Task<IHttpActionResult> GetFacets(GetFacetsRequest request)
+        {
+            var listSkus = MyUsualsContext.ListMyUsualsSkus;
+
+            if (listSkus == null || listSkus.Length == 0)
+            {
+                return Ok(MyUsualsContext.EmptyProductResultsViewModel);
+            }
+
+            var criteria = await MyUsualsViewService.BuildProductsSearchCriteria(listSkus, request.QueryString).ConfigureAwait(false);
+            criteria.NumberOfItemsPerPage = 0;
+
+            var viewModel = await SearchViewService.GetSearchViewModelAsync(criteria).ConfigureAwait(false);
+            viewModel.ProductSearchResults.Facets = viewModel.ProductSearchResults.Facets.Where(f => !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix)).ToList();
 
             return Ok(viewModel);
         }

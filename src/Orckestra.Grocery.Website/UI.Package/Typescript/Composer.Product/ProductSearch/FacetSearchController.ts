@@ -29,10 +29,12 @@ module Orckestra.Composer {
         public initialize() {
             super.initialize();
             this.initializeVueComponent();
-         }
+        }
 
         private initializeVueComponent() {
             var { CategoryFacetValuesTree, Facets, PromotedFacetValues, SelectedFacets } = this.context.viewModel;
+            var Keywords: string = this.context.container.attr('data-searchQuery');
+
             let self = this;
             this.VueFacets = new Vue({
                 el: '#vueSearchFacets',
@@ -45,7 +47,8 @@ module Orckestra.Composer {
                     PromotedFacetValues,
                     Mode: {
                         Loading: false
-                    }
+                    },
+                    Keywords
                 },
                 mounted() {
                     self.initializeServices();
@@ -53,9 +56,10 @@ module Orckestra.Composer {
                     self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, this.onFacetsLoaded);
                 },
                 methods: {
-                    onFacetsLoaded({data}) {
+                    onFacetsLoaded({ data }) {
                         this.CategoryFacetValuesTree = data.FacetSettings.CategoryFacetValuesTree;
                         this.Facets = data.ProductSearchResults.Facets;
+                        this.Keywords = data.Keywords.replace("*", " ");
 
                         self._searchService.updateFacetRegistry(self.buildFacetRegistry());
                     },
@@ -63,7 +67,7 @@ module Orckestra.Composer {
                         self.categoryFacetChanged(event, isSelected);
                     },
                     IsValuesCollapsed(facet) {
-                        return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < 0;
+                        return facet.OnDemandFacetValues.findIndex((n: any) => n.IsSelected) < 0;
                     }
                 },
                 updated() {
@@ -236,7 +240,7 @@ module Orckestra.Composer {
         }
 
         private initializeRangeSlider() {
-            const selectedFacets: IHashTable<string|string[]> = this._searchService.getSelectedFacets();
+            const selectedFacets: IHashTable<string | string[]> = this._searchService.getSelectedFacets();
             this.context.container.find('[data-facettype="Range"]').each((index, element: any) => {
                 const facetFieldName = element.dataset.facetfieldname;
                 const serviceInstance = new SliderService($(element), this.eventHub);

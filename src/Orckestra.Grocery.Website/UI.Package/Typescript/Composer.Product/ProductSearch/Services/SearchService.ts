@@ -9,6 +9,7 @@
 ///<reference path='../../../Repositories/SearchRepository.ts' />
 /// <reference path='../Constants/SearchEvents.ts' />
 ///<reference path='../../../Composer.Grocery/FulfillmentEvents.ts' />
+///<reference path='../../../Composer.MyAccount/MyUsuals/MyUsualsController.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -24,7 +25,7 @@ module Orckestra.Composer {
         public IsFacetsModalMode: Boolean = false;
 
         constructor(protected _eventHub: IEventHub, private _window: Window) {
-             this._searchCriteria = new SearchCriteria(_eventHub, _window);
+            this._searchCriteria = new SearchCriteria(_eventHub, _window);
         }
 
         /**
@@ -61,7 +62,7 @@ module Orckestra.Composer {
             this.search();
         }
 
-        public getSelectedFacets(): IHashTable<string|string[]> {
+        public getSelectedFacets(): IHashTable<string | string[]> {
             return this._searchCriteria.selectedFacets;
         }
 
@@ -140,7 +141,7 @@ module Orckestra.Composer {
             const applyButton = $(`${FacetsModalId} .modal--confirm`);
             const selected = Object.keys(this.getSelectedFacets());
 
-            if(selected.length === 0) {
+            if (selected.length === 0) {
                 clearAllButton.attr('disabled', 'true')
             } else {
                 clearAllButton.removeAttr('disabled')
@@ -161,11 +162,12 @@ module Orckestra.Composer {
             this._eventHub.subscribe(SearchEvents.FacetsModalClosed, this.facetsModalClosed.bind(this));
             this._eventHub.subscribe(SearchEvents.SearchKeywordChanged, this.searchKeywordChanged.bind(this));
             this._eventHub.subscribe(FulfillmentEvents.TimeSlotSelected, this.search.bind(this));
-            
+            this._eventHub.subscribe(SearchEvents.FilterKeywordChanged, this.searchKeywordChanged.bind(this));
+
             $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
-            $(FacetsModalId).on('click', '.modal--close',  this.facetsModalClosed.bind(this));
-            $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
-            $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
+            $(FacetsModalId).on('click', '.modal--close', this.facetsModalClosed.bind(this));
+            $(FacetsModalId).on('click', '.modal--confirm', this.facetsModalApply.bind(this));
+            $(FacetsModalId).on('click', '.modal--cancel', this.facetsModalCancel.bind(this));
         }
 
         protected search() {
@@ -176,12 +178,16 @@ module Orckestra.Composer {
                 $(FacetsModalId).addClass('loading');
 
                 const queryString = this._searchCriteria.toQuerystring();
+                var getFacetsPromise;
+
                 const { categoryId, queryName, queryType } = this._searchCriteria;
-
-                var getFacetsPromise = categoryId ? this._searchRepository.getCategoryFacets(categoryId, queryString) :
-                    (queryName ? this._searchRepository.getQueryFacets(queryName, queryType, queryString) :
-                        this._searchRepository.getFacets(queryString));
-
+                if (queryType === "MyUsuals") {
+                    getFacetsPromise = this._searchRepository.getMyUsualsFacets(queryString);
+                } else {
+                    getFacetsPromise = categoryId ? this._searchRepository.getCategoryFacets(categoryId, queryString) :
+                        (queryName ? this._searchRepository.getQueryFacets(queryName, queryType, queryString) :
+                            this._searchRepository.getFacets(queryString));
+                }
                 getFacetsPromise.then(result => this._eventHub.publish(SearchEvents.FacetsLoaded, { data: result }))
                     .fail(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));

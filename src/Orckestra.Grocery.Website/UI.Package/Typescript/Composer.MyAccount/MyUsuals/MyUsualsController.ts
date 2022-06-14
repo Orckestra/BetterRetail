@@ -15,6 +15,7 @@
 ///<reference path='../../Repositories/ISearchRepository.ts' />
 ///<reference path='../../Repositories/SearchRepository.ts' />
 ///<reference path='../../Composer.Grocery/FulfillmentEvents.ts' />
+/// <reference path='../../Composer.Product/ProductSearch/Constants/SearchEvents.ts' />
 
 module Orckestra.Composer {
   'use strict';
@@ -35,6 +36,7 @@ module Orckestra.Composer {
       let self = this;
       let inputField;
       const SearchUrl = this.context.container.data('searchurl');
+      var { ProductSearchResults } = this.context.viewModel;
 
       this.VueMyUsualsResults = new Vue({
         el: "#vueMyUsuals",
@@ -42,6 +44,7 @@ module Orckestra.Composer {
         mounted() {
           self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
           self.eventHub.subscribe(FulfillmentEvents.StoreSelected, this.onStoreSelected);
+          self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
           self.cartService.getCart()
             .then(cart => this.Cart = cart)
             .fin(() => this.IsBusy = false);
@@ -49,29 +52,29 @@ module Orckestra.Composer {
           self.wishListService.getWishListSummary()
             .then(wishList => this.WishList = wishList);
 
-          this.searchForMyUsuals();
-
           inputField = document.getElementById('filter_keywords');
-          inputField.addEventListener('keydown', (event) => {
-            if (event.code === 'Enter') {
-              this.filterMyUsuals();
-            }
-          });
+          if (inputField !== null) {
+            inputField.addEventListener('keydown', (event) => {
+              if (event.code === 'Enter') {
+                this.filterMyUsuals();
+              }
+            });
+          }
+
         },
         data: {
+          ...ProductSearchResults,
           keywords: "*",
-          MyUsualsResults: [],
           Cart: undefined,
           WishList: undefined,
           UpdatingProductId: undefined,
           Loading: false,
           IsBusy: true,
-          TotalCount: 0,
-          SearchUrl
+          SearchUrl,
         },
         computed: {
           ExtendedSearchResults() {
-            const results = _.map(this.MyUsualsResults, (product: any) => {
+            const results = _.map(this.SearchResults, (product: any) => {
               const isSameProduct = (i: any) => i.ProductId === product.ProductId;
               let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
               product.InCart = !!cartItem;
@@ -103,11 +106,16 @@ module Orckestra.Composer {
           updateKeyword(value) {
             this.keywords = value;
           },
-          searchForMyUsuals() {
+          searchForMyUsuals(queryString: string) {
             this.Loading = true;
-            self.searchRepository.getMyUsualsSearchResults(`keywords=${this.keywords}`).then(results => {
-              this.MyUsualsResults = results.ProductSearchResults.SearchResults;
+            self.searchRepository.getMyUsualsSearchResults(queryString).then(results => {
+              this.SearchResults = results.ProductSearchResults.SearchResults;
               this.TotalCount = results.ProductSearchResults.TotalCount;
+              this.SelectedSortBys = results.ProductSearchResults.SelectedSortBy;
+              this.Pagination = results.ProductSearchResults.Pagination;
+
+              Object.keys(results.ProductSearchResults).forEach(key => this[key] = results.ProductSearchResults[key]);
+              self.eventHub.publish(SearchEvents.SearchResultsLoaded, { data: results });
             }).fin(() => this.Loading = false)
           },
           onCartUpdated(result) {
@@ -118,15 +126,15 @@ module Orckestra.Composer {
             window.location.href = searchForProductsUrl;
           },
           onStoreSelected() {
-            this.MyUsualsResults = this.searchForMyUsuals();
+            this.SearchResults = this.searchForMyUsuals();
           },
           filterMyUsuals() {
-            this.MyUsualsResults = this.searchForMyUsuals();
+            self.eventHub.publish(SearchEvents.FilterKeywordChanged, { data: { keyword: this.keywords } });
           },
           clearFilter() {
             inputField.value = "";
-            this.keywords = "*";
-            this.MyUsualsResults = this.searchForMyUsuals();
+            this.keywords = "";
+            self.eventHub.publish(SearchEvents.FilterKeywordChanged, { data: {} });
           },
           updateItemQuantity(item: any, quantity: number) {
             let cartItem = _.find(this.Cart.LineItemDetailViewModels, (i: any) => i.Id === item.LineItemId);
@@ -185,7 +193,7 @@ module Orckestra.Composer {
           },
           loadingProduct(product, loading) {
             this.Loading = loading;
-            this.MyUsualsResults = [...this.MyUsualsResults];
+            this.SearchResults = [...this.SearchResults];
           },
           addToCart(event: any, product: any): void {
             const {
@@ -201,6 +209,15 @@ module Orckestra.Composer {
               .then(this.addToCartSuccess, this.onAddToCartFailed)
               .fin(() => this.loadingProduct(product, false));
           },
+
+          onSearchRequested({ data }): void {
+            this.searchForMyUsuals(data.queryString);
+          },
+
+          sortingChanged(url: string): void {
+            self.eventHub.publish(SearchEvents.SortingChanged, { data: { url } });
+          },
+
           onAddToCartFailed(reason: any): void {
             console.error('Error on adding item to cart', reason);
 

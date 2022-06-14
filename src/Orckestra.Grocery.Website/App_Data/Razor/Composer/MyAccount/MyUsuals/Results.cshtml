@@ -1,8 +1,8 @@
 ﻿@inherits Composer.Razor.ComposerRazorFunction
-@using Orckestra.Composer.Providers
-@using Orckestra.Composer.Parameters
+@using Newtonsoft.Json;
 @using System.Threading
 @using Orckestra.Composer.Grocery.Providers;
+@using Orckestra.Composer.Grocery.Context;
 
 @functions {
     public override string FunctionDescription
@@ -11,12 +11,14 @@
     }
 
     public IGroceryUrlProvider GroceryUrlProvider { get; set; }
+    public IMyUsualsContext MyUsualsContext { get; set; }
 }
 
 @{
     RedirectNotAuthorized();
 
     var searchGroceryUrl = GroceryUrlProvider.GetSearchUrl(Thread.CurrentThread.CurrentCulture);
+    var productViewModel = MyUsualsContext.ProductResultsViewModel;
 
 }
 
@@ -25,8 +27,8 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="MyAccount.MyUsuals" 
-         class="search-results" data-searchUrl="@searchGroceryUrl">
+    <div data-oc-controller="MyAccount.MyUsuals"
+         class="search-results" data-searchUrl="@searchGroceryUrl" data-context="@JsonConvert.SerializeObject(productViewModel, new Newtonsoft.Json.Converters.StringEnumConverter())">
         <div id="vueMyUsuals" class="card">
             <div class="card-header  clearfix">
                 <h3 class="float-left">
@@ -37,9 +39,9 @@
                 </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body" v-cloak="true">
                 <div class="input-group mb-2">
-                    <input id="filter_keywords" type="text" class="form-control" v-on:input="updateKeyword($event.target.value)" placeholder="Filter products" />
+                    <input id="filter_keywords" type="text" class="form-control" value="@MyUsualsContext.SearchQuery" v-on:input="updateKeyword($event.target.value)" placeholder="Filter products" />
                     <div class="input-group-append absolute">
                         <button class="btn btn-default" type="button" v-on:click="clearFilter">
                             <span class="fa fa-times fa-sm"></span>
@@ -49,9 +51,21 @@
                         </button>
                     </div>
                 </div>
-                <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px" v-cloak="true">
+
+                <div class="row filters-row mb-4" v-if="TotalCount > 0">
+                    <div class="col-6 d-lg-none">
+                        @FacetHelpers.FacetsModalCollapseBtn()
+                    </div>
+                    <div class="col-6 col-md-5">
+                        @SearchHelpers.SortBy()
+                    </div>
+                    <div class="col-6 col-md-7 d-none d-lg-block">
+                        @SearchHelpers.PaginationDropdown()
+                    </div>
+                </div>
+                <div class="busy-container" v-bind:class="{'busy' : IsBusy }" style="min-height: 300px">
                     @GeneralHelpers.LoadingSpinner()
-                    <div class="row" v-if="MyUsualsResults.length > 0">
+                    <div class="row" v-if="SearchResults.length > 0">
                         <div v-for="(Product, index) in ExtendedSearchResults" v-bind:key="Product.ProductId"
                              class="col-lg-3 mb-2" data-qa="search-results">
                             @Function("Composer.Search.Products.ProductTileVue")
@@ -67,6 +81,9 @@
                             </a>
                         </span>
                     </div>
+                </div>
+                <div class="row d-block pt-2" v-if="TotalCount > 0">
+                    @SearchHelpers.Pagination()
                 </div>
             </div>
         </div>

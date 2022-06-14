@@ -38,5 +38,9 @@ module Orckestra.Composer {
         public getMyUsualsSearchResults(QueryString): Q.Promise<any> {
             return ComposerClient.post('/api/myUsuals/search', { QueryString });
         }
+
+        public getMyUsualsFacets(QueryString): Q.Promise<any> {
+            return ComposerClient.post('/api/myUsuals/getfacets', { QueryString });
+        }
     }
 }

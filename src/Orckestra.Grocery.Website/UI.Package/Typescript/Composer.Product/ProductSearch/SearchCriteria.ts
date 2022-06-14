@@ -18,7 +18,7 @@ module Orckestra.Composer {
         public page: number = 1;
         public sortBy: string = '';
         public sortDirection: string = '';
-        public selectedFacets: IHashTable<string|string[]> = {};
+        public selectedFacets: IHashTable<string | string[]> = {};
 
         constructor(private eventHub, private _window: Window) {
         }
@@ -47,15 +47,15 @@ module Orckestra.Composer {
                 facetKey: string,
                 facetIndex: number = 1,
                 facetValue: any,
-                selectedFacets: IHashTable<string|string[]> = this.selectedFacets;
+                selectedFacets: IHashTable<string | string[]> = this.selectedFacets;
 
             if (!_.isEmpty(this.keywords) ||
                 !_.isEmpty(this.sortBy) ||
                 !_.isEmpty(this.sortDirection) ||
                 !_.isEmpty(this.page) && this.page > 1 ||
                 !_.isEmpty(this.selectedFacets)) {
-                    queryBuilder.push('?');
-                }
+                queryBuilder.push('?');
+            }
 
             if (!_.isEmpty(this.keywords) || !_.isEmpty(this.correctedSearchTerm)) {
                 queryBuilder.push('keywords=');
@@ -114,6 +114,7 @@ module Orckestra.Composer {
 
         public addSingleFacet(facetKey: string, facetValue: string) {
             this.selectedFacets[facetKey] = facetValue;
+            this.resetPaging();
         }
 
         public searchKeywordChanged(keyword: string) {
@@ -122,7 +123,7 @@ module Orckestra.Composer {
             this.correctedSearchTerm = null;
         }
 
-        public updateMultiFacets(facets: IHashTable<string|string[]>) {
+        public updateMultiFacets(facets: IHashTable<string | string[]>) {
             var facetKey: string,
                 facetValues: string[];
 
@@ -160,7 +161,7 @@ module Orckestra.Composer {
             }
         }
 
-        private getSelectedFacetsArray(facetFieldName: string) : ISelectedFacet {
+        private getSelectedFacetsArray(facetFieldName: string): ISelectedFacet {
             var isSelectedFacetArray: boolean;
             var selectedFacet: any = this.selectedFacets[facetFieldName];
             var selectedFacetArray: Array<any>;

@@ -459,7 +459,9 @@
     <Content Include="App_Data\Razor\Composer\MyAccount\WishList.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\MyFavorites.cshtml" />
     <Content Include="App_Data\Razor\Grocery\Recipes\StructuredData.cshtml" />
-    <Content Include="App_Data\Razor\Composer\MyAccount\MyUsuals.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\MyUsuals\Results.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\MyUsuals\Facets.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\MyUsuals\SelectedFacets.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="Views\web.config" />

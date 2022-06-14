@@ -3,6 +3,7 @@
 @using Orckestra.Composer.Services;
 @using Orckestra.ExperienceManagement.Configuration;
 @inherits Composer.Razor.ComposerRazorFunction
+@using Composite.Core.WebClient.Renderings.Page;
 
 
 @functions {
@@ -45,8 +46,9 @@
 @{
     var cultureInfo = ComposerContext.CultureInfo;
     var searchPageId = SiteConfiguration.GetPagesConfiguration().SearchPageId;
+    var currentPageId = PageRenderer.CurrentPageId;
 
-    var keywords = Request.QueryString["keywords"] ?? string.Empty;
+    var keywords = currentPageId == searchPageId ? (Request.QueryString["keywords"] ?? string.Empty) : string.Empty;
     var actionTarget = PageService.GetRendererPageUrl(searchPageId, cultureInfo);
     var dataController = Autocomplete ? "General.AutocompleteSearchBoxVue" : "General.SearchBox";
 }
@@ -156,7 +158,7 @@
                                 </a>
                                 <a v-on:mouseup.stop=""
                                    v-html="suggestion.item.mappedDisplayName"
-                                   v-on:click ="selectCategory(suggestion.item)">
+                                   v-on:click="selectCategory(suggestion.item)">
                                 </a>
                             </div>
 

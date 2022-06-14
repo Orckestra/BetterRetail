@@ -153,7 +153,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\MyUsualsController.cs" />
+    <Compile Include="Context\IMyUsualsContext.cs" />
     <Compile Include="Context\IProductTileConfigurationContext.cs" />
+    <Compile Include="Context\MyUsualsContext.cs" />
     <Compile Include="DataTypes\IBootstrapCarousel.cs" />
     <Compile Include="DataTypes\IMyUsualsSettingsMeta.cs" />
     <Compile Include="DataTypes\IPromotionalBannerConfiguration.cs" />

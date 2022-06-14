@@ -14,6 +14,7 @@ module Orckestra.Composer {
         SearchRequested = 'searchRequested',
         SearchResultsLoaded = 'searchResultsLoaded',
         FacetsLoaded = 'facetsLoaded',
-        SearchKeywordChanged  = 'searchKeywordChanged'
+        SearchKeywordChanged = 'searchKeywordChanged',
+        FilterKeywordChanged = 'filterKeywordChanged'
     }
 }

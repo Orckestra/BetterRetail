@@ -45,5 +45,7 @@ module Orckestra.Composer {
         getProductsSearchResults(QueryString, Skus): Q.Promise<any>;
 
         getMyUsualsSearchResults(QueryString): Q.Promise<any>;
+
+        getMyUsualsFacets(QueryString): Q.Promise<any>;
     }
 }

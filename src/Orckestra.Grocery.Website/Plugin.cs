@@ -5,6 +5,7 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.CompositeC1.Providers.MainMenu;
 using Orckestra.Composer.ExceptionFilters;
+using Orckestra.Composer.Grocery.Context;
 using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Services;
@@ -14,6 +15,7 @@ using Orckestra.Composer.Recipes.Services;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Store.Services;
+using Orckestra.Overture;
 
 namespace Orckestra.Composer.Grocery.Website
 {
@@ -44,7 +46,9 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<MyUsualsMainMenuItemsProvider, IMainMenuItemsProvider>();
             host.Register<GroceryMyAccountViewService, IMyAccountViewService>();
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
-            
+
+            host.Register<MyUsualsContext, IMyUsualsContext>(ComponentLifestyle.PerRequest);
+
             RegisterPaymentProviders();
         }
 
