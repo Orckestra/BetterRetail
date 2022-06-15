@@ -103,6 +103,14 @@
         <Type type="Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousel,Orckestra.Composer.Grocery">
           <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Grocery.DataTypes.IBootstrapCarousels_public.xml" />
         </Type>
+
+        <!-- Recipes -->
+        <Type type="Orckestra.Composer.Recipes.DataTypes.IRecipeSettingsMeta,Orckestra.Composer.Recipes">
+          <Data dataScopeIdentifier="administrated" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipeSettingsMetas_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.Recipes.DataTypes.IRecipeSettingsMeta,Orckestra.Composer.Recipes">
+          <Data dataScopeIdentifier="public" locale="fr-CA" dataFilename="~\Datas\Orckestra.Composer.Recipes.DataTypes.IRecipeSettingsMetas_public.xml" />
+        </Type>
       </Types>
     </mi:Add>
   </mi:PackageFragmentInstallers>

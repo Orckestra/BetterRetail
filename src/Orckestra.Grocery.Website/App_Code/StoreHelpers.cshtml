@@ -105,13 +105,13 @@
                 </div>
                 @if (showChangeLink)
                 {
-                    <div class="clearfix">
-                        <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta float-right" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
+                    <div class="d-flex justify-content-between">
+                        <a class="cta" v-bind:href="@(vueBinding).Store.Url">@Html.Localize("Store", "B_ViewStoreDetails")</a>
+                        <a v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="cta" href="#" v-on:click.prevent="changeStoreModal($event, 'store')">
                             <i class="fa fa-edit d-inline d-sm-none" aria-hidden="true"></i>
                             <span class="d-none d-sm-inline" aria-hidden="true"> @Html.Localize("Grocery", "B_ChangeStore")</span>
                             <span class="sr-only"> @Html.Localize("Grocery", "B_ChangeStore")</span>
                         </a>
-                        <a class="cta float-left" v-bind:href="@(vueBinding).Store.Url">@Html.Localize("Store", "B_ViewStoreDetails")</a>
                     </div>
                 }
             </div>
