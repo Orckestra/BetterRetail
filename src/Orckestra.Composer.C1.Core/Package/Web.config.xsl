@@ -70,12 +70,15 @@
 			<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
 		</sectionGroup>
   </configSections>
-      <xsl:copy-of select="$ConfigBuilders"/>
-      <xsl:comment>Composer configuration</xsl:comment>
-      <xsl:copy-of select="$ComposerSection"/>
-      <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
-    <xsl:apply-templates select="node()" />
+    <xsl:apply-templates select="configSections" />
+
+    <xsl:copy-of select="$ConfigBuilders"/>
+    <xsl:comment>Composer configuration</xsl:comment>
+    <xsl:copy-of select="$ComposerSection"/>
+    <xsl:copy-of select="$AppSettings"/>
+
+    <xsl:apply-templates select="node()[not(configSections)]" />
 		<xsl:if test="not(experienceManagement)" xml:space="preserve">
 				<experienceManagement>
 					<settings configSource="App_Config\ExperienceManagement.config" />
@@ -96,11 +99,6 @@
 				  </sectionGroup>
 			  </xsl:if>
    </xsl:copy>
-    <xsl:copy-of select="$ConfigBuilders"/>
-    <xsl:comment>Composer configuration</xsl:comment>
-    <xsl:copy-of select="$ComposerSection"/>
-    <xsl:copy-of select="$AppSettings"/>
-
   </xsl:template>
 
   <xsl:template match="configuration/system.web" xml:space="preserve">
