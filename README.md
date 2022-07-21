@@ -127,7 +127,7 @@ The file contains *C1 CMS* packages, *Experience Management* packages and *Refer
 
 *Experience Management* packages are installed from the **develop** branch by default. To install *Experience Management* packages from a specific branch, set `"em-branch" : "{branch_name}"` in parameters.
 
-For *C1 CMS* package next link is used by default: *http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)* which will download **latest** package version sutibale for current *C1 CMS* version. If need to download specific package version, need to use next link format: *https://package.composite.net:443/packages/{package-GUID}-ver-{package-Version}.zip*. 
+For *C1 CMS* package next link is used by default: *http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)* which will download **latest** package version suitable for current *C1 CMS* version. To download a specific package version, it is required to use the following link format: *https://package.composite.net:443/packages/{package-GUID}-ver-{package-Version}.zip*. 
 
 Example:
 
