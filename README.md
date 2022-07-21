@@ -122,7 +122,19 @@ In general, the full deployment process includes the following steps:
 
 If you need to deploy using a configuration from a specific file, use the `-env={keyword}` param and argument. For example, if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json has the highest priority in this case. 
 
-The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages install from the **develop** branch by default. To install packages from a specific Experience Management branch, set "em-branch" : "{branch_name}" in parameters.
+The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during the deploy.
+The file contains *C1 CMS* packages, *Experience Management* packages and *Reference Application* packages, created during the Build process. 
+
+*Experience Management* packages are installed from the **develop** branch by default. To install *Experience Management* packages from a specific branch, set `"em-branch" : "{branch_name}"` in parameters.
+
+For *C1 CMS* package next link is used by default: *http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)* which will download **latest** package version sutibale for current *C1 CMS* version. If need to download specific package version, need to use next link format: *https://package.composite.net:443/packages/{package-GUID}-ver-{package-Version}.zip*. 
+
+Example:
+
+`<package id="d665fbe2-3ca1-4c3a-b25b-79e4760e0c16" url="https://package.composite.net:443/packages/d665fbe2-3ca1-4c3a-b25b-79e4760e0c16-ver-2.0.5.zip"/>`
+
+**NOTE**: 
+For client solutions we recommend to use specific package versions, to avoid automatic updates of packages. 
 
 The file **{solution_dir_path}\build\configuration\SetupDescriptionSecondary.xml** includes packages to be installed after. 
 
