@@ -99,6 +99,17 @@ namespace Orckestra.Composer.Search.Services
                     viewModel.FacetSettings.SelectedFacets,
                     viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
 
+                
+                var selectedFacetValues = new HashSet<string>(
+                    viewModel.FacetSettings.CategoryFacetValuesTree.ChildNodes
+                        .SelectMany(GetSelectedFacetValues));
+
+                viewModel.FacetSettings.SelectedFacets.Facets = viewModel.FacetSettings.SelectedFacets.Facets
+                    .Where(item =>
+                        selectedFacetValues.Contains(item.Value) 
+                        || !item.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
+                    .ToList();
+
                 // Json context for Facets
                 viewModel.FacetSettings.Context["CategoryFacetValuesTree"] = viewModel.FacetSettings.CategoryFacetValuesTree;
                 viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
@@ -114,6 +125,21 @@ namespace Orckestra.Composer.Search.Services
             viewModel.Context["ListName"] = viewModel.ListName;
 
             return viewModel;
+        }
+
+        private IEnumerable<string> GetSelectedFacetValues(CategoryFacetValuesTreeNode facetsTree)
+        {
+            if (facetsTree.IsSelected)
+            {
+                yield return facetsTree.Value;
+            }
+
+            if (facetsTree.ChildNodes == null) yield break;
+
+            foreach (var childValue in facetsTree.ChildNodes.SelectMany(GetSelectedFacetValues))
+            {
+                yield return childValue;
+            }
         }
 
         protected override string GenerateUrl(CreateSearchPaginationParam<SearchParam> param)
