@@ -409,9 +409,14 @@ namespace Orckestra.Composer.Cart.Services
 
             if (CartConfiguration.GroupCartItemsByPrimaryCategory)
             {
-                vm.GroupedLineItemDetailViewModels = await GetGroupedLineItems(vm, param).ConfigureAwait(false);
-            }
+                var categoryTree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+                {
+                    Scope = param.Cart.ScopeId
+                }).ConfigureAwait(false);
 
+                vm.GroupedLineItemDetailViewModels = CartViewModelFactory.GetGroupedLineItems(vm.LineItemDetailViewModels, categoryTree, param.Cart.ScopeId, param.CultureInfo);
+            }
+        
             return vm;
         }
 

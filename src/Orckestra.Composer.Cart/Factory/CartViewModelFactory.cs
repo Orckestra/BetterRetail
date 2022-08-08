@@ -17,6 +17,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using Orckestra.Composer.Extensions;
+using Orckestra.Composer.Utils;
+using Orckestra.Overture.ServiceModel.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory
@@ -115,7 +119,44 @@ namespace Orckestra.Composer.Cart.Factory
 
             return vm;
         }
+        public virtual List<GroupedLineItemDetailViewModel> GetGroupedLineItems(List<LineItemDetailViewModel> lineItemDetailViewModels, Tree<Category, string> categoryTree, string scope, CultureInfo cultureInfo)
+        {
+            return lineItemDetailViewModels?
+                .Select(li =>
+                {
+                    Category topLevelCategory = null;
+                    if (!string.IsNullOrWhiteSpace(li.ProductSummary.CategoryId))
+                    {
+                        var categories = categoryTree.BuildPathFromTree(li.ProductSummary.CategoryId);
+                        topLevelCategory = categories?.LastOrDefault(c => c.Id != "Root");
+                    }
 
+                    li.ProductSummary.TopLevelCategoryId = topLevelCategory?.Id ?? "Root";
+                    li.ProductSummary.TopLevelCategoryName = topLevelCategory?.DisplayName?.GetLocalizedValue(cultureInfo.Name)
+                        ?? LocalizationProvider.GetLocalizedString(new GetLocalizedParam
+                        {
+                            Category = "CheckoutProcess",
+                            Key = "L_UndefinedLineItemCategory",
+                            CultureInfo = cultureInfo
+                        });
+
+                    return li;
+
+                })
+                .GroupBy(li => li.ProductSummary.TopLevelCategoryId)
+                .Select(lineItemsGroup =>
+                {
+                    var li = lineItemsGroup.First();
+                    return new GroupedLineItemDetailViewModel
+                    {
+                        TopLevelCategoryId = lineItemsGroup.Key,
+                        TopLevelCategoryName = li.ProductSummary.TopLevelCategoryName,
+                        LineItemDetailViewModels = lineItemsGroup.ToList(),
+                        Quantity = lineItemsGroup.Sum(l => l.Quantity)
+                    };
+                }
+                ).OrderBy(c => c.TopLevelCategoryId == "Root").ThenBy(c => c.TopLevelCategoryName).ToList();
+        }
         protected virtual void SetForgotPasswordPageUrl(CartViewModel cartViewModel, BaseUrlParameter getUrlParam)
         {
             cartViewModel.ForgotPasswordUrl = CartUrlProvider.GetForgotPasswordPageUrl(getUrlParam);

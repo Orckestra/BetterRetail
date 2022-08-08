@@ -2,8 +2,10 @@
 using System.Globalization;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
+using Orckestra.Overture.ServiceModel.Products;
 
 namespace Orckestra.Composer.Cart.Factory
 {
@@ -93,5 +95,7 @@ namespace Orckestra.Composer.Cart.Factory
         List<AdditionalFeeSummaryViewModel> GetAdditionalFeesSummary(IEnumerable<LineItemDetailViewModel> lineItemDetailViewModels, CultureInfo cultureInfo);
 
         SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo);
+
+        List<GroupedLineItemDetailViewModel> GetGroupedLineItems(List<LineItemDetailViewModel> lineItemDetailViewModels, Tree<Category, string> categoryTree, string scope, CultureInfo cultureInfo);
     }
 }
