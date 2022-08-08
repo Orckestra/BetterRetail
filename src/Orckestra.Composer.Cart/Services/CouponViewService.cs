@@ -166,7 +166,7 @@ namespace Orckestra.Composer.Cart.Services
                     Scope = param.Cart.ScopeId
                 }).ConfigureAwait(false);
 
-                vm.GroupedLineItemDetailViewModels = CartViewModelFactory.GetGroupedLineItems(vm.LineItemDetailViewModels, categoryTree, param.Cart.ScopeId, param.CultureInfo);
+                vm.GroupedLineItemDetailViewModels = CartViewModelFactory.GetGroupedLineItems(vm.LineItemDetailViewModels, categoryTree, param.CultureInfo);
             }
             return vm;
         }

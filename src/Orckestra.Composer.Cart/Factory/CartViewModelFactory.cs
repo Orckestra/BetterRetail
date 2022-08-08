@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             return vm;
         }
-        public virtual List<GroupedLineItemDetailViewModel> GetGroupedLineItems(List<LineItemDetailViewModel> lineItemDetailViewModels, Tree<Category, string> categoryTree, string scope, CultureInfo cultureInfo)
+        public virtual List<GroupedLineItemDetailViewModel> GetGroupedLineItems(List<LineItemDetailViewModel> lineItemDetailViewModels, Tree<Category, string> categoryTree, CultureInfo cultureInfo)
         {
             return lineItemDetailViewModels?
                 .Select(li =>

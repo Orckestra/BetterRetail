@@ -96,6 +96,6 @@ namespace Orckestra.Composer.Cart.Factory
 
         SavedCreditCardPaymentMethodViewModel MapSavedCreditCard(PaymentMethod payment, CultureInfo cultureInfo);
 
-        List<GroupedLineItemDetailViewModel> GetGroupedLineItems(List<LineItemDetailViewModel> lineItemDetailViewModels, Tree<Category, string> categoryTree, string scope, CultureInfo cultureInfo);
+        List<GroupedLineItemDetailViewModel> GetGroupedLineItems(List<LineItemDetailViewModel> lineItemDetailViewModels, Tree<Category, string> categoryTree, CultureInfo cultureInfo);
     }
 }
