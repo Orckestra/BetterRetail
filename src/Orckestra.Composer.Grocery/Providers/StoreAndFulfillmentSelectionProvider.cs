@@ -140,27 +140,9 @@ namespace Orckestra.Composer.Grocery.Providers
             {
                 if (param.IsAuthenticated)
                 {
-                    var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
-                    {
-                        CustomerId = param.CustomerId,
-                        CultureInfo = param.CultureInfo,
-                        Scope = ScopeProvider.DefaultScope
-                    }).ConfigureAwait(false);
-
-                    if (customer != null && customer.PreferredStoreId != Guid.Empty)
-                    {
-                        var preferredStore = await StoreRepository.GetStoreAsync(new GetStoreParam
-                        {
-                            Id = customer.PreferredStoreId,
-                            CultureInfo = param.CultureInfo,
-                            Scope = ScopeProvider.DefaultScope,
-                            IncludeAddresses = true,
-                            IncludeSchedules = true
-                        }).ConfigureAwait(false);
-
-                        if (preferredStore != null) return preferredStore;
-                    }
-                };
+                    var preferredStore = await GetCustomerPreferredStoreAsync(param.CustomerId, param.CultureInfo).ConfigureAwait(false);
+                    if (preferredStore != null) return preferredStore;
+                }
 
                 if (param.TryGetFromDefaultSettings)
                 {
@@ -183,6 +165,27 @@ namespace Orckestra.Composer.Grocery.Providers
             }).ConfigureAwait(false);
 
             return store;
+        }
+
+        private async Task<StoreServiceModel> GetCustomerPreferredStoreAsync(Guid customerId, CultureInfo culture)
+        {
+            var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
+            {
+                CustomerId = customerId,
+                CultureInfo = culture,
+                Scope = ScopeProvider.DefaultScope
+            }).ConfigureAwait(false);
+
+            if (customer == null || customer.PreferredStoreId == Guid.Empty) return null;
+
+            return await StoreRepository.GetStoreAsync(new GetStoreParam
+            {
+                Id = customer.PreferredStoreId,
+                CultureInfo = culture,
+                Scope = ScopeProvider.DefaultScope,
+                IncludeAddresses = true,
+                IncludeSchedules = true
+            }).ConfigureAwait(false);
         }
 
         public async Task<StoreServiceModel> SetSelectedStoreAndFulfillmentMethodTypeAsync(SetSelectedFulfillmentParam param)
@@ -229,7 +232,7 @@ namespace Orckestra.Composer.Grocery.Providers
             {
                 await UpdatePreferredStoreAsync(param.CustomerId, newStore.Number).ConfigureAwait(false);
             }
-          
+
             var processedCart = await CartMoveProvider.MoveCart(new MoveCartParam
             {
                 CultureInfo = param.CultureInfo,
@@ -267,7 +270,7 @@ namespace Orckestra.Composer.Grocery.Providers
 
             var shipment = order.Cart.Shipments.FirstOrDefault();
 
-            if(shipment == null) { throw new ArgumentException($"Order #{order.OrderNumber} has no shipments"); }
+            if (shipment == null) { throw new ArgumentException($"Order #{order.OrderNumber} has no shipments"); }
 
             var fulfillmentLocationId = shipment.FulfillmentLocationId;
 
@@ -277,7 +280,7 @@ namespace Orckestra.Composer.Grocery.Providers
                 Scope = order.ScopeId
             }).ConfigureAwait(false);
 
-            if(store == null)
+            if (store == null)
             {
                 throw new ArgumentException($"Store for order #{order.OrderNumber} and fulfillment location id {fulfillmentLocationId} does not exist");
             }
@@ -333,7 +336,7 @@ namespace Orckestra.Composer.Grocery.Providers
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.SlotId == default) throw new ArgumentException(GetMessageOfNull(nameof(param.SlotId)));
-            
+
             var cookieData = new ExtendedCookieData(CookieAccessor.Read());
             if (cookieData.TimeSlotReservationId != default || param.TimeSlotReservationId != default)
             {
@@ -588,7 +591,7 @@ namespace Orckestra.Composer.Grocery.Providers
                         ScopeTo = preferredStore.ScopeId,
                         InventoryLocationId = preferredStore.FulfillmentLocation?.InventoryLocationId,
                         MoveFulfillment = false,// we just need to move cart items
-                     }).ConfigureAwait(false);
+                    }).ConfigureAwait(false);
                 }
 
                 await WriteStoreCartDataToCookie(preferredStore, param.CustomerId, param.IsAuthenticated, param.CultureInfo).ConfigureAwait(false);
@@ -650,6 +653,9 @@ namespace Orckestra.Composer.Grocery.Providers
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)));
 
             var cookieData = new ExtendedCookieData(CookieAccessor.Read());
+
+            var preferredStore = await GetCustomerPreferredStoreAsync(param.CustomerId, param.CultureInfo).ConfigureAwait(false);
+
             var currentStore = await GetSelectedStoreAsync(new GetSelectedFulfillmentParam
             {
                 TryGetFromDefaultSettings = true,
@@ -675,7 +681,7 @@ namespace Orckestra.Composer.Grocery.Providers
             }
 
             //Update selected store and recover cart from cookies
-            var processedCart = await ChangeSelectedStoreAsync(currentStore, currentStore, new SetSelectedFulfillmentParam()
+            var processedCart = await ChangeSelectedStoreAsync(preferredStore ?? currentStore, currentStore, new SetSelectedFulfillmentParam()
             {
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
