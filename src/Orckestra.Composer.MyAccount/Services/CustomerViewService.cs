@@ -30,19 +30,22 @@ namespace Orckestra.Composer.MyAccount.Services
         protected ICultureService CultureService { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IRegexRulesProvider RegexRulesProvider { get; }
+        protected IMyAccountUrlProvider MyAccountUrlProvider { get; set; }
 
         public CustomerViewService(
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
             ICultureService cultureService,
             ILocalizationProvider localizationProvider,
-            IRegexRulesProvider regexRulesProvider)
+            IRegexRulesProvider regexRulesProvider,
+            IMyAccountUrlProvider myAccountUrlProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             CultureService = cultureService ?? throw new ArgumentNullException(nameof(cultureService));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
         }
 
         /// <summary>
@@ -170,16 +173,30 @@ namespace Orckestra.Composer.MyAccount.Services
             customer.LastName = updateParam.LastName;
             customer.Language = updateParam.PreferredLanguage;
             customer.PhoneNumber = updateParam.PhoneNumber;
+            if (updateParam.PropertyBag?.Count > 0)
+            {
+                foreach (var item in updateParam.PropertyBag)
+                {
+                    customer.PropertyBag[item.Key] = item.Value;
+                }
+            }
         }
 
         protected virtual UpdateAccountViewModel GetUpdateAccountViewModel(GetUpdateAccountViewModelParam param, Customer customer)
         {
             var viewModel = ViewModelMapper.MapTo<UpdateAccountViewModel>(customer, param.CultureInfo);
 
+            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo };
+            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
+
             viewModel.Status = param.Status.HasValue ? param.Status.Value.ToString("G") : string.Empty;
             viewModel.ReturnUrl = param.ReturnUrl;
             viewModel.Languages = GetPreferredLanguageViewModel(param.CultureInfo, customer.Language);
             viewModel.PhoneNumberRegEx = RegexRulesProvider.GetPhoneNumberRegex();
+            viewModel.PropertyBag = customer.PropertyBag;
+            viewModel.AddressListUrl = addressListUrl;
+            viewModel.ChangePasswordUrl = changePasswordUrl;
 
             return viewModel;
         }
