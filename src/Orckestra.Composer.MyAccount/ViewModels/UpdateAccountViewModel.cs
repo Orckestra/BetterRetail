@@ -51,7 +51,7 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         /// <summary>
         ///  All the languages available for the customer preferred language.
         /// </summary>
-        public IList<PreferredLanguageViewModel> Languages { get; set; }
+        public Dictionary<string, string> Languages { get; set; }
 
         /// <summary>
         /// The PhoneNumber for the User account
@@ -70,7 +70,7 @@ namespace Orckestra.Composer.MyAccount.ViewModels
 
         public UpdateAccountViewModel()
         {
-            Languages = new List<PreferredLanguageViewModel>();
+            Languages = new Dictionary<string, string>();
             PropertyBag = new Dictionary<string, object>();
         }
     }

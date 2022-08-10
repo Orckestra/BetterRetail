@@ -201,48 +201,18 @@ namespace Orckestra.Composer.MyAccount.Services
             return viewModel;
         }
 
-        protected virtual List<PreferredLanguageViewModel> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
+        protected virtual Dictionary<string, string> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
         {
             var allcultures = CultureService.GetAllSupportedCultures();
-            CultureInfo customerCultureInfo = null;
 
-            var languages = (from culture in allcultures
-                             let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
-                             {
-                                 CultureInfo = currentCulture,
-                                 Category = "General",
-                                 Key = culture.DisplayName
-                             })
-                             select new PreferredLanguageViewModel
-                             {
-                                 DisplayName = displayName,
-                                 IsoCode = culture.Name,
-                                 IsSelected = customerLanguage == culture.Name
-                             }).ToList();
-
-            if (!languages.Any(item => item.IsSelected))
-            {
-                try
+            var languages = allcultures
+                .ToDictionary(key => key.Name, value => LocalizationProvider.GetLocalizedString(new GetLocalizedParam
                 {
-                    customerCultureInfo = CultureInfo.GetCultureInfo(customerLanguage);
-                }
-                catch (Exception ex)
-                {
-                    var errorMessage = string.Format("Culture not found: {0}", customerLanguage);
-                    Log.ErrorException(errorMessage, ex);
-                }
+                    CultureInfo = currentCulture,
+                    Category = "General",
+                    Key = value.DisplayName
+                }));
 
-                if (customerCultureInfo != null)
-                {
-                    var affinityCultureName = CultureService.GetAffinityCulture(customerCultureInfo)?.Name;
-                    if (string.IsNullOrEmpty(affinityCultureName)) return languages;
-
-                    var affinityLanguage = languages.FirstOrDefault(item => affinityCultureName == item.IsoCode);
-
-                    if (affinityLanguage != null)
-                        affinityLanguage.IsSelected = true;
-                }
-            }
             return languages;
         }
 

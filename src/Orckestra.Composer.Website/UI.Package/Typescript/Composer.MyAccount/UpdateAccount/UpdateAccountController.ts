@@ -8,77 +8,98 @@
 ///<reference path='../MyAccount/MyAccountController.ts' />
 
 module Orckestra.Composer {
+    enum UpdateAccountStates {
+        Sucsess = 'sucsess',
+        Failed = 'failed'
+    }
 
     export class UpdateAccountController extends Orckestra.Composer.MyAccountController {
 
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected userService: UserMetadataService = new UserMetadataService(new MembershipRepository());
+        protected VueUpdateAccount: Vue;
 
         public initialize() {
 
             super.initialize();
-            this.registerSubscriptions();
+            let userData = this.context.viewModel;
+            const self = this;
+            const updateAccountFormId = "#updateAccountForm";
+
+            this.VueUpdateAccount = new Vue({
+                el: '#vueUpdateAccount',
+
+                data: {
+                    ...userData,
+                    UpdateAccountState: "",
+                    IsLoading: false
+                },
+                mounted() {
+                    self.initializeParsey(updateAccountFormId);
+                },
+                computed: {
+                    SaveChangesFailed() {
+                        return this.UpdateAccountState === UpdateAccountStates.Failed;
+                    },
+                    SaveChangesSucceeded() {
+                        return this.UpdateAccountState === UpdateAccountStates.Sucsess;
+                    }
+                },
+                methods: {
+                    enableSubmitButton() {
+                        this.UpdateAccountState = "";
+                        let parsleyInit = self.getParsleyInit(updateAccountFormId);
+                        $('#UpdateAccountSubmit').prop('disabled', !parsleyInit.isValid());
+                    },
+                    updateAccount() {
+                        let parsleyInit = self.getParsleyInit(updateAccountFormId);
+                        if (parsleyInit && !parsleyInit.validate()) { return; }
+
+                        var formData: any = {
+                            FirstName: this.FirstName,
+                            LastName: this.LastName,
+                            Email: this.Email,
+                            PreferredLanguage: this.Language
+                        };
+
+                        var returnUrlQueryString: string = 'ReturnUrl=';
+                        var returnUrl: string = '';
+
+                        if (window.location.href.indexOf(returnUrlQueryString) > -1) {
+                            returnUrl = urlHelper.getURLParameter(location.search, 'ReturnUrl');
+                        }
+
+                        this.IsLoading = true;
+                        self.customerService.updateAccount(formData, returnUrl)
+                            .then((result) => {
+                                self.userService.invalidateCache();
+                                self.onAccountUpdated(result);
+                                this.UpdateAccountState = UpdateAccountStates.Sucsess;
+                                return result;
+                            })
+                            .fail((reason) => {
+                                console.error('Error updating the account.', reason);
+                                this.UpdateAccountState = UpdateAccountStates.Failed;
+
+                            })
+                            .fin(() => this.IsLoading = false);
+                    }
+                }
+            });
         }
 
-        protected registerSubscriptions() {
+        private initializeParsey(formId: any): void {
+            $(formId).parsley({ trigger: 'focusout change' });
+        };
 
-            this.registerFormsForValidation(this.context.container.find('form'));
-            this.eventHub.subscribe(MyAccountEvents[MyAccountEvents.AccountUpdated], e => this.onAccountUpdated(e));
+        private getParsleyInit(formId: any): IParsley {
+            return $(formId).parsley();
         }
 
-        private onAccountUpdated(e: IEventInformation): void {
-
-            var result = e.data;
-
+        private onAccountUpdated(result: any): void {
             if (result.ReturnUrl) {
                 window.location.replace(decodeURIComponent(result.ReturnUrl));
-            } else {
-
-                this.render('UpdateAccount', result);
-                this.registerFormsForValidation(this.context.container.find('form'), {
-                    serverValidationContainer: '[data-templateid="UpdateAccountSuccessful"]'
-                });
             }
-        }
-
-        public enableSubmitButton(actionContext: IControllerActionContext): void {
-
-            $('#UpdateAccountSubmit').prop('disabled', false);
-        }
-
-        public updateAccount(actionContext: IControllerActionContext): void {
-
-            actionContext.event.preventDefault();
-
-            var formData: any = this.getFormData(actionContext);
-            var returnUrlQueryString: string = 'ReturnUrl=';
-            var returnUrl: string = '';
-
-            if (window.location.href.indexOf(returnUrlQueryString) > -1) {
-                returnUrl = urlHelper.getURLParameter(location.search, 'ReturnUrl');
-            }
-
-            var busy = this.asyncBusy({elementContext: actionContext.elementContext});
-
-            this.customerService.updateAccount(formData, returnUrl)
-                .then((result) => {
-                    this.userService.invalidateCache();
-                    return result;
-                })
-                .then(result => this.onUpdateAccountFulfilled(result))
-                .fail((reason) => {
-                    console.error('Error updating the account.', reason);
-                    this.renderFormErrorMessages(reason);
-
-                })
-                .fin(() => busy.done());
-        }
-
-        protected onUpdateAccountFulfilled(result: any): Q.Promise<any> {
-
-            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AccountUpdated], { data: result });
-
-            return Q(result);
         }
     }
 }
