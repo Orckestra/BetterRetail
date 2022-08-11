@@ -22,6 +22,7 @@ module Orckestra.Composer {
         public initialize() {
 
             super.initialize();
+            this.registerSubscriptions();
             let userData = this.context.viewModel;
             const self = this;
             const updateAccountFormId = "#updateAccountForm";
@@ -73,7 +74,6 @@ module Orckestra.Composer {
                         self.customerService.updateAccount(formData, returnUrl)
                             .then((result) => {
                                 self.userService.invalidateCache();
-                                self.onAccountUpdated(result);
                                 this.UpdateAccountState = UpdateAccountStates.Sucsess;
                                 return result;
                             })
@@ -87,6 +87,10 @@ module Orckestra.Composer {
                     }
                 }
             });
+        }
+
+        protected registerSubscriptions() {
+            this.eventHub.subscribe(MyAccountEvents[MyAccountEvents.AccountUpdated], e => this.onAccountUpdated(e));
         }
 
         private initializeParsey(formId: any): void {
