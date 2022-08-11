@@ -77,6 +77,7 @@ module Orckestra.Composer {
                                 this.UpdateAccountState = UpdateAccountStates.Sucsess;
                                 return result;
                             })
+                            .then(result => self.onUpdateAccountFulfilled(result))
                             .fail((reason) => {
                                 console.error('Error updating the account.', reason);
                                 this.UpdateAccountState = UpdateAccountStates.Failed;
@@ -100,6 +101,13 @@ module Orckestra.Composer {
             if (result.ReturnUrl) {
                 window.location.replace(decodeURIComponent(result.ReturnUrl));
             }
+        }
+
+        protected onUpdateAccountFulfilled(result: any): Q.Promise<any> {
+
+            this.eventHub.publish(MyAccountEvents[MyAccountEvents.AccountUpdated], { data: result });
+
+            return Q(result);
         }
     }
 }

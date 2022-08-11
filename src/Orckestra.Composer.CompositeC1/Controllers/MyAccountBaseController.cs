@@ -71,30 +71,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult UpdateAccount()
-        {
-            var urlParam = new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            };
-            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
-
-            var param = new GetUpdateAccountViewModelParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId
-            };
-
-            var viewModel = CustomerViewService.GetUpdateAccountViewModelAsync(param).Result;
-            viewModel.ChangePasswordUrl = changePasswordUrl;
-            viewModel.AddressListUrl = addressListUrl;
-
-            return View("UpdateAccountBlade", viewModel);
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult CreateAddress()
         {
             var viewModel = CustomerAddressViewService.GetCreateAddressViewModelAsync(new GetCreateAddressViewModelAsyncParam
