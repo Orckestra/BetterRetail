@@ -62,16 +62,9 @@ namespace Orckestra.Composer.MyAccount.Api
                 CultureInfo = ComposerContext.CultureInfo,
             };
 
-            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo };
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
-            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
-
             var viewModel = await CustomerViewService.UpdateAccountAsync(param);
 
             if (viewModel == null) { return Unauthorized(); }
-
-            viewModel.AddressListUrl = addressListUrl;
-            viewModel.ChangePasswordUrl = changePasswordUrl;
 
             return Ok(viewModel);
         }

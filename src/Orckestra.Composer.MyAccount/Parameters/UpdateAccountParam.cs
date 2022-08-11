@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Orckestra.Composer.MyAccount.Parameters
@@ -58,6 +59,12 @@ namespace Orckestra.Composer.MyAccount.Parameters
         /// The PhoneNumber for the User account
         /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// (Optional)
+        /// Property Bag
+        /// </summary>
+        public Dictionary<string, object> PropertyBag { get; set; }
 
     }
 }

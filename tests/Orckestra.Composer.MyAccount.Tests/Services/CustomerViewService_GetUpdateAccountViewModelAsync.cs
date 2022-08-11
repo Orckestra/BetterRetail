@@ -14,6 +14,11 @@ using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
 using System.Threading.Tasks;
+using Orckestra.Composer.Services.Lookup;
+using Orckestra.Composer.Enums;
+using System.Collections.Generic;
+using Orckestra.Overture.ServiceModel.Metadata;
+using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -39,6 +44,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var mockedCustomerRepository = new Mock<ICustomerRepository>();
             mockedCustomerRepository.Setup(r => r.GetCustomerByIdAsync(It.Is<GetCustomerByIdParam>(p => p.CustomerId == customer.Id)))
                 .ReturnsAsync(customer);
+
+            var mockedLookupService = new Mock<ILookupService>();
+            mockedLookupService.Setup(
+                repo => repo.GetLookupAsync(It.IsAny<LookupType>(), It.IsAny<string>()))
+                .ReturnsAsync(BuildLookup());
+
+            _container.Use(mockedLookupService);
             _container.Use(mockedCustomerRepository);
 
             var expectedStatus = TestingExtensions.GetRandomEnum<MyAccountStatus>();
@@ -154,7 +166,14 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             var mockedCustomerRepository = new Mock<ICustomerRepository>();
             mockedCustomerRepository.Setup(r => r.GetCustomerByIdAsync(It.Is<GetCustomerByIdParam>(p => p.CustomerId == customer.Id)))
                 .ReturnsAsync(customer);
+
+            var mockedLookupService = new Mock<ILookupService>();
+            mockedLookupService.Setup(
+                repo => repo.GetLookupAsync(It.IsAny<LookupType>(), It.IsAny<string>()))
+                .ReturnsAsync(BuildLookup());
+
             _container.Use(mockedCustomerRepository);
+            _container.Use(mockedLookupService);
 
             var param = new GetUpdateAccountViewModelParam
             {
@@ -171,6 +190,27 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
 
             //Assert
             viewModel.Status.Should().BeEmpty();
+        }
+
+        private static Lookup BuildLookup()
+        {
+            return new Lookup
+            {
+                LookupName = "DefaultSubstitutionOption",
+                IsActive = true,
+                Description = "Some description",
+                Values = {
+                     new LookupValue {
+                        Value = "NotSelected",
+                        SortOrder = 380,
+                        DisplayName = new LocalizedString(new Dictionary<string,string> {
+                            {"en-US", "NotSelected EN"},
+                            {"en-CA", "NotSelected EN"},
+                            {"fr-CA", "NotSelected FR"}
+                        })
+                     }
+                }
+            };
         }
     }
 }
