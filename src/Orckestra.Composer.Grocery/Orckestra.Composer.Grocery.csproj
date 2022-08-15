@@ -198,6 +198,7 @@
     <Compile Include="Repositories\TimeSlotRepository.cs" />
     <Compile Include="Requests\SetSelectedFulfillmentRequest.cs" />
     <Compile Include="Services\GroceryComposerContext.cs" />
+    <Compile Include="Services\GroceryCustomerViewService.cs" />
     <Compile Include="Services\GroceryMembershipViewService.cs" />
     <Compile Include="Requests\GetTimeSlotsAvailabilityRequest.cs" />
     <Compile Include="Requests\SetSelectedFulfillmentMethodTypeRequest.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Settings\MyUsualsSettings.cs" />
     <Compile Include="StartupHandler.cs" />
     <Compile Include="ViewModels\DayAvailabilityViewModel.cs" />
+    <Compile Include="ViewModels\IGroceryUpdateAccountViewModel.cs" />
     <Compile Include="ViewModels\IGroceryCartViewModel.cs" />
     <Compile Include="ViewModels\IGroceryOrderShipmentDetailViewModel.cs" />
     <Compile Include="ViewModels\IGroceryLineItemDetailViewModel.cs" />

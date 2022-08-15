@@ -255,4 +255,7 @@
   <data name="L_EditingOrderFailed" xml:space="preserve">
     <value>Une erreur s'est produite lors de la modification de votre commande. Cette commande ne peut être modifiée. Veuillez essayer de nouveaux ou contactez-nous pour de plus amples informations.</value>
   </data>
+  <data name="L_UpdateAccountFailed" xml:space="preserve">
+    <value>An error occurred while updating your account information. Please try again or contact us</value>
+  </data>
 </root>

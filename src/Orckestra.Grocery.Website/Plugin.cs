@@ -10,6 +10,7 @@ using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.Repositories;
 using Orckestra.Composer.Grocery.Services;
 using Orckestra.Composer.MyAccount.Repositories;
+using Orckestra.Composer.MyAccount.Services;
 using Orckestra.Composer.Recipes;
 using Orckestra.Composer.Recipes.Services;
 using Orckestra.Composer.Repositories;
@@ -45,6 +46,7 @@ namespace Orckestra.Composer.Grocery.Website
             host.Register<RecipesMainMenuItemsProvider, IMainMenuItemsProvider>();
             host.Register<MyUsualsMainMenuItemsProvider, IMainMenuItemsProvider>();
             host.Register<GroceryMyAccountViewService, IMyAccountViewService>();
+            host.Register<GroceryCustomerViewService, ICustomerViewService>();
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
 
             host.Register<MyUsualsContext, IMyUsualsContext>(ComponentLifestyle.PerRequest);

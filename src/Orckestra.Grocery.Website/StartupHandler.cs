@@ -146,7 +146,6 @@ namespace Orckestra.Composer.Grocery.Website
             functions.RegisterAction<MembershipController>("ChangePasswordBlade", "Composer.Membership.ChangePassword");
 
             functions.RegisterAction<MyAccountController>("AccountHeader", "Composer.MyAccount.AccountHeader");
-            functions.RegisterAction<MyAccountController>("UpdateAccount", "Composer.MyAccount.UpdateAccount");
             functions.RegisterAction<MyAccountController>("CreateAddress", "Composer.MyAccount.CreateAddress");
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
             functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule");

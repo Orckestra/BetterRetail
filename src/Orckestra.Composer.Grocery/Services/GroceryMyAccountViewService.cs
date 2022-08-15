@@ -2,7 +2,6 @@
 using Orckestra.Composer.CompositeC1.Providers;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Configuration;
-using Orckestra.Composer.Grocery.Providers;
 using Orckestra.Composer.Grocery.Settings;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;

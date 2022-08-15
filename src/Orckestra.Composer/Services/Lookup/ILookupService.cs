@@ -24,6 +24,11 @@ namespace Orckestra.Composer.Services.Lookup
         Task<List<Overture.ServiceModel.Metadata.Lookup>> GetLookupsAsync(LookupType lookupType);
 
         /// <summary>
+        /// Gets lookup by specific lookup type and name.
+        /// </summary>
+        Task<Overture.ServiceModel.Metadata.Lookup> GetLookupAsync(LookupType lookupType, string LookupName);
+
+        /// <summary>
         /// Gets a specific lookup value
         /// </summary>
         Task<string> GetLookupDisplayNameAsync(GetLookupDisplayNameParam param);

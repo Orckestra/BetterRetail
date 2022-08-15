@@ -317,6 +317,7 @@
     <Content Include="App_Data\PageTemplateFeatures\Descriptive HTML head elements.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Minicart.html" />
     <Content Include="App_Data\PageTemplateFeatures\Social links.html" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\UpdateAccount.cshtml" />
     <Content Include="browserconfig.xml" />
     <Content Include="Deployment\InstallCulture.aspx" />
     <Content Include="Composite\content\forms\Administrative\EditPage.xml" />

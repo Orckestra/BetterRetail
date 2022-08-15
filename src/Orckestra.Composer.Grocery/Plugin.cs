@@ -43,6 +43,7 @@ namespace Orckestra.Composer.Grocery
             host.Register<GroceryLineItemViewModelFactory, ILineItemViewModelFactory>();
             host.Register<MyUsualsViewService, IMyUsualsViewService>();
             host.Register<MyUsualsSettings, IMyUsualsSettings>(ComponentLifestyle.PerRequest);
+            host.Register<GroceryCustomerViewService, ICustomerViewService>();
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(typeof(Plugin).Assembly);
             host.RegisterApiControllers(typeof(Plugin).Assembly);
         }

@@ -5,7 +5,7 @@
 module Orckestra.Composer {
     'use strict';
 
-    export class CustomerRepository  implements ICustomerRepository {
+    export class CustomerRepository implements ICustomerRepository {
 
         /**
         * Attempt to register using Composer API.
@@ -17,12 +17,12 @@ module Orckestra.Composer {
             return ComposerClient.post('/api/customer/update', data);
         }
 
-         /**
-         * Get the customer addresses.
-         */
+        /**
+        * Get the customer addresses.
+        */
         public getAddresses(): Q.Promise<any> {
 
-              return ComposerClient.get('/api/customer/addresses');
+            return ComposerClient.get('/api/customer/addresses');
         }
 
         /**

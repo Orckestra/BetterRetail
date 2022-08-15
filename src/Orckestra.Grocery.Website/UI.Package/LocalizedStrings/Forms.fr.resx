@@ -543,4 +543,13 @@
   <data name="L_HidePassword" xml:space="preserve">
     <value>Masquer</value>
   </data>
+  <data name="F_DefaultSubstitution" xml:space="preserve">
+    <value>Default Substitution</value>
+  </data>
+  <data name="F_DefaultSubstitutionIndication" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_SelectDefaultSubstitution" xml:space="preserve">
+    <value>Select Default Substitution</value>
+  </data>
 </root>
