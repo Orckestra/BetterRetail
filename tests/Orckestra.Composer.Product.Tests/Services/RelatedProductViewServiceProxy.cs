@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;
@@ -20,7 +21,8 @@ namespace Orckestra.Composer.Product.Tests.Services
             ILocalizationProvider localizationProvider, 
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
-            IFulfillmentContext fulfillmentContext) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext)
+            IFulfillmentContext fulfillmentContext,
+            IProductInformationFactory productInformationFactory) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory)
         {
         }
 

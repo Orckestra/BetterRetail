@@ -1,5 +1,6 @@
 ﻿using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Enums;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
@@ -29,6 +30,7 @@ namespace Orckestra.Composer.Search.Factory
         protected IProductSettingsViewService ProductSettings { get; }
         protected IComposerContext ComposerContext { get; }
         protected IPriceProvider PriceProvider { get; }
+        protected IProductInformationFactory ProductInformationFactory { get; }
 
         public ProductSearchViewModelFactory(
             IViewModelMapper viewModelMapper, 
@@ -36,7 +38,8 @@ namespace Orckestra.Composer.Search.Factory
             IRecurringOrdersSettings recurringOrdersSettings,
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
-            IPriceProvider priceProvider)
+            IPriceProvider priceProvider,
+            IProductInformationFactory productInformationFactory)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
@@ -44,6 +47,8 @@ namespace Orckestra.Composer.Search.Factory
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
             PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
+            ProductInformationFactory = productInformationFactory ?? throw new ArgumentNullException(nameof(productInformationFactory));
+
         }
 
         public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
@@ -56,18 +61,34 @@ namespace Orckestra.Composer.Search.Factory
                 variantId = productDocument.PropertyBag[VariantPropertyBagKey] as string;
             }
 
-            var productSearchVm = ViewModelMapper.MapTo<ProductSearchViewModel>(productDocument, cultureInfo);
-            productSearchVm.ProductId = productDocument.ProductId;
-            MapProductSearchViewModelInfos(productSearchVm, productDocument, cultureInfo);
-            MapProductSearchViewModelUrl(productSearchVm, variantId, cultureInfo, criteria.BaseUrl);
-            MapProductSearchViewModelImage(productSearchVm, imgDictionary);
+            var vm = ViewModelMapper.MapTo<ProductSearchViewModel>(productDocument, cultureInfo);
+            vm.ProductId = productDocument.ProductId;
+            MapProductSearchViewModelInfos(vm, productDocument, cultureInfo);
+            MapProductSearchViewModelUrl(vm, variantId, cultureInfo, criteria.BaseUrl);
+            MapProductSearchViewModelImage(vm, imgDictionary);
+            MapProductSearchPromotions(vm, productDocument);
 
-            productSearchVm.IsRecurringOrderEligible = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsRecurringOrderEligible();
-            productSearchVm.Context["IsRecurringOrderEligible "] = productSearchVm.IsRecurringOrderEligible;
+            vm.IsRecurringOrderEligible = RecurringOrdersSettings.Enabled && productDocument.PropertyBag.IsRecurringOrderEligible();
+            vm.Context["IsRecurringOrderEligible "] = vm.IsRecurringOrderEligible;
 
-            return productSearchVm;
+            return vm;
         }
 
+        protected virtual void MapProductSearchPromotions(ProductSearchViewModel vm, ProductDocument productDocument)
+        {
+            if (vm.ProductBadges != null)
+            {
+                vm.ProductBadgeValues = ProductInformationFactory.BuildProductBadgeValues(ExtractLookupId("ProductBadges_Facet", productDocument.PropertyBag), string.Join(",", vm.ProductBadges));
+            }
+
+            var ribbonStyles = ProductInformationFactory.BuildPromotionalRibbonStyles(ExtractLookupId("PromotionalRibbon_Facet", productDocument.PropertyBag));
+            vm.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
+            vm.PromotionalRibbonTextColor = ribbonStyles.TextColor;
+
+            var bannerStyles = ProductInformationFactory.BuildPromotionalBannerStyles(ExtractLookupId("PromotionalBanner_Facet", productDocument.PropertyBag));
+            vm.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
+            vm.PromotionalBannerTextColor = bannerStyles.TextColor;
+        }
 
         protected virtual string ExtractLookupId(string fieldName, PropertyBag propertyBag)
         {

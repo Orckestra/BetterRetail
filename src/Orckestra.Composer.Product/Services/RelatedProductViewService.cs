@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
@@ -28,9 +29,10 @@ namespace Orckestra.Composer.Product.Services
             ILocalizationProvider localizationProvider,
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
-            IFulfillmentContext fulfillmentContext)
+            IFulfillmentContext fulfillmentContext,
+            IProductInformationFactory productInformationFactory)
 
-            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext) { }
+            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory) { }
 
         protected override async Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(GetProductIdentifiersParam param)
         {

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
@@ -30,6 +31,7 @@ namespace Orckestra.Composer.Product.Services
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IFulfillmentContext FulfillmentContext { get; }
+        protected IProductInformationFactory ProductInformationFactory { get; }
 
         protected BaseProductViewService(
             IProductRepository productRepository,
@@ -40,7 +42,8 @@ namespace Orckestra.Composer.Product.Services
             IRelationshipRepository relationshipRepository,
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
-            IFulfillmentContext fulfillmentContext)
+            IFulfillmentContext fulfillmentContext,
+            IProductInformationFactory productInformationFactory)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -51,6 +54,7 @@ namespace Orckestra.Composer.Product.Services
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
+            ProductInformationFactory = productInformationFactory ?? throw new ArgumentNullException(nameof(productInformationFactory));
         }
 
         protected abstract Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(TParam param);
@@ -234,6 +238,16 @@ namespace Orckestra.Composer.Product.Services
 
             vm.RecurringOrderProgramName = recurringOrderProgramName;
             vm.IsRecurringOrderEligible = recurringOrdersEnabled && !string.IsNullOrWhiteSpace(recurringOrderProgramName);
+
+            vm.ProductBadgeValues = ProductInformationFactory.BuildProductBadgeValues(vm.ProductBadgesKeys, vm.ProductBadgesLookup);
+            
+            var ribbonStyles = ProductInformationFactory.BuildPromotionalRibbonStyles(vm.PromotionalRibbonValue);
+            vm.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
+            vm.PromotionalRibbonTextColor = ribbonStyles.TextColor;
+
+            var bannerStyles = ProductInformationFactory.BuildPromotionalBannerStyles(vm.PromotionalBannerValue);
+            vm.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
+            vm.PromotionalBannerTextColor = bannerStyles.TextColor;
 
             return vm;
         }

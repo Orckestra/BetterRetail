@@ -1,4 +1,5 @@
 ﻿using Orckestra.Composer.ViewModels;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.Search.ViewModels
 {
@@ -20,5 +21,42 @@ namespace Orckestra.Composer.Search.ViewModels
         /// Gets or sets the search term
         /// </summary>
         public string SearchTerm { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Badges
+        /// </summary>
+        public string[] ProductBadges { get; set; }
+
+        public Dictionary<string, string> ProductBadgeValues { get; set; }
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon
+        /// </summary>
+        public string PromotionalRibbon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon Background Color
+        /// </summary>
+        public string PromotionalRibbonBackgroundColor { get; set; }
+
+        // <summary>
+        /// Gets or sets the product Promotional Ribbon Text Color
+        /// </summary>
+        public string PromotionalRibbonTextColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner
+        /// </summary>
+        public string PromotionalBanner { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner Background Color
+        /// </summary>
+        public string PromotionalBannerBackgroundColor { get; set; }
+
+        // <summary>
+        /// Gets or sets the product Promotional Banner Text Color
+        /// </summary>
+        public string PromotionalBannerTextColor { get; set; }
+
     }
 }

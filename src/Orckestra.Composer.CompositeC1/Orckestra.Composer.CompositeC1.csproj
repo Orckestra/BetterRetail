@@ -178,12 +178,14 @@
     <Compile Include="ComposerPclExportClient.cs" />
     <Compile Include="ContextPreservationHttpModule.cs" />
     <Compile Include="Context\ILanguageSwitchContext.cs" />
+    <Compile Include="Context\IProductTileConfigurationContext.cs" />
     <Compile Include="Context\LanguageSwitchContext.cs" />
     <Compile Include="Context\BreadcrumbContext.cs" />
     <Compile Include="Context\ContextHelper.cs" />
     <Compile Include="Context\IBreadcrumbContext.cs" />
     <Compile Include="Context\IStoreContext.cs" />
     <Compile Include="Context\IProductContext.cs" />
+    <Compile Include="Context\ProductTileConfigurationContext.cs" />
     <Compile Include="Context\StoreContext.cs" />
     <Compile Include="Context\ProductContext.cs" />
     <Compile Include="Controllers\BrowsingCategoriesBaseController.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="EmptyHttpHandler.cs" />
     <Compile Include="Controllers\WishListBaseController.cs" />
     <Compile Include="Extensions\ControllerExtension.cs" />
+    <Compile Include="Factory\ProductInformationFactory.cs" />
     <Compile Include="Mappers\FacetsMapper.cs" />
     <Compile Include="Installers\ComposerFragmentUninstaller.cs" />
     <Compile Include="Installers\ComposerFragmentInstaller.cs" />

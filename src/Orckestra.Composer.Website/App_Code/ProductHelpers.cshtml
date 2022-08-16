@@ -133,3 +133,30 @@
         </div>
     </div>
 }
+
+@helper PromotionalRibbon(string entity = "Product")
+{
+    <div v-if="@(entity).PromotionalRibbon" class="product-tile-ribbon-holder">
+        <div class="product-tile-ribbon ribbon-top-right">
+            <span v-bind:class="[@(entity).PromotionalRibbonBackgroundColor, @(entity).PromotionalRibbonTextColor]">
+                {{@(entity).PromotionalRibbon}}
+            </span>
+        </div>
+    </div>
+}
+
+@helper PromotionalBanner(string entity = "Product")
+{
+    <div v-if="@(entity).PromotionalBanner" class="product-tile-banner">
+        <span v-bind:class="[@(entity).PromotionalBannerBackgroundColor, @(entity).PromotionalBannerTextColor]" class="w-100 p-1">
+            {{@(entity).PromotionalBanner}}
+        </span>
+    </div>
+}
+
+@helper ProductBadges(string entity = "Product")
+{
+    <ul v-if="@(entity).ProductBadgeValues" class="product-tile-badges list-unstyled">
+        <li v-for="(name, key) in @(entity).ProductBadgeValues"><img v-bind:src="'/UI.Package/Images/badge/' + key + '.svg'" v-bind:alt="name" /></li>
+    </ul>
+}
