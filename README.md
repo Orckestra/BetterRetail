@@ -263,7 +263,7 @@ A: In a Powershell console in Administrator mode run the command:
 
 Q: After the deployment is completed, on the main website page, the product categories have not appeared
 	
-A: The deployment process installing the C1 package `Orckestra.Composer.C1.PreConfiguration`. During this package installation the product categories are creating. If the deployment is completed, but product categories have not appeared, most likely something went wrong with this package installation (please, report a bug with your certain error). To resolve this issue, you need to remove the `Orckestra.Composer.C1.PreConfiguration` package. To do this:
+A: The deployment process installing the C1 package `Orckestra.Composer.C1.PreConfiguration`. During this package installation the product categories are creating. If you provide a deployment in a place with existing files, the categories might not be re-created because the package is already installed. To re-create the categories, you need to remove the `Orckestra.Composer.C1.PreConfiguration` package. To do this:
 - Go to the admin section of the web site: *https://{website hostname}/Composite/top.aspx*
 - Login with your username and password
 - On the left side panel, click on the `System` icon <img src="https://user-images.githubusercontent.com/57723696/147662749-9933346c-bb25-49cd-9595-feccb7e19fbf.png" style="width:20px;"/>
