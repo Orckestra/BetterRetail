@@ -100,27 +100,27 @@ namespace Orckestra.Composer.Search.Services
                     viewModel.ProductSearchResults.CategoryFacetCounts).ConfigureAwait(false);
 
 
-                var selectedFacetValues = new HashSet<string>(
+                var categorySelectedFacetValues = new HashSet<string>(
                     viewModel.FacetSettings?.CategoryFacetValuesTree?.ChildNodes
                         ?.SelectMany(GetSelectedFacetValues) ?? Array.Empty<string>());
 
-                if (viewModel.FacetSettings != null)
+                if (viewModel.FacetSettings.SelectedFacets != null)
                 {
                     viewModel.FacetSettings.SelectedFacets.Facets = viewModel.FacetSettings.SelectedFacets.Facets
                         .Where(item =>
-                            selectedFacetValues.Contains(item.Value)
+                            categorySelectedFacetValues.Contains(item.Value)
                             || !item.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix))
                         .ToList();
-
-                    // Json context for Facets
-                    viewModel.FacetSettings.Context["CategoryFacetValuesTree"] =
-                        viewModel.FacetSettings.CategoryFacetValuesTree;
-                    viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
-                    viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f =>
-                        !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
-                    viewModel.FacetSettings.Context["PromotedFacetValues"] =
-                        viewModel.ProductSearchResults.PromotedFacetValues;
                 }
+
+                // Json context for Facets
+                viewModel.FacetSettings.Context["CategoryFacetValuesTree"] =
+                    viewModel.FacetSettings.CategoryFacetValuesTree;
+                viewModel.FacetSettings.Context["SelectedFacets"] = viewModel.FacetSettings.SelectedFacets;
+                viewModel.FacetSettings.Context["Facets"] = viewModel.ProductSearchResults.Facets.Where(f =>
+                    !f.FieldName.StartsWith(SearchConfiguration.CategoryFacetFiledNamePrefix));
+                viewModel.FacetSettings.Context["PromotedFacetValues"] =
+                    viewModel.ProductSearchResults.PromotedFacetValues;
             }
 
             // TODO: Needed for some JS context - move to data-context-var where needed
