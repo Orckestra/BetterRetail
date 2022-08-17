@@ -251,7 +251,6 @@ If you look into samples and open some, it is possible to see a very detailed lo
   In the `Performance` section of the AppInsights service, on the `Operations` tab, it will be possible to see the operations with the new formatting. 
 Also, it is possible to filter by the `WFE` role to see only the RefApp logs. ![image](https://user-images.githubusercontent.com/57723696/147671714-5374c65b-a03d-49b9-9444-27e9aebdf57e.png) 
 
-
 ## Related projects
 The Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
 
@@ -260,6 +259,19 @@ Q: Cannot execute PowerShell scripts because of PowerShell execution policy {TOD
 
 A: In a Powershell console in Administrator mode run the command:
 `Set-ExecutionPolicy unrestricted -scope CurrentUser`
+	
 
-
+Q: After the deployment is completed, on the main website page, the product categories have not appeared
+	
+A: The deployment process installing the C1 package `Orckestra.Composer.C1.PreConfiguration`. During this package installation the product categories are creating. If the deployment is completed, but product categories have not appeared, most likely something went wrong with this package installation (please, report a bug with your certain error). To resolve this issue, you need to remove the `Orckestra.Composer.C1.PreConfiguration` package. To do this:
+- Go to the admin section of the web site: *https://{website hostname}/Composite/top.aspx*
+- Login with your username and password
+- On the left side panel, click on the `System` icon <img src="https://user-images.githubusercontent.com/57723696/147662749-9933346c-bb25-49cd-9595-feccb7e19fbf.png" style="width:20px;"/>
+- Find the `Packages` menu
+- In this menu, go to the Installed Packages - Local Packages branch and reach the `Orckestra.Composer.C1.PreConfiguration` package
+- Right click on this package and select the `Package Info` menu.
+- In the opened window, click on the `Uninstall` button.
+	
+After the uninstallation, the website will be automatically restarted, and it will automatically re-install the `Orckestra.Composer.C1.PreConfiguration` package. During its installation the categories will appear.
+	
 {TODO: fill this section with known issues}
