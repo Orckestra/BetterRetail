@@ -188,6 +188,11 @@ module Orckestra.Composer {
                         elem.submit();
                     },
                     selectedSearchTermsSuggestion(suggestion) {
+                        EventHub.instance().publish('searchTermSuggestionClicked', {
+                            data: {
+                                suggestion: suggestion.item.DisplayName,
+                            }
+                        });
                         this.query = suggestion.item.DisplayName;
                         this.$nextTick().then(() => {
                             this.searchMore()
