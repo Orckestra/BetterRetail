@@ -57,6 +57,7 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         /// The PhoneNumber for the User account
         /// </summary>
         public string PhoneNumber { get; set; }
+
         /// <summary>
         /// The PhoneNumber RegEx validation rule
         /// </summary>
