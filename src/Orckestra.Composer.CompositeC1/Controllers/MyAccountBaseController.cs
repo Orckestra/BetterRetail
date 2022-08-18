@@ -1,10 +1,3 @@
-using System;
-using System.Net;
-using System.Web.Mvc;
-using Composite.Core.Xml;
-using Orckestra.Composer.Cart;
-using Orckestra.Composer.Cart.Parameters;
-using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.ViewModels;
@@ -19,6 +12,8 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
+using System;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {

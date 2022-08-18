@@ -34,6 +34,7 @@ namespace Orckestra.Composer.Cart.Factory
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected ICurrencyProvider CurrencyProvider { get; private set; }
+        protected IProductPromotionsFactory ProductPromotionsFactory { get; set; }
 
         public LineItemViewModelFactory(IViewModelMapper viewModelMapper,
             ILocalizationProvider localizationProvider,
@@ -44,7 +45,8 @@ namespace Orckestra.Composer.Cart.Factory
             IComposerContext composerContext,
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings,
-            ICurrencyProvider currencyProvider)
+            ICurrencyProvider currencyProvider,
+            IProductPromotionsFactory productPromotionsFactory)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
@@ -56,6 +58,7 @@ namespace Orckestra.Composer.Cart.Factory
             RecurringOrderProgramViewModelFactory = recurringOrderProgramViewModelFactory ?? throw new ArgumentNullException(nameof(recurringOrderProgramViewModelFactory));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
             CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
+            ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
         }
 
         /// <summary>
@@ -137,11 +140,23 @@ namespace Orckestra.Composer.Cart.Factory
             });
 
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
-
+            MapProductPromotions(vm);
             //Because the whole class is not async, we call a .Result here
             _ = MapRecurringOrderFrequencies(vm, lineItem, param.CultureInfo).Result;
 
             return vm;
+        }
+
+        protected virtual void MapProductPromotions(LineItemDetailViewModel vm)
+        {
+            vm.ProductBadgeValues = ProductPromotionsFactory.BuildProductBadgeValues(vm.ProductBadges, vm.ProductBadgesLookup);
+            var ribbonStyles = ProductPromotionsFactory.BuildPromotionalRibbonStyles(vm.PromotionalRibbonKey);
+            vm.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
+            vm.PromotionalRibbonTextColor = ribbonStyles.TextColor;
+
+            var bannerStyles = ProductPromotionsFactory.BuildPromotionalBannerStyles(vm.PromotionalBannerKey);
+            vm.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
+            vm.PromotionalBannerTextColor = bannerStyles.TextColor;
         }
 
         public async virtual Task<bool> MapRecurringOrderFrequencies(LineItemDetailViewModel vm, LineItem lineItem, CultureInfo cultureInfo)

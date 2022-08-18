@@ -13,11 +13,9 @@ namespace Orckestra.Composer.CompositeC1.Context
         protected ICacheStore<string, List<IPromotionalBannerConfiguration>> PromotionalBannerCache { get; }
         protected HttpContextBase HttpContext { get; }
         protected IDataQueryService DataQueryService { get; }
-        private List<IPromotionalRibbonConfiguration> _promotionalRibbonConfigurations;
         public string PromotionalRibbonDefaultBackgroundColor => "bg-dark";
         public string PromotionalRibbonDefaultTextColor => "text-white";
-        private List<IPromotionalBannerConfiguration> _promotionalBannerConfigurations;
-        public string PromotionalBannerDefaultBackgroundColor => "bg-dark";
+          public string PromotionalBannerDefaultBackgroundColor => "bg-dark";
         public string PromotionalBannerDefaultTextColor => "text-white";
 
         public ProductTileConfigurationContext(HttpContextBase httpContext, IDataQueryService dataQueryService, ICacheService cacheService)
@@ -32,12 +30,7 @@ namespace Orckestra.Composer.CompositeC1.Context
         }
         public List<IPromotionalRibbonConfiguration> GetPromotionalRibbonConfigurations()
         {
-            if (_promotionalRibbonConfigurations == null)
-            {
-                _promotionalRibbonConfigurations = PromotionalRibbonCache.GetOrAdd("PromotionalRibbonSettings", _ => LoadPromotionalRibbonSettings());
-            }
-
-            return _promotionalRibbonConfigurations;
+            return PromotionalRibbonCache.GetOrAdd("PromotionalRibbonSettings", _ => LoadPromotionalRibbonSettings());
         }
 
         private List<IPromotionalRibbonConfiguration> LoadPromotionalRibbonSettings()
@@ -52,13 +45,8 @@ namespace Orckestra.Composer.CompositeC1.Context
         }
 
         public List<IPromotionalBannerConfiguration> GetPromotionalBannerConfigurations()
-        {
-            if (_promotionalBannerConfigurations == null)
-            {
-                _promotionalBannerConfigurations = PromotionalBannerCache.GetOrAdd("PromotionalBannerSettings", _ => LoadPromotionalBannerSettings());
-            }
-
-            return _promotionalBannerConfigurations;
+        {  
+            return PromotionalBannerCache.GetOrAdd("PromotionalBannerSettings", _ => LoadPromotionalBannerSettings());
         }
 
         private List<IPromotionalBannerConfiguration> LoadPromotionalBannerSettings()
