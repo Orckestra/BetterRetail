@@ -89,7 +89,7 @@
                 {
                     <button class="btn  btn-primary  text-uppercase"
                             data-qa="search-buy-now"
-                            v-on:click="addToCart(@EntityName)"
+                            v-on:click="addToCart($event, @(EntityName))"
                             v-bind:disabled="!@(EntityName).IsAvailableToSell || @(EntityName).loading">
                         {{@(EntityName).IsAvailableToSell ? '@Html.Localize("General", "B_AddToCartProductList")' : '@Html.Localize("General", "B_AddToCartProductListOOS")'}}
                         <span v-if="@(EntityName).loading" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
