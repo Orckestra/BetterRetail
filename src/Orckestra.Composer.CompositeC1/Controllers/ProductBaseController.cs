@@ -1,21 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Composite.Data;
-using Orckestra.Composer.CompositeC1.Context;
-using Orckestra.Composer.CompositeC1.DataTypes;
-using Orckestra.Composer.CompositeC1.Extensions;
-using Orckestra.Composer.CompositeC1.Services;
+﻿using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.CompositeC1.Services.PreviewMode;
-using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Services;
-using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
-using Orckestra.Composer.Utils;
+using System;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -42,61 +31,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             RelatedProductViewService = relatedProductViewService ?? throw new ArgumentNullException(nameof(relatedProductViewService));
             PreviewModeService = previewModeService ?? throw new ArgumentNullException(nameof(previewModeService));
             ProductContext = productContext ?? throw new ArgumentNullException(nameof(productContext)); ;
-        }
-
-        public virtual ActionResult RelatedProducts(string id, string merchandiseTypes, string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices, bool displayAddToCart, DataReference<CssStyle> backgroundStyle = null)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return this.HandlePreviewMode( () =>
-                            RelatedProducts(PreviewModeService.Value.GetProductId(), merchandiseTypes, headingText, maxItems,
-                                displaySameCategoryProducts, displayPrices, displayAddToCart));
-            }
-            
-            if (string.IsNullOrWhiteSpace(merchandiseTypes))
-            {
-                throw new HttpException(400, "merchandiseTypes parameter is required.");
-            }
-
-            var cssStyle = backgroundStyle?.Data?.CssCode;
-
-            var relatedProductsViewModel = CreateRelatedProductsViewModel(id, 
-                merchandiseTypes, 
-                headingText, 
-                maxItems, 
-                displaySameCategoryProducts, 
-                displayPrices, 
-                displayAddToCart,
-                cssStyle);
-
-            return View("RelatedProductsBlade", relatedProductsViewModel);
-        }
-
-        private RelatedProductsViewModel CreateRelatedProductsViewModel(string id, string merchandiseTypes,
-            string headingText, int maxItems, bool displaySameCategoryProducts, bool displayPrices,
-            bool displayAddToCart, string backgroundStyle)
-        {
-            var param = new GetProductIdentifiersParam
-            {
-                CultureInfo = ComposerContext.CultureInfo,
-                ProductId = id,
-                Scope = ComposerContext.Scope,
-                MerchandiseTypes = merchandiseTypes.Split(','),
-                FallbackOnSameCategoriesProduct = displaySameCategoryProducts,
-                MaxItems = maxItems
-            };
-
-            var relatedProductsViewModel = RelatedProductViewService.GetProductIdsAsync(param).Result;
-            relatedProductsViewModel.Context["DisplayAddToCart"] = displayAddToCart;
-            relatedProductsViewModel.Context["DisplayPrices"] = displayPrices;
-            relatedProductsViewModel.Context["HeadingComponentText"] = headingText;
-
-            if (!string.IsNullOrWhiteSpace(backgroundStyle))
-            {
-                relatedProductsViewModel.Context["BackgroundStyle"] = backgroundStyle;
-            }
-
-            return relatedProductsViewModel; ;
         }
     }
 }

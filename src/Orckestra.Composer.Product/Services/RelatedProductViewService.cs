@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
+﻿using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.ViewModels;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Search;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Products;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Product.Services
@@ -133,6 +135,13 @@ namespace Orckestra.Composer.Product.Services
             vm.Context["ListName"] = "Related Products";
 
             return vm;
+        }
+
+        protected override GetProductMainImagesParam GetImagesParam(IEnumerable<ProductWithVariant> products)
+        {
+            var param = base.GetImagesParam(products);
+            param.ImageSize = SearchConfiguration.DefaultImageSize;
+            return param;
         }
     }
 }

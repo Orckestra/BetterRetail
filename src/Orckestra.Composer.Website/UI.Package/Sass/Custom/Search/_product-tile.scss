@@ -10,7 +10,15 @@
     pointer-events: none;
 }
 
+@mixin banner-bg($parent, $color) {
+    #{$parent} {
+        background-color: transparentize($color, 0.2) !important;
+    }
+}
+
+
 .product-tile {
+    position: relative;
     $lines-of-text: 3;
 
     .product-tile-text {
@@ -54,7 +62,7 @@
         height: 0;
         padding-bottom: $product-image-ratio * 100%;
         position: relative;
-    }
+   }
 
     .product-tile-recurring {
         float:left;
@@ -103,5 +111,23 @@
         left: -20px;
         top: 45px;
         transform: rotate(45deg);
-      }
+    }
+
+    .product-tile-banner {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        font-size: 14px;
+        font-family: $font-size-h1-sm, sans-serif;
+        text-align: center;
+    }
+    .product-tile-banner span {
+        display: inline-block;
+    }
+    .product-tile-banner {
+        @each $color,
+        $value in $theme-colors {
+            @include banner-bg(".bg-#{$color}", $value);
+        }
+    }
 }

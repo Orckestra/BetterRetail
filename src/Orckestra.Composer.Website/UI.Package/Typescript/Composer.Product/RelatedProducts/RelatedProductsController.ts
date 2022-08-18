@@ -1,35 +1,96 @@
 /// <reference path='../Product/ProductController.ts' />
 ///<reference path='../../Plugins/SlickCarouselPlugin.ts' />
+///<reference path='../ProductEvents.ts' />
 module Orckestra.Composer {
     export class RelatedProductController extends Orckestra.Composer.ProductController  {
 
         protected concern: string = 'relatedProduct';
         private source: string = 'Related Products';
+        protected VueRelatedProducts: Vue;
 
         private products: any[];
 
         public initialize() {
 
             super.initialize();
-            this.getRelatedProducts();
+            let self: RelatedProductController = this;
+            let vm = self.context.viewModel;
+            let relatedProductsPromise = self.getRelatedProducts();
+            let getCartPromise = self.cartService.getCart();
+            Q.all([relatedProductsPromise, getCartPromise])
+            .spread((relatedproducts, cart) => {
+                self.VueRelatedProducts = new Vue({
+                    el: '#vueRelatedProducts',
+                    data: {
+                        RelatedProducts: self.products,
+                        ProductIdentifiers: vm.ProductIdentifiers,
+                        Loading: false,
+                        Cart: cart,
+                    },
+                    mounted() {
+                        self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
+                        self.eventHub.publish('iniCarousel', null);
+                    },
+                    computed: {
+                        ExtendedRelatedProducts() {
+                            const results = _.map(this.RelatedProducts, (product: any) => {
+                                const isSameProduct = (i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId;
+                                let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
+
+                                product.InCart = !!cartItem;
+                                product.Quantity = cartItem ? cartItem.Quantity : 0;
+                                product.LineItemId = cartItem ? cartItem.Id : undefined;
+
+                                return product;
+                            });
+                            return results;
+                        }
+                    },
+                    methods: {
+                        onCartUpdated(cart) {
+                            this.Cart = cart.data;
+                        },
+                        productClick(product, index) {
+                            self.eventHub.publish(ProductEvents.ProductClick, {
+                                data: {
+                                    Product: product,
+                                    ListName: self.getListNameForAnalytics(),
+                                    Index: index
+                                }
+                            });
+                        },
+                        addToCart(event, product) {
+                            const { HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName } = product;
+
+                            this.Loading = true;
+                            event.target.disabled = true;
+
+                            var promise: Q.Promise<any>;
+
+                            if (HasVariants) {
+                                promise = self.addVariantProductToCart(ProductId, VariantId, Price);
+                            } else {
+                                promise = self.addNonVariantProductToCart(ProductId, Price, RecurringOrderProgramName);
+                            }
+
+                            promise.fin(() => {
+                                event.target.disabled = false;
+                                this.Loading = false;
+                            });
+                        }
+                    }
+                });
+            })
         }
 
-        private getRelatedProducts() {
+
+        private getRelatedProducts(): Q.Promise<any> {
             let vm = this.context.viewModel;
             let identifiers = vm.ProductIdentifiers;
-            this.productService.getRelatedProducts(identifiers)
-                .then(data => {
-                    this.products = data.Products;
-                    //Need to map parent items to child item since handlebar doesnt seem to support
-                    //partial parameters or path properly while it suppose to. Maybe an update of handlebar could solve the issue
-                    //(3.01 right now).
-                    vm.Products = _.each(data.Products, (lineItem: any) => {
-                        lineItem.DisplayAddToCart = vm.DisplayAddToCart;
-                        lineItem.DisplayPrices = vm.DisplayPrices;
-                    });
-
-                    this.render('RelatedProducts', vm);
-                    this.eventHub.publish('iniCarousel', vm);
+            return this.productService.getRelatedProducts(identifiers)
+                .then(relatedProductsVm => {
+                    this.products = relatedProductsVm.Products;
+                    vm.Products = relatedProductsVm.Products;
                     return vm;
                 })
                 .then(vm => {
@@ -37,7 +98,7 @@ module Orckestra.Composer {
                         this.eventHub.publish('relatedProductsLoaded',
                             {
                                 data: {
-                                    ListName: this.getPageSource(),
+                                    ListName: this.getListNameForAnalytics(),
                                     Products: vm.Products
                                 }
                             });
@@ -69,27 +130,6 @@ module Orckestra.Composer {
             ErrorHandler.instance().outputErrorFromCode('RelatedProductLoadFailed');
         }
 
-         public addToCart(actionContext: IControllerActionContext) {
-            var productContext: JQuery = $(actionContext.elementContext).closest('[data-product-id]');
-
-            var hasVariants: boolean = productContext.data('hasVariants');
-            var productId: string = productContext.attr('data-product-id');
-            var variantId: string = productContext.attr('data-product-variant-id');
-            var price: string = productContext.data('price');
-            var recurringProgramName: string = productContext.data('recurringorderprogramname');
-
-            var busy = this.asyncBusy({ elementContext: actionContext.elementContext, containerContext: productContext });
-            var promise: Q.Promise<any>;
-
-            if (hasVariants) {
-                promise = this.addVariantProductToCart(productId, variantId, price);
-            } else {
-                promise = this.addNonVariantProductToCart(productId, price, recurringProgramName);
-            }
-
-            promise.fin(() => busy.done());
-        }
-
         /**
          * Occurs when adding a product to the cart that happens to have variants.
          */
@@ -110,7 +150,7 @@ module Orckestra.Composer {
                 var data: any = this.getProductDataForAnalytics(vm);
                 data.Quantity = quantity.Value ? quantity.Value : 1;
 
-                this.eventHub.publish('lineItemAdding',
+                this.eventHub.publish(ProductEvents.LineItemAdding,
                 {
                     data: data
                 });
@@ -142,19 +182,6 @@ module Orckestra.Composer {
                 Max: 1,
                 Value: 1
             };
-        }
-
-        public relatedProductsClick(actionContext: IControllerActionContext) {
-
-            var index: number = <any>actionContext.elementContext.data('index');
-            var productId: string = actionContext.elementContext.data('productid').toString();
-            var product: any = _.find(this.products, {ProductId : productId});
-
-            this.eventHub.publish('productClick', { data : {
-                Product : product,
-                ListName : 'Related Products',
-                Index : index
-            }});
         }
     }
 }
