@@ -48,7 +48,6 @@ namespace Orckestra.Composer.Search.Factory
             ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
             PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
             ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
-
         }
 
         public virtual ProductSearchViewModel GetProductSearchViewModel(ProductDocument productDocument, SearchCriteria criteria, IDictionary<(string ProductId, string VariantId), ProductMainImage> imgDictionary)
