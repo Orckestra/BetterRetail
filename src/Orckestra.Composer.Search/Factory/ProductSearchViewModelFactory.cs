@@ -30,7 +30,7 @@ namespace Orckestra.Composer.Search.Factory
         protected IProductSettingsViewService ProductSettings { get; }
         protected IComposerContext ComposerContext { get; }
         protected IPriceProvider PriceProvider { get; }
-        protected IProductInformationFactory ProductInformationFactory { get; }
+        protected IProductPromotionsFactory ProductPromotionsFactory { get; }
 
         public ProductSearchViewModelFactory(
             IViewModelMapper viewModelMapper, 
@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Search.Factory
             IComposerContext composerContext,
             IProductSettingsViewService productSettings,
             IPriceProvider priceProvider,
-            IProductInformationFactory productInformationFactory)
+            IProductPromotionsFactory productPromotionsFactory)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));
@@ -47,7 +47,7 @@ namespace Orckestra.Composer.Search.Factory
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             ProductSettings = productSettings ?? throw new ArgumentNullException(nameof(productSettings));
             PriceProvider = priceProvider ?? throw new ArgumentNullException(nameof(priceProvider));
-            ProductInformationFactory = productInformationFactory ?? throw new ArgumentNullException(nameof(productInformationFactory));
+            ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
 
         }
 
@@ -78,14 +78,14 @@ namespace Orckestra.Composer.Search.Factory
         {
             if (vm.ProductBadges != null)
             {
-                vm.ProductBadgeValues = ProductInformationFactory.BuildProductBadgeValues(ExtractLookupId("ProductBadges_Facet", productDocument.PropertyBag), string.Join(",", vm.ProductBadges));
+                vm.ProductBadgeValues = ProductPromotionsFactory.BuildProductBadgeValues(ExtractLookupId("ProductBadges_Facet", productDocument.PropertyBag), string.Join(",", vm.ProductBadges));
             }
 
-            var ribbonStyles = ProductInformationFactory.BuildPromotionalRibbonStyles(ExtractLookupId("PromotionalRibbon_Facet", productDocument.PropertyBag));
+            var ribbonStyles = ProductPromotionsFactory.BuildPromotionalRibbonStyles(ExtractLookupId("PromotionalRibbon_Facet", productDocument.PropertyBag));
             vm.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
             vm.PromotionalRibbonTextColor = ribbonStyles.TextColor;
 
-            var bannerStyles = ProductInformationFactory.BuildPromotionalBannerStyles(ExtractLookupId("PromotionalBanner_Facet", productDocument.PropertyBag));
+            var bannerStyles = ProductPromotionsFactory.BuildPromotionalBannerStyles(ExtractLookupId("PromotionalBanner_Facet", productDocument.PropertyBag));
             vm.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
             vm.PromotionalBannerTextColor = bannerStyles.TextColor;
         }

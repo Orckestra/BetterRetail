@@ -90,7 +90,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<BaseSearchCriteriaProvider, IBaseSearchCriteriaProvider>();
 
             host.Register<ProductTileConfigurationContext, IProductTileConfigurationContext>();
-            host.Register<ProductInformationFactory, IProductInformationFactory>();
+            host.Register<ProductPromotionsFactory, IProductPromotionsFactory>();
 
             host.Register<EditingOrderProvider, IEditingOrderProvider>();
             RegisterBreadcrumProviders(host);

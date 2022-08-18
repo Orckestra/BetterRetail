@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Product.Services
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IFulfillmentContext FulfillmentContext { get; }
-        protected IProductInformationFactory ProductInformationFactory { get; }
+        protected IProductPromotionsFactory ProductPromotionsFactory { get; }
 
         protected BaseProductViewService(
             IProductRepository productRepository,
@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Product.Services
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
             IFulfillmentContext fulfillmentContext,
-            IProductInformationFactory productInformationFactory)
+            IProductPromotionsFactory productPromotionsFactory)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Product.Services
             InventoryLocationProvider = inventoryLocationProvider ?? throw new ArgumentNullException(nameof(inventoryLocationProvider));
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
-            ProductInformationFactory = productInformationFactory ?? throw new ArgumentNullException(nameof(productInformationFactory));
+            ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
         }
 
         protected abstract Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(TParam param);
@@ -239,13 +239,13 @@ namespace Orckestra.Composer.Product.Services
             vm.RecurringOrderProgramName = recurringOrderProgramName;
             vm.IsRecurringOrderEligible = recurringOrdersEnabled && !string.IsNullOrWhiteSpace(recurringOrderProgramName);
 
-            vm.ProductBadgeValues = ProductInformationFactory.BuildProductBadgeValues(vm.ProductBadgesKeys, vm.ProductBadgesLookup);
+            vm.ProductBadgeValues = ProductPromotionsFactory.BuildProductBadgeValues(vm.ProductBadgesKeys, vm.ProductBadgesLookup);
             
-            var ribbonStyles = ProductInformationFactory.BuildPromotionalRibbonStyles(vm.PromotionalRibbonValue);
+            var ribbonStyles = ProductPromotionsFactory.BuildPromotionalRibbonStyles(vm.PromotionalRibbonValue);
             vm.PromotionalRibbonBackgroundColor = ribbonStyles.BackgroundColor;
             vm.PromotionalRibbonTextColor = ribbonStyles.TextColor;
 
-            var bannerStyles = ProductInformationFactory.BuildPromotionalBannerStyles(vm.PromotionalBannerValue);
+            var bannerStyles = ProductPromotionsFactory.BuildPromotionalBannerStyles(vm.PromotionalBannerValue);
             vm.PromotionalBannerBackgroundColor = bannerStyles.BackgroundColor;
             vm.PromotionalBannerTextColor = bannerStyles.TextColor;
 

@@ -8,36 +8,17 @@ using System.Linq;
 
 namespace Orckestra.Composer.CompositeC1.Factory
 {
-    public class ProductInformationFactory : IProductInformationFactory
+    public class ProductPromotionsFactory : IProductPromotionsFactory
     {
         public IProductTileConfigurationContext ProductTileConfigurationContext { get; }
         protected ILocalizationProvider LocalizationProvider { get; }
 
-        public ProductInformationFactory(
+        public ProductPromotionsFactory(
             ILocalizationProvider localizationProvider,
             IProductTileConfigurationContext productTileConfigurationContext)
         {
             ProductTileConfigurationContext = productTileConfigurationContext ?? throw new ArgumentNullException(nameof(productTileConfigurationContext));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
-        }
-        public virtual string BuildProductFormat(int productUnitQuantity,
-              decimal productUnitSize,
-              string productUnitMeasure,
-              bool isWeightedProduct,
-              CultureInfo cultureInfo)
-        {
-            var hasUnitValues = productUnitQuantity > 0 && productUnitSize > 0 && !string.IsNullOrWhiteSpace(productUnitMeasure);
-
-            if (hasUnitValues)
-            {
-                var isSingleUnit = productUnitQuantity == 1;
-                var unitQuantity = (isSingleUnit) ? "" : $"{productUnitQuantity} x";
-                var unitQuantitySuffix = (isSingleUnit && isWeightedProduct) ? LocalizationProvider.GetLocalizedString(new Composer.Providers.Localization.GetLocalizedParam() { Category = "General", Key = "L_EachAbbrev", CultureInfo = cultureInfo }) : "";
-                var unitSize = (isWeightedProduct) ? $"{LocalizationProvider.GetLocalizedString(new Composer.Providers.Localization.GetLocalizedParam() { Category = "ProductPage", Key = "L_Approx", CultureInfo = cultureInfo })} {productUnitSize}{productUnitMeasure}" : $"{productUnitSize}{productUnitMeasure}";
-                return $"{unitQuantity} {unitSize} {unitQuantitySuffix}".TrimEnd().TrimStart();
-            }
-
-            return null;
         }
 
         public virtual Dictionary<string, string> BuildProductBadgeValues(string keys, string lookupDisplayNames)

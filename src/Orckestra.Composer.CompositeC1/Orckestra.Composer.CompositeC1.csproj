@@ -204,7 +204,7 @@
     <Compile Include="EmptyHttpHandler.cs" />
     <Compile Include="Controllers\WishListBaseController.cs" />
     <Compile Include="Extensions\ControllerExtension.cs" />
-    <Compile Include="Factory\ProductInformationFactory.cs" />
+    <Compile Include="Factory\ProductPromotionsFactory.cs" />
     <Compile Include="Mappers\FacetsMapper.cs" />
     <Compile Include="Installers\ComposerFragmentUninstaller.cs" />
     <Compile Include="Installers\ComposerFragmentInstaller.cs" />

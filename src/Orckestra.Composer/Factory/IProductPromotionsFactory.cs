@@ -2,7 +2,7 @@
 
 namespace Orckestra.Composer.Factory
 {
-    public interface IProductInformationFactory
+    public interface IProductPromotionsFactory
     {
         Dictionary<string, string> BuildProductBadgeValues(string keys, string lookupDisplayNames);
         (string BackgroundColor, string TextColor) BuildPromotionalRibbonStyles(string ribbobValue);

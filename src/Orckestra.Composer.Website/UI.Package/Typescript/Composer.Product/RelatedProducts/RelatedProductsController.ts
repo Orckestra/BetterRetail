@@ -50,11 +50,11 @@ module Orckestra.Composer {
                         onCartUpdated(cart) {
                             this.Cart = cart.data;
                         },
-                        productClick(product, index) {
+                        searchProductClick(product, index) {
                             self.eventHub.publish(ProductEvents.ProductClick, {
                                 data: {
                                     Product: product,
-                                    ListName: self.getListNameForAnalytics(),
+                                    ListName: self.getPageSource(),
                                     Index: index
                                 }
                             });

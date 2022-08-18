@@ -32,7 +32,7 @@ namespace Orckestra.Composer.Product.Services
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
             IFulfillmentContext fulfillmentContext,
-            IProductInformationFactory productInformationFactory)
+            IProductPromotionsFactory productInformationFactory)
 
             : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory) { }
 
