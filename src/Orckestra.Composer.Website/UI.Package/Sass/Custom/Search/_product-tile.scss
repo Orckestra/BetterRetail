@@ -83,7 +83,7 @@
     .product-tile-ribbon::before,
     .product-tile-ribbon::after {
         position: absolute;
-        z-index: -1;
+        z-index: 9;
         content: '';
         display: block;
         border-top-color: transparent;
@@ -111,6 +111,7 @@
         left: -20px;
         top: 45px;
         transform: rotate(45deg);
+        z-index: 10;
     }
 
     .product-tile-banner {

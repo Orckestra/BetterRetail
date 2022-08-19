@@ -200,7 +200,7 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// </summary>
         public string PromotionalBannerBackgroundColor { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets the product Promotional Banner Text Color
         /// </summary>
         public string PromotionalBannerTextColor { get; set; }

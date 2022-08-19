@@ -73,7 +73,7 @@
 
                 <template v-if="Total">
                     <div class="row">
-                        <div v-for="item in Items" class="col-12 col-md-4 mb-2">
+                        <div v-for="item in Items" class="col-12 col-md-4 mb-5">
                             @SummaryTile("item")
                         </div>
                     </div>
@@ -95,9 +95,9 @@
         <img class="img-fluid m-auto" v-bind:src="@(entity).ImageUrl"
              v-bind:alt="@(entity).ProductSummary.DisplayName"
              v-bind:onerror="'this.onerror=null; this.src=\'' + @(entity).FallbackImageUrl + '\''" />
-        @ProductHelpers.PromotionalBanner(entity + ".Bag")
+        @ProductHelpers.PromotionalBanner(entity)
     </a>
-    @ProductHelpers.PromotionalRibbon(entity + ".Bag")
+    @ProductHelpers.PromotionalRibbon(entity)
     <div class="wishlist-tile-delete d-none ">
         <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
                 class="btn btn-secondary bg-white text-secondary"

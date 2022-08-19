@@ -15,7 +15,9 @@ namespace Orckestra.Composer.Search.ViewModels
         /// </summary>
         [MapTo("DisplayName")]
         public string FullDisplayName { get; set; }
+
         public double? Price { get; set; }
+
         public double? ListPrice { get; set; }
         /// <summary>
         /// Gets or sets the search term
@@ -28,6 +30,7 @@ namespace Orckestra.Composer.Search.ViewModels
         public string[] ProductBadges { get; set; }
 
         public Dictionary<string, string> ProductBadgeValues { get; set; }
+        
         /// <summary>
         /// Gets or sets the product Promotional Ribbon
         /// </summary>
@@ -38,7 +41,7 @@ namespace Orckestra.Composer.Search.ViewModels
         /// </summary>
         public string PromotionalRibbonBackgroundColor { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets the product Promotional Ribbon Text Color
         /// </summary>
         public string PromotionalRibbonTextColor { get; set; }

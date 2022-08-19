@@ -19,6 +19,7 @@ namespace Orckestra.Composer.Product.ViewModels
         /// The base price for the product
         /// </summary>
         public decimal? ListPrice { get; set; }
+
         /// <summary>
         /// The current price of the product. This will usually be the same as <see cref="ListPrice"/>,
         /// but could be less if the product is discounted.
@@ -47,6 +48,7 @@ namespace Orckestra.Composer.Product.ViewModels
         /// </summary>
         [MapTo("PromotionalRibbon")]
         public string PromotionalRibbonValue { get; set; }
+
         /// <summary>
         /// Gets or sets the product Promotional Ribbon
         /// </summary>
@@ -62,7 +64,6 @@ namespace Orckestra.Composer.Product.ViewModels
         /// Gets or sets the product Promotional Ribbon Text Color
         /// </summary>
         public string PromotionalRibbonTextColor { get; set; }
-
 
         /// <summary>
         /// Gets or sets the product Promotional Banner Value
@@ -81,7 +82,7 @@ namespace Orckestra.Composer.Product.ViewModels
         /// </summary>
         public string PromotionalBannerBackgroundColor { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets the product Promotional Banner Text Color
         /// </summary>
         public string PromotionalBannerTextColor { get; set; }

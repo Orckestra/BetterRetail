@@ -22,21 +22,16 @@ namespace Orckestra.Composer.CompositeC1.Factory
         }
 
         public virtual Dictionary<string, string> BuildProductBadgeValues(string keys, string lookupDisplayNames)
-        {
-            var productBadgesNames = lookupDisplayNames != null ? lookupDisplayNames.Split(',').ToList() : new List<string>();
-            var productBadgeKeys = keys != null ? keys.Split('|').ToList() : new List<string>();
+        {   
+            if (string.IsNullOrWhiteSpace(keys)) return null;
+            var productBadgesNames = lookupDisplayNames?.Split(',').ToList() ?? new List<string>();
+            var productBadgeKeys = keys.Split('|').ToList();
 
-            if (!productBadgeKeys.Any())
+           var productBadgeValues = new Dictionary<string, string>();
+
+            foreach (var tuple in productBadgeKeys.Zip(productBadgesNames, (x, y) => (Key: x, Value: y)))
             {
-                return null;
-            }
-
-            var productBadgeValues = new Dictionary<string, string>();
-
-            for (var i = 0; i < productBadgeKeys.Count; i++)
-            {
-                if (!productBadgeValues.ContainsValue(productBadgeKeys[i]))
-                    productBadgeValues.Add(productBadgeKeys[i], productBadgesNames[i]);
+                productBadgeValues[tuple.Key] = tuple.Value;
             }
 
             return productBadgeValues;
