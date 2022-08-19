@@ -90,6 +90,8 @@
     <Compile Include="DataTypesEventRegistrator.cs" />
     <Compile Include="Facets\IFacetConfigurationMeta.cs" />
     <Compile Include="IPreviewModeMeta.cs" />
+    <Compile Include="IPromotionalBannerConfiguration.cs" />
+    <Compile Include="IPromotionalRibbonConfiguration.cs" />
     <Compile Include="IWebsiteStyleTheme.cs" />
     <Compile Include="Navigation\IMainMenuProviderConfiguration.cs" />
     <Compile Include="SearchAutocomplete\ISearchTerm.cs" />

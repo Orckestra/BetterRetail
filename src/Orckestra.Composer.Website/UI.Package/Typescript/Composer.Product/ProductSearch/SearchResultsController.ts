@@ -53,7 +53,7 @@ module Orckestra.Composer {
                     sortingChanged(url: string): void {
                         self.eventHub.publish(SearchEvents.SortingChanged, {data: {url}});
                     },
-                    addToCart(product: any): void {
+                    addToCart(event: any, product: any): void {
                         const {
                             HasVariants: hasVariants,
                             ProductId: productId,

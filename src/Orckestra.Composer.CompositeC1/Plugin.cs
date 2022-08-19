@@ -25,6 +25,8 @@ using Orckestra.Composer.CompositeC1.Services.PreviewMode;
 using Orckestra.Composer.CompositeC1.Providers.Breadcrumb;
 using Orckestra.Composer.CompositeC1.Providers.LanguageSwitch;
 using Orckestra.Composer.Cart.Providers.Order;
+using Orckestra.Composer.CompositeC1.Factory;
+using Orckestra.Composer.Factory;
 
 namespace Orckestra.Composer.CompositeC1
 {
@@ -86,6 +88,9 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<StoreContext, IStoreContext>(ComponentLifestyle.PerRequest);
             host.Register<LazyFunctionCallDataProvider, ILazyFunctionCallDataProvider>();
             host.Register<BaseSearchCriteriaProvider, IBaseSearchCriteriaProvider>();
+
+            host.Register<ProductTileConfigurationContext, IProductTileConfigurationContext>();
+            host.Register<ProductPromotionsFactory, IProductPromotionsFactory>();
 
             host.Register<EditingOrderProvider, IEditingOrderProvider>();
             RegisterBreadcrumProviders(host);

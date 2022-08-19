@@ -1,11 +1,16 @@
 @using Orckestra.Composer.CompositeC1.DataTypes
-@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Product.Services
+@using Orckestra.Composer.Product.Parameters
+@inherits RazorFunction
+
 @functions {
     public override string FunctionDescription
     {
         get { return "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category"; }
     }
 
+    public IRelatedProductViewService RelatedProductViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
 
     [FunctionParameter(Name = "merchandiseTypes", Label = "Products Merchandise Relationship Types to include", Help = "Specify the Merchandise Types ")]
     public string merchandiseTypes { get; set; }
@@ -25,23 +30,44 @@
     [FunctionParameter(Name = "displayAddToCart", Label = "Display \"Add to cart\" on products", DefaultValue = true, Help = "Show the \"Add to cart\" link on the products in this block.")]
     public bool displayAddToCart { get; set; }
 
-
     [FunctionParameter(Name = "backgroundStyle", Label = "Css Style", DefaultValue = null, Help = "Specify the style of this block")]
     public DataReference<CssStyle> backgroundStyle { get; set; }
 }
 
-<div>
-        @Html.LazyFunction("Composer.Product.Instant.RelatedProducts", new
-        {
-            merchandiseTypes = merchandiseTypes,
-            headingText = headingText,
-            displaySameCategoryProducts = displaySameCategoryProducts,
-            maxItems = maxItems,
-            displayPrices = displayPrices,
-            displayAddToCart = displayAddToCart,
-            backgroundStyle = backgroundStyle
-        })
-   <div data-concern="relatedProduct">
-       @Partial("ProductQuickviewDataBlade", new { })
+@{
+    string id = Request[nameof(id)];
+    var param = new GetProductIdentifiersParam
+    {
+        CultureInfo = ComposerContext.CultureInfo,
+        ProductId = id,
+        Scope = ComposerContext.Scope,
+        MerchandiseTypes = merchandiseTypes.Split(','),
+        FallbackOnSameCategoriesProduct = displaySameCategoryProducts,
+        MaxItems = maxItems
+    };
+
+    var relatedProductsViewModel = RelatedProductViewService.GetProductIdsAsync(param).Result;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="Product.RelatedProducts"
+         data-context="@relatedProductsViewModel.JsonContext">
+        <div id="vueRelatedProducts" style="@backgroundStyle?.Data?.CssCode" v-cloak="true">
+            @if (!string.IsNullOrEmpty(headingText))
+            {
+                <h2>@headingText</h2>
+            }
+            <div class="slick-carousel">
+                <div class="js-slick-carousel" data-slick='{"slidesToShow": 4, "slidesToScroll": 1, "mobileCarousel": true}'>
+                    <div v-for="(Product, index) in ExtendedRelatedProducts" v-bind:key="Product.ProductId">
+                        @Function("Composer.Search.Products.ProductTileVue")
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</body>
+</html>

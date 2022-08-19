@@ -80,6 +80,7 @@
         <File sourceFilename="~\ApplicationInsights.config" targetFilename="~\ApplicationInsights.config" allowOverwrite="true" />
       </Files>
       <Directories>
+        <Directory sourceDirectory="~\UI.Package\GetStyleOptionsFromFile\" targetDirectory="~\UI.Package\GetStyleOptionsFromFile\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\Images\" targetDirectory="~\UI.Package\Images\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\JavaScript\" targetDirectory="~\UI.Package\JavaScript\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\UI.Package\LocalizedStrings\" targetDirectory="~\UI.Package\LocalizedStrings\" allowOverwrite="true" deleteTargetDirectory="false" />
@@ -141,6 +142,12 @@
         </Type>
         <Type type="Composite.Data.Types.IMethodBasedFunctionInfo,Composite">
           <Data dataScopeIdentifier="public" dataFilename="~\Datas\Composite.Data.Types.IMethodBasedFunctionInfos_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration_public.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration_public.xml" />
         </Type>
       </Types>
     </mi:Add>
