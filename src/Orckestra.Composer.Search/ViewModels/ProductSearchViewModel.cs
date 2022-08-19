@@ -19,6 +19,7 @@ namespace Orckestra.Composer.Search.ViewModels
         public double? Price { get; set; }
 
         public double? ListPrice { get; set; }
+
         /// <summary>
         /// Gets or sets the search term
         /// </summary>
@@ -56,7 +57,7 @@ namespace Orckestra.Composer.Search.ViewModels
         /// </summary>
         public string PromotionalBannerBackgroundColor { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets the product Promotional Banner Text Color
         /// </summary>
         public string PromotionalBannerTextColor { get; set; }

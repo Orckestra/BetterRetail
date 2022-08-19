@@ -60,7 +60,7 @@ namespace Orckestra.Composer.Product.ViewModels
         /// </summary>
         public string PromotionalRibbonBackgroundColor { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets the product Promotional Ribbon Text Color
         /// </summary>
         public string PromotionalRibbonTextColor { get; set; }
