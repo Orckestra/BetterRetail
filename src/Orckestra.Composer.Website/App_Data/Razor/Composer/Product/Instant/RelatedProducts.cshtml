@@ -12,7 +12,6 @@
     public IRelatedProductViewService RelatedProductViewService { get; set; }
     public IComposerContext ComposerContext { get; set; }
 
-
     [FunctionParameter(Name = "merchandiseTypes", Label = "Products Merchandise Relationship Types to include", Help = "Specify the Merchandise Types ")]
     public string merchandiseTypes { get; set; }
 
@@ -30,7 +29,6 @@
 
     [FunctionParameter(Name = "displayAddToCart", Label = "Display \"Add to cart\" on products", DefaultValue = true, Help = "Show the \"Add to cart\" link on the products in this block.")]
     public bool displayAddToCart { get; set; }
-
 
     [FunctionParameter(Name = "backgroundStyle", Label = "Css Style", DefaultValue = null, Help = "Specify the style of this block")]
     public DataReference<CssStyle> backgroundStyle { get; set; }
