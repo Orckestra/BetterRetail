@@ -185,6 +185,7 @@
     <Compile Include="..\..\src\Solution Items\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Factory\ProductPromotionsFactory_BuildProductBadgeValues.cs" />
     <Compile Include="Mappers\FacetsMapper_ConvertToFacetSetting.cs" />
     <Compile Include="Mocks\MainMenuMock.cs" />
     <Compile Include="Mocks\ISiteConfigurationMetaMock.cs" />
