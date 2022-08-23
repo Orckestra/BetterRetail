@@ -75,6 +75,7 @@
             </button>
         </div>
     </div>
+    <div v-else="else">{{item.Quantity}} @Html.Localize("MiniCart", "L_Items")</div>
     <div v-if="!item.IsGiftItem" class="d-none d-sm-block">@CartSummaryHelpers.RemoveCartItemLink()</div>
     <div v-if="!item.IsValid" class="text-danger">@Html.Localize("General", "B_AddToCartProductDetailOOS")</div>
 }

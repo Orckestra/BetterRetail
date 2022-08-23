@@ -220,7 +220,7 @@ namespace Orckestra.Composer.Cart.Api
             };
             var providers = await PaymentViewService.GetPaymentProvidersAsync(param).ConfigureAwait(false);
 
-            var results = await PaymentViewService.GetCustomerPaymentMethodListViewModelAsync(new GetCustomerPaymentMethodListViewModelParam
+            var results = await PaymentViewService.GetCustomerPaymentMethodsViewModelAsync(new GetCustomerPaymentMethodListViewModelParam
             {
                 CustomerId = ComposerContext.CustomerId,
                 ScopeId = ComposerContext.Scope,

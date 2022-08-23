@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Orckestra.Composer.MyAccount.Requests
 {
@@ -38,5 +39,11 @@ namespace Orckestra.Composer.MyAccount.Requests
         /// </summary>
         [Required]
         public string PreferredLanguage { get; set; }
+
+        /// <summary>
+        /// (Optional)
+        /// Property Bag
+        /// </summary>
+        public Dictionary<string, object> PropertyBag { get; set; }
     }
 }

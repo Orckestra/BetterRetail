@@ -11,6 +11,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.WebAPIFilters;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -62,7 +63,7 @@ namespace Orckestra.Composer.Cart.Api
         {
             var cartViewModel = await CartService.GetCartViewModelAsync(new GetCartParam
             {
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = GetCartName(),
@@ -165,6 +166,10 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = CartConfiguration.ShoppingCartName
             });
 
+            shippingMethodTypesViewModel.ShippingMethodTypes = shippingMethodTypesViewModel.ShippingMethodTypes
+                .Where(method => CartConfiguration.AvailableShippingMethodTypes.Contains(method.FulfillmentMethodType))
+                .ToList();
+
             return Ok(shippingMethodTypesViewModel);
         }
 
@@ -252,7 +257,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.AddLineItemAsync(new AddLineItemParam
             {
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = GetCartName(),
@@ -282,7 +287,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.RemoveLineItemAsync(new RemoveLineItemParam
             {
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
@@ -308,7 +313,7 @@ namespace Orckestra.Composer.Cart.Api
 
             var vm = await CartService.UpdateLineItemAsync(new UpdateLineItemParam
             {
-                ScopeId = ComposerContext.Scope,
+                ScopeId = GetCartScopeId(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 LineItemId = new Guid(request.LineItemId),
@@ -426,7 +431,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartType = GetCartType(),
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
-                Scope = ComposerContext.Scope,
+                Scope = GetCartScopeId(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             };
 
@@ -503,6 +508,11 @@ namespace Orckestra.Composer.Cart.Api
         private string GetCartType()
         {
             return EditingOrderProvider.IsEditMode() ? CartConfiguration.OrderDraftCartType : null;
+        }
+
+        private string GetCartScopeId()
+        {
+            return EditingOrderProvider.IsEditMode() ? EditingOrderProvider.GetCurrentEditingScopeId() : ComposerContext.Scope;
         }
     }
 }

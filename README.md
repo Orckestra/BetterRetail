@@ -122,7 +122,19 @@ In general, the full deployment process includes the following steps:
 
 If you need to deploy using a configuration from a specific file, use the `-env={keyword}` param and argument. For example, if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json has the highest priority in this case. 
 
-The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during deploy. These packages install from the **develop** branch by default. To install packages from a specific Experience Management branch, set "em-branch" : "{branch_name}" in parameters.
+The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during the deploy.
+The file contains *C1 CMS* packages, *Experience Management* packages and *Reference Application* packages, created during the Build process. 
+
+*Experience Management* packages are installed from the **develop** branch by default. To install *Experience Management* packages from a specific branch, set `"em-branch" : "{branch_name}"` in parameters.
+
+For *C1 CMS* package next link is used by default: *http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)* which will download **latest** package version suitable for current *C1 CMS* version. To download a specific package version, it is required to use the following link format: *https://package.composite.net:443/packages/{package-GUID}-ver-{package-Version}.zip*. 
+
+Example:
+
+`<package id="d665fbe2-3ca1-4c3a-b25b-79e4760e0c16" url="https://package.composite.net:443/packages/d665fbe2-3ca1-4c3a-b25b-79e4760e0c16-ver-2.0.5.zip"/>`
+
+**NOTE**: 
+For client solutions we recommend to use specific package versions, to avoid automatic updates of packages. 
 
 The file **{solution_dir_path}\build\configuration\SetupDescriptionSecondary.xml** includes packages to be installed after. 
 
@@ -239,7 +251,6 @@ If you look into samples and open some, it is possible to see a very detailed lo
   In the `Performance` section of the AppInsights service, on the `Operations` tab, it will be possible to see the operations with the new formatting. 
 Also, it is possible to filter by the `WFE` role to see only the RefApp logs. ![image](https://user-images.githubusercontent.com/57723696/147671714-5374c65b-a03d-49b9-9444-27e9aebdf57e.png) 
 
-
 ## Related projects
 The Reference Application is dependent on [C1 CMS Foundation](https://github.com/Orckestra/C1-CMS-Foundation) and can use [C1 CMS packages](https://github.com/Orckestra/CMS-Packages)
 
@@ -248,6 +259,22 @@ Q: Cannot execute PowerShell scripts because of PowerShell execution policy {TOD
 
 A: In a Powershell console in Administrator mode run the command:
 `Set-ExecutionPolicy unrestricted -scope CurrentUser`
+	
 
-
+Q: After the deployment is completed, on the main website page, the product categories have not appeared
+	
+A: The deployment process is installing the C1 package `Orckestra.Composer.C1.PreConfiguration`. When this package installation is providing, it takes the current data and creates the categories. If you provide a deployment in a place with existing files, the categories might not be re-created because the package is already installed. There are 2 options for how to handle this.
+A1. You can re-create the categories. To do this, remove the `Orckestra.Composer.C1.PreConfiguration` package in the following way:
+- Go to the admin section of the web site: *https://{website hostname}/Composite/top.aspx*
+- Login with your username and password
+- On the left side panel, click on the `System` icon <img src="https://user-images.githubusercontent.com/57723696/147662749-9933346c-bb25-49cd-9595-feccb7e19fbf.png" style="width:20px;"/>
+- Find the `Packages` menu
+- In this menu, go to the Installed Packages - Local Packages branch and reach the `Orckestra.Composer.C1.PreConfiguration` package
+- Right click on this package and select the `Package Info` menu.
+- In the opened window, click on the `Uninstall` button.
+	
+After the uninstallation, the website will be automatically restarted, and it will automatically re-install the `Orckestra.Composer.C1.PreConfiguration` package. During its installation the categories will appear.
+	
+A2. To avoid this issue at all, if in the pipeline is not cleaning up the target folder, add to the deployment pipeline a step to remove the specific `Website\App_Data\Composite\Packages` folder. Then the issue with categories will not appear.
+	
 {TODO: fill this section with known issues}

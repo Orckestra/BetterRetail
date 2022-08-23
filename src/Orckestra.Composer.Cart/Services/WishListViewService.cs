@@ -141,7 +141,7 @@ namespace Orckestra.Composer.Cart.Services
             {
                 var imageInfo = new ProductImageInfo
                 {
-                    ImageUrls = await ImageService.GetImageUrlsAsync(lineItems).ConfigureAwait(false),
+                    ImageUrls = await ImageService.GetImageUrlsFromProperty(lineItems).ConfigureAwait(false)
                 };
 
                 viewModel.Items = LineItemViewModelFactory.CreateViewModel(new CreateListOfLineItemDetailViewModelParam {

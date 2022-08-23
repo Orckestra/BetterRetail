@@ -14,6 +14,11 @@ using Orckestra.Composer.MyAccount.Tests.Mock;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
+using Orckestra.Composer.Services.Lookup;
+using Orckestra.Composer.Enums;
+using Orckestra.Overture.ServiceModel.Metadata;
+using Orckestra.Overture.ServiceModel;
+using System.Collections.Generic;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -39,6 +44,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             mockedCustomerRepository.Setup(r => r.GetCustomerByIdAsync(It.IsAny<GetCustomerByIdParam>())).ReturnsAsync(customer);
             mockedCustomerRepository.Setup(r => r.UpdateUserAsync(It.IsAny<UpdateUserParam>())).ReturnsAsync(customer);
 
+            var mockedLookupService = new Mock<ILookupService>();
+            mockedLookupService.Setup(
+                repo => repo.GetLookupAsync(It.IsAny<LookupType>(), It.IsAny<string>()))
+                .ReturnsAsync(BuildLookup());
+
+            _container.Use(mockedLookupService);
             _container.Use(mockedCustomerRepository);
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
@@ -53,6 +64,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 FirstName = GetRandom.String(32),
                 LastName = GetRandom.String(32),
                 PreferredLanguage = "en-US",
+                PropertyBag = {}
             });
 
             //Assert
@@ -69,6 +81,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 .ReturnsAsync(null);
 
             _container.Use(mockedCustomerRepository);
+
+            var mockedLookupService = new Mock<ILookupService>();
+            mockedLookupService.Setup(
+                repo => repo.GetLookupAsync(It.IsAny<LookupType>(), It.IsAny<string>()))
+                .ReturnsAsync(BuildLookup());
+
+            _container.Use(mockedLookupService);
 
             var customerViewService = _container.CreateInstance<CustomerViewService>();
 
@@ -283,6 +302,28 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
 
             //Assert
             ex.Message.Should().ContainEquivalentOf("PreferredLanguage");
+        }
+
+        private static Lookup BuildLookup()
+        {
+            return new Lookup
+            {
+                LookupName = "DefaultSubstitutionOption",
+                IsActive = true,
+                Description = "Some description",
+                Values = {
+                     new LookupValue {
+                        Value = "NotSelected",
+                        SortOrder = 380,
+                        DisplayName = new LocalizedString(new Dictionary<string,string> {
+                            {"en-US", "NotSelected EN"},
+                            {"en-CA", "NotSelected EN"},
+                            {"fr-CA", "NotSelected FR"}
+                        })
+                     }
+                }
+            };
+
         }
     }
 }

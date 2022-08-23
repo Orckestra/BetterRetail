@@ -72,25 +72,21 @@
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.WebComponentsV1, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.WebComponentsV1.1.1.0\lib\net472\Orckestra.ExperienceManagement.WebComponentsV1.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.0.0\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.0.0\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.0.0\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.Tools.ConditionalContent, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.Tools.ConditionalContent.0.1.0\lib\net472\Orckestra.Tools.ConditionalContent.dll</HintPath>

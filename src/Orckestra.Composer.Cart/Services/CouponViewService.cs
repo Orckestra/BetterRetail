@@ -7,9 +7,11 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
+using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Overture.ServiceModel.Marketing;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
@@ -22,16 +24,19 @@ namespace Orckestra.Composer.Cart.Services
         protected ICartViewModelFactory CartViewModelFactory { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IImageService ImageService { get; private set; }
+        protected ICategoryRepository CategoryRepository { get; private set; }
 
         public CouponViewService(ICartRepository cartRepository, 
             ICartViewModelFactory cartViewModelFactory, 
             ILocalizationProvider localizationProvider,
-            IImageService imageService)
+            IImageService imageService,
+            ICategoryRepository categoryRepository)
         {
             CartRepository = cartRepository;
             CartViewModelFactory = cartViewModelFactory;
             LocalizationProvider = localizationProvider;
             ImageService = imageService;
+            CategoryRepository = categoryRepository;
         }
 
         /// <summary>
@@ -153,6 +158,16 @@ namespace Orckestra.Composer.Cart.Services
             };
 
             var vm = CartViewModelFactory.CreateCartViewModel(param);
+
+            if (CartConfiguration.GroupCartItemsByPrimaryCategory)
+            {
+                var categoryTree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+                {
+                    Scope = param.Cart.ScopeId
+                }).ConfigureAwait(false);
+
+                vm.GroupedLineItemDetailViewModels = CartViewModelFactory.GetGroupedLineItems(vm.LineItemDetailViewModels, categoryTree, param.CultureInfo);
+            }
             return vm;
         }
     }

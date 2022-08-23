@@ -22,7 +22,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Mock
                 AccountStatus = status ?? TestingExtensions.GetRandomEnum<AccountStatus>(),
                 Id = customerId ?? GetRandom.Guid(),
                 CellNumber = GetRandom.String(32),
-                PropertyBag = new PropertyBag(),
+                PropertyBag = new PropertyBag(new Dictionary<string, object> { { "DefaultSubstitutionOption", "NotSelected" } }),
                 Addresses = new List<Address>(),
                 AddressIds = new List<Guid>(),
                 Created = GetRandom.DateTime(),

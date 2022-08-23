@@ -124,47 +124,6 @@ namespace Orckestra.Composer.Website
 
             functions.RegisterAction<BrowsingCategoriesController>("ChildCategories", "Composer.BrowsingCategories.ChildCategories");
 
-            functions.RegisterAction<ProductController>("RelatedProducts", "Composer.Product.Instant.RelatedProducts", "Displays products/variants related to the product displayed on the current product/variant details page.  First products which are related via merchandising relationship will be displayed and if none are available then displays product in the same default category")
-                .AddParameter("merchandiseTypes",
-                    typeof(string),
-                    label: "Products Merchandise Relationship Types to include",
-                    helpText: "Specify the Merchandise Types ")
-                .AddParameter(
-                    "headingText",
-                    typeof(string),
-                    defaultValueProvider: new ConstantValueProvider("You may also like"),
-                    label: "Heading",
-                    helpText: "Displays the header of the related products block. The header must be short. Use text like \"You might also like\".")
-                .AddParameter(
-                    "displaySameCategoryProducts",
-                    typeof(bool),
-                    defaultValueProvider: new ConstantValueProvider(true),
-                    label: "Display products in the same category",
-                    helpText: "Specify if this block should display products in the same default category if no products are displayed based on specified relationship types.")
-                .AddParameter(
-                    "maxItems",
-                    typeof(int),
-                    defaultValueProvider: new ConstantValueProvider(5),
-                    label: "Number of maximum displayed products/variants",
-                    helpText: "Specify the number of products/items displayed in this block. The maximum should be 15.")
-                .AddParameter(
-                    "displayPrices",
-                    typeof(bool),
-                    defaultValueProvider: new ConstantValueProvider(true),
-                    label: "Display price on products",
-                    helpText: "Show the price on the products in this block.")
-                .AddParameter(
-                    "displayAddToCart",
-                    typeof(bool),
-                    defaultValueProvider: new ConstantValueProvider(true),
-                    label: "Display \"Add to cart\" on products",
-                    helpText: "Show the \"Add to cart\" link on the products in this block.")
-                .AddParameter(
-                    "backgroundStyle",
-                    typeof(DataReference<CssStyle>),
-                    label: "Background style",
-                    helpText: "Specify the style of this block background");
-
             functions.RegisterAction<CartController>("Minicart", "Composer.Cart.Minicart").AddParameter(
                 "notificationTimeInSeconds",
                 typeof(int),
@@ -186,11 +145,8 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<MembershipController>("ChangePasswordBlade", "Composer.Membership.ChangePassword");
 
             functions.RegisterAction<MyAccountController>("AccountHeader", "Composer.MyAccount.AccountHeader");
-            functions.RegisterAction<MyAccountController>("UpdateAccount", "Composer.MyAccount.UpdateAccount");
             functions.RegisterAction<MyAccountController>("CreateAddress", "Composer.MyAccount.CreateAddress");
             functions.RegisterAction<MyAccountController>("EditAddress", "Composer.MyAccount.UpdateAddress").IncludePathInfo();
-            functions.RegisterAction<MyAccountController>("WishList", "Composer.MyAccount.WishList")
-                .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty");
             functions.RegisterAction<MyAccountController>("RecurringSchedule", "Composer.MyAccount.RecurringSchedule");
             functions.RegisterAction<MyAccountController>("RecurringScheduleDetails", "Composer.MyAccount.RecurringScheduleDetails");
             functions.RegisterAction<MyAccountController>("UpcomingOrders", "Composer.MyAccount.UpcomingOrders");

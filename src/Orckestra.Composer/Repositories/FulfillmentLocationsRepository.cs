@@ -23,7 +23,23 @@ namespace Orckestra.Composer.Repositories
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
-        public Task<List<FulfillmentLocation>> GetFulfillmentLocationsByScopeAsync(GetFulfillmentLocationsByScopeParam param)
+        public virtual Task<FulfillmentLocation> GetFulfillmentLocationByIdAsync(Guid id, string scope)
+        {
+            if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(scope))); }
+            if (id == null) { throw new ArgumentNullException(nameof(id)); }
+
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.FulfillmentLocationsByScope, id.ToString());
+
+            var request = new GetFulfillmentLocationByIdRequest
+            {
+                FulfillmentLocationId = id,
+                ScopeId = scope
+            };
+
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
+        }
+
+        public virtual Task<List<FulfillmentLocation>> GetFulfillmentLocationsByScopeAsync(GetFulfillmentLocationsByScopeParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }

@@ -64,6 +64,8 @@
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacets_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration_public.xml" />
     <Content Include="Package\install.xml" />
     <Content Include="Package\Composite.config.xsl" />
     <Content Include="Package\Web.config.xsl" />

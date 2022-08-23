@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Orckestra.Composer.Enums;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Cart.ViewModels
@@ -145,6 +146,64 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// The item is a gift (free) item
         /// </summary>
         public bool IsGiftItem { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Badges
+        /// </summary>
+        [MapTo("Product.ProductBadges")]
+        public string ProductBadges { get; set; }
+
+        [Lookup(LookupType.Product, "ProductBadges")]
+        [MapTo("Product.ProductBadges")]
+        public string ProductBadgesLookup { get; set; }
+
+        public Dictionary<string, string> ProductBadgeValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon
+        /// </summary>
+        [MapTo("Product.PromotionalRibbon")]
+        public string PromotionalRibbonKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon
+        /// </summary>
+        [Lookup(LookupType.Product, "PromotionalRibbon")]
+        [MapTo("Product.PromotionalRibbon")]
+        public string PromotionalRibbon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Ribbon Background Color
+        /// </summary>
+        public string PromotionalRibbonBackgroundColor { get; set; }
+
+        // <summary>
+        /// Gets or sets the product Promotional Ribbon Text Color
+        /// </summary>
+        public string PromotionalRibbonTextColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner
+        /// </summary>
+        [MapTo("Product.PromotionalBanner")]
+        public string PromotionalBannerKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner
+        /// </summary>
+        [Lookup(LookupType.Product, "PromotionalBanner")]
+        [MapTo("Product.PromotionalBanner")]
+        public string PromotionalBanner { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner Background Color
+        /// </summary>
+        public string PromotionalBannerBackgroundColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product Promotional Banner Text Color
+        /// </summary>
+        public string PromotionalBannerTextColor { get; set; }
 
         public LineItemDetailViewModel()
         {

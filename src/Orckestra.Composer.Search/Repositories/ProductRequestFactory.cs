@@ -62,7 +62,7 @@ namespace Orckestra.Composer.Search.Repositories
             return CreateProductRequest(criteria.Scope);
         }
 
-        protected virtual Query CreateQuery(SearchBySkusCriteria searchBySkusCriteria)
+        public virtual Query CreateQuery(SearchBySkusCriteria searchBySkusCriteria)
         {
             var skus = searchBySkusCriteria.Skus.Select(s => $"Sku:{s}").ToList();
             var customExpr = String.Join(" OR ", skus);
@@ -87,7 +87,7 @@ namespace Orckestra.Composer.Search.Repositories
 
         }
 
-        protected virtual Query CreateQuery(string scopeId)
+        public virtual Query CreateQuery(string scopeId)
         {
             if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scopeId)); }
 

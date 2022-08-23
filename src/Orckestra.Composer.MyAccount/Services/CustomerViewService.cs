@@ -30,19 +30,22 @@ namespace Orckestra.Composer.MyAccount.Services
         protected ICultureService CultureService { get; private set; }
         protected ILocalizationProvider LocalizationProvider { get; private set; }
         protected IRegexRulesProvider RegexRulesProvider { get; }
+        protected IMyAccountUrlProvider MyAccountUrlProvider { get; set; }
 
         public CustomerViewService(
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
             ICultureService cultureService,
             ILocalizationProvider localizationProvider,
-            IRegexRulesProvider regexRulesProvider)
+            IRegexRulesProvider regexRulesProvider,
+            IMyAccountUrlProvider myAccountUrlProvider)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             CustomerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
             CultureService = cultureService ?? throw new ArgumentNullException(nameof(cultureService));
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
+            MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
         }
 
         /// <summary>
@@ -170,62 +173,46 @@ namespace Orckestra.Composer.MyAccount.Services
             customer.LastName = updateParam.LastName;
             customer.Language = updateParam.PreferredLanguage;
             customer.PhoneNumber = updateParam.PhoneNumber;
+            if (updateParam.PropertyBag?.Count > 0)
+            {
+                foreach (var item in updateParam.PropertyBag)
+                {
+                    customer.PropertyBag[item.Key] = item.Value;
+                }
+            }
         }
 
         protected virtual UpdateAccountViewModel GetUpdateAccountViewModel(GetUpdateAccountViewModelParam param, Customer customer)
         {
             var viewModel = ViewModelMapper.MapTo<UpdateAccountViewModel>(customer, param.CultureInfo);
 
+            var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo };
+            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
+            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
+
             viewModel.Status = param.Status.HasValue ? param.Status.Value.ToString("G") : string.Empty;
             viewModel.ReturnUrl = param.ReturnUrl;
             viewModel.Languages = GetPreferredLanguageViewModel(param.CultureInfo, customer.Language);
             viewModel.PhoneNumberRegEx = RegexRulesProvider.GetPhoneNumberRegex();
+            viewModel.PropertyBag = customer.PropertyBag;
+            viewModel.AddressListUrl = addressListUrl;
+            viewModel.ChangePasswordUrl = changePasswordUrl;
 
             return viewModel;
         }
 
-        protected virtual List<PreferredLanguageViewModel> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
+        protected virtual Dictionary<string, string> GetPreferredLanguageViewModel(CultureInfo currentCulture, string customerLanguage)
         {
             var allcultures = CultureService.GetAllSupportedCultures();
-            CultureInfo customerCultureInfo = null;
 
-            var languages = (from culture in allcultures
-                             let displayName = LocalizationProvider.GetLocalizedString(new GetLocalizedParam
-                             {
-                                 CultureInfo = currentCulture,
-                                 Category = "General",
-                                 Key = culture.DisplayName
-                             })
-                             select new PreferredLanguageViewModel
-                             {
-                                 DisplayName = displayName,
-                                 IsoCode = culture.Name,
-                                 IsSelected = customerLanguage == culture.Name
-                             }).ToList();
-
-            if (!languages.Any(item => item.IsSelected))
-            {
-                try
+            var languages = allcultures
+                .ToDictionary(key => key.Name, value => LocalizationProvider.GetLocalizedString(new GetLocalizedParam
                 {
-                    customerCultureInfo = CultureInfo.GetCultureInfo(customerLanguage);
-                }
-                catch (Exception ex)
-                {
-                    var errorMessage = string.Format("Culture not found: {0}", customerLanguage);
-                    Log.ErrorException(errorMessage, ex);
-                }
+                    CultureInfo = currentCulture,
+                    Category = "General",
+                    Key = value.DisplayName
+                }));
 
-                if (customerCultureInfo != null)
-                {
-                    var affinityCultureName = CultureService.GetAffinityCulture(customerCultureInfo)?.Name;
-                    if (string.IsNullOrEmpty(affinityCultureName)) return languages;
-
-                    var affinityLanguage = languages.FirstOrDefault(item => affinityCultureName == item.IsoCode);
-
-                    if (affinityLanguage != null)
-                        affinityLanguage.IsSelected = true;
-                }
-            }
             return languages;
         }
 

@@ -16,31 +16,13 @@ module Orckestra.Composer {
             super.initialize();
 
             const Tabs = this.context.viewModel;
+            const SuggestedTabs = this.context.container.data('suggestedtabs')
             const SearchQuery = this.context.container.data('searchquery');
-            const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms'); 
-            const IsProductTab = this.context.container.data('isproducttab');
+            const CorrectedSearchTerms = this.context.container.data('сorrectedsearchterms');
+            const ProductsCount = this.context.container.data('productstotal');
+            const IsProductTab = this.context.container.data('isproducttab') === 'True';
             const self = this;
-
-            this.vueTabSearchSummary = new Vue({
-                el: '#vueTabSearchSummary',
-                data: {
-                    Tabs,
-                    SearchQuery
-                },
-                mounted() {
-                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
-                       this.Tabs = [...this.Tabs];
-                    });
-                },
-                computed: {
-                    CurrentTab() {
-                        return this.Tabs.find(t => t.IsActive);
-                    },
-                    TabsWithResults() {
-                        return this.Tabs.filter(t => t.Total > 0);
-                    }
-                }
-            });
+            this.initializeTabSummaryVue(Tabs, SearchQuery, self);
 
             this.vueSearchSummary = new Vue({
                 el: '#vueSearchSummary',
@@ -50,24 +32,27 @@ module Orckestra.Composer {
                     Tabs,
                     SearchQuery,
                     CorrectedSearchTerms,
+                    ProductsCount,
                     ProductsLoading: false,
-                    ContentLoading: false
+                    ContentLoading: false,
+                    SuggestedTabs
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.SearchRequested, () => this.ProductsLoading = true);
-                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({data}) => {
+                    self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, ({ data }) => {
                         this.ProductsLoading = false;
                         this.Tabs.find(t => t.IsProducts).Total = data.ProductSearchResults.TotalCount;
                         this.Tabs = [...this.Tabs];
                         this.CorrectedSearchTerms = data.ProductSearchResults.CorrectedSearchTerms;
-                        this.ProductCount = data.ProductSearchResults.TotalCount;
+                        this.ProductsCount = data.ProductSearchResults.TotalCount;
+                        this.SearchQuery = data.Keywords;
                     });
 
-                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({data}) => {
+                    self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, ({ data }) => {
                         this.ContentLoading = false;
                         data.Tabs.forEach(x => {
                             const foundTab = this.Tabs.find(tab => tab.Title === x.Title)
-                            if(foundTab) {
+                            if (foundTab) {
                                 foundTab.Total = x.Total;
                                 foundTab.TabUrl = x.TabUrl;
                             }
@@ -81,7 +66,7 @@ module Orckestra.Composer {
                         return this.Tabs.reduce((accum, item) => accum + item.Total, 0);
                     },
                     IsProductsCorrected() {
-                        return this.CorrectedSearchTerms && this.ProductCount > 0 && IsProductTab;
+                        return this.CorrectedSearchTerms && this.ProductsCount > 0 && IsProductTab;
                     }
                 },
             });
@@ -89,11 +74,38 @@ module Orckestra.Composer {
             this.sendSearchTermForAnalytics(this.context.viewModel);
         }
 
+        private initializeTabSummaryVue(Tabs: any, SearchQuery: any, self: this) {
+            let elTabSearchSummary = document.getElementById('vueTabSearchSummary');
+
+            if (elTabSearchSummary) {
+                this.vueTabSearchSummary = new Vue({
+                    el: '#vueTabSearchSummary',
+                    data: {
+                        Tabs,
+                        SearchQuery
+                    },
+                    mounted() {
+                        self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, () => {
+                            this.Tabs = [...this.Tabs];
+                        });
+                    },
+                    computed: {
+                        CurrentTab() {
+                            return this.Tabs.find(t => t.IsActive);
+                        },
+                        TabsWithResults() {
+                            return this.Tabs.filter(t => t.Total > 0);
+                        }
+                    }
+                });
+            }
+        }
+
         protected sendSearchTermForAnalytics(viewModel: any): void {
             const { TotalCount, Keywords: Keyword, ListName, CorrectedSearchTerms } = viewModel;
 
             if (TotalCount === 0 && Keyword) {
-                this.eventHub.publish('noResultsFound', {data: {Keyword, ListName}});
+                this.eventHub.publish('noResultsFound', { data: { Keyword, ListName } });
             }
 
             if (!_.isEmpty(CorrectedSearchTerms) && Keyword && TotalCount !== 0) {
@@ -103,7 +115,7 @@ module Orckestra.Composer {
                     ListName,
                 };
 
-                this.eventHub.publish('searchTermCorrected', {data});
+                this.eventHub.publish('searchTermCorrected', { data });
             }
         }
     }

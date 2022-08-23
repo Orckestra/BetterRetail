@@ -44,22 +44,34 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         public string Email { get; set; }
 
         /// <summary>
+        ///  Customer preferred language
+        /// </summary>
+        public string Language { get; set; }
+
+        /// <summary>
         ///  All the languages available for the customer preferred language.
         /// </summary>
-        public IList<PreferredLanguageViewModel> Languages { get; set; }
+        public Dictionary<string, string> Languages { get; set; }
 
         /// <summary>
         /// The PhoneNumber for the User account
         /// </summary>
         public string PhoneNumber { get; set; }
+
         /// <summary>
         /// The PhoneNumber RegEx validation rule
         /// </summary>
         public string PhoneNumberRegEx { get; set; }
 
+        /// <summary>
+        /// Property Bag
+        /// </summary>
+        public Dictionary<string, object> PropertyBag { get; set; }
+
         public UpdateAccountViewModel()
         {
-            Languages = new List<PreferredLanguageViewModel>();
+            Languages = new Dictionary<string, string>();
+            PropertyBag = new Dictionary<string, object>();
         }
     }
 }

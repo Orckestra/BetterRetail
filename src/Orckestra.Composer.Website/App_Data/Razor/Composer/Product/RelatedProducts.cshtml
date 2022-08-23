@@ -1,6 +1,5 @@
 @using Orckestra.Composer.CompositeC1.DataTypes
-@inherits RazorFunction
-
+@inherits Composer.Razor.ComposerRazorFunction
 @functions {
     public override string FunctionDescription
     {
@@ -31,14 +30,18 @@
     public DataReference<CssStyle> backgroundStyle { get; set; }
 }
 
-
-@Html.LazyFunction("Composer.Product.Instant.RelatedProducts", new
-{
-    merchandiseTypes = merchandiseTypes,
-    headingText = headingText,
-    displaySameCategoryProducts = displaySameCategoryProducts,
-    maxItems = maxItems,
-    displayPrices = displayPrices,
-    displayAddToCart = displayAddToCart,
-    backgroundStyle = backgroundStyle
-})
+<div>
+        @Html.LazyFunction("Composer.Product.Instant.RelatedProducts", new
+        {
+            merchandiseTypes = merchandiseTypes,
+            headingText = headingText,
+            displaySameCategoryProducts = displaySameCategoryProducts,
+            maxItems = maxItems,
+            displayPrices = displayPrices,
+            displayAddToCart = displayAddToCart,
+            backgroundStyle = backgroundStyle
+        })
+   <div data-concern="relatedProduct">
+       @Partial("ProductQuickviewDataBlade", new { })
+    </div>
+</div>

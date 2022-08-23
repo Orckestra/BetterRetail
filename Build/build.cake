@@ -5,7 +5,7 @@
 #addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
 #addin "nuget:?package=Cake.Npm&version=0.17.0"
 #addin "nuget:?package=Cake.Karma&version=0.2.0"
-#addin "nuget:?package=Cake.Powershell&version=0.4.8"
+#addin "nuget:?package=Cake.Powershell&version=1.0.1"
 
 #load "helpers/filesystem.cake"
 #load "helpers/typescripts.cake"

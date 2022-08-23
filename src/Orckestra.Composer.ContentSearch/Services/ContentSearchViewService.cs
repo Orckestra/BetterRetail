@@ -13,6 +13,7 @@ using Orckestra.Search.WebsiteSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Orckestra.Composer.ContentSearch.Services
 {
@@ -221,7 +222,7 @@ namespace Orckestra.Composer.ContentSearch.Services
             var url = PageService.GetPageUrl(pagesConfiguration.SearchPageId, param.Culture);
             if (url == null) return null;
 
-            return $"{url}/{tab.UrlTitle}?{SearchRequestParams.Keywords}={searchQuery}";
+            return $"{url}/{tab.UrlTitle}?{SearchRequestParams.Keywords}={HttpUtility.UrlEncode(searchQuery)}";
         }
        
         protected virtual WebsiteSearchQuery GetSearchRequestForContentTab(GetContentSearchParameter param, IContentTab tab, string searchQuery)
