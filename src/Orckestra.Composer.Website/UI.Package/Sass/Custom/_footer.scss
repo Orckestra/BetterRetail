@@ -172,16 +172,23 @@
     }
   }
 
-  @include media-breakpoint-up(md) {
-    .collapse-mobile {
-      .collapse {
-        display: block;
-        height: auto!important;
-      }
-      .nav-footer-list.collapsing {
-        display: block;
-        height: auto !important;
-      }
+  .collapse-mobile {
+    .nav-footer-list.collapsing {
+      flex-wrap: nowrap !important;
     }
+  }
+  
+  @include media-breakpoint-up(sm) {
+      .collapse-mobile {
+          .collapse {
+              display: block;
+              height: auto!important;
+          }
+          .nav-footer-list.collapsing {
+              display: block;
+              height: auto !important;
+        flex-wrap: inherit;
+          }
+      }
   }
 
