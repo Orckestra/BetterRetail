@@ -73,7 +73,7 @@ $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
 $light:         $gray-100 !default;
-$dark:          $gray-700 !default;
+$dark:          $gray-800 !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -290,6 +290,7 @@ $font-size-sm:                $font-size-base * .875 !default;
 $font-weight-lighter:         lighter !default;
 $font-weight-light:           300 !default;
 $font-weight-normal:          400 !default;
+$font-weight-semibold:        600 !default;
 $font-weight-bold:            700 !default;
 $font-weight-bolder:          bolder !default;
 
