@@ -9,13 +9,19 @@ h3, .h3 {
     margin-bottom: $spacer;
 }
 
+h5, .h5,
+h6, .h6 {
+font-family: $font-family-base;
+font-weight: $font-weight-semibold;
+}
+
  @include media-breakpoint-down(sm) {
     h1, .h1 { font-size: $font-size-h1-sm; }
-    h2, .h2 { font-size: $font-size-h1-sm; }
-    h3, .h3 { font-size: $font-size-h1-sm; }
-    h4, .h4 { font-size: $font-size-h1-sm; }
-    h5, .h5 { font-size: $font-size-h1-sm; }
-    h6, .h6 { font-size: $font-size-h1-sm; }
+    h2, .h2 { font-size: $font-size-h2-sm; }
+    h3, .h3 { font-size: $font-size-h3-sm; }
+    h4, .h4 { font-size: $font-size-h4-sm; }
+    h5, .h5 { font-size: $font-size-h5-sm; }
+    h6, .h6 { font-size: $font-size-h6-sm; }
 }
 
 blockquote {
