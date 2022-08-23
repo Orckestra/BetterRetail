@@ -64,6 +64,18 @@ namespace Orckestra.Composer.Product.ViewModels
 
         public decimal ItemFormat { get; set; }
 
+        /// <summary>
+        /// Gets or sets the product Badges
+        /// </summary>
+        [MapTo("ProductBadges")]
+        public string ProductBadgesKeys { get; set; }
+
+        [Lookup(LookupType.Product, "ProductBadges")]
+        [MapTo("ProductBadges")]
+        public string ProductBadgesLookup { get; set; }
+
+        public Dictionary<string, string> ProductBadgeValues { get; set; }
+
         public ProductViewModel()
         {
             KeyVariantAttributeItems = new List<KeyVariantAttributeItem>();
