@@ -181,7 +181,8 @@ namespace Orckestra.Composer.Cart.Repositories
                 Quantity = param.Quantity,
                 VariantId = param.VariantId,
                 RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = param.RecurringOrderProgramName
+                RecurringOrderProgramName = param.RecurringOrderProgramName,
+                PropertyBag = param.PropertyBag
             };
         }
 
