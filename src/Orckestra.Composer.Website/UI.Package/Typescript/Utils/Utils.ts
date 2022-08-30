@@ -25,6 +25,10 @@ module Orckestra.Composer {
             return $('html').data('website');
         }
 
+        public static getCulture() {
+            return $('html').attr('lang');
+        }
+
         public static IsC1ConsolePreview(): boolean {
             return $('html').data('console-preview') === 'True';
         }
