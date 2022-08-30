@@ -220,6 +220,7 @@
     </Compile>
     <Compile Include="ActionFilters\AppInsightsActionFilter.cs" />
     <Compile Include="Api\LocalizationController.cs" />
+    <Compile Include="Api\LookupController.cs" />
     <Compile Include="Api\RecurringOrderTemplateController.cs" />
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ComposerConfiguration.cs" />

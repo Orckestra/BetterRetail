@@ -1,6 +1,9 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../Repositories/CustomerRepository.ts' />
+///<reference path='../Repositories/IMembershipRepository.ts' />
+///<reference path='../Repositories/MembershipRepository.ts' />
 ///<reference path='../Cache/CacheProvider.ts' />
+///<reference path='../Utils/Utils.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -11,6 +14,7 @@ module Orckestra.Composer {
         private cachePolicy: ICachePolicy = { slidingExpiration: 300 }; // 5min
         private cacheProvider: ICacheProvider;
         private membershipRepository: IMembershipRepository;
+        private static instance: UserMetadataService;
 
         constructor(membershipRepository: IMembershipRepository) {
 
@@ -20,15 +24,25 @@ module Orckestra.Composer {
 
             this.cacheProvider = CacheProvider.instance();
             this.membershipRepository = membershipRepository;
+            UserMetadataService.instance = this;
         }
 
-        public getUserMetadata(param: any): Q.Promise<any> {
+        public static getInstance(): UserMetadataService {
 
-            return this.getFromCache(param)
+            if (!UserMetadataService.instance) {
+                UserMetadataService.instance = new UserMetadataService(new MembershipRepository());
+            }
+
+            return UserMetadataService.instance;
+        }
+
+        public getUserMetadata(): Q.Promise<any> {
+
+            return this.getFromCache()
                 .fail(reason => {
 
                     if (this.canHandle(reason)) {
-                        return this.getFreshMetadata(param);
+                        return this.getFreshMetadata();
                     }
 
                     throw reason;
@@ -40,34 +54,32 @@ module Orckestra.Composer {
             return reason === CacheError.Expired || reason === CacheError.NotFound;
         }
 
-        public getFreshMetadata(param: any): Q.Promise<any> {
+        public getFreshMetadata(): Q.Promise<any> {
 
             return this.membershipRepository.userMetadata()
-                .then(result => this.setToCache(param, result));
+                .then(result => this.setToCache(result));
         }
 
-        public buildCacheKey(param: any): string {
+        public buildCacheKey(): string {
 
-            return this.cacheKey + '.' + param.cultureInfo + '.' + param.isAuthenticated + '.' + param.encryptedCustomerId + '.' + param.websiteId;
+            return `${this.cacheKey}.${Utils.getCulture()}.${Utils.getWebsiteId()}`;
         }
 
         public invalidateCache(): Q.Promise<void> {
 
-            return this.cacheProvider.sessionCache.fullClear();
+            return this.cacheProvider.defaultCache.clear(this.buildCacheKey());
         }
 
-        private getFromCache(param: any): Q.Promise<any> {
+        private getFromCache(): Q.Promise<any> {
 
-            var composedKey = this.buildCacheKey(param);
-
-            return this.cacheProvider.sessionCache.get<any>(composedKey);
+            var composedKey = this.buildCacheKey();
+            return this.cacheProvider.defaultCache.get<any>(composedKey);
         }
 
-        private setToCache(param: any, cart: any): Q.Promise<any> {
+        private setToCache(cart: any): Q.Promise<any> {
 
-            var composedKey = this.buildCacheKey(param);
-
-            return this.cacheProvider.sessionCache.set(composedKey, cart, this.cachePolicy);
+            var composedKey = this.buildCacheKey();
+            return this.cacheProvider.defaultCache.set(composedKey, cart, this.cachePolicy);
         }
     }
 }

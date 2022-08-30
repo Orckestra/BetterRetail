@@ -9,7 +9,7 @@ module Orckestra.Composer {
 
     export class SignInHeaderController extends Orckestra.Composer.Controller {
 
-        protected userMetadataService: UserMetadataService = new UserMetadataService(new MembershipRepository());
+        protected userMetadataService: UserMetadataService = UserMetadataService.getInstance();
 
         public initialize() {
 
@@ -20,11 +20,7 @@ module Orckestra.Composer {
         }
 
         private initializeSignInHeader() {
-            var cultureInfo = $('html').attr('lang');
-            var websiteId = $('html').data('website');
-            var param = { cultureInfo, websiteId };
-
-            this.userMetadataService.getUserMetadata(param)
+             this.userMetadataService.getUserMetadata()
             .then(vm => this.render('SignInHeader', vm));
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Overture.ServiceModel;
 
 namespace Orckestra.Composer.Cart.ViewModels
 {
@@ -204,6 +205,10 @@ namespace Orckestra.Composer.Cart.ViewModels
         /// Gets or sets the product Promotional Banner Text Color
         /// </summary>
         public string PromotionalBannerTextColor { get; set; }
+
+        public PropertyBag PropertyBag { get; set; }
+
+        public string Sku { get; set; }
 
         public LineItemDetailViewModel()
         {

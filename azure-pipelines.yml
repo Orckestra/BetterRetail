@@ -43,7 +43,7 @@ stages:
       displayName: Build
       inputs:
         scriptName: Build/build.ps1
-        arguments: '-t Build'
+        arguments: '-t Build -Verbosity Diagnostic'
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 

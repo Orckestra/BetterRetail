@@ -267,7 +267,8 @@ namespace Orckestra.Composer.Cart.Api
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = request.RecurringOrderProgramName
+                RecurringOrderProgramName = request.RecurringOrderProgramName,
+                PropertyBag = request.PropertyBag
             });
 
             return Ok(vm);
@@ -322,7 +323,8 @@ namespace Orckestra.Composer.Cart.Api
                 Quantity = request.Quantity.GetValueOrDefault(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = request.RecurringOrderProgramName
+                RecurringOrderProgramName = request.RecurringOrderProgramName,
+                PropertyBag = request.PropertyBag
             });
 
             return Ok(vm);
