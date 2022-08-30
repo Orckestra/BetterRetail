@@ -237,6 +237,7 @@
     <Compile Include="Country\ICountryService.cs" />
     <Compile Include="Country\RegionViewModel.cs" />
     <Compile Include="Country\RetrieveCountryParam.cs" />
+    <Compile Include="dtos.cs" />
     <Compile Include="Enums\LengthMeasureUnitsEnum.cs" />
     <Compile Include="Enums\MediaTypeEnum.cs" />
     <Compile Include="Enums\AccountStatusEnum.cs" />

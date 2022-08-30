@@ -185,6 +185,7 @@ namespace Orckestra.Composer
 
         public static IOvertureClient CreateFromConfig()
         {
+            Overture.Serialization.JsonSerializationConfig.SetConfig();
             var config = GetClientConfig();
             return new ComposerOvertureClient(new OvertureClient(config));
         }
