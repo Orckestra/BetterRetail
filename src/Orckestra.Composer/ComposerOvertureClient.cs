@@ -12,21 +12,6 @@ using ServiceStack.Validation;
 
 namespace Orckestra.Composer
 {
-    public interface IComposerOvertureClient
-    {
-        TResponse Send<TResponse>(IReturn<TResponse> request);
-        void Send(IReturnVoid requestDto);
-        TResponse Send<TResponse>(IReturn<TResponse> request, string httpMethod);
-        void Send(IReturnVoid requestDto, string httpMethod);
-        Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto);
-        Task<HttpWebResponse> SendAsync(IReturnVoid requestDto);
-        Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto, string httpMethod);
-        Task<HttpWebResponse> SendAsync(IReturnVoid requestDto, string httpMethod);
-        void SendAllOneWay(IEnumerable<IReturnVoid> request);
-        List<TResponse> SendAll<TResponse>(IEnumerable<IReturn<TResponse>> request);
-        Task<List<TResponse>> SendAllAsync<TResponse>(IEnumerable<IReturn<TResponse>> request);
-    }
-
     public sealed class ComposerOvertureClient : IComposerOvertureClient
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
@@ -47,37 +32,22 @@ namespace Orckestra.Composer
         {
             Intercept(() => _client.Send(requestDto), requestDto);
         }
-
-        public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto)
-        {
-            return InterceptAsync(() => _client.SendAsync(requestDto), requestDto);
-        }
-
+        
         public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto)
         {
             return InterceptAsync(() => _client.SendAsync<HttpWebResponse>(requestDto), requestDto);
         }
-
-        public TResponse Send<TResponse>(IReturn<TResponse> request, string httpMethod)
-        {
-            return Intercept(() => _client.Send(request), request);
-        }
-
+        
         public void Send(IReturnVoid requestDto, string httpMethod)
         {
             Intercept(() => _client.Send(requestDto), requestDto);
         }
 
-        public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto, string httpMethod)
+        public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto)
         {
             return InterceptAsync(() => _client.SendAsync(requestDto), requestDto);
         }
-
-        public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto, string httpMethod)
-        {
-            return InterceptAsync(() => _client.SendAsync<HttpWebResponse>(requestDto), requestDto);
-        }
-
+        
         public void SendAllOneWay(IEnumerable<IReturnVoid> request)
         {
             Intercept(() => _client.SendAllOneWay(request), request);

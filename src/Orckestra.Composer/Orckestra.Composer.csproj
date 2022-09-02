@@ -246,6 +246,7 @@
     <Compile Include="Factory\RecurringOrderTemplateViewModelFactory.cs" />
     <Compile Include="HttpModules\AntiCookieTamperingModule.cs" />
     <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
+    <Compile Include="IComposerOvertureClient.cs" />
     <Compile Include="IPerformanceDataCollector.cs" />
     <Compile Include="Kernel\ComposerDependencyResolver.cs" />
     <Compile Include="OutputCacheOptions.cs" />
