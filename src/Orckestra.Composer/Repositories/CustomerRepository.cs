@@ -208,7 +208,7 @@ namespace Orckestra.Composer.Repositories
             {
                 ScopeId = param.Scope
             };
-            request.UpdateCustomerRequestAddition(param.Customer);
+            request.ExtendUpdateCustomerRequest(param.Customer);
             var updatedCustomer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 
             return updatedCustomer;

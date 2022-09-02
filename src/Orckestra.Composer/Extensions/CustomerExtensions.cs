@@ -2,12 +2,13 @@
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using System.Linq;
+using Orckestra.Overture.ServiceModel.Requests;
 
 namespace Orckestra.Composer.Extensions
 {
     public static class CustomerExtensions
     {
-        public static UpdateCustomerRequest UpdateCustomerRequestAddition(this UpdateCustomerRequest request, Customer customer)
+        public static UpdateCustomerRequest ExtendUpdateCustomerRequest(this UpdateCustomerRequest request, Customer customer)
         {
             request.AccountStatus = customer.AccountStatus;
             if (customer.AddressIds != null)
@@ -37,6 +38,6 @@ namespace Orckestra.Composer.Extensions
             }
 
             return request;
-        }
+        } 
     }
 }

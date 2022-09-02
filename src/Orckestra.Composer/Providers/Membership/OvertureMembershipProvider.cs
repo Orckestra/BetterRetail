@@ -229,7 +229,7 @@ namespace Orckestra.Composer.Providers.Membership
                     PasswordQuestion = newPasswordQuestion,
                     ScopeId = GetCurrentScope()
                 };
-                updatedRequest.UpdateCustomerRequestAddition(customer);
+                updatedRequest.ExtendUpdateCustomerRequest(customer);
 
                 var updatedCustomer = _client.Send(updatedRequest);
 
@@ -349,7 +349,7 @@ namespace Orckestra.Composer.Providers.Membership
 
             var customer = ConvertToCustomer(user);
             var request = new UpdateCustomerRequest() { ScopeId = GetCurrentScope() };
-            request.UpdateCustomerRequestAddition(customer);
+            request.ExtendUpdateCustomerRequest(customer);
             try
             {
                 var updateCustomer = _client.Send(request);
@@ -702,7 +702,7 @@ namespace Orckestra.Composer.Providers.Membership
                     AccountStatus = newStatus,
                     ScopeId = GetCurrentScope()
                 };
-                updatedRequest.UpdateCustomerRequestAddition(customer);
+                updatedRequest.ExtendUpdateCustomerRequest(customer);
 
                 var updatedCustomer = _client.Send(updatedRequest);
 
