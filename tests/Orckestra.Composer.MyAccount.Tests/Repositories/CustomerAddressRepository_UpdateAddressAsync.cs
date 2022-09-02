@@ -33,7 +33,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             var customerRepository = _container.CreateInstance<CustomerAddressRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(r => r.SendAsync(It.IsAny<UpdateAddressRequest>()))
                       .ReturnsAsync(address);
 
@@ -54,7 +54,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             var customerRepository = _container.CreateInstance<CustomerAddressRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(r => r.SendAsync(It.IsAny<UpdateAddressRequest>()))
                       .ReturnsAsync(address);
 

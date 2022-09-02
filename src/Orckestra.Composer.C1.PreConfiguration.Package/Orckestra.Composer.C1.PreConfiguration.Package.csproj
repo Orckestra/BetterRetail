@@ -83,15 +83,6 @@
     <Reference Include="Orckestra.Overture.Interfaces, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.5.4.0-alpha0051\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
-    </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.Client.5.9.0\lib\net45\ServiceStack.Client.dll</HintPath>
     </Reference>
@@ -176,6 +167,10 @@
     <ProjectReference Include="..\Orckestra.Composer.C1.PreConfiguration\Orckestra.Composer.C1.PreConfiguration.csproj">
       <Project>{485808cc-75b2-4bf6-9b57-470d30b562d4}</Project>
       <Name>Orckestra.Composer.C1.PreConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
+      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
+      <Name>Orckestra.Composer.OccClient</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

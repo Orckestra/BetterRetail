@@ -277,7 +277,7 @@ namespace Orckestra.Composer
             throw new Exception("Unable to get the cache configuration.");
         }
 
-        private IOvertureClient CreateOvertureClient()
+        private IComposerOvertureClient CreateOvertureClient()
         {
             return ComposerOvertureClient.CreateFromConfig();
         }

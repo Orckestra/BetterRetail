@@ -7,10 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
-using Orckestra.Composer.Product.Parameters;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using ServiceStack;
 
@@ -58,7 +55,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         public async Task WhenOkParameters_InvokesOvertureClientSendAsync()
         {
             //Arrange
-            var overtureClientMock = new Mock<IOvertureClient>();
+            var overtureClientMock = new Mock<IComposerOvertureClient>();
 
             overtureClientMock
                 .Setup(oc => oc.SendAsync(It.IsNotNull<IReturn<Overture.ServiceModel.Products.Product>>()))
@@ -80,7 +77,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         public async Task WHEN_Ok_parameters_but_product_is_inactive_SHOULD_return_null()
         {
             //Arrange
-            var overtureClientMock = new Mock<IOvertureClient>();
+            var overtureClientMock = new Mock<IComposerOvertureClient>();
             overtureClientMock
                 .Setup(oc => oc.SendAsync(It.IsNotNull<IReturn<Overture.ServiceModel.Products.Product>>()))
                 .ReturnsAsync(new Overture.ServiceModel.Products.Product() { Active = false })

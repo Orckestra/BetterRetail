@@ -10,7 +10,6 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
 using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
@@ -25,7 +24,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         private IProductRequestFactory ProductRequestFactory { get; set; }
         private IFacetPredicateFactory FacetPredicateFactory { get; set; }
         private ISearchRepository _sut;
-        private Mock<IOvertureClient> OvertureClientMock { get; set; }
+        private Mock<IComposerOvertureClient> OvertureClientMock { get; set; }
         private Mock<IFacetConfigurationContext> FacetConfigurationContext { get; set; }
 
 
@@ -220,9 +219,9 @@ namespace Orckestra.Composer.Search.Tests.Repository
             return mockPaymentProviderFactory;
         }
 
-        private static Mock<IOvertureClient> MockOvertureClient()
+        private static Mock<IComposerOvertureClient> MockOvertureClient()
         {
-            var overtureClient = new Mock<IOvertureClient>(MockBehavior.Strict);
+            var overtureClient = new Mock<IComposerOvertureClient>(MockBehavior.Strict);
 
             overtureClient
                 .Setup(c => c.SendAsync(It.IsNotNull<SearchAvailableProductsRequest>()))

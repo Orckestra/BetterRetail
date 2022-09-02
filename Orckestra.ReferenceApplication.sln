@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.Customer
 		{91EBDFE4-73C2-4812-A4E9-9FED337D2223} = {91EBDFE4-73C2-4812-A4E9-9FED337D2223}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orckestra.Composer.OccClient", "src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj", "{06196B4D-24A8-4BDE-B093-E56B9638DE66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -297,6 +299,10 @@ Global
 		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06196B4D-24A8-4BDE-B093-E56B9638DE66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06196B4D-24A8-4BDE-B093-E56B9638DE66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06196B4D-24A8-4BDE-B093-E56B9638DE66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06196B4D-24A8-4BDE-B093-E56B9638DE66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -349,6 +355,7 @@ Global
 		{D63C2FD6-1BBB-400C-B17C-BD6AE254DBD2} = {832CD4F4-EF5A-44B0-92FF-D159B6276AF7}
 		{91EBDFE4-73C2-4812-A4E9-9FED337D2223} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
 		{D36AD587-2FF9-43EA-8BAE-4D08F81EA506} = {B8DA1457-A933-4B02-A5DF-2F899148CF50}
+		{06196B4D-24A8-4BDE-B093-E56B9638DE66} = {B770DD6A-41C2-4576-80D9-58023319B204}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31789445-A48E-4454-9EC2-4B738A35383C}

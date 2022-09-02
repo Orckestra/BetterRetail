@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias occ;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
@@ -8,15 +9,13 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 using System.Linq.Expressions;
+using occ::Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -43,7 +42,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
 
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             var dummyCart = new ProcessedCart();
 
             overtureClient

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Requests.Products.Inventory;
@@ -14,10 +13,10 @@ namespace Orckestra.Composer.Repositories
 {
     public class InventoryRepository : IInventoryRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public InventoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public InventoryRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

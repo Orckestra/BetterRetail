@@ -56,12 +56,6 @@
     <Reference Include="Orckestra.Overture.Interfaces, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.Interfaces.5.9.0\lib\net45\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
@@ -79,6 +73,10 @@
     <Compile Include="Services\SearchQueryViewService_GetSearchViewModelAsync.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
+      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
+      <Name>Orckestra.Composer.OccClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
       <Project>{6dee1972-e64b-43f0-bbaf-04d0aa64dd60}</Project>
       <Name>Orckestra.Composer.SearchQuery</Name>

@@ -1,4 +1,13 @@
-﻿using System;
+﻿using Autofac.Integration.Mvc;
+using Orckestra.Overture.ServiceModel;
+using Orckestra.Overture.ServiceModel.Customers;
+using Orckestra.Overture.ServiceModel.Customers.Membership;
+using Orckestra.Overture.ServiceModel.Queries;
+using Orckestra.Overture.ServiceModel.Requests.Customers;
+using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
+using ServiceStack;
+using ServiceStack.Validation;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -7,21 +16,13 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Security;
-using Autofac.Integration.Mvc;
-using Orckestra.Overture;
-using Orckestra.Overture.ServiceModel.Customers;
-using Orckestra.Overture.ServiceModel.Customers.Membership;
-using Orckestra.Overture.ServiceModel.Queries;
-using Orckestra.Overture.ServiceModel.Requests.Customers;
-using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
-using ServiceStack;
-using ServiceStack.Validation;
+using Orckestra.Composer.Extensions;
 
 namespace Orckestra.Composer.Providers.Membership
 {
     public class OvertureMembershipProvider : MembershipProvider
     {
-        private IOvertureClient _client;
+        private IComposerOvertureClient _client;
         private MembershipConfiguration _configuration;
         private Regex _matchDomainUserRegex;
 
@@ -223,13 +224,14 @@ namespace Orckestra.Composer.Providers.Membership
 
                 if (customer == null) { return false; }
 
-                var updateRequest = new UpdateCustomerRequest(customer)
+                var updatedRequest = new UpdateCustomerRequest()
                 {
                     PasswordQuestion = newPasswordQuestion,
                     ScopeId = GetCurrentScope()
                 };
+                updatedRequest.UpdateCustomerRequestAddition(customer);
 
-                var updatedCustomer = _client.Send(updateRequest);
+                var updatedCustomer = _client.Send(updatedRequest);
 
                 return updatedCustomer.PasswordQuestion == newPasswordQuestion;
             }
@@ -345,16 +347,17 @@ namespace Orckestra.Composer.Providers.Membership
         {
             if (user == null) { throw new ArgumentNullException(nameof(user)); }
 
-            var request = new UpdateCustomerRequest(ConvertToCustomer(user)) { ScopeId = GetCurrentScope() };
-
+            var customer = ConvertToCustomer(user);
+            var request = new UpdateCustomerRequest() { ScopeId = GetCurrentScope() };
+            request.UpdateCustomerRequestAddition(customer);
             try
             {
-                var customer = _client.Send(request);
+                var updateCustomer = _client.Send(request);
 
-                user.Email = customer.Email;
-                user.IsApproved = customer.AccountStatus != AccountStatus.RequiresApproval;
-                user.LastActivityDate = customer.LastActivityDate;
-                user.LastLoginDate = customer.LastLoginDate;
+                user.Email = updateCustomer.Email;
+                user.IsApproved = updateCustomer.AccountStatus != AccountStatus.RequiresApproval;
+                user.LastActivityDate = updateCustomer.LastActivityDate;
+                user.LastLoginDate = updateCustomer.LastLoginDate;
             }
             catch (WebException ex)
             {
@@ -694,13 +697,14 @@ namespace Orckestra.Composer.Providers.Membership
 
                 if (customer == null) { throw new InvalidOperationException(string.Format("This customer with username {0} doesn't exist.", username)); }
 
-                var updateRequest = new UpdateCustomerRequest(customer)
+                var updatedRequest = new UpdateCustomerRequest()
                 {
                     AccountStatus = newStatus,
                     ScopeId = GetCurrentScope()
                 };
+                updatedRequest.UpdateCustomerRequestAddition(customer);
 
-                var updatedCustomer = _client.Send(updateRequest);
+                var updatedCustomer = _client.Send(updatedRequest);
 
                 return updatedCustomer.AccountStatus == newStatus;
             }
@@ -802,7 +806,7 @@ namespace Orckestra.Composer.Providers.Membership
 
             _matchDomainUserRegex = new Regex(string.Format(@"^{0}\\(?<username>.+)$", OvertureMembershipConfiguration.DefaultMembershipDomain), RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-            _client = ComposerHost.Current.Resolve<IOvertureClient>();
+            _client = ComposerHost.Current.Resolve<IComposerOvertureClient>();
 
             GetMembershipConfigurationFromOverture();
         }

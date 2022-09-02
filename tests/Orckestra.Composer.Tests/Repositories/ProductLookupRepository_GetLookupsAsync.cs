@@ -4,13 +4,10 @@ using System.Threading.Tasks;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
-using Orckestra.Composer.Country;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Requests;
-using ServiceStack;
 
 namespace Orckestra.Composer.Tests.Repositories
 {
@@ -36,7 +33,7 @@ namespace Orckestra.Composer.Tests.Repositories
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
 
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             var dummyCountry = new Overture.ServiceModel.Country();
 
             overtureClient

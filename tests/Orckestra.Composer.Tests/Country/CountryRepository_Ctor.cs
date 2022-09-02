@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using Orckestra.Composer.Country;
 using Orckestra.Overture.Caching;
-using Orckestra.Overture.RestClient;
 
 namespace Orckestra.Composer.Tests.Country
 {
@@ -15,7 +14,7 @@ namespace Orckestra.Composer.Tests.Country
         public void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             // Arrange
-            Mock<OvertureClient> overtureClient = new Mock<OvertureClient>();
+            Mock<IComposerOvertureClient> overtureClient = new Mock<IComposerOvertureClient>();
             Mock<ICacheProvider> cacheProvider = new Mock<ICacheProvider>();
 
             // Act
@@ -40,7 +39,7 @@ namespace Orckestra.Composer.Tests.Country
         [Test]
         public void WHEN_Passing_Null_CacheProvider_SHOULD_Throw_Exception()
         {
-            Mock<OvertureClient> overtureClient = new Mock<OvertureClient>();
+            Mock<IComposerOvertureClient> overtureClient = new Mock<IComposerOvertureClient>();
 
             // Act
             Action action = () => new CountryRepository(overtureClient.Object, null);

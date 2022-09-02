@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
@@ -14,10 +13,10 @@ namespace Orckestra.Composer.MyAccount.Repositories
 {
     public class CustomerAddressRepository: ICustomerAddressRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public CustomerAddressRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public CustomerAddressRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -44,13 +43,39 @@ namespace Orckestra.Composer.MyAccount.Repositories
         public virtual async Task<Address> CreateAddressAsync(Guid customerId, Address address, string scope)
         {
             //TODO: We can get rid of the await by using the extension method ExecuteAndSet on CacheProvider.
-            var request = new AddAddressToCustomerRequest(customerId, address, scope)
+            var request = new AddAddressToCustomerRequest()
             {
                 //TODO: Remove this when the bug #3694 is fixed:
                 //TODO: [Blocker SEG #2879] When adding a new address in CheckOut > set as default does not work
                 IsPreferredBilling = address.IsPreferredBilling || address.IsPreferredShipping,
                 IsPreferredShipping = address.IsPreferredShipping || address.IsPreferredShipping
             };
+
+            request.CustomerId = customerId;
+            request.Id = address.Id;
+            request.AddressName = address.AddressName;
+            request.City = address.City;
+            request.CountryCode = address.CountryCode;
+            request.RegionCode = address.RegionCode;
+            request.Line1 = address.Line1;
+            request.Line2 = address.Line2;
+            request.FirstName = address.FirstName;
+            request.LastName = address.LastName;
+            request.PhoneNumber = address.PhoneNumber;
+            request.PhoneExtension = address.PhoneExtension;
+            request.PostalCode = address.PostalCode;
+            request.Latitude = address.Latitude;
+            request.Longitude = address.Longitude;
+            request.Email = address.Email;
+            request.Notes = address.Notes;
+            request.ScopeId = scope;
+            request.IsPreferredBilling = address.IsPreferredBilling;
+            request.IsPreferredShipping = address.IsPreferredShipping;
+
+            if (address.PropertyBag != null)
+            {
+                request.PropertyBag = new PropertyBag(address.PropertyBag);
+            }
 
             var result = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 
@@ -65,11 +90,34 @@ namespace Orckestra.Composer.MyAccount.Repositories
 
         public virtual async Task<Address> UpdateAddressAsync(Guid customerId, Address address)
         {
-            var request = new UpdateAddressRequest(address)
+            var request = new UpdateAddressRequest()
             {
                 RelatedEntityId = customerId.ToString(),
                 RelatedEntityType = "Customer"
             };
+
+            request.AddressId = address.Id;
+            request.AddressName = address.AddressName;
+            request.City = address.City;
+            request.CountryCode = address.CountryCode;
+            request.RegionCode = address.RegionCode;
+            request.Line1 = address.Line1;
+            request.Line2 = address.Line2;
+            request.FirstName = address.FirstName;
+            request.LastName = address.LastName;
+            request.PhoneNumber = address.PhoneNumber;
+            request.PhoneExtension = address.PhoneExtension;
+            request.PostalCode = address.PostalCode;
+            request.Latitude = address.Latitude;
+            request.Longitude = address.Longitude;
+            request.Email = address.Email;
+            request.Notes = address.Notes;
+            request.IsPreferredBilling = address.IsPreferredBilling;
+            request.IsPreferredShipping = address.IsPreferredShipping;
+            if (address.PropertyBag != null)
+            {
+                request.PropertyBag = new PropertyBag(address.PropertyBag);
+            }
 
             var result = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 

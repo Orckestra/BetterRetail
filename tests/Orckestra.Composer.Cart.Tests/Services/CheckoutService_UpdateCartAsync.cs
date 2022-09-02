@@ -18,7 +18,7 @@ using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Country;
-using Orckestra.Composer.Enums;
+using Orckestra.Composer.OccClient;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
@@ -28,10 +28,7 @@ using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel;
-using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Orders;
-using Orckestra.Overture.ServiceModel.Requests.Administration;
-
 namespace Orckestra.Composer.Cart.Tests.Services
 {
     [TestFixture]

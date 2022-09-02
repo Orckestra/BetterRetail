@@ -1,12 +1,12 @@
-﻿using System;
+﻿extern alias occ;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using occ::Orckestra.Overture.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.Providers;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -22,10 +22,10 @@ namespace Orckestra.Composer.Cart.Repositories
 {
 	public class PaymentRepository : IPaymentRepository
 	{
-		protected IOvertureClient OvertureClient { get; private set; }
+		protected IComposerOvertureClient OvertureClient { get; private set; }
 		protected ICacheProvider CacheProvider { get; private set; }
 
-		public PaymentRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+		public PaymentRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
 		{
 			OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
 			CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

@@ -12,6 +12,7 @@ using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Country;
+using Orckestra.Composer.OccClient;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Providers.Localization;

@@ -7,8 +7,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Tests.Mock;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
@@ -91,7 +89,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var vm = await sut.GetScopeAsync(param);
 
             //Assert
-            _container.GetMock<IOvertureClient>().VerifyAll();
+            _container.GetMock<IComposerOvertureClient>().VerifyAll();
         }
 
         [Test]
@@ -156,12 +154,12 @@ namespace Orckestra.Composer.Tests.Repositories
             await sut.GetScopeAsync(param);
 
             //Assert
-            _container.GetMock<IOvertureClient>().Verify(client => client.SendAsync(It.IsNotNull<GetScopeRequest>()), Times.AtMostOnce);
+            _container.GetMock<IComposerOvertureClient>().Verify(client => client.SendAsync(It.IsNotNull<GetScopeRequest>()), Times.AtMostOnce);
         }
 
         private void MockOvertureClient(string scope, Scope response = null)
         {
-            var mock = _container.GetMock<IOvertureClient>();
+            var mock = _container.GetMock<IComposerOvertureClient>();
 
             mock.Setup(client => client.SendAsync(It.IsNotNull<GetScopeRequest>()))
                 .Returns((GetScopeRequest request) =>

@@ -63,5 +63,16 @@ namespace Orckestra.Composer.Cart.Extensions
         {
             return Guid.TryParse(orderId, out Guid guid) ? guid.ToString("N") : null;
         }
+
+        /// <summary>
+        /// Get cart line items
+        /// </summary>
+        /// <param name="cart">The cart.</param>
+        /// <returns>Expected draft cart name</returns>
+        /// <returns>All line items.</returns>
+        public static List<LineItem> GetLineItems(this Overture.ServiceModel.Orders.Cart cart)
+        {
+            return cart.Shipments.SelectMany(s => s.LineItems).ToList();
+        }
     }
 }

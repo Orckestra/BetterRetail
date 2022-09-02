@@ -7,9 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Country;
-using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
@@ -27,7 +25,7 @@ namespace Orckestra.Composer.Tests.Country
         {
             _container = new AutoMocker();
 
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
 
             overtureClient
                 .Setup(client => client.SendAsync(

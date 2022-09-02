@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
@@ -13,10 +12,10 @@ namespace Orckestra.Composer.Country
 {
     public class CountryRepository : ICountryRepository
     {
-        private readonly IOvertureClient _overtureClient;
+        private readonly IComposerOvertureClient _overtureClient;
         private readonly ICacheProvider _cacheProvider;
 
-        public CountryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public CountryRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

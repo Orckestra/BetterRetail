@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Factory.Order;
+using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Repositories;
@@ -439,7 +440,7 @@ namespace Orckestra.Composer.Cart.Services
 
                 if (shipment?.Address == null) { return Task.FromResult(0); }
 
-                payment.BillingAddress = shipment.Address.Clone();
+                payment.BillingAddress = ObjectHelper.CreateDeepCopy(shipment.Address);
             }
             else
             {
@@ -474,7 +475,7 @@ namespace Orckestra.Composer.Cart.Services
 
                 if (isBillingChanged)
                 {
-                    payment.BillingAddress = shipment.Address.Clone();
+                    payment.BillingAddress = ObjectHelper.CreateDeepCopy(shipment.Address);
                     payment.BillingAddress.Id = Guid.Empty;
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Orckestra.Composer.OccClient;
 using Orckestra.Overture.ServiceModel.Orders;
 
 namespace Orckestra.Composer.Cart.Extensions

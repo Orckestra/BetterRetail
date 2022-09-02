@@ -1,5 +1,4 @@
 ﻿using Orckestra.Composer.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.CustomProfiles;
 using System;
@@ -14,10 +13,10 @@ namespace Orckestra.Composer.Repositories
 {
     public class CustomProfilesRepository : ICustomProfilesRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public CustomProfilesRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public CustomProfilesRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

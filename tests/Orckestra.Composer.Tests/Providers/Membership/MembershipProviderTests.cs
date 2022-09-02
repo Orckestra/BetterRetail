@@ -11,7 +11,6 @@ using Moq;
 using NUnit.Framework;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Membership;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Customers.Membership;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
@@ -24,7 +23,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
     [TestFixture]
     public class MembershipProviderTests
     {
-        private Mock<IOvertureClient> _mockClient;
+        private Mock<IComposerOvertureClient> _mockClient;
         private Mock<IScopeProvider> _mockScopeProvider;
         private OvertureMembershipProvider _sut;
         private MembershipConfiguration _membershipConfig;
@@ -34,7 +33,7 @@ namespace Orckestra.Composer.Tests.Providers.Membership
         [SetUp]
         public void Setup()
         {
-            _mockClient = new Mock<IOvertureClient>(MockBehavior.Strict);
+            _mockClient = new Mock<IComposerOvertureClient>(MockBehavior.Strict);
             _mockScopeProvider = new Mock<IScopeProvider>();
             _mockScopeProvider.SetupGet(sp => sp.DefaultScope).Returns(FakeData.ScopeId);
             _composerHostMoq = new ComposerHostMoq();

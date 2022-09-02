@@ -6,7 +6,6 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Sitemap;
 using Orckestra.Composer.Sitemap.Config;
 using Orckestra.Composer.Sitemap.Product;
-using Orckestra.Overture;
 using Composite.Core;
 using Orckestra.Composer.Sitemap.Factory;
 using Orckestra.ExperienceManagement.Configuration;
@@ -28,7 +27,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
         private static void RegisterSitemapGenerationDependencies(ContainerBuilder builder)
         {
             // Register overture client + product url provider + scope provider + culture service
-            builder.Register(container => ComposerOvertureClient.CreateFromConfig()).As<IOvertureClient>().SingleInstance();
+            builder.Register(container => ComposerOvertureClient.CreateFromConfig()).As<IComposerOvertureClient>().SingleInstance();
 
             builder.RegisterType<WebsiteProductUrlProvider>().As<IProductUrlProvider>();
             builder.RegisterType<ProductUrlParamFactory>().As<IProductUrlParamFactory>();

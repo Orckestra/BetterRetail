@@ -1,9 +1,9 @@
-﻿using System;
+﻿extern alias occ;
+using System;
 using System.Threading.Tasks;
+using occ::Orckestra.Overture.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.Providers.MonerisPayment.ServiceModel;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -17,7 +17,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <value>
         /// The overture client.
         /// </value>
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
 
         /// <summary>
         /// Gets the cache provider.
@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// or
         /// cacheProvider
         /// </exception>
-        public VaultProfileRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public VaultProfileRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

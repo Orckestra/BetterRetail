@@ -3,7 +3,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Product.Tests.Repositories
@@ -15,7 +14,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         public void WHEN_Passing_Valid_Parameters_SHOULD_Succeed()
         {
             // Arrange
-            var overtureClient = new Mock<IOvertureClient>();
+            var overtureClient = new Mock<IComposerOvertureClient>();
             var cacheProvider = new Mock<ICacheProvider>();
 
             // Act
@@ -42,7 +41,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         public void WHEN_Passing_Null_CacheProvider_SHOULD_Throw_ArgumentNullException()
         {
             // Arrange
-            var overtureClient = new Mock<IOvertureClient>();
+            var overtureClient = new Mock<IComposerOvertureClient>();
 
             // Act
             Action action = () => new CategoryRepository(overtureClient.Object, null);

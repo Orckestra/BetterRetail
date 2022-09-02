@@ -6,7 +6,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers.Membership;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
 
@@ -21,7 +20,7 @@ namespace Orckestra.Composer.Tests.Repositories
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
         }
 
         [Test]
@@ -34,7 +33,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedPasswordAnswer = GetRandom.String(70);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<ResetPasswordRequest>(
                     param => param.Username == expectedUsername &&
                     param.Password == expectedPassword &&
@@ -55,7 +54,7 @@ namespace Orckestra.Composer.Tests.Repositories
             //Arrange
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.IsAny<ResetPasswordRequest>()))
                 .ReturnsAsync(new ResetPasswordResponse
                 {
@@ -125,7 +124,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<ResetPasswordRequest>(
                     param => param.Username == expectedUsername &&
                     param.ScopeId == expectedScopeId &&

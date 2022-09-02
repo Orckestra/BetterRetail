@@ -9,10 +9,8 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
-using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
 
@@ -54,7 +52,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
                 }
             };
 
-            var overtureClientMock = _container.GetMock<IOvertureClient>();
+            var overtureClientMock = _container.GetMock<IComposerOvertureClient>();
             overtureClientMock
             .Setup(client => client.SendAsync(It.IsNotNull<GetCategoriesV2Request>()))
             .ReturnsAsync(new CategoryList() { Categories = new List<Category>(categoriesToReturn) })

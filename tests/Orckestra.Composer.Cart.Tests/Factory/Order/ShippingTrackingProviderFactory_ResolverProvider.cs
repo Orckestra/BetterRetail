@@ -8,11 +8,12 @@ using NUnit.Framework;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Providers.ShippingTracking;
 using Orckestra.Composer.Cart.Tests.Mock;
-using Orckestra.Overture;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.Cart.Tests.Factory.Order
 {
+    extern alias occ;
+
     public class ShippingTrackingProviderFactoryResolverProvider
     {
         private AutoMocker _container;
@@ -81,7 +82,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory.Order
             var providerName = GetRandom.String(15);
             registry.RegisterProvider(providerName, typeof(FakeShippingTrackingProvider));
 
-            var mockResolver = _container.GetMock<IDependencyResolver>();
+            var mockResolver = _container.GetMock<occ::Orckestra.Overture.IDependencyResolver>();
             mockResolver.Setup(dr => dr.Resolve(It.IsNotNull<Type>()))
                 .Returns(new FakeShippingTrackingProvider());
 

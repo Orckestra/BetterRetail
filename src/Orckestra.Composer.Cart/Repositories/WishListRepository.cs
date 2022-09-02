@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
@@ -12,12 +10,14 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
+    extern alias occ;
+
     public class WishListRepository: IWishListRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
-        protected ICacheProvider CacheProvider { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
+        protected occ::Orckestra.Overture.Caching.ICacheProvider CacheProvider { get; private set; }
 
-        public WishListRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public WishListRepository(IComposerOvertureClient overtureClient, occ::Orckestra.Overture.Caching.ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -103,9 +103,9 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <summary>
         /// Builds the cache key for a WishList.
         /// </summary>
-        protected virtual CacheKey BuildWishListCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildWishListCacheKey(string scope, Guid customerId, string cartName)
         {
-            var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
+            var key = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.Cart)
             {
                 Scope = scope
             };

@@ -8,7 +8,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
@@ -29,7 +28,7 @@ namespace Orckestra.Composer.Tests.Repositories
         {
             _container = new AutoMocker();
 
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             overtureClient.Setup(ovClient => ovClient.SendAsync(
                     It.IsNotNull<GetFulfillmentLocationsByScopeRequest>()))
                 .ReturnsAsync(new List<FulfillmentLocation>())
@@ -103,7 +102,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var results = await _sut.GetFulfillmentLocationsByScopeAsync(p);
 
             //Assert
-            _container.Verify<IOvertureClient>(
+            _container.Verify<IComposerOvertureClient>(
                 ovClient => ovClient.SendAsync(It.IsNotNull<GetFulfillmentLocationsByScopeRequest>()));
         }
         

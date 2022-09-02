@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Store.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Customers.Stores;
@@ -18,7 +17,7 @@ namespace Orckestra.Composer.Store.Repositories
 {
     public class StoreRepository : IStoreRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
         public const string GETSTORES_CACHE_KEYPART = "allstores";
@@ -29,7 +28,7 @@ namespace Orckestra.Composer.Store.Repositories
         public static readonly string StoreTypePropertyName = ((MemberExpression)((Expression<Func<Overture.ServiceModel.Customers.Stores.Store, StoreType>>)(s => s.StoreType)).Body).Member.Name;
         public static readonly string StoreActivePropertyName = ((MemberExpression)((Expression<Func<Overture.ServiceModel.Customers.Stores.Store, bool>>)(s => s.IsActive)).Body).Member.Name;
 
-        public StoreRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public StoreRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

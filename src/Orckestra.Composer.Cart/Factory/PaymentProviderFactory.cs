@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Providers;
-using Orckestra.Overture;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory
 {
+    extern alias occ;
+
     public sealed class PaymentProviderFactory : ProviderFactory<IPaymentProvider>, IPaymentProviderFactory
     {
         private IPaymentProviderRegistry PaymentProviderRegistry { get; set; }
 
-        public PaymentProviderFactory(IDependencyResolver dependencyResolver, IPaymentProviderRegistry paymentProviderRegistry) 
+        public PaymentProviderFactory(occ::Orckestra.Overture.IDependencyResolver dependencyResolver, IPaymentProviderRegistry paymentProviderRegistry) 
             : base(dependencyResolver)
         {
             PaymentProviderRegistry = paymentProviderRegistry;

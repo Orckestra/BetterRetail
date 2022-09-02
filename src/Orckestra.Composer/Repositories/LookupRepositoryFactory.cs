@@ -1,16 +1,15 @@
 ﻿using System;
 using Orckestra.Composer.Enums;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Repositories
 {
     class LookupRepositoryFactory : ILookupRepositoryFactory
     {
-        private readonly IOvertureClient _overtureClient;
+        private readonly IComposerOvertureClient _overtureClient;
         private readonly ICacheProvider _cacheProvider;
 
-        public LookupRepositoryFactory(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public LookupRepositoryFactory(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             _overtureClient = overtureClient;
             _cacheProvider = cacheProvider;

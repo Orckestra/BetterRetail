@@ -8,11 +8,8 @@ using NUnit.Framework;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture;
 using Orckestra.Overture.Caching;
-using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests;
-using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 
 namespace Orckestra.Composer.Tests.Country
 {
@@ -38,7 +35,7 @@ namespace Orckestra.Composer.Tests.Country
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
 
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             var dummyCountry = new Overture.ServiceModel.Country();
 
             overtureClient

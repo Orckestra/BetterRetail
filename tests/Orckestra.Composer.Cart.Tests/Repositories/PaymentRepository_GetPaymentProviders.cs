@@ -7,13 +7,13 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Providers;
 using Orckestra.Overture.ServiceModel.Requests.Providers;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
+    extern alias occ;
+
     [TestFixture]
     public class PaymentRepositoryGetPaymentProviders
     {
@@ -24,15 +24,15 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         {
             _container = new AutoMocker();
 
-            var cacheProvider = _container.GetMock<ICacheProvider>();
+            var cacheProvider = _container.GetMock<occ::Orckestra.Overture.Caching.ICacheProvider>();
             cacheProvider
                 .Setup(provider => provider.GetOrAddAsync(
-                    It.IsNotNull<CacheKey>(),
+                    It.IsNotNull<occ::Orckestra.Overture.Caching.CacheKey>(),
                     It.IsNotNull<Func<Task<GetPaymentProvidersResponse>>>(),
                     It.IsAny<Func<GetPaymentProvidersResponse, Task>>(),
-                    It.IsAny<CacheKey>()))
-                .Returns<CacheKey, Func<Task<GetPaymentProvidersResponse>>,
-                        Func<GetPaymentProvidersResponse, Task>, CacheKey>(
+                    It.IsAny<occ::Orckestra.Overture.Caching.CacheKey>()))
+                .Returns<occ::Orckestra.Overture.Caching.CacheKey, Func<Task<GetPaymentProvidersResponse>>,
+                        Func<GetPaymentProvidersResponse, Task>, occ::Orckestra.Overture.Caching.CacheKey>(
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
         }
@@ -79,7 +79,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
 
         private void MockPaymentProvidersRequest(GetPaymentProvidersResponse paymentProviders)
         {
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetPaymentProvidersRequest>()))
                 .ReturnsAsync(paymentProviders)
                 .Verifiable();
