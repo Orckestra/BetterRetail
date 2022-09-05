@@ -48,7 +48,7 @@ module Orckestra.Composer {
 
                 computed: {
                     currentNode() {
-                        return this.node ? this.node: this.parentnode;
+                        return this.node ? this.node : this.parentnode;
                     },
                     hasChildren() {
                         const { ChildNodes } = this.currentNode;
@@ -56,7 +56,7 @@ module Orckestra.Composer {
                     },
                     visibleNodes() {
                         const { ChildNodes, MaxCollapsedCount } = this.currentNode;
-                        return this.isSelectedInColapsed ? ChildNodes: ChildNodes.slice(0, MaxCollapsedCount);
+                        return this.isSelectedInColapsed ? ChildNodes : ChildNodes.slice(0, MaxCollapsedCount);
                     },
                     collapsedNodes() {
                         const { ChildNodes, MaxCollapsedCount, MaxExpandedCount } = this.currentNode;
@@ -70,6 +70,11 @@ module Orckestra.Composer {
                 methods: {
                     isHighlighted(facet) {
                         return facet.IsSelected && (!facet.ChildNodes || facet.ChildNodes.every(child => !child.IsSelected));
+                    },
+                    getTitle(nodeValue) {
+                        var textArea = document.createElement('textarea');
+                        textArea.innerText = nodeValue;
+                        return textArea.value;
                     }
                 },
                 mounted() {
@@ -111,7 +116,7 @@ module Orckestra.Composer {
                             :data-selected="node.IsSelected"
                             v-on:click="(event) => nodeсlicked(event, node.IsSelected)" 
                         />
-                        {{node.Title}} ({{node.Quantity}})
+                        {{getTitle(node.Title)}} ({{node.Quantity}})
                     </label>
 
                 <div v-if="hasChildren">
