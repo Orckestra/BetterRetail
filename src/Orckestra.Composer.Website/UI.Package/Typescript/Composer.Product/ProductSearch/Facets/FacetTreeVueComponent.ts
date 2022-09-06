@@ -70,11 +70,6 @@ module Orckestra.Composer {
                 methods: {
                     isHighlighted(facet) {
                         return facet.IsSelected && (!facet.ChildNodes || facet.ChildNodes.every(child => !child.IsSelected));
-                    },
-                    getTitle(nodeValue) {
-                        var textArea = document.createElement('textarea');
-                        textArea.innerText = nodeValue;
-                        return textArea.value;
                     }
                 },
                 mounted() {
@@ -116,7 +111,7 @@ module Orckestra.Composer {
                             :data-selected="node.IsSelected"
                             v-on:click="(event) => nodeсlicked(event, node.IsSelected)" 
                         />
-                        {{getTitle(node.Title)}} ({{node.Quantity}})
+                        {{node.Title}} ({{node.Quantity}})
                     </label>
 
                 <div v-if="hasChildren">
