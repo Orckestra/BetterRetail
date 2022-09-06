@@ -133,7 +133,8 @@ namespace Orckestra.Composer.Cart.Services
                             LineItemId = existingLineItem.Id,
                             Quantity = param.Quantity + existingLineItem.Quantity,
                             RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                            RecurringOrderProgramName = param.RecurringOrderProgramName
+                            RecurringOrderProgramName = param.RecurringOrderProgramName,
+                            PropertyBag = param.PropertyBag
                         };
                         return await UpdateLineItemAsync(updateLineItemParam).ConfigureAwait(false);
                     }

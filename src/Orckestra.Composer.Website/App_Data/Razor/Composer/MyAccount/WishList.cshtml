@@ -13,6 +13,8 @@
 
     [FunctionParameter(Label = "Empty Wish List Content", Help = "That content will be shown when Wish List is Empty")]
     public XhtmlDocument emptyWishListContent { get; set; }
+
+    public override bool PreventFunctionOutputCaching { get { return true; } } 
 }
 
 @{

@@ -1,3 +1,4 @@
+using Orckestra.Overture.ServiceModel;
 using System;
 using System.Globalization;
 
@@ -64,6 +65,8 @@ namespace Orckestra.Composer.Cart.Parameters
         /// The name of the recurring order program.
         /// </summary>
         public string RecurringOrderProgramName { get; set; }
+
+        public PropertyBag PropertyBag { get; set; }
 
         public AddLineItemParam Clone()
         {
