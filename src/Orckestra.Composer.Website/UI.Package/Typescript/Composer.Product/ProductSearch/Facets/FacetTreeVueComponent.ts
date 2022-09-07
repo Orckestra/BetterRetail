@@ -48,7 +48,7 @@ module Orckestra.Composer {
 
                 computed: {
                     currentNode() {
-                        return this.node ? this.node : this.parentnode;
+                        return this.node ? this.node: this.parentnode;
                     },
                     hasChildren() {
                         const { ChildNodes } = this.currentNode;
