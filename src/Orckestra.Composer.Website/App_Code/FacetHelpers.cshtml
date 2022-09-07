@@ -207,7 +207,7 @@
         </div>
         <div id="categoryFacets" class="card-body collapse show">
             <div class="mb-1">
-                <strong>@HttpUtility.HtmlEncode(rootTitle) ({{CategoryFacetValuesTree.TotalCount}})</strong>
+                <strong><span>@Html.Raw(rootTitle)</span> ({{CategoryFacetValuesTree.TotalCount}})</strong>
             </div>
             <facets-tree v-bind:parentnode="CategoryFacetValuesTree"
                          v-bind:nodeсlicked="categoryFacetChanged"
