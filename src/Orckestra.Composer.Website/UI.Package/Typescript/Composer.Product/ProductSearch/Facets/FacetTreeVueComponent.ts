@@ -56,7 +56,7 @@ module Orckestra.Composer {
                     },
                     visibleNodes() {
                         const { ChildNodes, MaxCollapsedCount } = this.currentNode;
-                        return this.isSelectedInColapsed ? ChildNodes : ChildNodes.slice(0, MaxCollapsedCount);
+                        return this.isSelectedInColapsed ? ChildNodes: ChildNodes.slice(0, MaxCollapsedCount);
                     },
                     collapsedNodes() {
                         const { ChildNodes, MaxCollapsedCount, MaxExpandedCount } = this.currentNode;
