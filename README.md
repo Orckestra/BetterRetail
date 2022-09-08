@@ -276,5 +276,12 @@ A1. You can re-create the categories. To do this, remove the `Orckestra.Composer
 After the uninstallation, the website will be automatically restarted, and it will automatically re-install the `Orckestra.Composer.C1.PreConfiguration` package. During its installation the categories will appear.
 	
 A2. To avoid this issue at all, if in the pipeline is not cleaning up the target folder, add to the deployment pipeline a step to remove the specific `Website\App_Data\Composite\Packages` folder. Then the issue with categories will not appear.
+
+Q: How to set Google Maps API key?
+
+A: The system will take first not empty value as Google Maps API Key.
+  - C1 Console - Root Page - Meta Data -  "Google Maps API Key" field
+  - Environment variable: "AppSettings_GoogleSettings.MapsApiKey"
+  - Web.config/configuration/appSettings[@key='GoogleSettings.MapsApiKey']/@value
 	
 {TODO: fill this section with known issues}
