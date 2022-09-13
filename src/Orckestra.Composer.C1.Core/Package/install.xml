@@ -21,12 +21,6 @@
         <File sourceFilename="~\Bin\Orckestra.Caching.dll" targetFilename="~\Bin\Orckestra.Caching.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.AsyncExtensions.dll" targetFilename="~\Bin\Orckestra.AsyncExtensions.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Overture.Interfaces.dll" targetFilename="~\Bin\Orckestra.Overture.Interfaces.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Overture.RestClient.dll" targetFilename="~\Bin\Orckestra.Overture.RestClient.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Overture.ServiceModel.dll" targetFilename="~\Bin\Orckestra.Overture.ServiceModel.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Overture.ServiceModel.Requests.dll" targetFilename="~\Bin\Orckestra.Overture.ServiceModel.Requests.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll" targetFilename="~\Bin\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.dll" targetFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll" targetFilename="~\Bin\OrckestraCommerce.RecurringOrders.ServiceModel.Requests.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Owin.dll" targetFilename="~\Bin\Owin.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Client.dll" targetFilename="~\Bin\ServiceStack.Client.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\ServiceStack.Interfaces.dll" targetFilename="~\Bin\ServiceStack.Interfaces.dll" allowOverwrite="true" />

@@ -10,7 +10,6 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 namespace Orckestra.Composer.Cart.Repositories
 {
     extern alias occ;
-
     public class FulfillmentMethodRepository : IFulfillmentMethodRepository
     {
         protected IComposerOvertureClient OvertureClient { get; private set; }

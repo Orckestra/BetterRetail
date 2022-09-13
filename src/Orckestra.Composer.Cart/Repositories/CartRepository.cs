@@ -1,10 +1,8 @@
-﻿extern alias occ;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using occ::Orckestra.Overture.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Configuration;
@@ -22,13 +20,14 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
+    extern alias occ;
     public class CartRepository : ICartRepository
     {
         protected IComposerOvertureClient OvertureClient { get; private set; }
-        protected ICacheProvider CacheProvider { get; private set; }
+        protected occ::Orckestra.Overture.Caching.ICacheProvider CacheProvider { get; private set; }
         protected IScopeProvider ScopeProvider { get; private set; }
 
-        public CartRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeProvider scopeProvider)
+        public CartRepository(IComposerOvertureClient overtureClient, occ::Orckestra.Overture.Caching.ICacheProvider cacheProvider, IScopeProvider scopeProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -113,7 +112,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope
             };
-            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
+            occ::Orckestra.Overture.Caching.CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
             await CacheProvider.RemoveAsync(cacheKey);
 
             return await OvertureClient.SendAsync(request);
@@ -212,7 +211,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
             };
 
-            CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
+            occ::Orckestra.Overture.Caching.CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
 
             return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
@@ -486,9 +485,9 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <param name="customerId"></param>
         /// <param name="cartName"></param>
         /// <returns></returns>
-        protected virtual CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
+        protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildCartCacheKey(string scope, Guid customerId, string cartName)
         {
-            var key = new CacheKey(CacheConfigurationCategoryNames.Cart)
+            var key = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.Cart)
             {
                 Scope = scope
             };

@@ -13,7 +13,6 @@ using Orckestra.Composer.Providers;
 namespace Orckestra.Composer.Cart
 {
     extern alias occ;
-
     public class CartPlugin : IComposerPlugin
     {
         /// <summary>

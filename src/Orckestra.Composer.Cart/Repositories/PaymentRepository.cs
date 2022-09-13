@@ -1,9 +1,7 @@
-﻿extern alias occ;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using occ::Orckestra.Overture.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
@@ -20,12 +18,14 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
-	public class PaymentRepository : IPaymentRepository
+    extern alias occ;
+
+    public class PaymentRepository : IPaymentRepository
 	{
 		protected IComposerOvertureClient OvertureClient { get; private set; }
-		protected ICacheProvider CacheProvider { get; private set; }
+		protected occ::Orckestra.Overture.Caching.ICacheProvider CacheProvider { get; private set; }
 
-		public PaymentRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
+		public PaymentRepository(IComposerOvertureClient overtureClient, occ::Orckestra.Overture.Caching.ICacheProvider cacheProvider)
 		{
 			OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
 			CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -333,9 +333,9 @@ namespace Orckestra.Composer.Cart.Repositories
 		/// <param name="cartName">Name of the cart.</param>
 		/// <param name="customerId">ID of the customer to which belongs the cart.</param>
 		/// <returns></returns>
-		protected virtual CacheKey BuildCartCacheKey(string scope, string cartName, Guid customerId)
+		protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildCartCacheKey(string scope, string cartName, Guid customerId)
 		{
-			var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Cart)
+			var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.Cart)
 			{
 				Scope = scope
 			};
@@ -346,9 +346,9 @@ namespace Orckestra.Composer.Cart.Repositories
 			return cacheKey;
 		}
 
-		protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
+		protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
 		{
-			var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
+			var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
 			{
 				Scope = scope,
 			};
@@ -366,9 +366,9 @@ namespace Orckestra.Composer.Cart.Repositories
 		/// <param name="customerId"></param>
 		/// <param name="cartName"></param>
 		/// <returns></returns>
-		protected virtual CacheKey BuildCartPaymentCacheKey(string scope, Guid customerId, string cartName)
+		protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildCartPaymentCacheKey(string scope, Guid customerId, string cartName)
 		{
-			var key = new CacheKey(CacheConfigurationCategoryNames.CartPayment)
+			var key = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.CartPayment)
 			{
 				Scope = scope
 			};
@@ -377,9 +377,9 @@ namespace Orckestra.Composer.Cart.Repositories
 			return key;
 		}
 
-		protected virtual CacheKey BuildPaymentProvidersCacheKey(string scope)
+		protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildPaymentProvidersCacheKey(string scope)
 		{
-			var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentProviders)
+			var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.PaymentProviders)
 			{
 				Scope = scope,
 			};
@@ -387,9 +387,9 @@ namespace Orckestra.Composer.Cart.Repositories
 			return cacheKey;
 		}
 
-		protected virtual CacheKey BuildProvidersCacheKey(string scope, ProviderType providerType)
+		protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildProvidersCacheKey(string scope, ProviderType providerType)
 		{
-			var cacheKey = new CacheKey(CacheConfigurationCategoryNames.Providers)
+			var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.Providers)
 			{
 				Scope = scope,
 			};

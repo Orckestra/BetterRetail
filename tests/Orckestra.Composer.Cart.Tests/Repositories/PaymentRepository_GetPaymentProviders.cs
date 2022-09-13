@@ -13,7 +13,6 @@ using Orckestra.Overture.ServiceModel.Requests.Providers;
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
     extern alias occ;
-
     [TestFixture]
     public class PaymentRepositoryGetPaymentProviders
     {

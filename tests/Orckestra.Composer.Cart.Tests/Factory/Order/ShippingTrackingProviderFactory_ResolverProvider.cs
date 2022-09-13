@@ -13,7 +13,6 @@ using static Orckestra.Composer.Utils.ExpressionUtility;
 namespace Orckestra.Composer.Cart.Tests.Factory.Order
 {
     extern alias occ;
-
     public class ShippingTrackingProviderFactoryResolverProvider
     {
         private AutoMocker _container;

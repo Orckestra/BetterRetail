@@ -20,7 +20,6 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
-    extern alias occ;
 
     [TestFixture]
     public class CartRepositoryAddPaymentAsync

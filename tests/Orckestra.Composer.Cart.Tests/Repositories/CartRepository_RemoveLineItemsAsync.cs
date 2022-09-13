@@ -1,5 +1,4 @@
-﻿extern alias occ;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
-using occ::Orckestra.Overture.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -317,7 +315,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
 
             //Assert
             //3.8 upgrade
-            Container.Verify<ICacheProvider>(m => m.SetAsync(It.IsNotNull<CacheKey>(), It.IsAny<ProcessedCart>(), It.IsAny<CacheKey>()));
+            Container.Verify<occ::Orckestra.Overture.Caching.ICacheProvider>(m => m.SetAsync(It.IsNotNull<occ::Orckestra.Overture.Caching.CacheKey>(), It.IsAny<ProcessedCart>(), It.IsAny<occ::Orckestra.Overture.Caching.CacheKey>()));
         }
     }
 }

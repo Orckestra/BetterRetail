@@ -68,6 +68,12 @@ namespace Orckestra.Composer.SearchQuery.Context
             return _viewModel;
         }
 
+        public async Task<SearchQueryViewModel> GetTopSearchQueryViewModelAsync(string queryTypeValue, string queryName, int pageSize)
+        {
+            Enum.TryParse(queryTypeValue, out SearchQueryType queryType);
+            return await GetTopSearchQueryViewModelAsync(queryType, queryName, pageSize).ConfigureAwait(false);
+        }
+
         public async Task<SearchQueryViewModel> GetTopSearchQueryViewModelAsync(SearchQueryType queryType, string queryName, int pageSize)
         {
             if (_topResultsViewModel != null && _topResultsViewModel.QueryName == queryName && _topResultsViewModel.QueryType == queryType) { return _topResultsViewModel; }

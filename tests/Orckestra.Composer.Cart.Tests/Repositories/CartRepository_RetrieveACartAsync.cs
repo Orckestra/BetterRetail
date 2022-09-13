@@ -1,5 +1,4 @@
-﻿extern alias occ;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FizzWare.NBuilder.Generators;
@@ -15,10 +14,11 @@ using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 using System.Linq.Expressions;
-using occ::Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
+    extern alias occ;
+
     public class CartRepositoryRetrieveACartAsync
     {
         private AutoMocker _container;
@@ -31,14 +31,14 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container = new AutoMocker();
             _repository = _container.CreateInstance<CartRepository>();
 
-            var cacheProvider = _container.GetMock<ICacheProvider>();
+            var cacheProvider = _container.GetMock<occ::Orckestra.Overture.Caching.ICacheProvider>();
             cacheProvider
                 .Setup(provider => provider.GetOrAddAsync(
-                    It.IsNotNull<CacheKey>(),
+                    It.IsNotNull<occ::Orckestra.Overture.Caching.CacheKey>(),
                     It.IsNotNull<Func<Task<ProcessedCart>>>(),
                     It.IsAny<Func<ProcessedCart, Task>>(),
-                    It.IsAny<CacheKey>()))
-                .Returns<CacheKey, Func<Task<ProcessedCart>>, Func<ProcessedCart, Task>, CacheKey>(
+                    It.IsAny<occ::Orckestra.Overture.Caching.CacheKey>()))
+                .Returns<occ::Orckestra.Overture.Caching.CacheKey, Func<Task<ProcessedCart>>, Func<ProcessedCart, Task>, occ::Orckestra.Overture.Caching.CacheKey>(
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
 

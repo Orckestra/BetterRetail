@@ -1,7 +1,5 @@
-﻿extern alias occ;
-using System;
+﻿using System;
 using System.Threading.Tasks;
-using occ::Orckestra.Overture.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
 using Orckestra.Overture.Providers.MonerisPayment.ServiceModel;
@@ -9,6 +7,8 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
+    extern alias occ;
+
     public class VaultProfileRepository : IVaultProfileRepository
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// <value>
         /// The cache provider.
         /// </value>
-        protected ICacheProvider CacheProvider { get; private set; }
+        protected occ::Orckestra.Overture.Caching.ICacheProvider CacheProvider { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VaultProfileRepository"/> class.
@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// or
         /// cacheProvider
         /// </exception>
-        public VaultProfileRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public VaultProfileRepository(IComposerOvertureClient overtureClient, occ::Orckestra.Overture.Caching.ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -93,9 +93,9 @@ namespace Orckestra.Composer.Cart.Repositories
             return await OvertureClient.SendAsync(request);
         }
 
-        protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
+        protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)
         {
-            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
+            var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.PaymentMethod)
             {
                 Scope = scope,
             };

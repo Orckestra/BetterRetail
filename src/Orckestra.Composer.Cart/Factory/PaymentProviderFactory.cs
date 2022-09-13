@@ -7,7 +7,6 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 namespace Orckestra.Composer.Cart.Factory
 {
     extern alias occ;
-
     public sealed class PaymentProviderFactory : ProviderFactory<IPaymentProvider>, IPaymentProviderFactory
     {
         private IPaymentProviderRegistry PaymentProviderRegistry { get; set; }

@@ -7,7 +7,6 @@ using Orckestra.Composer.Cart.Repositories;
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
     extern alias occ;
-
     [TestFixture]
     public class FulfillmentMethodRepositoryCtor
     {
