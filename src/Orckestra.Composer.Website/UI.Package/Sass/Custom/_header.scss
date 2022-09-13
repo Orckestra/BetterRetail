@@ -263,20 +263,21 @@
 }
 // cart button and badge
 .fa-shopping-cart + .badge-pill.badge-top-right {
-    left: -10px !important;
+    left: -10px;
+    top: -5px;
     padding: 5px 7px 4px;
     display: inline-block;
-    min-width: 23px;
+    min-width: 16px;
 
     @include media-breakpoint-up(md) {
-        left: -26px !important;
+        left: -10px;
     }
 
     @include media-breakpoint-up(lg) {
-        left: -15px !important;
+        left: 0px;
     }
 
     @include media-breakpoint-up(xl) {
-        left: -30px !important;
+        left: -15px;
     }
 }
