@@ -273,6 +273,7 @@
     <Content Include="ApplicationInsights.config" />
     <Content Include="App_Code\ImageHelpers.cshtml" />
     <Content Include="App_Code\ContentSearchHelpers.cshtml" />
+    <Content Include="App_Code\HeaderHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />

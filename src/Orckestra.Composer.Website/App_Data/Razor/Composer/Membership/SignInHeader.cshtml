@@ -18,22 +18,7 @@
         class="nav-item ml-auto d-block"
         id="vueSignInHeader"
         v-cloak="true">
-    <a class="nav-link" v-bind:class="{ 'logged-in': IsOnMyAccount }"
-       data-qa="my-account-in-header"
-       data-toggle="dropdown"
-       v-if="IsAuthenticated" v-bind:href="Url"
-       title="@Html.Localize("MyAccount", "L_MyAccount")"
-       role="button" aria-haspopup="true" aria-expanded="false" aria-controls="signInHeaderDropdown">
-        <i class="fa fa-user fa-lg  sps--blw-show-inline-block" aria-hidden="true"></i>&#160;
-        <span class="d-none d-lg-inline sps--blw-hidden">@Html.Localize("MyAccount", "L_MyAccount")</span>
-    </a>
-    <a class="nav-link"
-       data-qa="login-in"
-       v-if="!IsAuthenticated" v-bind:href="Url"
-       title="@Html.Localize("MyAccount", "L_SignIn")">
-        <i class="fa fa-user fa-lg  sps--blw-show-inline-block" aria-hidden="true"></i>&#160;
-        <span class="d-none d-lg-inline sps--blw-hidden">@Html.Localize("MyAccount", "L_SignIn")</span>
-    </a>
+        @HeaderHelpers.SingInHeader()
     </li>
 </body>
 </html>
