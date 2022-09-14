@@ -2,7 +2,7 @@
 
 @helper SingInHeader()
 {
-    <a class="nav-link" v-bind:class="{ 'logged-in': IsOnMyAccount }"
+    <a class="nav-link"
        data-qa="my-account-in-header"
        v-if="IsAuthenticated" v-bind:href="Url"
        title="@Html.Localize("MyAccount", "L_MyAccount")"
