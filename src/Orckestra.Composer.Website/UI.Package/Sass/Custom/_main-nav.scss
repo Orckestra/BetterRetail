@@ -228,3 +228,42 @@ ul.main-nav-sticky {
         }
     }
 }
+
+ul.main-nav-sticky {
+    display: none;
+    overflow: hidden;
+    white-space: nowrap;
+
+    li {
+        float: left;
+
+        a {
+            background-color: transparent;
+            color: #fff;
+            float: left;
+            position: relative;
+
+            &:hover,
+            &:focus {
+                background-color: transparent;
+
+                &::after {
+                    background-color: #fff;
+                    bottom: 0;
+                    content: '';
+                    height: 4px;
+                    left: 0;
+                    position: absolute;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+//Sticky Menu
+.sticky-show {
+    .sps--abv & {
+        display: none !important;
+    }
+}

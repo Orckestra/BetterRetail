@@ -273,6 +273,7 @@
     <Content Include="ApplicationInsights.config" />
     <Content Include="App_Code\ImageHelpers.cshtml" />
     <Content Include="App_Code\ContentSearchHelpers.cshtml" />
+    <Content Include="App_Code\HeaderHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -358,6 +359,10 @@
     <Content Include="App_Data\Razor\Composer\MyAccount\UpdateAccount.cshtml" />
     <Content Include="App_Data\Razor\Composer\Product\Instant\RelatedProducts.cshtml" />
     <Content Include="App_Data\Razor\Composer\Search\Products\ProductTileVue.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButton.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Membership\SignInHeader.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Membership\SignInSticky.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -461,6 +466,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
     <Folder Include="App_Data\Razor\Orckestra\Lists\" />
+    <Folder Include="UI.Package\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

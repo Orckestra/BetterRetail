@@ -17,7 +17,7 @@
           <cms:bind source="GTMContainerId" />
         </TextBox.Text>
       </TextBox>
-      <TextBox Label="Google Maps API Key" Help="" SpellCheck="true">
+      <TextBox Label="Google Maps API Key" Help="If empty the Environment variable with name 'AppSettings_GoogleSettings.MapsApiKey' or Web.config/configuration/appSettings[@key='GoogleSettings.MapsApiKey']/@value can be used." SpellCheck="true">
         <TextBox.Text>
           <cms:bind source="MapsApiKey" />
         </TextBox.Text>

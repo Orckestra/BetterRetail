@@ -119,12 +119,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AllowAnonymous]
-        public virtual ActionResult SignInHeaderBlade()
-        {
-            return View("SignInHeaderBlade", new SignInHeaderViewModel { IsLoading = true });
-        }
-
-        [AllowAnonymous]
         [MustBeAnonymous(MustBeAnonymousAttribute.MyAccountDestination)]
         public virtual ActionResult ForgotPasswordBlade()
         {
