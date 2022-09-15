@@ -136,7 +136,6 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsGuest", "Composer.Checkout.CheckoutSignInAsGuest");
             functions.RegisterAction<CheckoutController>("CheckoutSignInAsCustomer", "Composer.Checkout.CheckoutSignInAsCustomer");
   
-            functions.RegisterAction<MembershipController>("SignInHeaderBlade", "Composer.Membership.SignInHeader");
             functions.RegisterAction<MembershipController>("ReturningCustomerBlade", "Composer.Membership.ReturningCustomer");
             functions.RegisterAction<MembershipController>("NewCustomerBlade", "Composer.Membership.NewCustomer");
             functions.RegisterAction<MembershipController>("CreateAccountBlade", "Composer.Membership.CreateAccount");
