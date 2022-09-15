@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -9,13 +10,12 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
-    extern alias occ;
     public class FulfillmentMethodRepository : IFulfillmentMethodRepository
     {
         protected IComposerOvertureClient OvertureClient { get; private set; }
-        protected occ::Orckestra.Overture.Caching.ICacheProvider CacheProvider { get; private set; }
+        protected ICacheProvider CacheProvider { get; private set; }
 
-        public FulfillmentMethodRepository(IComposerOvertureClient overtureClient, occ::Orckestra.Overture.Caching.ICacheProvider cacheProvider)
+        public FulfillmentMethodRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -58,9 +58,9 @@ namespace Orckestra.Composer.Cart.Repositories
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        protected static occ::Orckestra.Overture.Caching.CacheKey GetCacheKeyForFulfillmentMethodsByScope(string scopeId)
+        protected static CacheKey GetCacheKeyForFulfillmentMethodsByScope(string scopeId)
         {
-            var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.FulfillmentMethodsByScope, scopeId);
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.FulfillmentMethodsByScope, scopeId);
 
             return cacheKey;
         }

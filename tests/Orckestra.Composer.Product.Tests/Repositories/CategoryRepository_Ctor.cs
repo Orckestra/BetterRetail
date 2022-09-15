@@ -2,8 +2,8 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Product.Tests.Repositories
 {

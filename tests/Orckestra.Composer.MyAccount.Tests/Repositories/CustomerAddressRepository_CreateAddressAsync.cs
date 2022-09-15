@@ -4,9 +4,9 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.Tests.Mock;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 

@@ -8,12 +8,12 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 using System.Linq.Expressions;
+using Orckestra.Composer.Caching;
 
 namespace Orckestra.Composer.Tests.Repositories
 {

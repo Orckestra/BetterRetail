@@ -8,12 +8,11 @@ using NUnit.Framework;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Providers.Payment;
 using Orckestra.Composer.Cart.Tests.Mock;
+using Orckestra.Composer.Dependency;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.Cart.Tests.Factory
 {
-    extern alias occ;
-
     [TestFixture]
     public class PaymentProviderFactoryResolverProvider
     {
@@ -83,7 +82,7 @@ namespace Orckestra.Composer.Cart.Tests.Factory
             var providerName = GetRandom.String(15);
             registry.RegisterProvider(providerName, typeof(FakePaymentProvider));
 
-            var mockResolver = _container.GetMock<occ::Orckestra.Overture.IDependencyResolver>();
+            var mockResolver = _container.GetMock<IDependencyResolver>();
             mockResolver.Setup(dr => dr.Resolve(It.IsNotNull<Type>()))
                 .Returns(new FakePaymentProvider());
 

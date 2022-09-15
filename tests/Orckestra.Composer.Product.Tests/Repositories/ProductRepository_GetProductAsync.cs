@@ -6,9 +6,9 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture.Caching;
 using ServiceStack;
 
 namespace Orckestra.Composer.Product.Tests.Repositories

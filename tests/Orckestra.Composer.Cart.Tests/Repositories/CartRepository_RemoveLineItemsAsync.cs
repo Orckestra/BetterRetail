@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Overture.ServiceModel.Orders;
@@ -14,8 +15,6 @@ using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
-    extern alias occ;
-
     [TestFixture]
     public class CartRepository_RemoveLineItemsAsync
     {
@@ -315,7 +314,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
 
             //Assert
             //3.8 upgrade
-            Container.Verify<occ::Orckestra.Overture.Caching.ICacheProvider>(m => m.SetAsync(It.IsNotNull<occ::Orckestra.Overture.Caching.CacheKey>(), It.IsAny<ProcessedCart>(), It.IsAny<occ::Orckestra.Overture.Caching.CacheKey>()));
+            Container.Verify<ICacheProvider>(m => m.SetAsync(It.IsNotNull<CacheKey>(), It.IsAny<ProcessedCart>(), It.IsAny<CacheKey>()));
         }
     }
 }

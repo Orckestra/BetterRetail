@@ -4,9 +4,9 @@ using FizzWare.NBuilder.Generators;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.Composer.ViewEngine;
-using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Tests.ViewEngine
 {

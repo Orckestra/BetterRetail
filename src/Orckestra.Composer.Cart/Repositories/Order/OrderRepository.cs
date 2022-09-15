@@ -11,22 +11,21 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
 {
-    extern alias occ;
-
     public class OrderRepository : IOrderRepository
     {
         protected virtual IComposerOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
-        protected occ::Orckestra.Overture.Caching.ICacheProvider CacheProvider { get; private set; }
+        protected ICacheProvider CacheProvider { get; private set; }
 
         public OrderRepository(
             IComposerOvertureClient overtureClient,
             IFindOrdersRequestFactory findOrdersRequestFactory,
-            occ::Orckestra.Overture.Caching.ICacheProvider cacheProvider)
+            ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             FindOrdersRequestFactory = findOrdersRequestFactory ?? throw new ArgumentNullException(nameof(findOrdersRequestFactory));
@@ -144,9 +143,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
                 .ConfigureAwait(false);
         }
 
-        protected virtual occ::Orckestra.Overture.Caching.CacheKey BuildOrderSettingsCacheKey(string scope)
+        protected virtual CacheKey BuildOrderSettingsCacheKey(string scope)
         {
-            var cacheKey = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.OrderSettings)
+            var cacheKey = new CacheKey(CacheConfigurationCategoryNames.OrderSettings)
             {
                 Scope = scope
             };
@@ -321,9 +320,9 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        public static occ::Orckestra.Overture.Caching.CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
+        public static CacheKey CustomerOrderedProductsCacheKey(string scope, Guid customerId)
         {
-            var key = new occ::Orckestra.Overture.Caching.CacheKey(CacheConfigurationCategoryNames.CustomerOrderedProducts)
+            var key = new CacheKey(CacheConfigurationCategoryNames.CustomerOrderedProducts)
             {
                 Scope = scope
             };

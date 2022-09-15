@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Requests.Metadata;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.Repositories
 {

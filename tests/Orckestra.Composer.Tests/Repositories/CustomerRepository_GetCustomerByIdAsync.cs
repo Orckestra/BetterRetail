@@ -6,11 +6,11 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 

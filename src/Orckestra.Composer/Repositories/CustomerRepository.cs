@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
-using Orckestra.Overture.Caching;
-using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 

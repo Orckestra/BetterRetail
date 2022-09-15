@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.ForTests;
@@ -14,7 +15,6 @@ using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
-    extern alias occ;
 
     [TestFixture]
     public class PaymentRepositoryGetPaymentMethodsAsync
@@ -27,15 +27,15 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container = new AutoMocker();
 
             //
-            var cacheProvider = _container.GetMock<occ::Orckestra.Overture.Caching.ICacheProvider>();
+            var cacheProvider = _container.GetMock<ICacheProvider>();
             cacheProvider
                 .Setup(provider => provider.GetOrAddAsync(
-                    It.IsNotNull<occ::Orckestra.Overture.Caching.CacheKey>(),
+                    It.IsNotNull<CacheKey>(),
                     It.IsNotNull<Func<Task<List<PaymentMethod>>>>(),
                     It.IsAny<Func<List<PaymentMethod>, Task>>(),
-                    It.IsAny<occ::Orckestra.Overture.Caching.CacheKey>()))
-                .Returns<occ::Orckestra.Overture.Caching.CacheKey, Func<Task<List<PaymentMethod>>>,
-                        Func<List<PaymentMethod>, Task>, occ::Orckestra.Overture.Caching.CacheKey>(
+                    It.IsAny<CacheKey>()))
+                .Returns<CacheKey, Func<Task<List<PaymentMethod>>>,
+                        Func<List<PaymentMethod>, Task>, CacheKey>(
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
         }

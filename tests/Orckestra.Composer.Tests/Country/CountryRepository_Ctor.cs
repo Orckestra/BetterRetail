@@ -2,8 +2,8 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Country;
-using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.Tests.Country
 {

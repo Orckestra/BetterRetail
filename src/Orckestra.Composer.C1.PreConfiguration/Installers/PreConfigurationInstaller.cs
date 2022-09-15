@@ -9,11 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Orckestra.Composer.Caching;
 
 namespace Orckestra.Composer.CompositeC1.Installers
 {
-    extern alias occ;
-
     public class PreConfigurationInstaller : BasePackageFragmentInstaller
     {
         public override IEnumerable<XElement> Install()
@@ -25,7 +24,7 @@ namespace Orckestra.Composer.CompositeC1.Installers
                 // Default dependency is not registered in Console Mode
                 var builder = new ContainerBuilder();
                 builder.Register(c => ComposerOvertureClient.CreateFromConfig()).As<IComposerOvertureClient>().SingleInstance();
-                builder.RegisterType<NullCacheProvider>().As<occ::Orckestra.Overture.Caching.ICacheProvider>();
+                builder.RegisterType<NullCacheProvider>().As<ICacheProvider>();
                 builder.RegisterType<CategoryRepository>().As<ICategoryRepository>().SingleInstance();
                 builder.RegisterType<CategoryAndNavigationBuilder>().As<ICategoryAndNavigationBuilder>().SingleInstance();
                 var container = builder.Build();

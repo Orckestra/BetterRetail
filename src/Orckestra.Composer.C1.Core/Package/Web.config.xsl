@@ -5,7 +5,7 @@
 
   <xsl:variable name="ComposerSectionGroup" xml:space="preserve">
     <sectionGroup name="composer" type="System.Configuration.ConfigurationSectionGroup, System.Configuration">
-      <section name="caching" type="Orckestra.Overture.Components.Caching.CacheConfiguration, Orckestra.Caching" />
+      <section name="caching" type="Orckestra.Composer.Caching.CacheConfiguration, Orckestra.Composer" />
     </sectionGroup>
   </xsl:variable>
 

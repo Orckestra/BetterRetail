@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Orckestra.Composer.Cart.Providers.ShippingTracking;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Providers;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Factory.Order
 {
-    extern alias occ;
     public class ShippingTrackingProviderFactory : ProviderFactory<IShippingTrackingProvider>, IShippingTrackingProviderFactory
     {
         protected IShippingTrackingProviderRegistry ShippingTrackingProviderRegistry { get; set; }
 
-        public ShippingTrackingProviderFactory(occ::Orckestra.Overture.IDependencyResolver dependencyResolver,
+        public ShippingTrackingProviderFactory(IDependencyResolver dependencyResolver,
             IShippingTrackingProviderRegistry shippingTrackingProviderRegistry) 
             : base(dependencyResolver)
         {

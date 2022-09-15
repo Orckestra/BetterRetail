@@ -14,10 +14,10 @@ using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 using System.Linq.Expressions;
+using Orckestra.Composer.Caching;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
-    extern alias occ;
 
     [TestFixture]
     public class PaymentRepositoryGetCartPaymentsAsync
@@ -36,14 +36,14 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
                 .ReturnsAsync(new List<Payment>());
                 
 
-            var cacheProvider = _container.GetMock<occ::Orckestra.Overture.Caching.ICacheProvider>();
+            var cacheProvider = _container.GetMock<ICacheProvider>();
             cacheProvider
                 .Setup(provider => provider.GetOrAddAsync(
-                    It.IsNotNull<occ::Orckestra.Overture.Caching.CacheKey>(),
+                    It.IsNotNull<CacheKey>(),
                     It.IsNotNull<Func<Task<List<Payment>>>>(),
                     It.IsAny<Func<List<Payment>, Task>>(),
-                    It.IsAny<occ::Orckestra.Overture.Caching.CacheKey>()))
-                .Returns<occ::Orckestra.Overture.Caching.CacheKey, Func<Task<List<Payment>>>, Func<List<Payment>, Task>, occ::Orckestra.Overture.Caching.CacheKey>(
+                    It.IsAny<CacheKey>()))
+                .Returns<CacheKey, Func<Task<List<Payment>>>, Func<List<Payment>, Task>, CacheKey>(
                     (key, func, arg3, arg4) => func())
                 .Verifiable();
         }

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using Orckestra.Composer.Country;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Factory;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.RegionCode;
@@ -11,7 +12,6 @@ using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewEngine.HandleBarsBlockHelpers;
 using Orckestra.Composer.ViewEngine.HandleBarsHelpers;
-using Orckestra.Overture;
 
 namespace Orckestra.Composer
 {

@@ -8,11 +8,11 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Providers;
 
 namespace Orckestra.Composer.Cart
 {
-    extern alias occ;
     public class CartPlugin : IComposerPlugin
     {
         /// <summary>
@@ -63,19 +63,19 @@ namespace Orckestra.Composer.Cart
             RegisterShippingTrackingProviders(host);
         }
 
-        private static void RegisterPaymentProviders(occ::Orckestra.Overture.IDependencyRegister host)
+        private static void RegisterPaymentProviders(IDependencyRegister host)
         {
             host.Register<IPaymentProviderRegistry>(CartConfiguration.PaymentProviderRegistry);
-            host.Register<PaymentProviderFactory, IPaymentProviderFactory>(occ::Orckestra.Overture.ComponentLifestyle.Transient);
-            host.Register<MonerisCanadaPaymentProvider>(occ::Orckestra.Overture.ComponentLifestyle.Transient);
-            host.Register<OnSitePOSPaymentProvider>(occ::Orckestra.Overture.ComponentLifestyle.Transient);
+            host.Register<PaymentProviderFactory, IPaymentProviderFactory>(ComponentLifestyle.Transient);
+            host.Register<MonerisCanadaPaymentProvider>(ComponentLifestyle.Transient);
+            host.Register<OnSitePOSPaymentProvider>(ComponentLifestyle.Transient);
         }
 
-        private static void RegisterShippingTrackingProviders(occ::Orckestra.Overture.IDependencyRegister host)
+        private static void RegisterShippingTrackingProviders(IDependencyRegister host)
         {
             host.Register<IShippingTrackingProviderRegistry>(CartConfiguration.ShippingTrackingProviderRegistry);
-            host.Register<ShippingTrackingProviderFactory, IShippingTrackingProviderFactory>(occ::Orckestra.Overture.ComponentLifestyle.Transient);
-            host.Register<NullShippingTrackingProvider>(occ::Orckestra.Overture.ComponentLifestyle.Transient);
+            host.Register<ShippingTrackingProviderFactory, IShippingTrackingProviderFactory>(ComponentLifestyle.Transient);
+            host.Register<NullShippingTrackingProvider>(ComponentLifestyle.Transient);
 
             CartConfiguration.ShippingTrackingProviderRegistry.RegisterProvider<NullShippingTrackingProvider>(CartConfiguration.DefaultShippingTrackingProviderName);
         }

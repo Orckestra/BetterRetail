@@ -1,23 +1,22 @@
-﻿using System;
+﻿using Autofac;
+using Autofac.Core;
+using Autofac.Integration.Mvc;
+using Newtonsoft.Json;
+using Orckestra.Composer.Caching;
+using Orckestra.Composer.Kernel;
+using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
+using Orckestra.Composer.ViewEngine;
+using Orckestra.Composer.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Autofac;
-using Autofac.Core;
-using Autofac.Integration.Mvc;
-using Newtonsoft.Json;
-using Orckestra.Caching;
-using Orckestra.Composer.Kernel;
-using Orckestra.Composer.Providers;
-using Orckestra.Composer.Providers.Localization;
-using Orckestra.Composer.ViewEngine;
-using Orckestra.Composer.ViewModels;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
-using Orckestra.Overture.Components.Caching;
+using ComponentLifestyle = Orckestra.Composer.Dependency.ComponentLifestyle;
+using IDependencyResolver = Orckestra.Composer.Dependency.IDependencyResolver;
 
 namespace Orckestra.Composer
 {
@@ -268,6 +267,7 @@ namespace Orckestra.Composer
 
         private CacheConfiguration GetCacheConfiguration()
         {
+            var t = (CacheConfiguration)ConfigurationManager.GetSection("composer/caching");
             var configCacheSection = ConfigurationManager.GetSection("composer/caching") as CacheConfiguration;
            
             if (configCacheSection != null)

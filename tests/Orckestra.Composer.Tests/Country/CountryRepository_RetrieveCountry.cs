@@ -5,10 +5,10 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Requests;
 
 namespace Orckestra.Composer.Tests.Country

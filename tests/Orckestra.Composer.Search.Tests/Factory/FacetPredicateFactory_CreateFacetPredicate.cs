@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;

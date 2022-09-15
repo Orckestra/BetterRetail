@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Requests;
 
