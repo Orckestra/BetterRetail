@@ -2,7 +2,7 @@
   "ocs-cm-hostName": "",
   "ocsAuthToken": "",
   
-  "em-branch": "4.9.6",
+  "em-branch": "develop",
   "adminName": "",
   "adminPassword": "",
   "adminEmail": "build-bot@orckestra.com",
