@@ -80,15 +80,40 @@
     }
 
     h1, .h1 {
-        font-size: 4rem;
+        font-size: 6vw;
+
+        @include media-breakpoint-up(md) {
+            font-size: 5vw;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 4rem;
+        }
     }
 
     h2, .h2 {
-        font-size: 3rem;
+        font-size: 5vw;
+        
+        @include media-breakpoint-up(md) {
+            font-size: 3.5vw;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 3rem;
+        }
     }
 
     h3, .h3 {
-        font-size: 2.5rem;
+        
+        font-size: 4.5vw;
+        
+        @include media-breakpoint-up(md) {
+            font-size: 3vw;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 2.5rem;
+        }
     }
 
     h4, .h4 {
@@ -96,5 +121,9 @@
     }
     p {
         font-size: 5vw;
+
+        @include media-breakpoint-up(xl) {
+            font-size: 70px;
+        }
     }
 }

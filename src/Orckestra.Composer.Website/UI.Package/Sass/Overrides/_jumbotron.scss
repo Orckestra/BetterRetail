@@ -16,8 +16,14 @@
         left: 30px;
         right: 30px;
         font-weight: bold;
+        font-size: 10vw;
+
         @include media-breakpoint-up(sm) {
-            font-size: 88px;
+            font-size: 8vw;
+        }
+
+        @include media-breakpoint-up(md) {
+            font-size: 6vw;
         }
     }
     .jumbotron-caption {
