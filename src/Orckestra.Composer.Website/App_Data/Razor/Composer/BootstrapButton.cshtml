@@ -1,0 +1,68 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return "Shortly describe this function here"; }
+    }
+     
+    [FunctionParameter(Label = "Button Text", DefaultValue = "")]
+	public string ButtonText { get; set; }
+
+	[FunctionParameter(Label = "Button Url", WidgetFunctionName = "Composite.Widgets.String.UrlComboBox", DefaultValue = "")]
+	public string ButtonUrl { get; set; }
+	
+	[FunctionParameter(Label = "Button Size", DefaultValue = "lg", WidgetMarkup = buttonSizeWidgetMarkup)]
+	public string ButtonSize { get; set; }
+	
+	[FunctionParameter(Label = "Button Style", DefaultValue = "primary", WidgetMarkup = buttonStyleWidgetMarkup)]
+	public string ButtonStyle { get; set; }
+	
+	[FunctionParameter(Label = "Set Button Full Width ?", DefaultValue = false)]
+	public bool ButtonPosition { get; set; }
+	
+	[FunctionParameter(Label = "Url is an external link ?", DefaultValue = false)]
+	public bool UrlExternal { get; set; }
+	
+	
+	
+	[FunctionParameter(Label = "Show arrow icon ?", DefaultValue = false)]
+	public bool ShowArrowIcon { get; set; }
+	
+	[FunctionParameter(Label = "Button GA Tracking ID", DefaultValue = "")]
+	public string ButtonGa { get; set; }
+	
+	private const string buttonStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+		<f:param name='Options'>
+			<f:function name='Composite.Utils.String.Split'>
+				<f:param name='String' value='default,primary,secondary,info,warning,danger,success,dark,light,outline-default,outline-primary,outline-secondary,outline-info,outline-warning,outline-danger,outline-success,outline-dark,outline-light' />
+			</f:function>
+		</f:param>
+	</f:widgetfunction>";
+		
+	private const string buttonSizeWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+		<f:param name='Options'>
+			<f:function name='Composite.Utils.String.Split'>
+				<f:param name='String' value='lg,sm,normal' />
+			</f:function>
+		</f:param>
+	</f:widgetfunction>";
+	
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+       <a class="btn btn-@ButtonSize btn-@ButtonStyle @(ButtonPosition ? "btn-block" : "")" href="@ButtonUrl"
+			@if (UrlExternal) {
+				@: target="_blank" 
+			}>
+			@ButtonText
+			@if (ShowArrowIcon)
+			{
+			  <span class="btn-arrow glyphicon glyphicon-chevron-right"></span>
+			}
+		</a>
+    </body>
+</html>

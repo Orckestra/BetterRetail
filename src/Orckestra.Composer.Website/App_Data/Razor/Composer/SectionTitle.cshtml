@@ -1,0 +1,31 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return "Section Title with subtitle decorated by lines on each side"; }
+    }
+     
+    [FunctionParameter(Label = "Section Title", Help = "Section Title", DefaultValue = "Title Here")]
+    public string Title { get; set; }
+
+    [FunctionParameter(Label = "Subtitle", Help = "Optionally add a subtitle")]
+    public string SubTitle { get; set; }
+
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+		<div class="section-header">
+			<hgroup>
+				<h2>@Title</h2>
+				@if (!String.IsNullOrEmpty(SubTitle)) {
+					<p>@SubTitle</p>
+				}
+			</hgroup>
+		</div>
+    </body>
+</html>

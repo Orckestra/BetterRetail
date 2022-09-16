@@ -56,3 +56,7 @@ button, a {
         }
     }
 }
+
+.btn + .btn {
+    margin-left: 10px;
+}

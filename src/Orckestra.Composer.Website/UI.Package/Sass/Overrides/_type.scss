@@ -43,3 +43,31 @@ blockquote {
 }
 
 @include text-emphasis-variant('.text-gray', $gray-800);
+
+
+// SectionTitle component styling
+.section-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    hgroup {
+        text-align:center;
+        padding: 60px 20px;
+        > h2 {
+            margin: 0;
+            & + * {
+                margin-top: 10px;
+            }
+        }
+      }
+  }
+  
+  .section-header:before, 
+  .section-header:after {
+    content: "";
+    flex: 1 1 0;
+    background-color: theme-color("dark");
+    height: 1px;
+  }
+  
