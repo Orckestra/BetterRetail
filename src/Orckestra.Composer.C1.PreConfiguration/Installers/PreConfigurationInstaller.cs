@@ -3,7 +3,6 @@ using Composite.Core;
 using Composite.Core.PackageSystem;
 using Composite.Core.PackageSystem.PackageFragmentInstallers;
 using Orckestra.Composer.CompositeC1.Builders;
-using Orckestra.Composer.OutputCache;
 using Orckestra.Composer.Repositories;
 using System;
 using System.Collections.Generic;
