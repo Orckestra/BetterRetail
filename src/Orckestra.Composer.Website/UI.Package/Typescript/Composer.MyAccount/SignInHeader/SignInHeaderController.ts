@@ -10,6 +10,8 @@ module Orckestra.Composer {
     export class SignInHeaderController extends Orckestra.Composer.Controller {
 
         protected userMetadataService: UserMetadataService = UserMetadataService.getInstance();
+        public VueSignInHeader: Vue;
+        public VueSignInSticky: Vue;
 
         public initialize() {
 
@@ -20,16 +22,27 @@ module Orckestra.Composer {
         }
 
         private initializeSignInHeader() {
-             this.userMetadataService.getUserMetadata()
-            .then(vm => this.render('SignInHeader', vm));
+            let self: SignInHeaderController = this;
+
+            this.userMetadataService.getUserMetadata()
+                .then(vm => {
+                    this.VueSignInHeader = new Vue({
+                        el: '#vueSignInHeader',
+                        data: vm
+                    });
+                    this.VueSignInSticky = new Vue({
+                        el: '#vueSignInSticky',
+                        data: vm
+                    });
+                });
         }
 
         protected registerSubscriptions() {
             var loggedInScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedIn]);
             var loggedOutScheduler = EventScheduler.instance(MyAccountEvents[MyAccountEvents.LoggedOut]);
 
-            loggedOutScheduler.subscribe( e => this.onLoggedOut(e));
-            loggedInScheduler.subscribe( e => this.onLoggedIn(e));
+            loggedOutScheduler.subscribe(e => this.onLoggedOut(e));
+            loggedInScheduler.subscribe(e => this.onLoggedIn(e));
         }
 
         protected onLoggedOut(e: IEventInformation): Q.Promise<any> {
@@ -37,7 +50,7 @@ module Orckestra.Composer {
         }
 
         protected onLoggedIn(e: IEventInformation): Q.Promise<any> {
-             return this.userMetadataService.invalidateCache();
+            return this.userMetadataService.invalidateCache();
         }
     }
 }

@@ -151,6 +151,13 @@
                                 <a class="nav-link" href="@optionalMenuEntry.Url" data-qa="main-menu-category-link" target="@optionalMenuEntry.UrlTarget" style="@optionalMenuEntry.CssClass">@optionalMenuEntry.DisplayName</a>
                             </li>
                         }
+                        <li class="ml-auto d-none d-lg-inline sticky-show nav-item">
+                            @Function("Composer.Store.LocatorInHeader")
+                        </li>
+                            @Function("Composer.Membership.SignInSticky")
+                        <li class="d-none d-lg-inline sticky-show nav-item">
+                            @Function("Composer.WishList.WishListInHeader")
+                        </li>
                     </ul>
                 </div>
             </nav>
