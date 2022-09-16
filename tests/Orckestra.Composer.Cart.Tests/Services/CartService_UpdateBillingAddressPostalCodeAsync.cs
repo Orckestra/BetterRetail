@@ -10,7 +10,6 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Tests.Mock;
-using Orckestra.Composer.OccClient;
 using Orckestra.ForTests;
 using Orckestra.Overture.ServiceModel.Orders;
 

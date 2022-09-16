@@ -165,10 +165,6 @@
       <Project>{485808cc-75b2-4bf6-9b57-470d30b562d4}</Project>
       <Name>Orckestra.Composer.C1.PreConfiguration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

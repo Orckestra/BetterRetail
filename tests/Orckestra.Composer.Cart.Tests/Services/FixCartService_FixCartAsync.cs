@@ -10,11 +10,10 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Tests.Mock;
-using Orckestra.Composer.OccClient;
+
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Overture.ServiceModel.Orders;
-
 namespace Orckestra.Composer.Cart.Tests.Services
 {
     public class FixCartService_FixCartAsync

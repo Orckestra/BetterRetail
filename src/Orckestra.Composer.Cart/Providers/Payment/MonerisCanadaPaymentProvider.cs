@@ -8,7 +8,6 @@ using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Cart.ViewModels.Order;
-using Orckestra.Composer.OccClient;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Utils;

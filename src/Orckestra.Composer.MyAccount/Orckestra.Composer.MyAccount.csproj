@@ -126,10 +126,6 @@
       <Project>{08f6fcb8-6065-4d31-b7df-67fe67ee67e5}</Project>
       <Name>Orckestra.Composer.Cart</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{d00bd58b-93fe-4f3d-bbc8-6f7873ca6830}</Project>
       <Name>Orckestra.Composer</Name>

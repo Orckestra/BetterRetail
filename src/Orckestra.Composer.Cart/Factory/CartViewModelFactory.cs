@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Orckestra.Composer.Extensions;
-using Orckestra.Composer.OccClient;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;

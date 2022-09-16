@@ -111,10 +111,6 @@
     <None Include="Properties\PublishProfiles\Package.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
       <Name>Orckestra.Composer.Search</Name>

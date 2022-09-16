@@ -18,7 +18,6 @@ using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Tests.Mock;
 using Orckestra.Composer.Cart.ViewModels;
 using Orckestra.Composer.Country;
-using Orckestra.Composer.OccClient;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;

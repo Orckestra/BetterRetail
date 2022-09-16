@@ -70,10 +70,6 @@
     <Compile Include="Services\SearchQueryViewService_GetSearchViewModelAsync.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer.SearchQuery\Orckestra.Composer.SearchQuery.csproj">
       <Project>{6dee1972-e64b-43f0-bbaf-04d0aa64dd60}</Project>
       <Name>Orckestra.Composer.SearchQuery</Name>

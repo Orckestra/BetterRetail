@@ -11,7 +11,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Composer.OccClient;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;

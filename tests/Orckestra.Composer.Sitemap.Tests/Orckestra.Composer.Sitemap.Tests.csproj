@@ -164,10 +164,6 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer.Sitemap\Orckestra.Composer.Sitemap.csproj">
       <Project>{8227ECD6-6D34-4F4D-BFBC-02BC52E7CE7A}</Project>
       <Name>Orckestra.Composer.Sitemap</Name>

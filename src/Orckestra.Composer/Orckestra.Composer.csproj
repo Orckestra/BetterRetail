@@ -226,6 +226,7 @@
     <Compile Include="Caching\NullCacheClient.cs" />
     <Compile Include="Caching\ObjectCache.cs" />
     <Compile Include="Caching\PerRequestCacheClient.cs" />
+    <Compile Include="CreditCardPaymentProperties.cs" />
     <Compile Include="Dependency\ComponentLifestyle.cs" />
     <Compile Include="ComposerConfiguration.cs" />
     <Compile Include="Configuration\CacheConfigurationCategoryNames.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Dependency\IDependencyResolver.cs" />
     <Compile Include="Dependency\IProfiler.cs" />
     <Compile Include="Dependency\Profiler.cs" />
+    <Compile Include="dtos.cs" />
     <Compile Include="Enums\LengthMeasureUnitsEnum.cs" />
     <Compile Include="Enums\MediaTypeEnum.cs" />
     <Compile Include="Enums\AccountStatusEnum.cs" />
@@ -311,6 +313,7 @@
     <Compile Include="Parameters\UpdateRecurringOrderTemplateLineItemQuantityParam.cs" />
     <Compile Include="Parameters\UpdateUserParam.cs" />
     <Compile Include="Parameters\UpdateUserPreferredStoreParam.cs" />
+    <Compile Include="PaymentStatus.cs" />
     <Compile Include="Providers\CurrencyProvider.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\ICurrencyProvider.cs" />
@@ -589,12 +592,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

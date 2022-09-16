@@ -86,10 +86,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer.Store\Orckestra.Composer.Store.csproj">
       <Project>{1407af7b-a1fe-4b52-906b-7503b6db0f2b}</Project>
       <Name>Orckestra.Composer.Store</Name>

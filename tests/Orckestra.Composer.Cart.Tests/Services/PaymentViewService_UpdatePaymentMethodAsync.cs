@@ -19,7 +19,6 @@ using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 using System.Linq.Expressions;
-using Orckestra.Composer.OccClient;
 
 namespace Orckestra.Composer.Cart.Tests.Services
 {

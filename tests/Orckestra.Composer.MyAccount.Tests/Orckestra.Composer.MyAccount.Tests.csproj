@@ -122,10 +122,6 @@
       <Project>{0a2628f0-3e30-4da6-852f-b2cbec9b968d}</Project>
       <Name>Orckestra.Composer.MyAccount</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer\Orckestra.Composer.csproj">
       <Project>{D00BD58B-93FE-4F3D-BBC8-6F7873CA6830}</Project>
       <Name>Orckestra.Composer</Name>

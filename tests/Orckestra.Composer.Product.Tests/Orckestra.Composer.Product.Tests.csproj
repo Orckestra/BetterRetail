@@ -195,10 +195,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Orckestra.Composer.OccClient\Orckestra.Composer.OccClient.csproj">
-      <Project>{06196b4d-24a8-4bde-b093-e56b9638de66}</Project>
-      <Name>Orckestra.Composer.OccClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Orckestra.Composer.Product\Orckestra.Composer.Product.csproj">
       <Project>{1f767098-1fbf-4cb9-8637-6529e1cc0b24}</Project>
       <Name>Orckestra.Composer.Product</Name>
