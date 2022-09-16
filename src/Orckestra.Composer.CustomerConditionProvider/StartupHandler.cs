@@ -1,4 +1,6 @@
-﻿using System.Web.Hosting;
+﻿using System;
+using System.Web.Hosting;
+using Composite.Core;
 using Composite.Core.Application;
 using Microsoft.Extensions.DependencyInjection;
 using Orckestra.Composer.CustomerConditionProvider.Repositories;
@@ -6,7 +8,7 @@ using Orckestra.Tools.ConditionalContent.Providers;
 
 namespace Orckestra.Composer.ConditionalContentProvider
 {
-    [ApplicationStartup(AbortStartupOnException = true)]
+    [ApplicationStartup(AbortStartupOnException = false)]
     public static class StartupHandler
     {
         public static void OnBeforeInitialize()
@@ -24,8 +26,17 @@ namespace Orckestra.Composer.ConditionalContentProvider
         {
             if (!HostingEnvironment.IsHosted) return;
 
-            collection.AddTransient<IConditionProvider, CustomerConditionProvider.Providers.CustomerConditionProvider>();
-            collection.AddTransient<ICustomerDefinitionsRepository, CustomerDefinitionsRepository>();
+            try
+            {
+                collection.AddTransient<IConditionProvider, CustomerConditionProvider.Providers.CustomerConditionProvider>();
+                collection.AddTransient<ICustomerDefinitionsRepository, CustomerDefinitionsRepository>();
+
+            }
+            catch(Exception e)
+            {
+                // For example, Orckestra.Tools.ConditionalContent is temporarily uninstall
+                Log.LogError("Orckestra.Composer.ConditionalContentProvider", e);
+            }
         }
     }
 }

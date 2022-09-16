@@ -260,6 +260,7 @@
     <Compile Include="HttpModules\AntiCookieTamperingModule.cs" />
     <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
     <Compile Include="IPerformanceDataCollector.cs" />
+    <Compile Include="Kernel\ComposerAssemblyIgnoreAttribute.cs" />
     <Compile Include="Kernel\ComposerDependencyResolver.cs" />
     <Compile Include="OutputCacheOptions.cs" />
     <Compile Include="OutputCache\NullCacheProvider.cs" />
