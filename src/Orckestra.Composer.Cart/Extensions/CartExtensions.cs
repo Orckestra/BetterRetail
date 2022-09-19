@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Cart.Extensions
         /// <returns>All line items.</returns>
         public static List<LineItem> GetLineItems(this Overture.ServiceModel.Orders.Cart cart)
         {
-            return cart.Shipments.SelectMany(s => s.LineItems).ToList();
+            return cart.Shipments?.SelectMany(s => s.LineItems).ToList();
         }
     }
 }
