@@ -136,7 +136,7 @@ namespace Orckestra.Composer.Cart.Services
         protected virtual async Task<WishListViewModel> CreateWishListViewModelAsync(CreateWishListViewModelParam param)
         {
             var viewModel = new WishListViewModel();
-            var lineItems = param.WishList.Shipments?.SelectMany(s => s.LineItems).ToList();
+            var lineItems = param.WishList.GetLineItems();
 
             if (lineItems != null)
             {

@@ -697,14 +697,14 @@ namespace Orckestra.Composer.Providers.Membership
 
                 if (customer == null) { throw new InvalidOperationException(string.Format("This customer with username {0} doesn't exist.", username)); }
 
-                var updatedRequest = new UpdateCustomerRequest()
+                var updateRequest = new UpdateCustomerRequest()
                 {
                     AccountStatus = newStatus,
                     ScopeId = GetCurrentScope()
                 };
-                updatedRequest.ExtendUpdateCustomerRequest(customer);
+                updateRequest.ExtendUpdateCustomerRequest(customer);
 
-                var updatedCustomer = _client.Send(updatedRequest);
+                var updatedCustomer = _client.Send(updateRequest);
 
                 return updatedCustomer.AccountStatus == newStatus;
             }
