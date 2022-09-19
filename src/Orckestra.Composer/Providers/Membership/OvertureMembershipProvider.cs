@@ -224,14 +224,14 @@ namespace Orckestra.Composer.Providers.Membership
 
                 if (customer == null) { return false; }
 
-                var updatedRequest = new UpdateCustomerRequest()
+                var updateRequest = new UpdateCustomerRequest()
                 {
                     PasswordQuestion = newPasswordQuestion,
                     ScopeId = GetCurrentScope()
                 };
-                updatedRequest.ExtendUpdateCustomerRequest(customer);
+                updateRequest.ExtendUpdateCustomerRequest(customer);
 
-                var updatedCustomer = _client.Send(updatedRequest);
+                var updatedCustomer = _client.Send(updateRequest);
 
                 return updatedCustomer.PasswordQuestion == newPasswordQuestion;
             }
