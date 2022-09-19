@@ -81,7 +81,7 @@
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
 
-    <xsl:apply-templates select="node()[not(configSections)]" />
+    <xsl:apply-templates select="node()[not(local-name() = 'configSections')]" />
 		<xsl:if test="not(experienceManagement)" xml:space="preserve">
 				<experienceManagement>
 					<settings configSource="App_Config\ExperienceManagement.config" />
