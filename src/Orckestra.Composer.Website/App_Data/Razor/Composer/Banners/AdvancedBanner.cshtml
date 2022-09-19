@@ -1,0 +1,111 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Simple Banner Component"; }
+    }
+
+    [FunctionParameter(Label = "Banner Image")]
+    public NullableDataReference<IImageFile> BannerImage { get; set; }
+	
+	[FunctionParameter(Label = "Image alternate text", Help = "Alternate text for the banner image", DefaultValue = "" )]
+    public string Alt { get; set; }
+	
+	private const string backgroundSizeWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/BackgroundSizeOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+	[FunctionParameter(Label = "Background Image Size", Help = "How the background image fits the container", DefaultValue = "cover", WidgetMarkup = backgroundSizeWidgetMarkup)]
+    public string BackgroundSize { get; set; }
+	
+	 private const string verticalAligmentWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/VerticalAlignmentOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Background Image Vertical Alignment", Help = "Vertical positioning of the banner content", DefaultValue = "top", WidgetMarkup = verticalAligmentWidgetMarkup)]
+    public string ImageVerticalPos { get; set; }
+
+    private const string horizontallAligmentWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/HorizontalAlignmentOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Background Image Horizontal Alignment", Help = "Hotizontal positioning of the banner content", DefaultValue = "left", WidgetMarkup = horizontallAligmentWidgetMarkup)]
+    public string ImageHorizontalPos { get; set; }
+
+    private const string backgroundStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Background Color", Help = "Gray color is by default.", DefaultValue = "bg-gray", WidgetMarkup = backgroundStyleWidgetMarkup)]
+    public string BackgroundColor { get; set; }
+	
+	private const string columnWidthWidgetmarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ColumnSizesOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Banner column width", Help ="the width is based on the Bootstrap column system", DefaultValue = "col-12", WidgetMarkup = columnWidthWidgetmarkup)]
+    public string BannerWidth { get; set; }
+	
+    [FunctionParameter(Label = "Banner Content", Help = "The Content to be displayed over the background image")]
+    public XhtmlDocument Content { get; set; }
+
+	[FunctionParameter(Label = "Content Vertical Alignment", Help = "Vertical positioning of the banner content", DefaultValue = "top", WidgetMarkup = verticalAligmentWidgetMarkup)]
+    public string ContentVerticalPos { get; set; }
+		
+    [FunctionParameter(Label = "Content Horizontal Alignment", Help = "Hotizontal positioning of the banner content", DefaultValue = "left", WidgetMarkup = horizontallAligmentWidgetMarkup)]
+    public string ContentHorizontalPos { get; set; }
+
+    [FunctionParameter(Label = "Banner Actions", Help = "The Buttons to be displayed over the background image")]
+    public XhtmlDocument Actions { get; set; }
+	
+	[FunctionParameter(Label = "Actions Vertical Alignment", Help = "Vertical positioning of the banner actions", DefaultValue = "bottom", WidgetMarkup = verticalAligmentWidgetMarkup)]
+    public string ActionsVerticalPos { get; set; }
+		
+    [FunctionParameter(Label = "Actions Horizontal Alignment", Help = "Hotizontal positioning of the banner actions", DefaultValue = "right", WidgetMarkup = horizontallAligmentWidgetMarkup)]
+    public string ActionsHorizontalPos { get; set; }
+
+    [FunctionParameter(Label = "Banner Content Background Color as RGBA", DefaultValue = null,
+        Help = "Provide any background color in RGBA or # format. If you need color with transparency, use RGBA format, for example: rgba(0,0,0,0.5)")]
+    public string BackgroundColorRGB { get; set; }
+   
+}
+
+@{
+	var imgURL = "~/media(@BannerImage)";
+	var bgColor = String.IsNullOrEmpty(BackgroundColorRGB) ? BackgroundColor: BackgroundColorRGB;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+   <div class="banner @BannerWidth relative @bgColor">
+	   <div class="imageWrapper @BackgroundSize  @ImageVerticalPos-@ImageHorizontalPos">
+		   <img src="~/media(@BannerImage)" alt="@Alt" />
+	   </div>
+	   <div class="caption position @ContentVerticalPos-@ContentHorizontalPos">@Html.Raw(@Content)</div>
+	   <div class="actions position @ActionsVerticalPos-@ActionsHorizontalPos">@Html.Raw(@Actions)</div>
+	</div>
+</body>
+</html>

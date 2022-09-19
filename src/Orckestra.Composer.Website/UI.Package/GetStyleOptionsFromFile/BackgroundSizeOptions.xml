@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Options>
+  <Option  CssClassKey="auto" Label="Auto"></Option>
+  <Option  CssClassKey="cover" Label="Cover"></Option>
+  <Option  CssClassKey="content" Label="Content"></Option>
+  <Option  CssClassKey="initial" Label="Initial"></Option>
+</Options>
