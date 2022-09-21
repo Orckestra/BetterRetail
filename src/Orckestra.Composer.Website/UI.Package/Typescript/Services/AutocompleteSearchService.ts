@@ -41,7 +41,7 @@ module Orckestra.Composer {
 
         public categorySuggestionClicked(eventInformation: Orckestra.Composer.IEventInformation) {
             if (eventInformation.data.url) {
-                window.location.href = eventInformation.data.url;
+                this._window.location.href = eventInformation.data.url;
             } else {
                 this._searchCriteria.clearFacets();
                 var suggestion = eventInformation.data.suggestion;
@@ -67,7 +67,7 @@ module Orckestra.Composer {
 
         protected search(): void {
             const queryString = this._searchCriteria.toQuerystring();
-            window.location.href = this._baseSearchUrl + queryString;
+            this._window.location.href = this._baseSearchUrl + queryString;
         }
     }
 }

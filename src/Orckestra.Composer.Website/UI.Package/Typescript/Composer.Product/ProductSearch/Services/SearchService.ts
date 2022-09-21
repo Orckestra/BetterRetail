@@ -22,7 +22,7 @@ module Orckestra.Composer {
         protected _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
         public IsFacetsModalMode: Boolean = false;
 
-        constructor(protected _eventHub: IEventHub, private _window: Window) {
+        constructor(protected _eventHub: IEventHub, protected _window: Window) {
             this._searchCriteria = new SearchCriteria(_eventHub, _window);
         }
 
