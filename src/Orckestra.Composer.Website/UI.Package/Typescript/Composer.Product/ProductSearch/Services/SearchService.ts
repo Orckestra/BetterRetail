@@ -179,15 +179,11 @@ module Orckestra.Composer {
 
             } else {
                 const queryString = this._searchCriteria.toQuerystring();
-                if (this._window.location.pathname === this._baseSearchUrl) {
-                    const { categoryId, queryName, queryType } = this._searchCriteria;
+                const { categoryId, queryName, queryType } = this._searchCriteria;
 
-                    this._eventHub.publish(SearchEvents.SearchRequested, { data: { categoryId, queryName, queryType, queryString } });
+                this._eventHub.publish(SearchEvents.SearchRequested, { data: { categoryId, queryName, queryType, queryString } });
 
-                    this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + queryString);
-                } else {
-                    this._window.location.href = this._baseSearchUrl + queryString;
-                }
+                this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + queryString);
             }
         }
     }
