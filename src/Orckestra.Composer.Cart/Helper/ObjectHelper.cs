@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Orckestra.Composer.Cart.Helper
@@ -35,6 +36,11 @@ namespace Orckestra.Composer.Cart.Helper
             }
             else if (type.IsClass)
             {
+                if(type.FullName == "Orckestra.Overture.ServiceModel.PropertyBag")
+                {
+                    return new Overture.ServiceModel.PropertyBag((Overture.ServiceModel.PropertyBag)obj);
+                }
+
                 object toret = Activator.CreateInstance(obj.GetType());
                 FieldInfo[] fields = type.GetFields(BindingFlags.Public |
                                                     BindingFlags.NonPublic | BindingFlags.Instance);
