@@ -108,7 +108,7 @@
 
 @helper BrandName()
 {
-    <h2 class="h5  mb-1" property="brand" data-qa="product-brand">@Model.Brand</h2>
+    <h2 class="h5  mb-1" property="brand" data-qa="product-brand">@Html.Raw(Model.Brand)</h2>
 }
 
 @helper StoreInventoryLink()

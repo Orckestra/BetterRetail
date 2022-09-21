@@ -111,7 +111,7 @@ module Orckestra.Composer {
                             :data-selected="node.IsSelected"
                             v-on:click="(event) => nodeсlicked(event, node.IsSelected)" 
                         />
-                        {{node.Title}} ({{node.Quantity}})
+                        <span v-html="node.Title"></span> <span>({{node.Quantity}})</span>
                     </label>
 
                 <div v-if="hasChildren">
