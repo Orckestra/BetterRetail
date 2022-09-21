@@ -64,5 +64,10 @@ module Orckestra.Composer {
             this._searchCriteria.correctedSearchTerm = '*';
             this.search();
         }
+
+        protected search(): void {
+            const queryString = this._searchCriteria.toQuerystring();
+            window.location.href = this._baseSearchUrl + queryString;
+        }
     }
 }

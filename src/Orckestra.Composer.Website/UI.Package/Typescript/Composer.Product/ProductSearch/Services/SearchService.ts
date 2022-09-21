@@ -19,11 +19,11 @@ module Orckestra.Composer {
         protected _searchRepository: ISearchRepository = new SearchRepository();
         protected _searchCriteria: SearchCriteria;
         private _searchCriteriaBackup: any;
-        private _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
+        protected _baseSearchUrl: string = window.location.href.replace(window.location.search, '');
         public IsFacetsModalMode: Boolean = false;
 
         constructor(protected _eventHub: IEventHub, private _window: Window) {
-             this._searchCriteria = new SearchCriteria(_eventHub, _window);
+            this._searchCriteria = new SearchCriteria(_eventHub, _window);
         }
 
         /**
@@ -54,7 +54,7 @@ module Orckestra.Composer {
             this.search();
         }
 
-        public getSelectedFacets(): IHashTable<string|string[]> {
+        public getSelectedFacets(): IHashTable<string | string[]> {
             return this._searchCriteria.selectedFacets;
         }
 
@@ -133,7 +133,7 @@ module Orckestra.Composer {
             const applyButton = $(`${FacetsModalId} .modal--confirm`);
             const selected = Object.keys(this.getSelectedFacets());
 
-            if(selected.length === 0) {
+            if (selected.length === 0) {
                 clearAllButton.attr('disabled', 'true')
             } else {
                 clearAllButton.removeAttr('disabled')
@@ -154,9 +154,9 @@ module Orckestra.Composer {
             this._eventHub.subscribe(SearchEvents.FacetsModalClosed, this.facetsModalClosed.bind(this));
 
             $(FacetsModalId).on('show.bs.modal', (event) => this.facetsModalOpened());
-            $(FacetsModalId).on('click', '.modal--close',  this.facetsModalClosed.bind(this));
-            $(FacetsModalId).on('click', '.modal--confirm',  this.facetsModalApply.bind(this));
-            $(FacetsModalId).on('click', '.modal--cancel',  this.facetsModalCancel.bind(this));
+            $(FacetsModalId).on('click', '.modal--close', this.facetsModalClosed.bind(this));
+            $(FacetsModalId).on('click', '.modal--confirm', this.facetsModalApply.bind(this));
+            $(FacetsModalId).on('click', '.modal--cancel', this.facetsModalCancel.bind(this));
         }
 
         protected search() {
