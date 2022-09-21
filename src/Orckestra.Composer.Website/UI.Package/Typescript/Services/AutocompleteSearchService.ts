@@ -52,6 +52,9 @@ module Orckestra.Composer {
                 this._searchCriteria.addSingleFacet(`CategoryLevel${parents.length + 1}_Facet`, suggestion);
                 this._searchCriteria.keywords = '*';
                 this._searchCriteria.correctedSearchTerm = '*';
+
+                this._eventHub.publish("autosuggestModalClosed", { data: {} });
+
                 this.search();
             }
         }
