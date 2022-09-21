@@ -182,8 +182,8 @@ namespace Orckestra.Composer.Search.Providers
 
         private static bool IsInDiscount(ProductDocument document)
         {
-            var listPrice = GetPriceForComparison(document.EntityPricing?.RegularPrice.GetValueOrDefault(0) ?? default);
-            var price = GetPriceForComparison(document.EntityPricing?.CurrentPrice.GetValueOrDefault(0) ?? default);
+            var listPrice = GetPriceForComparison(document.EntityPricing.RegularPrice.GetValueOrDefault(0));
+            var price = GetPriceForComparison(document.EntityPricing.CurrentPrice.GetValueOrDefault(0));
 
             return listPrice > price;
         }

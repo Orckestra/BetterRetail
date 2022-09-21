@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Orckestra.Composer.Exceptions;
+using Orckestra.Composer.Logging;
+using Orckestra.ExperienceManagement.Configuration;
+using ServiceStack;
+using ServiceStack.Validation;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Orckestra.Composer.Exceptions;
-using Orckestra.Composer.Logging;
-using Orckestra.ExperienceManagement.Configuration;
-using ServiceStack;
-using ServiceStack.Validation;
 
 namespace Orckestra.Composer
 {
     public sealed class ComposerOvertureClient : IComposerOvertureClient
     {
+
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
         private readonly JsonServiceClient _client;
@@ -137,7 +138,6 @@ namespace Orckestra.Composer
             }
         }
 
-
         private IDisposable MeasureExecutionTime(object request)
         {
             if (!(ComposerHost.Current?.IsInitialized ?? false)) { return null; }
@@ -161,7 +161,6 @@ namespace Orckestra.Composer
 
         public static IComposerOvertureClient CreateFromConfig()
         {
-            Overture.Serialization.JsonSerializationConfig.SetConfig();
             var settings = OvertureConfiguration.Settings;
             var client = new JsonServiceClient(settings.Url);
             client.Headers.Add("X-Auth", settings.AuthToken);

@@ -8,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.ViewEngine;
 using Orckestra.Composer.ViewModels;
+using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -22,6 +23,16 @@ namespace Orckestra.Composer
 {
     public sealed class ComposerHost : IComposerHost
     {
+        static ComposerHost()
+        {
+            // Making sure OCC API specific JsonSerializationConfig isn't loaded twice
+            var orckestraConfigAlreadyLoaded = JsConfig.TypeWriter.Method.DeclaringType.Assembly.FullName.StartsWith("Orckestra");
+            if (!orckestraConfigAlreadyLoaded)
+            {
+                Overture.Serialization.JsonSerializationConfig.SetConfig();
+            }
+        }
+
         public List<Type> RegisteredInterfaces { get; } = new List<Type>();
         private const string ComposerDllRegex = "Orckestra\\.Composer(\\.(.+))?.dll$";
 
