@@ -28,15 +28,10 @@ module Orckestra.Composer {
                 facetRegistry: {}
             });
 
-            this.eventHub.subscribe("autosuggestModalClosed", e => {
-                this.closeModal();
-            });
-
             this.searchService['_baseSearchUrl'] = document.getElementById("frm-search-box").getAttribute('action');
         }
 
         public initializeVue() {
-            let self = this;
             this.VueAutocomplete = new Vue({
                 el: '#vueAutocomplete',
                 components: {
@@ -112,9 +107,6 @@ module Orckestra.Composer {
                             this.searchMore()
                         }
                     });
-                    input.addEventListener('click', function () {
-                        self.openModal();
-                    });
                 },
                 updated() {
                 },
@@ -189,7 +181,7 @@ module Orckestra.Composer {
                         return item.DisplayName;
                     },
                     shouldRenderSuggestions(size, loading) {
-                        return this.query.length >= this.minSearchSize && !loading && this.suggestions.length;
+                        return this.query.length >= this.minSearchSize && !loading && this.suggestions.length
                     },
                     searchMore() {
                         const elem = document.getElementById("frm-search-box") as HTMLFormElement;
@@ -228,27 +220,13 @@ module Orckestra.Composer {
                         }
                     },
                     onOpened() {
-                        self.openModal();
+                        document.body.classList.add("modal-open");
                     },
                     onClosed() {
-                        self.closeModal();
+                        document.body.classList.remove("modal-open");
                     }
                 }
             });
-        }
-
-        private closeModal() {
-            document.body.classList.remove("modal-open");
-
-            const autosuggest = document.getElementById('autosuggest-autosuggest__results');
-            if (autosuggest && autosuggest.classList && !autosuggest.classList.contains("d-none")) autosuggest.classList.add("d-none");
-        }
-
-        private openModal() {
-            document.body.classList.add("modal-open");
-
-            const autosuggest = document.getElementById('autosuggest-autosuggest__results');
-            if (autosuggest && autosuggest.classList && autosuggest.classList.contains("d-none")) autosuggest.classList.remove("d-none");
         }
     }
 }
