@@ -68,7 +68,7 @@
            v-bind:class="{'selected': facetValue.IsSelected}"
            data-oc-click="singleFacetChanged">
             <i class="fa fa-check"></i>
-            <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
+            <span v-html="facetValue.Title"></span><span> ({{facetValue.Quantity}})</span>
         </a>
         <span v-else="else" class="facet-link"
               v-bind:class="{'selected': facetValue.IsSelected}">
@@ -89,7 +89,7 @@
                    v-bind:disabled="!facetValue.IsRemovable"
                    data-oc-click="multiFacetChanged"
                    v-bind:checked="facetValue.IsSelected" />
-            <span>{{facetValue.Title}} ({{facetValue.Quantity}})</span>
+            <span v-html="facetValue.Title"></span><span> ({{facetValue.Quantity}})</span>
         </label>
     </div>
 }

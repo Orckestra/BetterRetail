@@ -34,8 +34,8 @@
         <div class="product-tile-text">
             <div class="row">
                 <div class="col-9 col-md-10">
-                    <strong v-if="@(EntityName).Brand" class="text-uppercase product-tile-brand" data-qa="search-product-brand"
-                            v-bind:title="@(EntityName).Brand">{{@(EntityName).Brand}}<br /></strong>
+                    <div v-if="@(EntityName).Brand" class="font-weight-bold text-uppercase product-tile-brand" data-qa="search-product-brand"
+                            v-bind:title="@(EntityName).Brand" v-html="@(EntityName).Brand"></div>
                             <a data-qa="search-product-title"
                                v-bind:href="@(EntityName).Url" v-bind:title="@(EntityName).FullDisplayName"
                                v-on:click="searchProductClick(@EntityName, index)">{{@(EntityName).DisplayName}}</a>
