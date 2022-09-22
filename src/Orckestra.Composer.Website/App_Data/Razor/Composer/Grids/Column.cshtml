@@ -55,23 +55,23 @@
     </f:widgetfunction>";
 		
 		
-    [FunctionParameter(Label = "Mobile column width", Help ="the width is based on the Bootstrap column system (0px and more)", DefaultValue = "col-xs-12", WidgetMarkup = columnWidthXSWidgetmarkup)]
+    [FunctionParameter(Label = "Mobile column width", Help ="the width is based on the Bootstrap column system (0px and more)", DefaultValue = "col-12", WidgetMarkup = columnWidthXSWidgetmarkup)]
     public string ColumnWidthXS { get; set; }
 	
 	
-    [FunctionParameter(Label = "Small screen column width", Help ="the width is based on the Bootstrap column system (576px and more)", DefaultValue = "col-sm-12", WidgetMarkup = columnWidthSMWidgetmarkup)]
+    [FunctionParameter(Label = "Small screen column width", Help ="the width is based on the Bootstrap column system (576px and more)", DefaultValue = " ", WidgetMarkup = columnWidthSMWidgetmarkup)]
     public string ColumnWidthSM { get; set; }
 	
 	
-    [FunctionParameter(Label = "Tablet column width", Help ="the width is based on the Bootstrap column system (768px and more)", DefaultValue = "col-md-12", WidgetMarkup = columnWidthMDWidgetmarkup)]
+    [FunctionParameter(Label = "Tablet column width", Help ="the width is based on the Bootstrap column system (768px and more)", DefaultValue = " ", WidgetMarkup = columnWidthMDWidgetmarkup)]
     public string ColumnWidthMD { get; set; }
 	
 	
-    [FunctionParameter(Label = "Small laptop column width", Help ="the width is based on the Bootstrap column system (992px and more)", DefaultValue = "col-lg-12", WidgetMarkup = columnWidthLGWidgetmarkup)]
+    [FunctionParameter(Label = "Small laptop column width", Help ="the width is based on the Bootstrap column system (992px and more)", DefaultValue = " ", WidgetMarkup = columnWidthLGWidgetmarkup)]
     public string ColumnWidthLG { get; set; }
 	
 	
-    [FunctionParameter(Label = "Wide screen column width", Help ="the width is based on the Bootstrap column system (1200px and more)", DefaultValue = "col-xl-12", WidgetMarkup = columnWidthXLWidgetmarkup)]
+    [FunctionParameter(Label = "Wide screen column width", Help ="the width is based on the Bootstrap column system (1200px and more)", DefaultValue = " ", WidgetMarkup = columnWidthXLWidgetmarkup)]
     public string ColumnWidthXL { get; set; }
 	
     [FunctionParameter(Label = "Column Content", Help = "The Content to be displayed in the column")]
@@ -85,7 +85,7 @@
 <head>
 </head>
 <body>
-   <div class="@ColumnWidthXS @ColumnWidthSM @ColumnWidthMD @ColumnWidthLG @ColumnWidthXL">
+   <div class="@(String.IsNullOrEmpty(ColumnWidthXS) || (ColumnWidthXS.Contains(' ')) ? null : ColumnWidthXS) @(String.IsNullOrEmpty(ColumnWidthSM) || (ColumnWidthSM.Contains(' ')) ? null: ColumnWidthSM) @(String.IsNullOrEmpty(ColumnWidthMD) || (ColumnWidthMD.Contains(' ')) ? null: ColumnWidthMD) @(String.IsNullOrEmpty(ColumnWidthLG) || (ColumnWidthLG.Contains(' ')) ? null: ColumnWidthLG) @(String.IsNullOrEmpty(ColumnWidthXL) || ColumnWidthXL.Contains(' ') ? null: ColumnWidthXL)">
 	   @Html.Raw(@Content)
 	</div>
 </body>

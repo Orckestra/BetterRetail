@@ -120,3 +120,7 @@ html {
 .row+.row {
     margin-top: 20px;
 }
+
+.row {
+    row-gap: $grid-gutter-width;
+}

@@ -1,7 +1,7 @@
 $banner-heights: () !default;
 $banner-heights: map-merge(
     (
-        "xs": 30vw,
+        "xs": 60vw,
         "sm": 30vw,
         "md": map-get($grid-breakpoints,md)/3.423,
         "lg": map-get($grid-breakpoints,lg)/3.423,
@@ -19,6 +19,10 @@ $banner-heights: map-merge(
 
         padding-bottom: map-get($banner-heights,"xs");
 
+        @include media-breakpoint-up(sm) {
+            padding-bottom: map-get($banner-heights,"sm");
+        }
+
         @include media-breakpoint-up(md) {
             padding-bottom: map-get($banner-heights,"md");
         }
@@ -35,50 +39,36 @@ $banner-heights: map-merge(
             width: 100%;
         }
         &.center {
-            &-left picture {
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%);
+            &-left img {
+                object-position: center left;
             }
-            &-center picture {
-                top: 50%;
-                left: 50%;
-                transform: translateX(-50%) translateY(-50%);
+            &-center img {
+                object-position: center center;
             }
-            &-right picture {
-                top: 50%;
-                right: 0;
-                transform: translateY(-50%);
+            &-right img {
+                object-position: center right;
             }
         }
         &.top {
-            &-left picture {
-                top: 0;
-                left: 0;
+            &-left img {
+                object-position: top left;
             }
-            &-center picture {
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
+            &-center img {
+                object-position: top center;
             }
-            &-right picture {
-                top: 0;
-                right: 0;
+            &-right img {
+                object-position: top right;
             }
         }
         &.bottom {
-            &-left picture {
-                bottom: 0;
-                left: 0;
+            &-left img {
+                object-position: bottom left;
             }
-            &-center picture {
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%);
+            &-center img {
+                object-position: bottom center;
             }
-            &-right picture {
-                bottom: 0;
-                right: 0;
+            &-right img {
+                object-position: bottom right;
             }
         }
         &.contain {
@@ -144,7 +134,11 @@ $banner-heights: map-merge(
         font-size: 1.5rem;
     }
     p {
-        font-size: 5vw;
+        font-size: 7.5vw;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 5vw;
+        }
 
         @include media-breakpoint-up(xl) {
             font-size: 70px;
