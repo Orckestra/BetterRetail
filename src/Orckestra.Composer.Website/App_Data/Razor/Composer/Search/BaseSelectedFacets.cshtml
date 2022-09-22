@@ -55,13 +55,13 @@
                 <ul class="list-group">
                     <li v-for="(facet, index) in Facets"
                         class="list-group-item d-flex justify-content-between align-items-center">
-                        {{facet.DisplayName}}
+                        <span v-html="facet.DisplayName"></span>
                         <span class="badge badge-light">
                             <a v-if="facet.IsRemovable"
-                                class="float-right" data-qa="search-refiner-remove"
-                                v-on:click="removeSelectedFacet(facet, index)"
-                                v-bind:title="facet.DisplayName">
-                                    <span class="fa  fa-times  fa-lg"></span>
+                               class="float-right" data-qa="search-refiner-remove"
+                               v-on:click="removeSelectedFacet(facet, index)"
+                               v-bind:title="facet.DisplayName">
+                                <span class="fa  fa-times  fa-lg"></span>
                             </a>
                             <span v-else="v-else" class="float-right  fa  fa-times  fa-lg  text-muted"></span>
                         </span>
