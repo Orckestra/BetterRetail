@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
@@ -16,7 +17,6 @@ using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.RecurringOrders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -25,7 +25,7 @@ namespace Orckestra.Composer.Cart.Services
     public class RecurringOrderCartsViewService : IRecurringOrderCartsViewService
     {
         protected ICartRepository CartRepository { get; private set; }
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected IRecurringOrderCartViewModelFactory RecurringOrderCartViewModelFactory { get; private set; }
         protected IImageService ImageService { get; private set; }
         protected ILookupService LookupService { get; private set; }
@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Cart.Services
 
         public RecurringOrderCartsViewService(
             ICartRepository cartRepository,
-            IOvertureClient overtureClient,
+            IComposerOvertureClient overtureClient,
             IRecurringOrderCartViewModelFactory recurringOrderCartViewModelFactory,
             IImageService imageService,
             ILookupService lookupService,

@@ -3,10 +3,9 @@ using FizzWare.NBuilder.Generators;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.ForTests.Mock;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Addresses;
 
 namespace Orckestra.Composer.MyAccount.Tests.Repositories
@@ -30,7 +29,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             var customerRepository = _container.CreateInstance<CustomerAddressRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(r => r.SendAsync(It.Is<RemoveAddressRequest>(param => param.AddressId == addressId)))
                       .ReturnsTask();
             
@@ -46,7 +45,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             var customerRepository = _container.CreateInstance<CustomerAddressRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(r => r.SendAsync(It.Is<RemoveAddressRequest>(param => param.AddressId == addressId)))
                       .ReturnsTask();
 

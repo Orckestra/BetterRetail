@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.SearchQuery.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Requests.Products.Inventory;
 
@@ -11,12 +10,12 @@ namespace Orckestra.Composer.SearchQuery.Repositories
 {
     public class InventoryRepository : IInventoryRepository
     {
-        public InventoryRepository(IOvertureClient overtureClient)
+        public InventoryRepository(IComposerOvertureClient overtureClient)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
         }
 
-        protected IOvertureClient OvertureClient { get; set; }
+        protected IComposerOvertureClient OvertureClient { get; set; }
 
         public async Task<List<InventoryItemAvailability>> GetInventoryLocationStatusesBySkus(GetInventoryLocationStatuseParam param)
         {

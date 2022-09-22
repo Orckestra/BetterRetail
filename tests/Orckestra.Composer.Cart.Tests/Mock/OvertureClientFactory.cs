@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
@@ -12,13 +11,13 @@ namespace Orckestra.Composer.Cart.Tests.Mock
 {
     internal static class OvertureClientFactory
     {
-        internal static Mock<IOvertureClient> Create()
+        internal static Mock<IComposerOvertureClient> Create()
         {
             ProcessedCart dummyCart = new ProcessedCart();
             List<CartSummary> dummyCartListSummary = new List<CartSummary> { new CartSummary() };
             var dummyOrder = new Order();
 
-            var overtureClient = new Mock<IOvertureClient>();
+            var overtureClient = new Mock<IComposerOvertureClient>();
 
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetCartsByCustomerIdRequest>()))
                           .ReturnsAsync(dummyCartListSummary)
@@ -55,9 +54,9 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             return overtureClient;
         }
 
-        internal static Mock<IOvertureClient> CreateMockWithValue(ProcessedCart cart)
+        internal static Mock<IComposerOvertureClient> CreateMockWithValue(ProcessedCart cart)
         {
-            var overtureClient = new Mock<IOvertureClient>();
+            var overtureClient = new Mock<IComposerOvertureClient>();
 
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetCartRequest>()))
                           .ReturnsAsync(cart)
@@ -86,7 +85,7 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             return overtureClient;
         }
 
-        internal static Mock<IOvertureClient> CreateWithNullValues()
+        internal static Mock<IComposerOvertureClient> CreateWithNullValues()
         {
             ProcessedCart dummyCart = new ProcessedCart
             {
@@ -149,7 +148,7 @@ namespace Orckestra.Composer.Cart.Tests.Mock
             };
 
 
-            var overtureClient = new Mock<IOvertureClient>();
+            var overtureClient = new Mock<IComposerOvertureClient>();
 
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetCartsByCustomerIdRequest>()))
                           .ReturnsAsync(dummyCartListSummary)

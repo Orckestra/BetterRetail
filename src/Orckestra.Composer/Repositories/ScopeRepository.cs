@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
@@ -14,11 +13,11 @@ namespace Orckestra.Composer.Repositories
 {
     public class ScopeRepository: IScopeRepository
     {
-        protected IOvertureClient OvertureClient { get; }
+        protected IComposerOvertureClient OvertureClient { get; }
 
         protected ICacheProvider CacheProvider { get; }
 
-        public ScopeRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public ScopeRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient;
             CacheProvider = cacheProvider;

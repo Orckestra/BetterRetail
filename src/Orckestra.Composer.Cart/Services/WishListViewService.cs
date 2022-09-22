@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Factory;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Parameters.WishList;
@@ -163,7 +164,7 @@ namespace Orckestra.Composer.Cart.Services
             };
 
             viewModel.SignInUrl = WishListUrlProvider.GetSignInUrl(getUrlParam);
-            viewModel.ShareUrl = viewModel.TotalQuantity == 0 ? string.Empty: WishListUrlProvider.GetShareUrl(new GetShareWishListUrlParam
+            viewModel.ShareUrl = (viewModel.TotalQuantity == null || viewModel.TotalQuantity == 0) ? string.Empty: WishListUrlProvider.GetShareUrl(new GetShareWishListUrlParam
             {
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo,

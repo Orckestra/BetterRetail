@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Composite.Core;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
@@ -10,7 +11,6 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Checkout;
 using Orckestra.Composer.Services;
 using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.Overture.Caching;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.CompositeC1.Providers

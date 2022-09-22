@@ -4,10 +4,9 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.MyAccount.Repositories;
 using Orckestra.Composer.MyAccount.Tests.Mock;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
 
@@ -21,7 +20,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
         }
 
         [Test]
@@ -33,7 +32,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             var customerRepository = _container.CreateInstance<CustomerAddressRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(r => r.SendAsync(It.IsAny<UpdateAddressRequest>()))
                       .ReturnsAsync(address);
 
@@ -54,7 +53,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
 
             var customerRepository = _container.CreateInstance<CustomerAddressRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(r => r.SendAsync(It.IsAny<UpdateAddressRequest>()))
                       .ReturnsAsync(address);
 

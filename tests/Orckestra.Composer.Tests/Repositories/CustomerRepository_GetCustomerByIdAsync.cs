@@ -6,12 +6,11 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 
@@ -26,7 +25,7 @@ namespace Orckestra.Composer.Tests.Repositories
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
             _container.Use(new Mock<ICacheProvider>(MockBehavior.Strict));
 
             //Testing with cache always empty 
@@ -53,7 +52,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedCultureInfo = TestingExtensions.GetRandomCulture();
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<GetCustomerRequest>(
                     param => param.CustomerId == expectedCustomer.Id)))
                 .ReturnsAsync(expectedCustomer);
@@ -93,7 +92,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedCultureInfo = TestingExtensions.GetRandomCulture();
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<GetCustomerRequest>(
                     param => param.CustomerId == expectedCustomerId)))
                 .ReturnsAsync(null);

@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.Search.Context;
+﻿using Orckestra.Composer.Dependency;
+using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Providers;

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
@@ -24,11 +23,11 @@ namespace Orckestra.Composer.Cart.Repositories
 {
     public class CartRepository : ICartRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
         protected IScopeProvider ScopeProvider { get; private set; }
 
-        public CartRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeProvider scopeProvider)
+        public CartRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeProvider scopeProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
