@@ -155,7 +155,7 @@ module Orckestra.Composer {
 
                         return [
                             decodedValue.slice(0, start),
-                            `<strong>${value.slice(start, end)}</strong>`,
+                            `<strong>${decodedValue.slice(start, end)}</strong>`,
                             decodedValue.slice(end),
                         ].join('');
                     },      
