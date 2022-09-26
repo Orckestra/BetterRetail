@@ -22,10 +22,9 @@
 @helper CartItemSummaryCell()
 {
     <div>
-        <strong v-bind:data-qa="'cart-item-brand-' + index" v-html="item.ProductSummary.Brand"></strong>
+        <strong v-bind:data-qa="'cart-item-brand-' + index" v-html="item.ProductSummary.Brand"/>
         <p v-bind:data-qa="'cart-item-name-' + index" class="mb-2">
-            <a v-bind:href="item.ProductUrl" class="cart-item font-weight-normal" v-html="item.ProductSummary.DisplayName">
-            </a>
+            <a v-bind:href="item.ProductUrl" class="cart-item font-weight-normal" v-html="item.ProductSummary.DisplayName"/>
         </p>
         <p v-if="item.VariantId" class="mb-2 mb-sm-0" v-bind:data-qa="'cart-item-variant-' + index">
             <span v-for="(keyV, index) in item.KeyVariantAttributesList">
