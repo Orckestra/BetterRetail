@@ -123,7 +123,7 @@ namespace Orckestra.Composer.Search.Api
             var SortDirection = queryString[SearchRequestParams.SortDirection] ?? SearchRequestParams.DefaultSortDirection;
             var SortBy = queryString[SearchRequestParams.SortBy] ?? SearchRequestParams.DefaultSortBy;
             var BaseUrl = RequestUtils.GetBaseUrl(Request).ToString();
-            var Keywords = queryString[SearchRequestParams.Keywords];
+            var Keywords = SearchTermsTransformationProvider.TransformSearchTerm(queryString[SearchRequestParams.Keywords], ComposerContext.CultureInfo.Name);
             BaseSearchViewModel viewModel;
 
             if (!string.IsNullOrEmpty(request.CategoryId))
@@ -330,7 +330,6 @@ namespace Orckestra.Composer.Search.Api
         public virtual async Task<IHttpActionResult> SuggestBrands(AutoCompleteSearchViewModel request, int limit = MAXIMUM_BRAND_SUGGESTIONS)
         {
             string searchTerm = request.Query.Trim().ToLower();
-
             List<Facet> facets = await SearchViewService.GetBrandProductCounts(ComposerContext.CultureInfo.Name).ConfigureAwait(false);
             List<BrandSuggestionViewModel> brandList = facets.Single().Values.Select(facetValue => new BrandSuggestionViewModel
             {
