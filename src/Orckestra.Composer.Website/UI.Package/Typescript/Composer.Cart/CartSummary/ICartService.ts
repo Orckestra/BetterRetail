@@ -22,9 +22,8 @@ module Orckestra.Composer {
         /**
          * Add a line item to the cart of the current customer.
          */
-        addLineItem(productId: string, price: string, variantId: string, quantity: number,
-            recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any>;
+        addLineItem(product: any, variantId: string, price: string, quantity: number, concern?: string,
+            recurringOrderFrequencyName?: string): Q.Promise<any>;
 
         /**
          * Update the quantity of a line item in the cart of the current customer.

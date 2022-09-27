@@ -205,3 +205,38 @@
         <span class="fa  fa-angle-down"></span>
     </button>
 }
+
+@helper VariantKvaSelector(string vueBinding, string kvaProperyName)
+{
+    <div class="variant-kva variant-kva-@(kvaProperyName)">
+        <div class="form-group row">
+             <div class="offset-2 col-8">
+                <select name="@kvaProperyName"
+                        class="form-control"
+                        required="required"
+                        placeholder="select price"
+                        v-on:change="($event) => selectKva(@(vueBinding), '@(kvaProperyName)', $event.target.value)">
+                    <option disabled="disabled" selected="selected">- select size-</option>
+                    <option v-for="v in getKeyVariantValues(@(vueBinding).ProductId, '@(kvaProperyName)')"
+                            v-bind:value="v.Value"
+                            v-bind:disabled="v.Disabled">
+                        {{v.Title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+}
+
+@helper VariantColorKvaSelector(string vueBinding, string kvaProperyName)
+{
+<div class="variant-kva variant-kva-color variant-kva-@(kvaProperyName)">
+    <div v-for="v in getKeyVariantValues(@(vueBinding).ProductId, '@(kvaProperyName)')"
+         v-bind:class="{'selected': v.Selected, 'disabled': v.Disabled }"
+         v-on:click="selectKva(@(vueBinding), '@(kvaProperyName)', v.Value)"
+         v-bind:title="v.Title"
+         class="kva-color">
+        <div class="kva-color-value" v-bind:style="{background: v.Value}"></div>
+    </div>
+</div>
+}

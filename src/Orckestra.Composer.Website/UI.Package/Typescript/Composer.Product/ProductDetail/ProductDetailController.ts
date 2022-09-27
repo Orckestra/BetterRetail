@@ -111,13 +111,12 @@ module Orckestra.Composer {
                         if (this.Loading) return;
 
                         this.Loading = true;
-                        self.publishProductDataForAnalytics(self.context.viewModel, ProductEvents.LineItemAdding);
+                       
+                        let { FrequencyName } = self.getRecurringData();
+                        let { selectedVariantId, ListPrice } = this.Product;
 
-                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
-                        let { ProductId, selectedVariantId, ListPrice } = this.Product;
-
-                        self.cartService.addLineItem(ProductId, ListPrice, selectedVariantId, 1,
-                            FrequencyName, RecurringProgramName)
+                        self.cartService.addLineItem(this.Product, ListPrice, selectedVariantId,  1,
+                            this.concern, FrequencyName)
                             .then(() => {
                                 self.onAddLineItemSuccess();
                                 }, (reason: any) => {
@@ -228,13 +227,11 @@ module Orckestra.Composer {
                         if (this.Loading) return;
 
                         this.Loading = true;
-                        self.publishProductDataForAnalytics(self.context.viewModel, ProductEvents.LineItemAdding);
+                        let { FrequencyName } = self.getRecurringData();
+                        let { selectedVariantId, ListPrice } = this.Product;
 
-                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
-                        let { ProductId, selectedVariantId, ListPrice } = this.Product;
-
-                        self.cartService.addLineItem(ProductId, ListPrice, selectedVariantId, this.Quantity,
-                            FrequencyName, RecurringProgramName)
+                        self.cartService.addLineItem(this.Product, selectedVariantId, ListPrice, this.Quantity,
+                            this.concern, FrequencyName)
                             .then(() => {
                                 self.onAddLineItemSuccess();
                             }, (reason: any) => {

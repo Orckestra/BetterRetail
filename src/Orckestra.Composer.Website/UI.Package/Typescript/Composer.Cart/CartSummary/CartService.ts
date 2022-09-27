@@ -74,8 +74,66 @@ module Orckestra.Composer {
                     throw reason;
                 });
         }
+        public addLineItem(product, price, variantId?: string, quantity: number = 1, pageName = "Search Results", recurringOrderFrequencyName = undefined) {
+            
+            const {
+                ProductId,
+                RecurringOrderProgramName,
+                Brand,
+                DisplayName,
+                CategoryId
+            } = product;
 
-        public addLineItem(productId: string, price: string, variantId?: string,
+            let dataForAnalytics = {
+                ProductId, VariantId: variantId, Quantity: quantity, Price: price, ListPrice: price, DisplayName, Brand, CategoryId, List: pageName
+            }
+
+            if(variantId)
+            {
+                const variant = product.Variants.find(v=> v.id === variantId);
+                const variantData = this.getVariantDataForAnalytics(variant);
+                dataForAnalytics = {...dataForAnalytics, ...variantData };
+            }
+
+            this.eventHub.publish(ProductEvents.LineItemAdding, { data: dataForAnalytics });
+            this.eventHub.publish(CartEvents.CartUpdating, { data: dataForAnalytics });
+
+            return this.cartRepository.addLineItem(ProductId, variantId, quantity, recurringOrderFrequencyName, RecurringOrderProgramName)
+                .then(cart => {
+                    this.setCartToCache(cart);
+                    this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
+                    this.eventHub.publish(ProductEvents.LineItemAdded, { data: { Cart: cart, ProductId, VariantId: variantId }});
+                });
+          
+        }
+
+        protected getVariantDataForAnalytics(variant: any): any {
+            var variantName: string = this.buildVariantName(variant.Kvas);
+
+            var data: any = {
+                Variant: variantName,
+                Name: variant.DisplayName ? variant.DisplayName : undefined,
+                ListPrice: variant.ListPrice
+            };
+
+            return data;
+        }
+
+        protected buildVariantName(kvas: any): string {
+            var keys: string[] = Object.keys(kvas).sort();
+            var nameParts: string[] = [];
+
+            for (var i: number = 0; i < keys.length; i++) {
+                var key: string = keys[i];
+                var value: any = kvas[key];
+
+                nameParts.push(value);
+            }
+
+            return nameParts.join(' ');
+        }
+
+      /*  public addLineItem(productId: string, price: string, variantId?: string,
              quantity: number = 1,
              recurringOrderFrequencyName?: string,
              recurringOrderProgramName?: string): Q.Promise<any> {
@@ -101,7 +159,7 @@ module Orckestra.Composer {
                     this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                     this.eventHub.publish('lineItemAddedToCart', { data: addedToCartData });
                 });
-        }
+        }*/
 
         public updateLineItem(lineItemId: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,

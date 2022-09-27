@@ -22,7 +22,8 @@ namespace Orckestra.Composer.Product.Tests.Services
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
             IFulfillmentContext fulfillmentContext,
-            IProductPromotionsFactory productInformationFactory) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory)
+            IProductPromotionsFactory productInformationFactory,
+            IProductPricesViewModelFactory productPricesViewModelFactory) : base(productRepository, relationshipRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory, productPricesViewModelFactory)
         {
         }
 

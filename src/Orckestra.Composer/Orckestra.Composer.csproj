@@ -252,6 +252,8 @@
     <Compile Include="ComposerOvertureClient.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="Extensions\LookupExtensions.cs" />
+    <Compile Include="Factory\ProductPricesViewModelFactory.cs" />
+    <Compile Include="Factory\IProductPricesViewModelFactory.cs" />
     <Compile Include="Factory\IProductPromotionsFactory.cs" />
     <Compile Include="Factory\IRecurringOrderProgramViewModelFactory.cs" />
     <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
