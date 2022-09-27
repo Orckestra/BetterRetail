@@ -17,7 +17,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
     [Title("Variant Color")]
     [LabelPropertyName("LookupValue")]
     [InternalUrl("VariantColor")]
-    [SearchableType]
+    [Caching(CachingType.Full)]
     public interface IVariantColorConfiguration : IData
     {
         [ImmutableFieldId("620358ee-702c-459c-9a47-e397fbdf7bb1")]
