@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Tests.Mock;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 
 namespace Orckestra.Composer.Tests.Repositories
@@ -20,7 +19,7 @@ namespace Orckestra.Composer.Tests.Repositories
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
         }
 
         [Test]
@@ -30,7 +29,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedCustomer = MockCustomerFactory.CreateRandom();
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.IsAny<UpdateCustomerRequest>()))
                 .ReturnsAsync(expectedCustomer);
 

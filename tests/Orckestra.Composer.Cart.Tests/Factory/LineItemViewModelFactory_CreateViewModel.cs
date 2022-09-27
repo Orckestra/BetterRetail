@@ -160,7 +160,11 @@ namespace Orckestra.Composer.Cart.Tests.Factory
                 Id = Guid.NewGuid(),
                 Total = GetRandom.Decimal(),
                 DefaultPrice = GetRandom.PositiveDecimal(2000000),
-                CurrentPrice = new decimal()
+                CurrentPrice = new decimal(),
+                ProductSummary = new CartProductSummary()
+                {
+                    DisplayName = "Test"
+                }
             };
 
             var param = new CreateListOfLineItemDetailViewModelParam()

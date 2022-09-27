@@ -1,27 +1,25 @@
-﻿using System;
+﻿using Orckestra.Composer.Exceptions;
+using Orckestra.Composer.Logging;
+using Orckestra.ExperienceManagement.Configuration;
+using ServiceStack;
+using ServiceStack.Validation;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Cache;
 using System.Threading.Tasks;
-using Orckestra.Composer.Exceptions;
-using Orckestra.Composer.Logging;
-using Orckestra.ExperienceManagement.Configuration;
-using Orckestra.Overture;
-using Orckestra.Overture.RestClient;
-using ServiceStack;
-using ServiceStack.Validation;
 
 namespace Orckestra.Composer
 {
-    public sealed class ComposerOvertureClient : IOvertureClient
+    public sealed class ComposerOvertureClient : IComposerOvertureClient
     {
+
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private readonly IOvertureClient _client;
+        private readonly JsonServiceClient _client;
 
-        private ComposerOvertureClient(IOvertureClient client)
+        private ComposerOvertureClient(JsonServiceClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
@@ -35,37 +33,22 @@ namespace Orckestra.Composer
         {
             Intercept(() => _client.Send(requestDto), requestDto);
         }
+        
+        public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto)
+        {
+            return InterceptAsync(() => _client.SendAsync<HttpWebResponse>(requestDto), requestDto);
+        }
+        
+        public void Send(IReturnVoid requestDto, string httpMethod)
+        {
+            Intercept(() => _client.Send(requestDto), requestDto);
+        }
 
         public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto)
         {
             return InterceptAsync(() => _client.SendAsync(requestDto), requestDto);
         }
-
-        public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto)
-        {
-            return InterceptAsync(() => _client.SendAsync(requestDto), requestDto);
-        }
-
-        public TResponse Send<TResponse>(IReturn<TResponse> request, string httpMethod)
-        {
-            return Intercept(() => _client.Send(request, httpMethod), request);
-        }
-
-        public void Send(IReturnVoid requestDto, string httpMethod)
-        {
-            Intercept(() => _client.Send(requestDto, httpMethod), requestDto);
-        }
-
-        public Task<TResponse> SendAsync<TResponse>(IReturn<TResponse> requestDto, string httpMethod)
-        {
-            return InterceptAsync(() => _client.SendAsync(requestDto, httpMethod), requestDto);
-        }
-
-        public Task<HttpWebResponse> SendAsync(IReturnVoid requestDto, string httpMethod)
-        {
-            return InterceptAsync(() => _client.SendAsync(requestDto, httpMethod), requestDto);
-        }
-
+        
         public void SendAllOneWay(IEnumerable<IReturnVoid> request)
         {
             Intercept(() => _client.SendAllOneWay(request), request);
@@ -79,11 +62,6 @@ namespace Orckestra.Composer
         public Task<List<TResponse>> SendAllAsync<TResponse>(IEnumerable<IReturn<TResponse>> request)
         {
             return InterceptAsync(() => _client.SendAllAsync(request), request);
-        }
-
-        public Task<HttpWebResponse> SendAllOneWayAsync<TResponse>(IEnumerable<TResponse> requestDto) where TResponse : IReturnVoid
-        {
-            return InterceptAsync(() => _client.SendAllOneWayAsync(requestDto), requestDto);
         }
 
         private void Intercept(Action action, object request)
@@ -134,8 +112,7 @@ namespace Orckestra.Composer
                 throw;
             }
         }
-
-
+        
         private string GetRequestErrorDescription(object request)
         {
             string type = request != null ? request.GetType().FullName : "null";
@@ -161,7 +138,6 @@ namespace Orckestra.Composer
             }
         }
 
-
         private IDisposable MeasureExecutionTime(object request)
         {
             if (!(ComposerHost.Current?.IsInitialized ?? false)) { return null; }
@@ -183,25 +159,12 @@ namespace Orckestra.Composer
         }
 
 
-        public static IOvertureClient CreateFromConfig()
+        public static IComposerOvertureClient CreateFromConfig()
         {
-            var config = GetClientConfig();
-            return new ComposerOvertureClient(new OvertureClient(config));
-        }
-
-
-        private static OvertureClientConfig GetClientConfig()
-        {
-            var config = OvertureConfiguration.Settings;
-            var clientConfig = new OvertureClientConfig
-            {
-                AuthToken = config.AuthToken,
-                Format = ClientFormat.Json,
-                ServerBaseUrl = config.Url,
-                CacheLevel = HttpRequestCacheLevel.Default
-            };
-
-            return clientConfig;
+            var settings = OvertureConfiguration.Settings;
+            var client = new JsonServiceClient(settings.Url);
+            client.Headers.Add("X-Auth", settings.AuthToken);
+            return new ComposerOvertureClient(client);
         }
     }
 }

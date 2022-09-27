@@ -3,9 +3,7 @@ using System.Reflection;
 using FluentAssertions;
 using Moq.AutoMock;
 using NUnit.Framework;
-using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 
 namespace Orckestra.Composer.Product.Tests.Repositories
 {
@@ -17,7 +15,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
         {
             //Arrange
             var container = new AutoMocker();
-            container.Use((IOvertureClient) null);
+            container.Use((IComposerOvertureClient) null);
 
             //Act & Assert
             var nullException = Assert.Throws<TargetInvocationException>(() =>

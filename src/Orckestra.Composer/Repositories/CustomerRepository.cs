@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Exceptions;
+using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 
@@ -21,10 +21,10 @@ namespace Orckestra.Composer.Repositories
     /// </summary>
     public class CustomerRepository : ICustomerRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public CustomerRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public CustomerRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
@@ -202,11 +202,11 @@ namespace Orckestra.Composer.Repositories
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.Customer == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Customer)), nameof(param)); }
 
-            var request = new UpdateCustomerRequest(param.Customer)
+            var request = new UpdateCustomerRequest()
             {
                 ScopeId = param.Scope
             };
-
+            request.ExtendUpdateCustomerRequest(param.Customer);
             var updatedCustomer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
 
             return updatedCustomer;

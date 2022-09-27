@@ -250,7 +250,7 @@ namespace Orckestra.Composer.Providers.Dam
                 var globalVariantMediaSet = new List<ProductMedia>();
                 variantMediaSet?.ForEach(mediaVariant =>
                 {
-                    if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag.Contains(atribute)))
+                    if (mediaVariant.AttributesToMatch.Any(atribute => variant.PropertyBag != null && variant.PropertyBag.Contains(atribute)))
                     {
                         globalVariantMediaSet.AddRange(FilterImages(mediaVariant.Media));
                     }

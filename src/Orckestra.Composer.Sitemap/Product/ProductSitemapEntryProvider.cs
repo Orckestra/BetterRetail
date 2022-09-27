@@ -7,7 +7,6 @@ using Orckestra.Composer.Logging;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Sitemap.Factory;
 using Orckestra.Composer.Sitemap.Models;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
@@ -24,11 +23,11 @@ namespace Orckestra.Composer.Sitemap.Product
 
         private static string[] RequiredDocumentKeys = new[] { DisplayName };
 
-        private readonly IOvertureClient _overtureClient;
+        private readonly IComposerOvertureClient _overtureClient;
         private readonly IProductUrlProvider _productUrlProvider;
         private readonly IProductUrlParamFactory _productUrlParamFactory;
 
-        public ProductSitemapEntryProvider(IOvertureClient overtureClient, IProductUrlProvider productUrlProvider, IProductUrlParamFactory productUrlParamFactory)
+        public ProductSitemapEntryProvider(IComposerOvertureClient overtureClient, IProductUrlProvider productUrlProvider, IProductUrlParamFactory productUrlParamFactory)
         {
             _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             _productUrlProvider = productUrlProvider ?? throw new ArgumentNullException(nameof(productUrlProvider));

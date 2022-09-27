@@ -135,7 +135,7 @@ namespace Orckestra.Composer.Cart.Factory
                 CultureInfo = param.CultureInfo,
                 VariantId = lineItem.VariantId,
                 ProductId = lineItem.ProductId,
-                ProductName = lineItem.ProductSummary.DisplayName,
+                ProductName = lineItem.ProductSummary?.DisplayName,
                 SKU = lineItem.Sku
             });
 

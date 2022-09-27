@@ -120,8 +120,8 @@
         }
 
         .navbar-nav > li > a {
-            padding-top: $spacer;
-            padding-bottom: $spacer;
+            padding-top: $spacer/2;
+            padding-bottom: $spacer/2;
         }
         // override bootstrap defaults that put the dropdown in stacked mode
         // when in a mobile and in a navbar.

@@ -50,7 +50,7 @@ namespace Orckestra.Composer.Factory
         protected IAddressRepository AddressRepository { get; private set; }
         protected IProductUrlProvider ProductUrlProvider { get; private set; }
         protected IProductPriceViewService ProductPriceViewService { get; private set; }
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected IRecurringScheduleUrlProvider RecurringScheduleUrlProvider { get; private set; }
         protected IRecurringOrderProgramViewModelFactory RecurringOrderProgramViewModelFactory { get; private set; }
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
@@ -58,7 +58,7 @@ namespace Orckestra.Composer.Factory
 
 
         public RecurringOrderTemplateViewModelFactory(
-            IOvertureClient overtureClient,
+            IComposerOvertureClient overtureClient,
             ILocalizationProvider localizationProvider,
             IViewModelMapper viewModelMapper,
             ICountryService countryService,

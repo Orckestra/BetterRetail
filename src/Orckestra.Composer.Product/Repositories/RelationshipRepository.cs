@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orckestra.Composer.Product.Parameters;
 using Orckestra.Composer.Search.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
@@ -12,10 +11,10 @@ namespace Orckestra.Composer.Product.Repositories
 {
     public class RelationshipRepository : IRelationshipRepository
     {
-        protected readonly IOvertureClient _overtureClient;
+        protected readonly IComposerOvertureClient _overtureClient;
         protected readonly IProductRequestFactory _productRequestFactory;
 
-        public RelationshipRepository(IOvertureClient overtureClient, IProductRequestFactory productRequestFactory)
+        public RelationshipRepository(IComposerOvertureClient overtureClient, IProductRequestFactory productRequestFactory)
         {
             _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             _productRequestFactory = productRequestFactory ?? throw new ArgumentNullException(nameof(productRequestFactory));

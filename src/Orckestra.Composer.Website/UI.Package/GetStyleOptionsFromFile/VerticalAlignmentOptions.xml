@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Options>
+  <Option  CssClassKey="top" Label="Top"></Option>
+  <Option  CssClassKey="center" Label="Center"></Option>
+  <Option  CssClassKey="bottom" Label="Bottom"></Option>
+</Options>

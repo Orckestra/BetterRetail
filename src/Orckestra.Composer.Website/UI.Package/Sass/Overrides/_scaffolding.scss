@@ -1,3 +1,122 @@
 html {
-  -webkit-tap-highlight-color: rgba(0,0,0, 0.2);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
+}
+
+// background image positioning
+.bg {
+    &.top-right {
+        background-position: top right;
+    }
+    &.top-left {
+        background-position: top left;
+    }
+    &.top-center {
+        background-position: top center;
+    }
+    &.bottom-right {
+        background-position: bottom right;
+    }
+    &.bottom-left {
+        background-position: bottom left;
+    }
+    &.bottom-center {
+        background-position: bottom center;
+    }
+    &.center-right {
+        background-position: center right;
+    }
+    &.center-left {
+        background-position: center left;
+    }
+    &.center-center {
+        background-position: center center;
+    }
+    &.auto {
+        background-size: auto;
+    }
+    &.cover {
+        background-size: cover;
+    }
+    &.contain {
+        background-size: contain;
+    }
+    &.initial {
+        background-size: initial;
+    }
+}
+
+// div absolute positioning
+.position {
+    &.top-left {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        .row & {
+            left: 30px;
+        }
+    }
+    &.top-right {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        .row & {
+            right: 30px;
+        }
+    }
+    &.top-center {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.bottom-left {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        .row & {
+            left: 30px;
+        }
+    }
+    &.bottom-right {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        .row & {
+            right: 30px;
+        }
+    }
+    &.bottom-center {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.center-left {
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+        .row & {
+            left: 30px;
+        }
+    }
+    &.center-right {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        .row & {
+            right: 30px;
+        }
+    }
+    &.center-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.row+.row {
+    margin-top: 20px;
 }

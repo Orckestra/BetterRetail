@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.SearchQuery.Context;
+﻿using Orckestra.Composer.Dependency;
+using Orckestra.Composer.SearchQuery.Context;
 using Orckestra.Composer.SearchQuery.Repositories;
 using Orckestra.Composer.SearchQuery.Services;
 using Orckestra.Overture;

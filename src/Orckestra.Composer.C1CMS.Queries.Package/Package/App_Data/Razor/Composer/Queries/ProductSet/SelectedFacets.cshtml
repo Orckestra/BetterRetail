@@ -15,7 +15,7 @@
 }
 
 @{
-    var browsingViewModel = RequestContext.GetSearchQueryViewModelAsync(SearchQueryType.ProductSet, QueryName).Result;
+    var browsingViewModel = RequestContext.GetSearchQueryViewModelAsync("ProductSet", QueryName).Result;
     if (browsingViewModel == null)
     {
         return;
