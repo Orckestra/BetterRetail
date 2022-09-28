@@ -34,9 +34,14 @@
         @ProductHelpers.PromotionalRibbon(EntityName)
 
         <template v-if="@(EntityName).HasVariants">
-            <div class="variants" v-if="productDetailsLoaded(@(EntityName))">
-                @SearchHelpers.VariantColorKvaSelector(EntityName, "Colour")
-                @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize")
+            <div class="variants">
+                <template v-if="@(EntityName).variantsLoading">
+                    @GeneralHelpers.LoadingSpinner()
+                </template>
+                <template v-if="productDetailsLoaded(@(EntityName))">
+                    @SearchHelpers.VariantColorKvaSelector(EntityName, "Colour")
+                    @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize")
+                </template>
             </div>
         </template>
 

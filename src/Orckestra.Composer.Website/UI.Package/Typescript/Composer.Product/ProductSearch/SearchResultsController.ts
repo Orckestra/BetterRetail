@@ -66,7 +66,7 @@ module Orckestra.Composer {
                         const { ProductId, VariantId, HasVariants } = searchProduct;
                         if(!HasVariants || this.ProductsMap[ProductId]) return;
 
-                        this.loadingProduct(searchProduct, true);
+                        this.loadingProduct(searchProduct, true, true);
                         const pricesTask = self.productService.calculatePrices(ProductId, this.ListName);
                         const productDetailsTask = self.productService.loadProduct(ProductId, VariantId);
                          Q.all([pricesTask, productDetailsTask])
@@ -76,7 +76,7 @@ module Orckestra.Composer {
                                 searchProduct.SizeSelected = false;
                                 this.ProductsMap[ProductId] = product;
                                })
-                            .fin(() => this.loadingProduct(searchProduct, false));
+                            .fin(() => this.loadingProduct(searchProduct, false, false));
                     },
                     selectKva(searchProduct, kvaName, kvaValue) {
                         const { ProductId: productId } = searchProduct;
@@ -102,8 +102,9 @@ module Orckestra.Composer {
                         .then(result => searchProduct.IsAvailableToSell = result)
                         .fin(() => this.loadingProduct(searchProduct, false));
                     },
-                    loadingProduct(product, loading) {
+                    loadingProduct(product, loading, variantsLoading = false) {
                         product.loading = loading;
+                        product.variantsLoading = variantsLoading;
                         this.refreshData(); 
                     },
                     productDetailsLoaded(searchProduct) {
