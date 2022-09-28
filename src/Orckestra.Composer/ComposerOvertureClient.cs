@@ -91,6 +91,12 @@ namespace Orckestra.Composer
             }
             catch (Exception e)
             {
+                if (e is WebServiceException wsException)
+                {
+                    if (wsException.StatusCode == (int)HttpStatusCode.NotFound)
+                        return default;
+                }
+
                 HandleException(e, request);
                 throw;
             }
@@ -111,7 +117,7 @@ namespace Orckestra.Composer
                 if (e is WebServiceException wsException)
                 {
                     if (wsException.StatusCode == (int)HttpStatusCode.NotFound)
-                        return await Task.FromResult<T>(default);
+                        return default;
                 }
 
                 HandleException(e, request);
