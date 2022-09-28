@@ -118,11 +118,15 @@ module Orckestra.Composer {
                             ProductId: productId,
                         } = product;
                         const price = product.IsOnSale ? product.Price : product.ListPrice;
-                        const variantId = hasVariants ? this.ProductsMap[productId].SelectedVariant.Id: undefined;
+                       
+                        if(hasVariants) {
+                            product.VariantId = this.ProductsMap[productId].SelectedVariant.Id;
+                            product.Variants = this.ProductsMap[productId].Variants;
+                        }
 
                         this.loadingProduct(product, true);
  
-                        self.cartService.addLineItem(product, price, variantId, 1, this.ListName)
+                        self.cartService.addLineItem(product, price, product.VariantId, 1, this.ListName)
                             .then(this.addToCartSuccess, this.onAddToCartFailed)
                             .fin(() => this.loadingProduct(product, false));
                         

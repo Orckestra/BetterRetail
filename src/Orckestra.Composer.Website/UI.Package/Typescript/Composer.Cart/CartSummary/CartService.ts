@@ -6,6 +6,7 @@
 ///<reference path='../../Utils/Utils.ts' />
 ///<reference path='./ICartService.ts' />
 ///<reference path='./CartEvents.ts' />
+///<reference path='../../Composer.Product/Product/ProductHelpers.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -94,34 +95,6 @@ module Orckestra.Composer {
                 });
           
         }
-
-      /*  public addLineItem(productId: string, price: string, variantId?: string,
-             quantity: number = 1,
-             recurringOrderFrequencyName?: string,
-             recurringOrderProgramName?: string): Q.Promise<any> {
-
-            var data = {
-                ProductId: productId,
-                VariantId: variantId,
-                Quantity: quantity,
-                Price: price
-            };
-
-            this.eventHub.publish(CartEvents.CartUpdating, { data: data });
-
-            return this.cartRepository.addLineItem(productId, variantId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
-                .then(cart => this.setCartToCache(cart))
-                .then(cart => {
-                    let addedToCartData = {
-                        Cart: cart,
-                        ProductId: productId,
-                        VariantId: variantId
-                    };
-
-                    this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
-                    this.eventHub.publish('lineItemAddedToCart', { data: addedToCartData });
-                });
-        }*/
 
         public updateLineItem(lineItemId: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,
