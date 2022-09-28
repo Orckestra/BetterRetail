@@ -216,9 +216,11 @@
                         required="required"
                         placeholder="select price"
                         v-on:change="($event) => selectKva(@(vueBinding), '@(kvaProperyName)', $event.target.value)">
-                    <option disabled="disabled" selected="selected">- select size-</option>
+                    <option disabled="disabled" v-bind:selected="requireSelection(@(vueBinding).ProductId, '@(kvaProperyName)')">- select {{getKeyVariantDisplayName(@(vueBinding).ProductId, '@(kvaProperyName)')}} -</option>
                     <option v-for="v in getKeyVariantValues(@(vueBinding).ProductId, '@(kvaProperyName)')"
+                            v-bind:key="v.Value"
                             v-bind:value="v.Value"
+                            v-bind:selected="v.Selected"
                             v-bind:disabled="v.Disabled">
                         {{v.Title}}
                     </option>

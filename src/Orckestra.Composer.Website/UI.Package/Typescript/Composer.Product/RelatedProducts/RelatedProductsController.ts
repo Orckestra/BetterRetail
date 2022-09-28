@@ -59,6 +59,18 @@ module Orckestra.Composer {
                         productDetailsLoaded(relatedProduct) {
                             return this.ProductsMap[relatedProduct.ProductId] != undefined;
                         },
+                        getKeyVariantDisplayName(id, kvaName) {
+                            const product = this.ProductsMap[id];
+                            return ProductsHelper.getKeyVariantDisplayName(product, kvaName);
+                        },
+                        requireSelection(id, kvaName) {
+                            const product = this.ProductsMap[id];
+                            return ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false;
+                        },
+                        getKeyVariantValues(id, kvaName) {
+                            const product = this.ProductsMap[id];
+                            return ProductsHelper.getKeyVariantValues(product, kvaName, ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false);
+                        },
                         onMouseover(relatedProduct) {
                             const { ProductId, VariantId, HasVariants } = relatedProduct;
                             if(!HasVariants || this.ProductsMap[ProductId]) return;
@@ -71,10 +83,6 @@ module Orckestra.Composer {
                                     this.ProductsMap[ProductId] = product;
                                     })
                                 .fin(() => this.loadingProduct(relatedProduct, false));
-                        },
-                        getKeyVariantValues(id, keyName) {
-                            const product = this.ProductsMap[id];
-                            return ProductsHelper.getKeyVariantValues(product, keyName);
                         },
                         selectKva(relatedProduct, kvaName, kvaValue) {
                             const { ProductId: productId } = relatedProduct;
@@ -89,7 +97,7 @@ module Orckestra.Composer {
                             product.SelectedVariant = variant;
                             relatedProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
                             
-                            if(kvaName.toLowerCase().includes('size')) {
+                            if(ProductsHelper.isSize(kvaName)) {
                                 relatedProduct.SizeSelected = true;
                             }
     
@@ -113,11 +121,15 @@ module Orckestra.Composer {
                             const { HasVariants, ProductId } = product;
 
                             const price = product.IsOnSale ? product.Price : product.ListPrice;
-                            const variantId = product.VariantId = HasVariants ? this.ProductsMap[ProductId].SelectedVariant.Id : undefined;
+                       
+                            if(HasVariants) {
+                                product.VariantId = this.ProductsMap[ProductId].SelectedVariant.Id;
+                                product.Variants = this.ProductsMap[ProductId].Variants;
+                            }
 
                             this.loadingProduct(product, true);
 
-                            self.cartService.addLineItem(product, price, variantId,  1, self.getListNameForAnalytics())
+                            self.cartService.addLineItem(product, price, product.VariantId,  1, self.getListNameForAnalytics())
                                 .then(self.onAddLineItemSuccess, this.onAddToCartFailed)
                                 .fin(() => this.loadingProduct(product, false));
                         },

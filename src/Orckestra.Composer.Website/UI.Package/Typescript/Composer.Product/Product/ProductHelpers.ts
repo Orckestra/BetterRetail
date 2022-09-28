@@ -1,6 +1,16 @@
 module Orckestra.Composer {
     export class ProductsHelper {
-        static getKeyVariantValues(product, keyName) {
+        static isSize(kvaName) {
+            return kvaName.toLowerCase().includes('size');
+        }
+        
+        static getKeyVariantDisplayName(product, keyName) {
+            if (!product || !product.KeyVariantAttributeItems) return;
+            const kva = product.KeyVariantAttributeItems.find(i => i.PropertyName === keyName);
+            return kva.DisplayName;
+        }
+
+        static getKeyVariantValues(product, keyName, noSelection = false) {
             if (!product || !product.KeyVariantAttributeItems) return [];
             const kva = product.KeyVariantAttributeItems.find(i => i.PropertyName === keyName);
             const selectedVariant = product.SelectedVariant;
@@ -31,7 +41,7 @@ module Orckestra.Composer {
                 return {
                     ...prValue,
                     Disabled: isDisabled(relatedVariants),
-                    Selected: selectedPrValue === prValue.Value
+                    Selected: noSelection ? false : selectedPrValue === prValue.Value
                 }
             })
         }

@@ -55,9 +55,17 @@ module Orckestra.Composer {
                     },
                   },
                 methods: {
-                    getKeyVariantValues(id, keyName) {
+                    getKeyVariantDisplayName(id, kvaName) {
                         const product = this.ProductsMap[id];
-                        return ProductsHelper.getKeyVariantValues(product, keyName);
+                        return ProductsHelper.getKeyVariantDisplayName(product, kvaName);
+                    },
+                    requireSelection(id, kvaName) {
+                        const product = this.ProductsMap[id];
+                        return ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false;
+                    },
+                    getKeyVariantValues(id, kvaName) {
+                        const product = this.ProductsMap[id];
+                        return ProductsHelper.getKeyVariantValues(product, kvaName, ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false);
                     },
                     refreshData() {
                         this.dataUpdatedTracker += 1;
@@ -71,7 +79,7 @@ module Orckestra.Composer {
                         const productDetailsTask = self.productService.loadProduct(ProductId, VariantId);
                          Q.all([pricesTask, productDetailsTask])
                             .spread((prices, product) => {
-                                product.ProductPrices = <any>_.find(prices.ProductPrices, { ProductId });
+                                product.ProductPrice = <any>_.find(prices.ProductPrices, { ProductId });
                                 product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
                                 searchProduct.SizeSelected = false;
                                 this.ProductsMap[ProductId] = product;
@@ -91,11 +99,11 @@ module Orckestra.Composer {
                         product.SelectedVariant = variant;
                         searchProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
 
-                        if(kvaName.toLowerCase().includes('size')) {
+                        if(ProductsHelper.isSize(kvaName)) {
                             searchProduct.SizeSelected = true;
                         }
 
-                        const variantPrice = product.ProductPrices.VariantPrices.find(p=> p.VariantId === variant.Id);
+                        const variantPrice = product.ProductPrice.VariantPrices.find(p=> p.VariantId === variant.Id);
                         ProductsHelper.mergeVariantPrice(searchProduct, variantPrice);
 
                         self.inventoryService.isAvailableToSell(variant.Sku)
