@@ -7,7 +7,7 @@
   "adminPassword": "",
   "adminEmail": "build-bot@orckestra.com",
   
-  "C1Url": "https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v6.12/C1.CMS.6.12.zip",
+  "C1Url": "https://github.com/Orckestra/C1-CMS-Foundation/releases/download/v6.13/C1.CMS.6.13.zip",
   "websiteSuffix": "{{new System.IO.DirectoryInfo(rootPath).Name}}",
   "websiteName": "composer-c1-{websiteSuffix}.develop.orckestra.cloud",
   "websiteUrl": "https://{websiteName}",
