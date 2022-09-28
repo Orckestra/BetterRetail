@@ -26,7 +26,7 @@ namespace Orckestra.Composer.Factory
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
         }
-        public ProductPriceViewModel CreateProductPriceViewModel(CultureInfo cultureInfo, ProductPrice productPrice)
+        public virtual ProductPriceViewModel CreateProductPriceViewModel(CultureInfo cultureInfo, ProductPrice productPrice)
         {
             var productPriceVm = GenerateProductPriceVm(cultureInfo, productPrice);
 

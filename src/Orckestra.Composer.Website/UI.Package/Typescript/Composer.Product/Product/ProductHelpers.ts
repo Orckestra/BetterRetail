@@ -54,6 +54,61 @@ module Orckestra.Composer {
             };
             return product.Variants.find(v => compareProperties(v.Kvas));
         }
+
+        static  getProductDataForAnalytics(product, variantId, price, pageName, quantity: number = 1)  {
+            const {
+                ProductId,
+                Brand,
+                DisplayName,
+                CategoryId
+            } = product;
+
+            let data = {
+                ProductId, 
+                VariantId: variantId, 
+                Quantity: quantity, 
+                Price: price, 
+                ListPrice: price, 
+                DisplayName, 
+                Brand, 
+                CategoryId, 
+                List: pageName };
+
+                if(variantId)
+                {
+                    const variant = product.Variants.find(v=> v.id === variantId);
+                    const variantData = this.getVariantDataForAnalytics(variant);
+                    data = {...data, ...variantData };
+                }
+
+            return data;
+        }
+
+        static getVariantDataForAnalytics(variant: any): any {
+            var variantName: string = this.buildVariantName(variant.Kvas);
+
+            var data: any = {
+                Variant: variantName,
+                Name: variant.DisplayName ? variant.DisplayName : undefined,
+                ListPrice: variant.ListPrice
+            };
+
+            return data;
+        }
+
+        static buildVariantName(kvas: any): string {
+            var keys: string[] = Object.keys(kvas).sort();
+            var nameParts: string[] = [];
+
+            for (var i: number = 0; i < keys.length; i++) {
+                var key: string = keys[i];
+                var value: any = kvas[key];
+
+                nameParts.push(value);
+            }
+
+            return nameParts.join(' ');
+        }
     }
 }
 

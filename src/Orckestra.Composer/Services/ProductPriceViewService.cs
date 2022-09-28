@@ -19,14 +19,11 @@ namespace Orckestra.Composer.Services
         protected IProductRepository ProductRepository { get; }
         protected IScopeViewService ScopeViewService { get; }
         protected IFulfillmentContext FulfillmentContext { get; }
-
         protected IProductPricesViewModelFactory ProductPricesViewModelFactory { get; set; }
 
         public ProductPriceViewService(IProductRepository productRepository, 
-            IViewModelMapper viewModelMapper,
             IScopeViewService scopeViewService, 
             IFulfillmentContext fulfillmentContext,
-            ICurrencyProvider currencyProvider,
             IProductPricesViewModelFactory productPricesViewModelFactory)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));

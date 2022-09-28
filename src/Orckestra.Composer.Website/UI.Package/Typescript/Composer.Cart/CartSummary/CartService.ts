@@ -78,22 +78,10 @@ module Orckestra.Composer {
             
             const {
                 ProductId,
-                RecurringOrderProgramName,
-                Brand,
-                DisplayName,
-                CategoryId
+                RecurringOrderProgramName
             } = product;
 
-            let dataForAnalytics = {
-                ProductId, VariantId: variantId, Quantity: quantity, Price: price, ListPrice: price, DisplayName, Brand, CategoryId, List: pageName
-            }
-
-            if(variantId)
-            {
-                const variant = product.Variants.find(v=> v.id === variantId);
-                const variantData = this.getVariantDataForAnalytics(variant);
-                dataForAnalytics = {...dataForAnalytics, ...variantData };
-            }
+            const dataForAnalytics = ProductsHelper.getProductDataForAnalytics(product, variantId, price, pageName, quantity);
 
             this.eventHub.publish(ProductEvents.LineItemAdding, { data: dataForAnalytics });
             this.eventHub.publish(CartEvents.CartUpdating, { data: dataForAnalytics });
@@ -105,32 +93,6 @@ module Orckestra.Composer {
                     this.eventHub.publish(ProductEvents.LineItemAdded, { data: { Cart: cart, ProductId, VariantId: variantId }});
                 });
           
-        }
-
-        protected getVariantDataForAnalytics(variant: any): any {
-            var variantName: string = this.buildVariantName(variant.Kvas);
-
-            var data: any = {
-                Variant: variantName,
-                Name: variant.DisplayName ? variant.DisplayName : undefined,
-                ListPrice: variant.ListPrice
-            };
-
-            return data;
-        }
-
-        protected buildVariantName(kvas: any): string {
-            var keys: string[] = Object.keys(kvas).sort();
-            var nameParts: string[] = [];
-
-            for (var i: number = 0; i < keys.length; i++) {
-                var key: string = keys[i];
-                var value: any = kvas[key];
-
-                nameParts.push(value);
-            }
-
-            return nameParts.join(' ');
         }
 
       /*  public addLineItem(productId: string, price: string, variantId?: string,

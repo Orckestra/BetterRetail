@@ -322,14 +322,7 @@ module Orckestra.Composer {
 
         protected notifyAnalyticsOfProductDetailsImpression() {
             var vm = this.context.viewModel;
-            var variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId);
-
-            var data: any = this.getProductDataForAnalytics(vm);
-            if (variant) {
-                var variantData: any = this.getVariantDataForAnalytics(variant);
-
-                _.extend(data, variantData);
-            }
+            var data: any = ProductsHelper.getProductDataForAnalytics(vm, vm.selectedVariantId, vm.ListPrice, this.getListNameForAnalytics());
 
             this.publishProductImpressionEvent(data);
         }

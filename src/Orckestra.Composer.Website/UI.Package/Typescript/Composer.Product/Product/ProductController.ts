@@ -212,13 +212,9 @@ module Orckestra.Composer {
             recurringOrderFrequencyName?: string) {
             let busy = this.asyncBusy({ elementContext: actionContext.elementContext }),
                 quantity = this.getCurrentQuantity(),
-                vm = this.context.viewModel,
-                variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId),
-                data: any = this.getProductDataForAnalytics(vm);
-
-            data.Quantity = quantity.Value ? quantity.Value : 1;
-
-            this.addLineItemImpl(vm, vm.ListPrice, vm.selectedVariantId, quantity,
+                vm = this.context.viewModel;
+                
+              this.addLineItemImpl(vm, vm.ListPrice, vm.selectedVariantId, quantity,
                 recurringOrderFrequencyName)
                 .then((data: any) => {
                     this.onAddLineItemSuccess(data);
@@ -297,6 +293,12 @@ module Orckestra.Composer {
         protected calculatePrice(): Q.Promise<any> {
 
             return this.productService.calculatePrice(this.context.viewModel.productId, this.concern);
+        }
+
+        protected publishProductDataForAnalytics(vm: any, eventName: string): void {
+            var data = ProductsHelper.getProductDataForAnalytics(vm, vm.selectedVariantId, vm.ListPrice, this.getListNameForAnalytics());
+
+            this.eventHub.publish(eventName, { data });
         }
 
         protected getProductDataForAnalytics(vm: any): any {
