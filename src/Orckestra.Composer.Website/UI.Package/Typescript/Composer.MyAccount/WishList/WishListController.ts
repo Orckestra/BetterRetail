@@ -43,7 +43,7 @@ module Orckestra.Composer {
 
 
         protected getListNameForAnalytics(): string {
-            return 'WishList'
+            throw new Error('ListName not defined for this controller');
         }
 
         protected getProductDataForAnalytics(productId, variant, displayName, price, brand, category): any {

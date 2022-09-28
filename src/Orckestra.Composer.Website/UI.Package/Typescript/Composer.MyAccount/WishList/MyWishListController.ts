@@ -49,7 +49,7 @@ module Orckestra.Composer {
                             )
                         });
 
-                        self._cartService.addLineItem(item, item.VariantId, price, 1, self.getListNameForAnalytics())
+                        self._cartService.addLineItem(item, price, item.VariantId, 1, self.getListNameForAnalytics())
                             .then(() => {
                                 item.Loading = false;
                                 this.Items = [...this.Items];

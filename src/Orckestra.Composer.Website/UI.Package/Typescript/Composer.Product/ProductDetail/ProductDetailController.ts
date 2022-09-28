@@ -231,7 +231,7 @@ module Orckestra.Composer {
                         let { selectedVariantId, ListPrice } = this.Product;
 
                         self.cartService.addLineItem(this.Product, selectedVariantId, ListPrice, this.Quantity,
-                            this.concern, FrequencyName)
+                            this.getListNameForAnalytics(), FrequencyName)
                             .then(() => {
                                 self.onAddLineItemSuccess();
                             }, (reason: any) => {

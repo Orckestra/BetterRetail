@@ -250,7 +250,7 @@ module Orckestra.Composer {
 
         protected addLineItemImpl(product: any, price: string, variantId: string, quantity: any,
             recurringOrderFrequencyName?: string): Q.Promise<any> {
-            return this.cartService.addLineItem(product, price, variantId, quantity.Value, this.concern, recurringOrderFrequencyName);
+            return this.cartService.addLineItem(product, price, variantId, quantity.Value, this.getListNameForAnalytics(), recurringOrderFrequencyName);
         }
 
         protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
