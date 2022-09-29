@@ -94,6 +94,7 @@ module Orckestra.Composer {
                         const variant = ProductsHelper.findVariant(product, kva);
       
                         if(!variant) {
+                            //resert size selection to select existent variant 
                            product.SizeSelected = false;
                             this.loadingProduct(searchProduct, false);
                             return;
