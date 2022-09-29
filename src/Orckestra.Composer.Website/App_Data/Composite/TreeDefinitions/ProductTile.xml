@@ -8,34 +8,47 @@
       <Element Label="Product" Id="OrckestraProduct">
         <Actions>
         </Actions>
-		  <Children>
-			  <Element Label="Promotional Ribbons" Id="PromotionalRibbons">
-				  <Actions>
-					  <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration" />
-				  </Actions>
-				  <Children>
-					  <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration">
-						  <Actions>
-							  <EditDataAction Label="Edit" />
-							  <DeleteDataAction Label="Delete" />
-						  </Actions>
-					  </DataElements>
-				  </Children>
-			  </Element>
-		      <Element Label="Promotional Banners" Id="PromotionalBanners">
-			      <Actions>
-				      <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration" />
-			      </Actions>
-			      <Children>
-				      <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration">
-					      <Actions>
-						      <EditDataAction Label="Edit" />
-						      <DeleteDataAction Label="Delete" />
-					      </Actions>
-				      </DataElements>
-			      </Children>
-		      </Element>
-	      </Children>
+        <Children>
+          <Element Label="Promotional Ribbons" Id="PromotionalRibbons">
+            <Actions>
+              <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration" />
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalRibbonConfiguration">
+                <Actions>
+                  <EditDataAction Label="Edit" />
+                  <DeleteDataAction Label="Delete" />
+                </Actions>
+              </DataElements>
+            </Children>
+          </Element>
+          <Element Label="Promotional Banners" Id="PromotionalBanners">
+            <Actions>
+              <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration" />
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration">
+                <Actions>
+                  <EditDataAction Label="Edit" />
+                  <DeleteDataAction Label="Delete" />
+                </Actions>
+              </DataElements>
+            </Children>
+          </Element>
+          <Element Label="Varinat Colors" Id="VariantColors">
+            <Actions>
+              <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IVariantColorConfiguration" />
+            </Actions>
+            <Children>
+              <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.IVariantColorConfiguration">
+                <Actions>
+                  <EditDataAction Label="Edit" />
+                  <DeleteDataAction Label="Delete" />
+                </Actions>
+              </DataElements>
+            </Children>
+          </Element>
+        </Children>
       </Element>
     </Children>
   </ElementRoot>
