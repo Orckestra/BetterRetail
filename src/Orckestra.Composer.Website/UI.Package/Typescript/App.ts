@@ -11,7 +11,6 @@
 ///<reference path='./Composer.Product/ProductSearch/FacetSearchController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SearchResultsController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SearchSummaryController.ts' />
-///<reference path='./Composer.Product/ProductSearch/QuickViewController.ts' />
 ///<reference path='./Composer.Product/ProductSearch/SelectedFacetSearchController.ts' />
 ///<reference path='./Composer.Cart/AddToCartNotification/AddToCartNotificationController.ts' />
 ///<reference path='./Composer.Cart/CartSummary/CartSummaryController.ts' />
@@ -112,7 +111,6 @@
                 { name: 'Product.RelatedProducts', controller: Orckestra.Composer.RelatedProductController },
                 { name: 'Product.SearchResults', controller: Orckestra.Composer.SearchResultsController },
                 { name: 'Product.SearchSummary', controller: Orckestra.Composer.SearchSummaryController },
-                { name: 'Product.QuickView', controller: Orckestra.Composer.QuickViewController },
                 { name: 'Product.SelectedSearchFacets', controller: Orckestra.Composer.SelectedFacetSearchController },
                 { name: 'Product.ProductZoom', controller: Orckestra.Composer.ProductZoomController },
                 { name: 'Product.RecurringOrderSignInForm', controller: Orckestra.Composer.RecurringOrderSignInFormController },

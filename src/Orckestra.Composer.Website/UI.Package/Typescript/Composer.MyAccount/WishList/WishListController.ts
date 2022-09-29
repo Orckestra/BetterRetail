@@ -21,22 +21,22 @@ module Orckestra.Composer {
         public addToCart(actionContext: IControllerActionContext) {
             var context: JQuery = actionContext.elementContext;
             var container = context.closest('.wishlist-tile');
-            var productId: string = <any>context.data('productid');
+            var ProductId: string = <any>context.data('productid');
             var price: string = <any>context.data('price');
             var brand: string = <any>context.data('brand');
             var variantId: string = <any>context.data('variantid');
             var variant: string = <any>context.data('variant');
             var name: string = <any>context.data('name');
             var category: string = <any>context.data('category');
-            var recurringProgramName: string = <any>context.data('recurringorderprogramname');
+            var RecurringOrderProgramName: string = <any>context.data('recurringorderprogramname');
 
             this.eventHub.publish('wishListLineItemAddingToCart', {
-                data: this.getProductDataForAnalytics(productId, variant, name, price, brand, category)
+                data: this.getProductDataForAnalytics(ProductId, variant, name, price, brand, category)
             });
 
             container.addClass('is-loading');
 
-            this._cartService.addLineItem(productId, price, variantId, 1, null, recurringProgramName)
+            this._cartService.addLineItem({ ProductId, RecurringOrderProgramName }, price, variantId, 1, this.getListNameForAnalytics())
                 .fin(() => container.removeClass('is-loading'));
 
         }

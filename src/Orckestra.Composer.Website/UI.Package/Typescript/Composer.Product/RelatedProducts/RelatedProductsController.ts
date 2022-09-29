@@ -26,6 +26,8 @@ module Orckestra.Composer {
                         ProductIdentifiers: vm.ProductIdentifiers,
                         Loading: false,
                         Cart: cart,
+                        ProductsMap: {},
+                        dataUpdatedTracker: 1,
                     },
                     mounted() {
                         self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
@@ -43,12 +45,72 @@ module Orckestra.Composer {
 
                                 return product;
                             });
-                            return results;
+                            return this.dataUpdatedTracker && results;
                         }
                     },
                     methods: {
                         onCartUpdated(cart) {
                             this.Cart = cart.data;
+                        },
+                        isAddToCartDisabled(product) {
+                            return ProductsHelper.isAddToCartDisabled(product, this.ProductsMap);
+                        },
+                        productDetailsLoaded(relatedProduct) {
+                            return this.ProductsMap[relatedProduct.ProductId] != undefined;
+                        },
+                        getKeyVariantDisplayName(id, kvaName) {
+                            const product = this.ProductsMap[id];
+                            return ProductsHelper.getKeyVariantDisplayName(product, kvaName);
+                        },
+                        requireSelection(relatedProduct, kvaName) {
+                            const product = this.ProductsMap[relatedProduct.ProductId];
+                            return ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false;
+                        },
+                        getKeyVariantValues(id, kvaName) {
+                            const product = this.ProductsMap[id];
+                            return ProductsHelper.getKeyVariantValues(product, kvaName, ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false);
+                        },
+                        onMouseover(relatedProduct) {
+                            const { ProductId, VariantId, HasVariants } = relatedProduct;
+                            if (!HasVariants || this.ProductsMap[ProductId]) return;
+
+                            this.loadingProduct(relatedProduct, true);
+                            self.productService.loadProduct(ProductId, VariantId)
+                                .then(product => {
+                                    product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
+                                    product.SizeSelected = false;
+                                    this.ProductsMap[ProductId] = product;
+                                })
+                                .fin(() => this.loadingProduct(relatedProduct, false));
+                        },
+                        selectKva(relatedProduct, kvaName, kvaValue) {
+                            const { ProductId: productId } = relatedProduct;
+                            const kva = { [kvaName]: kvaValue };
+                            const product = this.ProductsMap[productId];
+
+                            let variant = ProductsHelper.findVariant(product, kva, product.SelectedVariant.Kvas);
+
+                            if (!variant) {
+                                variant = ProductsHelper.findVariant(product, kva, null);
+                                //reset size selection to select existent variant 
+                                product.SizeSelected = false;
+                            };
+
+                            this.loadingProduct(relatedProduct, true);
+
+                            product.SelectedVariant = variant;
+                            relatedProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
+
+                            if (ProductsHelper.isSize(kvaName)) {
+                                product.SizeSelected = true;
+                            }
+
+                            const variantPrice = relatedProduct.ProductPrice.VariantPrices.find(p => p.VariantId === variant.Id);
+                            ProductsHelper.mergeVariantPrice(relatedProduct, variantPrice);
+
+                            self.inventoryService.isAvailableToSell(variant.Sku)
+                                .then(result => relatedProduct.IsAvailableToSell = result)
+                                .fin(() => this.loadingProduct(relatedProduct, false));
                         },
                         searchProductClick(product, index) {
                             self.eventHub.publish(ProductEvents.ProductClick, {
@@ -60,24 +122,28 @@ module Orckestra.Composer {
                             });
                         },
                         addToCart(event, product) {
-                            const { HasVariants, ProductId, VariantId, Price, RecurringOrderProgramName } = product;
+                            const { HasVariants, ProductId } = product;
 
-                            this.Loading = true;
-                            event.target.disabled = true;
-
-                            var promise: Q.Promise<any>;
-
-                            if (HasVariants) {
-                                promise = self.addVariantProductToCart(ProductId, VariantId, Price);
-                            } else {
-                                promise = self.addNonVariantProductToCart(ProductId, Price, RecurringOrderProgramName);
+                            const price = product.IsOnSale ? product.Price : product.ListPrice;
+                       
+                            if(HasVariants) {
+                                product.VariantId = this.ProductsMap[ProductId].SelectedVariant.Id;
+                                product.Variants = this.ProductsMap[ProductId].Variants;
                             }
 
-                            promise.fin(() => {
-                                event.target.disabled = false;
-                                this.Loading = false;
-                            });
-                        }
+                            this.loadingProduct(product, true);
+
+                            self.cartService.addLineItem(product, price, product.VariantId,  1, self.getListNameForAnalytics())
+                                .then(self.onAddLineItemSuccess, this.onAddToCartFailed)
+                                .fin(() => this.loadingProduct(product, false));
+                        },
+                        refreshData() {
+                            this.dataUpdatedTracker += 1;
+                        },
+                        loadingProduct(product, loading) {
+                            product.loading = loading;
+                            this.refreshData(); 
+                        },
                     }
                 });
             })
@@ -117,71 +183,17 @@ module Orckestra.Composer {
         }
 
         protected getPageSource(): string {
-            return 'Related Products';
+            return this.source;
         }
 
         protected getListNameForAnalytics(): string {
-            return 'Related Products';
+            return this.source;
         }
 
         protected onLoadingFailed(reason: any) {
             console.error('Failed loading the Related Product View');
 
             ErrorHandler.instance().outputErrorFromCode('RelatedProductLoadFailed');
-        }
-
-        /**
-         * Occurs when adding a product to the cart that happens to have variants.
-         */
-        protected addVariantProductToCart(productId: string, variantId: string, price: string): Q.Promise<any> {
-            var promise = this.productService.loadQuickBuyProduct(productId, variantId, this.concern, this.source);
-            promise.fail((reason: any) => this.onLoadingFailed(reason));
-
-            return promise;
-        }
-
-        /**
-         * Occurs when adding a product to the cart that has no variant.
-         */
-        protected addNonVariantProductToCart(productId: string, price: string, recurringProgramName: string): Q.Promise<any> {
-            var vm = this.getProductViewModel(productId);
-            if (vm) {
-                var quantity = this.getCurrentQuantity();
-                var data: any = this.getProductDataForAnalytics(vm);
-                data.Quantity = quantity.Value ? quantity.Value : 1;
-
-                this.eventHub.publish(ProductEvents.LineItemAdding,
-                {
-                    data: data
-                });
-            }
-
-            var promise = this.cartService.addLineItem(productId, price, null, 1, null, recurringProgramName)
-                .then((vm: any) => this.onAddLineItemSuccess(vm),
-                    (reason: any) => this.onAddLineItemFailed(reason));
-
-            return promise;
-        }
-
-        protected getProductViewModel(productId: string): any {
-            var productVM = _.find(this.products, p => {
-                return p.ProductId === productId;
-            });
-
-            if (!productVM) {
-                console.warn(`Could not find the product with ID of ${productId} within related products.
-                    This will cause the product to not be reported to Analytics.`);
-            }
-
-            return productVM;
-        }
-
-        protected getCurrentQuantity(): any {
-            return {
-                Min: 1,
-                Max: 1,
-                Value: 1
-            };
         }
     }
 }
