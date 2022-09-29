@@ -6,7 +6,6 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
@@ -17,13 +16,13 @@ namespace Orckestra.Composer.Search.Repositories
 {
     public class SearchRepository : ISearchRepository
     {
-        protected IOvertureClient OvertureClient { get; }
+        protected IComposerOvertureClient OvertureClient { get; }
         protected IProductRequestFactory ProductRequestFactory { get; }
         protected IFacetPredicateFactory FacetPredicateFactory { get; }
         protected IFacetConfigurationContext FacetConfigContext { get; }
 
         public SearchRepository(
-            IOvertureClient overtureClient,
+            IComposerOvertureClient overtureClient,
             IProductRequestFactory productRequestFactory,
             IFacetPredicateFactory facetPredicateFactory,
             IFacetConfigurationContext facetConfigContext)

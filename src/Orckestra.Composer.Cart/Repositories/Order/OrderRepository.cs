@@ -1,8 +1,6 @@
 ﻿using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
@@ -13,18 +11,19 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories.Order
 {
     public class OrderRepository : IOrderRepository
     {
-        protected virtual IOvertureClient OvertureClient { get; private set; }
+        protected virtual IComposerOvertureClient OvertureClient { get; private set; }
         protected virtual IFindOrdersRequestFactory FindOrdersRequestFactory { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
         public OrderRepository(
-            IOvertureClient overtureClient,
+            IComposerOvertureClient overtureClient,
             IFindOrdersRequestFactory findOrdersRequestFactory,
             ICacheProvider cacheProvider)
         {

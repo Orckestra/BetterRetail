@@ -183,9 +183,9 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             cart.ScopeId.Should().Be(p.Scope);
         }
 
-        private Mock<IOvertureClient> GetClientMock()
+        private Mock<IComposerOvertureClient> GetClientMock()
         {
-            var mock = Container.GetMock<IOvertureClient>();
+            var mock = Container.GetMock<IComposerOvertureClient>();
 
             mock.Setup(m => m.SendAsync(It.IsNotNull<AddCouponRequest>()))
                 .Returns((AddCouponRequest r) => Task.FromResult(CartRepositoryFactory.CreateCartBasedOnAddCouponRequest(r, CouponState.Ok)))

@@ -32,9 +32,10 @@ namespace Orckestra.Composer.Product.Services
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
             IFulfillmentContext fulfillmentContext,
-            IProductPromotionsFactory productInformationFactory)
+            IProductPromotionsFactory productInformationFactory,
+            IProductPricesViewModelFactory productPricesViewModelFactory)
 
-            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory) { }
+            : base(productRepository, damProvider, productUrlProvider, viewModelMapper, localizationProvider, relationshipRepository, inventoryLocationProvider, recurringOrdersSettings, fulfillmentContext, productInformationFactory, productPricesViewModelFactory) { }
 
         protected override async Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(GetProductIdentifiersParam param)
         {

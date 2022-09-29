@@ -11,7 +11,6 @@ using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Tests.Mock;
 using Orckestra.ForTests;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
 using static Orckestra.Composer.Utils.ExpressionUtility;
@@ -27,7 +26,7 @@ namespace Orckestra.Composer.Tests.Repositories
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
         }
 
         [Test]
@@ -38,7 +37,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedCustomer = MockCustomerFactory.CreateRandom();
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<CreateCustomerMembershipRequest>(
                     param => param.Email == expectedCustomer.Email &&
                     param.Username == expectedCustomer.Username &&
@@ -75,7 +74,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<CreateCustomerMembershipRequest>(
                     param => param.Email == expectedCustomer.Email &&
                     param.Username == expectedCustomer.Username &&
@@ -199,7 +198,7 @@ namespace Orckestra.Composer.Tests.Repositories
 
             var expectedEmail = GetRandom.Email();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<CreateCustomerMembershipRequest>(param => string.IsNullOrWhiteSpace(param.Username))))
                 .ReturnsAsync(new Customer
                 {
@@ -266,7 +265,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedCustomer = MockCustomerFactory.CreateRandom();
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(p => p.SendAsync(It.Is<CreateCustomerMembershipRequest>(param => string.IsNullOrWhiteSpace(param.PasswordQuestion))))
                       .ReturnsAsync(expectedCustomer);
 
@@ -298,7 +297,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedCustomer = MockCustomerFactory.CreateRandom();
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                       .Setup(p => p.SendAsync(It.Is<CreateCustomerMembershipRequest>(param => string.IsNullOrWhiteSpace(param.PasswordAnswer))))
                       .ReturnsAsync(expectedCustomer);
 

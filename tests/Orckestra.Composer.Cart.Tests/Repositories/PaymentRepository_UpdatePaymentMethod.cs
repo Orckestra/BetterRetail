@@ -8,7 +8,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
@@ -27,7 +26,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         {
             _container = new AutoMocker();
 
-            var overtureClientMock = _container.GetMock<IOvertureClient>();
+            var overtureClientMock = _container.GetMock<IComposerOvertureClient>();
             overtureClientMock.Setup(ov => ov.SendAsync(It.IsNotNull<UpdatePaymentMethodRequest>()))
                 .ReturnsAsync(new ProcessedCart())
                 .Verifiable();
@@ -57,7 +56,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
 
             //Assert
             cart.Should().NotBeNull();
-            _container.Verify<IOvertureClient>(ov => ov.SendAsync(It.IsNotNull<UpdatePaymentMethodRequest>()));
+            _container.Verify<IComposerOvertureClient>(ov => ov.SendAsync(It.IsNotNull<UpdatePaymentMethodRequest>()));
         }
 
         [Test]

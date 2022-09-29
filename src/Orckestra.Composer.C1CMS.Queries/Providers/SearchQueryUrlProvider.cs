@@ -5,10 +5,10 @@ using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.SearchQuery.Parameters;
 using Orckestra.Composer.SearchQuery.Providers;
 using Orckestra.Composer.Utils;
-using Orckestra.Overture.Caching;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 
 namespace Orckestra.Composer.C1CMS.Queries.Providers
 {

@@ -12,7 +12,7 @@ module Orckestra.Composer {
             return ComposerClient.get('/api/cart/getcart');
         }
 
-        public addLineItem(productId: string, variantId: string, quantity: number,
+        public addLineItem(productId: string, variantId?: string, quantity: number = 1,
             recurringOrderFrequencyName?: string,
             recurringOrderProgramName?: string): Q.Promise<any> {
 

@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Product.Tests.Mock;
 using Orckestra.Composer.Providers;
@@ -34,6 +35,11 @@ namespace Orckestra.Composer.Product.Tests.Services
             _container.Use(CreateDamProvider());
             _container.Use(FakeViewModelMapper.CreateFake(typeof(ProductPriceViewService).Assembly));
             _container.Use(CreateLocalizationProvider());
+            var currencyProvider = new Mock<ICurrencyProvider>();
+            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
+            _container.Use(currencyProvider);
+            var productPriceFactory = _container.CreateInstance<ProductPricesViewModelFactory>();
+            _container.Use<IProductPricesViewModelFactory>(productPriceFactory);
         }
 
         [Test]
@@ -43,9 +49,7 @@ namespace Orckestra.Composer.Product.Tests.Services
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
             _container.Use(contextStub);
-            var currencyProvider = new Mock<ICurrencyProvider>();
-            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
-            _container.Use(currencyProvider);
+           
             _container.Use(CreateProductRepositoryWithProductAndVariantPrices());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 
@@ -98,9 +102,6 @@ namespace Orckestra.Composer.Product.Tests.Services
             var contextStub = new Mock<IComposerContext>();
             contextStub.SetupGet(mock => mock.ScopeCurrencyIso).Returns("CAD");
             _container.Use(contextStub);
-            var currencyProvider = new Mock<ICurrencyProvider>();
-            currencyProvider.Setup(c => c.GetCurrency()).Returns("CAD").Verifiable();
-            _container.Use(currencyProvider);
             _container.Use(CreateProductRepositoryWithProductPriceNoVariant());
             var productService = _container.CreateInstance<ProductPriceViewService>();
 

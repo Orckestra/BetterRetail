@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Orckestra.Composer.Factory;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
@@ -16,26 +17,19 @@ namespace Orckestra.Composer.Services
     public class ProductPriceViewService : IProductPriceViewService
     {
         protected IProductRepository ProductRepository { get; }
-        protected ILocalizationProvider LocalizationProvider { get; }
-        protected IViewModelMapper ViewModelMapper { get; }
         protected IScopeViewService ScopeViewService { get; }
-
         protected IFulfillmentContext FulfillmentContext { get; }
-        protected ICurrencyProvider CurrencyProvider { get; private set; }
+        protected IProductPricesViewModelFactory ProductPricesViewModelFactory { get; set; }
 
         public ProductPriceViewService(IProductRepository productRepository, 
-            ILocalizationProvider localizationProvider,
-            IViewModelMapper viewModelMapper,
             IScopeViewService scopeViewService, 
             IFulfillmentContext fulfillmentContext,
-            ICurrencyProvider currencyProvider)
+            IProductPricesViewModelFactory productPricesViewModelFactory)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
-            LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
-            ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ScopeViewService = scopeViewService ?? throw new ArgumentNullException(nameof(scopeViewService));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
-            CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
+            ProductPricesViewModelFactory= productPricesViewModelFactory ?? throw new ArgumentNullException(nameof(productPricesViewModelFactory));
         }
 
         /// <summary>
@@ -89,68 +83,11 @@ namespace Orckestra.Composer.Services
 
             foreach (var productPrice in param.ProductPrices)
             {
-                var productPriceVm = CreateProductPriceVm(param.CultureInfo, productPrice);
+                var productPriceVm = ProductPricesViewModelFactory.CreateProductPriceViewModel(param.CultureInfo, productPrice);
                 viewModel.ProductPrices.Add(productPriceVm);
             }
 
             return viewModel;
-        }
-
-        protected virtual ProductPriceViewModel CreateProductPriceVm(CultureInfo cultureInfo, ProductPrice productPrice)
-        {
-            var productPriceVm = GenerateProductPriceVm(cultureInfo, productPrice);
-
-            foreach (var variantPriceEntry in productPrice.VariantPrices)
-            {
-                var variantPriceVm = GenerateVariantPriceVm(cultureInfo, variantPriceEntry);
-                productPriceVm.VariantPrices.Add(variantPriceVm);
-            }
-
-            return productPriceVm;
-        }
-
-        /// <summary>
-        /// Creates the model view product price.
-        /// </summary>
-        /// <param name="cultureInfo">The get product price parameter.</param>
-        /// <param name="productPrice">The product price.</param>
-        /// <returns></returns>
-        protected virtual ProductPriceViewModel GenerateProductPriceVm(CultureInfo cultureInfo, ProductPrice productPrice)
-        {
-            var vm = ViewModelMapper.MapTo<ProductPriceViewModel>(productPrice, cultureInfo);
-
-            vm.IsPriceDiscounted = IsPriceDiscounted(productPrice.Pricing.Price, productPrice.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(productPrice.Pricing.Price, CurrencyProvider.GetCurrency());
-            vm.VariantPrices = new List<VariantPriceViewModel>();
-
-            return vm;
-        }
-
-        /// <summary>
-        /// Generates the variant price model view item.
-        /// </summary>
-        /// <param name="cultureInfo"></param>
-        /// <param name="variantPriceEntry">The variant price entry.</param>
-        /// <returns></returns>
-        protected virtual VariantPriceViewModel GenerateVariantPriceVm(CultureInfo cultureInfo, VariantPrice variantPriceEntry)
-        {
-            var vm = ViewModelMapper.MapTo<VariantPriceViewModel>(variantPriceEntry, cultureInfo);
-
-            vm.IsPriceDiscounted = IsPriceDiscounted(variantPriceEntry.Pricing.Price, variantPriceEntry.DefaultPrice);
-            vm.ListPrice = LocalizationProvider.FormatPrice(variantPriceEntry.Pricing.Price, CurrencyProvider.GetCurrency());
-
-            return vm;
-        }
-
-        /// <summary>
-        /// Determines whether there is a discount on the product price (or its variants).
-        /// </summary>
-        /// <param name="price">The price.</param>
-        /// <param name="defaultPrice">The default price.</param>
-        /// <returns></returns>
-        protected bool IsPriceDiscounted(decimal price, decimal defaultPrice)
-        {
-            return price < defaultPrice;
         }
     }
 }

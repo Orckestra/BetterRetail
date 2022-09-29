@@ -26,6 +26,7 @@ using Orckestra.Composer.CompositeC1.Providers.Breadcrumb;
 using Orckestra.Composer.CompositeC1.Providers.LanguageSwitch;
 using Orckestra.Composer.Cart.Providers.Order;
 using Orckestra.Composer.CompositeC1.Factory;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Factory;
 
 namespace Orckestra.Composer.CompositeC1

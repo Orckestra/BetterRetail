@@ -1,0 +1,129 @@
+.banner {
+    overflow: hidden;
+    .imageWrapper {
+        height: 100%;
+        width: 100%;
+        padding-bottom: 100%;
+        picture {
+            position: absolute;
+        }
+        &.center {
+            &-left picture {
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+            }
+            &-center picture {
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+            }
+            &-right picture {
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%);
+            }
+        }
+        &.top {
+            &-left picture {
+                top: 0;
+                left: 0;
+            }
+            &-center picture {
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            &-right picture {
+                top: 0;
+                right: 0;
+            }
+        }
+        &.bottom {
+            &-left picture {
+                bottom: 0;
+                left: 0;
+            }
+            &-center picture {
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            &-right picture {
+                bottom: 0;
+                right: 0;
+            }
+        }
+        &.contain {
+            img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            picture {
+                width: 100%;
+            }
+        }
+        &.cover {
+            img {
+                height: 100%;
+            }
+            picture {
+                height: 100%;
+            }
+        }
+    }
+}
+
+.banner {
+    h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+        font-family: $font-caveat;
+    }
+
+    h1, .h1 {
+        font-size: 6vw;
+
+        @include media-breakpoint-up(md) {
+            font-size: 5vw;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 4rem;
+        }
+    }
+
+    h2, .h2 {
+        font-size: 5vw;
+        
+        @include media-breakpoint-up(md) {
+            font-size: 3.5vw;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 3rem;
+        }
+    }
+
+    h3, .h3 {
+        
+        font-size: 4.5vw;
+        
+        @include media-breakpoint-up(md) {
+            font-size: 3vw;
+        }
+
+        @include media-breakpoint-up(xl) {
+            font-size: 2.5rem;
+        }
+    }
+
+    h4, .h4 {
+        font-size: 1.5rem;
+    }
+    p {
+        font-size: 5vw;
+
+        @include media-breakpoint-up(xl) {
+            font-size: 70px;
+        }
+    }
+}

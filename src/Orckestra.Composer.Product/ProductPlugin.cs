@@ -1,4 +1,5 @@
-﻿using Orckestra.Composer.Product.Factory;
+﻿using Orckestra.Composer.Dependency;
+using Orckestra.Composer.Product.Factory;
 using Orckestra.Composer.Product.Providers;
 using Orckestra.Composer.Product.Repositories;
 using Orckestra.Composer.Product.Services;

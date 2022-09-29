@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.Providers;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -20,12 +19,13 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Repositories
 {
-	public class PaymentRepository : IPaymentRepository
+
+    public class PaymentRepository : IPaymentRepository
 	{
-		protected IOvertureClient OvertureClient { get; private set; }
+		protected IComposerOvertureClient OvertureClient { get; private set; }
 		protected ICacheProvider CacheProvider { get; private set; }
 
-		public PaymentRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+		public PaymentRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
 		{
 			OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
 			CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

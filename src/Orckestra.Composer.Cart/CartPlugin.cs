@@ -8,10 +8,8 @@ using Orckestra.Composer.Cart.Repositories;
 using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Providers;
-using Orckestra.Composer.Repositories;
-using Orckestra.Composer.Services;
-using Orckestra.Overture;
 
 namespace Orckestra.Composer.Cart
 {

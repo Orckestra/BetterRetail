@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Orckestra.Composer.Kernel;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -17,3 +18,5 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("91ebdfe4-73c2-4812-a4e9-9fed337d2223")]
+
+[assembly: ComposerAssemblyIgnore] // Do not try to load the assembly to allow uninstall Orckestra.Tools.ConditionalContent

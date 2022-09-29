@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Data>
+  <Add Id="236d40cd-d1c9-49d8-9039-91912443aaf7" LookupValue="medium_red" Color="red" Image="" />
+  <Add Id="2e390f8f-ea3a-4e52-8a65-2ed10cbdccc9" LookupValue="scarlet" Color="red" Image="" />
+  <Add Id="34f4a1cf-42c5-48a8-bbc2-25b5e9b4e07f" LookupValue="Bluewave" Color="blue" Image="" />
+  <Add Id="3e029e18-d6c0-449f-975b-d6f10e0a8567" LookupValue="pebble" Color="rgb(157,152,128)" Image="" />
+  <Add Id="43c6c943-986f-4373-825f-56727c671e9d" LookupValue="open_white" Color="#fff" Image="" />
+  <Add Id="4a198b96-d04c-4939-8adb-599e4b2f2ca9" LookupValue="espresso" Color="#3C2218" Image="" />
+  <Add Id="589199ae-3edd-4363-ae0f-05a65631fe61" LookupValue="dark_brown" Color="brown" Image="" />
+  <Add Id="73889a4a-e6f6-4deb-8818-f366b798e093" LookupValue="beigekhaki" Color="beige" Image="" />
+  <Add Id="98464ff5-c962-48e2-a628-1ab2c6a719f0" LookupValue="blackcolonial_cream" Color="black" Image="" />
+  <Add Id="b192edad-d4fe-49a5-bebb-d4f8b5d0ed1b" LookupValue="heather_grey" Color="grey" Image="" />
+  <Add Id="c663b944-d662-49bb-a28e-66c7d4c5bdf4" LookupValue="olive_sharkskin" Color="olive" Image="" />
+  <Add Id="ee8754bb-2812-4164-a729-2c0ab243d766" LookupValue="medium_beige" Color="beige" Image="" />
+  <Add Id="c56cf04c-e105-4443-acee-ce87da22cc85" LookupValue="multicoloured" Color="" Image="multicolor.JPG" />
+</Data>

@@ -76,7 +76,14 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = new Order
             {
                 OrderStatus = orderStatus,
-                CustomerId = _currentCustomerId.ToString()
+                CustomerId = _currentCustomerId.ToString(),
+                Cart = new Overture.ServiceModel.Orders.Cart()
+                {
+                    Shipments = new List<Shipment>()
+                    {
+                        new Shipment()
+                    }
+                }
             };
             var allowedStatusChanges = new List<string>()
             {
@@ -105,7 +112,14 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             var order = new Order
             {
                 OrderStatus = "InProgress",
-                CustomerId = _currentCustomerId.ToString()
+                CustomerId = _currentCustomerId.ToString(),
+                Cart = new Overture.ServiceModel.Orders.Cart()
+                {
+                    Shipments = new List<Shipment>()
+                    {
+                        new Shipment()
+                    }
+                }
             };
 
             var allowedStatusChanges = new List<string>()
@@ -272,7 +286,14 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             {
                 OrderStatus = orderStatus,
                 Id = orderId,
-                CustomerId = _currentCustomerId.ToString()
+                CustomerId = _currentCustomerId.ToString(),
+                Cart = new Overture.ServiceModel.Orders.Cart()
+                {
+                    Shipments = new List<Shipment>()
+                    {
+                        new Shipment()
+                    }
+                }
             };
 
             var orderFulfillmentState = CreateOrderFulfillmentState(false, true, orderId);
@@ -302,7 +323,14 @@ namespace Orckestra.Composer.Cart.Tests.Providers
             {
                 OrderStatus = "New",
                 Id = orderId,
-                CustomerId = _currentCustomerId.ToString()
+                CustomerId = _currentCustomerId.ToString(),
+                Cart = new Overture.ServiceModel.Orders.Cart()
+                {
+                    Shipments = new List<Shipment>()
+                    {
+                        new Shipment()
+                    }
+                }
             };
 
             var orderFulfillmentState = CreateOrderFulfillmentState(isCancelable, isProcessing, orderId);

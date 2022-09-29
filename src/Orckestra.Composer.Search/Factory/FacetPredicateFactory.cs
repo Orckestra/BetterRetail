@@ -1,4 +1,5 @@
 ﻿using System;
+using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Providers.FacetPredicate;

@@ -2,15 +2,13 @@
 using Composite.Core;
 using Composite.Core.PackageSystem;
 using Composite.Core.PackageSystem.PackageFragmentInstallers;
-using Orckestra.Caching;
 using Orckestra.Composer.CompositeC1.Builders;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Orckestra.Composer.Caching;
 
 namespace Orckestra.Composer.CompositeC1.Installers
 {
@@ -24,7 +22,7 @@ namespace Orckestra.Composer.CompositeC1.Installers
             {
                 // Default dependency is not registered in Console Mode
                 var builder = new ContainerBuilder();
-                builder.Register(c => ComposerOvertureClient.CreateFromConfig()).As<IOvertureClient>().SingleInstance();
+                builder.Register(c => ComposerOvertureClient.CreateFromConfig()).As<IComposerOvertureClient>().SingleInstance();
                 builder.RegisterType<NullCacheProvider>().As<ICacheProvider>();
                 builder.RegisterType<CategoryRepository>().As<ICategoryRepository>().SingleInstance();
                 builder.RegisterType<CategoryAndNavigationBuilder>().As<ICategoryAndNavigationBuilder>().SingleInstance();

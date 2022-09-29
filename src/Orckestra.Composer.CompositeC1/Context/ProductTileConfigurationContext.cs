@@ -3,6 +3,7 @@ using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.CompositeC1.Services.Cache;
 using Orckestra.Composer.CompositeC1.Services.DataQuery;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
 namespace Orckestra.Composer.CompositeC1.Context
@@ -11,6 +12,7 @@ namespace Orckestra.Composer.CompositeC1.Context
     {
         protected ICacheStore<string, List<IPromotionalRibbonConfiguration>> PromotionalRibbonCache { get; }
         protected ICacheStore<string, List<IPromotionalBannerConfiguration>> PromotionalBannerCache { get; }
+        protected ICacheStore<string, List<IVariantColorConfiguration>> VariantColorCache { get; }
         protected HttpContextBase HttpContext { get; }
         protected IDataQueryService DataQueryService { get; }
         public string PromotionalRibbonDefaultBackgroundColor => "bg-dark";
@@ -27,8 +29,11 @@ namespace Orckestra.Composer.CompositeC1.Context
 
             PromotionalBannerCache = cacheService.GetStoreWithDependencies<string, List<IPromotionalBannerConfiguration>>("Promotional Banners",
                 new CacheDependentEntry<IPromotionalBannerConfiguration>());
+
+            VariantColorCache = cacheService.GetStoreWithDependencies<string, List<IVariantColorConfiguration>>("Variant Colors",
+                new CacheDependentEntry<IVariantColorConfiguration>());
         }
-        public List<IPromotionalRibbonConfiguration> GetPromotionalRibbonConfigurations()
+        public virtual List<IPromotionalRibbonConfiguration> GetPromotionalRibbonConfigurations()
         {
             return PromotionalRibbonCache.GetOrAdd("PromotionalRibbonSettings", _ => LoadPromotionalRibbonSettings());
         }
@@ -49,6 +54,11 @@ namespace Orckestra.Composer.CompositeC1.Context
             return PromotionalBannerCache.GetOrAdd("PromotionalBannerSettings", _ => LoadPromotionalBannerSettings());
         }
 
+        public List<IVariantColorConfiguration> GetVariantColorConfigurations()
+        {
+            return VariantColorCache.GetOrAdd("VariantColorSettings", _ => LoadVariantColorsSettings());
+        }
+
         private List<IPromotionalBannerConfiguration> LoadPromotionalBannerSettings()
         {
             var promotionalBanners = new List<IPromotionalBannerConfiguration>();
@@ -58,6 +68,14 @@ namespace Orckestra.Composer.CompositeC1.Context
             }
 
             return promotionalBanners;
+        }
+
+        private List<IVariantColorConfiguration> LoadVariantColorsSettings()
+        {
+            using (var con = new DataConnection())
+            {
+                return con.Get<IVariantColorConfiguration>().ToList();
+            }
         }
 
     }

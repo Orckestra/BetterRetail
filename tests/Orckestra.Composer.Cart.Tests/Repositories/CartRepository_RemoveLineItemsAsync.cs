@@ -7,13 +7,11 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.LineItems;
-using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
@@ -285,7 +283,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var vm = await sut.RemoveLineItemsAsync(p).ConfigureAwait(false);
 
             //Assert
-            Container.Verify<IOvertureClient>(m => m.SendAsync(It.IsNotNull<RemoveLineItemsRequest>()));
+            Container.Verify<IComposerOvertureClient>(m => m.SendAsync(It.IsNotNull<RemoveLineItemsRequest>()));
         }
 
         [Test]
