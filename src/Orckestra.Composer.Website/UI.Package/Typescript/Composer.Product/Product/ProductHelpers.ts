@@ -15,7 +15,7 @@ module Orckestra.Composer {
             const kva = product.KeyVariantAttributeItems.find(i => i.PropertyName === keyName);
             const selectedVariant = product.SelectedVariant;
 
-            if (!kva || !selectedVariant) return [];
+            if (!kva) return [];
 
             const selectedKvas = selectedVariant.Kvas;
             const selectedPrValue = selectedKvas[keyName];
@@ -118,6 +118,11 @@ module Orckestra.Composer {
             }
 
             return nameParts.join(' ');
+        }
+
+        static isAddToCartDisabled(product, productsMap) {
+            return product.loading || !product.IsAvailableToSell
+                || (product.HasVariants && productsMap[product.ProductId] && !productsMap[product.ProductId].SizeSelected);
         }
     }
 }

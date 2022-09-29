@@ -53,8 +53,7 @@ module Orckestra.Composer {
                             this.Cart = cart.data;
                         },
                         isAddToCartDisabled(product) {
-                            return product.loading || !product.IsAvailableToSell 
-                            || (product.HasVariants && this.ProductsMap[product.ProductId] && !product.SizeSelected);
+                           return ProductsHelper.isAddToCartDisabled(product, this.ProductsMap);
                         },
                         productDetailsLoaded(relatedProduct) {
                             return this.ProductsMap[relatedProduct.ProductId] != undefined;
@@ -63,8 +62,8 @@ module Orckestra.Composer {
                             const product = this.ProductsMap[id];
                             return ProductsHelper.getKeyVariantDisplayName(product, kvaName);
                         },
-                        requireSelection(id, kvaName) {
-                            const product = this.ProductsMap[id];
+                        requireSelection(relatedProduct, kvaName) {
+                            const product = this.ProductsMap[relatedProduct.ProductId];
                             return ProductsHelper.isSize(kvaName) ? !product.SizeSelected : false;
                         },
                         getKeyVariantValues(id, kvaName) {
@@ -79,7 +78,7 @@ module Orckestra.Composer {
                             self.productService.loadProduct(ProductId, VariantId)
                                 .then(product => {
                                     product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
-                                    relatedProduct.SizeSelected = false;
+                                    product.SizeSelected = false;
                                     this.ProductsMap[ProductId] = product;
                                     })
                                 .fin(() => this.loadingProduct(relatedProduct, false));
@@ -90,7 +89,12 @@ module Orckestra.Composer {
                             const product = this.ProductsMap[productId];
                             
                             const variant = ProductsHelper.findVariant(product, kva);
-                            if(!variant) return;
+
+                            if(!variant) {
+                                product.SizeSelected = false;
+                                 this.loadingProduct(relatedProduct, false);
+                                 return;
+                             };
     
                             this.loadingProduct(relatedProduct, true);
     
@@ -98,7 +102,7 @@ module Orckestra.Composer {
                             relatedProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
                             
                             if(ProductsHelper.isSize(kvaName)) {
-                                relatedProduct.SizeSelected = true;
+                                product.SizeSelected = true;
                             }
     
                             const variantPrice = relatedProduct.ProductPrice.VariantPrices.find(p=> p.VariantId === variant.Id);
