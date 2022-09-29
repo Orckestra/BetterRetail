@@ -1,9 +1,9 @@
 ﻿using Orckestra.Composer.CompositeC1.Context;
 using Orckestra.Composer.Factory;
+using Orckestra.Composer.Product;
 using Orckestra.Composer.Providers;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Orckestra.Composer.CompositeC1.Factory
@@ -82,6 +82,26 @@ namespace Orckestra.Composer.CompositeC1.Factory
             }
 
             return (defaultBackgroundColor, defaultTextColor);
+        }
+
+        public virtual string BuildProductVariantColor(string variantValue)
+        {
+            var settings = ProductTileConfigurationContext.GetVariantColorConfigurations()
+                   .FirstOrDefault(item => item.LookupValue.Equals(variantValue, StringComparison.OrdinalIgnoreCase));
+            if(settings != null)
+            {
+                if(!string.IsNullOrEmpty(settings.Color))
+                {
+                    return settings.Color;
+                }
+
+                if (!string.IsNullOrEmpty(settings.Image))
+                {
+                    return $"url({ProductConfiguration.ColorVarinatImagesRootPath}{settings.Image}) center repeat";
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -25,6 +25,7 @@
         opacity: 0;
         transition: opacity 0.8;
     }
+
     &:hover {
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         .product-tile-button-container,
@@ -34,7 +35,7 @@
     }
 
     &.with-variants {
-    
+   
          .variants {
             margin-top: 10px;
             height: 0;
@@ -44,22 +45,18 @@
         }
     
         &:hover {
-            
-           .variants {
+            .variants {
                 height: 75px;
             }
-    
             .product-tile-text {
                 height: 0;
             }
         }
-        }
-
+    }
 
     .product-tile-text {
         text-align:  center;
         background: #fff;
-        // 3 lines of text + half a line of spacing
         height: 75px;
         padding: 0 5px;
         position: relative;
@@ -170,7 +167,6 @@
 
 
 .variant-kva {
-    
     margin-bottom: 8px;
 
     &-color {

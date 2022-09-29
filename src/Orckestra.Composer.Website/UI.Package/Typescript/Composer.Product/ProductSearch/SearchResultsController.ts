@@ -91,13 +91,12 @@ module Orckestra.Composer {
                         const kva = { [kvaName]: kvaValue };
                         const product = this.ProductsMap[productId];
                         
-                        const variant = ProductsHelper.findVariant(product, kva);
+                        let variant = ProductsHelper.findVariant(product, kva, product.SelectedVariant.Kvas);
       
                         if(!variant) {
-                            //resert size selection to select existent variant 
+                           variant = ProductsHelper.findVariant(product, kva, null);
+                           //reset size selection to select existent variant 
                            product.SizeSelected = false;
-                            this.loadingProduct(searchProduct, false);
-                            return;
                         };
 
                         this.loadingProduct(searchProduct, true);

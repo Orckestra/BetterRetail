@@ -55,13 +55,13 @@ module Orckestra.Composer {
             product.HasPriceRange = false;
         }
 
-        static findVariant(product, kva) {
-            var currentVariantKvas = product.SelectedVariant.Kvas;
-            const keys = Object.keys(currentVariantKvas);
-            const mergedKva = { ...currentVariantKvas, ...kva };
+        static findVariant(product, kva, selectedKvas) {
+            const keys = selectedKvas ? Object.keys(selectedKvas): Object.keys(kva);
+            const mergedKva = selectedKvas ? { ...selectedKvas, ...kva }: kva;
             const compareProperties = (pr) => {
                 return keys.reduce((result, current) => result && (pr[current] && pr[current] === mergedKva[current]), true);
             };
+
             return product.Variants.find(v => compareProperties(v.Kvas));
         }
 

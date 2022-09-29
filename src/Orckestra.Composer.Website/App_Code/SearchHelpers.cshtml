@@ -238,7 +238,7 @@
          v-on:click="selectKva(@(vueBinding), '@(kvaProperyName)', v.Value)"
          v-bind:title="v.Title"
          class="kva-color">
-        <div class="kva-color-value" v-bind:style="{background: v.Value}"></div>
+        <div class="kva-color-value" v-bind:style="{background: v.ConfiguredValue ?? v.Value}"></div>
     </div>
 </div>
 }

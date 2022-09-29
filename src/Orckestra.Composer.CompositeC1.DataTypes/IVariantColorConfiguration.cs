@@ -36,7 +36,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         string LookupValue { get; set; }
 
         [ImmutableFieldId("741ea996-eb77-48c3-a4c3-e47dec9903bd")]
-        [FormRenderingProfile(HelpText = "CSS valid color format, ex: white, #fff, rgba(0,0,0,255)")]
+        [FormRenderingProfile(HelpText = "CSS valid color format, ex: white, #fff, rgba(0,0,0,255). Color has bigger priority than Image.")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
         [FieldPosition(1)]
         [NullStringLengthValidator(0, 64)]
@@ -44,6 +44,7 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
 
         [ImmutableFieldId("3b308c07-a1ed-4197-a4a0-556f7c06211a")]
         [StoreFieldType(PhysicalStoreFieldType.String, 64, IsNullable = true)]
+        [FormRenderingProfile(HelpText = "Image file name located in folder ~/UI.Package/Images/VariantColors/")]
         [FieldPosition(2)]
         [NullStringLengthValidator(0, 64)]
         string Image { get; set; }

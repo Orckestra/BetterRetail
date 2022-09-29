@@ -53,7 +53,7 @@ module Orckestra.Composer {
                             this.Cart = cart.data;
                         },
                         isAddToCartDisabled(product) {
-                           return ProductsHelper.isAddToCartDisabled(product, this.ProductsMap);
+                            return ProductsHelper.isAddToCartDisabled(product, this.ProductsMap);
                         },
                         productDetailsLoaded(relatedProduct) {
                             return this.ProductsMap[relatedProduct.ProductId] != undefined;
@@ -72,45 +72,45 @@ module Orckestra.Composer {
                         },
                         onMouseover(relatedProduct) {
                             const { ProductId, VariantId, HasVariants } = relatedProduct;
-                            if(!HasVariants || this.ProductsMap[ProductId]) return;
-    
+                            if (!HasVariants || this.ProductsMap[ProductId]) return;
+
                             this.loadingProduct(relatedProduct, true);
                             self.productService.loadProduct(ProductId, VariantId)
                                 .then(product => {
                                     product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
                                     product.SizeSelected = false;
                                     this.ProductsMap[ProductId] = product;
-                                    })
+                                })
                                 .fin(() => this.loadingProduct(relatedProduct, false));
                         },
                         selectKva(relatedProduct, kvaName, kvaValue) {
                             const { ProductId: productId } = relatedProduct;
                             const kva = { [kvaName]: kvaValue };
                             const product = this.ProductsMap[productId];
-                            
-                            const variant = ProductsHelper.findVariant(product, kva);
 
-                            if(!variant) {
+                            let variant = ProductsHelper.findVariant(product, kva, product.SelectedVariant.Kvas);
+
+                            if (!variant) {
+                                variant = ProductsHelper.findVariant(product, kva, null);
+                                //reset size selection to select existent variant 
                                 product.SizeSelected = false;
-                                 this.loadingProduct(relatedProduct, false);
-                                 return;
-                             };
-    
+                            };
+
                             this.loadingProduct(relatedProduct, true);
-    
+
                             product.SelectedVariant = variant;
                             relatedProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
-                            
-                            if(ProductsHelper.isSize(kvaName)) {
+
+                            if (ProductsHelper.isSize(kvaName)) {
                                 product.SizeSelected = true;
                             }
-    
-                            const variantPrice = relatedProduct.ProductPrice.VariantPrices.find(p=> p.VariantId === variant.Id);
+
+                            const variantPrice = relatedProduct.ProductPrice.VariantPrices.find(p => p.VariantId === variant.Id);
                             ProductsHelper.mergeVariantPrice(relatedProduct, variantPrice);
-    
+
                             self.inventoryService.isAvailableToSell(variant.Sku)
-                            .then(result => relatedProduct.IsAvailableToSell = result)
-                            .fin(() => this.loadingProduct(relatedProduct, false));
+                                .then(result => relatedProduct.IsAvailableToSell = result)
+                                .fin(() => this.loadingProduct(relatedProduct, false));
                         },
                         searchProductClick(product, index) {
                             self.eventHub.publish(ProductEvents.ProductClick, {
@@ -183,11 +183,11 @@ module Orckestra.Composer {
         }
 
         protected getPageSource(): string {
-            return 'Related Products';
+            return this.source;
         }
 
         protected getListNameForAnalytics(): string {
-            return 'Related Products';
+            return this.source;
         }
 
         protected onLoadingFailed(reason: any) {
