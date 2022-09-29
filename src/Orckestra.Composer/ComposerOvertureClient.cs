@@ -75,6 +75,12 @@ namespace Orckestra.Composer
             }
             catch (Exception e)
             {
+                if (e is WebServiceException wsException)
+                {
+                    if (wsException.StatusCode == (int)HttpStatusCode.NotFound)
+                        return;
+                } 
+
                 HandleException(e, request);
                 throw;
             }
@@ -91,6 +97,12 @@ namespace Orckestra.Composer
             }
             catch (Exception e)
             {
+                if (e is WebServiceException wsException)
+                {
+                    if (wsException.StatusCode == (int)HttpStatusCode.NotFound)
+                        return default;
+                }
+
                 HandleException(e, request);
                 throw;
             }
@@ -108,6 +120,12 @@ namespace Orckestra.Composer
             }
             catch (Exception e)
             {
+                if (e is WebServiceException wsException)
+                {
+                    if (wsException.StatusCode == (int)HttpStatusCode.NotFound)
+                        return default;
+                }
+
                 HandleException(e, request);
                 throw;
             }
