@@ -3,9 +3,9 @@ $banner-heights: map-merge(
     (
         "xs": 60vw,
         "sm": 30vw,
-        "md": map-get($grid-breakpoints,md)/3.423,
-        "lg": map-get($grid-breakpoints,lg)/3.423,
-        "xl": map-get($grid-breakpoints,xl)/3.423,
+        "md": 25vw,
+        "lg": 25vw,
+        "xl": 25vw,
     )
     , 
     $banner-heights

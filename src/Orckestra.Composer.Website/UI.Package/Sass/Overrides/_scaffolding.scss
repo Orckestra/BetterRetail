@@ -124,3 +124,8 @@ html {
 .row {
     row-gap: $grid-gutter-width;
 }
+@include media-breakpoint-up(xl) {
+    .container-md, .container-lg, .container-xl {
+        max-width: 80vw;
+    }
+}
