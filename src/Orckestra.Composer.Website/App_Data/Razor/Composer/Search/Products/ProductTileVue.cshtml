@@ -114,6 +114,11 @@
                     <span v-if="@(EntityName).loading" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
                 </button>
             </div>
+            <div class="product-tile-select-btn-container">
+                <button v-if="@(EntityName).HasVariants" class="d-block d-sm-none btn btn-block  btn-outline-secondary btn-lg text-uppercase">
+                    Select Variant
+                </button>
+            </div>
         }
     </div>
 
