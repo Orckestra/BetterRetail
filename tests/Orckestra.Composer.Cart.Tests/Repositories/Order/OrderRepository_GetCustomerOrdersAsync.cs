@@ -10,7 +10,6 @@ using NUnit.Framework;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Repositories.Order;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders;
 
@@ -24,7 +23,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
             _container.Use(new Mock<IFindOrdersRequestFactory>(MockBehavior.Strict));
         }
 
@@ -47,7 +46,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
               .Setup(r => r.Create(It.IsAny<GetCustomerOrdersParam>()))
               .Returns(findOrderRequest);
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(findOrderRequest))
                 .ReturnsAsync(orderQueryResult);
 
@@ -71,7 +70,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
               .Setup(r => r.Create(It.IsAny<GetCustomerOrdersParam>()))
               .Returns(findOrderRequest);
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(findOrderRequest))
                 .ReturnsAsync(null);
 
@@ -98,7 +97,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories.Order
               .Setup(r => r.Create(It.IsAny<GetCustomerOrdersParam>()))
               .Returns(findOrderRequest);
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(findOrderRequest))
                 .ReturnsAsync(orderQueryResult);
 

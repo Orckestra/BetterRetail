@@ -8,7 +8,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
@@ -46,7 +45,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             await sut.RemovePaymentAsync(param);
 
             //Assert
-            _container.Verify<IOvertureClient>(oc => oc.SendAsync(It.IsNotNull<RemovePaymentRequest>()));
+            _container.Verify<IComposerOvertureClient>(oc => oc.SendAsync(It.IsNotNull<RemovePaymentRequest>()));
         }
 
 

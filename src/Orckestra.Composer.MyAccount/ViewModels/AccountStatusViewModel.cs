@@ -12,5 +12,9 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         ///   ['Active' or 'Inactive' or 'RequiresApproval']: The current status of the customer account.
         /// </summary>
         public AccountStatusEnum Status { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
     }
 }

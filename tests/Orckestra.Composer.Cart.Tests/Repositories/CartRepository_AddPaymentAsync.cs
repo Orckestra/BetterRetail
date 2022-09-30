@@ -11,7 +11,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Payments;
@@ -20,6 +19,7 @@ using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
+
     [TestFixture]
     public class CartRepositoryAddPaymentAsync
     {
@@ -34,9 +34,9 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             _container.Use(clientMock);
         }
 
-        private Mock<IOvertureClient> CreateOvertureClientMock()
+        private Mock<IComposerOvertureClient> CreateOvertureClientMock()
         {
-            var clientMock = _container.GetMock<IOvertureClient>();
+            var clientMock = _container.GetMock<IComposerOvertureClient>();
 
             clientMock.Setup(ov => ov.SendAsync(It.IsNotNull<AddPaymentRequest>()))
                 .Returns((AddPaymentRequest r) =>
@@ -217,7 +217,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             var payment = cart.Payments.First();
             payment.BillingAddress.Should().Be(billingAddress);
 
-            _container.Verify<IOvertureClient>(c => c.SendAsync(It.IsAny<AddPaymentRequest>()));
+            _container.Verify<IComposerOvertureClient>(c => c.SendAsync(It.IsAny<AddPaymentRequest>()));
         }
     }
 }

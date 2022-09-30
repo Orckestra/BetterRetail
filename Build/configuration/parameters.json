@@ -1,8 +1,6 @@
 {
   "ocs-cm-hostName": "",
   "ocsAuthToken": "",
-  
-  "em-branch": "4.9.6",
   "adminName": "",
   "adminPassword": "",
   "adminEmail": "build-bot@orckestra.com",
@@ -19,5 +17,6 @@
   "occ-hostName": "occ-dev-localdeployment",
   "serviceBus-keyName": "RootManageSharedAccessKey",
   "serviceBus-key": "",
-  "serviceBus-topicPrefix": ""
+  "serviceBus-topicPrefix": "",
+  "em-branch": "4.9.7"
 }

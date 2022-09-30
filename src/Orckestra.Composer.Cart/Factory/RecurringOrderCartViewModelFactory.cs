@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Composer.Cart.Helper;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.ViewModels;

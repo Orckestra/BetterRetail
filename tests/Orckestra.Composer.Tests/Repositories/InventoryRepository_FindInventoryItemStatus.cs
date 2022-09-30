@@ -7,7 +7,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Products.Inventory;
 using Orckestra.Overture.ServiceModel.Requests.Products.Inventory;
 
@@ -23,7 +22,7 @@ namespace Orckestra.Composer.Tests.Repositories
         {
             Container = new AutoMocker();
 
-            var ovMock = Container.GetMock<IOvertureClient>();
+            var ovMock = Container.GetMock<IComposerOvertureClient>();
             ovMock.Setup(o => o.SendAsync(It.IsAny<FindInventoryItemStatusByLocationAndSkusRequest>()))
                 .ReturnsAsync(new List<InventoryItemAvailability>());
         }

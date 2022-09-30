@@ -92,7 +92,14 @@ namespace Orckestra.Composer.Cart.Tests.Services.Order
                 .Setup(r => r.GetOrderAsync(It.IsAny<GetCustomerOrderParam>()))
                 .ReturnsAsync(new Overture.ServiceModel.Orders.Order
                 {
-                    CustomerId = customerId.ToString()
+                    CustomerId = customerId.ToString(),
+                    Cart = new Overture.ServiceModel.Orders.Cart()
+                    {
+                        Shipments = new List<Shipment>()
+                        {
+                            new Shipment()
+                        }
+                    }
                 });
 
             //Act

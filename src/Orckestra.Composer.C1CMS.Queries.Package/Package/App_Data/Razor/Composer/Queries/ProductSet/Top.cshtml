@@ -23,7 +23,7 @@
 }
 
 @{
-    var searchQueryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync(SearchQueryType.ProductSet, QueryName, Number).Result;
+    var searchQueryViewModel = SearchQueryContext.GetTopSearchQueryViewModelAsync("ProductSet", QueryName, Number).Result;
     if (searchQueryViewModel == null)
     {
         return;

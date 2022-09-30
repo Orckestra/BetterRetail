@@ -32,6 +32,7 @@ namespace Orckestra.Composer.Product.Services
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IFulfillmentContext FulfillmentContext { get; }
         protected IProductPromotionsFactory ProductPromotionsFactory { get; }
+        protected IProductPricesViewModelFactory ProductPricesViewModelFactory { get; set; }
 
         protected BaseProductViewService(
             IProductRepository productRepository,
@@ -43,7 +44,8 @@ namespace Orckestra.Composer.Product.Services
             IInventoryLocationProvider inventoryLocationProvider,
             IRecurringOrdersSettings recurringOrdersSettings,
             IFulfillmentContext fulfillmentContext,
-            IProductPromotionsFactory productPromotionsFactory)
+            IProductPromotionsFactory productPromotionsFactory,
+            IProductPricesViewModelFactory productPricesViewModelFactory)
         {
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
@@ -55,6 +57,7 @@ namespace Orckestra.Composer.Product.Services
             RecurringOrdersSettings = recurringOrdersSettings ?? throw new ArgumentNullException(nameof(recurringOrdersSettings));
             FulfillmentContext = fulfillmentContext ?? throw new ArgumentNullException(nameof(fulfillmentContext));
             ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
+            ProductPricesViewModelFactory = productPricesViewModelFactory ?? throw new ArgumentNullException(nameof(productPricesViewModelFactory));
         }
 
         protected abstract Task<IEnumerable<ProductIdentifier>> GetProductIdentifiersAsync(TParam param);
@@ -221,8 +224,10 @@ namespace Orckestra.Composer.Product.Services
                 productVariant.Product.DisplayName.GetLocalizedValue(cultureInfo.Name), productVariant.Product.Sku);
 
             vm.Quantity = GetQuantity();
-            vm.ListPrice = GetProductBasePrice(prices, productVariant.Product, productVariant.Variant);
-            vm.Price = GetCurrentPrice(prices, productVariant.Product, productVariant.Variant);
+            var price = prices.FirstOrDefault(p => p.ProductId == productId);
+            vm.ProductPrice = ProductPricesViewModelFactory.CreateProductPriceViewModel(cultureInfo, price);
+            vm.ListPrice = GetProductBasePrice(price, productVariant.Product, productVariant.Variant);
+            vm.Price = GetCurrentPrice(price, productVariant.Product, productVariant.Variant);
             vm.ProductId = productId;
             vm.VariantId = variantId;
             vm.IsOnSale = vm.Price < vm.ListPrice;
@@ -262,11 +267,8 @@ namespace Orckestra.Composer.Product.Services
             return QuantityConfiguration.GetProductQuantity();
         }
 
-        protected virtual decimal? GetCurrentPrice(IEnumerable<ProductPrice> prices, Overture.ServiceModel.Products.Product product, Variant variant)
+        protected virtual decimal? GetCurrentPrice(ProductPrice price, Overture.ServiceModel.Products.Product product, Variant variant)
         {
-            // there may be multiple copies of the product if this is a variant, just take the first
-            var price = prices.FirstOrDefault(p => p.ProductId == product.Id);
-
             if (price == null) { return null; }
 
             if (variant == null) { return price.Pricing.Price; }
@@ -276,11 +278,8 @@ namespace Orckestra.Composer.Product.Services
             return variantPrice == null ? null : (decimal?)variantPrice.Pricing.Price;
         }
 
-        protected virtual decimal? GetProductBasePrice(IEnumerable<ProductPrice> prices, Overture.ServiceModel.Products.Product product, Variant variant)
+        protected virtual decimal? GetProductBasePrice(ProductPrice price, Overture.ServiceModel.Products.Product product, Variant variant)
         {
-            // there may be multiple copies of the product if this is a variant, just take the first
-            var price = prices.FirstOrDefault(p => p.ProductId == product.Id);
-
             if (price == null) { return null; }
 
             if (variant == null) { return price.DefaultPrice; }

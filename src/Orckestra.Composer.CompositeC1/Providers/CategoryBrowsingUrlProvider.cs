@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Composite.Core.Threading;
 using Composite.Data;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
@@ -12,7 +13,6 @@ using Orckestra.Composer.Search.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.ExperienceManagement.Configuration.DataTypes;
-using Orckestra.Overture.Caching;
 
 namespace Orckestra.Composer.CompositeC1.Providers
 {

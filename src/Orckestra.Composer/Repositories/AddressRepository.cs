@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Addresses;
 
@@ -10,10 +9,10 @@ namespace Orckestra.Composer.Repositories
 {
     public class AddressRepository : IAddressRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public AddressRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public AddressRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

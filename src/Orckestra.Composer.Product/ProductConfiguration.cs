@@ -12,6 +12,8 @@ namespace Orckestra.Composer.Product
         public static string ProductSummaryImageSize = "L";
         public static string ProductZoomImageSize = "XL";
         public static string LookupCacheCategory = "Lookup";
+        public static string ColorVariantKvaName = "Colour";
+        public static string ColorVarinatImagesRootPath = "/UI.Package/Images/VariantColors/";
     }
 
     public static class SpecificationConfiguration

@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Orckestra.Composer.ViewModels;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Products;
@@ -25,7 +24,7 @@ namespace Orckestra.Composer.Utils
                 : prduct.DisplayName.GetLocalizedValue(culture.Name);
         }
 
-        public static async Task<List<KeyVariantAttributes>> GetKeyVariantAttributes(Product product, Variant variant, CultureInfo culture, IOvertureClient client)
+        public static async Task<List<KeyVariantAttributes>> GetKeyVariantAttributes(Product product, Variant variant, CultureInfo culture, IComposerOvertureClient client)
         {
             if (variant == null)
                 return null;
@@ -118,7 +117,7 @@ namespace Orckestra.Composer.Utils
             return !string.IsNullOrWhiteSpace(localizedValue) ? localizedValue : firstOrDefault.Value;
         }
 
-        private static async Task<List<Lookup>> GetLookups(ProductDefinition productDef, IOvertureClient client)
+        private static async Task<List<Lookup>> GetLookups(ProductDefinition productDef, IComposerOvertureClient client)
         {
             var kvaLookupAttributes = productDef.VariantProperties
                 .Where(vp => vp.IsKeyVariant && vp.DataType == PropertyDataType.Lookup)

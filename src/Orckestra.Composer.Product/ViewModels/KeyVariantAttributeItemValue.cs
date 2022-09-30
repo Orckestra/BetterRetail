@@ -19,6 +19,11 @@ namespace Orckestra.Composer.Product.ViewModels
         public object Value { get; set; }
 
         /// <summary>
+        /// Configured value for this Key variant attribute value, for example custom color value
+        /// </summary>
+        public object ConfiguredValue { get; set; }
+
+        /// <summary>
         /// Selected State of this Key variant attribute
         /// </summary>
         public bool Selected { get; set; }

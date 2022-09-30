@@ -1,5 +1,6 @@
 using Orckestra.Composer.Enums;
 using Orckestra.Composer.ViewModels;
+using Orckestra.Overture.ServiceModel.Products;
 using System.Collections.Generic;
 
 namespace Orckestra.Composer.Product.ViewModels
@@ -25,6 +26,8 @@ namespace Orckestra.Composer.Product.ViewModels
         /// but could be less if the product is discounted.
         /// </summary>
         public decimal? Price { get; set; }
+
+        public ProductPriceViewModel ProductPrice { get; set; }
 
         /// <summary>
         /// todo

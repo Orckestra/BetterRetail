@@ -7,7 +7,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping.Coupons;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using static Orckestra.Composer.Utils.ExpressionUtility;
@@ -149,12 +148,12 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
             Assert.DoesNotThrowAsync(() => sut.RemoveCouponsAsync(p));
 
             //Assert
-            Container.Verify<IOvertureClient>();
+            Container.Verify<IComposerOvertureClient>();
         }
 
-        private Mock<IOvertureClient> GetOvertureClientMock()
+        private Mock<IComposerOvertureClient> GetOvertureClientMock()
         {
-            var mock = Container.GetMock<IOvertureClient>();
+            var mock = Container.GetMock<IComposerOvertureClient>();
 
             mock.Setup(m => m.SendAsync(It.IsNotNull<RemoveCouponRequest>()))
                 .ReturnsAsync(null)

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Moq;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Requests;
 
@@ -8,11 +7,11 @@ namespace Orckestra.Composer.Tests.Mock
 {
     internal static class OvertureClientFactory
     {
-        internal static Mock<IOvertureClient> Create()
+        internal static Mock<IComposerOvertureClient> Create()
         {
             var dummyCountry = new Overture.ServiceModel.Country();
 
-            var overtureClient = new Mock<IOvertureClient>(MockBehavior.Strict);
+            var overtureClient = new Mock<IComposerOvertureClient>(MockBehavior.Strict);
 
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetCountryRequest>()))
                           .ReturnsAsync(dummyCountry)
@@ -27,7 +26,7 @@ namespace Orckestra.Composer.Tests.Mock
             return overtureClient;
         }
 
-        internal static Mock<IOvertureClient> CreateWithNullValues()
+        internal static Mock<IComposerOvertureClient> CreateWithNullValues()
         {
             var dummyCountry = new Overture.ServiceModel.Country
             {
@@ -42,7 +41,7 @@ namespace Orckestra.Composer.Tests.Mock
                 SortOrder = -1
             };
 
-            var overtureClient = new Mock<IOvertureClient>(MockBehavior.Strict);
+            var overtureClient = new Mock<IComposerOvertureClient>(MockBehavior.Strict);
 
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetCountryRequest>()))
                           .ReturnsAsync(dummyCountry)

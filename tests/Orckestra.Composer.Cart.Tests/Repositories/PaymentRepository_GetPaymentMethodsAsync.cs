@@ -6,16 +6,16 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Parameters;
 using Orckestra.Composer.Cart.Repositories;
 using Orckestra.ForTests;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
 
 namespace Orckestra.Composer.Cart.Tests.Repositories
 {
+
     [TestFixture]
     public class PaymentRepositoryGetPaymentMethodsAsync
     {
@@ -177,7 +177,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
         
         private void MockFindCartPaymentMethodsRequest(List<PaymentMethod> paymentMethods)
         {
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<FindCartPaymentMethodsRequest>()))
                 .ReturnsAsync(paymentMethods)
                 .Verifiable();

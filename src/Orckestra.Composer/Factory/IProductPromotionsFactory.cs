@@ -7,5 +7,6 @@ namespace Orckestra.Composer.Factory
         Dictionary<string, string> BuildProductBadgeValues(string keys, string lookupDisplayNames);
         (string BackgroundColor, string TextColor) BuildPromotionalRibbonStyles(string ribbobValue);
         (string BackgroundColor, string TextColor) BuildPromotionalBannerStyles(string bannerValue);
+        string BuildProductVariantColor(string variantValue);
     }
 }

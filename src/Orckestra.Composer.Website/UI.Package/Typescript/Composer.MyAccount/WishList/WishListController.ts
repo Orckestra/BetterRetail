@@ -5,6 +5,7 @@
 ///<reference path='../../Composer.Cart/WishList/Services/WishListService.ts' />
 ///<reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 ///<reference path='../../Repositories/CartRepository.ts' />
+///<reference path='../../Composer.Product/Product/ProductHelpers.ts' />
 
 module Orckestra.Composer {
 
@@ -12,54 +13,74 @@ module Orckestra.Composer {
 
         protected _wishListService: IWishListService = new WishListService(new WishListRepository(), this.eventHub);
         protected _cartService: ICartService =  CartService.getInstance();
+        protected VueWishList: Vue;
 
         public initialize() {
 
             super.initialize();
-        }
 
-        public addToCart(actionContext: IControllerActionContext) {
-            var context: JQuery = actionContext.elementContext;
-            var container = context.closest('.wishlist-tile');
-            var productId: string = <any>context.data('productid');
-            var price: string = <any>context.data('price');
-            var brand: string = <any>context.data('brand');
-            var variantId: string = <any>context.data('variantid');
-            var variant: string = <any>context.data('variant');
-            var name: string = <any>context.data('name');
-            var category: string = <any>context.data('category');
-            var recurringProgramName: string = <any>context.data('recurringorderprogramname');
+            const vueId = this.context.container.data("vueid");
+            const self = this;
 
-            this.eventHub.publish('wishListLineItemAddingToCart', {
-                data: this.getProductDataForAnalytics(productId, variant, name, price, brand, category)
+            this.VueWishList = new Vue({
+                el: '#' + vueId,
+
+                data: {
+                    Items: [],
+                    ...this.context.viewModel
+                },
+                computed: {
+                    Total() {
+                        return this.Items.length;
+                    }
+                },
+                methods: {
+                    addToCart(item) {
+                        const price = item.IsOnSale ? item.ListPrice : item.DefaultListPrice;
+
+                        item.Loading = true;
+                        this.Items = [...this.Items];
+
+                        self.eventHub.publish('wishListLineItemAddingToCart', {
+                            data: ProductsHelper.getProductDataForAnalytics(
+                                item,
+                                item.VariantId,
+                                price,
+                                self.getListNameForAnalytics(), 1
+                            )
+                        });
+
+                        self._cartService.addLineItem(item, price, item.VariantId, 1, self.getListNameForAnalytics())
+                            .then(() => {
+                                item.Loading = false;
+                                this.Items = [...this.Items];
+                            })
+                    },
+                    copyShareUrl(shareUrl) {
+                        (navigator as any).clipboard.writeText(shareUrl);
+
+                        self.eventHub.publish('wishListCopyingShareUrl', {
+                            data: {}
+                        });
+                    },
+                    deleteLineItem(lineItemId) {
+                        const item = this.Items.find(x => x.Id === lineItemId)
+                        if(item) {
+                            item.Removing = true;
+                            this.Items = [...this.Items];
+                        }
+
+                        self._wishListService.removeLineItem(lineItemId)
+                            .then(wishList => {
+                                this.Items = this.Items.filter(x => x.Id !== lineItemId)
+                            })
+                    }
+                }
             });
-
-            container.addClass('is-loading');
-
-            this._cartService.addLineItem(productId, price, variantId, 1, null, recurringProgramName)
-                .fin(() => container.removeClass('is-loading'));
-
         }
-
 
         protected getListNameForAnalytics(): string {
             throw new Error('ListName not defined for this controller');
-        }
-
-        protected getProductDataForAnalytics(productId, variant, displayName, price, brand, category): any {
-
-            var data = {
-                List: this.getListNameForAnalytics(),
-                ProductId: productId,
-                Variant: variant,
-                DisplayName: displayName,
-                ListPrice: price,
-                Brand: brand,
-                CategoryId: category,
-                Quantity: 1
-            };
-
-            return data;
         }
     }
 }

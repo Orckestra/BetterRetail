@@ -5,14 +5,13 @@ using NUnit.Framework;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
-using Orckestra.Overture;
 
 namespace Orckestra.Composer.Search.Tests.Repository
 {
     [TestFixture]
     public class SearchRepositoryCtor
     {
-        private IOvertureClient _overtureClient;
+        private IComposerOvertureClient _overtureClient;
         private IProductRequestFactory _productFactory;
         private IFacetPredicateFactory _facetPredicateFactory;
         private IFacetConfigurationContext _facetConfigurationContext;
@@ -20,7 +19,7 @@ namespace Orckestra.Composer.Search.Tests.Repository
         [SetUp]
         public void SetUp()
         {
-            _overtureClient = new Mock<IOvertureClient>().Object;
+            _overtureClient = new Mock<IComposerOvertureClient>().Object;
             _productFactory = new Mock<IProductRequestFactory>().Object;
             _facetPredicateFactory = new Mock<IFacetPredicateFactory>().Object;
             _facetConfigurationContext = new Mock<IFacetConfigurationContext>().Object;

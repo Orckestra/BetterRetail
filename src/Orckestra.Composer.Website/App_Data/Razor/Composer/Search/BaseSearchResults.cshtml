@@ -41,7 +41,7 @@
         }
         <template v-if="TotalCount > 0">
             <div class="row">
-                <div v-for="(Product, index) in SearchResults" class="col-6  col-md-4  col-xl-3 mb-5" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
+                <div v-for="(Product, index) in SearchResultsData" class="col-6  col-md-4  col-xl-4 mb-5" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
                     @Function("Composer.Search.Products.ProductTileVue")
                 </div>
             </div>
@@ -54,6 +54,5 @@
             </div>
         }
     </div>
-    @Partial("ProductQuickviewDataBlade", new { })
 </body>
 </html>

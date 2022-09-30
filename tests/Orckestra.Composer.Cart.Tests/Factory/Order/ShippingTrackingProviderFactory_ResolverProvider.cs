@@ -8,7 +8,7 @@ using NUnit.Framework;
 using Orckestra.Composer.Cart.Factory.Order;
 using Orckestra.Composer.Cart.Providers.ShippingTracking;
 using Orckestra.Composer.Cart.Tests.Mock;
-using Orckestra.Overture;
+using Orckestra.Composer.Dependency;
 using static Orckestra.Composer.Utils.ExpressionUtility;
 
 namespace Orckestra.Composer.Cart.Tests.Factory.Order
