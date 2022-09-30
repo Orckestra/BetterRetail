@@ -84,7 +84,7 @@ module Orckestra.Composer {
                 CategoryId, 
                 List: pageName };
 
-                if(variantId)
+                if(variantId && product.Variants)
                 {
                     const variant = product.Variants.find(v=> v.Id === variantId);
                     const variantData = this.getVariantDataForAnalytics(variant);

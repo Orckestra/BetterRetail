@@ -344,6 +344,8 @@
     <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
     <Content Include="App_Data\Razor\Composer\Membership\SignInHeader.cshtml" />
     <Content Include="App_Data\Razor\Composer\Membership\SignInSticky.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\WishListTile.cshtml" />
+    <Content Include="App_Data\Razor\Composer\WishList\Shared.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
