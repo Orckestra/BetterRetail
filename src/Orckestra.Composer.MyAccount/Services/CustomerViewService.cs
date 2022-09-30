@@ -93,7 +93,9 @@ namespace Orckestra.Composer.MyAccount.Services
 
             var vm = new AccountStatusViewModel
             {
-                Status = GetAccountStatus(customer.AccountStatus)
+                Status = GetAccountStatus(customer.AccountStatus),
+                FirstName = customer.FirstName,
+                LastName = customer.LastName
             };
 
             return vm;
