@@ -20,36 +20,57 @@
 .product-tile {
     position: relative;
     $lines-of-text: 3;
+
     .product-tile-button-container,
     .variants {
         opacity: 0;
         transition: opacity 0.8;
     }
 
-    &:hover {
+    @include media-breakpoint-down(sm) {
+        .product-tile-button-container {
+            opacity: 1;
+        }
+     }
+
+    &:hover, &:focus {
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         .product-tile-button-container,
         .variants {
             opacity: 1;
         }
+
     }
 
     &.with-variants {
-   
+        @include media-breakpoint-down(sm) {
+
+            .product-tile-button-container {
+                display: none;
+            }
+        }
          .variants {
-            margin-top: 10px;
             height: 0;
             overflow: hidden;
             text-align: center;
             position: relative;
         }
     
-        &:hover {
+        &:hover, &:focus {
             .variants {
-                height: 75px;
+                height: 85px;
+                padding-top: 10px;
             }
             .product-tile-text {
+                padding-top: 0;
                 height: 0;
+            }
+
+            .product-tile-button-container {
+                display: block;
+            }
+            .product-tile-select-btn-container {
+                display: none;
             }
         }
     }
@@ -57,11 +78,11 @@
     .product-tile-text {
         text-align:  center;
         background: #fff;
-        height: 75px;
+        height: 85px;
         padding: 0 5px;
         position: relative;
         overflow: hidden;
-        margin-top: 5px;
+        padding-top: 10px;
 
         // gradient on first line and last line
         &:before {

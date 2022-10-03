@@ -150,12 +150,7 @@ namespace Orckestra.Composer.Website
             functions.RegisterAction<MyAccountController>("RecurringScheduleDetails", "Composer.MyAccount.RecurringScheduleDetails");
             functions.RegisterAction<MyAccountController>("UpcomingOrders", "Composer.MyAccount.UpcomingOrders");
             functions.RegisterAction<MyAccountController>("RecurringCartDetails", "Composer.MyAccount.RecurringCartDetails");
-
             functions.RegisterAction<WishListController>("WishListInHeader", "Composer.WishList.WishListInHeader");
-            functions.RegisterAction<WishListController>("SharedWishList", "Composer.WishList.Shared")
-                .AddParameter("emptyWishListContent", typeof(XhtmlDocument), true, label: "Empty Wish List Content", helpText: "That content will be shown when Wish List is Empty"); ;
-            functions.RegisterAction<WishListController>("SharedWishListTitle", "Composer.WishList.SharedTitle");
-
             functions.RegisterAction<OrderController>("FindMyOrder", "Composer.Order.FindMyOrder");
 
             functions.RegisterAction<StoreLocatorController>("StoreDetails", "Composer.Store.Details", "Store Details")
