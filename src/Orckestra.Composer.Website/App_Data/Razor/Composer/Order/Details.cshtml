@@ -191,7 +191,10 @@
                     @foreach (var payment in order.Payments)
                     {
                         var billingAddress = payment.BillingAddress;
-                        @AddressPreview(billingAddress)
+                        if(billingAddress != null)
+                        {
+                            @AddressPreview(billingAddress)
+                        }
                     }
                 </div>
             </div>
