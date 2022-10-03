@@ -92,6 +92,8 @@ module Orckestra.Composer {
                     this.setCartToCache(cart);
                     this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
                     this.eventHub.publish(ProductEvents.LineItemAdded, { data: { Cart: cart, ProductId, VariantId: variantId }});
+                    ErrorHandler.instance().removeErrors();
+                    return cart;
                 });
           
         }

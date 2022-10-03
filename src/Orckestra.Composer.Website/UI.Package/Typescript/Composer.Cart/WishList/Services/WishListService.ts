@@ -61,6 +61,13 @@ module Orckestra.Composer {
                 });
         }
 
+        public redirectToSignIn(): Q.Promise<any>  {
+            return this.getSignInUrl().then(signInUrl => {
+                this.clearCache();
+                window.location.href = signInUrl + '?ReturnUrl=' + window.location.href;
+            });
+        }
+
         public getSignInUrl(): Q.Promise<any> {
             return this.getWishListSummary()
                 .then(wishList => {
