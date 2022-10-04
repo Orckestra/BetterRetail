@@ -7,6 +7,8 @@ module Orckestra.Composer {
         protected concern: string = 'relatedProduct';
         private source: string = 'Related Products';
         protected VueRelatedProducts: Vue;
+        protected wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
+        protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
 
         private products: any[];
 
@@ -16,18 +18,21 @@ module Orckestra.Composer {
             let self: RelatedProductController = this;
             let vm = self.context.viewModel;
             let relatedProductsPromise = self.getRelatedProducts();
-            let getCartPromise = self.cartService.getCart();
-            Q.all([relatedProductsPromise, getCartPromise])
-            .spread((relatedproducts, cart) => {
+            let getWithListTask = this.wishListService.getWishListSummary();
+            let authenticatedPromise = this.membershipService.isAuthenticated();
+            Q.all([relatedProductsPromise, getWithListTask, authenticatedPromise])
+            .spread((relatedproducts, wishlist, authVm) => {
                 self.VueRelatedProducts = new Vue({
                     el: '#vueRelatedProducts',
                     data: {
                         RelatedProducts: self.products,
                         ProductIdentifiers: vm.ProductIdentifiers,
                         Loading: false,
-                        Cart: cart,
                         ProductsMap: {},
                         dataUpdatedTracker: 1,
+                        WishList: wishlist,
+                        IsAuthenticated: authVm.IsAuthenticated,
+
                     },
                     mounted() {
                         self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
@@ -36,13 +41,7 @@ module Orckestra.Composer {
                     computed: {
                         ExtendedRelatedProducts() {
                             const results = _.map(this.RelatedProducts, (product: any) => {
-                                const isSameProduct = (i: any) => i.ProductId === product.ProductId && i.VariantId == product.VariantId;
-                                let cartItem = this.Cart && this.Cart.LineItemDetailViewModels.find(isSameProduct);
-
-                                product.InCart = !!cartItem;
-                                product.Quantity = cartItem ? cartItem.Quantity : 0;
-                                product.LineItemId = cartItem ? cartItem.Id : undefined;
-
+                                product.WishListItem = this.WishList && this.WishList.Items.find(i => i.ProductId === product.ProductId && i.VariantId == product.VariantId);
                                 return product;
                             });
                             return this.dataUpdatedTracker && results;
@@ -100,7 +99,7 @@ module Orckestra.Composer {
 
                             product.SelectedVariant = variant;
                             relatedProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
-
+                            relatedProduct.VariantId = variant.Id;
                             if (ProductsHelper.isSize(kvaName)) {
                                 product.SizeSelected = true;
                             }
@@ -134,8 +133,30 @@ module Orckestra.Composer {
                             this.loadingProduct(product, true);
 
                             self.cartService.addLineItem(product, price, product.VariantId,  1, self.getListNameForAnalytics())
-                                .then(self.onAddLineItemSuccess, this.onAddToCartFailed)
+                                .fail(reason => this.onAddToCartFailed(reason, 'AddToCartFailed'))
                                 .fin(() => this.loadingProduct(product, false));
+                        },
+                        addLineItemToWishList(relatedProduct) {
+                            if (!this.IsAuthenticated) {
+                                return self.wishListService.redirectToSignIn();
+                            }
+    
+                            let { ProductId, VariantId, RecurringOrderProgramName } = relatedProduct;
+    
+                            self.wishListService.addLineItem(ProductId, VariantId, 1, undefined, RecurringOrderProgramName)
+                                .then(wishList => this.WishList = wishList)
+                                .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                        },
+    
+                        removeLineItemFromWishList(relatedProduct) {
+                            self.wishListService.removeLineItem(relatedProduct.WishListItem.Id)
+                                .then(wishList => this.WishList = wishList)
+                                .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                        },
+                        onAddToCartFailed(reason: any, errorCode): void {
+                            console.error('Error on adding item to cart', reason);
+    
+                            ErrorHandler.instance().outputErrorFromCode(errorCode);
                         },
                         refreshData() {
                             this.dataUpdatedTracker += 1;

@@ -35,7 +35,9 @@
         }
 
         <div class="product-tile-text">
-            <p v-if="@(EntityName).ProductSummary.Brand" class="product-tile-brand m-0" data-qa="wishlist-product-brand">{{@(EntityName).ProductSummary.Brand}}</p>
+            <p v-if="@(EntityName).ProductSummary.Brand" class="product-tile-brand m-0" 
+               v-html="@(EntityName).ProductSummary.Brand"
+               data-qa="wishlist-product-brand"></p>
 
             <div v-if="@(EntityName).RecurringOrderProgramName" class="product-tile-recurring">
                 <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="@Html.Localize("General", "L_RecurringProduct")" title="@Html.Localize("General", "L_RecurringProduct")" />
