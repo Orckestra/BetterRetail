@@ -9,8 +9,8 @@
     [FunctionParameter(Label = "Show Add To Cart Button", DefaultValue = true)]
     public bool ShowAddToCartButton { get; set; }
 
-     [FunctionParameter(Label = "Veu Entity Name", DefaultValue = "Product")]
-     public string EntityName { get; set; }
+    [FunctionParameter(Label = "Veu Entity Name", DefaultValue = "Product")]
+    public string EntityName { get; set; }
 
 }
 <div class="product-container">
@@ -32,8 +32,13 @@
             @ProductHelpers.PromotionalBanner(EntityName)
         </a>
 
+        <div class="product-tile-wishlist">
+            @AddToWishList(EntityName)
+        </div>
+
         @ProductHelpers.PromotionalRibbon(EntityName)
         <div class="product-tile-content">
+
         <template v-if="@(EntityName).HasVariants">
             <div class="variants">
                 <template v-if="@(EntityName).variantsLoading">
@@ -126,3 +131,22 @@
         </div>
     </div>
 </div>
+
+@helper AddToWishList(string EntityName)
+{
+    <span class="add-to-wishlist">
+        <a href="#" v-if="@(EntityName).WishListItem" data-qa="product-remove-from-wishlist"
+           v-on:click.prevent="removeLineItemFromWishList(@(EntityName))"
+           class="add-to-wishlist p-0 text-danger" role="button">
+            <i class="fa fa-heart" aria-hidden="true"></i>
+            <span class="sr-only">@Html.Localize("MyAccount", "H_RemoveFromTheWishList")</span>
+        </a>
+        <a href="#" v-else="else" data-qa="product-add-to-wishlist"
+           v-on:click.prevent="addLineItemToWishList(@(EntityName))"
+           class="add-to-wishlist p-0" role="button">
+            <i class="fa fa-heart-o" aria-hidden="true"></i>
+            <span class="sr-only">@Html.Localize("MyAccount", "H_AddToWishList")</span>
+        </a>
+    </span>
+}
+
