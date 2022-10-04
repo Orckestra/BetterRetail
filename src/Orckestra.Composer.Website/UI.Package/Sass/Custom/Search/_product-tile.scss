@@ -16,28 +16,64 @@
     }
 }
 
+.product-container {
+    height: auto;
+    position: relative;
+    margin-bottom: $grid-gutter-width;
+    z-index: 4;
+    &:hover {
+      z-index: 5;
+    }
+    @include media-breakpoint-up(sm) {
+      height: 406px;
+    }
+    @include media-breakpoint-up(lg) {
+      height: 21vw;
+    }
+  }
 
 .product-tile {
-    position: relative;
+    position: static;
     $lines-of-text: 3;
+    transition: all 0.3s ease-in-out;
+    max-height: 700px;
+
+    &-content {
+        padding: $spacer;
+        background: transparentize($color: $gray-200, $amount: 0.1);
+    }
+
 
     .product-tile-button-container,
     .variants {
         opacity: 0;
-        transition: opacity 0.8;
+        max-height: 0;
+        overflow: hidden;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease-in-out;
     }
 
     @include media-breakpoint-down(sm) {
         .product-tile-button-container {
             opacity: 1;
+            max-height: 200px;
         }
      }
 
     &:hover, &:focus {
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 15px 20px 0px;
+        
+        transform: translate(0, -4px);
+        z-index: 5;
+        margin-left: -$spacer;
+        margin-right: -$spacer;
+
         .product-tile-button-container,
         .variants {
             opacity: 1;
+            max-height: 200px;
+            padding-top: $spacer;
         }
 
     }
@@ -50,20 +86,12 @@
             }
         }
          .variants {
-            height: 0;
-            overflow: hidden;
-            text-align: center;
-            position: relative;
+
         }
     
         &:hover, &:focus {
             .variants {
-                height: 85px;
                 padding-top: 10px;
-            }
-            .product-tile-text {
-                padding-top: 0;
-                height: 0;
             }
 
             .product-tile-button-container {
@@ -76,23 +104,24 @@
     }
 
     .product-tile-text {
-        text-align:  center;
-        background: #fff;
-        height: 85px;
-        padding: 0 5px;
+        min-height: 60px;
         position: relative;
         overflow: hidden;
-        padding-top: 10px;
-
-        // gradient on first line and last line
-        &:before {
-            @include tile-gradient-right(0);
-        }
-
-        &:after {
-            @include tile-gradient-right(($line-height-base * $font-size-base) * ($lines-of-text - 1));
-        }
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
+
+    .product-tile-title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+        min-height: 40px;
+    }
+
 
     .product-tile-brand {
         white-space: nowrap;
@@ -102,19 +131,20 @@
 
     .product-tile-prices {
         display: flex;
-        flex-direction: row;
-        gap: 10px;
-        align-items: center;
-        justify-content: center;
-        margin: 1rem 0;
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-end;
+        justify-content: flex-end;
     }
 
     .product-tile-media {
         // http://alistapart.com/article/creating-intrinsic-ratios-for-video
         display: block;
         height: 0;
-        padding-bottom: $product-image-ratio * 100%;
+        //padding-bottom: $product-image-ratio * 100%;
+        padding-bottom: 100%;
         position: relative;
+        z-index: -1;
    }
 
     .product-tile-recurring {

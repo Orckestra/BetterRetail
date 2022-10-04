@@ -13,6 +13,7 @@
      public string EntityName { get; set; }
 
 }
+<div class="product-container">
     <div class="product-tile"
          v-bind:class="{'with-variants': @(EntityName).HasVariants}"
          data-qa="search-result"
@@ -32,7 +33,7 @@
         </a>
 
         @ProductHelpers.PromotionalRibbon(EntityName)
-
+        <div class="product-tile-content">
         <template v-if="@(EntityName).HasVariants">
             <div class="variants">
                 <template v-if="@(EntityName).variantsLoading">
@@ -44,63 +45,65 @@
                 </template>
             </div>
         </template>
-
-        <div class="product-tile-text">
-            <div v-if="@(EntityName).Brand"
-                 class="product-tile-brand"
-                 data-qa="search-product-brand"
-                 v-bind:title="@(EntityName).Brand" v-html="@(EntityName).Brand">
+        
+        <div class="row">
+            <div class="product-tile-text col-8">
+                <div v-if="@(EntityName).Brand"
+                    class="product-tile-brand"
+                    data-qa="search-product-brand"
+                    v-bind:title="@(EntityName).Brand" v-html="@(EntityName).Brand">
+                </div>
+                <a data-qa="search-product-title"
+                class="product-tile-title"
+                v-bind:href="@(EntityName).Url"
+                v-bind:title="@(EntityName).FullDisplayName"
+                v-on:click="searchProductClick(@EntityName, index)">
+                    {{@(EntityName).DisplayName}}
+                </a>
+                <div v-if="@(EntityName).IsRecurringOrderEligible" class="col-3 col-md-2 product-tile-recurring">
+                    <img src="/UI.Package/Images/recurring.svg" class="recurring-icon"
+                        alt="@Html.Localize("General", "L_RecurringProduct")"
+                        title="@Html.Localize("General", "L_RecurringProduct")" />
+                </div>
             </div>
-            <a data-qa="search-product-title"
-               class="product-tile-title"
-               v-bind:href="@(EntityName).Url"
-               v-bind:title="@(EntityName).FullDisplayName"
-               v-on:click="searchProductClick(@EntityName, index)">
-                {{@(EntityName).DisplayName}}
-            </a>
-            <div v-if="@(EntityName).IsRecurringOrderEligible" class="col-3 col-md-2 product-tile-recurring">
-                <img src="/UI.Package/Images/recurring.svg" class="recurring-icon"
-                     alt="@Html.Localize("General", "L_RecurringProduct")"
-                     title="@Html.Localize("General", "L_RecurringProduct")" />
-            </div>
-        </div>
-        <div class="product-tile-prices">
-            <template v-if="@(EntityName).HasPriceRange">
-                <template v-if="@(EntityName).IsOnSale">
-                    <div class="product-tile-special-price">
-                        <small class="text-danger">@Html.Localize("List-Search", "L_PriceFrom")</small>
-                    </div>
-                    <div class="product-tile-price">
-                        <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
-                    </div>
+            <div class="product-tile-prices col-4">
+                <template v-if="@(EntityName).HasPriceRange">
+                    <template v-if="@(EntityName).IsOnSale">
+                        <div class="product-tile-special-price">
+                            <small class="text-danger">@Html.Localize("List-Search", "L_PriceFrom")</small>
+                        </div>
+                        <div class="product-tile-price">
+                            <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
+                        </div>
+                    </template>
+                    <template v-else="v-else">
+                        <div class="product-tile-special-price">
+                            <small>@Html.Localize("List-Search", "L_PriceFrom")</small>
+                        </div>
+                        <div class="product-tile-price">
+                            <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
+                        </div>
+                    </template>
                 </template>
                 <template v-else="v-else">
-                    <div class="product-tile-special-price">
-                        <small>@Html.Localize("List-Search", "L_PriceFrom")</small>
-                    </div>
-                    <div class="product-tile-price">
-                        <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
-                    </div>
+                    <template v-if="@(EntityName).IsOnSale">
+                        <div class="product-tile-special-price">
+                            <del>{{@(EntityName).DisplayListPrice}}</del>
+                        </div>
+                        <div class="product-tile-price">
+                            <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
+                        </div>
+                    </template>
+                    <template v-else="v-else">
+                        <div class="product-tile-special-price">
+                            <!--only used for proper spacing-->
+                        </div>
+                        <div class="product-tile-price">
+                            <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
+                        </div>
+                    </template>
                 </template>
-            </template>
-            <template v-else="v-else">
-                <template v-if="@(EntityName).IsOnSale">
-                    <div class="product-tile-special-price">
-                        <del>{{@(EntityName).DisplayListPrice}}</del>
-                    </div>
-                    <div class="product-tile-price">
-                        <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
-                    </div>
-                </template>
-                <template v-else="v-else">
-                    <div class="product-tile-special-price">
-                        <!--only used for proper spacing-->
-                    </div>
-                    <div class="product-tile-price">
-                        <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
-                    </div>
-                </template>
-            </template>
+            </div>
         </div>
 
         @if (ShowAddToCartButton)
@@ -120,5 +123,6 @@
                 </button>
             </div>
         }
+        </div>
     </div>
-
+</div>

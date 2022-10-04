@@ -9,9 +9,42 @@
 
     [FunctionParameter(Label = "", Help = "", DefaultValue = true)]
     public bool ShowPagination { get; set; }
+
+    private const string rowNumSelectWidget = @" <f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+       <f:function name='Composite.Utils.String.Split'>
+            <f:param name='int' value='1,2,3,4,6,12' />
+       </f:function>
+      </f:param>
+     </f:widgetfunction>";
+
+    [FunctionParameter(Label = "", Help = "", WidgetMarkup = rowNumSelectWidget, DefaultValue = 3)]
+    public int ProductRowNum { get; set; }
 }
 @{
     string vueId = "vueSearchResults" + Guid.NewGuid().ToString("N");
+    string colNum = "";
+    switch(ProductRowNum)
+    {
+        case 1:
+            colNum = "12";
+            break;
+        case 2:
+            colNum = "6";
+            break;
+        case 3:
+            colNum = "4";
+            break;
+        case 4:
+            colNum = "3";
+            break;
+        case 6:
+            colNum = "2";
+            break;
+        case 12:
+            colNum = "1";
+            break;
+    }
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
@@ -41,7 +74,7 @@
         }
         <template v-if="TotalCount > 0">
             <div class="row">
-                <div v-for="(Product, index) in SearchResultsData" class="col-6  col-md-4  col-xl-4 mb-5" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
+                <div v-for="(Product, index) in SearchResultsData" class="col-12  col-md-@colNum  col-xl-@colNum mb-5" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
                     @Function("Composer.Search.Products.ProductTileVue")
                 </div>
             </div>
