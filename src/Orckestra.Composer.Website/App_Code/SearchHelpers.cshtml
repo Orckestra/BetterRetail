@@ -206,14 +206,14 @@
     </button>
 }
 
-@helper VariantKvaSelector(string vueBinding, string kvaProperyName, Guid productID)
+@helper VariantKvaSelector(string vueBinding, string kvaProperyName)
 {
     <div class="variant-kva variant-kva-@(kvaProperyName)">
         <div class="form-group row">
-            <label for="@vueBinding-@kvaProperyName-@productID" class="col-4 col-form-label">@kvaProperyName:</label>
+            <label v-bind:for="'@(kvaProperyName)' + @(vueBinding).ProductId" class="col-4 col-form-label">@kvaProperyName:</label>
             <div class="col-8">
                 <select name="@kvaProperyName"
-                        id="@vueBinding-@kvaProperyName-@productID"
+                        v-bind:id="'@(kvaProperyName)' + @(vueBinding).ProductId"
                         class="form-control"
                         required="required"
                         placeholder="select price"

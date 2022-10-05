@@ -77,7 +77,7 @@ module Orckestra.Composer {
                             self.productService.loadProduct(ProductId, VariantId)
                                 .then(product => {
                                     product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
-                                    product.SizeSelected = false;
+                                    product.SizeSelected = true;
                                     this.ProductsMap[ProductId] = product;
                                 })
                                 .fin(() => this.loadingProduct(relatedProduct, false));

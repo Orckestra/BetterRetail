@@ -99,7 +99,7 @@ module Orckestra.Composer {
                             .spread((prices, product) => {
                                 product.ProductPrice = <any>_.find(prices.ProductPrices, { ProductId });
                                 product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
-                                product.SizeSelected = false;
+                                product.SizeSelected = true;
                                 this.ProductsMap[ProductId] = product;
                                })
                             .fin(() => this.loadingProduct(searchProduct, false, false));

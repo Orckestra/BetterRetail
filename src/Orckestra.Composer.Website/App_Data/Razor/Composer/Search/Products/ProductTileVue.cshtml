@@ -46,7 +46,7 @@
                     </template>
                     <template v-if="productDetailsLoaded(@(EntityName))">
                         @SearchHelpers.VariantColorKvaSelector(EntityName, "Colour")
-                        @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize", Guid.NewGuid())
+                        @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize")
                     </template>
                 </div>
             </template>
