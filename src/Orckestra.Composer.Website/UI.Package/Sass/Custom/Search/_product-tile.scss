@@ -19,16 +19,18 @@
 .product-container {
     height: auto;
     position: relative;
-    margin-bottom: $grid-gutter-width;
     z-index: 4;
     &:hover {
       z-index: 5;
     }
-    @include media-breakpoint-up(sm) {
-      height: 406px;
+    @include media-breakpoint-up(md) {
+      height: 313px;
     }
     @include media-breakpoint-up(lg) {
-      height: 21vw;
+      height: 313px;
+    }
+    @include media-breakpoint-up(xl) {
+      height: 358px;
     }
   }
 
@@ -36,7 +38,10 @@
     position: static;
     $lines-of-text: 3;
     transition: all 0.3s ease-in-out;
-    max-height: 700px;
+    @include media-breakpoint-up(sm) {
+        max-height: 700px;
+    }
+    
 
     &-content {
         padding: $spacer;
@@ -44,30 +49,35 @@
     }
 
 
-    .product-tile-button-container,
+    .product-tile-button-container, .product-tile-select-btn-container,
     .variants {
-        opacity: 0;
-        max-height: 0;
+        opacity: 1;
+        max-height: 200px;
+        padding-top: $spacer;
         overflow: hidden;
         text-align: center;
         position: relative;
         transition: all 0.3s ease-in-out;
     }
 
-    @include media-breakpoint-down(sm) {
-        .product-tile-button-container {
-            opacity: 1;
-            max-height: 200px;
+    @include media-breakpoint-up(sm) {
+        .product-tile-button-container, .product-tile-select-btn-container, .variants {
+            opacity: 0;
+            max-height: 0;
+            padding-top: 0;
         }
      }
 
-    &:hover, &:focus {
+    &:hover, &:focus, &:focus-within {
         box-shadow: rgba(0, 0, 0, 0.2) 0px 15px 20px 0px;
         
         transform: translate(0, -4px);
         z-index: 5;
-        margin-left: -$spacer;
-        margin-right: -$spacer;
+
+        @include media-breakpoint-up(md) { 
+            margin-left: -$spacer;
+            margin-right: -$spacer;
+        }
 
         .product-tile-button-container,
         .variants {
@@ -89,7 +99,7 @@
 
         }
     
-        &:hover, &:focus {
+        &:hover, &:focus, &:focus-within {
             .variants {
                 padding-top: 10px;
             }
@@ -142,7 +152,7 @@
         display: block;
         height: 0;
         //padding-bottom: $product-image-ratio * 100%;
-        padding-bottom: 100%;
+        padding-bottom: 104%;
         position: relative;
         z-index: -1;
    }

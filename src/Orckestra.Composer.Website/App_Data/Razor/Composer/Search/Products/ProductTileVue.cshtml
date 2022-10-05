@@ -13,15 +13,16 @@
     public string EntityName { get; set; }
 
 }
-<div class="product-container">
-    <div class="product-tile"
-         v-bind:class="{'with-variants': @(EntityName).HasVariants}"
+<div class="product-container"
+         id="product-"
          data-qa="search-result"
          v-on:mouseover="onMouseover(@(EntityName))"
-         v-bind:data-product-id="@(EntityName).ProductId"
+         v-bind:id="@(EntityName).ProductId"
          v-bind:data-product-variant-id="@(EntityName).VariantId"
          v-bind:data-recurring-order-program-name="@(EntityName).RecurringOrderProgramName"
          xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+    <div class="product-tile"
+         v-bind:class="{'with-variants': @(EntityName).HasVariants}">
 
         <a class="product-tile-media"
            v-bind:href="@(EntityName).Url"
@@ -46,7 +47,7 @@
                     </template>
                     <template v-if="productDetailsLoaded(@(EntityName))">
                         @SearchHelpers.VariantColorKvaSelector(EntityName, "Colour")
-                        @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize")
+                        @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize", Guid.NewGuid())
                     </template>
                 </div>
             </template>
