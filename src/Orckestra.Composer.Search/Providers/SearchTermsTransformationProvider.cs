@@ -7,7 +7,7 @@
     {
         public virtual string TransformSearchTerm(string keyword, string cultureInfoName)
         {
-            return keyword;
+            return keyword?.Replace("&", string.Empty).Trim();
         }
     }
 }

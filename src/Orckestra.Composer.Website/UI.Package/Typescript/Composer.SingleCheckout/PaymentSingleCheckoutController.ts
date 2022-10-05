@@ -86,7 +86,7 @@ module Orckestra.Composer {
                     changePaymentMethodProcess(paymentId: string, paymentMethodEntity: any, providers: Array<string>) {
                         let oldPayment = this.SelectedPaymentMethod;
                         this.selectPaymentMethod(paymentMethodEntity.Id);
-
+                        this.Mode.Loading = true;
                         self.checkoutService.updatePaymentMethod({
                             PaymentId: paymentId,
                             PaymentProviderName: paymentMethodEntity.PaymentProviderName,
@@ -100,7 +100,7 @@ module Orckestra.Composer {
                             console.error('Error while changing the payment method.', reason);
                             ErrorHandler.instance().outputErrorFromCode('PaymentMethodChangeFailed');
                             this.selectPaymentMethod(oldPayment.Id);
-                        });
+                        }).fin(() => this.Mode.Loading = false);
                     },
 
                     selectPaymentMethod(paymentId: string) {

@@ -113,6 +113,7 @@ module Orckestra.Composer {
         }
 
         public addSingleFacet(facetKey: string, facetValue: string) {
+            this.resetPaging();
             this.selectedFacets[facetKey] = facetValue;
         }
 

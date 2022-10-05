@@ -31,7 +31,7 @@ module Orckestra.Composer {
                 });
         }
 
-        public getSelectedShippingAddressId(cart: any, addressList: any) : string {
+        public getSelectedShippingAddressId(cart: any, addressList: any) {
 
             if (this.isShippingAddressFromCartValid(cart, addressList)) {
                 return cart.ShippingAddress.AddressBookId;
@@ -49,11 +49,11 @@ module Orckestra.Composer {
             return _.some(addressList.Addresses, (address: AddressDto) => address.Id === cart.ShippingAddress.AddressBookId);
         }
 
-        private getPreferredShippingAddressId(addressList: any) : string {
+        private getPreferredShippingAddressId(addressList: any) {
 
             var preferredShippingAddress = _.find(addressList.Addresses, (address: AddressDto) => address.IsPreferredShipping);
 
-            return preferredShippingAddress === undefined ? undefined : preferredShippingAddress.Id;
+            return preferredShippingAddress ? preferredShippingAddress.Id: undefined;
         }
     }
 }
