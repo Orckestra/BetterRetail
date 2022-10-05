@@ -46,6 +46,11 @@
     &-content {
         padding: $spacer;
         background: transparentize($color: $gray-200, $amount: 0.1);
+        
+        .slick-slide & {
+            bottom: 0px;
+            position: absolute;
+        }
     }
 
 
@@ -77,6 +82,13 @@
         @include media-breakpoint-up(md) { 
             margin-left: -$spacer;
             margin-right: -$spacer;
+        }
+
+        
+        .slick-slide & {
+            margin-left: 0;
+            margin-right: 0;
+            transform: none;
         }
 
         .product-tile-button-container,
