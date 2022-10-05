@@ -119,8 +119,8 @@
                                 </div>
                                 <div class="col-10">
                                     <div class="product-tile-text mt-2">
-                                        <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName">{{suggestion.item.BrandDisplayName}}<br /></span>
-                                        <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand">{{suggestion.item.Brand}}</span>
+                                        <span data-qa="search-product-brand" v-if="suggestion.item.BrandDisplayName" v-html="suggestion.item.BrandDisplayName"><br /></span>
+                                        <span data-qa="search-product-brand" v-else-if="suggestion.item.Brand" v-html="suggestion.item.Brand"></span>
                                         <a data-qa="search-product-title"
                                            class="suggestion-title"
                                            v-on:mouseup.stop=""
