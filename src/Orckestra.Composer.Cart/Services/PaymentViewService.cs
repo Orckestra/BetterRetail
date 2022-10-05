@@ -19,6 +19,7 @@ using Orckestra.Composer.Services;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.Providers;
+using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Orders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -447,7 +448,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var paymentMethods = await GetAllPaymentMethodsAsync(getPaymentMethodParam).ConfigureAwait(false);
             var paymentMethod = paymentMethods?.Find(x => x.Id == param.PaymentMethodId);
-            return paymentMethod?.IsValid ?? throw new Exception($"Payment method for provider name /'{param.ProviderName}/' not found."); ;
+            return paymentMethod?.IsValid ?? throw new Exception($"Payment method for provider name /'{param.ProviderName}/' not found."); 
         }
 
         public virtual async Task<ActivePaymentViewModel> GetActivePayment(GetActivePaymentParam param)
@@ -500,7 +501,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var cart = await CartRepository.AddPaymentAsync(new AddPaymentParam
             {
-                BillingAddress = activePayment.BillingAddress.Clone(),
+                BillingAddress = ObjectHelper.CreateDeepCopy(activePayment.BillingAddress),
                 CartName = param.CartName,
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
@@ -510,7 +511,7 @@ namespace Orckestra.Composer.Cart.Services
             var newPayment = GetActivePayment(cart);
             return newPayment;
         }
-
+        
         protected virtual Task<List<Payment>> GetCartPaymentsAsync(UpdatePaymentMethodParam param)
         {
             return PaymentRepository.GetCartPaymentsAsync(new GetCartPaymentsParam

@@ -1,6 +1,6 @@
 ﻿using System;
 using Autofac;
-using Orckestra.Overture;
+using Orckestra.Composer.Dependency;
 
 namespace Orckestra.Composer.Kernel
 {

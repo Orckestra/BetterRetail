@@ -6,6 +6,7 @@ using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Orckestra.Composer.ActionFilters;
+using Orckestra.Composer.Dependency;
 using Orckestra.Overture;
 
 namespace Orckestra.Composer.Kernel

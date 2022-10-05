@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Parameters;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Orders;
 using Orckestra.Overture.ServiceModel.Requests.Orders.Shopping;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 
@@ -14,10 +13,10 @@ namespace Orckestra.Composer.Repositories
 {
     public class FulfillmentLocationsRepository: IFulfillmentLocationsRepository
     {
-        public IOvertureClient OvertureClient { get; set; }
+        public IComposerOvertureClient OvertureClient { get; set; }
         public ICacheProvider CacheProvider { get; set; }
 
-        public FulfillmentLocationsRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public FulfillmentLocationsRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Orckestra.Composer.Cart.Extensions;
 using Orckestra.Overture.ServiceModel.Orders.Fulfillment;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -362,7 +363,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             viewModel.OrderInfos.IsOrderCancelable = orderCancellationStatus.CanCancel;
             viewModel.OrderInfos.IsOrderPendingCancellation = orderCancellationStatus.CancellationPending;
 
-            if (order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
+            if (order.Cart.PropertyBag != null && order.Cart.PropertyBag.TryGetValue("PickedItems", out var pickedItemsObject))
             {
                 var pickedItemsList = ComposerJsonSerializer.Deserialize<List<PickedItemViewModel>>(pickedItemsObject.ToString());
                 var shipment = viewModel.Shipments.First();

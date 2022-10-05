@@ -6,6 +6,7 @@
 ///<reference path='../../Utils/Utils.ts' />
 ///<reference path='./ICartService.ts' />
 ///<reference path='./CartEvents.ts' />
+///<reference path='../../Composer.Product/Product/ProductHelpers.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -74,33 +75,27 @@ module Orckestra.Composer {
                     throw reason;
                 });
         }
+        public addLineItem(product, price, variantId?: string, quantity: number = 1, pageName = "Search Results", recurringOrderFrequencyName = undefined) {
+            
+            const {
+                ProductId,
+                RecurringOrderProgramName
+            } = product;
 
-        public addLineItem(productId: string, price: string, variantId?: string,
-             quantity: number = 1,
-             recurringOrderFrequencyName?: string,
-             recurringOrderProgramName?: string): Q.Promise<any> {
+            const dataForAnalytics = ProductsHelper.getProductDataForAnalytics(product, variantId, price, pageName, quantity);
 
-            var data = {
-                ProductId: productId,
-                VariantId: variantId,
-                Quantity: quantity,
-                Price: price
-            };
+            this.eventHub.publish(ProductEvents.LineItemAdding, { data: dataForAnalytics });
+            this.eventHub.publish(CartEvents.CartUpdating, { data: dataForAnalytics });
 
-            this.eventHub.publish(CartEvents.CartUpdating, { data: data });
-
-            return this.cartRepository.addLineItem(productId, variantId, quantity, recurringOrderFrequencyName, recurringOrderProgramName)
-                .then(cart => this.setCartToCache(cart))
+            return this.cartRepository.addLineItem(ProductId, variantId, quantity, recurringOrderFrequencyName, RecurringOrderProgramName)
                 .then(cart => {
-                    let addedToCartData = {
-                        Cart: cart,
-                        ProductId: productId,
-                        VariantId: variantId
-                    };
-
+                    this.setCartToCache(cart);
                     this.eventHub.publish(CartEvents.CartUpdated, { data: cart });
-                    this.eventHub.publish('lineItemAddedToCart', { data: addedToCartData });
+                    this.eventHub.publish(ProductEvents.LineItemAdded, { data: { Cart: cart, ProductId, VariantId: variantId }});
+                    ErrorHandler.instance().removeErrors();
+                    return cart;
                 });
+          
         }
 
         public updateLineItem(lineItemId: string, quantity: number, productId: string,

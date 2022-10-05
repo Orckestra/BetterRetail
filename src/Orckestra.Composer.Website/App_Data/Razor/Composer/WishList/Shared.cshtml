@@ -1,0 +1,91 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.Services;
+@using Orckestra.Composer.Utils;
+@using Orckestra.Composer.Cart;
+@using Orckestra.Composer.Cart.Services;
+@using Orckestra.Composer.Cart.Parameters;
+@using Newtonsoft.Json;
+@using Orckestra.Composer.Cart.Utils;
+@using Orckestra.Composer.MyAccount.Services;
+@using Orckestra.Composer.MyAccount.Parameters;
+@using System;
+@using Orckestra.Composer.Enums;
+
+@functions {
+    public IComposerContext ComposerContext { get; set; }
+    public IWishListViewService WishListViewService { get; set; }
+    public ICustomerViewService CustomerViewService { get; set; }
+
+    [FunctionParameter(Label = "Empty Wish List Content", Help = "That content will be shown when Wish List is Empty")]
+    public XhtmlDocument emptyWishListContent { get; set; }
+
+    public override bool PreventFunctionOutputCaching { get { return true; } }
+}
+
+@{
+    var id = Request["id"];
+    if (string.IsNullOrEmpty(id)) { return; }
+
+    var param = SharedWishListTokenizer.DecryptToken(Request["id"]);
+
+    if (param == null) { return; }
+
+    var customerStatus = CustomerViewService.GetAccountStatusViewModelAsync(new GetAccountStatusViewModelParam
+    {
+        CultureInfo = ComposerContext.CultureInfo,
+        Scope = param.Scope,
+        CustomerId = param.CustomerId
+    }).Result;
+
+    if (customerStatus == null || customerStatus.Status == AccountStatusEnum.Inactive) { return; }
+
+    var vm = WishListViewService.GetWishListViewModelAsync(new GetCartParam
+    {
+        Scope = param.Scope,
+        CultureInfo = ComposerContext.CultureInfo,
+        CustomerId = param.CustomerId,
+        CartName = CartConfiguration.WishlistCartName,
+        BaseUrl = RequestUtils.GetBaseUrl(Request.Url, Request.ApplicationPath).ToString()
+    }).Result;
+
+    var VueId = $"vue{Guid.NewGuid().GetHashCode()}";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <h1>
+        @Html.Localized("MyAccount", "T_SharedWishListAccountHeader", customerStatus.FirstName, customerStatus.LastName)
+    </h1>
+    <div data-oc-controller="MyAccount.SharedWishList"
+         data-context="@JsonConvert.SerializeObject(vm)"
+         class="wishlist-shared"
+         data-vueid="@VueId"
+         id="@VueId"
+         v-cloak="true">
+
+        <div class="card">
+            <div class="card-header  clearfix">
+                <h3 class="float-left">@Html.Localize("MyAccount", "T_SharedWishList")</h3>
+                <div class="float-right  wishlist-count  lead">
+                    <strong><span class="wishlist-header-count navbar-count">{{Total}}</span></strong>&#160;@Html.Localize("MyAccount", "T_WishListCount")
+                </div>
+            </div>
+
+            <div class="card-body">
+                <template v-if="Total">
+                    <div class="row">
+                        <div v-for="Product in Items" class="col-12 col-md-4 mb-5">
+                            @Function("Composer.MyAccount.WishListTile", new { DisplayDeleteButton = false})
+                        </div>
+                    </div>
+                </template>
+                <template v-else="v-else">
+                    @Html.Raw(emptyWishListContent.Body)
+                </template>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -315,7 +315,6 @@ namespace Orckestra.Composer.SearchQuery.Services
                 productDoc.InventoryLocationStatuses = new List<InventoryItemAvailability>();
 
                 //Legacy pricing fields
-
                 #pragma warning disable 612, 618
                 if (document.PropertyBag.ContainsKey(nameof(productDoc.CurrentPrice)) && document.PropertyBag[nameof(productDoc.CurrentPrice)] != null)
                     productDoc.CurrentPrice = double.Parse(document.PropertyBag[nameof(productDoc.CurrentPrice)].ToString());

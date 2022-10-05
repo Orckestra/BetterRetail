@@ -11,5 +11,6 @@ namespace Orckestra.Composer.CompositeC1.Context
         string PromotionalBannerDefaultTextColor { get; }
         List<IPromotionalRibbonConfiguration> GetPromotionalRibbonConfigurations();
         List<IPromotionalBannerConfiguration> GetPromotionalBannerConfigurations();
+        List<IVariantColorConfiguration> GetVariantColorConfigurations();
     }
 }

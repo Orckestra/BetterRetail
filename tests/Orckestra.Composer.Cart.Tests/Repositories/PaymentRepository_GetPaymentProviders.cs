@@ -6,9 +6,8 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Cart.Repositories;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Providers;
 using Orckestra.Overture.ServiceModel.Requests.Providers;
 
@@ -79,7 +78,7 @@ namespace Orckestra.Composer.Cart.Tests.Repositories
 
         private void MockPaymentProvidersRequest(GetPaymentProvidersResponse paymentProviders)
         {
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             overtureClient.Setup(client => client.SendAsync(It.IsNotNull<GetPaymentProvidersRequest>()))
                 .ReturnsAsync(paymentProviders)
                 .Verifiable();

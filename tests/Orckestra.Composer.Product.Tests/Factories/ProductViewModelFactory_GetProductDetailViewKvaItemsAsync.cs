@@ -100,6 +100,33 @@ namespace Orckestra.Composer.Product.Tests.Factories
         }
 
         [Test]
+        public async Task WHEN_Key_Variant_Is_Null_SHOULD_Return_KVA_List_Intanciated_With_Zero_Items()
+        {
+            //Arrange
+            var culture = CultureInfo.CreateSpecificCulture("en-US");
+            _container.Use(CreateDamProvider());
+            _container.Use(CreateProductRepositoryProductDefinitionWithoutKva(culture, GenerateProductWithNullVariants()));
+            _container.Use(CreateViewModelMapper(culture));
+            _container.Use(CreateLookupService());
+
+            var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
+
+            //Act
+            var vm = await productViewModelFactory.GetProductViewModel(new GetProductParam
+                {
+                    ProductId = GetRandom.String(10),
+                    CultureInfo = culture,
+                    Scope = GetRandom.String(10),
+                    BaseUrl = GetRandom.String(32)
+                })
+                .ConfigureAwait(false);
+
+            // Assert
+            vm.KeyVariantAttributeItems.Should().NotBeNull();
+            vm.KeyVariantAttributeItems.Count.Should().Be(0);
+        }
+
+        [Test]
         public async Task WHEN_Key_Variant_Exists_And_Culture_Not_Supported_SHOULD_Return_Variants_With_Names_As_Keys()
         {
             //Arrange
@@ -131,34 +158,7 @@ namespace Orckestra.Composer.Product.Tests.Factories
             vm.KeyVariantAttributeItems[2].DisplayName.Should().Be("Type");
             vm.KeyVariantAttributeItems[3].DisplayName.Should().Be("Lookup1");
         }
-
-        [Test]
-        public async Task WHEN_Key_Variant_Is_Null_SHOULD_Return_KVA_List_Intanciated_With_Zero_Items()
-        {
-            //Arrange
-            var culture = CultureInfo.CreateSpecificCulture("en-US");
-            _container.Use(CreateDamProvider());
-            _container.Use(CreateProductRepository(culture, GenerateProductWithNullVariants()));
-            _container.Use(CreateViewModelMapper(culture));
-            _container.Use(CreateLookupService());
-
-            var productViewModelFactory = _container.CreateInstance<ProductViewModelFactory>();
-
-            //Act
-            var vm = await productViewModelFactory.GetProductViewModel(new GetProductParam
-            {
-                ProductId = GetRandom.String(10), 
-                CultureInfo = culture, 
-                Scope = GetRandom.String(10),
-                BaseUrl = GetRandom.String(32)
-            })
-            .ConfigureAwait(false);
-
-            // Assert
-            vm.KeyVariantAttributeItems.Should().NotBeNull();
-            vm.KeyVariantAttributeItems.Count.Should().Be(0);
-        }
-
+        
         [Test]
         public async Task WHEN_Key_Variant_Order_Is_Defined_SHOULD_Return_KVA_List_With_Same_Order_Defined_For_KVA()
         {
@@ -324,6 +324,22 @@ namespace Orckestra.Composer.Product.Tests.Factories
             productRepositoryMock.Setup(
                 repo => repo.GetProductDefinitionAsync(It.Is<GetProductDefinitionParam>(param => param.Name == null && param.CultureInfo.Name == culture.Name)))
                 .ReturnsAsync(GenerateProductDefinitionWithKva())
+                .Verifiable();
+
+            return productRepositoryMock;
+        }
+
+        private static Mock<IProductRepository> CreateProductRepositoryProductDefinitionWithoutKva(CultureInfo culture, Overture.ServiceModel.Products.Product product)
+        {
+            Mock<IProductRepository> productRepositoryMock = new Mock<IProductRepository>();
+            productRepositoryMock.Setup(
+                    repo => repo.GetProductAsync(It.Is<GetProductParam>(param => param.CultureInfo.Name == culture.Name)))
+                .ReturnsAsync(product)
+                .Verifiable();
+
+            productRepositoryMock.Setup(
+                    repo => repo.GetProductDefinitionAsync(It.Is<GetProductDefinitionParam>(param => param.Name == null && param.CultureInfo.Name == culture.Name)))
+                .ReturnsAsync(new ProductDefinition())
                 .Verifiable();
 
             return productRepositoryMock;

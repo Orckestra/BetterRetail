@@ -524,6 +524,7 @@ namespace Orckestra.Composer.Product.Factory
                         Title = productFormatter.FormatValue(property, g.Key, kvaParam.CultureInfo)
                                 ?? (g.Key ?? string.Empty).ToString(),
                         Value = g.Key,
+                        ConfiguredValue = property.PropertyName == ProductConfiguration.ColorVariantKvaName ? ProductPromotionsFactory.BuildProductVariantColor(g.Key.ToString()) : null,
                         Selected = false,
                         Disabled = false,
                         RelatedVariantIds = g.Select(o => o.Variant.Id).ToList()

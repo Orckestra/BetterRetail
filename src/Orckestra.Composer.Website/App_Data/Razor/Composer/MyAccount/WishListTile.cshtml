@@ -1,0 +1,95 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+
+@functions {
+
+     [FunctionParameter(Label = "Veu Entity Name", DefaultValue = "Product")]
+     public string EntityName { get; set; }
+
+     [FunctionParameter(Label = "Display delete button", DefaultValue = true)]
+     public bool DisplayDeleteButton { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div class="wishlist-tile  product-tile d-flexh-100" v-bind:key="@(EntityName).Id" v-bind:class="{'is-loading': @(EntityName).Removing}">
+        <a class="product-tile-media" v-bind:href="@(EntityName).ProductUrl">
+            <img class="img-fluid m-auto" v-bind:src="@(EntityName).ImageUrl"
+                 v-bind:alt="@(EntityName).ProductSummary.DisplayName"
+                 v-bind:onerror="'this.onerror=null; this.src=\'' + @(EntityName).FallbackImageUrl + '\''" />
+            @ProductHelpers.PromotionalBanner(EntityName)
+        </a>
+        @ProductHelpers.PromotionalRibbon(EntityName)
+
+        @if (DisplayDeleteButton)
+        {
+            <div class="wishlist-tile-delete d-none ">
+                <button type="button" title="@Html.Localize("MyAccount", "H_RemoveFromTheWishList")"
+                        class="btn btn-secondary bg-white text-secondary"
+                        v-on:click="deleteLineItem(@(EntityName).Id)"
+                        data-qa="wishlist-product-delete">
+                    <span class="fa fa-times fa-lg"></span>
+                </button>
+            </div>
+        }
+
+        <div class="product-tile-text">
+            <p v-if="@(EntityName).ProductSummary.Brand" class="product-tile-brand m-0" 
+               v-html="@(EntityName).ProductSummary.Brand"
+               data-qa="wishlist-product-brand"></p>
+
+            <div v-if="@(EntityName).RecurringOrderProgramName" class="product-tile-recurring">
+                <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="@Html.Localize("General", "L_RecurringProduct")" title="@Html.Localize("General", "L_RecurringProduct")" />
+            </div>
+
+            <a class="p text-default-font" data-qa="wishlist-product-title" v-bind:href="@(EntityName).ProductUrl"
+               v-bind:title="@(EntityName).ProductSummary.DisplayName" v-bind:data-productId="@(EntityName).ProductId">{{@(EntityName).ProductSummary.DisplayName}}</a>
+
+            <div v-if="@(EntityName).VariantId" class="wishlist-tile-variants">
+                <span v-for="(key, index) in @(EntityName).KeyVariantAttributesList">
+                    {{key.Value}} <span v-if="index === 0"> | </span>
+                </span>
+            </div>
+        </div>
+
+        <div class="product-tile-prices">
+            <template v-if="@(EntityName).IsOnSale">
+                <div class="product-tile-special-price"><del>{{@(EntityName).DefaultPrice}}</del></div>
+                <div class="product-tile-price">
+                    <span class="h4  text-danger">{{@(EntityName).CurrentPrice}}</span>
+                </div>
+            </template>
+            <template v-else="else">
+                <div class="product-tile-special-price">
+                    <!--only used for proper spacing-->
+                </div>
+                <div class="product-tile-price">
+                    <span class="h4">{{@(EntityName).DefaultPrice}}</span>
+                </div>
+            </template>
+        </div>
+
+        <div class="product-tile-button-container">
+            <div>
+                <button v-if="@(EntityName).IsValid" class="btn  btn-primary btn-block  text-uppercase"
+                        data-qa="wishlist-product-add-to-cart"
+                        v-bind:disabled="@(EntityName).Loading"
+                        v-on:click="addToCart(@(EntityName))">
+                    <span class="fa  fa-shopping-cart"></span>&#160;
+                    @Html.Localize("General", "B_AddToCartProductList")
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                </button>
+                <button v-else="v-else"
+                        data-qa="wishlist-product-add-to-cart"
+                        class="btn  btn-primary btn-block  text-uppercase"
+                        disabled="disabled">
+                    <span class="fa  fa-times"></span>&#160;
+                    @Html.Localize("General", "B_AddToCartProductListOOS")
+                    <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

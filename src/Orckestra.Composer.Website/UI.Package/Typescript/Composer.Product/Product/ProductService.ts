@@ -36,6 +36,11 @@ module Orckestra.Composer {
             $('#addToCartModal').modal('hide');
         }
 
+        public calculatePrices(productId: string, concern: string) {
+            var data = { products: [productId] };
+            return ComposerClient.post('/api/product/calculatePrices', data);
+        }
+
         public calculatePrice(productId: string, concern: string) {
             var data = { products: [productId] };
 
@@ -164,6 +169,18 @@ module Orckestra.Composer {
 
         public getRelatedProducts(relatedProductIdentifiers: ProductIdentifierDto[]): Q.Promise<any> {
             return ComposerClient.post('/api/product/relatedProducts', relatedProductIdentifiers);
+        }
+
+        public loadProduct(productId: string, variantId: string) : Q.Promise<any> {
+            var data = {
+                ProductId: productId,
+                VariantId: variantId
+            };
+            return ComposerClient.post('/api/product/variantSelection', data).
+            fail((reason: any) => {
+                console.error('Failed loading the Product', reason);
+                throw reason;
+            });
         }
 
         public loadQuickBuyProduct(productId: string, variantId: string, concern: string, source: string): Q.Promise<any> {

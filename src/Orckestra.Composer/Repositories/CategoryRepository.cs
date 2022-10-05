@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Utils;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Products;
@@ -22,10 +21,10 @@ namespace Orckestra.Composer.Repositories
         private const string PropertyBagItemId = "Item_Id";
         private const string PropertyBagParentItemId = "ParentItem_Id";
 
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public CategoryRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public CategoryRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

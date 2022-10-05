@@ -49,6 +49,12 @@ namespace Orckestra.Composer.SearchQuery.Context
             BaseSearchCriteriaProvider = baseSearchCriteriaProvider ?? throw new ArgumentNullException(nameof(baseSearchCriteriaProvider)); ;
         }
 
+        public async Task<SearchQueryViewModel> GetSearchQueryViewModelAsync(string queryTypeValue, string queryName)
+        {
+            Enum.TryParse(queryTypeValue, out SearchQueryType queryType);
+            return await GetSearchQueryViewModelAsync(queryType, queryName).ConfigureAwait(false);
+        }
+
         public async Task<SearchQueryViewModel> GetSearchQueryViewModelAsync(SearchQueryType queryType, string queryName)
         {
             if (_viewModel != null && _viewModel.QueryName == queryName && _viewModel.QueryType == queryType) { return _viewModel; }
@@ -66,6 +72,12 @@ namespace Orckestra.Composer.SearchQuery.Context
             _viewModel = await SearchQueryViewService.GetSearchQueryViewModelAsync(param).ConfigureAwait(false);
 
             return _viewModel;
+        }
+
+        public async Task<SearchQueryViewModel> GetTopSearchQueryViewModelAsync(string queryTypeValue, string queryName, int pageSize)
+        {
+            Enum.TryParse(queryTypeValue, out SearchQueryType queryType);
+            return await GetTopSearchQueryViewModelAsync(queryType, queryName, pageSize).ConfigureAwait(false);
         }
 
         public async Task<SearchQueryViewModel> GetTopSearchQueryViewModelAsync(SearchQueryType queryType, string queryName, int pageSize)

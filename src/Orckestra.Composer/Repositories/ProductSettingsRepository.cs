@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
@@ -11,10 +10,10 @@ namespace Orckestra.Composer.Repositories
 {
     public class ProductSettingsRepository : IProductSettingsRepository
     {
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
 
-        public ProductSettingsRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public ProductSettingsRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

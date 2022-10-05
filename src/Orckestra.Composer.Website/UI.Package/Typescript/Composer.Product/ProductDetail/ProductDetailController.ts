@@ -111,13 +111,12 @@ module Orckestra.Composer {
                         if (this.Loading) return;
 
                         this.Loading = true;
-                        self.publishProductDataForAnalytics(self.context.viewModel, ProductEvents.LineItemAdding);
+                       
+                        let { FrequencyName } = self.getRecurringData();
+                        let { selectedVariantId, ListPrice } = this.Product;
 
-                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
-                        let { ProductId, selectedVariantId, ListPrice } = this.Product;
-
-                        self.cartService.addLineItem(ProductId, ListPrice, selectedVariantId, 1,
-                            FrequencyName, RecurringProgramName)
+                        self.cartService.addLineItem(this.Product, ListPrice, selectedVariantId,  1,
+                            this.concern, FrequencyName)
                             .then(() => {
                                 self.onAddLineItemSuccess();
                                 }, (reason: any) => {
@@ -228,13 +227,11 @@ module Orckestra.Composer {
                         if (this.Loading) return;
 
                         this.Loading = true;
-                        self.publishProductDataForAnalytics(self.context.viewModel, ProductEvents.LineItemAdding);
+                        let { FrequencyName } = self.getRecurringData();
+                        let { selectedVariantId, ListPrice } = this.Product;
 
-                        let { FrequencyName, RecurringProgramName } = self.getRecurringData();
-                        let { ProductId, selectedVariantId, ListPrice } = this.Product;
-
-                        self.cartService.addLineItem(ProductId, ListPrice, selectedVariantId, this.Quantity,
-                            FrequencyName, RecurringProgramName)
+                        self.cartService.addLineItem(this.Product, selectedVariantId, ListPrice, this.Quantity,
+                            this.getListNameForAnalytics(), FrequencyName)
                             .then(() => {
                                 self.onAddLineItemSuccess();
                             }, (reason: any) => {
@@ -324,15 +321,9 @@ module Orckestra.Composer {
         }
 
         protected notifyAnalyticsOfProductDetailsImpression() {
-            var vm = this.context.viewModel;
-            var variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId);
-
-            var data: any = this.getProductDataForAnalytics(vm);
-            if (variant) {
-                var variantData: any = this.getVariantDataForAnalytics(variant);
-
-                _.extend(data, variantData);
-            }
+            var product = this.context.viewModel;
+            product.Variants = product.allVariants;
+            var data: any = ProductsHelper.getProductDataForAnalytics(product, product.selectedVariantId, product.ListPrice, this.getListNameForAnalytics());
 
             this.publishProductImpressionEvent(data);
         }

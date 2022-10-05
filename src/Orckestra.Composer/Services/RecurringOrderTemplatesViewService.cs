@@ -10,7 +10,6 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Requests;
 using Orckestra.Composer.Services.Lookup;
 using Orckestra.Composer.ViewModels;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.RecurringOrders;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
@@ -21,7 +20,7 @@ namespace Orckestra.Composer.Services
     {
         protected IRecurringOrdersRepository RecurringOrderRepository { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
-        protected IOvertureClient OvertureClient { get; private set; }
+        protected IComposerOvertureClient OvertureClient { get; private set; }
         protected IRecurringOrderTemplateViewModelFactory RecurringOrderTemplateViewModelFactory { get; private set; }
         protected ILookupService LookupService { get; private set; }
         protected IImageService ImageService { get; private set; }
@@ -29,7 +28,7 @@ namespace Orckestra.Composer.Services
 
         public RecurringOrderTemplatesViewService(IRecurringOrdersRepository recurringOrdersRepository, 
             IViewModelMapper viewModelMapper,
-            IOvertureClient overtureClient, ILookupService lookupService,
+            IComposerOvertureClient overtureClient, ILookupService lookupService,
             IRecurringOrderTemplateViewModelFactory recurringOrderTemplateViewModelFactory,
             IImageService imageService,
             IRecurringOrdersSettings recurringOrdersSettings)

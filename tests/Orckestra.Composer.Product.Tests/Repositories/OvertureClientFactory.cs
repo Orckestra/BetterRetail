@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Moq;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
@@ -9,7 +8,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
 {
     public static class OvertureClientFactory
     {
-        public static Mock<IOvertureClient> CreateForGetCategoriesRequest()
+        public static Mock<IComposerOvertureClient> CreateForGetCategoriesRequest()
         {
             var categoriesToReturn = new[]
             {
@@ -33,7 +32,7 @@ namespace Orckestra.Composer.Product.Tests.Repositories
                 }
             };
 
-            var overtureClientMock = new Mock<IOvertureClient>();
+            var overtureClientMock = new Mock<IComposerOvertureClient>();
             overtureClientMock
             .Setup(client => client.SendAsync(It.IsNotNull<GetCategoriesV2Request>()))
             .ReturnsAsync(new CategoryList() { Categories = new List<Category>(categoriesToReturn) })

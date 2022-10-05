@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel.Products;

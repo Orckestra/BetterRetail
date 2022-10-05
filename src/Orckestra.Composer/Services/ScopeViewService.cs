@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Orckestra.Composer.Configuration;
+﻿using Orckestra.Composer.Caching;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.ViewModels;
-using Orckestra.Overture.Caching;
-using Orckestra.Overture.ServiceModel;
+using System;
+using System.Threading.Tasks;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.Services

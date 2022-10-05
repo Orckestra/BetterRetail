@@ -62,6 +62,7 @@
     <Content Include="Package\Datas\Composite.Data.Types.ISystemActiveLocale_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacetConfigurations_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Facets.IFacets_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IVariantColorConfigurations_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.Languages_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IPromotionalBannerConfiguration_public.xml" />

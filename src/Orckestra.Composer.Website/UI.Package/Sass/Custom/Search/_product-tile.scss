@@ -21,13 +21,68 @@
     position: relative;
     $lines-of-text: 3;
 
+    .product-tile-button-container,
+    .variants {
+        opacity: 0;
+        transition: opacity 0.8;
+    }
+
+    @include media-breakpoint-down(sm) {
+        .product-tile-button-container {
+            opacity: 1;
+        }
+     }
+
+    &:hover, &:focus {
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        .product-tile-button-container,
+        .variants {
+            opacity: 1;
+        }
+
+    }
+
+    &.with-variants {
+        @include media-breakpoint-down(sm) {
+
+            .product-tile-button-container {
+                display: none;
+            }
+        }
+         .variants {
+            height: 0;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+    
+        &:hover, &:focus {
+            .variants {
+                height: 85px;
+                padding-top: 10px;
+            }
+            .product-tile-text {
+                padding-top: 0;
+                height: 0;
+            }
+
+            .product-tile-button-container {
+                display: block;
+            }
+            .product-tile-select-btn-container {
+                display: none;
+            }
+        }
+    }
+
     .product-tile-text {
-        border-top: solid 1px lighten(gray("400"), 7%);
-        // 3 lines of text + half a line of spacing
-        height: ($line-height-base * $font-size-base) * 3;
-        padding-top: 3px;
+        text-align:  center;
+        background: #fff;
+        height: 85px;
+        padding: 0 5px;
         position: relative;
         overflow: hidden;
+        padding-top: 10px;
 
         // gradient on first line and last line
         &:before {
@@ -41,19 +96,17 @@
 
     .product-tile-brand {
         white-space: nowrap;
+        font-weight: bold;
+        font-size: small;
     }
 
-    .product-tile-price {
-        height: ceil($h4-font-size * $line-height-base);
-    }
-
-    .product-tile-special-price {
-        position: relative;
-        height: ceil(($line-height-base * $font-size-sm));
-        del {
-            position: absolute;
-            bottom: 0;
-        }
+    .product-tile-prices {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
     }
 
     .product-tile-media {
@@ -131,4 +184,53 @@
             @include banner-bg(".bg-#{$color}", $value);
         }
     }
+}
+
+
+.variant-kva {
+    margin-bottom: 8px;
+
+    &-color {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .kva-color {
+        width: 1.8rem;
+        cursor: pointer;
+        height: 1.8rem;
+        border: solid 1px $card-border-color;
+        margin: 2px 5px;
+        background: #fff;
+        position: relative;
+        &.disabled {
+            opacity: 0.4;
+        }
+    
+        &-value {
+            width: 80%;
+            height: 80%;
+            position: absolute;
+            border: solid 1px $card-border-color;
+            top: 10%;
+            left: 10%;
+        }
+    
+        &:hover, &.selected {
+            border: solid 1px $dark;
+            &.disabled {
+                border: solid 1px $card-border-color;
+            }
+        }
+    }
+}
+
+.product-tile-wishlist { 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    z-index: 10; 
 }

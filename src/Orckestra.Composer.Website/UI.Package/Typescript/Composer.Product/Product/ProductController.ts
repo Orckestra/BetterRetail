@@ -209,28 +209,13 @@ module Orckestra.Composer {
         }
 
         public addLineItem(actionContext: IControllerActionContext,
-            recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string) {
+            recurringOrderFrequencyName?: string) {
             let busy = this.asyncBusy({ elementContext: actionContext.elementContext }),
                 quantity = this.getCurrentQuantity(),
-                vm = this.context.viewModel,
-                variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId),
-                data: any = this.getProductDataForAnalytics(vm);
-
-            data.Quantity = quantity.Value ? quantity.Value : 1;
-            if (variant) {
-                let variantData: any = this.getVariantDataForAnalytics(variant);
-
-                _.extend(data, variantData);
-            }
-
-            this.eventHub.publish('lineItemAdding',
-                {
-                    data: data
-                });
-
-            this.addLineItemImpl(vm.productId, vm.ListPrice, vm.selectedVariantId, quantity,
-                recurringOrderFrequencyName, recurringOrderProgramName)
+                vm = this.context.viewModel;
+                
+              this.addLineItemImpl(vm, vm.ListPrice, vm.selectedVariantId, quantity,
+                recurringOrderFrequencyName)
                 .then((data: any) => {
                     this.onAddLineItemSuccess(data);
                     actionContext.elementContext.focus();
@@ -263,9 +248,9 @@ module Orckestra.Composer {
             };
         }
 
-        protected addLineItemImpl(productId: string, price: string, variantId: string, quantity: any,
-            recurringOrderFrequencyName?: string, recurringOrderProgramName?: string): Q.Promise<any> {
-            return this.cartService.addLineItem(productId, price, variantId, quantity.Value, recurringOrderFrequencyName, recurringOrderProgramName);
+        protected addLineItemImpl(product: any, price: string, variantId: string, quantity: any,
+            recurringOrderFrequencyName?: string): Q.Promise<any> {
+            return this.cartService.addLineItem(product, price, variantId, quantity.Value, this.getListNameForAnalytics(), recurringOrderFrequencyName);
         }
 
         protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
@@ -310,6 +295,12 @@ module Orckestra.Composer {
             return this.productService.calculatePrice(this.context.viewModel.productId, this.concern);
         }
 
+        protected publishProductDataForAnalytics(vm: any, eventName: string): void {
+            var data = ProductsHelper.getProductDataForAnalytics(vm, vm.selectedVariantId, vm.ListPrice, this.getListNameForAnalytics());
+
+            this.eventHub.publish(eventName, { data });
+        }
+
         protected getProductDataForAnalytics(vm: any): any {
             var productId: string = (vm.productId) ? vm.productId : vm.ProductId;
 
@@ -328,47 +319,6 @@ module Orckestra.Composer {
         protected getListNameForAnalytics(): string {
             throw new Error('ListName not defined for this controller');
         }
-
-
-        protected publishProductDataForAnalytics(vm: any, eventName: string): void {
-            var data = this.getProductDataForAnalytics(vm);
-
-            var variant: any = _.find(vm.allVariants, (v: any) => v.Id === vm.selectedVariantId);
-            if (variant) {
-                var variantData: any = this.getVariantDataForAnalytics(variant);
-                _.extend(data, variantData);
-            }
-
-            this.eventHub.publish(eventName, { data });
-        }
-
-
-        protected getVariantDataForAnalytics(variant: any): any {
-            var variantName: string = this.buildVariantName(variant.Kvas);
-
-            var data: any = {
-                Variant: variantName,
-                Name: variant.DisplayName ? variant.DisplayName : undefined,
-                ListPrice: variant.ListPrice
-            };
-
-            return data;
-        }
-
-        protected buildVariantName(kvas: any): string {
-            var keys: string[] = Object.keys(kvas).sort();
-            var nameParts: string[] = [];
-
-            for (var i: number = 0; i < keys.length; i++) {
-                var key: string = keys[i];
-                var value: any = kvas[key];
-
-                nameParts.push(value);
-            }
-
-            return nameParts.join(' ');
-        }
-
 
     }
 }

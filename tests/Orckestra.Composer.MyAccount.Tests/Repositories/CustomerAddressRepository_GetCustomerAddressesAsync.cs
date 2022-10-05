@@ -4,7 +4,6 @@ using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.MyAccount.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Requests.Customers;
 
 namespace Orckestra.Composer.MyAccount.Tests.Repositories
@@ -33,7 +32,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Repositories
         [Test]
         public void WHEN_Calling_GetCustomerAddressAsync_SHOULD_Call_OvertureClient_SendAsync()
         {
-            var overtureClient = _container.GetMock<IOvertureClient>();
+            var overtureClient = _container.GetMock<IComposerOvertureClient>();
             var repo = _container.CreateInstance<CustomerAddressRepository>();
 
             repo.GetCustomerAddressesAsync(Guid.NewGuid(), "Burma");

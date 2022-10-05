@@ -6,7 +6,6 @@ using Moq.AutoMock;
 using NUnit.Framework;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Repositories;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Customers.Membership;
 using Orckestra.Overture.ServiceModel.Requests.Customers.Membership;
 
@@ -21,7 +20,7 @@ namespace Orckestra.Composer.Tests.Repositories
         public void SetUp()
         {
             _container = new AutoMocker();
-            _container.Use(new Mock<IOvertureClient>(MockBehavior.Strict));
+            _container.Use(new Mock<IComposerOvertureClient>(MockBehavior.Strict));
         }
 
         [Test]
@@ -34,7 +33,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedNewPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<ChangePasswordRequest>(
                     param => param.UserName == expectedUsername &&
                     param.NewPassword == expectedNewPassword &&
@@ -62,7 +61,7 @@ namespace Orckestra.Composer.Tests.Repositories
             var expectedNewPassword = GetRandom.String(32);
             var customerRepository = _container.CreateInstance<CustomerRepository>();
 
-            _container.GetMock<IOvertureClient>()
+            _container.GetMock<IComposerOvertureClient>()
                 .Setup(r => r.SendAsync(It.Is<ChangePasswordRequest>(
                     param => param.UserName == expectedUsername &&
                     param.NewPassword == expectedNewPassword &&

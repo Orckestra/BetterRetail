@@ -1,7 +1,6 @@
 ﻿using Orckestra.Composer.Search.Factory;
 using Orckestra.Composer.Search.Repositories;
 using Orckestra.Composer.SearchQuery.Parameters;
-using Orckestra.Overture;
 using Orckestra.Overture.ServiceModel.Queries;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Requests.SearchQueries;
@@ -14,14 +13,13 @@ using System.Linq;
 using Orckestra.Composer.Search;
 using System;
 using Orckestra.Composer.Parameters;
-using SearchFilter = Orckestra.Composer.Parameters.SearchFilter;
 
 namespace Orckestra.Composer.SearchQuery.Repositories
 {
     public class SearchQueryRepository : SearchRepository, ISearchQueryRepository
     {
 
-        public SearchQueryRepository(IOvertureClient overtureClient,
+        public SearchQueryRepository(IComposerOvertureClient overtureClient,
             IProductRequestFactory productRequestFactory,
             IFacetPredicateFactory facetPredicateFactory,
             IFacetConfigurationContext facetConfigContext)

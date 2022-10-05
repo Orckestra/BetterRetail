@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Orckestra.Composer.Caching;
 using Orckestra.Composer.Configuration;
-using Orckestra.Overture;
-using Orckestra.Overture.Caching;
 using Orckestra.Overture.ServiceModel.Metadata;
 using Orckestra.Overture.ServiceModel.Requests.Metadata;
 
@@ -11,10 +10,10 @@ namespace Orckestra.Composer.Repositories
 {
     public class ProductLookupRepository : ILookupRepository
     {
-        private readonly IOvertureClient _overtureClient;
+        private readonly IComposerOvertureClient _overtureClient;
         private readonly ICacheProvider _cacheProvider;
 
-        public ProductLookupRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public ProductLookupRepository(IComposerOvertureClient overtureClient, ICacheProvider cacheProvider)
         {
             _overtureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             _cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));

@@ -1,7 +1,7 @@
 using Composite.Search.Crawling;
 using Orckestra.Composer.ContentSearch.Search;
 using Orckestra.Composer.ContentSearch.Services;
-using Orckestra.Overture;
+using Orckestra.Composer.Dependency;
 
 namespace Orckestra.Composer.ContentSearch
 {
