@@ -45,7 +45,22 @@
                                 @Html.Localize("MyAccount", "B_SaveNewAddress")
                             </button>
                         </div>
-                        <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
+                        <div v-show="Mode.EditingAddress" class="border-top mt-4 pt-4">
+                            @Forms.Address.Form("EditingAddress", "editAddressForm", true)
+                            <button class="btn btn-outline-secondary mt-1"
+                                    v-on:click="Mode.EditingAddress = false"
+                                    v-bind:disabled="Mode.Loading"
+                                    data-qa="shipping-save-address-link">
+                                @Html.Localize("General", "B_Cancel")
+                            </button>
+                            <button class="btn btn-primary mt-1"
+                                    v-on:click="updateEditedBillingAddress"
+                                    v-bind:disabled="Mode.Loading"
+                                    data-qa="shipping-save-address-link">
+                                @Html.Localize("MyAccount", "B_SaveAddress")
+                            </button>
+                        </div>
+                        <button v-if="!Mode.AddingNewAddress &amp;&amp; !Mode.EditingAddress" class="btn btn-dashed-block"
                                 v-on:click="addNewBillingAddress"
                                 v-bind:disabled="Mode.Loading"
                                 data-qa="billing-add-address-link">

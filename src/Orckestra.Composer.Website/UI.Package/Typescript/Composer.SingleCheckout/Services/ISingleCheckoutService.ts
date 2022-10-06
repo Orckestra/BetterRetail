@@ -53,6 +53,8 @@ module Orckestra.Composer {
 
         saveAddressToMyAccountAddressBook(address: any): Q.Promise<any>;
 
+        updateAddressInMyAccountAddressBook(address: any): Q.Promise<any>;
+
         deleteAddress(addressId: any): Q.Promise<any>;
 
         loginUser(formData: any): Q.Promise<any>;
