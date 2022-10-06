@@ -54,7 +54,8 @@ module Orckestra.Composer {
                     dataUpdatedTracker: 1,
                     ProductsMap: {},
                     WishList: wishlist,
-                    IsAuthenticated: authVm.IsAuthenticated
+                    IsAuthenticated: authVm.IsAuthenticated,
+                    ActiveProductId: undefined
                 },
                 mounted() {
                     this.registerSubscriptions();
@@ -89,9 +90,11 @@ module Orckestra.Composer {
                         this.dataUpdatedTracker += 1;
                     },
                     onMouseover(searchProduct) {
+                        console.log('onMouseover' + searchProduct.ProductId);
                         const { ProductId, VariantId, HasVariants } = searchProduct;
+                        if(this.ActiveProductId) return;
+                        this.ActiveProductId = ProductId;
                         if(!HasVariants || this.ProductsMap[ProductId]) return;
-
                         this.loadingProduct(searchProduct, true, true);
                         const pricesTask = self.productService.calculatePrices(ProductId, this.ListName);
                         const productDetailsTask = self.productService.loadProduct(ProductId, VariantId);
@@ -103,6 +106,10 @@ module Orckestra.Composer {
                                 this.ProductsMap[ProductId] = product;
                                })
                             .fin(() => this.loadingProduct(searchProduct, false, false));
+                    },
+                    onMouseleave(searchProduct) {
+                        this.ActiveProductId = undefined;
+                        console.log('onMouseleave' + searchProduct.ProductId);
                     },
                     selectKva(searchProduct, kvaName, kvaValue) {
                         const { ProductId: productId } = searchProduct;
@@ -129,7 +136,7 @@ module Orckestra.Composer {
 
                         const variantPrice = product.ProductPrice.VariantPrices.find(p=> p.VariantId === variant.Id);
                         ProductsHelper.mergeVariantPrice(searchProduct, variantPrice);
-
+                        this.ActiveProductId = productId;
                         self.inventoryService.isAvailableToSell(variant.Sku)
                         .then(result => searchProduct.IsAvailableToSell = result)
                         .fin(() => this.loadingProduct(searchProduct, false));

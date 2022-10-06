@@ -20,7 +20,7 @@
     height: auto;
     position: relative;
     z-index: 4;
-    &:hover {
+    &.active {
       z-index: 5;
     }
     @include media-breakpoint-up(md) {
@@ -41,8 +41,7 @@
     @include media-breakpoint-up(sm) {
         max-height: 700px;
     }
-    
-
+  
     &-content {
         padding: $spacer;
         background: transparentize($color: $gray-200, $amount: 0.1);
@@ -53,11 +52,8 @@
         }
     }
 
-
-    .product-tile-button-container, .product-tile-select-btn-container,
+    .product-tile-button-container, 
     .variants {
-        opacity: 1;
-        max-height: 200px;
         padding-top: $spacer;
         overflow: hidden;
         text-align: center;
@@ -65,15 +61,18 @@
         transition: all 0.3s ease-in-out;
     }
 
+
     @include media-breakpoint-up(sm) {
-        .product-tile-button-container, .product-tile-select-btn-container, .variants {
+        .product-tile-button-container, 
+        .product-tile-select-btn-container, 
+        .variants {
             opacity: 0;
             max-height: 0;
             padding-top: 0;
         }
      }
 
-    &:hover, &:focus, &:focus-within {
+    &.active {
         box-shadow: rgba(0, 0, 0, 0.2) 0px 15px 20px 0px;
         
         transform: translate(0, -4px);
@@ -101,17 +100,22 @@
     }
 
     &.with-variants {
-        @include media-breakpoint-down(sm) {
+        .product-tile-select-btn-container {
+            display: block;
+            padding-top: $spacer;
+            @include media-breakpoint-up(sm) {
+                display: none;
+            }
+        }
 
+
+        @include media-breakpoint-down(sm) {
             .product-tile-button-container {
                 display: none;
             }
         }
-         .variants {
-
-        }
     
-        &:hover, &:focus, &:focus-within {
+        &.active{
             .variants {
                 padding-top: 10px;
             }

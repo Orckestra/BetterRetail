@@ -32,6 +32,7 @@ module Orckestra.Composer {
                         dataUpdatedTracker: 1,
                         WishList: wishlist,
                         IsAuthenticated: authVm.IsAuthenticated,
+                        ActiveProductId: undefined
 
                     },
                     mounted() {
@@ -71,6 +72,8 @@ module Orckestra.Composer {
                         },
                         onMouseover(relatedProduct) {
                             const { ProductId, VariantId, HasVariants } = relatedProduct;
+                            console.log('onMouseover' + relatedProduct.ProductId);
+                            this.ActiveProductId = ProductId;
                             if (!HasVariants || this.ProductsMap[ProductId]) return;
 
                             this.loadingProduct(relatedProduct, true);
@@ -81,6 +84,10 @@ module Orckestra.Composer {
                                     this.ProductsMap[ProductId] = product;
                                 })
                                 .fin(() => this.loadingProduct(relatedProduct, false));
+                        },
+                        onMouseleave(relatedProduct) {
+                            this.ActiveProductId = undefined;
+                            console.log('onMouseleave' + relatedProduct.ProductId);
                         },
                         selectKva(relatedProduct, kvaName, kvaValue) {
                             const { ProductId: productId } = relatedProduct;

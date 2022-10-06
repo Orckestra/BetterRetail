@@ -14,15 +14,16 @@
 
 }
 <div class="product-container"
-         id="product-"
          data-qa="search-result"
-         v-on:mouseover="onMouseover(@(EntityName))"
+          v-bind:class="{'active': @(EntityName).ProductId === ActiveProductId}"
          v-bind:id="@(EntityName).ProductId"
          v-bind:data-product-variant-id="@(EntityName).VariantId"
          v-bind:data-recurring-order-program-name="@(EntityName).RecurringOrderProgramName"
          xmlns:v-bind="v-bind" xmlns:v-on="v-on">
     <div class="product-tile"
-         v-bind:class="{'with-variants': @(EntityName).HasVariants}">
+         v-on:mouseover="onMouseover(@(EntityName))"
+         v-on:mouseleave="onMouseleave(@(EntityName))"
+         v-bind:class="{'with-variants': @(EntityName).HasVariants, 'active': @(EntityName).ProductId === ActiveProductId}">
 
         <a class="product-tile-media"
            v-bind:href="@(EntityName).Url"
@@ -47,7 +48,7 @@
                     </template>
                     <template v-if="productDetailsLoaded(@(EntityName))">
                         @SearchHelpers.VariantColorKvaSelector(EntityName, "Colour")
-                        @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize", Guid.NewGuid())
+                        @SearchHelpers.VariantKvaSelector(EntityName, "RetailSize")
                     </template>
                 </div>
             </template>
@@ -125,7 +126,7 @@
                     </button>
                 </div>
                 <div class="product-tile-select-btn-container">
-                    <button v-if="@(EntityName).HasVariants" class="d-block d-sm-none btn btn-block  btn-outline-secondary text-uppercase">
+                    <button v-if="@(EntityName).HasVariants" v-on:click="ActiveProductId = undefined" class="btn btn-block  btn-outline-secondary text-uppercase">
                         Select Variant
                     </button>
                 </div>
