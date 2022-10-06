@@ -61,6 +61,16 @@
         transition: all 0.3s ease-in-out;
     }
 
+    
+    .variants {
+        .slick-slide & {
+            opacity: 0;
+            max-height: 0;
+            padding-top: 0;
+        }
+    }
+    
+
 
     @include media-breakpoint-up(sm) {
         .product-tile-button-container, 
@@ -171,6 +181,11 @@
         padding-bottom: 104%;
         position: relative;
         z-index: -1;
+        @include media-breakpoint-down(sm) {
+            .slick-slide & {
+                padding-bottom: 128%;
+            }
+        }
    }
 
     .product-tile-recurring {
