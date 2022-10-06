@@ -64,7 +64,8 @@ namespace Orckestra.Composer.MyAccount.Services
             {
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
-                Scope = param.Scope
+                Scope = param.Scope,
+                IncludeAddresses = true
             }).ConfigureAwait(false);
 
             var accountHeaderViewModel = ViewModelMapper.MapTo<AccountHeaderViewModel>(customer, param.CultureInfo);
