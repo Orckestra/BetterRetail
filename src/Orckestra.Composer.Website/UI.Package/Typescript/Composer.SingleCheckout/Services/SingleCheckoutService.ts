@@ -626,12 +626,7 @@ module Orckestra.Composer {
         }
 
         public updateAddressInMyAccountAddressBook(address: any): Q.Promise<any> {
-            return this.customerService.updateAddress(address, address.Id, null).then(address => {
-                var vue: any = this.VueCheckout;
-               // vue.RegisteredAddresses.push(address);
-                return address;
-            }
-            );
+            return this.customerService.updateAddress(address, address.Id, null);
         }
 
         public deleteAddress(addressId: any): Q.Promise<any> {
