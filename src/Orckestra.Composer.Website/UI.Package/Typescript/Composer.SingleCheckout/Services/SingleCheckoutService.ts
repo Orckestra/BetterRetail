@@ -167,6 +167,7 @@ module Orckestra.Composer {
                     ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
                     Payment: null,
                     RegisteredAddresses: [],
+                    EditingAddress: {},
                     Steps: {
                         StartStep: 0,
                         Information: {
@@ -188,6 +189,7 @@ module Orckestra.Composer {
                     Mode: {
                         SignIn: SignInModes.Base,
                         AddingNewAddress: false,
+                        EditingAddress: false,
                         AddingLine2Address: false,
                         CompleteCheckoutLoading: false,
                         Loading: false,
@@ -271,7 +273,25 @@ module Orckestra.Composer {
                         let addressId = $addressListItem.data('address-id');
 
                         return SingleCheckoutService.instance.deleteAddress(addressId);
-                    }
+                    },
+                    editAddress(address) {
+                        this.Mode.EditingAddress = true;
+                        this.Mode.AddingNewAddress = false;
+                        this.EditingAddress = address;
+                        this.AddressName = address.AddressName;
+                        this.initializeParsey('#editAddressForm');
+                    },
+                    handleAddressErrors(reason) {
+                        if (!reason.Errors) { return; }
+                        reason.Errors.forEach((e: any) => {
+                            switch (e.ErrorCode) {
+                                case 'NameAlreadyUsed':
+                                    this.Errors.AddressNameAlreadyInUseError = true; break;
+                                case 'InvalidPhoneFormat':
+                                    this.Errors.InvalidPhoneFormatError = true; break;
+                            }
+                        });
+                    },
                 }
             });
 
@@ -600,6 +620,15 @@ module Orckestra.Composer {
             return this.customerService.createAddress(address, null).then(address => {
                 var vue: any = this.VueCheckout;
                 vue.RegisteredAddresses.push(address);
+                return address;
+            }
+            );
+        }
+
+        public updateAddressInMyAccountAddressBook(address: any): Q.Promise<any> {
+            return this.customerService.updateAddress(address, address.Id, null).then(address => {
+                var vue: any = this.VueCheckout;
+               // vue.RegisteredAddresses.push(address);
                 return address;
             }
             );

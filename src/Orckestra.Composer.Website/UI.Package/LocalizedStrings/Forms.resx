@@ -304,7 +304,7 @@
     <value>This field can only accept letters</value>
   </data>
   <data name="F_FirstNameRequiredError" xml:space="preserve">
-    <value />
+    <value>First Name is required</value>
   </data>
   <data name="F_FirstNameValidation" xml:space="preserve">
     <value>Hi Franklin</value>
@@ -545,5 +545,11 @@
   </data>
   <data name="L_HidePassword" xml:space="preserve">
     <value>Hide</value>
+  </data>
+  <data name="F_FirstLastNameRequiredError" xml:space="preserve">
+    <value>First and Last Names are required</value>
+  </data>
+  <data name="F_PhoneNumberRequiredError" xml:space="preserve">
+    <value>Phone Number is required</value>
   </data>
 </root>

@@ -11,26 +11,41 @@
 <head>
 </head>
 <body>
-        <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddressRegistered">
-            <div is="transition-group" name="items-list">
-                <div v-for="(address, index) in RegisteredAddresses"
-                     v-bind:key="address.Id"
-                     class="border rounded p-3 mb-2 bg-white"
-                     v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId }">
-                    @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "SelectedShippingAddressId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
-                </div>
+    <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddressRegistered">
+        <div is="transition-group" name="items-list">
+            <div v-for="(address, index) in RegisteredAddresses"
+                 v-bind:key="address.Id"
+                 class="border rounded p-3 mb-2 bg-white"
+                 v-bind:class="{ 'bg-selected border-primary': address.Id == SelectedShippingAddressId }">
+                @CheckoutHelpers.AddressRadioOption("ShippingAddressId", "SelectedShippingAddressId", "changeRegisteredShippingAddress", "deleteShippingAddressConfirm")
             </div>
-            <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
-                @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
-                <button class="btn btn-primary mt-1"
-                        v-on:click="addShippingAddressToMyAddressBook()"
-                        v-bind:disabled="Mode.Loading"
-                        data-qa="shipping-save-address-link">
-                    @Html.Localize("MyAccount", "B_SaveNewAddress")
-                </button>
-            </div>
+        </div>
+        <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
+            @Forms.Address.Form("Cart.ShippingAddress", "addNewAddressForm", true)
+            <button class="btn btn-primary mt-1"
+                    v-on:click="addShippingAddressToMyAddressBook()"
+                    v-bind:disabled="Mode.Loading"
+                    data-qa="shipping-save-address-link">
+                @Html.Localize("MyAccount", "B_SaveNewAddress")
+            </button>
+        </div>
+        <div v-show="Mode.EditingAddress" class="border-top mt-4 pt-4">
+            @Forms.Address.Form("EditingAddress", "editAddressForm", true)
+            <button class="btn btn-outline-secondary mt-1"
+                    v-on:click="Mode.EditingAddress = false"
+                    v-bind:disabled="Mode.Loading"
+                    data-qa="shipping-save-address-link">
+                @Html.Localize("General", "B_Cancel")
+            </button>
+            <button class="btn btn-primary mt-1"
+                    v-on:click="updateEditedShippingAddress"
+                    v-bind:disabled="Mode.Loading"
+                    data-qa="shipping-save-address-link">
+                @Html.Localize("MyAccount", "B_SaveAddress")
+            </button>
+        </div>
 
-            <button v-if="!Mode.AddingNewAddress" class="btn btn-dashed-block"
+            <button v-if="!Mode.AddingNewAddress &amp;&amp; !Mode.EditingAddress" class="btn btn-dashed-block"
                     v-on:click="addNewAddressMode"
                     v-bind:disabled="IsLoading"
                     data-qa="shipping-add-address-link">
@@ -38,8 +53,8 @@
             </button>
         </div>
 
-        <div  v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddress">
+        <div v-if="!IsAuthenticated" data-oc-controller="SingleCheckout.ShippingAddress">
             @Forms.Address.Form("Cart.ShippingAddress", "addressForm")
-       </div>
+        </div>
 </body>
 </html>
