@@ -47,11 +47,11 @@ module Orckestra.Composer {
         }
 
         static  mergeVariantPrice(product, variantPrice) {
-            if(!variantPrice || !product.SizeSelected) return;
+            if(!variantPrice) return;
 
             product.IsOnSale = variantPrice.IsPriceDiscounted;
-            product.DisplaySpecialPrice = variantPrice.DefaultListPrice;
-            product.DisplayListPrice = variantPrice.ListPrice;
+            product.DisplaySpecialPrice = variantPrice.ListPrice;
+            product.DisplayListPrice = variantPrice.DefaultListPrice;
             product.HasPriceRange = false;
         }
 

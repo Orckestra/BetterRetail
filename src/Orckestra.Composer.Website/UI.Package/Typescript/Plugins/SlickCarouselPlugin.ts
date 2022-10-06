@@ -28,23 +28,25 @@ module Orckestra.Composer {
                 if (!$(slickInstance).hasClass('slick-initialized')) {
                     if (slickInstance.data('slick').mobileCarousel) {
                         let nbSlideToShow = slickInstance.data('slick').mobileSlidesToShow;
-                        nbSlideToShow = ( nbSlideToShow ) ? nbSlideToShow : 2;
+                        nbSlideToShow = ( nbSlideToShow ) ? nbSlideToShow : 1;
                         let nbSlideToScroll = slickInstance.data('slick').mobileSlidesToScroll;
-                        nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 2;
+                        nbSlideToScroll = ( nbSlideToScroll ) ? nbSlideToScroll : 1;
 
                         slickOptions.responsive.push({
-                            breakpoint: 768,
+                            breakpoint: 576,
                             arrows: false,
+                            dots: true,
                             settings: {
                                 slidesToShow: nbSlideToShow,
                                 slidesToScroll: nbSlideToScroll,
                                 dots: true,
-                                infinite: true
+                                infinite: true,
+                                centerMode: true,
                             }
                         });
                     } else {
                         slickOptions.responsive.push({
-                            breakpoint: 768,
+                            breakpoint: 576,
                             arrows: false,
                             settings: 'unslick' // destroys slick
                         });
