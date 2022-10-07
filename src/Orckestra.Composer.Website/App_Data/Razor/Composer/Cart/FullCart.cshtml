@@ -31,7 +31,9 @@
                         @Function("Composer.Cart.OrderSummary")
                     </div>
                     <div v-if="Cart.CartType != '@CartConfiguration.OrderDraftCartType'" class="col-md-6  col-md-pull-6  col-lg-pull-0  col-lg-12">
-                        @Function("Composer.Cart.Coupons")
+                        <div data-oc-controller="Cart.Coupons">
+                            @Function("Composer.Cart.Coupons")
+                        </div>
                     </div>
                 </div>
             </div>
