@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web;
-using Composite.Core;
-using Composite.Core.Routing;
+﻿using Composite.Core.Routing;
 using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.ExperienceManagement.Configuration;
+using System;
+using System.Globalization;
+using System.Web;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 namespace Orckestra.Composer.CompositeC1.Services
 {
     public class PageService : IPageService
     {
+        private readonly HttpContext _currentHttpContext;
         protected ISiteConfiguration SiteConfiguration { get; private set; }
-        public PageService() { }
+        public PageService() {
+            _currentHttpContext = HttpContext.Current;
+        }
 
         /// <summary>
         /// Returns a page in the given locale.
@@ -59,11 +59,12 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (pageId == Guid.Empty) { throw new ArgumentException(GetMessageOfEmpty(), nameof(pageId)); }
 
             var page = GetPage(pageId, cultureInfo);
-            return page == null
-                ? null
-                : httpContext != null 
-                    ? PageUrls.BuildUrl(page, UrlKind.Public, new UrlSpace(httpContext)) 
-                    : PageUrls.BuildUrl(page);
+            if (page == null) return null;
+
+            var context = httpContext ?? _currentHttpContext;
+            var urlSpace = context != null ? new UrlSpace(context) : null;
+
+            return PageUrls.BuildUrl(page, UrlKind.Public, urlSpace);
         }
 
         public virtual string GetPageUrl(IPage page)
