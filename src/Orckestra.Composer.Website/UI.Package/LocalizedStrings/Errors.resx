@@ -264,4 +264,7 @@
   <data name="L_UpdatingOrderFailed" xml:space="preserve">
     <value>An error occurred while updating your order. The order cannot be editable anymore. Please &lt;a href="javascript:window.location.reload();"&gt;refresh the page&lt;/a&gt; and try again to edit your order or contact us.</value>
   </data>
+  <data name="L_AddToWishListFailed" xml:space="preserve">
+    <value>An error occurred while adding the product to the WishList. Please try again.</value>
+  </data>
 </root>

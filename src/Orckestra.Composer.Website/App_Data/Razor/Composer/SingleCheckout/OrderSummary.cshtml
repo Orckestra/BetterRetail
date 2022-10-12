@@ -1,4 +1,5 @@
-﻿@inherits RazorFunction
+﻿@using Orckestra.Composer.Cart
+@inherits RazorFunction
 
 @functions {
     public override string FunctionDescription
@@ -11,47 +12,52 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="SingleCheckout.OrderSummary"
-         class="checkout-step-container  active-step"
-         v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
+    <div class="sps-order-summary sps  sps--abv"  data-sps-offset="100">
+        <div data-oc-controller="SingleCheckout.OrderSummary"
+             class="checkout-step-container  active-step"
+             v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
 
-        <div class="card  mb-4 w-100 sps-order-summary sps  sps--abv" data-sps-offset="100">
-            @GeneralHelpers.LoadingSpinner()
+            <div class="card  mb-4 w-100">
+                @GeneralHelpers.LoadingSpinner()
 
-            <h3 class="card-header bg-primary border-primary  text-white">
-                @Html.Localize("ShoppingCart", "T_OrderSummary")
-            </h3>
-            <div class="card-body  bg-light" v-cloak="true">
-                @OrderSummaryHelpers.Rewards()
+                <h3 class="card-header bg-primary border-primary  text-white">
+                    @Html.Localize("ShoppingCart", "T_OrderSummary")
+                </h3>
+                <div class="card-body  bg-light" v-cloak="true">
+                    @OrderSummaryHelpers.Rewards()
 
-                @OrderSummaryHelpers.SubTotal()
+                    @OrderSummaryHelpers.SubTotal()
 
-                @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
+                    @OrderSummaryHelpers.TaxableShipmentAdditionalFeeSummary()
 
-                @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
+                    @OrderSummaryHelpers.TaxableAdditionalFeeSummary()
 
-                <div v-if="OrderSummary.IsShippingTaxable">
-                    @Shipping()
+                    <div v-if="OrderSummary.IsShippingTaxable">
+                        @Shipping()
+                    </div>
+
+                    @OrderSummaryHelpers.Taxes()
+
+                    @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
+
+                    @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
+
+                    <div v-if="!OrderSummary.IsShippingTaxable">
+                        @Shipping()
+                    </div>
+
+                    @Totals()
+
+                    @OrderSummaryHelpers.SavingsTotal()
+
+                    @OrderSummaryHelpers.AdditionalFeesMessage()
+
+                    @PalceOrderBtn()
                 </div>
-
-                @OrderSummaryHelpers.Taxes()
-
-                @OrderSummaryHelpers.NotTaxableShipmentAdditionalFeeSummary()
-
-                @OrderSummaryHelpers.NotTaxableAdditionalFeeSummary()
-
-                <div v-if="!OrderSummary.IsShippingTaxable">
-                    @Shipping()
-                </div>
-
-                @Totals()
-
-                @OrderSummaryHelpers.SavingsTotal()
-
-                @OrderSummaryHelpers.AdditionalFeesMessage()
-
-                @PalceOrderBtn()
             </div>
+        </div>
+        <div data-oc-controller="SingleCheckout.Coupons">
+            @Function("Composer.Cart.Coupons")
         </div>
     </div>
 </body>
@@ -61,7 +67,7 @@
 {
     <div v-if="OrderSummary.Rewards.length" class="text-center">
         <p class="promotion  mb-2">
-            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}<br/></em>
+            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">{{reward.Description || reward.PromotionName}}<br /></em>
         </p>
     </div>
 }

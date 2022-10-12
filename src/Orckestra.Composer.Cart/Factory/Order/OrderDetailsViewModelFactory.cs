@@ -352,7 +352,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
                     var paymentProvider = PaymentProviderFactory.ResolveProvider(payment.PaymentMethod.PaymentProviderName);
                     model = paymentProvider.BuildOrderSummaryPaymentViewModel(payment, param.CultureInfo);
                 }
-                catch (ArgumentException)
+                catch (Exception)
                 {
                     model = new OrderSummaryPaymentViewModel();
                 }

@@ -14,12 +14,16 @@
 /// <reference path='../ProductEvents.ts' />
 /// <reference path='./Constants/SearchEvents.ts' />
 /// <reference path='../Product/InventoryService.ts' />
+///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
+///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
     export class SearchResultsController extends Orckestra.Composer.Controller {
         protected cartService: ICartService = CartService.getInstance();
+        protected wishListService: WishListService = new WishListService(new WishListRepository(), this.eventHub);
+        protected membershipService: IMembershipService = new MembershipService(new MembershipRepository());
         protected inventoryService = new InventoryService();
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected currentPage: any;
@@ -28,9 +32,15 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
+           
+            let getWithListTask = this.wishListService.getWishListSummary();
+            let authenticatedPromise = this.membershipService.isAuthenticated();
+            Q.all([authenticatedPromise, getWithListTask]).spread((authVm, wishList) => this.initializeVueComponent(wishList, authVm));
+        }
+
+        protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
             this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
-
             const self = this;
             this.vueSearchResults = new Vue({
                 el: `#${this.context.container.data('vueid')}`,
@@ -43,15 +53,24 @@ module Orckestra.Composer {
                     isLoading: false,
                     dataUpdatedTracker: 1,
                     ProductsMap: {},
+                    WishList: wishlist,
+                    IsAuthenticated: authVm.IsAuthenticated,
+                    ActiveProductId: undefined
                 },
                 mounted() {
                     this.registerSubscriptions();
                 },
                 computed: {
-                    SearchResultsData() { 
-                      // By using `dataUpdatedTracker` we tell Vue that this property depends on it,
-                      // so it gets re-evaluated whenever `dataUpdatedTracker` changes
-                      return this.dataUpdatedTracker && this.SearchResults;
+                    SearchResultsData() {
+                        // By using `dataUpdatedTracker` we tell Vue that this property depends on it,
+                        // so it gets re-evaluated whenever `dataUpdatedTracker` changes
+                        const results = _.map(this.SearchResults, (product: any) => {
+                            product.WishListItem = this.WishList && this.WishList.Items.find(i => i.ProductId === product.ProductId && i.VariantId == product.VariantId);
+                            return product;
+                        });
+                    
+                     
+                      return this.dataUpdatedTracker && results;
                     },
                   },
                 methods: {
@@ -71,9 +90,11 @@ module Orckestra.Composer {
                         this.dataUpdatedTracker += 1;
                     },
                     onMouseover(searchProduct) {
+                        console.log('onMouseover' + searchProduct.ProductId);
                         const { ProductId, VariantId, HasVariants } = searchProduct;
+                        if(this.ActiveProductId) return;
+                        this.ActiveProductId = ProductId;
                         if(!HasVariants || this.ProductsMap[ProductId]) return;
-
                         this.loadingProduct(searchProduct, true, true);
                         const pricesTask = self.productService.calculatePrices(ProductId, this.ListName);
                         const productDetailsTask = self.productService.loadProduct(ProductId, VariantId);
@@ -81,10 +102,14 @@ module Orckestra.Composer {
                             .spread((prices, product) => {
                                 product.ProductPrice = <any>_.find(prices.ProductPrices, { ProductId });
                                 product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
-                                product.SizeSelected = false;
+                                product.SizeSelected = true;
                                 this.ProductsMap[ProductId] = product;
                                })
                             .fin(() => this.loadingProduct(searchProduct, false, false));
+                    },
+                    onMouseleave(searchProduct) {
+                        this.ActiveProductId = undefined;
+                        console.log('onMouseleave' + searchProduct.ProductId);
                     },
                     selectKva(searchProduct, kvaName, kvaValue) {
                         const { ProductId: productId } = searchProduct;
@@ -102,6 +127,7 @@ module Orckestra.Composer {
                         this.loadingProduct(searchProduct, true);
 
                         product.SelectedVariant = variant;
+                        searchProduct.VariantId = variant.Id;
                         searchProduct.ImageUrl = variant.Images.find(i => i.Selected).ImageUrl;
 
                         if(ProductsHelper.isSize(kvaName)) {
@@ -110,7 +136,7 @@ module Orckestra.Composer {
 
                         const variantPrice = product.ProductPrice.VariantPrices.find(p=> p.VariantId === variant.Id);
                         ProductsHelper.mergeVariantPrice(searchProduct, variantPrice);
-
+                        this.ActiveProductId = productId;
                         self.inventoryService.isAvailableToSell(variant.Sku)
                         .then(result => searchProduct.IsAvailableToSell = result)
                         .fin(() => this.loadingProduct(searchProduct, false));
@@ -141,21 +167,34 @@ module Orckestra.Composer {
                         this.loadingProduct(product, true);
  
                         self.cartService.addLineItem(product, price, product.VariantId, 1, this.ListName)
-                            .then(this.addToCartSuccess, this.onAddToCartFailed)
+                            .fail(reason => this.onAddToCartFailed(reason, 'AddToCartFailed'))
                             .fin(() => this.loadingProduct(product, false));
                         
                     },
                     isAddToCartDisabled(product) {
                         return ProductsHelper.isAddToCartDisabled(product, this.ProductsMap);
                     },
-                    onAddToCartFailed(reason: any): void {
+                    onAddToCartFailed(reason: any, errorCode): void {
                         console.error('Error on adding item to cart', reason);
 
-                        ErrorHandler.instance().outputErrorFromCode('AddToCartFailed');
+                        ErrorHandler.instance().outputErrorFromCode(errorCode);
                     },
-                    addToCartSuccess(data: any): void {
-                        ErrorHandler.instance().removeErrors();
-                        return data;
+                    addLineItemToWishList(searchProduct) {
+                        if (!this.IsAuthenticated) {
+                            return self.wishListService.redirectToSignIn();
+                        }
+
+                        let { ProductId, VariantId, RecurringOrderProgramName } = searchProduct;
+
+                        self.wishListService.addLineItem(ProductId, VariantId, 1, undefined, RecurringOrderProgramName)
+                            .then(wishList => this.WishList = wishList)
+                            .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                    },
+
+                    removeLineItemFromWishList(searchProduct) {
+                        self.wishListService.removeLineItem(searchProduct.WishListItem.Id)
+                            .then(wishList => this.WishList = wishList)
+                            .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
                     },
                     registerSubscriptions(): void {
                         self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));

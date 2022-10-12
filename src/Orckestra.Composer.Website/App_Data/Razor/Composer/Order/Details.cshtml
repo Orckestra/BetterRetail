@@ -191,7 +191,10 @@
                     @foreach (var payment in order.Payments)
                     {
                         var billingAddress = payment.BillingAddress;
-                        @AddressPreview(billingAddress)
+                        if(billingAddress != null)
+                        {
+                            @AddressPreview(billingAddress)
+                        }
                     }
                 </div>
             </div>
@@ -302,7 +305,7 @@
                     </div>
                     <div class="col-8 col-sm-4  order-3">
                         <div>
-                            <strong>@item.ProductSummary.Brand</strong>
+                            <strong>@Html.Raw(item.ProductSummary.Brand)</strong>
                             <p class="mb-2">@item.ProductSummary.DisplayName</p>
                             @if (!string.IsNullOrEmpty(item.VariantId))
                             {

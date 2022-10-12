@@ -56,6 +56,7 @@ module Orckestra.Composer {
                     changeRegisteredBillingAddress(addressId) {
                         this.BillingAddress.AddressBookId = addressId;
                         this.Mode.AddingNewAddress = false;
+                        this.Mode.EditingAddress = false;
 
                         if (!this.debouncechangeRegisteredBillingAddress) {
                             this.debouncechangeRegisteredBillingAddress = _.debounce(() => {
@@ -68,6 +69,28 @@ module Orckestra.Composer {
                     deleteBillingAddressConfirm(event: JQueryEventObject) {
                         this.Modal.deleteAddressModal.openModal(event);
                     },
+                    updateEditedBillingAddress() {
+                        let isValid = this.validateParsey('#editAddressForm');
+                        if (!isValid) {
+                            return Q.reject('Address information is not valid');
+                        }
+                        this.Mode.Loading = true;
+                        this.EditingAddress.AddressName = this.AddressName;
+
+                        self.checkoutService.updateAddressInMyAccountAddressBook(this.EditingAddress)
+                        .then(() =>  {
+                            this.Mode.EditingAddress = false;
+                            
+                            if(this.Cart.Payment.BillingAddress.AddressBookId === this.EditingAddress.Id) {
+                                var isMatch = AddressUtils.isEquals(this.Cart.Payment.BillingAddress, this.EditingAddress);
+                                if(!isMatch) {
+                                    return this.changeRegisteredBillingAddress(this.EditingAddress.Id);
+                                }
+                            }
+                        })
+                        .fail(reason => this.handleAddressErrors(reason))
+                        .fin(() => this.Mode.Loading = false)
+                    }
                 }
             };
 

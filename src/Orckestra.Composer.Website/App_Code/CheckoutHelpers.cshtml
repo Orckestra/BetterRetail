@@ -25,19 +25,22 @@
 
 @helper AddressPreview(string vueBinding, string qaPrefix = "shipping-address-preview")
 {
-    <p class="mb-0">
-        <strong v-if="@(vueBinding).AddressName" data-qa="@(qaPrefix)-name">{{@(vueBinding).AddressName}}<br /></strong>
-        <strong v-if="@(vueBinding).FirstName" data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}<br /></strong>
-        <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span>
-        <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">, {{@(vueBinding).Line2}}</span><br />
-        <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
-        <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
-        <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span>
-    </p>
+<p class="mb-0">
+    <strong v-if="@(vueBinding).AddressName" data-qa="@(qaPrefix)-name">{{@(vueBinding).AddressName}}<br /></strong>
+    <strong v-if="@(vueBinding).FirstName" data-qa="@(qaPrefix)-fullname">{{@(vueBinding).FirstName}} {{@(vueBinding).LastName}}<br /></strong>
+    <span v-else="else" class="text-danger">@Html.Localize("Forms", "F_FirstLastNameRequiredError")<br /></span>
+    <span data-qa="@(qaPrefix)-line1">{{@(vueBinding).Line1}}</span>
+    <span data-qa="@(qaPrefix)-line2" v-if="@(vueBinding).Line2">, {{@(vueBinding).Line2}}</span><br />
+    <span data-qa="@(qaPrefix)-city">{{@(vueBinding).City}}</span><br />
+    <span data-qa="@(qaPrefix)-regionName">{{@(vueBinding).RegionName}}</span>,
+    <span data-qa="@(qaPrefix)-postalCode">{{@(vueBinding).PostalCode}}</span><br />
+    <span v-if="@(vueBinding).PhoneNumber" data-qa="@(qaPrefix)-phoneNumber">{{@(vueBinding).PhoneNumber}}</span>
+    <span v-else="else" class="text-danger">@Html.Localize("Forms", "F_PhoneNumberRequiredError")</span>
+</p>
 }
 
 
-@helper AddressRadioOption(string name = "ShippingAddressId", string selected = "AddressBookId", string onChange = "changeRegisteredShippingAddress", string onDelete = "deleteShippingAddressConfirm")
+@helper AddressRadioOption(string name = "ShippingAddressId", string selected = "AddressBookId", string onChange = "changeRegisteredShippingAddress", string onDelete = "deleteShippingAddressConfirm", string onEdit="editAddress")
 {
     <div class="form-check" v-bind:data-address-id="address.Id">
         <input data-parsley-errors-container="#adresses-errors"
@@ -56,9 +59,14 @@
                 <div class="col-12 col-sm-9 order-2 order-sm-1">@AddressPreview("address")</div>
                 <div class="col-12 col-sm-3 order-1 order-sm-2 font-weight-bolder d-flex align-items-start justify-content-between flex-sm-column align-items-sm-end">
                     <p class="h5"> {{address.AddressName}}</p>
-                    <button type="button" class="btn btn-link" data-qa="address-delete" v-on:click="@onDelete" title="@Html.Localize("MyAccount", "B_DeleteAddress")">
-                        <span class="fa fa-trash-o fa-lg"></span>
-                    </button>
+                    <div class=" d-flex flex-row">
+                        <button type="button" class="btn btn-link" data-qa="address-edit" v-on:click="@(onEdit)(address)" title="@Html.Localize("MyAccount", "B_EditAddress")">
+                            <span class="fa fa-edit fa-lg"></span>
+                        </button>
+                        <button type="button" class="btn btn-link" data-qa="address-delete" v-on:click="@onDelete" title="@Html.Localize("MyAccount", "B_DeleteAddress")">
+                            <span class="fa fa-trash-o fa-lg"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </label>

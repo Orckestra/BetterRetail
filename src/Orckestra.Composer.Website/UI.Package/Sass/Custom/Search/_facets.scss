@@ -142,7 +142,8 @@
         }
 
         .facets-modal-content {
-            position: relative;
+            position: fixed;
+            height: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -166,9 +167,8 @@
         .facets-modal-body {
             position: relative;
             overflow-y: auto;
+            background: $light;
             flex: 1 1 auto;
-            //TODO: class below make modal body full height, but for some reason it doesn't work on iPhone xS Safari, need to investigate 
-            //min-height: subtract(100vh, 120px);
 
             .overlay {
                 display: none;

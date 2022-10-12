@@ -111,7 +111,7 @@ namespace Orckestra.Composer.Search
         /// <value>
         ///     The default size of the image.
         /// </value>
-        public static string DefaultImageSize { get; set; } = "M";
+        public static string DefaultImageSize { get; set; } = "L";
 
         public static ProviderRegistry<IFacetPredicateProvider> FacetPredicateProviderRegistry
         {
