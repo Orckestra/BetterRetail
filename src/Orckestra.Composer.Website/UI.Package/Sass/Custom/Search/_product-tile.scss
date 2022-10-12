@@ -93,11 +93,13 @@
     .variants {
         padding-top: $spacer;
         overflow: hidden;
-        text-align: center;
         position: relative;
         transition: all 0.3s ease-in-out;
         max-height: 0;
         opacity: 0;
+        @include media-breakpoint-up(md){
+            text-align: center;
+        }
         .slick-slide & {
             opacity: 0;
             max-height: 0;

@@ -122,7 +122,14 @@ html {
 }
 
 .row {
-    row-gap: $grid-gutter-width*2;
+    row-gap: $grid-gutter-width;
+
+    .search-results > & {
+        row-gap: $grid-gutter-width*2;
+    }
+    &.form-group {
+        row-gap: 5px;
+    }
     & +.row {
         margin-top: $grid-gutter-width;
     }
