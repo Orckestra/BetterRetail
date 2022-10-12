@@ -122,7 +122,7 @@ html {
 }
 
 .row {
-    row-gap: $grid-gutter-width;
+    row-gap: $grid-gutter-width*2;
     & +.row {
         margin-top: $grid-gutter-width;
     }
