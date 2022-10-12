@@ -16,12 +16,27 @@
     }
 }
 
+.search-results {
+    > .row {
+        align-items: stretch;
+
+    }
+}
+
 .product-container {
-    height: auto;
+    height: 100%;
     position: relative;
     z-index: 4;
+
+    display: flex;
+    flex: 1;
+    align-content: stretch;
+
     &.active {
       z-index: 5;
+    }
+    @include media-breakpoint-up(sm) {
+        //height: 60vw;
     }
     @include media-breakpoint-up(md) {
       height: 313px;
@@ -38,31 +53,51 @@
     position: static;
     $lines-of-text: 3;
     transition: all 0.3s ease-in-out;
-    @include media-breakpoint-up(sm) {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid $gray-200;
+
+    @include media-breakpoint-up(md) {
+        display: block;
         max-height: 700px;
+        border: none;
     }
   
     &-content {
         padding: $spacer;
         background: transparentize($color: $gray-200, $amount: 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        @include media-breakpoint-up(md) {
+            display: block;
+        }
         
         .slick-slide & {
             bottom: 0px;
             position: absolute;
         }
+        flex: 1 1 auto;
+
     }
 
-    .product-tile-button-container, 
+    .product-tile-button-container {
+        padding-top: $spacer;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+    } 
+
+    
     .variants {
         padding-top: $spacer;
         overflow: hidden;
         text-align: center;
         position: relative;
         transition: all 0.3s ease-in-out;
-    }
-
-    
-    .variants {
+        max-height: 0;
+        opacity: 0;
         .slick-slide & {
             opacity: 0;
             max-height: 0;
@@ -72,7 +107,7 @@
     
 
 
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(md) {
         .product-tile-button-container, 
         .product-tile-select-btn-container, 
         .variants {
@@ -113,13 +148,13 @@
         .product-tile-select-btn-container {
             display: block;
             padding-top: $spacer;
-            @include media-breakpoint-up(sm) {
+            @include media-breakpoint-up(md) {
                 display: none;
             }
         }
 
 
-        @include media-breakpoint-down(sm) {
+        @include media-breakpoint-down(md) {
             .product-tile-button-container {
                 display: none;
             }
@@ -149,13 +184,15 @@
     }
 
     .product-tile-title {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        white-space: normal;
-        min-height: 40px;
+        @include media-breakpoint-up(md) {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            white-space: normal;
+            min-height: 40px;
+        }
     }
 
 
@@ -174,14 +211,18 @@
     }
 
     .product-tile-media {
+        flex: 1 0 40%;
         // http://alistapart.com/article/creating-intrinsic-ratios-for-video
-        display: block;
-        height: 0;
-        //padding-bottom: $product-image-ratio * 100%;
-        padding-bottom: 104%;
-        position: relative;
-        z-index: -1;
-        @include media-breakpoint-down(sm) {
+
+        @include media-breakpoint-up(md) {
+            z-index: -1;
+            display: block;
+            height: 0;
+            //padding-bottom: $product-image-ratio * 100%;
+            padding-bottom: 104%;
+            position: relative;
+        }
+        @include media-breakpoint-down(md) {
             .slick-slide & {
                 padding-bottom: 128%;
             }
@@ -239,12 +280,15 @@
     }
 
     .product-tile-banner {
-        width: 100%;
         position: absolute;
         bottom: 0;
         font-size: 14px;
-        font-family: $font-size-h1-sm, sans-serif;
+        font-family: $font-family-base;
         text-align: center;
+
+        @include media-breakpoint-up(md) {
+            width: 100%;
+        }
     }
     .product-tile-banner span {
         display: inline-block;

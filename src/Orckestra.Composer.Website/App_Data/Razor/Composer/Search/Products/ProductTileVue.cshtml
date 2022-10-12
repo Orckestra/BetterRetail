@@ -80,7 +80,7 @@
                                 <small class="text-danger">@Html.Localize("List-Search", "L_PriceFrom")</small>
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
+                                <span class="h5 strong text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
                             </div>
                         </template>
                         <template v-else="v-else">
@@ -88,7 +88,7 @@
                                 <small>@Html.Localize("List-Search", "L_PriceFrom")</small>
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
+                                <span class="h5 strong" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
                             </div>
                         </template>
                     </template>
@@ -98,7 +98,7 @@
                                 <del>{{@(EntityName).DisplayListPrice}}</del>
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
+                                <span class="h5 strong text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
                             </div>
                         </template>
                         <template v-else="v-else">
@@ -106,7 +106,7 @@
                                 <!--only used for proper spacing-->
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
+                                <span class="h5 strong" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
                             </div>
                         </template>
                     </template>
