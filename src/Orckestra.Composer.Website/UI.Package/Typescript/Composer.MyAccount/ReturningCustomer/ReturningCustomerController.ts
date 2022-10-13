@@ -84,7 +84,7 @@ module Orckestra.Composer {
             }
         }
 
-        private onLoginRejected(reason: any) {            
+        private onLoginRejected(reason: any) {
             let errorCode = MyAccountStatus[MyAccountStatus.AjaxFailed];
             let accountLockedDownUntil = "";
             if (reason && reason.Errors && reason.Errors[0] && reason.Errors[0].ErrorCode) {
