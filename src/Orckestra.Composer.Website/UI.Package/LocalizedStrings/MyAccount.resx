@@ -347,7 +347,7 @@ Don't worry, you can still find great products to offer!</value>
     <value>Incorrect username or password, please try again.</value>
   </data>
   <data name="L_SignInError" xml:space="preserve">
-    <value>An error occured while logging in, please check your username or password.</value>
+    <value>Incorrect username or password, please try again.</value>
   </data>
   <data name="L_SignInErrorRequiresApproval" xml:space="preserve">
     <value>Your account must be approved by an administrator.</value>

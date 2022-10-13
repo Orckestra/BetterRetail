@@ -10,8 +10,8 @@
             {{else}}{{#if_eq Status 'InvalidCredentials'}}
                 <span>{{localize 'MyAccount' 'L_SignInErrorInvalidCredentials'}}</span>
             {{else}}{{#if_eq Status 'UserLockedDown'}}
-                {{#if_neq AccountLockedDownUntil ''}}
-                <span>{{localizeFormat 'MyAccount' 'L_SignInErrorUserLockedDown' AccountLockedDownUntil}}</span>
+                {{#if_neq Bag.AccountLockedDownUntil ''}}
+                <span>{{localizeFormat 'MyAccount' 'L_SignInErrorUserLockedDown' Bag.AccountLockedDownUntil }}</span>
                  {{/if_neq}}
             {{/if_eq}}{{/if_eq}}{{/if_eq}}{{/if_eq}}
         </div>

@@ -341,13 +341,13 @@ Pas de soucis, vous pouvez trouver d'excellentes suggestions de produits à offr
     <value>Se connecter</value>
   </data>
   <data name="L_SignInErrorUserLockedDown" xml:space="preserve">
-    <value>Votre compte est actuellement verrouillé jusqu'au {0} en raison d'un trop grand nombre de tentatives incorrectes. Veuillez patienter ou contacter le service client pour plus d'informations.</value>
+    <value>Votre compte est présentement bloqué jusqu'à {0} puisque vous avez essayé de vous connecter avec des informations incorrectes. Veuillez contacter le service à la clientèle pour plus d'information.</value>
   </data>
   <data name="L_SignInErrorInvalidCredentials" xml:space="preserve">
     <value>Nom d'utilisateur ou mot de passe incorrect, veuillez essayer de nouveau.</value>
   </data>
   <data name="L_SignInError" xml:space="preserve">
-    <value>Une erreur s'est produite lors de la connexion. Veuillez vérifier votre nom d'utilisateur ou votre mot de passe.</value>
+    <value>Nom d'utilisateur ou mot de passe incorrect, veuillez essayer de nouveau.</value>
   </data>
   <data name="L_SignInErrorRequiresApproval" xml:space="preserve">
     <value>Votre compte doit être approuvé par un administrateur.</value>

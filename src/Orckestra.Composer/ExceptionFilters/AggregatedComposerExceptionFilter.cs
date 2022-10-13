@@ -37,15 +37,15 @@ namespace Orckestra.Composer.ExceptionFilters
 
             var query = from exception in innerExceptions.OfType<ComposerException>()
                 from error in exception.Errors
-                let localizedErrorMessage =
-                    LocalizationProvider.GetLocalizedErrorMessage(error.ErrorCode, Context.CultureInfo)
-                select ExtendErrorViewModel(error, localizedErrorMessage);
+                select CreateErrorViewModel(error);
 
             return query.ToList();
         }
 
-        private ErrorViewModel ExtendErrorViewModel(ErrorViewModel error, string localizedErrorMessage)
+        private ErrorViewModel CreateErrorViewModel(ErrorViewModel error)
         {
+            var localizedErrorMessage =
+                LocalizationProvider.GetLocalizedErrorMessage(error.ErrorCode, Context.CultureInfo);
             var errorModel = new ErrorViewModel
             {
                 ErrorCode = error.ErrorCode,

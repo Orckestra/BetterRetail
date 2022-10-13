@@ -15,6 +15,7 @@ using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -162,7 +163,7 @@ namespace Orckestra.Composer.MyAccount.Services
             }
             catch (ComposerException e)
             {
-                if (e.Errors[0].ErrorCode == "UserLockedDown")
+                if (e.Errors != null && e.Errors.Any() && e.Errors[0].ErrorCode == Constants.UserLockedDownErrorCode)
                 {
                     var customer = await CustomerRepository.GetCustomerByUsernameAsync(new GetCustomerByUsernameParam
                     {
@@ -170,7 +171,7 @@ namespace Orckestra.Composer.MyAccount.Services
                         Username = userName,
                         CultureInfo = param.CultureInfo
                     }).ConfigureAwait(false);
-                    e.Errors[0].Bag.Add("AccountLockedDownUntil", customer.AccountLockedDownUntil?.ToString("dd/MM/yyyy hh:mm tt"));
+                    e.Errors[0].Bag.Add("AccountLockedDownUntil", customer.AccountLockedDownUntil?.ToLocalTime().ToString("g", param.CultureInfo));
                 }
 
                 throw e;
