@@ -19,15 +19,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue-select@3.0.0"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-select@3.0.0/dist/vue-select.css">
-
+    <script src="https://kit.fontawesome.com/61794f002a.js" crossorigin="anonymous"></script>
 
 
     <!-- App -->
     <div id="app">
         <div class="" v-if="isLoadModification"></div>
-        <div class="m-3 flex">
-            <div class="flex-grow">
-                <input type="search" placeholder="Filter colors" class="color-filter" v-model="filterKeyword" />
+        <div class="m-3 info-bar">
+            <div class="filter-input">
+                <input type="search" placeholder="Filter colors" class="color-filter w-80" v-model="filterKeyword" />
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
             </div>
             <div class="flex-none">
                 <button type="submit" class="btn-primary w-24" :disabled="!HasModifications"
@@ -288,6 +289,21 @@
             border-radius: 0.25rem;
             --tw-border-opacity: 1;
             border-color: rgba(212, 212, 212, 1);
+        }
+
+        .search-icon {
+            top: 7;
+            position: absolute;
+            right: 10;
+        }
+
+        .filter-input {
+            position: relative;
+        }
+
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 
