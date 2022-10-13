@@ -164,7 +164,7 @@
     
         &.active{
             .variants {
-                padding-top: 10px;
+                padding-top: $spacer*2;
             }
 
             .product-tile-button-container {
@@ -312,7 +312,10 @@
         flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
+        @include media-breakpoint-up(md){
+            justify-content: center;
+        }
+        
     }
 
     .kva-color {

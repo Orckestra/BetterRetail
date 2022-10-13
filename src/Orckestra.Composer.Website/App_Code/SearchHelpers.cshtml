@@ -210,8 +210,8 @@
 {
     <div class="variant-kva variant-kva-@(kvaProperyName)">
         <div class="form-group row">
-            <label v-bind:for="'@(kvaProperyName)' + @(vueBinding).ProductId" class="col-md-4 col-form-label">{{getKeyVariantDisplayName(@(vueBinding).ProductId, '@(kvaProperyName)')}}:</label>
-            <div class="col-md-8">
+            <label v-bind:for="'@(kvaProperyName)' + @(vueBinding).ProductId" class="col-5 col-md-4 col-form-label">{{getKeyVariantDisplayName(@(vueBinding).ProductId, '@(kvaProperyName)')}}:</label>
+            <div class="col col-md-8">
                 <select name="@kvaProperyName"
                         v-bind:id="'@(kvaProperyName)' + @(vueBinding).ProductId"
                         class="form-control"
