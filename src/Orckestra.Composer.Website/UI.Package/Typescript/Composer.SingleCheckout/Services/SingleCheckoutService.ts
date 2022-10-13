@@ -64,6 +64,7 @@ module Orckestra.Composer {
         protected cartService: ICartService;
         protected membershipService: IMembershipService;
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
+        protected userMetadataService: UserMetadataService = UserMetadataService.getInstance();
         protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
             new ShippingAddressRegisteredService(this.customerService);
         protected regionService: IRegionService;
@@ -643,6 +644,7 @@ module Orckestra.Composer {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 this.cacheProvider.defaultCache.set('customerId', null).done();
                 this.cacheProvider.sessionCache.fullClear();
+                this.userMetadataService.invalidateCache();
                 this.loadUserAddresses();
                 return true;
                 // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
