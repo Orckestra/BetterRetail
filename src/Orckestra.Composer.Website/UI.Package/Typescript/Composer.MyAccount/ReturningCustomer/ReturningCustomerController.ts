@@ -86,14 +86,11 @@ module Orckestra.Composer {
 
         private onLoginRejected(reason: any) {
             let errorCode = MyAccountStatus[MyAccountStatus.AjaxFailed];
-            let errorBag = {};
+            
             if (reason && reason.Errors && reason.Errors[0] && reason.Errors[0].ErrorCode) {
                 errorCode = reason.Errors[0].ErrorCode;
-                if(reason.Errors[0].Bag){
-                    errorBag = reason.Errors[0].Bag;
-                }
             }
-            this.renderFailedForm(errorCode, errorBag);
+            this.renderFailedForm(errorCode, reason.Errors[0].Bag);
             this.busyHandler.done();
         }
 
@@ -104,7 +101,6 @@ module Orckestra.Composer {
          */
         private renderFailedForm(status: string, errorBag : any = {}) {
 
-            console.log(errorBag);
             this.render('ReturningCustomerFormsServerValidations', { Status: status,  Bag: errorBag });
 
             this.context.container.find('input[type="password"]').val('');

@@ -10,6 +10,7 @@ using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Providers.Membership;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -171,7 +172,7 @@ namespace Orckestra.Composer.MyAccount.Services
                         Username = userName,
                         CultureInfo = param.CultureInfo
                     }).ConfigureAwait(false);
-                    e.Errors[0].Bag.Add("AccountLockedDownUntil", customer.AccountLockedDownUntil?.ToLocalTime().ToString("g", param.CultureInfo));
+                    e.Errors[0].Bag.Add("AccountLockedDownUntil", LocalizationHelper.LocalizedFormat("General", "LoginDateTimeFormat", customer.AccountLockedDownUntil?.ToLocalTime(), param.CultureInfo));
                 }
 
                 throw e;
