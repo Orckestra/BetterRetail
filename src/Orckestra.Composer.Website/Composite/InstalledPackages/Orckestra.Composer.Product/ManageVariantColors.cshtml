@@ -56,19 +56,19 @@
                             </td>
                             <td>
                                 <div class="input-group color-picker">
-                                    <input type="text" class="form-control" :value="variantColorsModifications[variant.lookupValue]?.color ?? variant.color"
+                                    <input type="text" class="form-control" :value="getValue(variant, 'color')"
                                            v-on:focus="showPicker(variant.lookupValue)" v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
 
                                     <span class="input-group-addon color-picker-container">
-                                        <span class="current-color" :style="'background-color: ' + (variantColorsModifications[variant.lookupValue]?.color ?? variant.color)"
+                                        <span class="current-color" :style="'background-color: ' + getValue(variant, 'color')"
                                               v-on:click="togglePicker(variant.lookupValue)"></span>
-                                        <chrome-picker :value="getPickerSelectedColor()"
+                                        <chrome-picker :value="getPickerSelectedColor(variant)"
                                                        v-on:input="updateColorFromPicker($event, variant.lookupValue)" v-if="variant.lookupValue === openedPicker" />
                                     </span>
                                 </div>
                             </td>
                             <td>
-                                <v-select :options="colorImages" :value="variantColorsModifications[variant.lookupValue]?.image ?? variant.image"
+                                <v-select :options="colorImages" :value="getValue(variant, 'image')"
                                           v-on:input="updateItem($event, variant.lookupValue, 'image')"></v-select>
                             </td>
                             <td></td>
@@ -96,26 +96,26 @@
         })
 
         const VARIANT_COLOR_QUERY = Apollo.gql`
-                                                        query{
-                                                          colorValues {
-                                                          lookupValue,
-                                                          color,
-                                                          image
-                                                          }
-                                                        }`
+                                                                query{
+                                                                  colorValues {
+                                                                  lookupValue,
+                                                                  color,
+                                                                  image
+                                                                  }
+                                                                }`
 
         const VARIANT_COLOR_IMAGES_QUERY = Apollo.gql`
-                                                        query{
-                                                          colorImages
-                                                        }`
+                                                                query{
+                                                                  colorImages
+                                                                }`
 
         const VARIANT_COLOR_MUTATION = Apollo.gql`
-                                                    mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
-                                                      updateVariantColors(
-                                                        variantColorConfigurationItems: $variantColorConfigurationItems
-                                                      )
-                                                    }
-                                                    `
+                                                            mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
+                                                              updateVariantColors(
+                                                                variantColorConfigurationItems: $variantColorConfigurationItems
+                                                              )
+                                                            }
+                                                            `
 
         const app = new Vue({
             el: '#app',
@@ -168,6 +168,9 @@
                 }
             },
             methods: {
+                getValue(variant, fieldName) {
+                    return this.variantColorsModifications[variant.lookupValue] ? this.variantColorsModifications[variant.lookupValue][fieldName] : variant[fieldName]
+                },
                 saveColorConfig() {
                     this.$apollo.mutate({
                         mutation: VARIANT_COLOR_MUTATION,
@@ -184,7 +187,8 @@
 
                 },
 
-                getPickerSelectedColor(color) {
+                getPickerSelectedColor(variant) {
+                    let color = this.getValue(variant, 'color');
                     if (!color) return '#000000';
 
                     var ctx = document.createElement("canvas").getContext("2d");
@@ -204,11 +208,17 @@
                     this.updateItem(newColor, variantName, "color");
                 },
                 updateItem(newValue, variantName, modifiedField) {
+                    let immutableValue = this.variantColorsImmutable.find(color => color.lookupValue === variantName);
                     if (_.isEmpty(this.variantColorsModifications[variantName])) {
-                        let immutableValue = this.variantColorsImmutable.find(color => color.lookupValue === variantName);
                         this.variantColorsModifications[variantName] = { ...immutableValue };
                     }
+
                     this.variantColorsModifications[variantName][modifiedField] = newValue;
+
+                    if (_.isEqual(this.variantColorsModifications[variantName], immutableValue)) {
+                        delete this.variantColorsModifications[variantName]
+                    }
+
                     this.variantColorsModifications = { ...this.variantColorsModifications };
                 }
             }
