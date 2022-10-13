@@ -21,6 +21,7 @@
 ///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Services/ShippingAddressRegisteredService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
+///<reference path='../../Services/UserMetadataService.ts' />
 
 
 module Orckestra.Composer {
