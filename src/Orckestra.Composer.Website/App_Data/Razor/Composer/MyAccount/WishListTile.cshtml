@@ -74,7 +74,7 @@
             </div>
             <div class="product-tile-button-container">
                 <div>
-                    <button v-if="@(EntityName).IsValid" class="btn  btn-primary btn-block  text-uppercase relative"
+                    <button v-if="@(EntityName).IsValid" class="btn  btn-primary btn-block relative"
                             data-qa="wishlist-product-add-to-cart"
                             v-bind:disabled="@(EntityName).Loading"
                             v-on:click="addToCart(@(EntityName))">
@@ -84,7 +84,7 @@
                     </button>
                     <button v-else="v-else"
                             data-qa="wishlist-product-add-to-cart"
-                            class="btn  btn-primary btn-block  text-uppercase relative"
+                            class="btn  btn-primary btn-block relative"
                             disabled="disabled">
                         <span class="fa  fa-times fa-lg"></span>&#160;
                         @Html.Localize("General", "B_AddToCartProductListOOS")

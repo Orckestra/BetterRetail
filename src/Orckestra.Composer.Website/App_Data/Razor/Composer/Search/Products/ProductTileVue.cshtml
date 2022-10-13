@@ -116,7 +116,7 @@
             @if (ShowAddToCartButton)
             {
                 <div class="product-tile-button-container">
-                    <button class="btn btn-block  btn-primary text-uppercase relative"
+                    <button class="btn btn-block  btn-primary relative"
                             data-qa="search-buy-now"
                             v-on:click="addToCart($event, @(EntityName))"
                             v-bind:disabled="isAddToCartDisabled(@(EntityName))">
@@ -126,7 +126,7 @@
                     </button>
                 </div>
                 <div class="product-tile-select-btn-container">
-                    <button v-if="@(EntityName).HasVariants" v-on:click="ActiveProductId = undefined" class="btn btn-block  btn-outline-secondary text-uppercase">
+                    <button v-if="@(EntityName).HasVariants" v-on:click="ActiveProductId = undefined" class="btn btn-block  btn-outline-secondary">
                         Select Variant
                     </button>
                 </div>

@@ -156,7 +156,7 @@
                             @Html.Localize("CheckoutProcess", "L_Selected")
                         </span>
                     </div>
-                    <button v-else="v-else" class="btn btn-sm btn-outline-secondary text-uppercase float-right"
+                    <button v-else="v-else" class="btn btn-sm btn-outline-secondary float-right"
                             v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
                         @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                     </button>
