@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Security;
+using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.MyAccount.ViewModels;
@@ -154,7 +155,26 @@ namespace Orckestra.Composer.MyAccount.Services
             var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter { CultureInfo = param.CultureInfo, ReturnUrl = param.ReturnUrl });
             var userName = GenerateUserName(param.Username);
 
-            var loginResponse = Membership.LoginUser(userName, param.Password);
+            var loginResponse = false;
+            try
+            {
+                loginResponse = Membership.LoginUser(userName, param.Password);
+            }
+            catch (ComposerException e)
+            {
+                if (e.Errors[0].ErrorCode == "UserLockedDown")
+                {
+                    var customer = await CustomerRepository.GetCustomerByUsernameAsync(new GetCustomerByUsernameParam
+                    {
+                        Scope = param.Scope,
+                        Username = userName,
+                        CultureInfo = param.CultureInfo
+                    }).ConfigureAwait(false);
+                    e.Errors[0].Bag.Add("AccountLockedDownUntil", customer.AccountLockedDownUntil?.ToString("dd/MM/yyyy hh:mm tt"));
+                }
+
+                throw e;
+            }
 
             if (loginResponse)
             {

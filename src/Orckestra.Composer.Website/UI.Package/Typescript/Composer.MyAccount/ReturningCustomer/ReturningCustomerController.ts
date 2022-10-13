@@ -84,12 +84,16 @@ module Orckestra.Composer {
             }
         }
 
-        private onLoginRejected(reason: any) {
+        private onLoginRejected(reason: any) {            
             let errorCode = MyAccountStatus[MyAccountStatus.AjaxFailed];
+            let accountLockedDownUntil = "";
             if (reason && reason.Errors && reason.Errors[0] && reason.Errors[0].ErrorCode) {
                 errorCode = reason.Errors[0].ErrorCode;
+                if(reason.Errors[0].Bag["AccountLockedDownUntil"]){
+                    accountLockedDownUntil = reason.Errors[0].Bag["AccountLockedDownUntil"];
+                }
             }
-            this.renderFailedForm(errorCode);
+            this.renderFailedForm(errorCode, accountLockedDownUntil);
             this.busyHandler.done();
         }
 
@@ -98,9 +102,9 @@ module Orckestra.Composer {
          * Register Format validation to hide those server message on client interaction
          * Reset potentially unsafe fields
          */
-        private renderFailedForm(status: string) {
+        private renderFailedForm(status: string, accountLockedDownUntil: string = "") {
 
-            this.render('ReturningCustomerFormsServerValidations', { Status: status });
+            this.render('ReturningCustomerFormsServerValidations', { Status: status, AccountLockedDownUntil: accountLockedDownUntil });
 
             this.context.container.find('input[type="password"]').val('');
 

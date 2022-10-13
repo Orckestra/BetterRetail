@@ -7,9 +7,13 @@
                 <span>{{localize 'MyAccount' 'L_SignInErrorRequiresApproval'}}</span>
             {{else}}{{#if_eq Status 'AjaxFailed'}}
                 <span>{{localize 'General' 'L_ErrorAjaxFailed'}}</span>
-            {{else}}
-                <span>{{localize 'MyAccount' 'L_SignInError'}}</span>
-            {{/if_eq}}{{/if_eq}}
+            {{else}}{{#if_eq Status 'InvalidCredentials'}}
+                <span>{{localize 'MyAccount' 'L_SignInErrorInvalidCredentials'}}</span>
+            {{else}}{{#if_eq Status 'UserLockedDown'}}
+                {{#if_neq AccountLockedDownUntil ''}}
+                <span>{{localizeFormat 'MyAccount' 'L_SignInErrorUserLockedDown' AccountLockedDownUntil}}</span>
+                 {{/if_neq}}
+            {{/if_eq}}{{/if_eq}}{{/if_eq}}{{/if_eq}}
         </div>
     </div>
     {{/if_neq}}
