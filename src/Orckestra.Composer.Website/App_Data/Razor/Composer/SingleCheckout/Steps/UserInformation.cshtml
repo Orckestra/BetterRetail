@@ -98,7 +98,6 @@
                            @Html.ParsleyMessage("Forms", "F_LastNamePatternError", "pattern-message") />
                 </div>
             </div>
-
             @Forms.Validations.SignInErrors("Errors.SignIn")
             <div class="form-row" v-show="!SigningInMode">
                 @EmailField("username", true)
