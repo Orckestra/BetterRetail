@@ -1,0 +1,286 @@
+@inherits WebPage
+@{
+
+}
+<html>
+
+<head>
+</head>
+
+<body>
+    <link href="/Composite/InstalledPackages/Orckestra.Tools.C1CMSConsoleCss/index.css?v=1.0.1" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apollo-client-browser@1.9.0/dist/apollo-client.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-apollo@3.1.0/dist/vue-apollo.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue-color@2.8.1/dist/vue-color.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue-select@3.0.0"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-select@3.0.0/dist/vue-select.css">
+
+
+
+    <!-- App -->
+    <div id="app">
+        <div class="" v-if="isLoadModification"></div>
+        <div class="m-3 flex">
+            <div class="flex-grow">
+                <input type="search" placeholder="Filter colors" class="color-filter" v-model="filterKeyword" />
+            </div>
+            <div class="flex-none">
+                <button type="submit" class="btn-primary w-24" :disabled="!HasModifications"
+                        v-on:click="saveColorConfig">
+                    Save
+                </button>
+            </div>
+        </div>
+        <div>
+            <div class="accordion-item bg-white border-t border-gray-400">
+                <table class="table-default outborder-0 w-full border-t border-gray-300">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4">Lookup Value</th>
+                            <th class="w-1/4">Color</th>
+                            <th class="w-1/4">Image</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody tag="tbody" v-model="variantColors">
+                        <tr v-for="(variant, index) in variantColors" :key="index">
+
+                            <td class="py-4">
+                                <input v-model="variant.lookupValue" disabled :name="'lookupValue' + index"
+                                       type="text" class="mt-1 block w-full">
+                            </td>
+                            <td>
+                                <div class="input-group color-picker">
+                                    <input type="text" class="form-control" :value="variantColorsModifications[variant.lookupValue]?.color ?? variant.color"
+                                           v-on:focus="showPicker(variant.lookupValue)" v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
+
+                                    <span class="input-group-addon color-picker-container">
+                                        <span class="current-color" :style="'background-color: ' + (variantColorsModifications[variant.lookupValue]?.color ?? variant.color)"
+                                              v-on:click="togglePicker(variant.lookupValue)"></span>
+                                        <chrome-picker :value="getPickerSelectedColor()"
+                                                       v-on:input="updateColorFromPicker($event, variant.lookupValue)" v-if="variant.lookupValue === openedPicker" />
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <v-select :options="colorImages" :value="variantColorsModifications[variant.lookupValue]?.image ?? variant.image"
+                                          v-on:input="updateItem($event, variant.lookupValue, 'image')"></v-select>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        const omitTypeName = ({ __typename, ...i }) => i;
+
+        const apolloClient = new Apollo.lib.ApolloClient({
+            networkInterface: Apollo.lib.createNetworkInterface({
+                uri: '/composite/api/variantcolorgraphql/query',
+                transportBatching: true,
+            }),
+            connectToDevTools: true
+        })
+
+        const apolloProvider = new window["vue-apollo"].ApolloProvider({
+            defaultClient: apolloClient,
+        })
+
+        const VARIANT_COLOR_QUERY = Apollo.gql`
+                                                        query{
+                                                          colorValues {
+                                                          lookupValue,
+                                                          color,
+                                                          image
+                                                          }
+                                                        }`
+
+        const VARIANT_COLOR_IMAGES_QUERY = Apollo.gql`
+                                                        query{
+                                                          colorImages
+                                                        }`
+
+        const VARIANT_COLOR_MUTATION = Apollo.gql`
+                                                    mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
+                                                      updateVariantColors(
+                                                        variantColorConfigurationItems: $variantColorConfigurationItems
+                                                      )
+                                                    }
+                                                    `
+
+        const app = new Vue({
+            el: '#app',
+            components: {
+                'v-select': VueSelect.VueSelect,
+                'chrome-picker': VueColor.Chrome
+            },
+            data: {
+                variantColorsImmutable: [],
+                variantColors: [],
+                variantColorsModifications: {},
+                colorImages: [],
+                loading: 0,
+                isLoadModification: false,
+
+                filterKeyword: "",
+                openedPicker: "",
+            },
+            watch: {
+                filterKeyword: {
+                    handler: function (data) {
+                        this.variantColors = this.variantColorsImmutable.filter(item => item.lookupValue.includes(data));
+                    }
+                }
+            },
+            apolloProvider,
+            apollo: {
+                colorValues: {
+                    query: VARIANT_COLOR_QUERY,
+                    loadingKey: 'loading',
+
+                    result({ data }) {
+                        this.variantColorsImmutable = _.orderBy(data.colorValues.map(omitTypeName), "lookupValue");
+                        this.variantColors = [...this.variantColorsImmutable];
+                        this.isLoadModification = true;
+                    }
+                },
+                colorImages: {
+                    query: VARIANT_COLOR_IMAGES_QUERY,
+                    loadingKey: 'loading',
+
+                    result({ data }) {
+                        this.colorImages = _.orderBy(data.colorImages);
+                    }
+                }
+            },
+            computed: {
+                HasModifications() {
+                    return !_.isEmpty(this.variantColorsModifications)
+                }
+            },
+            methods: {
+                saveColorConfig() {
+                    this.$apollo.mutate({
+                        mutation: VARIANT_COLOR_MUTATION,
+                        variables: {
+                            variantColorConfigurationItems: Object.values(this.variantColorsModifications)
+                        },
+
+                    }).then((data) => {
+                        return this.$apollo.queries.colorValues.refetch();
+                    }).catch((error) => {
+                        console.error(error)
+                    })
+
+
+                },
+
+                getPickerSelectedColor(color) {
+                    if (!color) return '#000000';
+
+                    var ctx = document.createElement("canvas").getContext("2d");
+                    ctx.fillStyle = color;
+                    return ctx.fillStyle
+                },
+
+                showPicker(variant) {
+                    this.openedPicker = variant;
+                },
+
+                togglePicker(variant) {
+                    this.openedPicker = this.openedPicker === variant ? "" : variant;
+                },
+                updateColorFromPicker($event, variantName) {
+                    let newColor = $event.rgba.a == 1 ? $event.hex : `rgba(${$event.rgba.r}, ${$event.rgba.g}, ${$event.rgba.b}, ${$event.rgba.a})`;
+                    this.updateItem(newColor, variantName, "color");
+                },
+                updateItem(newValue, variantName, modifiedField) {
+                    if (_.isEmpty(this.variantColorsModifications[variantName])) {
+                        let immutableValue = this.variantColorsImmutable.find(color => color.lookupValue === variantName);
+                        this.variantColorsModifications[variantName] = { ...immutableValue };
+                    }
+                    this.variantColorsModifications[variantName][modifiedField] = newValue;
+                    this.variantColorsModifications = { ...this.variantColorsModifications };
+                }
+            }
+
+        })
+    </script>
+
+    <style>
+        .current-color {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #000;
+            cursor: pointer;
+        }
+
+        .vc-chrome {
+            position: absolute;
+            z-index: 9;
+            margin-top: 10px;
+        }
+
+        .input-group {
+            display: flex;
+        }
+
+        .form-control {
+            flex: 1;
+        }
+
+        .input-group-addon {
+            padding: 4px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1;
+            color: #555;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+            .input-group-addon:last-child {
+                border-left: 0;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+
+        .input-group .form-control:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+
+        .button {
+            margin-top: 35px;
+        }
+
+        input:disabled {
+            background-color: #EAEAEA;
+        }
+
+        .color-filter {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            border-radius: 0.25rem;
+            --tw-border-opacity: 1;
+            border-color: rgba(212, 212, 212, 1);
+        }
+    </style>
+
+</body>
+
+</html>

@@ -42,11 +42,25 @@
     </Compile>
     <Compile Include="Api\InventoryController.cs" />
     <Compile Include="Api\ProductController.cs" />
+    <Compile Include="Controllers\VariantColorGraphQLController.cs" />
     <Compile Include="Exceptions\ProductSpecificationsNotFoundException.cs" />
     <Compile Include="Extensions\ProductPropertyDefinitionExtensions.cs" />
     <Compile Include="Extensions\ProductPropertyDefinitionGroupExtensions.cs" />
     <Compile Include="Factory\IProductViewModelFactory.cs" />
     <Compile Include="Factory\ProductViewModelFactory.cs" />
+    <Compile Include="GraphQL\Extensions\DataGraphQLExtensions.cs" />
+    <Compile Include="GraphQL\Extensions\DataMutation.cs" />
+    <Compile Include="GraphQL\Extensions\LambdaExtensions.cs" />
+    <Compile Include="GraphQL\Interfaces\IVariantColorSchema.cs" />
+    <Compile Include="GraphQL\Types\DataInput.cs" />
+    <Compile Include="GraphQL\Types\DataInputObjectGraphType.cs" />
+    <Compile Include="GraphQL\Types\DataObjectGraphType.cs" />
+    <Compile Include="GraphQL\Types\VariantColorConfigurationInputGraphType.cs" />
+    <Compile Include="GraphQL\Types\VariantColorLookupValues.cs" />
+    <Compile Include="GraphQL\Types\VariantColorLookupValuesGraphType.cs" />
+    <Compile Include="GraphQL\VariantColorMutation.cs" />
+    <Compile Include="GraphQL\VariantColorQuery.cs" />
+    <Compile Include="GraphQL\VariantColorSchema.cs" />
     <Compile Include="Parameters\CreateCategoryViewModelParam.cs" />
     <Compile Include="Parameters\CreateRelatedProductViewModelParam.cs" />
     <Compile Include="Parameters\GetProductBreadcrumbParam.cs" />
@@ -77,6 +91,7 @@
     <Compile Include="Services\IProductSpecificationsViewService.cs" />
     <Compile Include="Services\ProductBreadcrumbService.cs" />
     <Compile Include="Services\ProductSpecificationsViewService.cs" />
+    <Compile Include="StartupHandler.cs" />
     <Compile Include="ViewModels\Inventory\DateRangeViewModel.cs" />
     <Compile Include="ViewModels\Inventory\InventoryItemAvailabilityViewModel.cs" />
     <Compile Include="ViewModels\Inventory\InventoryItemIdentifierViewModel.cs" />
@@ -111,6 +126,10 @@
     <None Include="Properties\PublishProfiles\Package.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Orckestra.Composer.CompositeC1.DataTypes\Orckestra.Composer.CompositeC1.DataTypes.csproj">
+      <Project>{E84BF038-FC5E-4841-8C5A-918FE8EAFF8F}</Project>
+      <Name>Orckestra.Composer.CompositeC1.DataTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orckestra.Composer.Search\Orckestra.Composer.Search.csproj">
       <Project>{CE6AD95E-0EBB-4E38-BF0B-27A67915FA68}</Project>
       <Name>Orckestra.Composer.Search</Name>
@@ -129,6 +148,16 @@
       <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Composite.Workflows.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="GraphQL, Version=4.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GraphQL.4.7.1\lib\netstandard2.0\GraphQL.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphQL-Parser, Version=7.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GraphQL-Parser.7.2.0\lib\netstandard2.0\GraphQL-Parser.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphQL.NewtonsoftJson, Version=4.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GraphQL.NewtonsoftJson.4.7.1\lib\netstandard2.0\GraphQL.NewtonsoftJson.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\C1CMS.Assemblies.6.12.8122.18346\lib\net471\Microsoft.Extensions.DependencyInjection.dll</HintPath>
       <Private>False</Private>
@@ -180,6 +209,9 @@
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
