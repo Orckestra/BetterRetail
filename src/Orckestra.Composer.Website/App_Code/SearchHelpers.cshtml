@@ -234,7 +234,8 @@
 
 @helper VariantColorKvaSelector(string vueBinding, string kvaProperyName)
 {
-<div class="variant-kva variant-kva-color variant-kva-@(kvaProperyName)">
+<div class="variant-kva variant-kva-color variant-kva-@(kvaProperyName)"
+    v-if="getKeyVariantValues(@(vueBinding).ProductId, '@(kvaProperyName)').length > 1">
     <div v-for="v in getKeyVariantValues(@(vueBinding).ProductId, '@(kvaProperyName)')"
          v-bind:class="{'selected': v.Selected, 'disabled': v.Disabled }"
          v-on:click="selectKva(@(vueBinding), '@(kvaProperyName)', v.Value)"
