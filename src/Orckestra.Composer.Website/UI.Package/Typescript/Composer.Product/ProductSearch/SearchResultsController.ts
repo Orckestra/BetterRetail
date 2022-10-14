@@ -90,7 +90,6 @@ module Orckestra.Composer {
                         this.dataUpdatedTracker += 1;
                     },
                     onMouseover(searchProduct) {
-                        console.log('onMouseover' + searchProduct.ProductId);
                         const { ProductId, VariantId, HasVariants } = searchProduct;
                         if(this.ActiveProductId) return;
                         this.ActiveProductId = ProductId;
@@ -109,7 +108,6 @@ module Orckestra.Composer {
                     },
                     onMouseleave(searchProduct) {
                         this.ActiveProductId = undefined;
-                        console.log('onMouseleave' + searchProduct.ProductId);
                     },
                     selectKva(searchProduct, kvaName, kvaValue) {
                         const { ProductId: productId } = searchProduct;
