@@ -22,7 +22,7 @@
     <body>
         <div data-oc-controller="Cart.MiniCartButton">
             <div id="vueMiniCartButton" v-cloak="true">
-                <a href="~/page(@pages.CartPageId)" class="d-none d-md-block btn btn-primary btn-block"
+                <a href="~/page(@pages.CartPageId)" class="d-none d-md-block btn btn-primary btn-block relative"
                    title="@Html.Localize("MiniCart", "H_MinicartTitle")">
                     <i class="fa fa-lg fa-shopping-bag" aria-hidden="true"></i>
                     <span v-if="!Cart.IsCartEmpty" class="badge badge-top-right badge-pill badge-danger">{{Cart.TotalQuantity}}</span>&#160;

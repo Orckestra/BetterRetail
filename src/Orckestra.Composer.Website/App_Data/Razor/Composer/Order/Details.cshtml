@@ -266,7 +266,7 @@
         return;
     }
     var index = 0;
-    <div class="card bg-light mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "L_OrderLineItemProductsTitle")
         </h3>
@@ -419,7 +419,7 @@
     var addFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => !t.Taxable).ToList();
     var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
 
-    <div class="card bg-light mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header  bg-primary border-primary  text-white">
             @Html.Localize("ShoppingCart", "T_OrderSummary")
         </h3>

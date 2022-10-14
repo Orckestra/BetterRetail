@@ -15,7 +15,7 @@
 <body>
     <div data-oc-controller="Cart.OrderSummary">
         <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" class="card">
-            <h3 class="card-header" data-qa="order-summary-title">
+            <h3 class="card-header card-header-primary" data-qa="order-summary-title">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
             <div class="card-body">
