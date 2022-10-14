@@ -1,26 +1,28 @@
-.badge {
+.btn .badge {
     &-top {
         &-right {
-            position: relative;
-            top: -5px;
-            left: -5px;
+            position: absolute;
+            top: 5px;
+            left: 20px;
         }
         &-left {
-            position: relative;
-            top: -5px;
-            left: calc(-100% + 5px);
+            position: absolute;
+            top: 5px;
+            left: 0;
         }
     }
     &-bottom {
         &-right {
-            position: relative;
+            top: unset;
+            position: absolute;
             bottom: -5px;
-            left: -5px;
+            left: 20px;
         }
         &-left {
-            position: relative;
+            top: unset;
+            position: absolute;
             bottom: -5px;
-            left: calc(-100% + 5px);
+            left: 0;
         }
     }
 }
