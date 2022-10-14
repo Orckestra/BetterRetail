@@ -120,7 +120,7 @@
                             data-qa="search-buy-now"
                             v-on:click="addToCart($event, @(EntityName))"
                             v-bind:disabled="isAddToCartDisabled(@(EntityName))">
-                            <span v-if="@(EntityName).IsAvailableToSell" class="fa  fa-shopping-cart fa-lg"></span><span v-else="v-else" class="fa  fa-times fa-lg"></span>&#160;
+                            <span v-if="@(EntityName).IsAvailableToSell" class="fa  fa-shopping-bag fa-lg"></span><span v-else="v-else" class="fa  fa-times fa-lg"></span>&#160;
                         {{@(EntityName).IsAvailableToSell ? '@Html.Localize("General", "B_AddToCartProductList")' : '@Html.Localize("General", "B_AddToCartProductListOOS")'}}
                         <span v-if="@(EntityName).loading" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
                     </button>
