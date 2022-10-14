@@ -190,6 +190,7 @@
     }
 
     .product-tile-title {
+        font-family: $font-product-title;
         @include media-breakpoint-up(md) {
             text-overflow: ellipsis;
             overflow: hidden;
@@ -203,6 +204,7 @@
 
 
     .product-tile-brand {
+        font-family: $font-product-brand;
         white-space: nowrap;
         font-weight: bold;
         font-size: small;
@@ -214,6 +216,9 @@
         gap: 5px;
         align-items: flex-end;
         justify-content: flex-end;
+        h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+            font-family: $font-family-base;
+        }
     }
 
     .product-tile-media {

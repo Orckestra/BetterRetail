@@ -1,4 +1,5 @@
 .main-nav {
+    
     // reset positions
     .nav, .collapse, .dropup, .dropdown {
         position: static;
@@ -41,6 +42,7 @@
 
 
     .nav-link  {
+        font-family: $font-nav;
         position: relative;
         text-transform: uppercase;
 
