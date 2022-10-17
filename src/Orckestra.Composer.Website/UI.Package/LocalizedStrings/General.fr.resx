@@ -225,8 +225,8 @@
   <data name="ShortDateFormat" xml:space="preserve">
     <value>{0:d MMMM yyyy}</value>
   </data>
-  <data name="LoginDateTimeFormat" xml:space="preserve">
-    <value>{0:MM/dd/yyyy hh:mm}</value>
+  <data name="ShortDateTimeFormat" xml:space="preserve">
+    <value>dd-MM-yyyy HH:mm</value>
   </data>
   <data name="T_FindYourOrder" xml:space="preserve">
     <value>Trouver votre commande</value>

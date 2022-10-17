@@ -172,7 +172,8 @@ namespace Orckestra.Composer.MyAccount.Services
                         Username = userName,
                         CultureInfo = param.CultureInfo
                     }).ConfigureAwait(false);
-                    e.Errors[0].Bag.Add("AccountLockedDownUntil", LocalizationHelper.LocalizedFormat("General", "LoginDateTimeFormat", customer.AccountLockedDownUntil?.AddMinutes(-1* ComposerContext.LocalTimeZoneOffset), param.CultureInfo));
+                    var dateFormat = LocalizationHelper.Localize("General", "ShortDateTimeFormat", param.CultureInfo);
+                    e.Errors[0].Bag.Add("AccountLockedDownUntil", customer.AccountLockedDownUntil?.AddMinutes(-1 * ComposerContext.LocalTimeZoneOffset).ToString(dateFormat, param.CultureInfo));
                 }
 
                 throw e;
