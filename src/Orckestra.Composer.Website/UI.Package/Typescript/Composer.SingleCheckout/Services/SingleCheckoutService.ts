@@ -205,7 +205,8 @@ module Orckestra.Composer {
                     },
                     Modal: {
                         deleteAddressModal: null,
-                    }
+                    },
+                    AccountLockedDownUntil: {}
                 },
                 mixins: this.VueCheckoutMixins,
                 mounted() {
@@ -682,6 +683,7 @@ module Orckestra.Composer {
             }
             console.error('An error occurred while logging in.', error.ErrorMessage);
             vueData.Errors.SignIn = errorCode;
+            vueData.AccountLockedDownUntil = error.Bag["AccountLockedDownUntil"];
         }
 
         public checkUserExist(email: string): Q.Promise<boolean> {

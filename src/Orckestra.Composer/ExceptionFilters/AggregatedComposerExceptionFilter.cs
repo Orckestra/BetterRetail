@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Filters;
+using Composite.Core.Collections.Generic;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
@@ -35,16 +36,24 @@ namespace Orckestra.Composer.ExceptionFilters
             }
 
             var query = from exception in innerExceptions.OfType<ComposerException>()
-                        from error in exception.Errors
-                        let localizedErrorMessage = LocalizationProvider.GetLocalizedErrorMessage(error.ErrorCode, Context.CultureInfo)
-                        select new ErrorViewModel
-                        {
-                            ErrorCode = error.ErrorCode,
-                            ErrorMessage = error.ErrorMessage,
-                            LocalizedErrorMessage = localizedErrorMessage
-                        };
+                from error in exception.Errors
+                select CreateErrorViewModel(error);
 
             return query.ToList();
+        }
+
+        private ErrorViewModel CreateErrorViewModel(ErrorViewModel error)
+        {
+            var localizedErrorMessage =
+                LocalizationProvider.GetLocalizedErrorMessage(error.ErrorCode, Context.CultureInfo);
+            var errorModel = new ErrorViewModel
+            {
+                ErrorCode = error.ErrorCode,
+                ErrorMessage = error.ErrorMessage,
+                LocalizedErrorMessage = localizedErrorMessage,
+            };
+            errorModel.Bag.AddDictionary(error.Bag);
+            return errorModel;
         }
     }
 }

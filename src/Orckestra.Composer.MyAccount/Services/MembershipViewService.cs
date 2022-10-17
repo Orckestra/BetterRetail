@@ -3,17 +3,20 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Security;
+using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
 using Orckestra.Composer.MyAccount.ViewModels;
 using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
+using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Providers.Membership;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using Orckestra.Composer.Services;
+using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -154,7 +157,27 @@ namespace Orckestra.Composer.MyAccount.Services
             var loginUrl = MyAccountUrlProvider.GetLoginUrl(new BaseUrlParameter { CultureInfo = param.CultureInfo, ReturnUrl = param.ReturnUrl });
             var userName = GenerateUserName(param.Username);
 
-            var loginResponse = Membership.LoginUser(userName, param.Password);
+            var loginResponse = false;
+            try
+            {
+                loginResponse = Membership.LoginUser(userName, param.Password);
+            }
+            catch (ComposerException e)
+            {
+                if (e.Errors != null && e.Errors.Any() && e.Errors[0].ErrorCode == Constants.UserLockedDownErrorCode)
+                {
+                    var customer = await CustomerRepository.GetCustomerByUsernameAsync(new GetCustomerByUsernameParam
+                    {
+                        Scope = param.Scope,
+                        Username = userName,
+                        CultureInfo = param.CultureInfo
+                    }).ConfigureAwait(false);
+                    var dateFormat = LocalizationHelper.Localize("General", "ShortDateTimeFormat", param.CultureInfo);
+                    e.Errors[0].Bag.Add("AccountLockedDownUntil", customer.AccountLockedDownUntil?.AddMinutes(-1 * ComposerContext.LocalTimeZoneOffset).ToString(dateFormat, param.CultureInfo));
+                }
+
+                throw e;
+            }
 
             if (loginResponse)
             {
