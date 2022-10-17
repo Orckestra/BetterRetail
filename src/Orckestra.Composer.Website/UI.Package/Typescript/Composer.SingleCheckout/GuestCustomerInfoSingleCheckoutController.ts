@@ -100,7 +100,6 @@ module Orckestra.Composer {
                         this.Mode.SignIn = SignInModes.SigningIn;
                     },
                     signInAndContinue() {
-                        console.log("signInAndContinue");
                         let { Email: Username, Password } = this.Cart.Customer;
                         let loginData = { Username, Password };
                         self.checkoutService.loginUser(loginData)
