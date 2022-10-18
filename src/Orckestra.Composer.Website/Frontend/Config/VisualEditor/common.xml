@@ -119,6 +119,7 @@
       </format>
       <format id="total" label="Total" image="" notes="" classes="total" selector="tr.sum td">
         <select />
+      </format>
       <format id="likeH1" label="h1 like" image="" notes="" classes="h1" selector="span, p, h2, h3, h4, h5, h6">
         <select />
       </format>
