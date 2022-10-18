@@ -123,9 +123,11 @@ html {
 
 .row {
     row-gap: $grid-gutter-width;
-
-    &.mobile-menu {
-        row-gap: 0;
+    
+    @include media-breakpoint-down(sm) {
+        &.mobile-menu {
+            row-gap: 0;
+        }
     }
 
     .search-results > & {
