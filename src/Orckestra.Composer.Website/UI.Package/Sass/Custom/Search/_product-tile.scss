@@ -58,6 +58,12 @@
     flex-direction: row;
     border: 1px solid $gray-200;
 
+    @include media-breakpoint-down(md) {
+        .slick-slide & {
+            width: 100%;
+        }
+    }
+
     @include media-breakpoint-up(md) {
         display: block;
         max-height: 700px;
@@ -235,7 +241,7 @@
         }
         @include media-breakpoint-down(md) {
             .slick-slide & {
-                padding-bottom: 128%;
+                padding-bottom: 50%;
             }
         }
    }
