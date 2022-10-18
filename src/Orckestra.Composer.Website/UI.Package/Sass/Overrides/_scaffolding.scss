@@ -124,6 +124,10 @@ html {
 .row {
     row-gap: $grid-gutter-width;
 
+    &.mobile-menu {
+        row-gap: 0;
+    }
+
     .search-results > & {
         row-gap: $grid-gutter-width*2;
     }
@@ -132,5 +136,11 @@ html {
     }
     & +.row {
         margin-top: $grid-gutter-width;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .container-md {
+        max-width: 80vw;
     }
 }

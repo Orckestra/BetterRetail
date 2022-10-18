@@ -46,7 +46,7 @@
       height: 313px;
     }
     @include media-breakpoint-up(xl) {
-      height: 358px;
+      height: 25vw;
     }
   }
 
@@ -230,7 +230,7 @@
             display: block;
             height: 0;
             //padding-bottom: $product-image-ratio * 100%;
-            padding-bottom: 104%;
+            padding-bottom: 107%;
             position: relative;
         }
         @include media-breakpoint-down(md) {
