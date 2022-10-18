@@ -52,19 +52,21 @@
                         <tr v-for="(variant, index) in variantColors" :key="index">
 
                             <td class="py-4">
-                                <input v-model="variant.lookupValue" disabled :name="'lookupValue' + index"
-                                       type="text" class="mt-1 block w-full">
+                                <input v-model="variant.lookupValue" disabled :name="'lookupValue' + index" type="text"
+                                       class="mt-1 block w-full">
                             </td>
                             <td>
-                                <div class="input-group color-picker">
+                                <div class="input-group color-picker" v-on:focusout="hidePicker" tabindex="0">
                                     <input type="text" class="form-control" :value="getValue(variant, 'color')"
-                                           v-on:focus="showPicker(variant.lookupValue)" v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
+                                           v-on:focus="showPicker(variant.lookupValue)"
+                                           v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
 
                                     <span class="input-group-addon color-picker-container">
-                                        <span class="current-color" :style="'background-color: ' + getValue(variant, 'color')"
+                                        <span class="current-color" :style="getSelectedColor(variant)"
                                               v-on:click="togglePicker(variant.lookupValue)"></span>
                                         <chrome-picker :value="getPickerSelectedColor(variant)"
-                                                       v-on:input="updateColorFromPicker($event, variant.lookupValue)" v-if="variant.lookupValue === openedPicker" />
+                                                       v-on:input="updateColorFromPicker($event, variant.lookupValue)"
+                                                       v-if="variant.lookupValue === openedPicker" />
                                     </span>
                                 </div>
                             </td>
@@ -168,41 +170,31 @@
                     return !_.isEmpty(this.variantColorsModifications)
                 }
             },
+
             methods: {
                 getValue(variant, fieldName) {
                     return this.variantColorsModifications[variant.lookupValue] ? this.variantColorsModifications[variant.lookupValue][fieldName] : variant[fieldName]
                 },
-                saveColorConfig() {
-                    this.$apollo.mutate({
-                        mutation: VARIANT_COLOR_MUTATION,
-                        variables: {
-                            variantColorConfigurationItems: Object.values(this.variantColorsModifications)
-                        },
-
-                    }).then((data) => {
-                        return this.$apollo.queries.colorValues.refetch();
-                    }).catch((error) => {
-                        console.error(error)
-                    })
-
-
+                getSelectedColor(variant) {
+                    let color = this.getValue(variant, "color");
+                    return `background-color:${color ? color : 'rgba(0, 0, 0, 0)'}`;
                 },
-
                 getPickerSelectedColor(variant) {
-                    let color = this.getValue(variant, 'color');
-                    if (!color) return '#000000';
+                    let color = this.getValue(variant, "color");
+                    if (!color) return 'rgba(0, 0, 0, 0)';
 
                     var ctx = document.createElement("canvas").getContext("2d");
                     ctx.fillStyle = color;
                     return ctx.fillStyle
                 },
-
                 showPicker(variant) {
                     this.openedPicker = variant;
                 },
-
+                hidePicker() {
+                    this.openedPicker = "";
+                },
                 togglePicker(variant) {
-                    this.openedPicker = this.openedPicker === variant ? "" : variant;
+                    this.openedPicker === variant ? this.hidePicker() : this.showPicker(variant);
                 },
                 updateColorFromPicker($event, variantName) {
                     let newColor = $event.rgba.a == 1 ? $event.hex : `rgba(${$event.rgba.r}, ${$event.rgba.g}, ${$event.rgba.b}, ${$event.rgba.a})`;
@@ -214,13 +206,27 @@
                         this.variantColorsModifications[variantName] = { ...immutableValue };
                     }
 
-                    this.variantColorsModifications[variantName][modifiedField] = newValue;
+                    this.variantColorsModifications[variantName][modifiedField] = _.isEmpty(newValue) && _.isEmpty(immutableValue[modifiedField]) ? null : newValue;
 
                     if (_.isEqual(this.variantColorsModifications[variantName], immutableValue)) {
                         delete this.variantColorsModifications[variantName]
                     }
 
                     this.variantColorsModifications = { ...this.variantColorsModifications };
+                },
+                saveColorConfig() {
+                    this.$apollo.mutate({
+                        mutation: VARIANT_COLOR_MUTATION,
+                        variables: {
+                            variantColorConfigurationItems: Object.values(this.variantColorsModifications)
+                        },
+
+                    }).then((data) => {
+                        this.variantColorsModifications = {};
+                        return this.$apollo.queries.colorValues.refetch();
+                    }).catch((error) => {
+                        console.error(error)
+                    })
                 }
             }
 
@@ -284,6 +290,7 @@
         .color-filter {
             padding-top: 0.25rem;
             padding-bottom: 0.25rem;
+            padding-right: 2rem;
             font-size: 0.875rem;
             line-height: 1.25rem;
             border-radius: 0.25rem;
