@@ -1,9 +1,24 @@
 .selected-facets {
     .list-group {
-        li { 
-            border: none;
-            padding: 0 0 2px 0;
+        flex-direction: row;
+        gap: $spacer/4;
+        flex-wrap: wrap;
+
+        &-item.disabled, &-item:disabled {
+            opacity: 0.75;
+            background: $gray-100;
+            color: $gray-900;
         }
+
+        li { 
+            padding: $spacer/2;
+            gap: $spacer/2;
+        }
+
+        .list-group-item + .list-group-item {
+            border-top-width: 1px;
+        }
+
     }
 
     @include media-breakpoint-down(md) { 
@@ -33,6 +48,7 @@
         }
     }
 }
+
 
 .facets-card {
     
