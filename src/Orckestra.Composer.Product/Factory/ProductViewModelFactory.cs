@@ -38,6 +38,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IRecurringOrdersSettings RecurringOrdersSettings { get; private set; }
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
+        protected IProductPromotionsFactory ProductPromotionsFactory { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -51,7 +52,8 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrderProgramViewModelFactory recurringOrderProgramViewModelFactory,
             IRecurringOrdersSettings recurringOrdersSettings,
             IProductSpecificationsViewService productSpecificationsViewService,
-            IMyAccountUrlProvider myAccountUrlProvider)
+            IMyAccountUrlProvider myAccountUrlProvider,
+            IProductPromotionsFactory productPromotionsFactory)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -65,6 +67,7 @@ namespace Orckestra.Composer.Product.Factory
             RecurringOrdersSettings = recurringOrdersSettings;
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
+            ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -231,6 +234,8 @@ namespace Orckestra.Composer.Product.Factory
                 Product = param.Product,
                 ProductDefinition = param.ProductDefinition
             });
+
+            productDetailViewModel.ProductBadgeValues = ProductPromotionsFactory.BuildProductBadgeValues(productDetailViewModel.ProductBadgesKeys, productDetailViewModel.ProductBadgesLookup);
 
             return productDetailViewModel;
         }

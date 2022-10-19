@@ -4,6 +4,7 @@
     fieldset[disabled] & {
         opacity: 0.5;
     }
+
     white-space: normal;
 }
 
@@ -12,31 +13,50 @@ button, a {
         .fa-caret-up {
             display: inline;
         }
+
         .fa-caret-down {
             display: none;
         }
     }
+
     &[aria-expanded="false"] {
         .fa-caret-up {
             display: none;
         }
+
         .fa-caret-down {
-          display: inline;  
+            display: inline;
         }
     }
+
 }
 
 .btn {
     &.btn-dashed-block {
         width: 100%;
-        border: dashed 2px  $gray-400;
+        border: dashed 2px $gray-400;
         background: #fff;
         font-weight: bold;
         color: $primary;
 
         &:hover, &:focus {
-            border: dashed 2px  $gray-600;
+            border: dashed 2px $gray-600;
             color: $primary;
+        }
+    }
+
+    &.btn-block {
+        > .fa {
+            position: absolute;
+            top: 10px;
+            left: 30px;
+
+            &.fa-2x {
+                &:before {
+                    top: 1px;
+                }
+            }
+
         }
     }
 }
@@ -55,4 +75,8 @@ button, a {
             display: inline-block;
         }
     }
+}
+
+.btn + .btn {
+    margin-left: 10px;
 }

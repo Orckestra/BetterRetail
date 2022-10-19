@@ -1,0 +1,163 @@
+@inherits Composer.Razor.ComposerRazorFunction
+@using Newtonsoft.Json;
+@using Orckestra.Composer.MyAccount.Services;
+@using Orckestra.Composer.MyAccount.Parameters;
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Update Account"; }
+    }
+    public ICustomerViewService CustomerViewService { get; set; }
+    public IComposerContext ComposerContext { get; set; }
+    public override bool PreventFunctionOutputCaching { get { return true; } } 
+}
+
+@{
+    RedirectNotAuthorized();
+    var param = new GetUpdateAccountViewModelParam
+    {
+        Scope = ComposerContext.Scope,
+        CultureInfo = ComposerContext.CultureInfo,
+        CustomerId = ComposerContext.CustomerId
+    };
+
+    var viewModel = CustomerViewService.GetUpdateAccountViewModelAsync(param).Result;
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+<head>
+</head>
+<body>
+    <div data-oc-controller="MyAccount.UpdateAccount"
+         data-context="@JsonConvert.SerializeObject(viewModel)">
+        <div id="vueUpdateAccount" v-cloak="true">
+            <form id="updateAccountForm" v-on:submit.prevent="updateAccount"
+                  method="post" v-on:change="enableSubmitButton">
+                <div class="card">
+                    <h3 class="card-header">@Html.Localize("MyAccount", "T_MyInformation")</h3>
+
+                    <div class="card-body">
+                        <div v-if="SaveChangesFailed" class="alert alert-danger text-danger error-box">
+                            <i class="fa fa-times-circle-o fa-lg pull-left" aria-hidden="true"></i>&#32;
+                            <div>@Html.Localize("Errors", "L_UpdateAccountFailed")</div>
+                        </div>
+
+                        <div v-if="SaveChangesSucceeded" class="alert alert-success text-success error-box">
+                            <i class="fa  fa-check-circle-o  fa-lg  pull-left" aria-hidden="true"></i>&#32;
+                            <div>@Html.Localize("MyAccount", "L_UpdateAccountSuccess")</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="UpdateAccount_FirstName">@Html.Localize("Forms", "F_FirstName") *</label>
+                                    <input v-model="FirstName"
+                                           id="UpdateAccount_FirstName"
+                                           name="FirstName"
+                                           data-qa="myAccount-firstname-input"
+                                           class="form-control"
+                                           placeholder="@Html.Localize("Forms", "F_FirstNameWaterMark")"
+                                           type="text"
+                                           @Html.HelpBubble("Forms", "F_FirstNameIndication")
+                                           @Html.ParsleyMessage("Forms", "F_FirstNameRequiredError", "required-message")
+                                           required="required"
+                                           @Html.ParsleyMessage("Forms", "F_FirstNameLengthError", "length-message")
+                                           data-parsley-length="[2, 36]"
+                                           @Html.ParsleyMessage("Forms", "F_FirstNamePatternError", "pattern-message")
+                                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="UpdateAccount_LastName">@Html.Localize("Forms", "F_LastName") *</label>
+                                    <input v-model="LastName"
+                                           id="UpdateAccount_LastName"
+                                           name="LastName"
+                                           data-qa="myAccount-lastname-input"
+                                           class="form-control"
+                                           placeholder="@Html.Localize("Forms", "F_LastNameWaterMark")"
+                                           type="text"
+                                           required="required"
+                                           data-parsley-length="[2, 36]"
+                                           data-parsley-pattern="/^[a-zA-Z\u00E0-\u00FC\.\-\s\']+$/i"
+                                           @Html.HelpBubble("Forms", "F_LastNameIndication")
+                                           @Html.ParsleyMessage("Forms", "F_LastNameLengthError", "required-message")
+                                           @Html.ParsleyMessage("Forms", "F_LastNameLengthError", "length-message")
+                                           @Html.ParsleyMessage("Forms", "F_LastNamePatternError", "pattern-message") />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="UpdateAccount_Email">@Html.Localize("Forms", "F_Email") *</label>
+                                    <input v-model="Email"
+                                           id="UpdateAccount_Email"
+                                           name="Email"
+                                           data-qa="myAccount-email-input"
+                                           class="form-control"
+                                           placeholder="@Html.Localize("Forms", "F_EmailWaterMark")"
+                                           type="email"
+                                           required="required"
+                                           data-parsley-length="[2, 36]"
+                                           data-parsley-type="email"
+                                           @Html.HelpBubble("Forms", "F_EmailIndication")
+                                           @Html.ParsleyMessage("Forms", "F_EmailRequiredError", "required-message")
+                                           @Html.ParsleyMessage("Forms", "F_EmailLengthError", "length-message")
+                                           @Html.ParsleyMessage("Forms", "F_EmailPatternError", "pattern-message") />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="UpdateAccount_PreferredLanguage">@Html.Localize("Forms", "F_PreferredLanguage") *</label>
+                                    <select name="PreferredLanguage" id="UpdateAccount_PreferredLanguage"
+                                            data-qa="myAccount-language-selector"
+                                            @Html.HelpBubble("Forms", "F_PreferredLanguageIndication")
+                                            class="form-control"
+                                            v-model="Language"
+                                            required="required">
+                                        <option v-for="(displayName, isoCode) in Languages"
+                                                v-bind:data-qa="'updateaccount-preferredlanguage-' + isoCode"
+                                                v-bind:value="isoCode">
+                                            {{displayName || isoCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a class="cta" v-bind:href="ChangePasswordUrl" title="@Html.Localize("MyAccount", "B_ChangePassword")">
+                                    @Html.Localize("MyAccount", "B_ChangePassword")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="form-group  float-right">
+                            <button type="submit" class="btn  btn-primary" id="UpdateAccountSubmit" data-qa="updateaccount-submit" disabled="disabled">
+                                @Html.Localize("MyAccount", "B_UpdateAccount")
+                                <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>

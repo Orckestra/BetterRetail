@@ -19,23 +19,23 @@
 </head>
 <body>
     <div class="row" id="accordion" role="tablist" aria-multiselectable="false">
-       @{int index = 0;}
-       @foreach (var footerEntity in footer)
+        @{int index = 0;}
+        @foreach (var footerEntity in footer)
         {
-            <div class="col-md-2">
+            <div class="col-sm-4 col-md-4 col-xl-3">
                 <div data-templateid="FooterNavList">
                     <ul class="nav nav-footer-entry list-unstyled collapse-mobile flex-column flex-sm-row">
                         <li class="nav-item">
-                            <h5 role="tab" id="@index">
+                            <h5 role="tab" id="@index" class="nav-footer-title">
                                 @if (footerEntity.HasChildren)
                                 {
                                     <a class="collapsed  d-block  d-md-none"
-                                       role="button" 
-                                       data-toggle="collapse" 
-                                       data-parent="#accordion" 
-                                       href="#footer-collapse-@index" 
-                                       aria-expanded="false" 
-                                       aria-controls="footer-collapse-@index" 
+                                       role="button"
+                                       data-toggle="collapse"
+                                       data-parent="#accordion"
+                                       href="#footer-collapse-@index"
+                                       aria-expanded="false"
+                                       aria-controls="footer-collapse-@index"
                                        style="@footerEntity.CssClass">
                                         @footerEntity.DisplayName
                                         <span class="float-right fa fa-chevron-down collapsed-icon"></span>
@@ -95,6 +95,14 @@
             </div>
             index++;
         }
+        <div class="col-md-4 col-xl-3">
+            <div class="nav-footer-entry">
+                <h5 class="nav-footer-title">@Html.Localize("General", "L_FollowUs")</h5>
+                <f:function name="Composite.Web.Html.Template.PageTemplateFeature" xmlns:f="http://www.composite.net/ns/function/1.0">
+                    <f:param name="FeatureName" value="Social links" />
+                </f:function>
+            </div>
+        </div>
     </div>
 </body>
 </html>

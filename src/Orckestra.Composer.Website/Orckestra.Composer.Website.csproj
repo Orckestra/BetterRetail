@@ -130,26 +130,26 @@
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Orckestra.ExperienceManagement.Configuration, Version=4.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Orckestra.ExperienceManagement.Configuration.4.9.3\lib\net471\Orckestra.ExperienceManagement.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Interfaces, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.3.0-beta0001\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Interfaces, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Interfaces.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.5.3.0-beta0001\lib\net461\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.Providers.MonerisPayment.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Moneris.5.4.0-alpha0051\lib\net461\Orckestra.Overture.Providers.MonerisPayment.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.RestClient, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.Client.5.3.0-beta0001\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
+    <Reference Include="Orckestra.Overture.RestClient, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.Client.5.4.0-alpha0051\lib\net461\Orckestra.Overture.RestClient.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.3.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.dll</HintPath>
     </Reference>
-    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.3.0-beta0001\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
+    <Reference Include="Orckestra.Overture.ServiceModel.Requests, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\OrckestraCommerce.ServiceModel.Requests.5.4.0-alpha0051\lib\net461\Orckestra.Overture.ServiceModel.Requests.dll</HintPath>
     </Reference>
     <Reference Include="OrckestraCommerce.RecurringOrders.ServiceModel, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\OrckestraCommerce.RecurringOrders.ServiceModel.5.0.0\lib\net461\OrckestraCommerce.RecurringOrders.ServiceModel.dll</HintPath>
@@ -244,6 +244,7 @@
     <Content Include="App_Data\Composite\TreeDefinitions\NavigationElement.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Data\Composite\TreeDefinitions\ProductTile.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Descriptive HTML head elements.xml" />
     <Content Include="App_Data\PageTemplateFeatures\Minicart.html" />
     <Content Include="App_Data\PageTemplateFeatures\Social links.html" />
@@ -272,6 +273,7 @@
     <Content Include="ApplicationInsights.config" />
     <Content Include="App_Code\ImageHelpers.cshtml" />
     <Content Include="App_Code\ContentSearchHelpers.cshtml" />
+    <Content Include="App_Code\HeaderHelpers.cshtml" />
     <None Include="App_Config\Caching.config" />
     <Content Include="App_Data\Razor\Composer\Grids\OneThirdTwoThirds.cshtml" />
     <Content Include="App_Data\Razor\Composer\Grids\AccountGrid.cshtml" />
@@ -353,6 +355,14 @@
     <Content Include="App_Data\Razor\Composer\Search\BaseSelectedFacets.cshtml" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\Facets.cshtml" />
     <Content Include="App_Data\Razor\Composer\ContentSearch\Results.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\WishList.cshtml" />
+    <Content Include="App_Data\Razor\Composer\MyAccount\UpdateAccount.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\Instant\RelatedProducts.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Search\Products\ProductTileVue.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButton.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Cart\MinicartButtonMobile.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Membership\SignInHeader.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Membership\SignInSticky.cshtml" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -456,6 +466,7 @@
   <ItemGroup>
     <Folder Include="App_Data\Composite\DynamicTypeForms\Orckestra\List\" />
     <Folder Include="App_Data\Razor\Orckestra\Lists\" />
+    <Folder Include="UI.Package\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

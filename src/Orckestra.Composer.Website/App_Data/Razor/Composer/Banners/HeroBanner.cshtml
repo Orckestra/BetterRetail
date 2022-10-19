@@ -1,0 +1,99 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Hero Banner Component"; }
+    }
+
+    [FunctionParameter(Label = "Background Image")]
+    public NullableDataReference<IImageFile> BackgroundImage { get; set; }
+
+    private const string backgroundStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Background Color", Help = "Gray color is by default.", DefaultValue = "bg-gray", WidgetMarkup = backgroundStyleWidgetMarkup)]
+    public string BackgroundColor { get; set; }
+
+    [FunctionParameter(Label = "Banner Heading", WidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.TextArea' />")]
+    public string Heading { get; set; }
+
+    private const string textAligmentWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextAligmentOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Banner Heading Aligment", Help = "Text is centered by default.", DefaultValue = "text-center", WidgetMarkup = textAligmentWidgetMarkup)]
+    public string HeadingAligment { get; set; }
+
+    private const string headingColorWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextColorOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Banner Heading Color", Help = "White color by default.", DefaultValue = "text-white", WidgetMarkup = headingColorWidgetMarkup)]
+    public string HeadingColor { get; set; }
+
+    [FunctionParameter(Label = "Banner Content", Help = "The Content displaying at the bottom. For the small screens content is hidden.")]
+    public XhtmlDocument Content { get; set; }
+
+    private const string contentBackgroundStyleWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/BackgroundOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Banner Content Background Color", Help = "Dark is by default. If RGBA background color is provided, then this will be ignored.", DefaultValue = "bg-dark", WidgetMarkup = contentBackgroundStyleWidgetMarkup)]
+    public string ContentBackgroundColor { get; set; }
+
+    [FunctionParameter(Label = "Banner Content Background Color as RGBA", DefaultValue = null,
+        Help = "Provide any background color in RGBA or # format. If you need color with transparency, use RGBA format, for example: rgba(0,0,0,0.5)")]
+    public string ContentBackgroundColorRGB { get; set; }
+
+    private const string contentTextColorWidgetMarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/TextColorOptions.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+    [FunctionParameter(Label = "Banner Content Text Color", DefaultValue = "text-white", WidgetMarkup = contentTextColorWidgetMarkup)]
+    public string ContentTextColor { get; set; }
+
+    [FunctionParameter(Label = "Full-Width Banner", DefaultValue = true)]
+    public bool isFullWidth { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div class="@(isFullWidth ? "container-fluid jumbotron-fluid": "") bg-cover hero-banner jumbotron @BackgroundColor">
+        @if (BackgroundImage != null)
+        {<img src="~/media(@BackgroundImage)" class="d-block w-100" alt="img" />}
+        <div class="container">
+            <h1 class="@HeadingAligment @HeadingColor">@Html.Raw(@Heading.Replace(System.Environment.NewLine, "<br/>"))</h1>
+            @if (Content != null && Content.Body != null && (!string.IsNullOrWhiteSpace(Content.Body.Value) || Content.Body.HasElements))
+            {
+                <div class="d-none d-md-block jumbotron-caption bottom @ContentTextColor @(String.IsNullOrEmpty(ContentBackgroundColorRGB) ? ContentBackgroundColor: "")" style="background-color: @(ContentBackgroundColorRGB);">
+                    @Html.Raw(@Content)
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

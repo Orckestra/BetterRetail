@@ -70,12 +70,18 @@
 			<section name="settings" type="System.Configuration.NameValueFileSectionHandler" />
 		</sectionGroup>
   </configSections>
-      <xsl:copy-of select="$ConfigBuilders"/>
-      <xsl:comment>Composer configuration</xsl:comment>
-      <xsl:copy-of select="$ComposerSection"/>
+    </xsl:if>
+    <xsl:apply-templates select="configSections" />
+
+    <xsl:copy-of select="$ConfigBuilders"/>
+    <xsl:comment>Composer configuration</xsl:comment>
+    <xsl:copy-of select="$ComposerSection"/>
+
+    <xsl:if test="not(appSettings)">
       <xsl:copy-of select="$AppSettings"/>
     </xsl:if>
-    <xsl:apply-templates select="node()" />
+
+    <xsl:apply-templates select="node()[not(local-name() = 'configSections')]" />
 		<xsl:if test="not(experienceManagement)" xml:space="preserve">
 				<experienceManagement>
 					<settings configSource="App_Config\ExperienceManagement.config" />
@@ -96,14 +102,16 @@
 				  </sectionGroup>
 			  </xsl:if>
    </xsl:copy>
-    <xsl:copy-of select="$ConfigBuilders"/>
-    <xsl:comment>Composer configuration</xsl:comment>
-    <xsl:copy-of select="$ComposerSection"/>
-    <xsl:copy-of select="$AppSettings"/>
-
   </xsl:template>
 
-  <xsl:template match="configuration/system.web" xml:space="preserve">
+  <xsl:template match="configuration/appSettings" xml:space="preserve">
+    <xsl:copy><xsl:attribute name="configBuilders">EnvAppSettings</xsl:attribute><xsl:apply-templates select="@*[name(.)!='configBuilders']" />
+      <xsl:apply-templates select="node()" />
+      <xsl:copy-of select="msxsl:node-set($AppSettings)/*/node()"/>
+   </xsl:copy>
+  </xsl:template>
+
+	<xsl:template match="configuration/system.web" xml:space="preserve">
     <xsl:copy><xsl:apply-templates select="@*" />
     <httpCookies httpOnlyCookies="true" requireSSL="true" />
     <authentication mode="Forms">

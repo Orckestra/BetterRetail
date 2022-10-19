@@ -31,6 +31,7 @@ namespace Orckestra.Composer
             host.Register<AddressRepository, IAddressRepository>();
             host.Register<FulfillmentLocationsRepository, IFulfillmentLocationsRepository>();
             host.Register<ProductSettingsRepository, IProductSettingsRepository>();
+            host.Register<CustomProfilesRepository, ICustomProfilesRepository>();
             host.Register<ProductSettingsViewService, IProductSettingsViewService>();
             host.Register<ScopeRepository, IScopeRepository>();
             host.Register<ScopeViewService, IScopeViewService>();

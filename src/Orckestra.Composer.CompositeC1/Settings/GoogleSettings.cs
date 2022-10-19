@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using Composite.Data;
@@ -15,6 +16,8 @@ namespace Orckestra.Composer.CompositeC1.Settings
     {
         public IWebsiteContext WebsiteContext;
         private DataTypes.GoogleSettings GoogleSettingsMeta;
+
+        private readonly string _mapsApiKeyAppSettingName = "GoogleSettings.MapsApiKey";
 
         public GoogleSettings(IWebsiteContext websiteContext)
         {
@@ -41,12 +44,12 @@ namespace Orckestra.Composer.CompositeC1.Settings
         {
             get
             {
-                if(GoogleSettingsMeta != null)
+                if(GoogleSettingsMeta != null && !string.IsNullOrWhiteSpace(GoogleSettingsMeta.MapsApiKey))
                 {
                     return GoogleSettingsMeta.MapsApiKey;
                 }
 
-                return null;
+                return ConfigurationManager.AppSettings[_mapsApiKeyAppSettingName];
             }
         }
         public int MapsZoomLevel

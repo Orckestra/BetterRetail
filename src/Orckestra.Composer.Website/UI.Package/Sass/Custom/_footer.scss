@@ -1,11 +1,12 @@
 .footer-nolink {
-  color:black;
   cursor:default;
 }
 .footer {
   position: relative;
   z-index: 1;
   margin-top: 40px;
+  background-color: $gray-100;
+  border-top: 1px solid $gray-200;
 
   .text-copy {
     margin-top: 10px;
@@ -22,13 +23,13 @@
     margin: 0 -10px;
     > li {
       margin-bottom: 0;
-      h5 {
+    }
+      .nav-footer-title {
         margin: 0;
+        padding: 20px 10px;
+
         > a {
-          border-bottom: 1px solid gray("200");
-          border-top: 1px solid gray("200");
           display: block;
-          padding: 20px 10px;
 
           .collapsed-icon {
             display: none;
@@ -54,21 +55,29 @@
           }
         }
       }
+    
+    .nav-social {
+      margin-left: 10px;
     }
+
    @include media-breakpoint-up(md) {
       margin-bottom: 20px;
     }
 
   }
   .nav {
+    @include media-breakpoint-down(xs) {
+        &.nav-text li {
+            margin: 0;
 
+            + li {
+                border-top: 1px solid $gray-300;
+            }
+        }
+     }
     @include media-breakpoint-down(sm) {
       li {
         margin: 0;
-
-        + li {
-          border-top: 1px solid #fff;
-        }
       }
     }
 
@@ -82,6 +91,7 @@
     &.nav-legal {
       display: table;
       width: 100%;
+      padding: 20px 0;
 
       > li {
         display: table-cell;
@@ -92,8 +102,6 @@
       }
 
       a {
-        border: 1px solid gray("200");
-        color: gray("600");
         font-size: 12px;
         padding: 10px;
 
@@ -106,6 +114,7 @@
         }
       }
       @include media-breakpoint-up(md) {
+        padding: 0;
         display: block;
         text-align: right;
         width: auto;
@@ -114,7 +123,6 @@
           text-align: left;
 
           a:before {
-            color: gray("600");
             content: "|";
             margin: 0 10px 0 8px;
             text-decoration: none;
@@ -139,8 +147,8 @@
     }
   }
 
-  .nav-footer-list {
-    background-color: gray("200");
+  .nav-footer-list {  
+    background-color: $gray-100;
     margin: 0;
     /* Small devices (tablets, 768px and up) */
     @include media-breakpoint-up(md) {
@@ -158,16 +166,23 @@
     }
   }
 
-  @include media-breakpoint-up(md) {
-    .collapse-mobile {
-      .collapse {
-        display: block;
-        height: auto!important;
-      }
-      .nav-footer-list.collapsing {
-        display: block;
-        height: auto !important;
-      }
+  .collapse-mobile {
+    .nav-footer-list.collapsing {
+      flex-wrap: nowrap !important;
     }
+  }
+  
+  @include media-breakpoint-up(sm) {
+      .collapse-mobile {
+          .collapse {
+              display: block;
+              height: auto!important;
+          }
+          .nav-footer-list.collapsing {
+              display: block;
+              height: auto !important;
+        flex-wrap: inherit;
+          }
+      }
   }
 

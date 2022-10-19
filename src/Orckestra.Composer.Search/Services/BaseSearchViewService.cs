@@ -137,6 +137,7 @@ namespace Orckestra.Composer.Search.Services
         /// <returns></returns>
         protected virtual async Task<ProductSearchResultsViewModel> CreateProductSearchResultsViewModelAsync(CreateProductSearchResultsViewModelParam<TParam> param)
         {
+            var corrected = param.SearchResult.CorrectedSearchTerms;
             //TODO: Implement by calling the ViewModelMapper instead.
             var searchResultViewModel = new ProductSearchResultsViewModel
             {
@@ -144,7 +145,7 @@ namespace Orckestra.Composer.Search.Services
                 CategoryFacetCounts = BuildCategoryFacetCounts(param),
                 Keywords = param.SearchParam.Criteria.Keywords,
                 TotalCount = param.SearchResult.TotalCount,
-                CorrectedSearchTerms = param.SearchResult.CorrectedSearchTerms,
+                CorrectedSearchTerms = !string.IsNullOrWhiteSpace(corrected) && corrected.EndsWith("*") ? corrected.Remove(corrected.Length - 1) : corrected,
                 Suggestions = new List<Suggestion>()
             };
 
@@ -411,12 +412,12 @@ namespace Orckestra.Composer.Search.Services
 
             return await CreateProductSearchResultsViewModelAsync(createSearchViewModelParam).ConfigureAwait(false);
         }
-        private static GetProductMainImagesParam GetImagesParam(List<ProductDocument> documnets)
+        private static GetProductMainImagesParam GetImagesParam(List<ProductDocument> documents)
         {
             return new GetProductMainImagesParam
             {
                 ImageSize = SearchConfiguration.DefaultImageSize,
-                ProductImageRequests = documnets
+                ProductImageRequests = documents
                     .Select(document => new ProductImageRequest
                     {
                         ProductId = document.ProductId,

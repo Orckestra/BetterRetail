@@ -29,6 +29,15 @@ namespace Orckestra.Composer.Services.Lookup
             return lookups;
         }
 
+        public virtual async Task<Overture.ServiceModel.Metadata.Lookup> GetLookupAsync(LookupType lookupType, string LookupName)
+        {
+            ILookupRepository repository = _lookupRepositoryFactory.CreateLookupRepository(lookupType);
+
+            var lookup = await repository.GetLookupAsync(LookupName).ConfigureAwait(false);
+
+            return lookup;
+        }
+
         public async Task<string> GetLookupDisplayNameAsync(GetLookupDisplayNameParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }

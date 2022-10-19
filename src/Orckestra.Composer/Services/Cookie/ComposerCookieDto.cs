@@ -23,6 +23,7 @@ namespace Orckestra.Composer.Services.Cookie
         public bool? IsGuest { get; set; }
 
         public string EncryptedEditingOrderId { get; set; }
+        public string EditingScopeId { get; set; }
 
         /// <summary>
         /// This property can be used for custom cookie properties

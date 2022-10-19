@@ -42,6 +42,7 @@
 /**
  * Composer bootstrap overrides
 */
+@import "Overrides/_badge.scss";
 @import "Overrides/_breadcrumb.scss";
 @import "Overrides/_button-groups.scss";
 @import "Overrides/_buttons.scss";
@@ -49,6 +50,7 @@
 @import "Overrides/_dropdown.scss";
 @import "Overrides/_forms.scss";
 @import "Overrides/_image.scss";
+@import "Overrides/_jumbotron.scss";
 @import "Overrides/_modal.scss";
 @import "Overrides/_navs.scss";
 @import "Overrides/_pagination.scss";
@@ -65,6 +67,7 @@
 @import "Custom/_affix.scss";
 @import "Custom/_anchor.scss";
 @import "Custom/_backgrounds.scss";
+@import "Custom/_banner.scss";
 @import "Custom/_bleed.scss";
 @import "Custom/_button-groups.scss";
 @import "Custom/_carousel.scss";

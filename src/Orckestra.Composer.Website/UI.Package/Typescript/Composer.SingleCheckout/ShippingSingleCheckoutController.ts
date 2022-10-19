@@ -133,7 +133,7 @@ module Orckestra.Composer {
 
                         if (methodEntity.ShippingProviderId === oldShippingMethod.ShippingProviderId) { return; }
 
-                        this.Cart.ShippingAddress = this.clearShippingAddress();
+                        this.Cart.ShippingAddress = this.getClearShippingAddress();
                         return self.checkoutService.updateCart([self.viewModelName])
                             .then(() => {
                                 this.Cart.ShippingAddress = this.SelectedMethodType.OldAddress;
@@ -142,7 +142,7 @@ module Orckestra.Composer {
                                 this.Cart.ShippingMethod = oldShippingMethod;
                             });
                     },
-                    clearShippingAddress() {
+                    getClearShippingAddress() {
                         this.Mode.AddingLine2Address = true;
                         let { ShippingAddress: { FirstName, LastName, CountryCode, PhoneRegex, PostalCodeRegexPattern }, Customer } = this.Cart;
 

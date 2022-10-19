@@ -1,3 +1,8 @@
+// Load external fonts from Google
+// Open Sans and Caveat
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+$font-opensans: 'Open Sans';
+$font-caveat: 'Caveat';
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -6,15 +11,15 @@
 // Color system
 
 $white:    #fff !default;
-$gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #6c757d !default;
-$gray-700: #696969 !default;
-$gray-800: #343a40 !default;
-$gray-900: #212529 !default;
+$gray-100: #f9f9f9 !default;
+$gray-200: #eaeaea !default;
+$gray-300: #d5d5d5 !default;
+$gray-400: #c4c4c4 !default;
+$gray-500: #828282 !default;
+$gray-600: #696969 !default;
+$gray-700: #545454 !default;
+$gray-800: #3d3d3d !default;
+$gray-900: #232323 !default;
 $black:    #000 !default;
 
 $grays: () !default;
@@ -38,12 +43,12 @@ $blue:    #007bff !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
-$red:     #dc3545 !default;
+$red:     #BF1D3F !default;
 $orange:  #fd7e14 !default;
-$yellow:  #ffc107 !default;
-$green:   #28a745 !default;
+$yellow:  #F0AD4E !default;
+$green:   #4E9E4E !default;
 $teal:    #20c997 !default;
-$cyan:    #17a2b8 !default;
+$cyan:    #0984B2 !default;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -61,18 +66,20 @@ $colors: map-merge(
     "cyan":       $cyan,
     "white":      $white,
     "gray":       $gray-600,
-    "gray-dark":  $gray-800
+    "gray-dark":  $gray-700
   ),
   $colors
 );
 
 $primary:       #0f4e66 !default;
 $secondary:     $gray-600 !default;
+$default:       $gray-500 !default;
 $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         $gray-100 !default;
+$lighter:       $gray-100 !default;
+$light:         $gray-200 !default;
 $dark:          $gray-700 !default;
 
 $theme-colors: () !default;
@@ -81,10 +88,12 @@ $theme-colors: map-merge(
   (
     "primary":    $primary,
     "secondary":  $secondary,
+    "default":    $default,
     "success":    $success,
     "info":       $info,
     "warning":    $warning,
     "danger":     $danger,
+    "lighter":    $lighter,
     "light":      $light,
     "dark":       $dark
   ),
@@ -226,7 +235,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns:                12 !default;
-$grid-gutter-width:           30px !default;
+$grid-gutter-width:           20px !default;
 $grid-row-columns:            6 !default;
 
 
@@ -278,7 +287,7 @@ $embed-responsive-aspect-ratios: join(
 // Font, line-height, and color for body text, headings, and more.
 
 // stylelint-disable value-keyword-case
-$font-family-sans-serif:      Arial, Helvetica, "Helvetica Neue", sans-serif;
+$font-family-sans-serif:      $font-opensans , Arial, Helvetica, "Helvetica Neue", sans-serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
@@ -290,6 +299,7 @@ $font-size-sm:                $font-size-base * .875 !default;
 $font-weight-lighter:         lighter !default;
 $font-weight-light:           300 !default;
 $font-weight-normal:          400 !default;
+$font-weight-semibold:        600 !default;
 $font-weight-bold:            700 !default;
 $font-weight-bolder:          bolder !default;
 

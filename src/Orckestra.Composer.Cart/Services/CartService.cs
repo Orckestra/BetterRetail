@@ -133,7 +133,8 @@ namespace Orckestra.Composer.Cart.Services
                             LineItemId = existingLineItem.Id,
                             Quantity = param.Quantity + existingLineItem.Quantity,
                             RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                            RecurringOrderProgramName = param.RecurringOrderProgramName
+                            RecurringOrderProgramName = param.RecurringOrderProgramName,
+                            PropertyBag = param.PropertyBag
                         };
                         return await UpdateLineItemAsync(updateLineItemParam).ConfigureAwait(false);
                     }
@@ -409,9 +410,14 @@ namespace Orckestra.Composer.Cart.Services
 
             if (CartConfiguration.GroupCartItemsByPrimaryCategory)
             {
-                vm.GroupedLineItemDetailViewModels = await GetGroupedLineItems(vm, param).ConfigureAwait(false);
-            }
+                var categoryTree = await CategoryRepository.GetCategoriesTreeAsync(new GetCategoriesParam
+                {
+                    Scope = param.Cart.ScopeId
+                }).ConfigureAwait(false);
 
+                vm.GroupedLineItemDetailViewModels = CartViewModelFactory.GetGroupedLineItems(vm.LineItemDetailViewModels, categoryTree, param.CultureInfo);
+            }
+        
             return vm;
         }
 

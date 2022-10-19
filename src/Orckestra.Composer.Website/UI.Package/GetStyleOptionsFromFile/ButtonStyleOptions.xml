@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Options>
+  <Option  CssClassKey="btn-secondary" Label="Secondary"></Option>
+  <Option  CssClassKey="btn-primary" Label="Primary"></Option>
+  <Option  CssClassKey="btn-info" Label="Info"></Option>
+  <Option  CssClassKey="btn-success" Label="Success"></Option>
+  <Option  CssClassKey="btn-warning" Label="Warning"></Option>
+  <Option  CssClassKey="bg-danger" Label="Danger"></Option>
+  <Option  CssClassKey="btn-light" Label="Light"></Option>
+  <Option  CssClassKey="btn-dark" Label="Dark"></Option>
+  <Option  CssClassKey="btn-outline-secondary" Label="Outline Secondary"></Option>
+  <Option  CssClassKey="btn-outline-primary" Label="Outline Primary"></Option>
+  <Option  CssClassKey="btn-outline-info" Label="Outline Info"></Option>
+  <Option  CssClassKey="btn-outline-success" Label="Outline Success"></Option>
+  <Option  CssClassKey="btn-outline-warning" Label="Outline Warning"></Option>
+  <Option  CssClassKey="bg-outline-danger" Label="Outline Danger"></Option>
+  <Option  CssClassKey="btn-outline-light" Label="Outline Light"></Option>
+  <Option  CssClassKey="btn-outline-dark" Label="Outline Dark"></Option>
+</Options>

@@ -212,6 +212,11 @@ namespace Orckestra.Composer
                     continue;
                 }
 
+                if (assembly.GetCustomAttributes(typeof(ComposerAssemblyIgnoreAttribute), false).Any())
+                {
+                    continue;
+                }
+
                 foreach (var type in assembly.SafeGetTypes().Where(t => !t.IsAbstract))
                 {
                     if (typeof(IComposerPlugin).IsAssignableFrom(type))

@@ -1,10 +1,3 @@
-using System;
-using System.Net;
-using System.Web.Mvc;
-using Composite.Core.Xml;
-using Orckestra.Composer.Cart;
-using Orckestra.Composer.Cart.Parameters;
-using Orckestra.Composer.Cart.Parameters.Order;
 using Orckestra.Composer.Cart.Services;
 using Orckestra.Composer.Cart.Services.Order;
 using Orckestra.Composer.Cart.ViewModels;
@@ -19,6 +12,8 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using Orckestra.Composer.ViewModels;
+using System;
+using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -71,30 +66,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [AuthorizeAndRedirect]
-        public virtual ActionResult UpdateAccount()
-        {
-            var urlParam = new BaseUrlParameter
-            {
-                CultureInfo = ComposerContext.CultureInfo
-            };
-            var changePasswordUrl = MyAccountUrlProvider.GetChangePasswordUrl(urlParam);
-            var addressListUrl = MyAccountUrlProvider.GetAddressListUrl(urlParam);
-
-            var param = new GetUpdateAccountViewModelParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId
-            };
-
-            var viewModel = CustomerViewService.GetUpdateAccountViewModelAsync(param).Result;
-            viewModel.ChangePasswordUrl = changePasswordUrl;
-            viewModel.AddressListUrl = addressListUrl;
-
-            return View("UpdateAccountBlade", viewModel);
-        }
-
-        [AuthorizeAndRedirect]
         public virtual ActionResult CreateAddress()
         {
             var viewModel = CustomerAddressViewService.GetCreateAddressViewModelAsync(new GetCreateAddressViewModelAsyncParam
@@ -129,28 +100,6 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             }
 
             return View("EditAddressBlade", vm);
-        }
-
-        [AuthorizeAndRedirect]
-        public virtual ActionResult WishList(XhtmlDocument emptyWishListContent)
-        {
-            var vm = WishListViewService.GetWishListViewModelAsync(new GetCartParam
-            {
-                Scope = ComposerContext.Scope,
-                CultureInfo = ComposerContext.CultureInfo,
-                CustomerId = ComposerContext.CustomerId,
-                CartName = CartConfiguration.WishlistCartName,
-                ExecuteWorkflow = CartConfiguration.WishListExecuteWorkflow,
-                WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
-                BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            }).Result;
-
-            if (vm != null && vm.TotalQuantity == 0 && emptyWishListContent != null)
-            {
-                return View("WishListContainer", new {TotalQuantity = 0, EmptyContent = emptyWishListContent.Body});
-            }
-
-            return View("WishListContainer", vm);
         }
 
         [AuthorizeAndRedirect]

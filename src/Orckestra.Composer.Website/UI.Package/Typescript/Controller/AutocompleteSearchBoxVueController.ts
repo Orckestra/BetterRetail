@@ -144,17 +144,21 @@ module Orckestra.Composer {
                             });
                         }, this.debounceMilliseconds);
                     },
+                    htmlDecode(value){ 
+                        return $('<div/>').html(value).text(); 
+                      },
                     highlightSuggestion(value, query) {
-                        const start = value.toLowerCase().indexOf(query.toLowerCase());
+                        const decodedValue = this.htmlDecode(value);
+                        const start = decodedValue.toLowerCase().indexOf(query.toLowerCase());
                         const end = start + query.length;
-                        if (start < 0) return value;
+                        if (start < 0) return decodedValue;
 
                         return [
-                            value.slice(0, start),
-                            `<strong>${value.slice(start, end)}</strong>`,
-                            value.slice(end),
+                            decodedValue.slice(0, start),
+                            `<strong>${decodedValue.slice(start, end)}</strong>`,
+                            decodedValue.slice(end),
                         ].join('');
-                    },
+                    },      
                     mapSections(values, query) {
                         return (sectionName, index) => ({
                             name: sectionName,
@@ -188,8 +192,15 @@ module Orckestra.Composer {
                         elem.submit();
                     },
                     selectedSearchTermsSuggestion(suggestion) {
-                        //this.query = suggestion.item.DisplayName;
-                        this.searchMore();
+                        EventHub.instance().publish('searchTermSuggestionClicked', {
+                            data: {
+                                suggestion: suggestion.item.DisplayName,
+                            }
+                        });
+                        this.query = suggestion.item.DisplayName;
+                        this.$nextTick().then(() => {
+                            this.searchMore()
+                        });
                     },
                     selectedCategorySuggestion(suggestion) {
                         EventHub.instance().publish('categorySuggestionClicked', {

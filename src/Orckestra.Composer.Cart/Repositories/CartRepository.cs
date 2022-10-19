@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Orckestra.Composer.Cart.Parameters;
+using Orckestra.Composer.Cart.Repositories.Order;
 using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Providers;
 using Orckestra.Overture;
@@ -25,11 +26,13 @@ namespace Orckestra.Composer.Cart.Repositories
     {
         protected IOvertureClient OvertureClient { get; private set; }
         protected ICacheProvider CacheProvider { get; private set; }
+        protected IScopeProvider ScopeProvider { get; private set; }
 
-        public CartRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider)
+        public CartRepository(IOvertureClient overtureClient, ICacheProvider cacheProvider, IScopeProvider scopeProvider)
         {
             OvertureClient = overtureClient ?? throw new ArgumentNullException(nameof(overtureClient));
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
+            ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
         }
 
         /// <summary>
@@ -178,7 +181,8 @@ namespace Orckestra.Composer.Cart.Repositories
                 Quantity = param.Quantity,
                 VariantId = param.VariantId,
                 RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = param.RecurringOrderProgramName
+                RecurringOrderProgramName = param.RecurringOrderProgramName,
+                PropertyBag = param.PropertyBag
             };
         }
 
@@ -303,7 +307,7 @@ namespace Orckestra.Composer.Cart.Repositories
             if (param.LineItems == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.LineItems)), nameof(param)); }
 
             var array = new Guid[param.LineItems.Count];
-            for(int i = 0; i < param.LineItems.Count; i++)
+            for (int i = 0; i < param.LineItems.Count; i++)
             {
                 var currentLine = param.LineItems[i];
                 if (currentLine.Id == Guid.Empty)
@@ -356,9 +360,9 @@ namespace Orckestra.Composer.Cart.Repositories
                 Id = param.LineItemId,
                 PropertyBag = param.PropertyBag,
                 Quantity = param.Quantity,
-                ScopeId = param.ScopeId,      
+                ScopeId = param.ScopeId,
                 RecurringOrderFrequencyName = param.RecurringOrderFrequencyName,
-                RecurringOrderProgramName = param.RecurringOrderProgramName    
+                RecurringOrderProgramName = param.RecurringOrderProgramName
             };
 
             var cacheKey = BuildCartCacheKey(param.ScopeId, param.CustomerId, param.CartName);
@@ -537,6 +541,8 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
             };
 
+            var cacheKey = OrderRepository.CustomerOrderedProductsCacheKey(ScopeProvider.DefaultScope, param.CustomerId);
+            CacheProvider.Remove(cacheKey);
             return OvertureClient.SendAsync(request);
         }
 

@@ -36,7 +36,7 @@ module Orckestra.Composer {
                         this.adressBeforeEdit = {};
                         this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
-                        this.clearShippingAddress();
+                        this.Cart.ShippingAddress = this.getClearShippingAddress();
                         this.initializeParsey(self.formSelector);
                     },
 

@@ -169,10 +169,12 @@ module Orckestra.Composer {
                     if (this._isAuthenticated) {
                         return this._service.getDefaultAddress()
                             .then(defaultAddr => {
-                                var formattedAddress
-                                    = `${defaultAddr.City}, ${defaultAddr.RegionCode} ${defaultAddr.PostalCode}, ${defaultAddr.CountryCode}`;
-                                this._searchBoxJQ.val(formattedAddress);
-                                return this._geoService.getLocationByAddress(formattedAddress);
+                                if (defaultAddr && defaultAddr.PostalCode) {
+                                    var formattedAddress
+                                        = `${defaultAddr.City}, ${defaultAddr.RegionCode} ${defaultAddr.PostalCode}, ${defaultAddr.CountryCode}`;
+                                    this._searchBoxJQ.val(formattedAddress);
+                                    return this._geoService.getLocationByAddress(formattedAddress);
+                                }
                             });
                     }
                 })
