@@ -54,9 +54,6 @@ module Orckestra.Composer {
                         }
 
                         self.couponService.removeCoupon(couponCode.toString());
-                    },
-                    hideAlert(){
-                        this.ShowAlert = false;
                     }
                 }
             };
