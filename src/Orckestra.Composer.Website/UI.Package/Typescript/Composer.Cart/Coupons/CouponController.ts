@@ -23,7 +23,8 @@ module Orckestra.Composer {
                     CouponCode: undefined,
                     Mode: {
                         ApplyingCoupon: false
-                    }
+                    },
+                    ShowAlert: false
                 },
                 computed: {
                     Coupons() {
@@ -42,6 +43,7 @@ module Orckestra.Composer {
                             .fin(() => {
                                 if (!this.HasCouponsErrorMessage) this.CouponCode = undefined;
                                 this.Mode.ApplyingCoupon = false;
+                                this.ShowAlert = true;
                             });
                     },
                     removeCoupon(couponCode) {
@@ -52,6 +54,9 @@ module Orckestra.Composer {
                         }
 
                         self.couponService.removeCoupon(couponCode.toString());
+                    },
+                    hideAlert(){
+                        this.ShowAlert = false;
                     }
                 }
             };
