@@ -62,9 +62,10 @@
                                            v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
 
                                     <span class="input-group-addon color-picker-container">
-                                        <span class="current-color" :style="getSelectedColor(variant)"
+                                        <span class="current-color"
+                                              :style="`background-color:${getSelectedColor(variant)}`"
                                               v-on:click="togglePicker(variant.lookupValue)"></span>
-                                        <chrome-picker :value="getPickerSelectedColor(variant)"
+                                        <chrome-picker :value="getSelectedColor(variant)"
                                                        v-on:input="updateColorFromPicker($event, variant.lookupValue)"
                                                        v-if="variant.lookupValue === openedPicker" />
                                     </span>
@@ -99,26 +100,23 @@
         })
 
         const VARIANT_COLOR_QUERY = Apollo.gql`
-                                                                query{
-                                                                  colorValues {
-                                                                  lookupValue,
-                                                                  color,
-                                                                  image
-                                                                  }
-                                                                }`
+                                query{
+                                  colorValues {
+                                    lookupValue,
+                                    color,
+                                    image
+                                  }
+                                }`
 
         const VARIANT_COLOR_IMAGES_QUERY = Apollo.gql`
-                                                                query{
-                                                                  colorImages
-                                                                }`
+                                 query{
+                                   colorImages
+                                 }`
 
         const VARIANT_COLOR_MUTATION = Apollo.gql`
-                                                            mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
-                                                              updateVariantColors(
-                                                                variantColorConfigurationItems: $variantColorConfigurationItems
-                                                              )
-                                                            }
-                                                            `
+                                 mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
+                                    updateVariantColors(variantColorConfigurationItems: $variantColorConfigurationItems)
+                                 }`
 
         const app = new Vue({
             el: '#app',
@@ -177,15 +175,12 @@
                 },
                 getSelectedColor(variant) {
                     let color = this.getValue(variant, "color");
-                    return `background-color:${color ? color : 'rgba(0, 0, 0, 0)'}`;
-                },
-                getPickerSelectedColor(variant) {
-                    let color = this.getValue(variant, "color");
-                    if (!color) return 'rgba(0, 0, 0, 0)';
 
                     var ctx = document.createElement("canvas").getContext("2d");
-                    ctx.fillStyle = color;
-                    return ctx.fillStyle
+                    ctx.fillStyle = color ?? variant.lookupValue;
+
+                    let selectedColor = ctx.fillStyle === "#000000" && !color && variant.lookupValue !== "black" ? 'rgba(0, 0, 0, 0)' : ctx.fillStyle;
+                    return selectedColor;
                 },
                 showPicker(variant) {
                     this.openedPicker = variant;
@@ -197,7 +192,8 @@
                     this.openedPicker === variant ? this.hidePicker() : this.showPicker(variant);
                 },
                 updateColorFromPicker($event, variantName) {
-                    let newColor = $event.rgba.a == 1 ? $event.hex : `rgba(${$event.rgba.r}, ${$event.rgba.g}, ${$event.rgba.b}, ${$event.rgba.a})`;
+                    let newColor = $event.rgba.a == 1 || $event.rgba.a == 0 ? $event.hex :
+                        `rgba(${$event.rgba.r}, ${$event.rgba.g}, ${$event.rgba.b}, ${$event.rgba.a})`;
                     this.updateItem(newColor, variantName, "color");
                 },
                 updateItem(newValue, variantName, modifiedField) {
