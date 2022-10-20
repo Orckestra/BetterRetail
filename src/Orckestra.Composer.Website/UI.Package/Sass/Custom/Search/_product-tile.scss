@@ -79,11 +79,13 @@
 
         @include media-breakpoint-up(md) {
             display: block;
+            width: 100%;
         }
         
         .slick-slide & {
             bottom: 0px;
             position: absolute;
+            width: 100%;
         }
         flex: 1 1 auto;
 
@@ -230,20 +232,24 @@
     .product-tile-media {
         flex: 1 0 40%;
         // http://alistapart.com/article/creating-intrinsic-ratios-for-video
+        
+        .slick-slide & {
+            padding-bottom: 0;
+        }
 
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(sm) {
             z-index: -1;
             display: block;
             height: 0;
             //padding-bottom: $product-image-ratio * 100%;
             padding-bottom: 107%;
             position: relative;
-        }
-        @include media-breakpoint-down(md) {
             .slick-slide & {
-                padding-bottom: 50%;
+                padding-bottom: 150%;
             }
         }
+        
+        
    }
 
     .product-tile-recurring {
