@@ -1,6 +1,12 @@
 .wishlist-header-count {
     min-width: 8px;
     display: inline-block;
+    &:before {
+        content: "(";
+    }
+    &:after {
+        content: ")";
+    }
 }
 
 .wishlist-count {

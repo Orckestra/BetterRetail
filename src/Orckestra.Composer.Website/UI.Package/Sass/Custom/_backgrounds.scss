@@ -1,3 +1,37 @@
+$transparencies: () !default;
+$transparencies: map-merge(
+  (
+    "90": .1,
+    "80": .2,
+    "70": .3,
+    "60": .4,
+    "50": .5,
+    "40": .6,
+    "30": .7,
+    "20": .8,
+    "10": .9,
+  ),
+  $transparencies
+);
+
+@mixin bg-variant-opacity($parent, $color, $ignore-warning: false) {
+    @each $transparency, $value in $transparencies {
+        #{$parent}-#{$transparency} {
+        background-color: transparentize($color, $value) !important;
+        }
+        a#{$parent}-#{transparency},
+        button#{$parent}-#{transparency} {
+        @include hover-focus() {
+            background-color: darken(transparentize($color, $value), 10%) !important;
+        }
+        }
+    }
+  }
+
+@each $color, $value in $theme-colors {
+    @include bg-variant-opacity(".bg-#{$color}", $value, true);
+  }
+
 .bg-selected {
     background-color: #ebf1f3 !important;
 }

@@ -7,14 +7,14 @@
        v-if="IsAuthenticated" v-bind:href="Url"
        title="@Html.Localize("MyAccount", "L_MyAccount")"
        role="button" aria-expanded="false">
-        <i class="fa fa-user fa-lg  sps--blw-show-inline-block" aria-hidden="true"></i>&#160;
+        <i class="fa fa-user sps--blw-show-inline-block" aria-hidden="true"></i>&#160;
         <span class="d-none d-lg-inline sps--blw-hidden">@Html.Localize("MyAccount", "L_MyAccount")</span>
     </a>
     <a class="nav-link"
        data-qa="login-in"
        v-if="!IsAuthenticated" v-bind:href="Url"
        title="@Html.Localize("MyAccount", "L_SignIn")">
-        <i class="fa fa-user fa-lg  sps--blw-show-inline-block" aria-hidden="true"></i>&#160;
+        <i class="fa fa-user sps--blw-show-inline-block" aria-hidden="true"></i>&#160;
         <span class="d-none d-lg-inline sps--blw-hidden">@Html.Localize("MyAccount", "L_SignIn")</span>
     </a>
 }
