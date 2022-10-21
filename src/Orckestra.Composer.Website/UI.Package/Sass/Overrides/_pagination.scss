@@ -5,3 +5,9 @@
         overflow-y:auto;
     }
 }
+
+.page-item {
+    &.disabled {
+        opacity: 0.4;
+    }
+}

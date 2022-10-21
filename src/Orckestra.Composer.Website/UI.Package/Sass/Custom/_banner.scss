@@ -94,7 +94,11 @@ $banner-heights: map-merge(
     }
 
     h1, .h1 {
-        font-size: 6vw;
+        font-size: 8vw;
+
+        @include media-breakpoint-up(sm){
+            font-size: 6vw;
+        }
 
         @include media-breakpoint-up(md) {
             font-size: 5vw;
@@ -106,7 +110,11 @@ $banner-heights: map-merge(
     }
 
     h2, .h2 {
-        font-size: 5vw;
+        font-size: 7vw;
+
+        @include media-breakpoint-up(sm){
+            font-size: 5vw;
+        }
         
         @include media-breakpoint-up(md) {
             font-size: 3.5vw;
@@ -134,7 +142,11 @@ $banner-heights: map-merge(
         font-size: 1.5rem;
     }
     p {
+        font-family: $font-headings;
+        font-weight: 300;
         font-size: 7.5vw;
+
+        strong { font-weight: 600; }
 
         @include media-breakpoint-up(sm) {
             font-size: 5vw;
