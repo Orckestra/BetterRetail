@@ -26,7 +26,7 @@
                 @CheckoutHelpers.StepEditButton("shipping")
             </div>
             <transition-collapse>
-                <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
+                <div class="card-body" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
                     @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
                     <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
                     <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">

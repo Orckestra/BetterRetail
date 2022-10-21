@@ -3,18 +3,16 @@
 
 @helper Rewards()
 {
-    <div v-if="OrderSummary.Rewards.length" class="text-center">
-        <p class="promotion  mb-2">
-            <em v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index">
-                {{reward.Description || reward.PromotionName}}<br />
-            </em>
-        </p>
-    </div>
+        <div v-if="OrderSummary.Rewards.length" class="promotion">
+            <div class="promotion-item" v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index" v-bind:id="'reward-' + index">
+                {{reward.Description || reward.PromotionName}}
+            </div>
+        </div>
 }
 
 @helper SubTotal()
 {
-    <div class="row mb-2">
+    <div class="row">
         <div class="col-6  col-md-7">
             @Html.Localize("MyAccount", "L_Subtotal")
         </div>
@@ -28,7 +26,7 @@
 
 @helper TaxableShipmentAdditionalFeeSummary()
 {
-    <div class="row  mb-2" data-qa="taxable-shipment-additional-fee-summary"
+    <div class="row" data-qa="taxable-shipment-additional-fee-summary"
          v-if="feeSummary.Taxable"
          v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
         @FeeSummary()
@@ -37,7 +35,7 @@
 
 @helper TaxableAdditionalFeeSummary()
 {
-    <div class="row mb-2" data-qa="taxable-additional-fee-summary"
+    <div class="row" data-qa="taxable-additional-fee-summary"
          v-if="feeSummary.Taxable"
          v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
         @FeeSummary()
@@ -46,7 +44,7 @@
 
 @helper NotTaxableShipmentAdditionalFeeSummary()
 {
-    <div class="row  mb-2" data-qa="nottaxable-shipment-additional-fee-summary"
+    <div class="row" data-qa="nottaxable-shipment-additional-fee-summary"
          v-if="!feeSummary.Taxable"
          v-for="feeSummary in OrderSummary.ShipmentAdditionalFeeSummaryList">
         @FeeSummary()
@@ -56,7 +54,7 @@
 
 @helper NotTaxableAdditionalFeeSummary()
 {
-    <div class="row  mb-2" data-qa="nottaxable-additional-fee-summary"
+    <div class="row" data-qa="nottaxable-additional-fee-summary"
          v-if="!feeSummary.Taxable"
          v-for="feeSummary in OrderSummary.AdditionalFeeSummaryList">
         @FeeSummary()
@@ -74,7 +72,7 @@
 
 @helper Taxes()
 {
-    <div class="row  mb-2" v-for="(tax, index) in OrderSummary.Taxes" v-bind:data-qa="'tax-' + index">
+    <div class="row" v-for="(tax, index) in OrderSummary.Taxes" v-bind:data-qa="'tax-' + index">
         <div class="col-7">
             {{tax.DisplayName}}
             <span v-if="tax.Percentage">({{tax.Percentage}})</span>
@@ -88,7 +86,7 @@
 
 @helper Shipping()
 {
-    <div class="row  mb-2">
+    <div class="row">
         <div class="col-6  col-md-7">
             <span v-if="Cart.ShippingAddress">
                 @Html.Localized("ShoppingCart", "L_ShippingBasedOn", "{{Cart.ShippingAddress.PostalCode}}")
@@ -104,7 +102,7 @@
 
 @helper Totals()
 {
-    <div class="row mb-2">
+    <div class="row">
         <div class="col-6  col-md-7">
             <h4>@Html.Localize("MyAccount", "L_Total")</h4>
         </div>
@@ -119,14 +117,12 @@
 
 @helper SavingsTotal()
 {
-    <div v-if="OrderSummary.SavingsTotal" class="row  mb-2">
+    <div v-if="OrderSummary.SavingsTotal" class="row">
         <div class=" col-12 ">
-            <div class="alert alert-success bg-white text-center text-success  m-0">
-                <span data-qa="checkout-order-summary-discount">
-                    @Html.Localize("MyAccount", "L_Savings")
-                    &#160;
-                    <span v-text="OrderSummary.SavingsTotal"></span>
-                </span>
+            <div data-qa="checkout-order-summary-discount" class="d-flex justify-content-between text-success strong">
+                @Html.Localize("MyAccount", "L_Savings")
+                &#160;
+                <span v-text="OrderSummary.SavingsTotal"></span>
             </div>
         </div>
     </div>
@@ -134,7 +130,7 @@
 
 @helper AdditionalFeesMessage()
 {
-    <div class="row  mb-2">
+    <div class="row">
         <div class="col-12">
             <div class="additional-info">
                 <div class="multiline-message">

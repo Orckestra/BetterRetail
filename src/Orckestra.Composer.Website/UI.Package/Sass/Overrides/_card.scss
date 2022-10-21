@@ -20,6 +20,14 @@
             position: absolute;
             bottom: 0px;
             left: 10px;
+
+            .checkout-step-container & {
+                height: 0;
+            }
+
+            .checkout-step-container.active-step & {
+                height: 1px;
+            }
         }
     }
 }

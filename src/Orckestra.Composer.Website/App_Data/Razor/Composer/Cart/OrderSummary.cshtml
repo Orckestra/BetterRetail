@@ -18,8 +18,8 @@
             <h3 class="card-header card-header-primary" data-qa="order-summary-title">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
+            @OrderSummaryHelpers.Rewards()
             <div class="card-body">
-                @OrderSummaryHelpers.Rewards()
 
                 @OrderSummaryHelpers.SubTotal()
 
