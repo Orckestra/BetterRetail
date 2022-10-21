@@ -56,12 +56,12 @@
                                        class="mt-1 block w-full">
                             </td>
                             <td>
-                                <div class="input-group color-picker" v-on:focusout="hidePicker" tabindex="0">
+                                <div class="input-group color-picker">
                                     <input type="text" class="form-control" :value="getValue(variant, 'color')"
                                            v-on:focus="showPicker(variant.lookupValue)"
                                            v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
 
-                                    <span class="input-group-addon color-picker-container">
+                                    <span class="input-group-addon color-picker-container" v-on:focusout="hidePicker" tabindex="0">
                                         <span class="current-color"
                                               :style="`background-color:${getSelectedColor(variant)}`"
                                               v-on:click="togglePicker(variant.lookupValue)"></span>
