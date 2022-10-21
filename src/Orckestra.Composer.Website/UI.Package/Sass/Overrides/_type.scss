@@ -66,7 +66,7 @@ blockquote {
   .section-header:after {
     content: "";
     flex: 1 1 0;
-    background-color: theme-color("dark");
+    background-color: $gray-400;
     height: 1px;
   }
   

@@ -1,7 +1,7 @@
 .main-nav {
-    
+
     // reset positions
-    .nav, .collapse, .dropup, .dropdown {
+    .nav, .collapse, .dropup, .dropdown, .navbar.megamenu {
         position: static;
     }
     // main-nav dropdown to have a higher z-index than in the search sort
@@ -19,7 +19,7 @@
     }
     // Content with padding
     &-content {
-        padding: 20px;
+        padding: 20px 10px;
 
         ul p {
             /*
@@ -42,6 +42,8 @@
         left: 0;
         right: 0;
         border-top: 2px solid transparent;
+        border-right: 0;
+        border-left: 0;
     }
 
     &-toggle {

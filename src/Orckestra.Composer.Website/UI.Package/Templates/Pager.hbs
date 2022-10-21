@@ -5,14 +5,14 @@
         <li class="page-item previous mr-auto {{#unless PreviousPage.Url }} disabled {{/unless}}  ">
             <a class="page-link" data-qa="search-pagination-previous" 
                  href="{{PreviousPage.Url}}">
-                <span class="fa  fa-arrow-circle-left"></span> {{PreviousPage.DisplayName}}
+                <span class="fa  fa-chevron-left"></span> {{PreviousPage.DisplayName}}
             </a>
         </li>
         {{/if}}
         {{#if NextPage }}
         <li class="page-item  next {{#unless NextPage.Url }} disabled {{/unless}}">
             <a class="page-link" data-qa="search-pagination-next" href="{{NextPage.Url}}">
-                {{NextPage.DisplayName}} <span class="fa  fa-arrow-circle-right"></span>
+                {{NextPage.DisplayName}} <span class="fa  fa-chevron-right"></span>
             </a>
         </li>
         {{/if}}

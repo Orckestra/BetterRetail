@@ -1,15 +1,17 @@
 $transparencies: () !default;
 $transparencies: map-merge(
   (
-    "90": .1,
-    "80": .2,
-    "70": .3,
-    "60": .4,
-    "50": .5,
-    "40": .6,
-    "30": .7,
-    "20": .8,
-    "10": .9,
+    100: 0,
+    90: .1,
+    80: .2,
+    70: .3,
+    60: .4,
+    50: .5,
+    40: .6,
+    30: .7,
+    20: .8,
+    10: .9,
+    0 : 1
   ),
   $transparencies
 );
@@ -28,8 +30,30 @@ $transparencies: map-merge(
     }
   }
 
+@mixin bg-variant-tint($parent, $color, $ignore-warning: false) {
+    @each $tint, $value in $transparencies {
+        #{$parent}-#{$tint} {
+        background-color: mix($color, #fff, $tint * 1%) !important;
+        }
+        a#{$parent}-#{$tint},
+        button#{$parent}-#{$tint} {
+        @include hover-focus() {
+            background-color: darken(mix($color, #fff, $tint * 1%), 10%) !important;
+        }
+        }
+    }
+  }
+
 @each $color, $value in $theme-colors {
-    @include bg-variant-opacity(".bg-#{$color}", $value, true);
+    @include bg-variant-opacity(".bg-#{$color}-opacity", $value, true);
+  }
+
+
+
+
+
+@each $color, $value in $theme-colors {
+    @include bg-variant-tint(".bg-#{$color}", $value, true);
   }
 
 .bg-selected {
