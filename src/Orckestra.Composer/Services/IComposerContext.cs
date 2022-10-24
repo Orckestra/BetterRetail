@@ -15,5 +15,6 @@ namespace Orckestra.Composer.Services
         string ScopeCurrencyIso { get; }
         string EditingCartName { get; set; }
         string EditingScopeId { get; set; }
+        int LocalTimeZoneOffset { get; }
     }
 }

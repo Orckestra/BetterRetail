@@ -21,6 +21,7 @@
 ///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Services/ShippingAddressRegisteredService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
+///<reference path='../../Services/UserMetadataService.ts' />
 
 
 module Orckestra.Composer {
@@ -64,6 +65,7 @@ module Orckestra.Composer {
         protected cartService: ICartService;
         protected membershipService: IMembershipService;
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
+        protected userMetadataService: UserMetadataService = UserMetadataService.getInstance();
         protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
             new ShippingAddressRegisteredService(this.customerService);
         protected regionService: IRegionService;
@@ -205,7 +207,8 @@ module Orckestra.Composer {
                     },
                     Modal: {
                         deleteAddressModal: null,
-                    }
+                    },
+                    AccountLockedDownUntil: {}
                 },
                 mixins: this.VueCheckoutMixins,
                 mounted() {
@@ -667,6 +670,7 @@ module Orckestra.Composer {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 this.cacheProvider.defaultCache.set('customerId', null).done();
                 this.cacheProvider.sessionCache.fullClear();
+                this.userMetadataService.invalidateCache();
                 this.loadUserAddresses();
                 return true;
                 // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
@@ -682,6 +686,7 @@ module Orckestra.Composer {
             }
             console.error('An error occurred while logging in.', error.ErrorMessage);
             vueData.Errors.SignIn = errorCode;
+            vueData.AccountLockedDownUntil = error.Bag["AccountLockedDownUntil"];
         }
 
         public checkUserExist(email: string): Q.Promise<boolean> {
