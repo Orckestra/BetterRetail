@@ -1,5 +1,9 @@
 .card {
     background-color: $lighter;
+
+    &-body & {
+        background-color: white;
+    }
     &-header {
         position: relative;
         border-bottom: unset;
