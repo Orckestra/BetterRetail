@@ -3,7 +3,7 @@
 
 @helper Rewards()
 {
-        <div v-if="OrderSummary.Rewards.length" class="promotion">
+        <div v-if="OrderSummary.Rewards.length" class="promotion" v-cloak="true">
             <div class="promotion-item" v-for="(reward, index) in OrderSummary.Rewards" v-bind:data-qa="'reward-' +  index" v-bind:id="'reward-' + index">
                 {{reward.Description || reward.PromotionName}}
             </div>
