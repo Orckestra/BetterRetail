@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Orckestra.Composer.Product.GraphQL.Extensions
+namespace Orckestra.Composer.GraphQL.Extensions
 {
     public static class LambdaExtensions
     {

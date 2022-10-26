@@ -3,9 +3,9 @@ using GraphQL;
 using GraphQL.Types;
 using System;
 using System.Linq;
-using Orckestra.Composer.Product.GraphQL.Types;
+using Orckestra.Composer.GraphQL.Types;
 
-namespace Orckestra.Composer.Product.GraphQL.Extensions
+namespace Orckestra.Composer.GraphQL.Extensions
 {
     public static class DataGraphQLExtensions
     {

@@ -1,5 +1,4 @@
-﻿using Composite.Data;
-using GraphQL.Types;
+﻿using GraphQL.Types;
 
 namespace Orckestra.Composer.Product.GraphQL.Types
 {

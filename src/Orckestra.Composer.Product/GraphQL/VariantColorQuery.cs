@@ -3,7 +3,7 @@ using GraphQL;
 using GraphQL.Types;
 using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.Enums;
-using Orckestra.Composer.Product.GraphQL.Extensions;
+using Orckestra.Composer.GraphQL.Extensions;
 using Orckestra.Composer.Product.GraphQL.Types;
 using Orckestra.Composer.Services.Lookup;
 using System;

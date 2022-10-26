@@ -1,12 +1,11 @@
 ﻿using Composite.Data;
-using GraphQL;
 using GraphQL.Types;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Orckestra.Composer.Product.GraphQL.Extensions;
+using Orckestra.Composer.GraphQL.Extensions;
 
-namespace Orckestra.Composer.Product.GraphQL.Types
+namespace Orckestra.Composer.GraphQL.Types
 {
     public class DataObjectGraphType<TSourceType> : AutoRegisteringObjectGraphType<TSourceType>
         where TSourceType : class, IData

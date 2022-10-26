@@ -7,7 +7,8 @@ using GraphQL;
 using GraphQL.Types;
 using Orckestra.Composer.CompositeC1.DataTypes;
 using Orckestra.Composer.Product.GraphQL.Types;
-using Orckestra.Composer.Product.GraphQL.Extensions;
+using Orckestra.Composer.GraphQL.Extensions;
+using Orckestra.Composer.GraphQL.Types;
 
 namespace Orckestra.Composer.Product.GraphQL
 {

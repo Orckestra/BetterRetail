@@ -1,9 +1,4 @@
-﻿using Composite.Data;
-using GraphQL.Types;
-using Orckestra.Composer.CompositeC1.DataTypes;
-using System;
-
-namespace Orckestra.Composer.Product.GraphQL.Types
+﻿namespace Orckestra.Composer.Product.GraphQL.Types
 {
     public class VariantColorLookupValues 
     {

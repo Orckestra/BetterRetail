@@ -59,6 +59,15 @@
     <Reference Include="Fasterflect">
       <HintPath>..\..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
     </Reference>
+    <Reference Include="GraphQL, Version=4.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GraphQL.4.7.1\lib\netstandard2.0\GraphQL.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphQL-Parser, Version=7.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GraphQL-Parser.7.2.0\lib\netstandard2.0\GraphQL-Parser.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphQL.NewtonsoftJson, Version=4.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GraphQL.NewtonsoftJson.4.7.1\lib\netstandard2.0\GraphQL.NewtonsoftJson.dll</HintPath>
+    </Reference>
     <Reference Include="Handlebars, Version=1.0.5615.36670, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Handlebars.Net.1.3.3\lib\Handlebars.dll</HintPath>
       <Private>True</Private>
@@ -126,6 +135,9 @@
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -273,6 +285,12 @@
     <Compile Include="Factory\IRecurringOrderTemplateViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderProgramViewModelFactory.cs" />
     <Compile Include="Factory\RecurringOrderTemplateViewModelFactory.cs" />
+    <Compile Include="GraphQL\Extensions\DataGraphQLExtensions.cs" />
+    <Compile Include="GraphQL\Extensions\DataMutation.cs" />
+    <Compile Include="GraphQL\Extensions\LambdaExtensions.cs" />
+    <Compile Include="GraphQL\Types\DataInput.cs" />
+    <Compile Include="GraphQL\Types\DataInputObjectGraphType.cs" />
+    <Compile Include="GraphQL\Types\DataObjectGraphType.cs" />
     <Compile Include="HttpModules\AntiCookieTamperingModule.cs" />
     <Compile Include="HttpModules\IAntiCookieTamperingExcluder.cs" />
     <Compile Include="IComposerOvertureClient.cs" />

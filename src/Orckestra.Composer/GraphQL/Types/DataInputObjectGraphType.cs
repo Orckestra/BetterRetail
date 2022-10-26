@@ -7,9 +7,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using Orckestra.Composer.Product.GraphQL.Extensions;
+using Orckestra.Composer.GraphQL.Extensions;
 
-namespace Orckestra.Composer.Product.GraphQL.Types
+namespace Orckestra.Composer.GraphQL.Types
 {
     public class DataInputObjectGraphType<TSourceType> : AutoRegisteringInputObjectGraphType<TSourceType> where TSourceType : class, IData
     {

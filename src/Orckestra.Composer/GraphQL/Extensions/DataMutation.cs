@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
 
-namespace Orckestra.Composer.Product.GraphQL.Extensions
+namespace Orckestra.Composer.GraphQL.Extensions
 {
     public class DataMutation : ObjectGraphType
     {
