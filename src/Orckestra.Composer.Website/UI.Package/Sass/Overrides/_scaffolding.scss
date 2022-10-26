@@ -123,7 +123,26 @@ html {
 
 .row {
     row-gap: $grid-gutter-width;
+    
+    @include media-breakpoint-down(sm) {
+        &.mobile-menu {
+            row-gap: 0;
+        }
+    }
+
+    .search-results > & {
+        row-gap: $grid-gutter-width*2;
+    }
+    &.form-group {
+        row-gap: 5px;
+    }
     & +.row {
         margin-top: $grid-gutter-width;
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .container-md {
+        max-width: 80vw;
     }
 }

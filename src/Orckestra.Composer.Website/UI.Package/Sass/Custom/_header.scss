@@ -21,7 +21,8 @@
     transform: translateX(-50%) translateY(-50%);
 
     & img {
-        max-width: 220px;
+        width: 37vw;
+        max-width: 160px;
     }
 }
 
@@ -39,6 +40,7 @@
     &-with-mega-menu {
         //margin-bottom: $grid-gutter-width;
         padding-bottom: 0;
+        border-bottom: 1px solid $gray-200;
 
         @include media-breakpoint-up(md) {
             padding-bottom: 43px;
@@ -64,6 +66,15 @@
         input[type="search"]::-webkit-search-results-decoration {
             -webkit-appearance: none;
         }
+        input[type="text"] {
+            &.form-control {
+                border: 0;
+                background-color: $gray-200;
+            }
+            &::placeholder {
+                font-style: normal;
+            }
+        }
     }
 
     .search-box .navbar-form {
@@ -80,7 +91,7 @@
         -webkit-transition: padding .5s ease-in-out;
         -moz-transition: padding .5s ease-in-out;
         -o-transition: padding .5s ease-in-out;
-        padding: map-get($spacers, 4) 0;
+        padding: map-get($spacers, 3) 0;
     }
 
     .reserved-slot-baller {
@@ -99,6 +110,13 @@
 
         .navbar {
             min-height: 42px;
+            &.bg-light {
+                background-color: white !important;
+                @include media-breakpoint-up(md) {
+                    background-color: theme-color("light") !important;
+                }
+            }
+            
         }
 
         .navbar.affix {
@@ -164,11 +182,6 @@
         @include media-breakpoint-down(sm) {
             .navbar-expand .navbar-nav .nav-link {
                 padding-right: 0
-            }
-
-            .navbar-nav > li > div > a {
-                padding-top: $spacer;
-                padding-bottom: $spacer;
             }
         }
     }

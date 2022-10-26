@@ -21,11 +21,11 @@
             <a href="@HomePageNode.Url" class="btn btn-primary">@Html.Localize("ShoppingCart", "B_StartShopping")</a>
         </div>
         <transition-collapse>
-            <div v-if="step.active" class="card-body bg-light pt-0" v-cloak="true" data-qa="reviewcart-active-state" key="active">
+            <div v-if="step.active" class="card-body pt-0" v-cloak="true" data-qa="reviewcart-active-state" key="active">
                 @Cart_Step_ActiveMode()
             </div>
 
-            <div v-if="step.preview" class="card-body bg-light" v-cloak="true" data-qa="reviewcart-preview-state" key="preview">
+            <div v-if="step.preview" class="card-body" v-cloak="true" data-qa="reviewcart-preview-state" key="preview">
                 @* PREVIEW MODE of CART *@
                 @Cart_Step_PreviewMode()
             </div>

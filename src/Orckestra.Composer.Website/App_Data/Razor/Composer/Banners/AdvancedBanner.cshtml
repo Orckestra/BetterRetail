@@ -64,7 +64,7 @@
     </f:param>
     <f:param name='Required' value='True' />
     </f:widgetfunction>";
-    [FunctionParameter(Label = "Banner column width", Help ="the width is based on the Bootstrap column system", DefaultValue = "col-12", WidgetMarkup = columnWidthWidgetmarkup)]
+    [FunctionParameter(Label = "Banner column width", Help ="the width is based on the Bootstrap column system, Full Width removes the column restraints", DefaultValue = "", WidgetMarkup = columnWidthWidgetmarkup)]
     public string BannerWidth { get; set; }
 	
     [FunctionParameter(Label = "Banner Content", Help = "The Content to be displayed over the background image")]

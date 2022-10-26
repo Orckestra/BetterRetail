@@ -11,7 +11,6 @@ h3, .h3 {
 
 h5, .h5,
 h6, .h6 {
-font-family: $font-family-base;
 font-weight: $font-weight-semibold;
 }
 
@@ -67,7 +66,7 @@ blockquote {
   .section-header:after {
     content: "";
     flex: 1 1 0;
-    background-color: theme-color("dark");
+    background-color: $gray-400;
     height: 1px;
   }
   

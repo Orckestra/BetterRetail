@@ -11,13 +11,13 @@
 <head>
 </head>
 <body>
-    <header class="masthead masthead-with-mega-menu shadow-sm sps sticky-top bg-white">
+    <header class="masthead masthead-with-mega-menu shadow-sm-none sps sticky-top bg-white">
         <div class="header">
-            <nav class="navbar navbar-expand navbar-dark bg-dark p-0">
-                <div class="container-lg">
+            <nav class="navbar navbar-expand navbar-light bg-lighter p-sm-0 px-2 py-0">
+                <div class="container-md">
                     <div class="mobile-logo d-lg-none">
                         <a href="@HomePageNode.Url">
-                            <img src="~/UI.Package/Images/better-retail-white.png" alt="logo" class="d-block w-100" />
+                            <img src="~/UI.Package/Images/better-retail.png" alt="logo" class="d-block" />
                         </a>
                     </div>
 
@@ -48,9 +48,9 @@
 
         @Function("Composer.Header.MainMenu")
 
-        <div class="search-bar container-fluid bg-light">
+        <div class="search-bar container-fluid bg-white">
             <div class="container-md">
-                <div class="row justify-content-between ">
+                <div class="row justify-content-between mobile-menu">
                     <div class="col-10 col-lg-4 mx-auto mx-lg-0 justify-content-center align-self-center d-none d-lg-block text-md-center text-lg-left">
                         @Logo()
                     </div>
@@ -60,7 +60,7 @@
                             <f:param name="Autocomplete" value="true" />
                         </f:function>
                     </div>
-                    <div class="col-3 col-lg-2 justify-content-center align-self-center">
+                    <div class="col-3 col-lg-2 justify-content-center align-self-center d-none d-md-block">
                         @Function("Composer.Cart.MinicartButton")
                     </div>
                 </div>

@@ -26,7 +26,7 @@
                 @CheckoutHelpers.StepEditButton("shipping")
             </div>
             <transition-collapse>
-                <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
+                <div class="card-body" v-show="step.active" v-cloak="true" data-qa="shipping-active-state" key="active">
                     @Forms.Validations.SelectStoreError("Errors.StoreNotSelectedError")
                     <p>@Html.Localize("CheckoutProcess", "F_ShippingStepDescription")</p>
                     <div class="form-row" novalidate="novalidate" id="AccordionShippingMethodType">
@@ -53,7 +53,7 @@
                     </transition-group>
                 </div>
 
-                <div class="card-body bg-light" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state" key="preview">
+                <div class="card-body" v-show="step.preview" v-cloak="true" data-qa="shipping-preview-state" key="preview">
                     <div v-if="Cart.ShippingMethod">
                         <div class="row">
                             <div class="col-12 col-sm-8">
@@ -156,7 +156,7 @@
                             @Html.Localize("CheckoutProcess", "L_Selected")
                         </span>
                     </div>
-                    <button v-else="v-else" class="btn btn-sm btn-outline-secondary text-uppercase float-right"
+                    <button v-else="v-else" class="btn btn-sm btn-outline-secondary float-right"
                             v-on:click='selectShippingMethod(shippingMethod)' v-bind:disabled="IsLoading">
                         @Html.Localize("CheckoutProcess", "F_SelectShippingMethod")
                     </button>

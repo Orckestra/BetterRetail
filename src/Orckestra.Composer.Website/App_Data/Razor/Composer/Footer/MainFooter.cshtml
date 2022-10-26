@@ -18,11 +18,11 @@
 <head>
 </head>
 <body>
-    <div class="row" id="accordion" role="tablist" aria-multiselectable="false">
+    <div class="row mobile-menu" id="accordion" role="tablist" aria-multiselectable="false">
         @{int index = 0;}
         @foreach (var footerEntity in footer)
         {
-            <div class="col-sm-4 col-md-4 col-xl-3">
+            <div class="col-sm-4 col-md-4 col-xl-3 footer-menu-item">
                 <div data-templateid="FooterNavList">
                     <ul class="nav nav-footer-entry list-unstyled collapse-mobile flex-column flex-sm-row">
                         <li class="nav-item">

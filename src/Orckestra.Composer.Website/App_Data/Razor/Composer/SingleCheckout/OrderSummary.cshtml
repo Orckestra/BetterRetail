@@ -17,14 +17,14 @@
              class="checkout-step-container  active-step"
              v-bind:class="{'loading': Mode.CompleteCheckoutLoading}">
 
-            <div class="card  mb-4 w-100">
+            <div class="card">
                 @GeneralHelpers.LoadingSpinner()
 
-                <h3 class="card-header bg-primary border-primary  text-white">
+                <h3 class="card-header card-header-primary">
                     @Html.Localize("ShoppingCart", "T_OrderSummary")
                 </h3>
-                <div class="card-body  bg-light" v-cloak="true">
-                    @OrderSummaryHelpers.Rewards()
+                @OrderSummaryHelpers.Rewards()
+                <div class="card-body" v-cloak="true">
 
                     @OrderSummaryHelpers.SubTotal()
 
@@ -123,7 +123,7 @@
 {
     <div class="row  mb-2">
         <div class="col-12">
-            <button class="btn btn-success  w-100  text-uppercase"
+            <button class="btn btn-success  w-100"
                     data-qa="chechout-place-order-btn"
                     v-bind:disabled="!OrderCanBePlaced"
                     v-on:click="processCompleteCheckout()">

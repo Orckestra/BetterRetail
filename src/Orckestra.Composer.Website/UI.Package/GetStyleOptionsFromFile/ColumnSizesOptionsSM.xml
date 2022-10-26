@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Options>
+  <Option  CssClassKey=" " Label="None"></Option>
+  <Option  CssClassKey="d-sm-none" Label="Hidden"></Option>
+  <Option  CssClassKey="col-sm-1" Label="1 Column"></Option>
+  <Option  CssClassKey="col-sm-2" Label="2 Columns"></Option>
+  <Option  CssClassKey="col-sm-3" Label="3 Columns"></Option>
+  <Option  CssClassKey="col-sm-4" Label="4 Columns"></Option>
+  <Option  CssClassKey="col-sm-5" Label="5 Columns"></Option>
+  <Option  CssClassKey="col-sm-6" Label="6 Columns"></Option>
+  <Option  CssClassKey="col-sm-7" Label="7 Columns"></Option>
+  <Option  CssClassKey="col-sm-8" Label="8 Columns"></Option>
+  <Option  CssClassKey="col-sm-9" Label="9 Columns"></Option>
+  <Option  CssClassKey="col-sm-10" Label="10 Columns"></Option>
+  <Option  CssClassKey="col-sm-11" Label="11 Columns"></Option>
+  <Option  CssClassKey="col-sm-12" Label="12 Columns"></Option>
+</Options>

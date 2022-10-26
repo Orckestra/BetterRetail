@@ -1,0 +1,92 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Grid column component"; }
+    }
+
+	
+	
+	private const string columnWidthXSWidgetmarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ColumnSizesOptionsXS.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+		
+		
+	private const string columnWidthSMWidgetmarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ColumnSizesOptionsSM.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+		
+	private const string columnWidthMDWidgetmarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ColumnSizesOptionsMD.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+		
+	private const string columnWidthLGWidgetmarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ColumnSizesOptionsLG.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+		
+	private const string columnWidthXLWidgetmarkup = @"<f:widgetfunction xmlns:f='http://www.composite.net/ns/function/1.0' name='Composite.Widgets.String.Selector'>
+    <f:param name='Options'>
+        <f:function name='Orckestra.Web.Html.GetStyleOptionsFromFile'>
+            <f:param name='OptionsXMLFilePath' value='UI.Package/GetStyleOptionsFromFile/ColumnSizesOptionsXL.xml' />
+        </f:function>
+    </f:param>
+    <f:param name='Required' value='True' />
+    </f:widgetfunction>";
+		
+		
+    [FunctionParameter(Label = "Mobile column width", Help ="the width is based on the Bootstrap column system (0px and more)", DefaultValue = "col-12", WidgetMarkup = columnWidthXSWidgetmarkup)]
+    public string ColumnWidthXS { get; set; }
+	
+	
+    [FunctionParameter(Label = "Small screen column width", Help ="the width is based on the Bootstrap column system (576px and more)", DefaultValue = " ", WidgetMarkup = columnWidthSMWidgetmarkup)]
+    public string ColumnWidthSM { get; set; }
+	
+	
+    [FunctionParameter(Label = "Tablet column width", Help ="the width is based on the Bootstrap column system (768px and more)", DefaultValue = " ", WidgetMarkup = columnWidthMDWidgetmarkup)]
+    public string ColumnWidthMD { get; set; }
+	
+	
+    [FunctionParameter(Label = "Small laptop column width", Help ="the width is based on the Bootstrap column system (992px and more)", DefaultValue = " ", WidgetMarkup = columnWidthLGWidgetmarkup)]
+    public string ColumnWidthLG { get; set; }
+	
+	
+    [FunctionParameter(Label = "Wide screen column width", Help ="the width is based on the Bootstrap column system (1200px and more)", DefaultValue = " ", WidgetMarkup = columnWidthXLWidgetmarkup)]
+    public string ColumnWidthXL { get; set; }
+	
+    [FunctionParameter(Label = "Column Content", Help = "The Content to be displayed in the column")]
+    public XhtmlDocument Content { get; set; }
+
+	
+   
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+   <div class="@(String.IsNullOrEmpty(ColumnWidthXS) || (ColumnWidthXS.Contains(' ')) ? null : ColumnWidthXS) @(String.IsNullOrEmpty(ColumnWidthSM) || (ColumnWidthSM.Contains(' ')) ? null: ColumnWidthSM) @(String.IsNullOrEmpty(ColumnWidthMD) || (ColumnWidthMD.Contains(' ')) ? null: ColumnWidthMD) @(String.IsNullOrEmpty(ColumnWidthLG) || (ColumnWidthLG.Contains(' ')) ? null: ColumnWidthLG) @(String.IsNullOrEmpty(ColumnWidthXL) || ColumnWidthXL.Contains(' ') ? null: ColumnWidthXL)">
+	   @Html.Raw(@Content)
+	</div>
+</body>
+</html>

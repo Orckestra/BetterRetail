@@ -20,7 +20,7 @@
             @CheckoutHelpers.StepEditButton("billing")
         </div>
         <transition-collapse>
-            <div class="card-body  bg-light" v-show="step.active" v-cloak="true" data-qa="billing-active-state" key="active">
+            <div class="card-body" v-show="step.active" v-cloak="true" data-qa="billing-active-state" key="active">
                 <div v-if="IsAuthenticated" data-oc-controller="SingleCheckout.BillingAddressRegistered">
                     <div v-if="IsShippingMethodType">
                         @UseShippingAddressCheckbox()
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="card-body  bg-light" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state" key="preview">
+            <div class="card-body" v-show="step.preview" v-cloak="true" data-qa="billing-preview-state" key="preview">
                 @CheckoutHelpers.AddressPreview("BillingAddress", "billing-address-preview")
             </div>
         </transition-collapse>

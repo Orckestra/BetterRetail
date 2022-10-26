@@ -47,7 +47,7 @@
 
 @helper OrderDetails(OrderDetailViewModel order)
 {
-    <div class="card  bg-light">
+    <div class="card  bg-lighter">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_OrderDetails")
         </h3>
@@ -145,7 +145,7 @@
         var status = shipping.ShipmentStatusName;
         var statusCss = status == Constants.OrderStatus.Fulfilled ? "text-success" :
             status == "Canceled" ? "text-danger" : "text-warning";
-        <div class="card  bg-light  mt-4">
+        <div class="card  bg-lighter  mt-4">
             <h3 class="card-header">
                 @Html.Localize("MyAccount", "L_Shipping")
             </h3>
@@ -173,7 +173,7 @@
 
 @helper OrderAddress(OrderDetailViewModel order)
 {
-    <div class="card  bg-light  mt-4">
+    <div class="card  bg-lighter  mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_Addresses")
         </h3>
@@ -204,7 +204,7 @@
 
 @helper OrderPayment(OrderDetailViewModel order)
 {
-    <div class="card  bg-light  mt-4">
+    <div class="card  bg-lighter  mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "T_PaymentMethod")
         </h3>
@@ -266,7 +266,7 @@
         return;
     }
     var index = 0;
-    <div class="card bg-light mt-4">
+    <div class="card bg-lighter mt-4">
         <h3 class="card-header">
             @Html.Localize("MyAccount", "L_OrderLineItemProductsTitle")
         </h3>
@@ -419,8 +419,8 @@
     var addFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => !t.Taxable).ToList();
     var taxableAddFeeSummary = order.OrderSummary.AdditionalFeeSummaryList.Where(t => t.Taxable).ToList();
 
-    <div class="card bg-light mt-4">
-        <h3 class="card-header  bg-primary border-primary  text-white">
+    <div class="card bg-lighter mt-4">
+        <h3 class="card-header card-header-primary">
             @Html.Localize("ShoppingCart", "T_OrderSummary")
         </h3>
         <div class="card-body">

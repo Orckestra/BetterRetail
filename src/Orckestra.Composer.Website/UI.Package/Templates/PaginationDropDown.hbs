@@ -3,13 +3,13 @@
     <ul class="pagination m-0  align-items-center justify-content-end" >
         <li class="page-item previous  {{#unless PreviousPage.Url}}disabled{{/unless}}">
             <a class="page-link" title="{{PreviousPage.DisplayName}}" href="{{PreviousPage.Url}}">
-                <i class="fa  fa-arrow-circle-left"></i>&#160;{{PreviousPage.DisplayName}}
+                <i class="fa  fa-chevron-left"></i>&#160;{{PreviousPage.DisplayName}}
             </a>
         </li>
 
         <li class="page-item mx-2">
             <div class="dropdown">
-                <button class="btn btn-outline-secondary  dropdown-toggle" type="button" data-qa="page-select-toggle"
+                <button class="btn btn-outline-default  dropdown-toggle" type="button" data-qa="page-select-toggle"
                     data-toggle="dropdown" aria-expanded="true">
                     {{localize 'List-Search' 'L_PageInDropDown'}}&#160;{{CurrentPage.DisplayName}}
                 </button>
@@ -29,7 +29,7 @@
         </li>
         <li class="page-item  next ml-2  {{#unless NextPage.Url}}disabled{{/unless}}">
             <a class="page-link" title="{{NextPage.DisplayName}}" href="{{NextPage.Url}}">
-                {{NextPage.DisplayName}}&#160;<i class="fa  fa-arrow-circle-right"></i>
+                {{NextPage.DisplayName}}&#160;<i class="fa  fa-chevron-right"></i>
             </a>
         </li>
     </ul>
