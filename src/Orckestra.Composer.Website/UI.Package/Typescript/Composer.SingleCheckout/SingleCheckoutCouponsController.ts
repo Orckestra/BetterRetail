@@ -15,7 +15,8 @@ module Orckestra.Composer {
                     CouponCode: undefined,
                     Mode: {
                         ApplyingCoupon: false
-                    }
+                    }, 
+                    ShowAlert: false
                 },
                 mounted() {
                     self.eventHub.subscribe(CartEvents.CartUpdated, this.onCartUpdated);
@@ -39,6 +40,7 @@ module Orckestra.Composer {
                                 if (!this.HasCouponsErrorMessage) this.CouponCode = undefined;
                                 this.Mode.ApplyingCoupon = false;
                                 this.Mode.Loading = false;
+                                this.ShowAlert = true;
                             });
                     },
                     removeCoupon(couponCode) {
