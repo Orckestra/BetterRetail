@@ -60,7 +60,8 @@
                                            v-on:focus="showPicker(variant.lookupValue)"
                                            v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
 
-                                    <span class="input-group-addon color-picker-container" v-on:focusout="hidePicker" tabindex="0">
+                                    <span class="input-group-addon color-picker-container" v-on:focusout="hidePicker"
+                                          tabindex="0">
                                         <span class="current-color"
                                               :style="`background-color:${getSelectedColor(variant)}`"
                                               v-on:click="togglePicker(variant.lookupValue)"></span>
@@ -81,13 +82,11 @@
             </div>
             <div class="flex justify-center items-end m-4" v-if="counter !== totalCount">
                 <p class="font-roboto mr-5">Showed {{this.counter}} of {{this.totalCount}} colors</p>
-                <button type="button" class="btn-secondary w-32 mr-4"
-                        v-on:click="showMoreButtonOnClick">
+                <button type="button" class="btn-secondary w-32 mr-4" v-on:click="showMoreButtonOnClick">
                     <i class="fa-solid fa-rotate-right pr-1"></i>
                     Show more
                 </button>
-                <button type="button" class="btn-secondary w-24"
-                        v-on:click="showAllButtonOnClick">
+                <button type="button" class="btn-secondary w-24" v-on:click="showAllButtonOnClick">
                     Show all
                 </button>
             </div>
@@ -128,7 +127,7 @@
                                  mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
                                     updateVariantColors(variantColorConfigurationItems: $variantColorConfigurationItems)
                                  }`
-                                                        
+
         const MAX_ITEM_DISPLAYED = 20;
 
         const app = new Vue({
@@ -154,8 +153,8 @@
             watch: {
                 filterKeyword: {
                     handler: function (data) {
-                        this.variantColors = this.variantColorsImmutable.filter(item => item.lookupValue.includes(data));
-                        this.filteredVariantColorsImmutable = [...this.variantColors];
+                        this.filteredVariantColorsImmutable = this.filter(data);
+                        this.variantColors = [...this.filteredVariantColorsImmutable];
                         this.totalCount = this.filteredVariantColorsImmutable.length;
                         this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
                         this.loadMore();
@@ -171,6 +170,7 @@
                     result({ data }) {
                         this.variantColorsImmutable = _.orderBy(data.colorValues.map(omitTypeName), "lookupValue");
                         this.variantColors = [...this.variantColorsImmutable];
+                        if (!_.isEmpty(this.filterKeyword)) this.filteredVariantColorsImmutable = this.filter(this.filterKeyword);
                         this.totalCount = this.variantColors.length;
                         this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
                         this.loadMore();
@@ -193,6 +193,9 @@
             },
 
             methods: {
+                filter(filter) {
+                    return this.variantColorsImmutable.filter(item => item.lookupValue.includes(filter))
+                },
                 getValue(variant, fieldName) {
                     return this.variantColorsModifications[variant.lookupValue] ? this.variantColorsModifications[variant.lookupValue][fieldName] : variant[fieldName]
                 },

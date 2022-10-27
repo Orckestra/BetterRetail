@@ -25,8 +25,7 @@ namespace Orckestra.Composer.Product
     {
         public static void ConfigureServices(IServiceCollection collection)
         {
-            //GraphQL, NOTE: may be move to IRecipeDocumentExecuter and IRecipeDocumentWriter
-            collection.AddSingleton<IDocumentExecuter, DocumentExecuter>();
+            collection.AddSingleton<IVariantColorDocumentExecuter, VariantColorDocumentExecuter>();
             collection.AddSingleton<IDocumentWriter>(new DocumentWriter(true, new ErrorInfoProvider(options =>
             {
                 options.ExposeExceptionStackTrace = false;

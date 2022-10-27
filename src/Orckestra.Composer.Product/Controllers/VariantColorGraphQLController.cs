@@ -20,12 +20,12 @@ namespace Orckestra.Composer.Product.Controllers
     public class VariantColorGraphQLController : ApiController
     {
         private readonly IVariantColorSchema _schema;
-        private readonly IDocumentExecuter _executer;
+        private readonly IVariantColorDocumentExecuter _executer;
         private readonly IDocumentWriter _writer;
         private readonly IServiceProvider _serviceProvider;
 
         public VariantColorGraphQLController(
-            IDocumentExecuter executer,
+            IVariantColorDocumentExecuter executer,
             IDocumentWriter writer,
             IVariantColorSchema schema,
             IServiceProvider serviceProvider)
@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Product.Controllers
 
         public VariantColorGraphQLController()
         {
-            _executer = ServiceLocator.GetService<IDocumentExecuter>();
+            _executer = ServiceLocator.GetService<IVariantColorDocumentExecuter>();
             _writer = ServiceLocator.GetService<IDocumentWriter>();
             _schema = ServiceLocator.GetService<IVariantColorSchema>();
             _serviceProvider = ServiceLocator.GetService<IServiceProvider>();
