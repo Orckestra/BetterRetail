@@ -276,6 +276,18 @@ module Orckestra.Composer {
 
         }
 
+        public zoomImage(actionContext: IControllerActionContext) {
+            
+            var target = actionContext.event.target;
+            var zoomSrc = $(target).attr('data-zoom-src');
+
+            if (target.tagName.toLowerCase() === 'img') {
+
+                var zoomThumbnail = $('.js-zoom-thumbnails').find('img[data-zoom-src="' + zoomSrc + '"]');
+                zoomThumbnail.click();
+            }
+        }
+
         public selectKva(actionContext: IControllerActionContext) {
 
             var selectionsToAdd = {};

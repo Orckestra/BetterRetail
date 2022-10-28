@@ -13,13 +13,13 @@
                 </div>
                 <div class="modal-body tall">
                     <div class="row">
-                        <div class="col-md-9 order-2 order-md-1">
+                        <div class="col-md-11 order-2 order-md-1">
                             <img property="image" class="img-zoom js-zoom-image"
                                  alt="@Model.DisplayName"
                                  src="@Model.SelectedImage.ProductZoomImageUrl"
                                  onerror="imgError(this)" />
                         </div>
-                        <div class="col-md-3 order-1 order-md-2">
+                        <div class="col-md-1 order-1 order-md-2">
                             <section class="js-zoom-thumbnails">
                                 @foreach (var image in Model.Images)
                                 {

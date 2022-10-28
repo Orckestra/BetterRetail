@@ -1,87 +1,179 @@
 .product-details {
-  .add-to-wishlist {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 9;
-  }
+    .add-to-wishlist {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 9;
+    }
 }
 
 .product-details-thumbnail {
-  position: relative;
-  height: 0;
-  padding-bottom: $product-thumb-image-ratio * 100%;
+    position: relative;
+    height: 0;
+    padding-bottom: $product-thumb-image-ratio * 100%;
 }
 
 .product-details-media {
-  position: relative;
-  //height: 0;
-  //padding-bottom: $product-lg-image-ratio * 100%;
-  margin-bottom: round($spacer / 2);
-
-  i {
-    font-size: 2rem;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-  }
+    position: relative;
+    //height: 0;
+    //padding-bottom: $product-lg-image-ratio * 100%;
+    margin-bottom: round($spacer / 2);
+    i {
+        font-size: 2rem;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
 }
 
 .product-details-zoom {
-  img {
-    display: block;
+    img {
+        display: block;
+    }
+    &.modal-fullscreen {
+        background: transparentize($gray-900, 0.6);
+
+        .modal-dialog {
+            width: 80vw;
+            max-width: 80vw;
+        }
+
+    }
+    @include media-breakpoint-up(sm) {
+        .sps {
+            position: sticky;
+        }       
+    }
+   
+
+    .js-zoom-thumbnails {
+        display: flex;
+        @include media-breakpoint-up(sm) {
+            display: block;
+            position: fixed;
+            width: 5vw;
+        }
+    }
+    .thumbnail {
+        border: none;
+        margin-bottom: 0;
+        width: 100%;
+        @include media-breakpoint-down(md) {
+            margin: 0 5px;
+        }
+        &.active {
+            img {
+                border: 1px solid #000;
+            }
+        }
+    }
+    .tall {
+        height: calc(100% - 56px);
+        overflow-y: auto;
+        .row {
+            height: 100%;
+            @include media-breakpoint-up(md) {
+                &>div {
+                    height: 100%;
+                }
+            }
+            @include media-breakpoint-down(md) {
+                &>div {
+                    text-align: center;
+                }
+                &>div:first-child {
+                    height: calc(100% - 131px);
+                }
+            }
+            .img-zoom {
+                margin: 0 auto;
+                max-width: 95%;
+            }
+        }
+    }
+    &-trigger {
+        display: block;
+        left: 0;
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+    }
+}
+
+.specification-attributes {
+    padding-top: 20px;
+    margin-top: 10px;
+    border-top: 1px solid $gray-300;
+    &-row {
+        display: flex;
+        align-items: baseline;
+        column-gap: 10px;
+        h6 {
+            white-space: nowrap;
+            &:after {
+                content: ":";
+            }
+        }
+    }
+}
+
+.accordion {
+  padding: 10px 0;
+  border-top: 1px solid $gray-300;
+  &:last-child {
+    border-bottom: 1px solid $gray-300;
   }
+  .specifications {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 
-  .thumbnail {
-    border: none;
-    margin-bottom: 0;
-    width: 100%;
-
-    @include media-breakpoint-down(md) {
-      margin: 0 5px;
+    h3 {
+      flex: 1 1 0;
+      margin-bottom: 0;
     }
 
-    &.active {
+    .fa-chevron-up {
+      display: inline-block;
+    }
+    .fa-chevron-down {
+      display: none;
+    }
 
-      img {
-        border: 1px solid #000;
+    &.collapsed, &[aria-expanded="false"] {
+      .fa-chevron-up {
+        display: none;
       }
-  }
-  }
-  .tall {
-    height: calc(100% - 56px);
-
-    .row {
-      height: 100%;
-
-      @include media-breakpoint-up(md) {
-        & > div {
-          height: 100%;
-        }
-      }
-
-      @include media-breakpoint-down(md) {
-        & > div {
-          text-align: center;
-        }
-        & > div:first-child {
-          height: calc(100% - 131px);
-        }
-      }
-
-      .img-zoom {
-        margin: 0 auto;
-        max-height: 95%;
-        max-width: 95%;
+      .fa-chevron-down {
+        display: inline-block;
       }
     }
   }
+}
+.mobile-carousel {
+    flex-wrap: nowrap;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    &-container {
+        overflow-x: scroll;
+    }
+    > div {
+        transform-origin: center center;
+        transform: scale(1);
+        transition: transform 0.5s;
+        scroll-snap-align: start;
+        flex-shrink: 0;
+    }
 
-  &-trigger {
-    display: block;
-    left: 0;
-    position: absolute;
-    bottom: 50px;
-    width: 100%;
-  }
+    .img-anchor {
+        position: absolute;
+        top: -150px;
+        left: 0px;
+    }
+    @include media-breakpoint-up(md){
+        flex-wrap: wrap;
+        &-container {
+            overflow-x: unset;
+        }
+    }
 }

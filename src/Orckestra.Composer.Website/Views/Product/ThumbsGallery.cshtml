@@ -1,0 +1,93 @@
+@using System.Web;
+@using System.Globalization;
+@using Orckestra.Composer.Product.ViewModels;
+@model Orckestra.Composer.Product.ViewModels.ProductViewModel
+
+@{
+
+    string SelectedVariantClass(params string[] ids)
+    {
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
+    }
+
+    int VariantIndex = 0;
+    int CurIndex = 0;
+
+
+    string GetVariantIndex(string variantID) {
+        CurIndex = VariantIndex;
+        VariantIndex ++;
+        return String.IsNullOrEmpty(variantID) ? "img-"+CurIndex : "img-"+variantID+"-"+CurIndex;
+    }
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <script>
+        function imgError(el) {
+            if (!el.src.includes('@Model.FallbackImageUrl')) {
+                el.src = '@Model.FallbackImageUrl';
+            }
+        }
+        function imgLoaded(el) {
+            if (el.complete) {
+                el.parentNode.style.display = 'block';
+                el.parentNode.parentNode.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    
+    <div class="row">
+         @if (Model.Variants == null || Model.Variants.Count == 0)
+        {
+            
+            foreach (var image in Model.Images)
+            {
+                <div class="col-2">
+                @RenderThumbnailImg(image, false, GetVariantIndex(""))
+                
+                </div>
+                VariantIndex = 0;
+                
+            }
+        }
+        else
+        {
+            foreach (var variant in Model.Variants)
+            {
+                
+                foreach (var image in variant.Images)
+                {
+                    <div data-variant="@variant.Id" class="col-2 @SelectedVariantClass(variant.Id)">
+                    @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId, GetVariantIndex(variant.Id))
+                    </div>
+                
+                }
+                VariantIndex = 0;
+            }
+        }
+    </div>
+</body>
+</html>
+
+
+
+
+@helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden, string ImgId )
+{
+    <div class="product-thumb-container" style="display: none;">
+        <a href="#@ImgId" class="thumbnail @(image.Selected ? "active": "")">
+            <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }
+                 data-main-src="@image.ImageUrl"
+                 data-zoom-src="@image.ProductZoomImageUrl"
+                 alt="@image.Alt"
+                 onload="imgLoaded(this)"
+                 class="img-fluid"
+                 data-oc-click="slideToImage" />
+
+        </a>
+    </div>
+}
