@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Composite.Core;
 using GraphQL;
-using GraphQL.Instrumentation;
 using GraphQL.NewtonsoftJson;
-using GraphQL.Types;
 using GraphQL.Validation.Complexity;
 using Orckestra.Composer.Product.GraphQL.Interfaces;
 using Orckestra.Composer.WebAPIFilters;
@@ -21,12 +19,12 @@ namespace Orckestra.Composer.Product.Controllers
     {
         private readonly IVariantColorSchema _schema;
         private readonly IVariantColorDocumentExecuter _executer;
-        private readonly IDocumentWriter _writer;
+        private readonly IVariantColorDocumentWriter _writer;
         private readonly IServiceProvider _serviceProvider;
 
         public VariantColorGraphQLController(
             IVariantColorDocumentExecuter executer,
-            IDocumentWriter writer,
+            IVariantColorDocumentWriter writer,
             IVariantColorSchema schema,
             IServiceProvider serviceProvider)
         {
@@ -39,7 +37,7 @@ namespace Orckestra.Composer.Product.Controllers
         public VariantColorGraphQLController()
         {
             _executer = ServiceLocator.GetService<IVariantColorDocumentExecuter>();
-            _writer = ServiceLocator.GetService<IDocumentWriter>();
+            _writer = ServiceLocator.GetService<IVariantColorDocumentWriter>();
             _schema = ServiceLocator.GetService<IVariantColorSchema>();
             _serviceProvider = ServiceLocator.GetService<IServiceProvider>();
         }

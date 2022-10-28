@@ -48,6 +48,7 @@
     <Compile Include="Extensions\ProductPropertyDefinitionGroupExtensions.cs" />
     <Compile Include="Factory\IProductViewModelFactory.cs" />
     <Compile Include="Factory\ProductViewModelFactory.cs" />
+    <Compile Include="GraphQL\Interfaces\IVariantColorDocumentWriter.cs" />
     <Compile Include="GraphQL\Interfaces\IVariantColorDocumentExecuter.cs" />
     <Compile Include="GraphQL\Interfaces\IVariantColorSchema.cs" />
     <Compile Include="GraphQL\Types\VariantColorConfigurationInputGraphType.cs" />
