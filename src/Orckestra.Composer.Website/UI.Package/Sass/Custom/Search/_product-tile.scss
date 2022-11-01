@@ -16,21 +16,37 @@
     }
 }
 
+.search-results {
+    > .row {
+        align-items: stretch;
+
+    }
+}
+
 .product-container {
-    height: auto;
+    height: 100%;
     position: relative;
     z-index: 4;
+
+    display: flex;
+    flex: 1;
+    align-content: stretch;
+
     &.active {
       z-index: 5;
     }
+    @include media-breakpoint-up(sm) {
+        //height: 60vw;
+    }
     @include media-breakpoint-up(md) {
       height: 313px;
+      display: block;
     }
     @include media-breakpoint-up(lg) {
       height: 313px;
     }
     @include media-breakpoint-up(xl) {
-      height: 358px;
+      height: 25vw;
     }
   }
 
@@ -38,31 +54,61 @@
     position: static;
     $lines-of-text: 3;
     transition: all 0.3s ease-in-out;
-    @include media-breakpoint-up(sm) {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid $gray-200;
+
+    @include media-breakpoint-down(md) {
+        .slick-slide & {
+            width: 100%;
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        display: block;
         max-height: 700px;
+        border: none;
     }
   
     &-content {
         padding: $spacer;
         background: transparentize($color: $gray-200, $amount: 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        @include media-breakpoint-up(md) {
+            display: block;
+            width: 100%;
+        }
         
         .slick-slide & {
             bottom: 0px;
             position: absolute;
+            width: 100%;
         }
+        flex: 1 1 auto;
+
     }
 
-    .product-tile-button-container, 
-    .variants {
+    .product-tile-button-container {
         padding-top: $spacer;
-        overflow: hidden;
         text-align: center;
         position: relative;
         transition: all 0.3s ease-in-out;
-    }
+    } 
 
     
     .variants {
+        padding-top: $spacer;
+        overflow: hidden;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        max-height: 0;
+        opacity: 0;
+        @include media-breakpoint-up(md){
+            text-align: center;
+        }
         .slick-slide & {
             opacity: 0;
             max-height: 0;
@@ -72,7 +118,7 @@
     
 
 
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(md) {
         .product-tile-button-container, 
         .product-tile-select-btn-container, 
         .variants {
@@ -113,13 +159,13 @@
         .product-tile-select-btn-container {
             display: block;
             padding-top: $spacer;
-            @include media-breakpoint-up(sm) {
+            @include media-breakpoint-up(md) {
                 display: none;
             }
         }
 
 
-        @include media-breakpoint-down(sm) {
+        @include media-breakpoint-down(md) {
             .product-tile-button-container {
                 display: none;
             }
@@ -127,7 +173,10 @@
     
         &.active{
             .variants {
-                padding-top: 10px;
+                padding-top: $spacer*2;
+                @include media-breakpoint-up(md){
+                    padding-top: $spacer/2;
+                }
             }
 
             .product-tile-button-container {
@@ -149,17 +198,21 @@
     }
 
     .product-tile-title {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        white-space: normal;
-        min-height: 40px;
+        font-family: $font-product-title;
+        @include media-breakpoint-up(md) {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            white-space: normal;
+            min-height: 40px;
+        }
     }
 
 
     .product-tile-brand {
+        font-family: $font-product-brand;
         white-space: nowrap;
         font-weight: bold;
         font-size: small;
@@ -171,21 +224,32 @@
         gap: 5px;
         align-items: flex-end;
         justify-content: flex-end;
+        h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+            font-family: $font-family-base;
+        }
     }
 
     .product-tile-media {
+        flex: 1 0 40%;
         // http://alistapart.com/article/creating-intrinsic-ratios-for-video
-        display: block;
-        height: 0;
-        //padding-bottom: $product-image-ratio * 100%;
-        padding-bottom: 104%;
-        position: relative;
-        z-index: -1;
-        @include media-breakpoint-down(sm) {
+        
+        .slick-slide & {
+            padding-bottom: 0;
+        }
+
+        @include media-breakpoint-up(sm) {
+            z-index: -1;
+            display: block;
+            height: 0;
+            //padding-bottom: $product-image-ratio * 100%;
+            padding-bottom: 107%;
+            position: relative;
             .slick-slide & {
-                padding-bottom: 128%;
+                padding-bottom: 150%;
             }
         }
+        
+        
    }
 
     .product-tile-recurring {
@@ -239,12 +303,15 @@
     }
 
     .product-tile-banner {
-        width: 100%;
         position: absolute;
         bottom: 0;
         font-size: 14px;
-        font-family: $font-size-h1-sm, sans-serif;
+        font-family: $font-family-base;
         text-align: center;
+
+        @include media-breakpoint-up(md) {
+            width: 100%;
+        }
     }
     .product-tile-banner span {
         display: inline-block;
@@ -266,7 +333,10 @@
         flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
+        @include media-breakpoint-up(md){
+            justify-content: center;
+        }
+        
     }
 
     .kva-color {

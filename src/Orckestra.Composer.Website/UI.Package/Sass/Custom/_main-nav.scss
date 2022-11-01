@@ -1,6 +1,7 @@
 .main-nav {
+
     // reset positions
-    .nav, .collapse, .dropup, .dropdown {
+    .nav, .collapse, .dropup, .dropdown, .navbar.megamenu {
         position: static;
     }
     // main-nav dropdown to have a higher z-index than in the search sort
@@ -18,18 +19,31 @@
     }
     // Content with padding
     &-content {
-        padding: 20px 30px;
+        padding: 20px 10px;
 
         ul p {
+            /*
             border-bottom: 1px solid gray("400");
             padding-bottom: $grid-gutter-width/2;
+            */
         }
+    }
+
+    &-section {
+        font-weight: 600;
+    }
+
+    &-link {
+        
     }
 
     // Fullwidth menu
     .dropdown.main-nav-fw .dropdown-menu {
         left: 0;
         right: 0;
+        border-top: 2px solid transparent;
+        border-right: 0;
+        border-left: 0;
     }
 
     &-toggle {
@@ -39,10 +53,16 @@
         padding: 4px 10px;
     }
 
+    &.nav-tabs {
+        border-bottom: none;
+    }
+
 
     .nav-link  {
+        font-family: $font-nav;
         position: relative;
         text-transform: uppercase;
+        font-size: 13px;
 
         &::after {
             content: unset;
@@ -148,16 +168,19 @@
 
         .dropdown > a:hover,
         .dropdown > a:focus,
+        .dropdown > a:active,
+        .dropdown > a.active,
         .show > a {
 
             &::after {
                 background-color: $link-color;
-                bottom: 0;
+                bottom: 1px;
                 content: '';
-                height: 4px;
+                height: 1px;
                 right: 0;
                 position: absolute;
                 width: 100%;
+                border: none;
             }
         }
         .dropdown:hover .dropdown-menu {

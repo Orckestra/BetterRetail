@@ -58,7 +58,7 @@
         <div id="vueRelatedProducts" style="@backgroundStyle?.Data?.CssCode" v-cloak="true">
             @if (!string.IsNullOrEmpty(headingText))
             {
-                <h2>@headingText</h2>
+                @Function("Composer.SectionTitle", new {Title=@headingText, SubTitle=""} )
             }
             <div class="slick-carousel">
                 <div class="js-slick-carousel" data-slick='{"slidesToShow": 4, "slidesToScroll": 1, "mobileCarousel": true}'>

@@ -80,7 +80,7 @@
                                 <small class="text-danger">@Html.Localize("List-Search", "L_PriceFrom")</small>
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
+                                <span class="h5 strong text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
                             </div>
                         </template>
                         <template v-else="v-else">
@@ -88,7 +88,7 @@
                                 <small>@Html.Localize("List-Search", "L_PriceFrom")</small>
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
+                                <span class="h5 strong" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
                             </div>
                         </template>
                     </template>
@@ -98,7 +98,7 @@
                                 <del>{{@(EntityName).DisplayListPrice}}</del>
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4  text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
+                                <span class="h5 strong text-danger">{{@(EntityName).DisplaySpecialPrice}}</span>
                             </div>
                         </template>
                         <template v-else="v-else">
@@ -106,7 +106,7 @@
                                 <!--only used for proper spacing-->
                             </div>
                             <div class="product-tile-price">
-                                <span class="h4" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
+                                <span class="h5 strong" data-qa="search-product-price">{{@(EntityName).DisplayListPrice}}</span>
                             </div>
                         </template>
                     </template>
@@ -116,17 +116,17 @@
             @if (ShowAddToCartButton)
             {
                 <div class="product-tile-button-container">
-                    <button class="btn btn-block  btn-primary text-uppercase relative"
+                    <button class="btn btn-block  btn-primary relative"
                             data-qa="search-buy-now"
                             v-on:click="addToCart($event, @(EntityName))"
                             v-bind:disabled="isAddToCartDisabled(@(EntityName))">
-                            <span v-if="@(EntityName).IsAvailableToSell" class="fa  fa-shopping-cart fa-lg"></span><span v-else="v-else" class="fa  fa-times fa-lg"></span>&#160;
+                            <span v-if="@(EntityName).IsAvailableToSell" class="fa  fa-shopping-bag fa-lg"></span><span v-else="v-else" class="fa  fa-times fa-lg"></span>&#160;
                         {{@(EntityName).IsAvailableToSell ? '@Html.Localize("General", "B_AddToCartProductList")' : '@Html.Localize("General", "B_AddToCartProductListOOS")'}}
                         <span v-if="@(EntityName).loading" class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch"></span>
                     </button>
                 </div>
                 <div class="product-tile-select-btn-container">
-                    <button v-if="@(EntityName).HasVariants" v-on:click="ActiveProductId = undefined" class="btn btn-block  btn-outline-secondary text-uppercase">
+                    <button v-if="@(EntityName).HasVariants" v-on:click="ActiveProductId = undefined" class="btn btn-block  btn-outline-secondary">
                         Select Variant
                     </button>
                 </div>

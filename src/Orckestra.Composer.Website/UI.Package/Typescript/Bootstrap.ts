@@ -11,6 +11,7 @@
 ///<reference path='./Mvc/IControllerConfiguration.ts' />
 ///<reference path='./Plugins/IPlugin.ts' />
 ///<reference path='./Events/EventHub.ts' />
+///<reference path='./Utils/CookieUtils.ts' />
 
 module Orckestra.Composer {
 
@@ -44,6 +45,13 @@ module Orckestra.Composer {
             eventHub.publish('languageSwitched', null);
             cacheProvider.defaultCache.clear(cacheKey);
         });
+    }
+
+    function setTimezoneOffsetCookie(){
+        var timezoneoffset = CookieUtils.getCookie("timeZoneOffset");
+        if(!timezoneoffset){
+            CookieUtils.setCookie("timeZoneOffset", new Date().getTimezoneOffset().toString());
+        }
     }
 
     export var bootstrap = (window: Window, document: HTMLDocument, composerConfiguration: IComposerConfiguration) => {
@@ -108,6 +116,7 @@ module Orckestra.Composer {
             $(window).on('beforeunload', () => {
                 controllers.forEach(controller => controller.dispose());
             });
+            setTimezoneOffsetCookie();
         }).done();
     };
 }

@@ -21,7 +21,7 @@
                 @CheckoutHelpers.StepEditButton("payment")
             </div>
             <transition-collapse>
-                <div class="card-body bg-light" v-show="step.active" v-cloak="true" key="active">
+                <div class="card-body" v-show="step.active" v-cloak="true" key="active">
                     <form v-if="Payment" id="PaymentForm">
                         <div class="form-row">
                             <div class="col-md-6 pb-3" v-if="HasCreditCardProvider">
@@ -132,7 +132,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body bg-light" v-show="step.preview" v-cloak="true" key="preview">
+                <div class="card-body" v-show="step.preview" v-cloak="true" key="preview">
                     <div v-if="ActivePayment">
                         <div v-if="ActivePayment.PaymentMethodType == 'SavedCreditCard'">
                             @PreviewCartTypeMethod("SelectedPaymentMethod")

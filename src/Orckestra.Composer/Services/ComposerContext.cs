@@ -340,5 +340,19 @@ namespace Orckestra.Composer.Services
                 return !string.IsNullOrWhiteSpace(EditingCartName);
             }
         }
+        private int _localTimeZoneOffset;
+        public int LocalTimeZoneOffset
+        {
+            get
+            {
+                if (_localTimeZoneOffset == default)
+                {
+                    var timeZoneOffset = HttpContextBase.Request.Cookies.Get("timeZoneOffset");
+                    _localTimeZoneOffset = int.Parse(timeZoneOffset?.Value ?? string.Empty);
+                }
+
+                return _localTimeZoneOffset;
+            }
+        }
     }
 }

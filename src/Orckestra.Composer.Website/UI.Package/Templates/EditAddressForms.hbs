@@ -1,13 +1,13 @@
 
 <form id="EditAddressForm" {{#if IsUpdating}}data-oc-submit="updateAddress" data-address-id="{{Id}}"{{else}}data-oc-submit="createAddress"{{/if}}>
     <div class="card">
-            <h5 class="card-header">
+            <h3 class="card-header">
                 {{#if AddressName}}
                     {{localize 'MyAccount' 'T_EditAddress'}}
                 {{else}}
                     {{localize 'MyAccount' 'T_AddAddress'}}
                 {{/if}}
-            </h5>
+            </h3>
         <div class="card-body">
             {{>FormErrorMessages}}
 

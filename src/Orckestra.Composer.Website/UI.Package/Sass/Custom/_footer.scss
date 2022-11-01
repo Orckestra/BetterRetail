@@ -8,6 +8,13 @@
   background-color: $gray-100;
   border-top: 1px solid $gray-200;
 
+  &-menu-item {
+    border-bottom: 1px solid $gray-300;
+    @include media-breakpoint-up(sm) {
+      border: none;
+    }
+  }
+
   .text-copy {
     margin-top: 10px;
     text-align: center;

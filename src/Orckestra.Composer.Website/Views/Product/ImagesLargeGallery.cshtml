@@ -1,0 +1,94 @@
+@using System.Web;
+@using System.Globalization;
+@using Orckestra.Composer.Product.ViewModels;
+@model Orckestra.Composer.Product.ViewModels.ProductViewModel
+
+@{
+
+    string SelectedVariantClass(params string[] ids)
+    {
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
+    }
+
+    int VariantIndex = 0;
+    int CurIndex = 0;
+
+    string GetFirstClass()
+    {
+        CurIndex = VariantIndex;
+        VariantIndex ++;
+        return (CurIndex == 0) ? "col-md-12" : "col-md-6";
+    }
+
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+    <script>
+        function imgError(el) {
+            if (!el.src.includes('@Model.FallbackImageUrl')) {
+                el.src = '@Model.FallbackImageUrl';
+            }
+        }
+        function imgLoaded(el) {
+            if (el.complete) {
+                el.parentNode.style.display = 'block';
+                el.parentNode.parentNode.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="row mobile-carousel">
+        
+        <!-- Main image -->
+       
+        @if (Model.Variants == null || Model.Variants.Count == 0)
+        {
+            
+            foreach (var image in Model.Images)
+            {
+                <div class="col-9 @GetFirstClass() col-lg-6" id="img-@CurIndex">
+                @RenderImg(image, false )
+                
+                </div>
+                
+            }
+                VariantIndex = 0;
+        }
+        else
+        {
+            foreach (var variant in Model.Variants)
+            {
+                
+                foreach (var image in variant.Images)
+                {
+                    <div data-variant="@variant.Id" class="col-9 @GetFirstClass() col-lg-6 @SelectedVariantClass(variant.Id)" id="img-@variant.Id-@CurIndex">
+                    @RenderImg(image, variant.Id != Model.SelectedVariantId)
+                    </div>
+                
+                }
+                VariantIndex = 0;
+            }
+        }
+    </div>
+</body>
+</html>
+
+
+@helper RenderImg(ProductDetailImageViewModel image, bool isHidden)
+{
+    <div class="product-img-container"  style="display: none;">
+        <a href="#" class="@(image.Selected ? "active": "")">
+            <img @if (isHidden) { <text> data-src="@image.ImageUrl" </text>  } else { <text> src="@image.ImageUrl" </text> }
+                 data-main-src="@image.ImageUrl"
+                 data-zoom-src="@image.ProductZoomImageUrl"
+                 alt="@image.Alt"
+                 onload="imgLoaded(this)"
+                 onerror="imgError(this)"
+                 class="js-zoom product-img img-fluid" 
+                 data-oc-click="zoomImage" />
+
+        </a>
+    </div>
+}

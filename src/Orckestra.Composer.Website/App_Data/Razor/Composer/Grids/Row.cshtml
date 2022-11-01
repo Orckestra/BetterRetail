@@ -1,0 +1,21 @@
+﻿@inherits RazorFunction
+
+@functions {
+    public override string FunctionDescription
+    {
+        get  { return "Represents a single grid row that can be popluated with any number of grid items (other rows or coluns)."; }
+    }
+	
+	[FunctionParameter(Label = "Grid Row")]
+    public XhtmlDocument RowContent { get; set; }
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+    <head>
+    </head>
+    <body>
+        <div class="row">
+			@Markup(RowContent)
+        </div>
+</body>
+</html>

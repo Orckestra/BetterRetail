@@ -33,6 +33,7 @@ module Orckestra.Composer {
 
                     addNewAddressMode() {
                         this.Mode.AddingNewAddress = true;
+                        this.Mode.EditingAddress = false;
                         this.adressBeforeEdit = {};
                         this.AddressName = null;
                         this.SelectedShippingAddressId = undefined;
@@ -60,27 +61,18 @@ module Orckestra.Composer {
                                         })
                                         .fail((reason) => {
                                             console.log(reason);
-                                            if (!reason.Errors) { return; }
-
-                                            reason.Errors.forEach((e: any) => {
-                                                switch (e.ErrorCode) {
-                                                    case 'NameAlreadyUsed':
-                                                        this.Errors.AddressNameAlreadyInUseError = true; break;
-                                                    case 'InvalidPhoneFormat':
-                                                        this.Errors.InvalidPhoneFormatError = true; break;
-                                                }
-                                            });
+                                            this.handleAddressErrors(reason);
                                         });
                                 } else {
                                     //
                                 }
                             });
                     },
-
                     changeRegisteredShippingAddress(addressId) {
 
                         this.SelectedShippingAddressId = addressId;
                         this.Mode.AddingNewAddress = false;
+                        this.Mode.EditingAddress = false;
                         if (!this.debounceChangeRegisteredShippingAddress) {
                             this.debounceChangeRegisteredShippingAddress = _.debounce(() => {
                                 //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
@@ -96,6 +88,28 @@ module Orckestra.Composer {
                     deleteShippingAddressConfirm(event: JQueryEventObject) {
                         this.Modal.deleteAddressModal.openModal(event);
                     },
+                    updateEditedShippingAddress() {
+                        let isValid = this.validateParsey('#editAddressForm');
+                        if (!isValid) {
+                            return Q.reject('Address information is not valid');
+                        }
+                        this.Mode.Loading = true;
+                        this.EditingAddress.AddressName = this.AddressName;
+
+                        self.checkoutService.updateAddressInMyAccountAddressBook(this.EditingAddress)
+                        .then(() =>  {
+                            this.Mode.EditingAddress = false;
+                            
+                            if(this.Cart.ShippingAddress.AddressBookId === this.EditingAddress.Id) {
+                                var isMatch = AddressUtils.isEquals(this.Cart.ShippingAddress, this.EditingAddress);
+                                if(!isMatch) {
+                                    return this.changeRegisteredShippingAddress(this.EditingAddress.Id);
+                                }
+                            }
+                        })
+                        .fail(reason => this.handleAddressErrors(reason))
+                        .fin(() => this.Mode.Loading = false)
+                    }
                 }
             };
 

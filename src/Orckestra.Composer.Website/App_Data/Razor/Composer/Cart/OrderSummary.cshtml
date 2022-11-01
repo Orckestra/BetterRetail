@@ -15,11 +15,11 @@
 <body>
     <div data-oc-controller="Cart.OrderSummary">
         <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" class="card">
-            <h3 class="card-header" data-qa="order-summary-title">
+            <h3 class="card-header card-header-primary" data-qa="order-summary-title">
                 @Html.Localize("ShoppingCart", "T_OrderSummary")
             </h3>
+            @OrderSummaryHelpers.Rewards()
             <div class="card-body">
-                @OrderSummaryHelpers.Rewards()
 
                 @OrderSummaryHelpers.SubTotal()
 
@@ -66,7 +66,7 @@
                     <div class="row mb-2" v-if="Cart.InvalidLineItemCount > 0">
                         <div class="col-12">
                             <button v-on:click="removeInvalidLineItems" v-bind:disabled="IsLoading"
-                                    class="btn w-100 text-uppercase alert-danger text-danger">
+                                    class="btn w-100 alert-danger text-danger">
                                 @Html.Localize("ShoppingCart", "B_RemoveUnavailableProducts")
                             </button>
                         </div>
@@ -75,13 +75,13 @@
                     <div class="row">
                         <div class="col-6">
                             <button v-on:click="cancelEditOrder" v-bind:disabled="IsLoading"
-                                    class="btn btn-secondary w-100  text-uppercase">
+                                    class="btn btn-secondary w-100">
                                 @Html.Localize("General", "B_Cancel")
                             </button>
                         </div>
                         <div class="col-6">
                             <button v-on:click="saveEditOrder" v-bind:disabled="IsLoading || Cart.InvalidLineItemCount > 0"
-                                    class="btn btn-success w-100 text-uppercase">
+                                    class="btn btn-success w-100">
                                 @Html.Localize("General", "B_Update")
                             </button>
                         </div>
@@ -108,7 +108,7 @@
 {
     <div class="row  mb-2">
         <div class="col-12">
-            <button class="btn btn-success  w-100  text-uppercase"
+            <button class="btn btn-success  w-100"
                     data-qa="order-summary-checkout-btn"
                     v-on:click="proceedToCheckout()">
                 @Html.Localize("ShoppingCart", "B_Checkout")

@@ -21,6 +21,7 @@
 ///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
 ///<reference path='../Services/ShippingAddressRegisteredService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
+///<reference path='../../Services/UserMetadataService.ts' />
 
 
 module Orckestra.Composer {
@@ -64,6 +65,7 @@ module Orckestra.Composer {
         protected cartService: ICartService;
         protected membershipService: IMembershipService;
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
+        protected userMetadataService: UserMetadataService = UserMetadataService.getInstance();
         protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
             new ShippingAddressRegisteredService(this.customerService);
         protected regionService: IRegionService;
@@ -167,6 +169,7 @@ module Orckestra.Composer {
                     ShippingMethodTypes: checkoutContext.ShippingMethodTypes,
                     Payment: null,
                     RegisteredAddresses: [],
+                    EditingAddress: {},
                     Steps: {
                         StartStep: 0,
                         Information: {
@@ -188,6 +191,7 @@ module Orckestra.Composer {
                     Mode: {
                         SignIn: SignInModes.Base,
                         AddingNewAddress: false,
+                        EditingAddress: false,
                         AddingLine2Address: false,
                         CompleteCheckoutLoading: false,
                         Loading: false,
@@ -203,7 +207,8 @@ module Orckestra.Composer {
                     },
                     Modal: {
                         deleteAddressModal: null,
-                    }
+                    },
+                    AccountLockedDownUntil: {}
                 },
                 mixins: this.VueCheckoutMixins,
                 mounted() {
@@ -271,7 +276,25 @@ module Orckestra.Composer {
                         let addressId = $addressListItem.data('address-id');
 
                         return SingleCheckoutService.instance.deleteAddress(addressId);
-                    }
+                    },
+                    editAddress(address) {
+                        this.Mode.EditingAddress = true;
+                        this.Mode.AddingNewAddress = false;
+                        this.EditingAddress = address;
+                        this.AddressName = address.AddressName;
+                        this.initializeParsey('#editAddressForm');
+                    },
+                    handleAddressErrors(reason) {
+                        if (!reason.Errors) { return; }
+                        reason.Errors.forEach((e: any) => {
+                            switch (e.ErrorCode) {
+                                case 'NameAlreadyUsed':
+                                    this.Errors.AddressNameAlreadyInUseError = true; break;
+                                case 'InvalidPhoneFormat':
+                                    this.Errors.InvalidPhoneFormatError = true; break;
+                            }
+                        });
+                    },
                 }
             });
 
@@ -605,6 +628,10 @@ module Orckestra.Composer {
             );
         }
 
+        public updateAddressInMyAccountAddressBook(address: any): Q.Promise<any> {
+            return this.customerService.updateAddress(address, address.Id, null);
+        }
+
         public deleteAddress(addressId: any): Q.Promise<any> {
             return this.customerService.deleteAddress(addressId, null).then(() => {
                 let vue: any = this.VueCheckout;
@@ -643,6 +670,7 @@ module Orckestra.Composer {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
                 this.cacheProvider.defaultCache.set('customerId', null).done();
                 this.cacheProvider.sessionCache.fullClear();
+                this.userMetadataService.invalidateCache();
                 this.loadUserAddresses();
                 return true;
                 // vueData.$children[0].navigateToStep(CheckoutStepNumbers.Shipping);
@@ -658,6 +686,7 @@ module Orckestra.Composer {
             }
             console.error('An error occurred while logging in.', error.ErrorMessage);
             vueData.Errors.SignIn = errorCode;
+            vueData.AccountLockedDownUntil = error.Bag["AccountLockedDownUntil"];
         }
 
         public checkUserExist(email: string): Q.Promise<boolean> {

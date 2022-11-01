@@ -1,7 +1,7 @@
 //new autosuggestion
 
 #vueAutocomplete {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: $font-family-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $primary;

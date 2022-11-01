@@ -12,8 +12,8 @@
 <head>
 </head>
 <body>
-    <div data-oc-controller="Cart.Coupons">
-        <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" class="card mt-3">
+   
+        <div v-if="Cart &amp;&amp; !Cart.IsCartEmpty" v-cloak="true" class="card mt-3">
             <h3 class="card-header" data-qa="order-summary-title">
                 @Html.Localize("ShoppingCart", "F_PromoCode")
             </h3>
@@ -41,16 +41,16 @@
                 @Coupons()
             </div>
         </div>
-    </div>
+
 </body>
 </html>
 
 @helper Coupons()
 {
     <div v-if="Coupons">
-        <div v-for="msg in Coupons.Messages" >
+        <div v-if="ShowAlert" v-for="msg in Coupons.Messages" >
             <div v-bind:class="'alert  alert-' + msg.Level + ' alert-dismissible'">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" aria-label="Close" v-on:click="ShowAlert = false">
                     <span class="fa  fa-times"></span>
                 </button>
                 <div class="multiline-message">

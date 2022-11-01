@@ -225,6 +225,9 @@
   <data name="ShortDateFormat" xml:space="preserve">
     <value>{0:MMMM dd, yyyy}</value>
   </data>
+  <data name="ShortDateTimeFormat" xml:space="preserve">
+    <value>MM/dd/yyyy hh:mm tt</value>
+  </data>
   <data name="T_FindYourOrder" xml:space="preserve">
     <value>Find your order</value>
   </data>

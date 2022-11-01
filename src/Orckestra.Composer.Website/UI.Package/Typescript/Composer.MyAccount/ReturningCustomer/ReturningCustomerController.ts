@@ -86,10 +86,11 @@ module Orckestra.Composer {
 
         private onLoginRejected(reason: any) {
             let errorCode = MyAccountStatus[MyAccountStatus.AjaxFailed];
+            
             if (reason && reason.Errors && reason.Errors[0] && reason.Errors[0].ErrorCode) {
                 errorCode = reason.Errors[0].ErrorCode;
             }
-            this.renderFailedForm(errorCode);
+            this.renderFailedForm(errorCode, reason.Errors[0].Bag);
             this.busyHandler.done();
         }
 
@@ -98,9 +99,9 @@ module Orckestra.Composer {
          * Register Format validation to hide those server message on client interaction
          * Reset potentially unsafe fields
          */
-        private renderFailedForm(status: string) {
+        private renderFailedForm(status: string, errorBag : any = {}) {
 
-            this.render('ReturningCustomerFormsServerValidations', { Status: status });
+            this.render('ReturningCustomerFormsServerValidations', { Status: status,  Bag: errorBag });
 
             this.context.container.find('input[type="password"]').val('');
 

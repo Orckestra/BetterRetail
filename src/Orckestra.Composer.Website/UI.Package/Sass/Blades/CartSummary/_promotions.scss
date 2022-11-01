@@ -1,11 +1,12 @@
 .promotion {
-    display: inline-block;
-    border-top: solid 1px theme-color("info");
-    border-bottom: solid 1px theme-color("info");
+    display: block;
     color: theme-color("info");
-    padding-top: $spacer / 2;
-    padding-bottom: $spacer / 2;
-    margin-bottom: $spacer;
+
+    &-item {
+        padding: $spacer/2 $spacer;
+        border-bottom: 1px solid $border-color;
+        background: #fff;
+    }
 }
 
 .promotion-block {

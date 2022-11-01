@@ -132,6 +132,7 @@
                 { name: 'SingleCheckout.PickUpStoreAddress', controller: Orckestra.Composer.PickUpAddressSingleCheckoutController },
                 { name: 'SingleCheckout.ChangeRecurringFrequency', controller: Orckestra.Composer.ChangeRecurringFrequencyCheckoutController },
                 { name: 'SingleCheckout.OrderConfirmation', controller: Orckestra.Composer.OrderConfirmationController },
+                { name: 'SingleCheckout.Coupons', controller: Orckestra.Composer.SingleCheckoutCouponsController },
 
                 { name: 'MyAccount.AddressList', controller: Orckestra.Composer.AddressListController },
                 { name: 'MyAccount.ChangePassword', controller: Orckestra.Composer.ChangePasswordController },

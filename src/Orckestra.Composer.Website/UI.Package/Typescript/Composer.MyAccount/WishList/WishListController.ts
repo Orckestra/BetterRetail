@@ -27,6 +27,7 @@ module Orckestra.Composer {
 
                 data: {
                     Items: [],
+                    ActiveProductId: undefined,
                     ...this.context.viewModel
                 },
                 computed: {
