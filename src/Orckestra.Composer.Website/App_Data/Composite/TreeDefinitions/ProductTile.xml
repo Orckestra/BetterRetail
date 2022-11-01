@@ -38,6 +38,11 @@
           <Element Label="Varinat Colors" Id="VariantColors">
             <Actions>
               <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IVariantColorConfiguration" />
+				      <CustomUrlAction Icon="folder-edit"
+                      ViewLabel="Manage Variant Colors"
+                      ViewToolTip="Manage Variant Colors"
+                      Label="Manage Variant Colors" Url="Composite/InstalledPackages/Orckestra.Composer.Product/ManageVariantColors.cshtml"
+                      ViewType="documentview" />
             </Actions>
             <Children>
               <DataElements Type="Orckestra.Composer.CompositeC1.DataTypes.IVariantColorConfiguration">

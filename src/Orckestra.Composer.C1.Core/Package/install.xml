@@ -59,6 +59,11 @@
         <File sourceFilename="~\Bin\Microsoft.ApplicationInsights.dll" targetFilename="~\Bin\Microsoft.ApplicationInsights.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" targetFilename="~\Bin\Microsoft.AspNet.TelemetryCorrelation.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\GraphQL.dll" targetFilename="~\Bin\GraphQL.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\GraphQL.NewtonsoftJson.dll" targetFilename="~\Bin\GraphQL.NewtonsoftJson.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\GraphQL-Parser.dll" targetFilename="~\Bin\GraphQL-Parser.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.ComponentModel.Annotations.dll" targetFilename="~\Bin\System.ComponentModel.Annotations.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+
       </Files>
     </mi:Add>
 
@@ -85,6 +90,7 @@
         <Directory sourceDirectory="~\App_Data\" targetDirectory="~\App_Data\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\App_Code\" targetDirectory="~\App_Code\" allowOverwrite="true" deleteTargetDirectory="false" />
         <Directory sourceDirectory="~\Views\" targetDirectory="~\Views\" allowOverwrite="true" deleteTargetDirectory="false" />
+        <Directory allowOverwrite="false" deleteTargetDirectory="false" targetDirectory="~\Composite\InstalledPackages\Orckestra.Composer.Product\" sourceDirectory="~\Composite\InstalledPackages\Orckestra.Composer.Product\"/>
       </Directories>
     </mi:Add>
     <mi:Add installerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentInstaller, Composite" uninstallerType="Composite.Core.PackageSystem.PackageFragmentInstallers.DataPackageFragmentUninstaller, Composite">

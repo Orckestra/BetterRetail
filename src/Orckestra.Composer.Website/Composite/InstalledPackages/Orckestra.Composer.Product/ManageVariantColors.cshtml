@@ -1,0 +1,337 @@
+@inherits WebPage
+@{
+
+}
+<html>
+
+<head>
+</head>
+
+<body>
+    <link href="/Composite/InstalledPackages/Orckestra.Tools.C1CMSConsoleCss/index.css?v=1.0.1" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apollo-client-browser@1.9.0/dist/apollo-client.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-apollo@3.1.0/dist/vue-apollo.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue-color@2.8.1/dist/vue-color.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue-select@3.0.0"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-select@3.0.0/dist/vue-select.css">
+    <script src="/Composite/InstalledPackages/Orckestra.Composer.Product/fontAwesome.js"></script>
+
+
+    <!-- App -->
+    <div id="app">
+        <div class="flex justify-between m-3">
+            <div class="relative">
+                <input type="search" placeholder="Filter colors" class="color-filter w-80" v-model="filterKeyword" />
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+            <div class="flex-none">
+                <button type="submit" class="btn-primary w-24" :disabled="!HasModifications"
+                        v-on:click="saveColorConfig">
+                    Save
+                </button>
+            </div>
+        </div>
+        <div>
+            <div class="accordion-item bg-white border-t border-gray-400">
+                <table class="table-default outborder-0 w-full border-t border-gray-300">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4">Lookup Value</th>
+                            <th class="w-1/4">Color</th>
+                            <th class="w-1/4">Image</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody tag="tbody" v-model="variantColors">
+                        <tr v-for="(variant, index) in variantColors" :key="index">
+
+                            <td class="py-4">
+                                <input v-model="variant.lookupValue" disabled :name="'lookupValue' + index" type="text"
+                                       class="mt-1 block w-full">
+                            </td>
+                            <td>
+                                <div class="flex input-group color-picker">
+                                    <input type="text" class="form-control" :value="getValue(variant, 'color')"
+                                           v-on:focus="showPicker(variant.lookupValue)"
+                                           v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
+
+                                    <span class="input-group-addon color-picker-container" v-on:focusout="hidePicker"
+                                          tabindex="0">
+                                        <span class="current-color"
+                                              :style="`background-color:${getSelectedColor(variant)}`"
+                                              v-on:click="togglePicker(variant.lookupValue)"></span>
+                                        <chrome-picker :value="getSelectedColor(variant)"
+                                                       v-on:input="updateColorFromPicker($event, variant.lookupValue)"
+                                                       v-if="variant.lookupValue === openedPicker" />
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <v-select :options="colorImages" :value="getValue(variant, 'image')"
+                                          v-on:input="updateItem($event, variant.lookupValue, 'image')"></v-select>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex justify-center items-end m-4" v-if="counter !== totalCount">
+                <p class="font-roboto mr-5">Showed {{this.counter}} of {{this.totalCount}} colors</p>
+                <button type="button" class="btn-secondary w-32 mr-4" v-on:click="showMoreButtonOnClick">
+                    <i class="fa-solid fa-rotate-right pr-1"></i>
+                    Show more
+                </button>
+                <button type="button" class="btn-secondary w-24" v-on:click="showAllButtonOnClick">
+                    Show all
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        const omitTypeName = ({ __typename, ...i }) => i;
+
+        const apolloClient = new Apollo.lib.ApolloClient({
+            networkInterface: Apollo.lib.createNetworkInterface({
+                uri: '/composite/api/variantcolorgraphql/query',
+                transportBatching: true,
+            }),
+            connectToDevTools: true
+        })
+
+        const apolloProvider = new window["vue-apollo"].ApolloProvider({
+            defaultClient: apolloClient,
+        })
+
+        const VARIANT_COLOR_QUERY = Apollo.gql`
+                                query{
+                                  colorValues {
+                                    lookupValue,
+                                    color,
+                                    image
+                                  }
+                                }`
+
+        const VARIANT_COLOR_IMAGES_QUERY = Apollo.gql`
+                                 query{
+                                   colorImages
+                                 }`
+
+        const VARIANT_COLOR_MUTATION = Apollo.gql`
+                                 mutation($variantColorConfigurationItems: [variantColorConfigurationInput]){
+                                    updateVariantColors(variantColorConfigurationItems: $variantColorConfigurationItems)
+                                 }`
+
+        const MAX_ITEM_DISPLAYED = 20;
+
+        const app = new Vue({
+            el: '#app',
+            components: {
+                'v-select': VueSelect.VueSelect,
+                'chrome-picker': VueColor.Chrome
+            },
+            data: {
+                variantColorsImmutable: [],
+                filteredVariantColorsImmutable: [],
+                variantColors: [],
+                variantColorsModifications: {},
+                colorImages: [],
+                loading: 0,
+                isLoadModification: false,
+
+                filterKeyword: "",
+                openedPicker: "",
+                counter: 0,
+                totalCount: 0
+            },
+            watch: {
+                filterKeyword: {
+                    handler: function (data) {
+                        this.filteredVariantColorsImmutable = this.filter(data);
+                        this.variantColors = [...this.filteredVariantColorsImmutable];
+                        this.totalCount = this.filteredVariantColorsImmutable.length;
+                        this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
+                        this.loadMore();
+                    }
+                }
+            },
+            apolloProvider,
+            apollo: {
+                colorValues: {
+                    query: VARIANT_COLOR_QUERY,
+                    loadingKey: 'loading',
+
+                    result({ data }) {
+                        this.variantColorsImmutable = _.orderBy(data.colorValues.map(omitTypeName), "lookupValue");
+                        this.variantColors = [...this.variantColorsImmutable];
+                        if (!_.isEmpty(this.filterKeyword)) this.filteredVariantColorsImmutable = this.filter(this.filterKeyword);
+                        this.totalCount = this.variantColors.length;
+                        this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
+                        this.loadMore();
+                        this.isLoadModification = true;
+                    }
+                },
+                colorImages: {
+                    query: VARIANT_COLOR_IMAGES_QUERY,
+                    loadingKey: 'loading',
+
+                    result({ data }) {
+                        this.colorImages = _.orderBy(data.colorImages);
+                    }
+                }
+            },
+            computed: {
+                HasModifications() {
+                    return !_.isEmpty(this.variantColorsModifications)
+                }
+            },
+
+            methods: {
+                filter(filter) {
+                    return this.variantColorsImmutable.filter(item => item.lookupValue.includes(filter))
+                },
+                getValue(variant, fieldName) {
+                    return this.variantColorsModifications[variant.lookupValue] ? this.variantColorsModifications[variant.lookupValue][fieldName] : variant[fieldName]
+                },
+                getSelectedColor(variant) {
+                    let color = this.getValue(variant, "color");
+
+                    var ctx = document.createElement("canvas").getContext("2d");
+                    ctx.fillStyle = color ?? variant.lookupValue;
+
+                    let selectedColor = ctx.fillStyle === "#000000" && !color && variant.lookupValue !== "black" ? 'rgba(0, 0, 0, 0)' : ctx.fillStyle;
+                    return selectedColor;
+                },
+                showPicker(variant) {
+                    this.openedPicker = variant;
+                },
+                hidePicker() {
+                    this.openedPicker = "";
+                },
+                togglePicker(variant) {
+                    this.openedPicker === variant ? this.hidePicker() : this.showPicker(variant);
+                },
+                updateColorFromPicker($event, variantName) {
+                    let newColor = $event.rgba.a == 1 || $event.rgba.a == 0 ? $event.hex :
+                        `rgba(${$event.rgba.r}, ${$event.rgba.g}, ${$event.rgba.b}, ${$event.rgba.a})`;
+                    this.updateItem(newColor, variantName, "color");
+                },
+                updateItem(newValue, variantName, modifiedField) {
+                    let immutableValue = this.variantColorsImmutable.find(color => color.lookupValue === variantName);
+                    if (_.isEmpty(this.variantColorsModifications[variantName])) {
+                        this.variantColorsModifications[variantName] = { ...immutableValue };
+                    }
+
+                    this.variantColorsModifications[variantName][modifiedField] = _.isEmpty(newValue) && _.isEmpty(immutableValue[modifiedField]) ? null : newValue;
+
+                    if (_.isEqual(this.variantColorsModifications[variantName], immutableValue)) {
+                        delete this.variantColorsModifications[variantName]
+                    }
+
+                    this.variantColorsModifications = { ...this.variantColorsModifications };
+                },
+                saveColorConfig() {
+                    this.$apollo.mutate({
+                        mutation: VARIANT_COLOR_MUTATION,
+                        variables: {
+                            variantColorConfigurationItems: Object.values(this.variantColorsModifications)
+                        },
+
+                    }).then((data) => {
+                        this.variantColorsModifications = {};
+                        return this.$apollo.queries.colorValues.refetch();
+                    }).catch((error) => {
+                        console.error(error)
+                    })
+                },
+                showMoreButtonOnClick() {
+                    let newCounter = this.counter + MAX_ITEM_DISPLAYED;
+                    this.counter = newCounter <= this.totalCount ? newCounter : this.totalCount;
+                    this.loadMore();
+                },
+                showAllButtonOnClick() {
+                    this.counter = this.totalCount;
+                    this.loadMore();
+                },
+                loadMore() {
+                    let immutableList = _.isEmpty(this.filterKeyword) ? this.variantColorsImmutable : this.filteredVariantColorsImmutable;
+                    this.variantColors = immutableList.slice(0, this.counter);
+                }
+            }
+
+        })
+    </script>
+
+    <style>
+        .current-color {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #000;
+            cursor: pointer;
+        }
+
+        .vc-chrome {
+            position: absolute;
+            z-index: 9;
+            margin-top: 10px;
+        }
+
+        .form-control {
+            flex: 1;
+        }
+
+        .input-group-addon {
+            padding: 4px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1;
+            color: #555;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+            .input-group-addon:last-child {
+                border-left: 0;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+
+        .input-group .form-control:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        input:disabled {
+            --tw-bg-opacity: 1;
+            background-color: rgba(245, 245, 245, var(--tw-bg-opacity));
+        }
+
+        .color-filter {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            padding-right: 2rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            border-radius: 0.25rem;
+            --tw-border-opacity: 1;
+            border-color: rgba(212, 212, 212, 1);
+        }
+
+        .search-icon {
+            top: 7;
+            position: absolute;
+            right: 10;
+        }
+    </style>
+
+</body>
+
+</html>
