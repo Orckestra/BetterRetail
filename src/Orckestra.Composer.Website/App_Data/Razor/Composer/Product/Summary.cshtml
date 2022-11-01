@@ -34,11 +34,15 @@
          data-context-var="productDetailContext"
          class="product-details">
         <div class="row">
-            <div class="col-lg-6  col-md-6">
-                @ProductHelpers.AddToWishList()
-                @Partial("Product", "Images", Model)
+            <div class="col-md-7 col-lg-8 mobile-carousel-container">
+                @Partial("Product", "ImagesLargeGallery", Model)
             </div>
-            <div class="col-md-6">
+            <div class="mobile-carousel-thumbnails d-md-none">
+                @Partial("Product", "ThumbsGallery", Model)
+            </div>
+            <div class="col-md-5 col-lg-4">
+                
+                @ProductHelpers.AddToWishList()
                 @BrandName()
 
                 @DisplayName()
@@ -58,13 +62,13 @@
                 <div class="mb-4">
                     @ProductHelpers.AddToCartWithQuantity(true)
                 </div>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-12">
+
                 @StoreInventoryLink()
+
+                @Function("Composer.Product.Specifications")
             </div>
         </div>
+        
     </div>
 
     @if (Model.IsProductZoomEnabled)
@@ -113,12 +117,14 @@
 
 @helper StoreInventoryLink()
 {
-    <div class="card">
-        <div class="card-body text-center">
-            <a href="#storeinventory">
-                <i class="fa  fa-file-text-o"></i>&#160;
-                @Html.Localize("Store", "H_StoreAvailability")
-            </a>
+    <div class="mb-4">
+        <div class="row">
+            <div class="col-12 col-lg-7">
+                <a class="btn btn-outline-default btn-block mb-4 relative" href="#storeinventory">
+                    <i class="fa  fa-store"></i>&#160;
+                    @Html.Localize("Store", "H_StoreAvailability")
+                </a>
+            </div>
         </div>
     </div>
 }

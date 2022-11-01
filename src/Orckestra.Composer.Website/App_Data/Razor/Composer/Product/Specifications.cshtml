@@ -23,13 +23,15 @@
 <head>
 </head>
 <body>
-    <div class="row">
-        <div class="col-lg-10  offset-lg-1">
-            <hr />
-            <h2>@Html.Localize("ProductPage", "L_ProductSpecifications")</h2>
+        <div class="accordion">
+            <div class="specifications" data-toggle="collapse" href="#specifications" role="button" aria-expanded="false" aria-controls="specifications" >
+                <h3>@Html.Localize("ProductPage", "L_ProductSpecifications")</h3>
+                <span class="fa fa-chevron-down"></span>
+                <span class="fa fa-chevron-up"></span>
+            </div>
+            
             @Attributes()
         </div>
-    </div>
 </body>
 </html>
 
@@ -61,16 +63,16 @@
 
 @helper AttributesTable(SpecificationsViewModel specifications)
 {
-    <table class="table table-striped">
+    <div class="specification-attributes collapse" id="specifications">
         @foreach (var group in specifications.Groups)
         {
             foreach (var attribute in group.Attributes)
             {
-                <tr>
-                    <th>@attribute.Title</th>
-                    <td>@attribute.Value</td>
-                </tr>
+                <div class="specification-attributes-row">
+                    <h6>@attribute.Title</h6>
+                    <div>@attribute.Value</div>
+                </div>
             }
         }
-    </table>
+    </div>
 }
