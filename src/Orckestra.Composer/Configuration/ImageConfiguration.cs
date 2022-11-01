@@ -8,6 +8,7 @@ namespace Orckestra.Composer.Configuration
 {
     public static class ImageConfiguration
     {
+        public static string ProductTileImageSize { get; set; } = "L";
         /// <summary>
         ///     Get/Set the ImageSize for dislaying thumbnails
         /// </summary>
