@@ -1,32 +1,33 @@
 <div data-templateid="StoreInventoryList">
-{{#if IsLoading}}
-    {{>Loading}}
-{{else}}
-    {{#if Stores}}
-        <div class="row">
-            {{#each Stores}}
-                <div class="col-md-6 col-lg-4">
-                    {{> StoreInventoryTile}}
-                </div>
-            {{/each}}
-        </div>
+    {{#if IsLoading}}
+        {{>Loading}}
     {{else}}
-        <p class="lead  text-center">{{localize 'Store' 'L_InventoryUnavailable'}}</p>
-    {{/if}}
+        {{#if Stores}}
+            <div class="row">
+                {{#each Stores}}
+                    <div class="mb-4 col-lg-4">
+                        {{> StoreInventoryTile}}
+                    </div>
+                {{/each}}
+            </div>
+        {{else}}
+            <p class="lead text-center">{{localize 'Store' 'L_InventoryUnavailable'}}</p>
+        {{/if}}
 
-    {{#if NextPage}}
-    {{#with NextPage}}
-       <div class="col-12 stores-list-paging">
-            <a data-qa="next-page"
-               data-page="{{Page}}"
-               data-oc-click="nextPage"
-               class="btn   btn-outline-secondary">
-               {{localize 'Store' 'B_ShowMore'}}
-               <span class="loading-indicator  fa  fa-spin  fa-fw  fa-circle-o-notch  d-none"></span>
-            </a>
-       </div>
-    {{/with}}
+        {{#if NextPage}}
+            {{#with NextPage}}
+                <div class="col-12 stores-list-paging">
+                    <a href="#"
+                       data-qa="next-page"
+                       data-page="{{Page}}"
+                       data-oc-click="nextPage"
+                       class="btn btn-outline-secondary"
+                       role="button">
+                        {{localize 'Store' 'B_ShowMore'}}
+                        <span class="loading-indicator fa fa-spin fa-fw fa-circle-o-notch d-none"></span>
+                    </a>
+                </div>
+            {{/with}}
+        {{/if}}
     {{/if}}
-{{/if}}
 </div>
-
