@@ -52,7 +52,7 @@ namespace Orckestra.Composer.Services
             var imageUrls = await GetMediaImageUrlsForProducts(products).ConfigureAwait(false);
             var getImageParam = new GetProductMainImagesParam
             {
-                ImageSize = ImageConfiguration.CartThumbnailImageSize,
+                ImageSize = ImageConfiguration.ProductTileImageSize,
                 ProductImageRequests = new List<ProductImageRequest>(products.Count),
             };
 
@@ -116,7 +116,7 @@ namespace Orckestra.Composer.Services
         {
             var imagesParam = new GetProductMainImagesParam
             {
-                ImageSize = ImageConfiguration.CartThumbnailImageSize,
+                ImageSize = ImageConfiguration.ProductTileImageSize,
                 ProductImageRequests = documents
                    .Select(document => new ProductImageRequest
                    {
