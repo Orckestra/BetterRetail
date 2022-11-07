@@ -17,29 +17,59 @@
     {
         return Model.Variants == null || Model.Variants.Count == 0;
     }
+
+    public bool HasSpecifications()
+    {
+        if (IsWithoutVariants())
+        {
+            return Model.Specifications.Groups != null || Model.Specifications.Groups.Count != 0;
+        }
+        else
+        {
+            return HasVariantSpecifications() || Model.Specifications.Groups != null || Model.Specifications.Groups.Count != 0;
+        }
+    }
+
+    public bool HasVariantSpecifications()
+    {
+        var variantsSpecs = Model.Variants.Where(v => v.Specifications != null);
+        var hasSpecs = false;
+        foreach (var spec in variantsSpecs)
+        {
+            hasSpecs = hasSpecs || spec.Specifications.Groups.Count != 0;
+        }
+        return hasSpecs;
+    }
+
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
+    @if (HasSpecifications())
+    {
         <div class="accordion">
-            <div class="specifications" data-toggle="collapse" href="#specifications" role="button" aria-expanded="false" aria-controls="specifications" >
+            <div class="specifications" data-toggle="collapse" href="#specifications" role="button" aria-expanded="false" aria-controls="specifications">
                 <h3>@Html.Localize("ProductPage", "L_ProductSpecifications")</h3>
                 <span class="fa fa-chevron-down"></span>
                 <span class="fa fa-chevron-up"></span>
             </div>
-            
+
             @Attributes()
         </div>
+    }
 </body>
 </html>
 
 @helper Attributes()
 {
+
     if (IsWithoutVariants())
     {
-        @AttributesTable(Model.Specifications)
+        <div class="specification-attributes collapse" id="specifications">
+            @AttributesTable(Model.Specifications)
+        </div>
     }
     else
     {
@@ -47,24 +77,45 @@
         foreach (var variant in variantsWithSpecs)
         {
             <div data-variant="@variant.Id" class="@SelectedVariantClass(variant.Id)">
-                @AttributesTable(variant.Specifications)
+                <div class="specification-attributes collapse" id="specifications">
+                    @AttributesTable(variant.Specifications)
+                </div>
             </div>
         }
 
         var inheritedVariantIds = Model.Variants.Where(v => v.Specifications == null).Select(v => v.Id).ToArray();
         if (inheritedVariantIds.Any())
         {
-            <div data-variant="@(String.Join(",", inheritedVariantIds))" class="@SelectedVariantClass(inheritedVariantIds)">
-                @AttributesTable(Model.Specifications)
-            </div>
+            foreach (var vid in inheritedVariantIds)
+            {
+                <div data-variant="@vid" class="@SelectedVariantClass(vid)">
+                    <div class="specification-attributes collapse" id="specifications">
+                        @AttributesTable(Model.Specifications)
+                        @KvaTable(Model.KeyVariantAttributeItems, vid)
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            var variantsNoSpecs = Model.Variants.Where(v => v.Specifications == null);
+            foreach (var variant in variantsNoSpecs)
+            {
+                <div data-variant="@variant.Id" class="@SelectedVariantClass(variant.Id)">
+                    <div class="specification-attributes collapse" id="specifications">
+                        @AttributesTable(Model.Specifications)
+                        @KvaTable(Model.KeyVariantAttributeItems, variant.Id)
+                    </div>
+                </div>
+            }
         }
     }
 }
 
 @helper AttributesTable(SpecificationsViewModel specifications)
 {
-    <div class="specification-attributes collapse" id="specifications">
-        @foreach (var group in specifications.Groups)
+    
+        foreach (var group in specifications.Groups)
         {
             foreach (var attribute in group.Attributes)
             {
@@ -74,5 +125,32 @@
                 </div>
             }
         }
-    </div>
+}
+
+@helper KvaTable(List<KeyVariantAttributeItem> kvaAttributes, string variantId)
+{
+    foreach (KeyVariantAttributeItem kva in kvaAttributes)
+    {
+        KeyVariantAttributeItemValue kvaValue = null;
+        var kvaValues = kva.Values;
+        foreach (KeyVariantAttributeItemValue kvaVal in kvaValues)
+        {
+            foreach (var vid in kvaVal.RelatedVariantIds)
+            {
+                if (vid == variantId)
+                {
+                    kvaValue = kvaVal;
+                }
+            }
+        }
+
+        if (kvaValue != null)
+        {
+            <div class="specification-attributes-row">
+                <h6>@kva.DisplayName</h6>
+                <div>@kvaValue.Title</div>
+            </div>
+        }
+
+}
 }
