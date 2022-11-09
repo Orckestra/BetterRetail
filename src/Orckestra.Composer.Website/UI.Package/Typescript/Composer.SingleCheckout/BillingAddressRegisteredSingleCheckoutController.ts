@@ -14,9 +14,21 @@ module Orckestra.Composer {
 
             let vueBillingAddressRegisteredMixin = {
                 data: {
+                    SelectedBillingAddressId: null,
                     deleteBillingAddressModal: null,
                 },
                 methods: {
+                    prepareBillingAddressRegistered() {
+                        if (self.checkoutService.isAddressBookIdEmpty(this.Cart.Payment.BillingAddress.AddressBookId)
+                        && !self.checkoutService.isAddressBookIdEmpty(this.SelectedBillingAddressId)) {
+                            this.Cart.Payment.BillingAddress.AddressBookId = this.SelectedBillingAddressId;
+                            return self.checkoutService.updateCart([self.viewModelName]);
+                        }
+                        if (this.IsPickUpMethodType) {
+                            this.Cart.Payment.BillingAddress.UseShippingAddress = false;
+                        }
+                        return Q.resolve(true);
+                    },
                     processBillingAddressRegistered():Q.Promise<boolean> {
                         if (!this.billingAddressModified()) {
                             return Q.resolve(true);

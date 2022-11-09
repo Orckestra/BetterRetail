@@ -4,7 +4,7 @@
 
 module Orckestra.Composer {
     'use strict';
-    export class ShippingAddressRegisteredService {
+    export class AddressRegisteredService {
 
         protected customerService: ICustomerService;
 
@@ -26,18 +26,27 @@ module Orckestra.Composer {
                 .then(addresses => {
                     addresses.AddressesLoaded = true;
                     addresses.SelectedShippingAddressId = this.getSelectedShippingAddressId(cart, addresses);
-
+                    addresses.SelectedBillingAddressId = this.getSelectedBillingAddressId(cart, addresses);
                     return addresses;
                 });
         }
 
-        public getSelectedShippingAddressId(cart: any, addressList: any) {
+        public getSelectedShippingAddressId(cart: any, addressList: any) : string {
 
             if (this.isShippingAddressFromCartValid(cart, addressList)) {
                 return cart.ShippingAddress.AddressBookId;
             }
 
             return this.getPreferredShippingAddressId(addressList);
+        }
+
+        public getSelectedBillingAddressId(cart: any, addressList: any) : string {
+
+            if (this.isBillingAddressFromCartValid(cart, addressList)) {
+                return cart.Payment.BillingAddress.AddressBookId;
+            }
+
+            return this.getPreferredBilliingAddressId(addressList);
         }
 
         private isShippingAddressFromCartValid(cart: any, addressList: any) : boolean {
@@ -49,11 +58,27 @@ module Orckestra.Composer {
             return _.some(addressList.Addresses, (address: AddressDto) => address.Id === cart.ShippingAddress.AddressBookId);
         }
 
-        private getPreferredShippingAddressId(addressList: any) {
+        private isBillingAddressFromCartValid(cart: any, addressList: any) : boolean {
+
+            if (cart.Payment.BillingAddress === undefined) {
+                return false;
+            }
+
+            return _.some(addressList.Addresses, (address: AddressDto) => address.Id === cart.Payment.BillingAddress.AddressBookId);
+        }
+
+        private getPreferredShippingAddressId(addressList: any) : string {
 
             var preferredShippingAddress = _.find(addressList.Addresses, (address: AddressDto) => address.IsPreferredShipping);
 
             return preferredShippingAddress ? preferredShippingAddress.Id: undefined;
+        }
+
+        private getPreferredBilliingAddressId(addressList: any): string {
+
+            var preferredAddress = _.find(addressList.Addresses, (address: AddressDto) => address.IsPreferredBilling);
+
+            return preferredAddress ? preferredAddress.Id : undefined;
         }
     }
 }

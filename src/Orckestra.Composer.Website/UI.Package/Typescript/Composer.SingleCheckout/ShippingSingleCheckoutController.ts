@@ -1,7 +1,6 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
 ///<reference path='./BaseSingleCheckoutController.ts' />
 ///<reference path='../Composer.MyAccount/Common/CustomerService.ts' />
-///<reference path='./Services/ShippingAddressRegisteredService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -56,7 +55,7 @@ module Orckestra.Composer {
 
                         this.ShippingMethodTypes.forEach(methodType => {
                             if (this.IsPickUpMethodType && methodType.FulfillmentMethodTypeString === FulfillmentMethodTypes.Shipping) {
-                                methodType.OldAddress = this.clearShippingAddress();
+                                methodType.OldAddress = this.getClearShippingAddress();
                             } else {
                                 methodType.OldAddress = this.Cart.ShippingAddress;
                             }
@@ -133,11 +132,17 @@ module Orckestra.Composer {
 
                         if (methodEntity.ShippingProviderId === oldShippingMethod.ShippingProviderId) { return; }
 
-                        this.Cart.ShippingAddress = this.getClearShippingAddress();
-                        return self.checkoutService.updateCart([self.viewModelName])
+                        this.Cart.ShippingAddress = this.SelectedMethodType.OldAddress ? this.SelectedMethodType.OldAddress : this.getClearShippingAddress();
+                        let isAddressValid = !!(this.Cart.ShippingAddress.PostalCode) || this.SelectedShippingAddressId;
+                        let controllersToUpdate = [self.viewModelName];
+                        if(isAddressValid) { 
+                            controllersToUpdate.push(this.IsAuthenticated ? 'ShippingAddressRegistered' : 'ShippingAddress')
+                        };
+                        let needUpdateBilling = this.Cart.Payment.BillingAddress.UseShippingAddress;
+                        if (needUpdateBilling && isAddressValid) { controllersToUpdate.push(this.IsAuthenticated ? 'BillingAddressRegistered' : 'BillingAddress') }
+                        return self.checkoutService.updateCart(controllersToUpdate)
                             .then(() => {
-                                this.Cart.ShippingAddress = this.SelectedMethodType.OldAddress;
-                                this.Cart.PickUpLocationId = oldPickUpLocationId;
+                               this.Cart.PickUpLocationId = oldPickUpLocationId;
                             }).catch(() => {
                                 this.Cart.ShippingMethod = oldShippingMethod;
                             });

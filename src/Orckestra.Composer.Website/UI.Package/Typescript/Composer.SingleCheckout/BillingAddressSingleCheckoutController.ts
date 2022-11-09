@@ -27,19 +27,12 @@ module Orckestra.Composer {
                 },
 
                 methods: {
+                    prepareBilling() {
+                        return this.IsAuthenticated ? this.prepareBillingAddressRegistered() : this.prepareBillingAddress();
+                    },
                     prepareBillingAddress(): Q.Promise<boolean> {
-                        if (!this.BillingAddress.FirstName && !this.BillingAddress.LastName) {
-                            this.BillingAddress.FirstName = this.Customer.FirstName;
-                            this.BillingAddress.LastName = this.Customer.LastName;
-                        }
-
-                        let billingAddressParams = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
-
-                        billingAddressParams.forEach(param => {
-                            if (this.BillingAddress[param] === null) {
-                                this.BillingAddress[param] = '';
-                            }
-                        });
+                        this.fillAddressNames(this.Cart.Payment.BillingAddress);
+                        this.fixAddressNullValues(this.Cart.Payment.BillingAddress);
 
                         if (this.IsPickUpMethodType) {
                             this.Cart.Payment.BillingAddress.UseShippingAddress = false;

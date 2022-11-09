@@ -24,9 +24,10 @@ module Orckestra.Composer {
                             return Q.resolve(true);
                         }
 
-                        //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                        let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
-                        this.prepareBillingAddress();
+                        //WHEN CHANGING SHIPPING ADDRESS, WE ALSO NEED UPDATE BILLING IF UseShippingAddress = TRUE
+                        let needUpdateBilling = this.Cart.Payment.BillingAddress.UseShippingAddress;
+                        let controllersToUpdate = needUpdateBilling ? [self.viewModelName, 'BillingAddressRegistered'] : [self.viewModelName];
+                        if(needUpdateBilling) { this.fixAddressNullValues(this.Cart.Payment.BillingAddress); }
                         return self.checkoutService.updateCart(controllersToUpdate)
                             .then(() => true);
                     },
