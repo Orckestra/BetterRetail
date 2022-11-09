@@ -32,13 +32,7 @@
 
     public bool HasVariantSpecifications()
     {
-        var variantsSpecs = Model.Variants.Where(v => v.Specifications != null);
-        var hasSpecs = false;
-        foreach (var spec in variantsSpecs)
-        {
-            hasSpecs = hasSpecs || spec.Specifications.Groups.Count != 0;
-        }
-        return hasSpecs;
+        return Model.Variants.Where(v => v.Specifications != null && v.Specifications.Groups != null && v.Specifications.Groups.Count != 0).Any();
     }
 
 }
