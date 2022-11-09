@@ -47,13 +47,11 @@ module Orckestra.Composer {
                             if (!success) return false;
 
                             //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
-                            let controllersToUpdate = [self.viewModelName, 'BillingAddress'];
-                            return this.prepareBillingAddress()
-                                .then(() => self.checkoutService.updateCart(controllersToUpdate))
-                                .then(() => {
-                                    self.eventHub.publish('cartBillingAddressUpdated', { data: this });
-                                    return true;
-                                })
+                            let needUpdateBilling = this.Cart.Payment.BillingAddress.UseShippingAddress;
+                            let controllersToUpdate = needUpdateBilling ? [self.viewModelName, 'BillingAddress'] : [self.viewModelName];
+                            if(needUpdateBilling) this.fixAddressNullValues(this.Cart.Payment.BillingAddress);
+
+                            return self.checkoutService.updateCart(controllersToUpdate)
                                 .fail(reason => {
                                     console.log(reason);
                                     return false;

@@ -19,7 +19,7 @@
 ///<reference path='../VueComponents/TransitionCollapseVueComponent.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MyAccountStatus.ts' />
-///<reference path='../Services/ShippingAddressRegisteredService.ts' />
+///<reference path='./AddressRegisteredService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 ///<reference path='../../Services/UserMetadataService.ts' />
 
@@ -66,8 +66,8 @@ module Orckestra.Composer {
         protected membershipService: IMembershipService;
         protected customerService: ICustomerService = new CustomerService(new CustomerRepository());
         protected userMetadataService: UserMetadataService = UserMetadataService.getInstance();
-        protected shippingAddressRegisteredService: ShippingAddressRegisteredService =
-            new ShippingAddressRegisteredService(this.customerService);
+        protected addressRegisteredService: AddressRegisteredService =
+            new AddressRegisteredService(this.customerService);
         protected regionService: IRegionService;
         protected shippingMethodService: ShippingMethodService;
         protected paymentService: IPaymentService;
@@ -295,6 +295,21 @@ module Orckestra.Composer {
                             }
                         });
                     },
+                    fixAddressNullValues(address) {
+                        let billingAddressParamsToFix = ['FirstName', 'LastName', 'Line1', 'City', 'RegionCode', 'PostalCode', 'PhoneNumber'];
+
+                        billingAddressParamsToFix.forEach(param => {
+                            if (address[param] === null) {
+                                address[param] = '';
+                            }
+                        });
+                    },
+                    fillAddressNames(address) {
+                        if (!address.FirstName && !address.LastName) {
+                            address.FirstName = this.Customer.FirstName;
+                            address.LastName = this.Customer.LastName;
+                        }
+                    },
                 }
             });
 
@@ -373,7 +388,7 @@ module Orckestra.Composer {
             }
         }
 
-        private isAddressBookIdEmpty(bookId) {
+        public isAddressBookIdEmpty(bookId) {
             return bookId === '00000000-0000-0000-0000-000000000000' || !bookId;
         }
 
@@ -696,10 +711,11 @@ module Orckestra.Composer {
 
         public loadUserAddresses(): Q.Promise<any> {
             let vue: any = this.VueCheckout;
-            return this.shippingAddressRegisteredService.getShippingAddresses(vue.Cart)
+            return this.addressRegisteredService.getShippingAddresses(vue.Cart)
                 .then(data => {
                     vue.RegisteredAddresses = data.Addresses;
                     vue.SelectedShippingAddressId = data.SelectedShippingAddressId;
+                    vue.SelectedBillingAddressId = data.SelectedBillingAddressId;
                     if (this.isAddressBookIdEmpty(vue.Cart.ShippingAddress.AddressBookId)) {
                         vue.Cart.ShippingAddress.AddressBookId = data.SelectedShippingAddressId;
                     }

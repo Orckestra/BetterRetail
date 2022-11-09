@@ -62,5 +62,7 @@ module Orckestra.Composer {
         checkUserExist(username: string): Q.Promise<boolean>;
 
         loadUserAddresses(): Q.Promise<any>;
+
+        isAddressBookIdEmpty(id): boolean;
     }
 }
