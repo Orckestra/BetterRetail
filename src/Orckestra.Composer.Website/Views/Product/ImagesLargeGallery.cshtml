@@ -39,16 +39,16 @@
     </script>
 </head>
 <body>
-    <div class="row mobile-carousel">
+    <div class="row @(Model.Images.Count > 1 ? "mobile-carousel" : "")">
         
         <!-- Main image -->
        
         @if (Model.Variants == null || Model.Variants.Count == 0)
         {
-            
+            var ColumnClasses = (Model.Images.Count == 1) ? "col-12 col-lg-12 text-center" : "col-9 col-lg-6";
             foreach (var image in Model.Images)
             {
-                <div class="col-9 @GetFirstClass() col-lg-6" id="img-@CurIndex">
+                <div class="@ColumnClasses @GetFirstClass()" id="img-@CurIndex">
                 @RenderImg(image, false )
                 
                 </div>
@@ -60,10 +60,10 @@
         {
             foreach (var variant in Model.Variants)
             {
-                
+                var ColumnClasses = (Model.Images.Count == 1) ? "col-12 col-lg-12 text-center" : "col-9 col-lg-6";
                 foreach (var image in variant.Images)
                 {
-                    <div data-variant="@variant.Id" class="col-9 @GetFirstClass() col-lg-6 @SelectedVariantClass(variant.Id)" id="img-@variant.Id-@CurIndex">
+                    <div data-variant="@variant.Id" class="@ColumnClasses @GetFirstClass() @SelectedVariantClass(variant.Id)" id="img-@variant.Id-@CurIndex">
                     @RenderImg(image, variant.Id != Model.SelectedVariantId)
                     </div>
                 

@@ -34,7 +34,7 @@
          data-context-var="productDetailContext"
          class="product-details">
         <div class="row">
-            <div class="col-md-7 col-lg-8 mobile-carousel-container">
+            <div class="col-md-7 col-lg-8 @(Model.Images.Count > 1 ? "mobile-carousel-container" : "")">
                 @Partial("Product", "ImagesLargeGallery", Model)
             </div>
             <div class="mobile-carousel-thumbnails d-md-none">
@@ -92,7 +92,7 @@
         foreach (var group in displayNames)
         {
             var ids = group.Select(v => v.Id).ToArray();
-            <h1 data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</h1>
+            <span data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids) h1">@group.Key</span>
         }
         <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
     }
