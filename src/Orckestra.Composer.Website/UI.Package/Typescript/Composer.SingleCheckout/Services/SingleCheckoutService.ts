@@ -277,12 +277,13 @@ module Orckestra.Composer {
 
                         return SingleCheckoutService.instance.deleteAddress(addressId);
                     },
-                    editAddress(address) {
+                    editAddress(address, formId) {
                         this.Mode.EditingAddress = true;
                         this.Mode.AddingNewAddress = false;
                         this.EditingAddress = address;
                         this.AddressName = address.AddressName;
-                        this.initializeParsey('#editAddressForm');
+                        this.initializeParsey('#' + formId);
+                        setTimeout(() => Utils.scrollToElement($('#' + formId)), 500);
                     },
                     handleAddressErrors(reason) {
                         if (!reason.Errors) { return; }

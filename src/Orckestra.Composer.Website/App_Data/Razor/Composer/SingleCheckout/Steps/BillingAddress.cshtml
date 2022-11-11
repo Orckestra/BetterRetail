@@ -33,7 +33,7 @@
                              v-bind:key="address.Id"
                              class="border rounded p-3 mb-2 bg-white"
                              v-bind:class="{ 'bg-selected border-primary': address.Id == BillingAddress.AddressBookId }">
-                            @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress", "deleteBillingAddressConfirm")
+                            @CheckoutHelpers.AddressRadioOption("BillingAddressId", "BillingAddress.AddressBookId", "changeRegisteredBillingAddress", "deleteBillingAddressConfirm", "editAddress", "editBillingAddressForm")
                         </div>
                         <div v-show="Mode.AddingNewAddress" class="border-top mt-4 pt-4">
                             @Forms.Address.Form("Cart.Payment.BillingAddress", "addNewBillingAddressForm", true, null)
@@ -46,7 +46,7 @@
                             </button>
                         </div>
                         <div v-show="Mode.EditingAddress" class="border-top mt-4 pt-4">
-                            @Forms.Address.Form("EditingAddress", "editAddressForm", true)
+                            @Forms.Address.Form("EditingAddress", "editBillingAddressForm", true)
                             <button class="btn btn-outline-secondary mt-1"
                                     v-on:click="Mode.EditingAddress = false"
                                     v-bind:disabled="Mode.Loading"
