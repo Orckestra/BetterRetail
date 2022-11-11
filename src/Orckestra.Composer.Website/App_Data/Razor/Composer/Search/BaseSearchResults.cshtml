@@ -52,6 +52,7 @@
 </head>
 <body>
     <div data-oc-controller="Product.SearchResults"
+         data-facets-visible=""
          data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
          data-vueid="@vueId"
          id="@vueId"
@@ -74,7 +75,7 @@
         }
         <template v-if="TotalCount > 0">
             <div class="row">
-                <div v-for="(Product, index) in SearchResultsData" class="col-12 col-sm-6  col-md-@colNum  col-xl-@colNum" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
+                <div v-for="(Product, index) in SearchResultsData" class="col-12 col-sm-6  col-md-@colNum  col-xl-@colNum search-container" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
                     @Function("Composer.Search.Products.ProductTileVue")
                 </div>
             </div>

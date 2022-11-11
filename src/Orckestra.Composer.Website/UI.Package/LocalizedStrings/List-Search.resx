@@ -132,6 +132,12 @@
   <data name="B_Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="B_FiltersShow" xml:space="preserve">
+    <value>Show Filters</value>
+  </data>
+  <data name="B_FiltersHide" xml:space="preserve">
+    <value>Hide Filters</value>
+  </data>
   <data name="B_MobileRefiners" xml:space="preserve">
     <value>Refine</value>
   </data>

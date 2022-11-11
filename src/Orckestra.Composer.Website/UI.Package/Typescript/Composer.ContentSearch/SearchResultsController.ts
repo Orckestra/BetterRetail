@@ -20,6 +20,7 @@ module Orckestra.Composer {
             const AvailableSortBys = this.context.container.data('available-sort');
             const itemsCount = this.context.container.data('items-count');
             const currentSite = this.context.container.data('current-site') === 'True';
+            let FacetsVisible = this.context.container.data('facets-visible') || "True";
 
             this.sendContentSearchResultsForAnalytics(Total);
 
@@ -33,6 +34,7 @@ module Orckestra.Composer {
                     TotalCount: Total,
                     SelectedSortBy,
                     AvailableSortBys,
+                    FacetsVisible: FacetsVisible,
                     Pagination: {
                         PagesCount: 1,
                         CurrentPage: 1,
@@ -44,10 +46,50 @@ module Orckestra.Composer {
                 mounted() {
                     this.Pagination = this.getPagination(PagesCount)
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, this.onSearchResultsLoaded);
+                    
+                    if (FacetsVisible == "") {
+                        this.context.container.data('facets-visible', "True");
+                        self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True')
+                        FacetsVisible = "True";
+                        this.vueSearchResults.data.FacetsVisible = "True";
+                    }
                 },
                 computed: {
                 },
+                updated: function () {
+                    this.updateProductColumns();
+                },
                 methods: {
+                    toggleFacet(): void {
+                        let rightCol = document.getElementById("rightCol");
+                        if (FacetsVisible == "True") {
+                            FacetsVisible = "False";
+                            self.vueSearchResults.$el.setAttribute('data-facets-visible', 'False');
+                            document.getElementById("leftCol").classList.add("w-0");
+                            rightCol.classList.remove("col-lg-9");
+                            
+                        }
+                        else {
+                            FacetsVisible = "True";
+                            self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True');
+                            document.getElementById("leftCol").classList.remove("w-0");
+                            rightCol.classList.add("col-lg-9");
+                        }
+                        self.vueSearchResults.$data.FacetsVisible = FacetsVisible;
+                    },
+                    updateProductColumns(){
+                        let searchContainer = document.getElementsByClassName("search-container");
+                        if (FacetsVisible == "True") {
+                            for (let i=0; i < searchContainer.length; i++) {
+                                searchContainer[i].classList.replace("col-sm-3", "col-sm-4");
+                            }
+                        }
+                        else {
+                            for (let i=0; i < searchContainer.length; i++) {
+                                searchContainer[i].classList.replace("col-sm-4", "col-sm-3");
+                            }
+                        }
+                    },
                     getPagination(count): any {
                         const currentPage = SearchParams.currentPage();
                         return ({

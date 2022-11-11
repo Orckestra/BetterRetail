@@ -10,3 +10,19 @@
     z-index: 1042;
   }
 }
+
+#leftCol {
+  transition: .4s ease-in-out, opacity .1s;
+}
+
+.search-container, #rightCol {
+  transition: .4s ease-in-out;
+}
+
+#vueSearchFacets * {
+  white-space: nowrap;
+}
+
+.search-tabs {
+  border-bottom:  $nav-tabs-border-width solid $nav-tabs-border-color;
+}

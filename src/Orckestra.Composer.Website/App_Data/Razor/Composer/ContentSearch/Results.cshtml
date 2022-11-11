@@ -36,6 +36,7 @@
          data-selected-sort="@JsonConvert.SerializeObject(SelectedSortBy, new Newtonsoft.Json.Converters.StringEnumConverter())"
          data-items-count="@(Tab.SearchResults.Count)"
          data-current-site="@(CurrentSite)"
+         data-facets-visible=""
          data-vueid="@vueId"
          id="@vueId"
          v-cloak="true">
@@ -53,7 +54,7 @@
         </div>
 
         <div class="row">
-            <div v-for="(contentItem, index) in SearchResults" class="col-12 col-sm-4 mb-4">
+            <div v-for="(contentItem, index) in SearchResults" class="col-12 col-sm-4 mb-4 search-container">
                 @ContentSearchHelpers.ContentSearchEntry()
             </div>
         </div>

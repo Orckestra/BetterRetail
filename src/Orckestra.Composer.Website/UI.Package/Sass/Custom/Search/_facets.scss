@@ -51,7 +51,18 @@
 
 
 .facets-card {
-    
+    &.card {
+        border: none;
+        background: none;
+        .card-header,.card-body {
+            padding-left: 0;
+        }
+
+        .card-header:after {
+            left: 0;
+        }
+    }
+
     .card-header a {
         display: block;
         i { float: right; }

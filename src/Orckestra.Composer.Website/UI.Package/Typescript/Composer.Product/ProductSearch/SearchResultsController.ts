@@ -40,6 +40,8 @@ module Orckestra.Composer {
 
         protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
+            let FacetsVisible = this.context.container.data('facets-visible') || "True";
+
             this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
             const self = this;
             this.vueSearchResults = new Vue({
@@ -55,10 +57,17 @@ module Orckestra.Composer {
                     ProductsMap: {},
                     WishList: wishlist,
                     IsAuthenticated: authVm.IsAuthenticated,
-                    ActiveProductId: undefined
+                    ActiveProductId: undefined,
+                    FacetsVisible: FacetsVisible,
                 },
                 mounted() {
                     this.registerSubscriptions();
+                    if (FacetsVisible == "") {
+                        this.context.container.data('facets-visible', "True");
+                        self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True')
+                        FacetsVisible = "True";
+                        this.vueSearchResults.data.FacetsVisible = "True";
+                    }
                 },
                 computed: {
                     SearchResultsData() {
@@ -72,8 +81,43 @@ module Orckestra.Composer {
                      
                       return this.dataUpdatedTracker && results;
                     },
-                  },
+                },
+                updated: function () {
+                    this.updateProductColumns();
+                },  
                 methods: {
+                    toggleFacet(): void {
+                        let rightCol = document.getElementById("rightCol");
+                        if (FacetsVisible == "True") {
+                            FacetsVisible = "False";
+                            self.vueSearchResults.$el.setAttribute('data-facets-visible', 'False');
+                            document.getElementById("leftCol").classList.add("w-0");
+                            rightCol.classList.remove("col-lg-9");
+                            
+                        }
+                        else {
+                            FacetsVisible = "True";
+                            self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True');
+                            document.getElementById("leftCol").classList.remove("w-0");
+                            rightCol.classList.add("col-lg-9");
+                        }
+                        self.vueSearchResults.$data.FacetsVisible = FacetsVisible;
+                    },
+                    updateProductColumns(){
+                        let searchContainer = document.getElementsByClassName("search-container");
+                        if (FacetsVisible == "True") {
+                            for (let i=0; i < searchContainer.length; i++) {
+                                searchContainer[i].classList.replace("col-md-3", "col-md-4");
+                                searchContainer[i].classList.replace("col-xl-3", "col-xl-4");
+                            }
+                        }
+                        else {
+                            for (let i=0; i < searchContainer.length; i++) {
+                                searchContainer[i].classList.replace("col-md-4", "col-md-3");
+                                searchContainer[i].classList.replace("col-xl-4", "col-xl-3");
+                            }
+                        }
+                    },
                     getKeyVariantDisplayName(id, kvaName) {
                         const product = this.ProductsMap[id];
                         return ProductsHelper.getKeyVariantDisplayName(product, kvaName);

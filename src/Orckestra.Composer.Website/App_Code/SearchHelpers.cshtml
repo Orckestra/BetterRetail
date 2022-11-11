@@ -70,6 +70,13 @@
 @helper SortBy()
 {
     <div class="dropdown sort-by" v-if="SelectedSortBy">
+        <button class="btn btn-outline-default mr-1" type="button" data-qa="filter-visibility-toggle" v-on:click="toggleFacet()">
+            <span v-if="FacetsVisible == 'True'" class="fa fa-eye-slash"></span>
+            <span v-else="v-else" class="fa fa-eye"></span>
+            <span class="fa fa-filter"></span>
+            <span v-if="FacetsVisible == 'True'">@Html.Localize("List-Search", "B_FiltersHide")</span>
+            <span v-else="v-else">@Html.Localize("List-Search", "B_FiltersShow")</span>
+        </button>
         <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")&#160;</span>
         <button class="btn btn-outline-default dropdown-toggle" type="button" data-qa="search-sort-by-toggle"
                 data-toggle="dropdown" aria-expanded="true">
