@@ -110,6 +110,12 @@
 .search-results {
     .filters-row {
         height: 55px;
+        padding-top: 10px;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 136px;
+        z-index: 1000;
+        background-color: #fff;
     }
 
     .sort-by .btn {

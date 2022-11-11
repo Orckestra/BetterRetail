@@ -13,6 +13,16 @@
 
 #leftCol {
   transition: .4s ease-in-out, opacity .1s;
+  
+    position: sticky;
+    position: -webkit-sticky;
+    top: 136px;
+    max-height: calc(100vh - 419px);
+    overflow: hidden scroll;
+  
+  &.sps--blw {
+    max-height: calc(100vh - 136px);
+  }
 }
 
 .search-container, #rightCol {
@@ -25,4 +35,25 @@
 
 .search-tabs {
   border-bottom:  $nav-tabs-border-width solid $nav-tabs-border-color;
+}
+
+/* width */
+#leftCol::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+#leftCol::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+#leftCol::-webkit-scrollbar-thumb {
+  background: $gray-300;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+#leftCol::-webkit-scrollbar-thumb:hover {
+  background: #888;
 }
