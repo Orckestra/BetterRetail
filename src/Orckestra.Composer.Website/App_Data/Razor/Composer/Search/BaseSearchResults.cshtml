@@ -80,13 +80,16 @@
                 </div>
             </div>
         </template>
-
+        @* Commenting to evaluate the new sticky pagination bar before removal.
         @if (ShowPagination)
         {
-            <div class="row d-block pt-2" v-if="TotalCount > 0">
-                @SearchHelpers.Pagination()
+            <div class="row" v-if="TotalCount > 0">
+                <div class="col-12 d-block pt-2">
+                    @SearchHelpers.Pagination()
+                </div>
             </div>
         }
+        *@
     </div>
 </body>
 </html>

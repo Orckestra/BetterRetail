@@ -16,6 +16,7 @@
 /// <reference path='../Product/InventoryService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
+/// <reference path='./Services/ShowFacetsService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -28,6 +29,7 @@ module Orckestra.Composer {
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected currentPage: any;
         protected vueSearchResults: Vue;
+        protected showFacetsService: ShowFacetsService = ShowFacetsService.instance();
         protected searchRepository: ISearchRepository = new SearchRepository();
 
         public initialize() {
@@ -62,12 +64,20 @@ module Orckestra.Composer {
                 },
                 mounted() {
                     this.registerSubscriptions();
-                    if (FacetsVisible == "") {
-                        this.context.container.data('facets-visible', "True");
-                        self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True')
-                        FacetsVisible = "True";
-                        this.vueSearchResults.data.FacetsVisible = "True";
-                    }
+                    self.showFacetsService.getShowFacets().then(
+                        value => {
+                            if (value == "False") {
+                                FacetsVisible = "True";
+                                this.toggleFacet();  
+                           }
+                        }, 
+                        failed => {
+                            FacetsVisible = "True";
+                            this.vueSearchResults.data.FacetsVisible = "True";
+                            self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True');
+                            self.showFacetsService.setShowFacets("True");
+                        }
+                    );
                 },
                 computed: {
                     SearchResultsData() {
@@ -89,6 +99,7 @@ module Orckestra.Composer {
                     toggleFacet(): void {
                         let rightCol = document.getElementById("rightCol");
                         if (FacetsVisible == "True") {
+                            console.log("toggleFacet called, going to hide facets");
                             FacetsVisible = "False";
                             self.vueSearchResults.$el.setAttribute('data-facets-visible', 'False');
                             document.getElementById("leftCol").classList.add("w-0");
@@ -96,12 +107,14 @@ module Orckestra.Composer {
                             
                         }
                         else {
+                            console.log("toggleFacet called, going to show facets");
                             FacetsVisible = "True";
                             self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True');
                             document.getElementById("leftCol").classList.remove("w-0");
                             rightCol.classList.add("col-lg-9");
                         }
                         self.vueSearchResults.$data.FacetsVisible = FacetsVisible;
+                        self.showFacetsService.setShowFacets(FacetsVisible);
                     },
                     updateProductColumns(){
                         let searchContainer = document.getElementsByClassName("search-container");

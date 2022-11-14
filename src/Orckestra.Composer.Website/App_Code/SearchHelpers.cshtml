@@ -70,7 +70,7 @@
 @helper SortBy()
 {
     <div class="dropdown sort-by" v-if="SelectedSortBy">
-        <button class="btn btn-outline-default mr-1" type="button" data-qa="filter-visibility-toggle" v-on:click="toggleFacet()">
+        <button class="btn btn-outline-default mr-1 d-none d-lg-inline" type="button" data-qa="filter-visibility-toggle" v-on:click="toggleFacet()">
             <span v-if="FacetsVisible == 'True'" class="fa fa-eye-slash"></span>
             <span v-else="v-else" class="fa fa-eye"></span>
             <span class="fa fa-filter"></span>

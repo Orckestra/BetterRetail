@@ -45,6 +45,7 @@
         .card-header, .card-body {
             padding: 0.5rem;
             font-size: 85%;
+            
         }
     }
 }
@@ -55,7 +56,9 @@
         border: none;
         background: none;
         .card-header,.card-body {
-            padding-left: 0;
+            @include media-breakpoint-up(lg) {
+                padding-left: 0;
+            }
         }
 
         .card-header:after {
@@ -113,7 +116,10 @@
         padding-top: 10px;
         position: sticky;
         position: -webkit-sticky;
-        top: 136px;
+        top: 205px;
+        @include media-breakpoint-up(lg) {
+            top: 136px;
+          }
         z-index: 1000;
         background-color: #fff;
     }
