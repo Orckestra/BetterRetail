@@ -7,6 +7,17 @@
     }
 }
 
+.product-img-container {
+    a {
+        &:hover {
+            cursor: default;
+        }
+        > img:hover {
+            cursor: zoom-in;
+        }
+    }
+}
+
 .product-details-thumbnail {
     position: relative;
     height: 0;

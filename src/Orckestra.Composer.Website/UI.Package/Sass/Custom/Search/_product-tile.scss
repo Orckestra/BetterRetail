@@ -347,6 +347,9 @@
         margin: 2px 5px;
         background: #fff;
         position: relative;
+        &.active {
+            border: solid 1px $primary;
+        }
         &.disabled {
             opacity: 0.4;
         }
