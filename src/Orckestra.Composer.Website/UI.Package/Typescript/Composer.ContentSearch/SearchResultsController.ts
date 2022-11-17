@@ -1,7 +1,7 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 /// <reference path='../../Typings/vue/index.d.ts' />
-///<reference path='../Repositories/ISearchRepository.ts' />
-///<reference path='../Repositories/SearchRepository.ts' />
+/// <reference path='../Repositories/ISearchRepository.ts' />
+/// <reference path='../Repositories/SearchRepository.ts' />
 /// <reference path='../Utils/UrlHelper.ts' />
 /// <reference path='./SearchParams.ts' />
 /// <reference path='./Constants/ContentSearchEvents.ts' />
@@ -65,14 +65,14 @@ module Orckestra.Composer {
                         if (FacetsVisible == "True") {
                             FacetsVisible = "False";
                             self.vueSearchResults.$el.setAttribute('data-facets-visible', 'False');
-                            document.getElementById("leftCol").classList.add("w-0");
+                            document.getElementById("leftCol").classList.add("w-0-lg");
                             rightCol.classList.remove("col-lg-9");
                             
                         }
                         else {
                             FacetsVisible = "True";
                             self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True');
-                            document.getElementById("leftCol").classList.remove("w-0");
+                            document.getElementById("leftCol").classList.remove("w-0-lg");
                             rightCol.classList.add("col-lg-9");
                         }
                         self.vueSearchResults.$data.FacetsVisible = FacetsVisible;

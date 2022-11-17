@@ -153,4 +153,44 @@ html {
     padding-right: 0 !important;
     opacity: 0 !important;
     overflow: hidden !important;
+
+    @include media-breakpoint-up(sm) {
+       &-sm {
+        max-width: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        opacity: 0 !important;
+        overflow: hidden !important;
+        }
+    }
+    @include media-breakpoint-up(md) {
+        &-md {
+         max-width: 0 !important;
+         padding-left: 0 !important;
+         padding-right: 0 !important;
+         opacity: 0 !important;
+         overflow: hidden !important;
+         }
+        
+    }
+    @include media-breakpoint-up(lg) {
+        &-lg {
+         max-width: 0 !important;
+         padding-left: 0 !important;
+         padding-right: 0 !important;
+         opacity: 0 !important;
+         overflow: hidden !important;
+         }
+        
+    }
+    @include media-breakpoint-up(xl) {
+        &-xl {
+         max-width: 0 !important;
+         padding-left: 0 !important;
+         padding-right: 0 !important;
+         opacity: 0 !important;
+         overflow: hidden !important;
+         }
+
+    }
 }

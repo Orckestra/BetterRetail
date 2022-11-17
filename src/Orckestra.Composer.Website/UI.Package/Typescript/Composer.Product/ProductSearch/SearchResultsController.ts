@@ -99,18 +99,16 @@ module Orckestra.Composer {
                     toggleFacet(): void {
                         let rightCol = document.getElementById("rightCol");
                         if (FacetsVisible == "True") {
-                            console.log("toggleFacet called, going to hide facets");
                             FacetsVisible = "False";
                             self.vueSearchResults.$el.setAttribute('data-facets-visible', 'False');
-                            document.getElementById("leftCol").classList.add("w-0");
+                            document.getElementById("leftCol").classList.add("w-0-lg");
                             rightCol.classList.remove("col-lg-9");
                             
                         }
                         else {
-                            console.log("toggleFacet called, going to show facets");
                             FacetsVisible = "True";
                             self.vueSearchResults.$el.setAttribute('data-facets-visible', 'True');
-                            document.getElementById("leftCol").classList.remove("w-0");
+                            document.getElementById("leftCol").classList.remove("w-0-lg");
                             rightCol.classList.add("col-lg-9");
                         }
                         self.vueSearchResults.$data.FacetsVisible = FacetsVisible;
