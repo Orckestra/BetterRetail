@@ -22,6 +22,7 @@
   z-index: 1042;
   @include media-breakpoint-up(lg) {
     top: 136px;
+    z-index: unset;
   }
   
   
