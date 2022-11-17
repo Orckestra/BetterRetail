@@ -1,10 +1,10 @@
 <div data-templateid="KvaItems">
     {{#each KeyVariantAttributeItems}}
         {{#if Values}}
-            <div class="mb-3  btn-multiline" data-qa="product-variants" data-propertyname="{{PropertyName}}" data-propertydatatype="{{PropertyDataType}}">
+          <div class="mb-3" data-qa="product-variants" data-propertyname="{{PropertyName}}" data-propertydatatype="{{PropertyDataType}}">
 
             <h5 class="font-weight-bold">{{DisplayName}}</h5>
-
+            <div class="kva-list">
             {{#each Values}}
                 {{#if Disabled}}
                     {{#if Selected}}
@@ -53,6 +53,7 @@
                     {{/if}}
                 {{/if}}
             {{/each}}
+            </div>
         </div>
         {{/if}}
     {{/each}}
