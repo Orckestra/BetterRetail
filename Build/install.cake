@@ -216,7 +216,7 @@ Task("Create-ApplicationPool").Does(() =>
     CreatePool(new ApplicationPoolSettings()
     {
         Name = localSiteName,
-        IdentityType = IdentityType.LocalSystem
+        IdentityType = IdentityType.ApplicationPoolIdentity
     });
 });
 
@@ -243,19 +243,6 @@ Task("Create-Https-Binding").Does(() =>
     AddBinding(localSiteName, 
         IISBindings.Https
             .SetHostName(localSiteName)
-            .SetIpAddress("*")
-            .SetCertificateHash(certificate.GetCertHash())
-            .SetCertificateStoreName("My")
-    );
-    var computerName = "orckrefapp-ar1.orckestra.local";
-    AddBinding(localSiteName,
-        IISBindings.Http
-        .SetHostName(computerName)
-        .SetIpAddress("*")
-    );
-    AddBinding(localSiteName, 
-        IISBindings.Https
-            .SetHostName(computerName)
             .SetIpAddress("*")
             .SetCertificateHash(certificate.GetCertHash())
             .SetCertificateStoreName("My")
