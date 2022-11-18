@@ -41,7 +41,7 @@
       <package id="a47b070b-5102-4ef5-b8dd-186df2b8ada7" url="http://package.composite.net/Download.ashx?package=Orckestra.Tools.C1CMSConsoleCss&amp;c1version=$(version)"/>
       <package id="a7f946d8-aab6-445e-a26b-30203b3ea2f6" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/yaml-develop/Packages/Orckestra.ExperienceManagement.Api.zip"/>
       <package id="bf6787e3-8d2d-46e8-a9f3-c6b30ba790a0" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/yaml-develop/Packages/Orckestra.ExperienceManagement.WebComponentsV1.zip"/>
-      <package id="efdbb1a7-144c-47f5-91ca-183eafdd4206" url="http://experience-management-packages.c1preprod02.composite.net/Setup/branches/yaml-develop/Packages/Orckestra.Tools.ConditionalContent.zip"/>
+      <package id="efdbb1a7-144c-47f5-91ca-183eafdd4206" url="https://github.com/Orckestra/CMS-Packages-ConditionalContent/releases/latest/download/Orckestra.Tools.ConditionalContent.zip"/>
       <package id="5f59bf3f-4490-4490-9931-bde4472ad060" url="../../output/artifacts/Orckestra.Composer.CustomerConditionProvider.zip"/>
 
     </packages>
