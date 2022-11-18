@@ -41,7 +41,7 @@
                 @Partial("Product", "ThumbsGallery", Model)
             </div>
             <div class="col-md-5 col-lg-4">
-
+                
                 @ProductHelpers.AddToWishList()
                 @BrandName()
 
@@ -68,6 +68,7 @@
                 @Function("Composer.Product.Specifications")
             </div>
         </div>
+        
     </div>
 
     @if (Model.IsProductZoomEnabled)
