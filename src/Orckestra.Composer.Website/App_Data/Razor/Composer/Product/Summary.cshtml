@@ -52,7 +52,6 @@
                 @Sku()
 
                 @Partial("KvaItems", Model)
-                @* @KvaList() *@
 
                 @Html.LazyFunction("Composer.Product.RecurringFrequency")
 
@@ -68,114 +67,64 @@
 
                 @Function("Composer.Product.Specifications")
             </div>
-                </div>
-
-            </div>
-
-            @if (Model.IsProductZoomEnabled)
-            {
-                @Partial("Product", "Zoom", Model)
-            }
-
-        </body>
-        </html>
-
-        @helper DisplayName()
-        {
-            if (IsWithoutVariants())
-            {
-                <h1>@Model.DisplayName</h1>
-            }
-            else
-            {
-                var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
-
-                foreach (var group in displayNames)
-                {
-                    var ids = group.Select(v => v.Id).ToArray();
-                    <span data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids) h1">@group.Key</span>
-                }
-                <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
-            }
-        }
-
-        @helper Description()
-        {
-        <div class="mb-4" property="description">
-            @HttpUtility.HtmlDecode(Model.Description)
         </div>
-        }
 
-        @helper Sku()
-        {
-            <span class="d-none" property="sku">@Model.Sku</span>
-        }
+    </div>
 
-        @helper BrandName()
-        {
-            <h2 class="h5  mb-1" property="brand" data-qa="product-brand">@HttpUtility.HtmlDecode(Model.Brand)</h2>
-        }
+    @if (Model.IsProductZoomEnabled)
+    {
+        @Partial("Product", "Zoom", Model)
+    }
 
-        @helper StoreInventoryLink()
+</body>
+</html>
+
+@helper DisplayName()
+{
+    if (IsWithoutVariants())
+    {
+        <h1>@Model.DisplayName</h1>
+    }
+    else
+    {
+        var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
+
+        foreach (var group in displayNames)
         {
-            <div class="mb-4">
-                <div class="row">
-                    <div class="col-12 col-lg-7">
-                        <a class="btn btn-outline-default btn-block mb-4 relative" href="#storeinventory">
-                            <i class="fa  fa-store"></i>&#160;
-                            @Html.Localize("Store", "H_StoreAvailability")
-                        </a>
-                    </div>
-                </div>
+            var ids = group.Select(v => v.Id).ToArray();
+            <span data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids) h1">@group.Key</span>
+        }
+        <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
+    }
+}
+
+@helper Description()
+{
+<div class="mb-4" property="description">
+    @HttpUtility.HtmlDecode(Model.Description)
+</div>
+}
+
+@helper Sku()
+{
+    <span class="d-none" property="sku">@Model.Sku</span>
+}
+
+@helper BrandName()
+{
+    <h2 class="h5  mb-1" property="brand" data-qa="product-brand">@HttpUtility.HtmlDecode(Model.Brand)</h2>
+}
+
+@helper StoreInventoryLink()
+{
+    <div class="mb-4">
+        <div class="row">
+            <div class="col-12 col-lg-7">
+                <a class="btn btn-outline-default btn-block mb-4 relative" href="#storeinventory">
+                    <i class="fa  fa-store"></i>&#160;
+                    @Html.Localize("Store", "H_StoreAvailability")
+                </a>
             </div>
-        }
-
-        @helper KvaList()
-        {
-            <div data-templateid="KvaList">
-                @foreach (var values in Model.KeyVariantAttributeItems)
-                {
-                    if (values.Values != null)
-                    {
-                        <div class="mb-3" data-qa="product-variants" data-propertyname="@values.PropertyName" data-propertydatatype="@values.PropertyDataType">
-                            <h5 class="font-weight-bold">@values.DisplayName</h5>
-                            <div class="kva-list variant-kva">
-                                @if (values.PropertyName == "Colour")
-                                {
-                                    foreach (var value in values.Values)
-                                    {
-                                        <div title="@value.Title" class="kva-color @(value.Disabled ? "disabled" : "") btn-sm @(value.Selected ? "active" : "")" data-oc-click="selectKva" value="@value.Value">
-                                            <div class="kva-color-value" style="background: @(value.ConfiguredValue ?? value.Value);"></div>
-                                        </div>
-                                    }
-                                }
-                                else
-                                {
-                                    foreach (var value in values.Values)
-                                    {
-
-                                        <button class="btn btn-outline-primary @(value.Disabled ? "disabled" : "") btn-sm @(value.Selected ? "active" : "")" data-oc-click="selectKva" value="@value.Value">
-                                            @if (!String.IsNullOrEmpty(value.ImageUrl))
-                                        {
-                                                <img class="img-fluid" src="@value.ImageUrl" alt="@value.Title" />
-                                            }
-                                            else
-                                            {
-                                                @value.Title
-                                }
-
-                                        </button>
-                                    }
-                                }
-
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-        }
-
-        @helper KvaColorList()
-        {
-
-        }
+        </div>
+    </div>
+}
