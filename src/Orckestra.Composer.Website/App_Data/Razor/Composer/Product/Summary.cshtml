@@ -41,7 +41,7 @@
                 @Partial("Product", "ThumbsGallery", Model)
             </div>
             <div class="col-md-5 col-lg-4">
-                
+
                 @ProductHelpers.AddToWishList()
                 @BrandName()
 
@@ -51,7 +51,7 @@
 
                 @Sku()
 
-                @Partial("KvaItems", Model)
+                @KvaList()
 
                 @Html.LazyFunction("Composer.Product.RecurringFrequency")
 
@@ -68,7 +68,7 @@
                 @Function("Composer.Product.Specifications")
             </div>
         </div>
-        
+
     </div>
 
     @if (Model.IsProductZoomEnabled)
@@ -124,6 +124,44 @@
                     <i class="fa  fa-store"></i>&#160;
                     @Html.Localize("Store", "H_StoreAvailability")
                 </a>
+            </div>
+        </div>
+    </div>
+}
+
+@helper KvaList()
+{
+    <div id="vueKvaList" v-cloak="true" xmlns:v-bind="v-bind" xmlns:v-on="v-on">
+        <div class="mb-3"  
+            data-qa="product-variants"
+            v-for="values in KvaAttributeItems"  
+            v-bind:data-propertyname="values.PropertyName" 
+            v-bind:data-propertydatatype="values.PropertyDataType">   
+            
+            <h5 class="font-weight-bold">{{values.DisplayName}}</h5>
+            <div class="kva-list variant-kva" v-if="values.PropertyName == 'Colour'">
+                <div class="kva-color btn-sm"
+                    v-for="value in values.Values"
+                    v-bind:class="[(value.Diabled ? 'disabled' : ''), (value.Selected ? 'active' : '')]"
+                    v-bind:value="value.Value"
+                    v-on:click="changeKva"
+                    v-bind:title="value.Title">
+                    <div class="kva-color-value" v-bind:style="[ value.ConfiguredValue ? { 'background': value.ConfiguredValue} : { 'background': value.Value}]"></div>
+                </div>
+            </div>
+            <div class="kva-list variant-kva" v-else="v-else">
+                <button class="btn btn-sm"
+                    v-for="value in values.Values"
+                    v-bind:class="[(value.Diabled ? 'disabled' : ''), (value.Selected ? 'btn-primary' : 'btn-outline-secondary')]"
+                    v-bind:value="value.Value"
+                    v-on:click="changeKva">
+                    <span v-if="HasImage(value)">
+                        <img class="img-fluid" v-bind:src="value.ImageUrl" v-bind:alt="value.Title" />
+                    </span>
+                    <span v-else="v-else">
+                        {{value.Title}}
+                    </span>
+                </button>
             </div>
         </div>
     </div>

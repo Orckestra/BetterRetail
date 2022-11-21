@@ -35,6 +35,7 @@ module Orckestra.Composer {
 
         protected registerSubscriptions() {
 
+            this.eventHub.subscribe(this.concern + 'DisplayedVariantIdChanged', e => this.onSelectedVariantIdChanged(e));
             this.eventHub.subscribe(this.concern + 'SelectedVariantIdChanged', e => this.onSelectedVariantIdChanged(e));
             this.eventHub.subscribe(this.concern + 'SelectedKvasChanged', e => this.onSelectedKvasChanged(e));
             this.eventHub.subscribe(this.concern + 'ImagesChanged', e => this.onImagesChanged(e));
@@ -293,7 +294,7 @@ module Orckestra.Composer {
             var selectionsToAdd = {};
             var propertyName: any = actionContext.elementContext.parents('[data-propertyname]').data('propertyname');
             var propertyDataType: any = actionContext.elementContext.parents('[data-propertydatatype]').data('propertydatatype');
-
+            
             var formatter = new Orckestra.Composer.ProductFormatter();
             var value = formatter.convertToStronglyTyped(actionContext.elementContext.val(), propertyDataType);
 

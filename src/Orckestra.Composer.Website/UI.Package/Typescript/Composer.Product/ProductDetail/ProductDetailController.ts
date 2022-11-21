@@ -19,6 +19,7 @@ module Orckestra.Composer {
         public initialize() {
 
             super.initialize();
+            this.initKvaSelectVueComponent();
 
             this.productService.updateSelectedKvasWith(this.context.viewModel.selectedKvas, this.concern);
 
@@ -316,6 +317,41 @@ module Orckestra.Composer {
             })
         }
 
+        protected initKvaSelectVueComponent() {
+            let elId = 'vueKvaList';
+            let el = document.getElementById(elId);
+            if(!el) return;
+            let self: ProductDetailController = this;
+            new Vue({
+                el: `#${elId}`,
+                data: {
+                    Product: self.context.viewModel,
+                    Variant: self.context.viewModel.selectedVariantId,
+                    Values: self.context.viewModel.keyVariantAttributeItems,
+                    Loading: false,
+                    dataUpdatedTracker: 1
+                },
+                computed: {
+                    KvaAttributeItems() {
+                        return this.Values;
+                    }
+                },
+                methods: {
+                    HasImage(value) {
+                        let boolHasImage = (value.ImageUrl) ? true: false;
+                        return boolHasImage;
+                    },
+                    changeKva(event: JQueryEventObject) {
+                        // depending where we click we can either get the button with class kva-color or the color swatch kolor-color-value
+                        let target = event.target.classList.contains("kva-color-value") ? event.target : event.target.getElementsByClassName('kva-color-value')[0];
+                        // set element value in jquery for the parent ProductController's use
+                        $(target).val($(target.parentElement).attr('value'));
+                        self.selectKva({elementContext: $(target), event: event});
+                    },
+                }
+            });
+        }
+
         protected getListNameForAnalytics(): string {
             return 'Detail';
         }
@@ -333,8 +369,7 @@ module Orckestra.Composer {
         }
 
         protected onSelectedVariantIdChanged(e: IEventInformation) {
-
-            let varId = e.data.selectedVariantId || 'unavailable';
+            let varId = e.data.selectedVariantId || e.data.displayVariantId || 'unavailable';
             var all = $('[data-variant]');
 
             $.each(all, (index, el) => {
@@ -357,20 +392,13 @@ module Orckestra.Composer {
             });
         }
 
-        protected onSelectedKvasChanged(e: IEventInformation) {
-
-            this.render('KvaItems', {KeyVariantAttributeItems: e.data});
-        }
-
         protected onPricesChanged(e: IEventInformation) {
             let vm = this.isProductWithVariants() && this.isSelectedVariantUnavailable() ? null : e.data;
             this.render('PriceDiscount', vm);
         }
 
         public selectKva(actionContext: IControllerActionContext) {
-
             let currentSelectedVariantId = this.context.viewModel.selectedVariantId;
-
             super.selectKva(actionContext);
 
             //IE8 check

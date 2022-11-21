@@ -21,6 +21,7 @@ module Orckestra.Composer {
             const itemsCount = this.context.container.data('items-count');
             const currentSite = this.context.container.data('current-site') === 'True';
             let FacetsVisible = this.context.container.data('facets-visible') || "True";
+            const isOverriden = this.context.container.data('overriden') === 'True';
 
             this.sendContentSearchResultsForAnalytics(Total);
 
@@ -41,6 +42,7 @@ module Orckestra.Composer {
                         PreviousPage: false,
                         NextPage: false,
                     },
+                    isOverriden: isOverriden,
                     isLoading: false
                 },
                 mounted() {
@@ -79,6 +81,7 @@ module Orckestra.Composer {
                     },
                     updateProductColumns(){
                         let searchContainer = document.getElementsByClassName("search-container");
+                        if (isOverriden) return;
                         if (FacetsVisible == "True") {
                             for (let i=0; i < searchContainer.length; i++) {
                                 searchContainer[i].classList.replace("col-sm-3", "col-sm-4");

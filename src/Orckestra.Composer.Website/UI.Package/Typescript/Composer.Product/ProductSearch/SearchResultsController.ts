@@ -43,6 +43,7 @@ module Orckestra.Composer {
         protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
             let FacetsVisible = this.context.container.data('facets-visible') || "True";
+            const isOverriden = this.context.container.data('overriden') === 'True';
 
             this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
             const self = this;
@@ -61,6 +62,7 @@ module Orckestra.Composer {
                     IsAuthenticated: authVm.IsAuthenticated,
                     ActiveProductId: undefined,
                     FacetsVisible: FacetsVisible,
+                    isOverriden: isOverriden,
                 },
                 mounted() {
                     this.registerSubscriptions();
@@ -116,6 +118,7 @@ module Orckestra.Composer {
                     },
                     updateProductColumns(){
                         let searchContainer = document.getElementsByClassName("search-container");
+                        if (isOverriden) return;
                         if (FacetsVisible == "True") {
                             for (let i=0; i < searchContainer.length; i++) {
                                 searchContainer[i].classList.replace("col-md-3", "col-md-4");
