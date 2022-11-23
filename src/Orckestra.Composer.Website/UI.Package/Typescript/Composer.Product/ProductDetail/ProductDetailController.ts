@@ -1,6 +1,7 @@
 ///<reference path='../Product/ProductController.ts' />
 ///<reference path='../ProductEvents.ts' />
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
+/// <reference path='../../JQueryPlugins/IPopOverJqueryPlugin.ts' />
 
 module Orckestra.Composer {
 
@@ -343,7 +344,6 @@ module Orckestra.Composer {
                     },
                     KvaColorStyle(value) {
                         var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
-                        console.log("calculated colorStyle is ", colorStyle);
                         return colorStyle;
                     },
                     changeKva(event: JQueryEventObject) {
