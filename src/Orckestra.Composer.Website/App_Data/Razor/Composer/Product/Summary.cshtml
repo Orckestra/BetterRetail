@@ -142,23 +142,21 @@
             <div class="kva-list variant-kva" v-if="values.PropertyName == 'Colour'">
                 <div class="kva-color btn-sm"
                     v-for="value in values.Values"
-                    v-bind:class="[(value.Diabled ? 'disabled' : ''), (value.Selected ? 'active' : '')]"
+                    v-bind:class="{ disabled : value.Disabled, active : value.Selected }"
                     v-bind:value="value.Value"
+                    v-bind:disabled="value.Disabled"
                     v-on:click="changeKva"
                     v-bind:title="value.Title">
-                    <div class="kva-color-value" v-bind:style="[ value.ConfiguredValue ? { 'background': value.ConfiguredValue} : { 'background': value.Value}]"></div>
+                    <div class="kva-color-value" v-bind:style="KvaColorStyle(value)"></div>
                 </div>
             </div>
             <div class="kva-list variant-kva" v-else="v-else">
-                <button class="btn btn-sm"
+                <button class="kva-property btn btn-sm"
                     v-for="value in values.Values"
-                    v-bind:class="[(value.Diabled ? 'disabled' : ''), (value.Selected ? 'btn-primary' : 'btn-outline-secondary')]"
+                    v-bind:class="{ disabled : value.Disabled, 'btn-primary' : value.Selected, 'btn-outline-secondary' : !value.Selected  }"
                     v-bind:value="value.Value"
                     v-on:click="changeKva">
-                    <span v-if="HasImage(value)">
-                        <img class="img-fluid" v-bind:src="value.ImageUrl" v-bind:alt="value.Title" />
-                    </span>
-                    <span v-else="v-else">
+                    <span class="kva-property-value">
                         {{value.Title}}
                     </span>
                 </button>

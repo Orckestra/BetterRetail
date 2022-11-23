@@ -337,13 +337,31 @@ module Orckestra.Composer {
                     }
                 },
                 methods: {
-                    HasImage(value) {
+                    HasImage(value:any) {
                         let boolHasImage = (value.ImageUrl) ? true: false;
                         return boolHasImage;
                     },
+                    KvaColorStyle(value) {
+                        var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
+                        console.log("calculated colorStyle is ", colorStyle);
+                        return colorStyle;
+                    },
                     changeKva(event: JQueryEventObject) {
-                        // depending where we click we can either get the button with class kva-color or the color swatch kolor-color-value
-                        let target = event.target.classList.contains("kva-color-value") ? event.target : event.target.getElementsByClassName('kva-color-value')[0];
+                        //target is kva-color (outter div of the color swatch)
+                        var isColor = event.target.classList.contains("kva-color");
+                        //target is kva-property (outter 'property' button)
+                        var isProperty = event.target.classList.contains("kva-property");
+
+                        let target = event.target;
+
+                        if(isColor) {
+                            target = event.target.getElementsByClassName('kva-color-value')[0];
+                        } else if(isProperty) {
+                            target = event.target.getElementsByClassName('kva-property-value')[0];
+                        }
+                        // we don't accept clicks if the button is disabled
+                        if (target.parentElement.classList.contains("disabled")) return;
+                        
                         // set element value in jquery for the parent ProductController's use
                         $(target).val($(target.parentElement).attr('value'));
                         self.selectKva({elementContext: $(target), event: event});

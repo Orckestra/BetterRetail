@@ -132,8 +132,12 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+
     & > .btn {
         margin: 0;
+        &.disabled {
+            cursor: not-allowed;
+        }
         &.btn {
             margin: 0;
         }
