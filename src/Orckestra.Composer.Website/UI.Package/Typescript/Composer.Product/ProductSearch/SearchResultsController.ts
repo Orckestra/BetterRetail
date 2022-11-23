@@ -47,6 +47,9 @@ module Orckestra.Composer {
 
             this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
             const self = this;
+            $('[data-toggle="popover"]').popover({
+                placement:"top"
+            });
             this.vueSearchResults = new Vue({
                 el: `#${this.context.container.data('vueid')}`,
                 components: {
@@ -166,6 +169,16 @@ module Orckestra.Composer {
                     },
                     onMouseleave(searchProduct) {
                         this.ActiveProductId = undefined;
+                    },
+                    onKvaHover(event: MouseEvent) {
+                        let target = $(event.target);
+                        if (target.hasClass("kva-color-value")) return;
+                        $(target).popover('show');
+                    },
+                    onKvaOut(event: MouseEvent) {
+                        let target = $(event.target);
+                        if (target.hasClass("kva-color-value")) return;
+                        $(target).popover('hide');
                     },
                     selectKva(searchProduct, kvaName, kvaValue) {
                         const { ProductId: productId } = searchProduct;

@@ -87,6 +87,16 @@ module Orckestra.Composer {
                         onMouseleave(relatedProduct) {
                             this.ActiveProductId = undefined;
                         },
+                        onKvaHover(event: MouseEvent) {
+                            let target = $(event.target);
+                            if (target.hasClass("kva-color-value")) return;
+                            $(target).popover('show');
+                        },
+                        onKvaOut(event: MouseEvent) {
+                            let target = $(event.target);
+                            if (target.hasClass("kva-color-value")) return;
+                            $(target).popover('hide');
+                        },
                         selectKva(relatedProduct, kvaName, kvaValue) {
                             const { ProductId: productId } = relatedProduct;
                             const kva = { [kvaName]: kvaValue };

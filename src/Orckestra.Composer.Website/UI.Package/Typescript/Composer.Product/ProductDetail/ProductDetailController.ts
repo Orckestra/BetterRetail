@@ -323,6 +323,9 @@ module Orckestra.Composer {
             let el = document.getElementById(elId);
             if(!el) return;
             let self: ProductDetailController = this;
+            $('[data-toggle="popover"]').popover({
+                placement:"top"
+            });
             new Vue({
                 el: `#${elId}`,
                 data: {
@@ -345,6 +348,16 @@ module Orckestra.Composer {
                     KvaColorStyle(value) {
                         var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
                         return colorStyle;
+                    },
+                    onMouseover(event: MouseEvent) {
+                        let target = $(event.target);
+                        if (target.hasClass("kva-color-value")) return;
+                        $(target).popover('show');
+                    },
+                    onMouseleave(event: MouseEvent) {
+                        let target = $(event.target);
+                        if (target.hasClass("kva-color-value")) return;
+                        $(target).popover('hide');
                     },
                     changeKva(event: JQueryEventObject) {
                         //target is kva-color (outter div of the color swatch)
