@@ -112,13 +112,12 @@ module Orckestra.Composer {
                     },
                     toggleFacet(): void {
                         if (FacetsVisible) {
-                            FacetsVisible = false;
                             this.hideFacet();
                         }
                         else {
-                            FacetsVisible = true;
                             this.showFacet();
                         }
+                        FacetsVisible = !FacetsVisible;
                         self.showFacetsService.setShowFacets(FacetsVisible);
                     },
                     updateProductColumns(){
