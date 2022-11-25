@@ -76,10 +76,9 @@ module Orckestra.Composer {
                         document.getElementById("rightCol").classList.remove("col-lg-9");
                         if(update) self.vueSearchResults.$data.FacetsVisible = FacetsVisible; // setting this will trigger the "updated" function above only if requested
                     },
-                    showFacet(update = false): void {
+                    showFacet(): void {
                         document.getElementById("leftCol").classList.remove("w-0-lg");
                         document.getElementById("rightCol").classList.add("col-lg-9");
-                        if (update) self.vueSearchResults.$data.FacetsVisible = FacetsVisible;
                     },
                     toggleFacet(): void {
                         if (FacetsVisible) {
