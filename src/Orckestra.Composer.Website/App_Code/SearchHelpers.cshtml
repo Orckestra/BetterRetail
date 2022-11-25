@@ -251,7 +251,7 @@
          data-toggle="popover" 
          data-placement="top" 
          data-trigger="hover" 
-         v-bind:data-content="value.Title"
+         v-bind:data-content="v.Title"
          v-on:mouseover="onKvaHover"
          v-on:mouseleave="onKvaOut">
         <div class="kva-color-value" v-bind:style="{background: v.ConfiguredValue ?? v.Value}"></div>
