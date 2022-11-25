@@ -246,7 +246,6 @@
     <div v-for="v in getKeyVariantValues(@(vueBinding).ProductId, '@(kvaProperyName)')"
          v-bind:class="{'selected': v.Selected, 'disabled': v.Disabled }"
          v-on:click="selectKva(@(vueBinding), '@(kvaProperyName)', v.Value)"
-         v-bind:title="v.Title"
          class="kva-color"
          data-toggle="popover" 
          data-placement="top" 
