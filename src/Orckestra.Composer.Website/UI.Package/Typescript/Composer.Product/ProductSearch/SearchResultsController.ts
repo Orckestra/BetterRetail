@@ -74,7 +74,7 @@ module Orckestra.Composer {
                     self.showFacetsService.getShowFacets().then(
                         (value: boolean) => {
                                 FacetsVisible = value;
-                                if (!value) this.hideFacet();  
+                                if (!value) this.hideFacet(true); // as an intial setup we hide the facet and ask for an update to be made 
                            
                         }, 
                         (error: any) => {
@@ -100,15 +100,14 @@ module Orckestra.Composer {
                     this.updateProductColumns();
                 },  
                 methods: {
-                    hideFacet(): void {
+                    hideFacet(update = false): void {
                         document.getElementById("leftCol").classList.add("w-0-lg");
                         document.getElementById("rightCol").classList.remove("col-lg-9");
-                        self.vueSearchResults.$data.FacetsVisible = FacetsVisible; // settings this will trigger the updated function above
+                        if(update) self.vueSearchResults.$data.FacetsVisible = FacetsVisible; // setting this will trigger the "updated" function above only if requested
                     },
                     showFacet(): void {
                         document.getElementById("leftCol").classList.remove("w-0-lg");
                         document.getElementById("rightCol").classList.add("col-lg-9");
-                        self.vueSearchResults.$data.FacetsVisible = FacetsVisible;
                     },
                     toggleFacet(): void {
                         if (FacetsVisible) {
@@ -118,6 +117,7 @@ module Orckestra.Composer {
                             this.showFacet();
                         }
                         FacetsVisible = !FacetsVisible;
+                        self.vueSearchResults.$data.FacetsVisible = FacetsVisible; // setting this will trigger the "updated" function above
                         self.showFacetsService.setShowFacets(FacetsVisible);
                     },
                     updateProductColumns(){
