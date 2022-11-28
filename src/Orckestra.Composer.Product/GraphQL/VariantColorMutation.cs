@@ -42,7 +42,7 @@ namespace Orckestra.Composer.Product.GraphQL
                             if (!itemsToRemove.Any(i => i.LookupValue == item.LookupValue))
                             {
                                 var inputItem = configurationModifications.First(d => item.LookupValue == d.Data.LookupValue);
-                                inputItem.Data.ProjectedCopyTo(item);
+                                inputItem.Data.FullCopyChangedTo(item, new string [] { nameof(IVariantColorConfiguration.Id) });
                                 connection.Update(item);
                             }
 
