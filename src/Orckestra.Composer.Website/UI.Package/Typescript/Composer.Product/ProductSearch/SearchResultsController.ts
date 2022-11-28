@@ -42,7 +42,6 @@ module Orckestra.Composer {
 
         protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
-            let FacetsVisible = true;
             const isOverriden = this.context.container.data('overriden') === 'True';
             
             
@@ -66,19 +65,18 @@ module Orckestra.Composer {
                     WishList: wishlist,
                     IsAuthenticated: authVm.IsAuthenticated,
                     ActiveProductId: undefined,
-                    FacetsVisible: FacetsVisible,
+                    FacetsVisible: true,
                     isOverriden: isOverriden,
                 },
                 mounted() {
                     this.registerSubscriptions();
                     self.showFacetsService.getShowFacets().then(
                         (value: boolean) => {
-                                FacetsVisible = value;
+                                this.FacetsVisible = value;
                                 if (!value) this.hideFacet(true); // as an intial setup we hide the facet and ask for an update to be made 
                            
                         }, 
                         (error: any) => {
-                            FacetsVisible = true;
                             self.showFacetsService.setShowFacets(true);
                         }
                     );
@@ -103,27 +101,26 @@ module Orckestra.Composer {
                     hideFacet(update = false): void {
                         document.getElementById("leftCol").classList.add("w-0-lg");
                         document.getElementById("rightCol").classList.remove("col-lg-9");
-                        if(update) self.vueSearchResults.$data.FacetsVisible = FacetsVisible; // setting this will trigger the "updated" function above only if requested
+                        if(update) this.FacetsVisible = false; // setting this will trigger the "updated" function above only if requested
                     },
                     showFacet(): void {
                         document.getElementById("leftCol").classList.remove("w-0-lg");
                         document.getElementById("rightCol").classList.add("col-lg-9");
                     },
                     toggleFacet(): void {
-                        if (FacetsVisible) {
+                        if (this.FacetsVisible) {
                             this.hideFacet();
                         }
                         else {
                             this.showFacet();
                         }
-                        FacetsVisible = !FacetsVisible;
-                        self.vueSearchResults.$data.FacetsVisible = FacetsVisible; // setting this will trigger the "updated" function above
-                        self.showFacetsService.setShowFacets(FacetsVisible);
+                        this.FacetsVisible = !this.FacetsVisible; // setting this will trigger the "updated" function above
+                        self.showFacetsService.setShowFacets(this.FacetsVisible);
                     },
                     updateProductColumns(){
                         let searchContainer = document.getElementsByClassName("search-container");
                         if (isOverriden) return;
-                        if (FacetsVisible) {
+                        if (this.FacetsVisible) {
                             for (let i=0; i < searchContainer.length; i++) {
                                 searchContainer[i].classList.replace("col-md-3", "col-md-4");
                                 searchContainer[i].classList.replace("col-xl-3", "col-xl-4");
