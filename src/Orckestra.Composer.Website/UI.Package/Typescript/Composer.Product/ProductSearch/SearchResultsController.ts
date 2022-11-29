@@ -42,7 +42,6 @@ module Orckestra.Composer {
 
         protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
-            const isOverriden = this.context.container.data('overriden') === 'True';
             
             
 
@@ -66,7 +65,6 @@ module Orckestra.Composer {
                     IsAuthenticated: authVm.IsAuthenticated,
                     ActiveProductId: undefined,
                     FacetsVisible: true,
-                    isOverriden: isOverriden,
                 },
                 mounted() {
                     this.registerSubscriptions();
@@ -118,18 +116,19 @@ module Orckestra.Composer {
                         self.showFacetsService.setShowFacets(this.FacetsVisible);
                     },
                     updateProductColumns(){
-                        let searchContainer = document.getElementsByClassName("search-container");
-                        if (isOverriden) return;
+                        if (document.getElementById('vueSearchFacets') === null) return;
+
+                        let productColContainer = document.getElementsByClassName("product-col-container");
                         if (this.FacetsVisible) {
-                            for (let i=0; i < searchContainer.length; i++) {
-                                searchContainer[i].classList.replace("col-md-3", "col-md-4");
-                                searchContainer[i].classList.replace("col-xl-3", "col-xl-4");
+                            for (let i=0; i < productColContainer.length; i++) {
+                                productColContainer[i].classList.replace("col-md-3", "col-md-4");
+                                productColContainer[i].classList.replace("col-xl-3", "col-xl-4");
                             }
                         }
                         else {
-                            for (let i=0; i < searchContainer.length; i++) {
-                                searchContainer[i].classList.replace("col-md-4", "col-md-3");
-                                searchContainer[i].classList.replace("col-xl-4", "col-xl-3");
+                            for (let i=0; i < productColContainer.length; i++) {
+                                productColContainer[i].classList.replace("col-md-4", "col-md-3");
+                                productColContainer[i].classList.replace("col-xl-4", "col-xl-3");
                             }
                         }
                     },

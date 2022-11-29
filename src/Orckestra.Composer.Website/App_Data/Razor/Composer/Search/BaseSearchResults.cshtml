@@ -24,7 +24,6 @@
 @{
     string vueId = "vueSearchResults" + Guid.NewGuid().ToString("N");
     string colNum = "";
-    bool isProductRowNumOverriden = ProductRowNum != 3;
     switch(ProductRowNum)
     {
         case 1:
@@ -55,7 +54,6 @@
     <div data-oc-controller="Product.SearchResults"
          data-context="@JsonConvert.SerializeObject(Results, new Newtonsoft.Json.Converters.StringEnumConverter())"
          data-vueid="@vueId"
-         data-overriden="@isProductRowNumOverriden"
          id="@vueId"
          v-cloak="true"
          class="search-results">
@@ -76,7 +74,7 @@
         }
         <template v-if="TotalCount > 0">
             <div class="row">
-                <div v-for="(Product, index) in SearchResultsData" class="col-12 col-sm-6  col-md-@colNum  col-xl-@colNum search-container" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
+                <div v-for="(Product, index) in SearchResultsData" class="col-12 col-sm-6  col-md-@colNum  col-xl-@colNum product-col-container" data-qa="search-results" v-bind:key="Product.ProductId + Product.VariantId">
                     @Function("Composer.Search.Products.ProductTileVue")
                 </div>
             </div>

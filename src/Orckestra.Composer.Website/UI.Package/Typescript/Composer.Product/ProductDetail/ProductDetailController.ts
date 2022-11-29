@@ -328,23 +328,7 @@ module Orckestra.Composer {
             });
             new Vue({
                 el: `#${elId}`,
-                data: {
-                    Product: self.context.viewModel,
-                    Variant: self.context.viewModel.selectedVariantId,
-                    Values: self.context.viewModel.keyVariantAttributeItems,
-                    Loading: false,
-                    dataUpdatedTracker: 1
-                },
-                computed: {
-                    KvaAttributeItems() {
-                        return this.Values;
-                    }
-                },
                 methods: {
-                    HasImage(value:any) {
-                        let boolHasImage = (value.ImageUrl) ? true: false;
-                        return boolHasImage;
-                    },
                     KvaColorStyle(value) {
                         var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
                         return colorStyle;

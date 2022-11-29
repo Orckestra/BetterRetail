@@ -246,6 +246,7 @@
             position: relative;
             .slick-slide & {
                 padding-bottom: 150%;
+                z-index: auto;
             }
         }
         
