@@ -328,6 +328,14 @@ module Orckestra.Composer {
             });
             new Vue({
                 el: `#${elId}`,
+                data: {
+                    Values: self.context.viewModel.keyVariantAttributeItems
+                },
+                computed: {
+                    KvaAttributeItems() {
+                        return this.Values;
+                    }
+                },
                 methods: {
                     KvaColorStyle(value) {
                         var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
@@ -335,12 +343,10 @@ module Orckestra.Composer {
                     },
                     onMouseover(event: MouseEvent) {
                         let target = $(event.target);
-                        if (target.hasClass("kva-color-value")) return;
                         $(target).popover('show');
                     },
                     onMouseleave(event: MouseEvent) {
                         let target = $(event.target);
-                        if (target.hasClass("kva-color-value")) return;
                         $(target).popover('hide');
                     },
                     changeKva(event: JQueryEventObject) {

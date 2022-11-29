@@ -247,13 +247,18 @@
          v-bind:class="{'selected': v.Selected, 'disabled': v.Disabled }"
          v-on:click="selectKva(@(vueBinding), '@(kvaProperyName)', v.Value)"
          class="kva-color"
-         data-toggle="popover" 
-         data-placement="top" 
-         data-trigger="hover" 
-         v-bind:data-content="v.Title"
-         v-on:mouseover="onKvaHover"
-         v-on:mouseleave="onKvaOut">
-        <div class="kva-color-value" v-bind:style="{background: v.ConfiguredValue ?? v.Value}"></div>
+         v-bind:title="v.Title">
+        <div class="kva-color-value" 
+            v-bind:style="{background: v.ConfiguredValue ?? v.Value}" 
+            data-toggle="popover" 
+            data-placement="top" 
+            data-trigger="hover" 
+            v-bind:data-content="v.Title" 
+            v-on:mouseover="onKvaHover" 
+            v-on:mouseleave="onKvaOut"
+            v-on:click="onKvaOut"
+            >
+        </div>
     </div>
 </div>
 }

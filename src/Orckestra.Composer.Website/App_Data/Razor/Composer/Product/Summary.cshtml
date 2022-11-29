@@ -141,19 +141,20 @@
             <h5 class="font-weight-bold">{{values.DisplayName}}</h5>
             <div class="kva-list variant-kva" v-if="values.PropertyName == 'Colour'">
                 <div class="kva-color btn-sm" 
-                    data-toggle="popover" 
-                    data-placement="top" 
-                    data-trigger="hover" 
-                    v-bind:data-content="value.Title"
                     v-for="value in values.Values"
                     v-bind:class="{ disabled : value.Disabled, active : value.Selected }"
                     v-bind:value="value.Value"
                     v-bind:disabled="value.Disabled"
-                    v-on:click="changeKva"
                     v-bind:title="value.Title"
-                    v-on:mouseover="onMouseover"
-                    v-on:mouseleave="onMouseleave">
-                    <div class="kva-color-value" v-bind:style="KvaColorStyle(value)"></div>
+                    v-on:click="changeKva">
+                    <div class="kva-color-value" 
+                        v-bind:style="KvaColorStyle(value)"
+                        data-toggle="popover" 
+                        data-placement="top" 
+                        data-trigger="hover" 
+                        v-bind:data-content="value.Title"
+                        v-on:mouseover="onMouseover"
+                        v-on:mouseleave="onMouseleave"></div>
                 </div>
             </div>
             <div class="kva-list variant-kva" v-else="v-else">
