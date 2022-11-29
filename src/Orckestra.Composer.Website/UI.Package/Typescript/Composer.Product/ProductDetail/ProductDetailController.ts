@@ -328,12 +328,9 @@ module Orckestra.Composer {
             });
             new Vue({
                 el: `#${elId}`,
-                data: {
-                    Values: self.context.viewModel.keyVariantAttributeItems
-                },
                 computed: {
                     KvaAttributeItems() {
-                        return this.Values;
+                        return self.context.viewModel.keyVariantAttributeItems;
                     }
                 },
                 methods: {
