@@ -1,6 +1,7 @@
 ///<reference path='../Product/ProductController.ts' />
 ///<reference path='../ProductEvents.ts' />
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
+/// <reference path='../../JQueryPlugins/IPopOverJqueryPlugin.ts' />
 
 module Orckestra.Composer {
 
@@ -19,6 +20,7 @@ module Orckestra.Composer {
         public initialize() {
 
             super.initialize();
+            this.initKvaSelectVueComponent();
 
             this.productService.updateSelectedKvasWith(this.context.viewModel.selectedKvas, this.concern);
 
@@ -316,6 +318,58 @@ module Orckestra.Composer {
             })
         }
 
+        protected initKvaSelectVueComponent() {
+            let elId = 'vueKvaList';
+            let el = document.getElementById(elId);
+            if(!el) return;
+            let self: ProductDetailController = this;
+            $('[data-toggle="popover"]').popover({
+                placement:"top"
+            });
+            new Vue({
+                el: `#${elId}`,
+                computed: {
+                    KvaAttributeItems() {
+                        return self.context.viewModel.keyVariantAttributeItems;
+                    }
+                },
+                methods: {
+                    KvaColorStyle(value) {
+                        var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
+                        return colorStyle;
+                    },
+                    onMouseover(event: MouseEvent) {
+                        let target = $(event.target);
+                        $(target).popover('show');
+                    },
+                    onMouseleave(event: MouseEvent) {
+                        let target = $(event.target);
+                        $(target).popover('hide');
+                    },
+                    changeKva(event: JQueryEventObject) {
+                        //target is kva-color (outter div of the color swatch)
+                        var isColor = event.target.classList.contains("kva-color");
+                        //target is kva-property (outter 'property' button)
+                        var isProperty = event.target.classList.contains("kva-property");
+
+                        let target = event.target;
+
+                        if(isColor) {
+                            target = event.target.getElementsByClassName('kva-color-value')[0];
+                        } else if(isProperty) {
+                            target = event.target.getElementsByClassName('kva-property-value')[0];
+                        }
+                        // we don't accept clicks if the button is disabled
+                        if (target.parentElement.classList.contains("disabled")) return;
+                        
+                        // set element value in jquery for the parent ProductController's use
+                        $(target).val($(target.parentElement).attr('value'));
+                        self.selectKva({elementContext: $(target), event: event});
+                    },
+                }
+            });
+        }
+
         protected getListNameForAnalytics(): string {
             return 'Detail';
         }
@@ -333,8 +387,7 @@ module Orckestra.Composer {
         }
 
         protected onSelectedVariantIdChanged(e: IEventInformation) {
-
-            let varId = e.data.selectedVariantId || 'unavailable';
+            let varId = e.data.selectedVariantId || e.data.displayVariantId || 'unavailable';
             var all = $('[data-variant]');
 
             $.each(all, (index, el) => {
@@ -357,20 +410,13 @@ module Orckestra.Composer {
             });
         }
 
-        protected onSelectedKvasChanged(e: IEventInformation) {
-
-            this.render('KvaItems', {KeyVariantAttributeItems: e.data});
-        }
-
         protected onPricesChanged(e: IEventInformation) {
             let vm = this.isProductWithVariants() && this.isSelectedVariantUnavailable() ? null : e.data;
             this.render('PriceDiscount', vm);
         }
 
         public selectKva(actionContext: IControllerActionContext) {
-
             let currentSelectedVariantId = this.context.viewModel.selectedVariantId;
-
             super.selectKva(actionContext);
 
             //IE8 check

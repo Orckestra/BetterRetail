@@ -1,16 +1,19 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 /// <reference path='../../Typings/vue/index.d.ts' />
-///<reference path='../Repositories/ISearchRepository.ts' />
-///<reference path='../Repositories/SearchRepository.ts' />
+/// <reference path='../Repositories/ISearchRepository.ts' />
+/// <reference path='../Repositories/SearchRepository.ts' />
 /// <reference path='../Utils/UrlHelper.ts' />
 /// <reference path='./SearchParams.ts' />
 /// <reference path='./Constants/ContentSearchEvents.ts' />
+
+/// <reference path='../Composer.Product/ProductSearch/Services/ShowFacetsService.ts' />
 
 module Orckestra.Composer {
     'use strict';
 
     export class ContentSearchResultsController extends Orckestra.Composer.Controller {
         protected vueSearchResults: Vue;
+        protected showFacetsService: ShowFacetsService = ShowFacetsService.instance();
         protected searchRepository: ISearchRepository = new SearchRepository();
 
         public initialize() {
@@ -20,6 +23,7 @@ module Orckestra.Composer {
             const AvailableSortBys = this.context.container.data('available-sort');
             const itemsCount = this.context.container.data('items-count');
             const currentSite = this.context.container.data('current-site') === 'True';
+            
 
             this.sendContentSearchResultsForAnalytics(Total);
 
@@ -33,6 +37,7 @@ module Orckestra.Composer {
                     TotalCount: Total,
                     SelectedSortBy,
                     AvailableSortBys,
+                    FacetsVisible: true,
                     Pagination: {
                         PagesCount: 1,
                         CurrentPage: 1,
@@ -42,12 +47,60 @@ module Orckestra.Composer {
                     isLoading: false
                 },
                 mounted() {
-                    this.Pagination = this.getPagination(PagesCount)
+                    this.Pagination = this.getPagination(PagesCount);
                     self.eventHub.subscribe(ContentSearchEvents.SearchResultsLoaded, this.onSearchResultsLoaded);
+                    self.showFacetsService.getShowFacets().then(
+                        (value: boolean) => {
+                                this.FacetsVisible = value;
+                                if (!value) this.hideFacet(true);  // as an intial setup we hide the facet and ask for an update to be made  
+                           
+                        }, 
+                        (error: any) => {
+                            self.showFacetsService.setShowFacets(true);
+                        }
+                    );
+                    
                 },
                 computed: {
                 },
+                updated: function () {
+                    this.updateProductColumns();
+                },
                 methods: {
+                    hideFacet(update = false): void {
+                        document.getElementById("leftCol").classList.add("w-0-lg");
+                        document.getElementById("rightCol").classList.remove("col-lg-9");
+                        if(update) this.FacetsVisible = false; // setting this will trigger the "updated" function above only if requested
+                    },
+                    showFacet(): void {
+                        document.getElementById("leftCol").classList.remove("w-0-lg");
+                        document.getElementById("rightCol").classList.add("col-lg-9");
+                    },
+                    toggleFacet(): void {
+                        if (this.FacetsVisible) {
+                            this.hideFacet();
+                        }
+                        else {
+                            this.showFacet();
+                        }
+                        this.FacetsVisible = !this.FacetsVisible; // setting this will trigger the "updated" function above
+                        self.showFacetsService.setShowFacets(this.FacetsVisible);
+                    },
+                    updateProductColumns(){
+                        if (document.getElementById('vueContentSearchFacets') === null) return;
+
+                        let productColContainer = document.getElementsByClassName("product-col-container");
+                        if (this.FacetsVisible) {
+                            for (let i=0; i < productColContainer.length; i++) {
+                                productColContainer[i].classList.replace("col-sm-3", "col-sm-4");
+                            }
+                        }
+                        else {
+                            for (let i=0; i < productColContainer.length; i++) {
+                                productColContainer[i].classList.replace("col-sm-4", "col-sm-3");
+                            }
+                        }
+                    },
                     getPagination(count): any {
                         const currentPage = SearchParams.currentPage();
                         return ({

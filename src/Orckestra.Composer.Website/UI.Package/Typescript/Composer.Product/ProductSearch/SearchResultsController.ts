@@ -16,6 +16,7 @@
 /// <reference path='../Product/InventoryService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/IMembershipService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
+/// <reference path='./Services/ShowFacetsService.ts' />
 
 module Orckestra.Composer {
     'use strict';
@@ -28,6 +29,7 @@ module Orckestra.Composer {
         protected productService: ProductService = new ProductService(this.eventHub, this.context);
         protected currentPage: any;
         protected vueSearchResults: Vue;
+        protected showFacetsService: ShowFacetsService = ShowFacetsService.instance();
         protected searchRepository: ISearchRepository = new SearchRepository();
 
         public initialize() {
@@ -40,8 +42,14 @@ module Orckestra.Composer {
 
         protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
+            
+            
+
             this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
             const self = this;
+            $('[data-toggle="popover"]').popover({
+                placement:"top"
+            });
             this.vueSearchResults = new Vue({
                 el: `#${this.context.container.data('vueid')}`,
                 components: {
@@ -55,10 +63,21 @@ module Orckestra.Composer {
                     ProductsMap: {},
                     WishList: wishlist,
                     IsAuthenticated: authVm.IsAuthenticated,
-                    ActiveProductId: undefined
+                    ActiveProductId: undefined,
+                    FacetsVisible: true,
                 },
                 mounted() {
                     this.registerSubscriptions();
+                    self.showFacetsService.getShowFacets().then(
+                        (value: boolean) => {
+                                this.FacetsVisible = value;
+                                if (!value) this.hideFacet(true); // as an intial setup we hide the facet and ask for an update to be made 
+                           
+                        }, 
+                        (error: any) => {
+                            self.showFacetsService.setShowFacets(true);
+                        }
+                    );
                 },
                 computed: {
                     SearchResultsData() {
@@ -72,8 +91,47 @@ module Orckestra.Composer {
                      
                       return this.dataUpdatedTracker && results;
                     },
-                  },
+                },
+                updated: function () {
+                    this.updateProductColumns();
+                },  
                 methods: {
+                    hideFacet(update = false): void {
+                        document.getElementById("leftCol").classList.add("w-0-lg");
+                        document.getElementById("rightCol").classList.remove("col-lg-9");
+                        if(update) this.FacetsVisible = false; // setting this will trigger the "updated" function above only if requested
+                    },
+                    showFacet(): void {
+                        document.getElementById("leftCol").classList.remove("w-0-lg");
+                        document.getElementById("rightCol").classList.add("col-lg-9");
+                    },
+                    toggleFacet(): void {
+                        if (this.FacetsVisible) {
+                            this.hideFacet();
+                        }
+                        else {
+                            this.showFacet();
+                        }
+                        this.FacetsVisible = !this.FacetsVisible; // setting this will trigger the "updated" function above
+                        self.showFacetsService.setShowFacets(this.FacetsVisible);
+                    },
+                    updateProductColumns(){
+                        if (document.getElementById('vueSearchFacets') === null) return;
+
+                        let productColContainer = document.getElementsByClassName("product-col-container");
+                        if (this.FacetsVisible) {
+                            for (let i=0; i < productColContainer.length; i++) {
+                                productColContainer[i].classList.replace("col-md-3", "col-md-4");
+                                productColContainer[i].classList.replace("col-xl-3", "col-xl-4");
+                            }
+                        }
+                        else {
+                            for (let i=0; i < productColContainer.length; i++) {
+                                productColContainer[i].classList.replace("col-md-4", "col-md-3");
+                                productColContainer[i].classList.replace("col-xl-4", "col-xl-3");
+                            }
+                        }
+                    },
                     getKeyVariantDisplayName(id, kvaName) {
                         const product = this.ProductsMap[id];
                         return ProductsHelper.getKeyVariantDisplayName(product, kvaName);
@@ -108,6 +166,14 @@ module Orckestra.Composer {
                     },
                     onMouseleave(searchProduct) {
                         this.ActiveProductId = undefined;
+                    },
+                    onKvaHover(event: MouseEvent) {
+                        let target = $(event.target);
+                        $(target).popover('show');
+                    },
+                    onKvaOut(event: MouseEvent) {
+                        let target = $(event.target);
+                        $(target).popover('hide');
                     },
                     selectKva(searchProduct, kvaName, kvaValue) {
                         const { ProductId: productId } = searchProduct;

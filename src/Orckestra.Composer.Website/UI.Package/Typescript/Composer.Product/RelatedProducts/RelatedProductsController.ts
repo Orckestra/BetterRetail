@@ -72,7 +72,6 @@ module Orckestra.Composer {
                         },
                         onMouseover(relatedProduct) {
                             const { ProductId, VariantId, HasVariants } = relatedProduct;
-                            console.log('onMouseover' + relatedProduct.ProductId);
                             this.ActiveProductId = ProductId;
                             if (!HasVariants || this.ProductsMap[ProductId]) return;
 
@@ -87,7 +86,14 @@ module Orckestra.Composer {
                         },
                         onMouseleave(relatedProduct) {
                             this.ActiveProductId = undefined;
-                            console.log('onMouseleave' + relatedProduct.ProductId);
+                        },
+                        onKvaHover(event: MouseEvent) {
+                            let target = $(event.target);
+                            $(target).popover('show');
+                        },
+                        onKvaOut(event: MouseEvent) {
+                            let target = $(event.target);
+                            $(target).popover('hide');
                         },
                         selectKva(relatedProduct, kvaName, kvaValue) {
                             const { ProductId: productId } = relatedProduct;

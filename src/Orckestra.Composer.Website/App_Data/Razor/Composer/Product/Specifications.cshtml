@@ -22,11 +22,11 @@
     {
         if (IsWithoutVariants())
         {
-            return Model.Specifications.Groups != null || Model.Specifications.Groups.Count != 0;
+            return Model.Specifications.Groups != null && Model.Specifications.Groups.Count != 0;
         }
         else
         {
-            return HasVariantSpecifications() || Model.Specifications.Groups != null || Model.Specifications.Groups.Count != 0;
+            return HasVariantSpecifications() || Model.Specifications.Groups != null && Model.Specifications.Groups.Count != 0;
         }
     }
 
