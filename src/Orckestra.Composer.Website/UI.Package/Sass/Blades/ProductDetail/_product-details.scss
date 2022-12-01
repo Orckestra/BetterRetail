@@ -1,6 +1,9 @@
 #product-gallery {
     @include media-breakpoint-down(sm) {
         height: 122vw;
+        &.mobile-carousel-container {
+            height: 94vw;
+        }
     }
 }
 
