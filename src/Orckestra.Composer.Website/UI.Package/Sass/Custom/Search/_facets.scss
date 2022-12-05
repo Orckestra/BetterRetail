@@ -90,6 +90,7 @@
     .card-body {
         padding-left: $card-spacer-x / 1.5;
         padding-right: $card-spacer-x / 1.5;
+        min-height: 45px;
     }
 
     .fa-check {
@@ -116,7 +117,7 @@
         padding-top: 10px;
         position: sticky;
         position: -webkit-sticky;
-        top: 205px;
+        top: 193px;
         @include media-breakpoint-up(lg) {
             top: 136px;
           }

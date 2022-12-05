@@ -328,12 +328,21 @@ module Orckestra.Composer {
             });
             new Vue({
                 el: `#${elId}`,
+                data: {
+                   dataUpdatedTracker: 1
+                },
                 computed: {
                     KvaAttributeItems() {
-                        return self.context.viewModel.keyVariantAttributeItems;
+                        return this.dataUpdatedTracker && self.context.viewModel.keyVariantAttributeItems;
                     }
                 },
+                mounted() {
+                    self.eventHub.subscribe(self.concern + 'SelectedVariantIdChanged', this.onSelectedVariantIdChanged);
+                },
                 methods: {
+                    onSelectedVariantIdChanged(result) {
+                        this.dataUpdatedTracker += 1;
+                    },
                     KvaColorStyle(value) {
                         var colorStyle = value.ConfiguredValue ? {"background": value.ConfiguredValue} :  {"background": value.Value};
                         return colorStyle;

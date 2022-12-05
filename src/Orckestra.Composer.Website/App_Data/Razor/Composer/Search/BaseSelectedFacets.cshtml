@@ -41,7 +41,8 @@
          data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())" 
          data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)"
          id="vueSelectedSearchFacets" v-cloak="true">
-        <div v-if="Facets.length" class="card facets-card mb-3 selected-facets">
+        <div class="card facets-card selected-facets"
+            v-bind:class="{'d-lg-none' : !Facets.length}">
             <div class="card-header">
                 @Html.Localize("List-Search", "L_Selection")
                 <a v-if="IsAllRemovable" 

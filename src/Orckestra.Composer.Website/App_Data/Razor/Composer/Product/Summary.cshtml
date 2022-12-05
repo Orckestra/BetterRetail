@@ -34,10 +34,10 @@
          data-context-var="productDetailContext"
          class="product-details">
         <div class="row">
-            <div class="col-md-7 col-lg-8 @(Model.Images.Count > 1 ? "mobile-carousel-container" : "")">
+            <div id="product-gallery" class="col-md-7 col-lg-8 @(Model.Images.Count > 1 ? "mobile-carousel-container" : "")">
                 @Partial("Product", "ImagesLargeGallery", Model)
             </div>
-            <div class="mobile-carousel-thumbnails d-md-none">
+            <div class="mobile-carousel-thumbnails  @(Model.Images.Count > 1 ? "" : "d-none") d-md-none">
                 @Partial("Product", "ThumbsGallery", Model)
             </div>
             <div class="col-md-5 col-lg-4">
@@ -87,14 +87,23 @@
     }
     else
     {
-        var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
-
-        foreach (var group in displayNames)
-        {
-            var ids = group.Select(v => v.Id).ToArray();
-            <span data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids) h1">@group.Key</span>
+        <h1>
+        @{
+            var displayNames = Model.Variants.GroupBy(v => v.DisplayName).ToList();
+            if (displayNames.Count() > 1) {
+                foreach (var group in displayNames)
+                {
+                    var ids = group.Select(v => v.Id).ToArray();
+                    <span data-variant="@(String.Join(",", ids))" class="@SelectedVariantClass(ids)">@group.Key</span>
+                }
+            }
+            else {
+                var group = displayNames.FirstOrDefault();
+                var ids = group.Select(v => v.Id).ToArray();
+                <span class="single">@group.Key</span>
+            }
         }
-        <h1 data-variant="unavailable" class="d-none">@Model.DisplayName</h1>
+       </h1>
     }
 }
 
