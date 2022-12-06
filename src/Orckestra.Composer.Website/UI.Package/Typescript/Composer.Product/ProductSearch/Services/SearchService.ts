@@ -16,6 +16,7 @@ module Orckestra.Composer {
 
     // TODO: Decouple window object from search service.
     export class SearchService implements ISearchService {
+        private static instance: ISearchService;
         protected _searchRepository: ISearchRepository = new SearchRepository();
         protected _searchCriteria: SearchCriteria;
         private _searchCriteriaBackup: any;
@@ -24,6 +25,11 @@ module Orckestra.Composer {
 
         constructor(protected _eventHub: IEventHub, protected _window: Window) {
             this._searchCriteria = new SearchCriteria(_eventHub, _window);
+            SearchService.instance = this;
+        }
+        
+        public static getInstance(): ISearchService {
+            return SearchService.instance;
         }
 
         /**
@@ -181,7 +187,7 @@ module Orckestra.Composer {
                 const queryString = this._searchCriteria.toQuerystring();
                 const { categoryId, queryName, queryType } = this._searchCriteria;
 
-                this._eventHub.publish(SearchEvents.SearchRequested, { data: { categoryId, queryName, queryType, queryString } });
+                this._eventHub.publish(SearchEvents.SearchRequested, { data: { categoryId, queryName, queryType, queryString, selectedFacets: this.getSelectedFacets() } });
 
                 this._window.history.pushState(this._window.history.state, "", this._baseSearchUrl + queryString);
             }

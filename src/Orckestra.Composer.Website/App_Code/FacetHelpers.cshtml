@@ -181,15 +181,13 @@
 
 @helper FacetsModalCollapseBtn()
 {
-    <section id="vueFacetsFilterBy" v-cloak="true">
         <button type="button"
                 class="btn  btn-outline-secondary btn-dropdown  w-100 dropdown-toggle"
                 data-toggle="modal"
                 data-target="#facetsModal" aria-expanded="false">
-            <span v-if="FiltersCount">@Html.Localize("List-Search", "B_FiltersApplied") <span class="badge badge-dark">{{FiltersCount}}</span></span>
-            <span v-else="FiltersCount">@Html.Localize("List-Search", "B_FilterBy")</span>
+            <span v-if="getFacetsCount()">@Html.Localize("List-Search", "B_FiltersApplied") <span class="badge badge-dark">{{getFacetsCount()}}</span></span>
+            <span v-else="else">@Html.Localize("List-Search", "B_FilterBy")</span>
         </button>
-    </section>
 }
 
 @helper CategoryFactesTree(string rootTitle)

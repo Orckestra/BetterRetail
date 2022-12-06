@@ -34,7 +34,6 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-           
             let getWithListTask = this.wishListService.getWishListSummary();
             let authenticatedPromise = this.membershipService.isAuthenticated();
             Q.all([authenticatedPromise, getWithListTask]).spread((authVm, wishList) => this.initializeVueComponent(wishList, authVm));
@@ -42,9 +41,7 @@ module Orckestra.Composer {
 
         protected initializeVueComponent(wishlist, authVm) {
             const { ProductSearchResults, ListName, MaxItemsPerPage } = this.context.viewModel;
-            
-            
-
+          
             this.sendSearchResultsForAnalytics(ProductSearchResults, ListName, MaxItemsPerPage);
             const self = this;
             $('[data-toggle="popover"]').popover({
@@ -65,6 +62,7 @@ module Orckestra.Composer {
                     IsAuthenticated: authVm.IsAuthenticated,
                     ActiveProductId: undefined,
                     FacetsVisible: true,
+                    SelectedFacets: SearchService.getInstance() ? SearchService.getInstance().getSelectedFacets(): {}
                 },
                 mounted() {
                     this.registerSubscriptions();
@@ -90,12 +88,16 @@ module Orckestra.Composer {
                     
                      
                       return this.dataUpdatedTracker && results;
-                    },
+                    }
                 },
                 updated: function () {
                     this.updateProductColumns();
                 },  
                 methods: {
+                    getFacetsCount() {
+                        const getCount = (prev, next) => prev + (Array.isArray(this.SelectedFacets[next]) ? this.SelectedFacets[next].length : 1);
+                        return Object.keys(this.SelectedFacets).reduce(getCount, 0);
+                    },
                     hideFacet(update = false): void {
                         document.getElementById("leftCol").classList.add("w-0-lg");
                         document.getElementById("rightCol").classList.remove("col-lg-9");
@@ -264,6 +266,7 @@ module Orckestra.Composer {
                         self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
                     },
                     onSearchRequested({data}): void {
+                        this.SelectedFacets = data.selectedFacets;
                         const searchRequest = (!data.categoryId && data.queryName) ?
                             self.searchRepository.getQuerySearchResults(data.queryString, data.queryName, data.queryType) :
                             self.searchRepository.getSearchResults(data.queryString, data.categoryId);
