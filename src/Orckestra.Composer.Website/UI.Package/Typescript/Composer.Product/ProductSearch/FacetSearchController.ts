@@ -71,21 +71,6 @@ module Orckestra.Composer {
                     self.initializeRangeSlider();
                 }
             });
-
-            new Vue({
-                el: '#vueFacetsFilterBy',
-                data: {
-                    SelectedFacets
-                },
-                computed: {
-                    FiltersCount() {
-                        let factes = self._searchService.getSelectedFacets();
-                        let facetKeys = Object.keys(factes);
-                        const getCount = (prev, next) => prev + (Array.isArray(factes[next]) ? factes[next].length : 1);
-                        return facetKeys.reduce(getCount, 0);
-                    }
-                }
-            })
         }
 
         public multiFacetChanged(actionContext: IControllerActionContext) {
