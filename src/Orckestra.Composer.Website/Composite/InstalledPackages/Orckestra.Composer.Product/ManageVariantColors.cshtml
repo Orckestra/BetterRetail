@@ -155,7 +155,7 @@
                     handler: function (data) {
                         this.filteredVariantColorsImmutable = this.filter(data);
                         this.variantColors = [...this.filteredVariantColorsImmutable];
-                        this.getCounter(this.filteredVariantColorsImmutable);
+                        this.updateCounter(this.filteredVariantColorsImmutable);
                         this.loadMore();
                     }
                 }
@@ -170,7 +170,7 @@
                         this.variantColorsImmutable = _.orderBy(data.colorValues.map(omitTypeName), "lookupValue");
                         this.variantColors = [...this.variantColorsImmutable];
                         if (!_.isEmpty(this.filterKeyword)) this.filteredVariantColorsImmutable = this.filter(this.filterKeyword);
-                        this.getCounter(!_.isEmpty(this.filterKeyword) ? this.filteredVariantColorsImmutable : this.variantColors);
+                        this.updateCounter(!_.isEmpty(this.filterKeyword) ? this.filteredVariantColorsImmutable : this.variantColors);
                         this.loadMore();
                         this.isLoadModification = true;
                     }
@@ -261,7 +261,7 @@
                     let immutableList = _.isEmpty(this.filterKeyword) ? this.variantColorsImmutable : this.filteredVariantColorsImmutable;
                     this.variantColors = immutableList.slice(0, this.counter);
                 },
-                getCounter(immutableList) {
+                updateCounter(immutableList) {
                     this.totalCount = immutableList.length;
                     this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
                 }
