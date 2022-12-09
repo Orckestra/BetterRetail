@@ -29,7 +29,7 @@
     var tabs = new[] { new { Total = model.ProductSearchResults.TotalCount, IsProducts = true }};
     if (summary == null)
     {
-        <div class="@(FullWidth ? "container-fluid": "")  page-summary" 
+        <div class="@(FullWidth ? "container-fluid": "")  page-summary mb-4 sps sps--abv" 
              data-oc-controller="Product.SearchSummary"
              id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(tabs)"
              v-cloak="true">

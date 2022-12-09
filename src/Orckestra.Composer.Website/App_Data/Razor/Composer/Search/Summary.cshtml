@@ -34,7 +34,7 @@
 <head>
 </head>
 <body>
-    <div class="island" data-oc-controller="Product.SearchSummary" id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(ProductsSearchViewModel.ProductSearchResults)" v-cloak="true">
+    <div class="island mb-4 sps sps--abv" data-oc-controller="Product.SearchSummary" id="vueSearchSummary" data-context="@JsonConvert.SerializeObject(ProductsSearchViewModel.ProductSearchResults)" v-cloak="true">
         <template v-if="totalCount > 0">
             @{
                 var corrected = ProductsSearchViewModel.ProductSearchResults.CorrectedSearchTerms;
