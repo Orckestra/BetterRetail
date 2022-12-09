@@ -49,22 +49,20 @@
                     </thead>
                     <tbody tag="tbody" v-model="variantColors">
                         <tr v-for="(variant, index) in variantColors" :key="index">
-
                             <td class="py-4">
                                 <input v-model="variant.lookupValue" disabled :name="'lookupValue' + index" type="text"
                                        class="mt-1 block w-full">
                             </td>
                             <td>
-                                <div class="flex input-group color-picker">
+                                <div class="flex input-group color-picker"
+                                      :id="variant.lookupValue" ref="colorpicker">
                                     <input type="text" class="form-control" :value="getValue(variant, 'color')"
-                                           v-on:focus="showPicker(variant.lookupValue)"
+                                           v-on:click.stop="showPicker(variant.lookupValue)"
                                            v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
-
-                                    <span class="input-group-addon color-picker-container" v-on:focusout="hidePicker"
-                                          tabindex="0">
+                                    <span class="input-group-addon color-picker-container">
                                         <span class="current-color"
                                               :style="`background-color:${getSelectedColor(variant)}`"
-                                              v-on:click="togglePicker(variant.lookupValue)"></span>
+                                              v-on:click.stop="togglePicker(variant.lookupValue)"></span>
                                         <chrome-picker :value="getSelectedColor(variant)"
                                                        v-on:input="updateColorFromPicker($event, variant.lookupValue)"
                                                        v-if="variant.lookupValue === openedPicker" />
@@ -208,9 +206,31 @@
                 },
                 showPicker(variant) {
                     this.openedPicker = variant;
+                    if (this.onClick) {
+                        document.removeEventListener('click', this.onClick);
+                    }
+                    this.onClick = (event) => this.documentClick(event, variant);
+                    document.addEventListener('click', this.onClick);
                 },
                 hidePicker() {
                     this.openedPicker = "";
+                    document.removeEventListener('click', this.onClick);
+                    this.onClick = null;
+                },
+                documentClick(e, variant) {
+                    let colorVariants = this.$refs.colorpicker;
+                    let currentTarget = e.target;
+                    let currentColorVariant = colorVariants.find(i => i.id === variant);
+                    let target = currentTarget;
+                    if (currentColorVariant !== currentTarget) {
+                        while (target !== null) {
+                            target = target.parentNode;
+                            if (target && target.id && target.id === currentColorVariant.id) {
+                                return;
+                            }
+                        }
+                        this.hidePicker()
+                    }
                 },
                 togglePicker(variant) {
                     this.openedPicker === variant ? this.hidePicker() : this.showPicker(variant);
@@ -300,11 +320,11 @@
             border-radius: 4px;
         }
 
-            .input-group-addon:last-child {
-                border-left: 0;
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-            }
+        .input-group-addon:last-child {
+            border-left: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
 
         .input-group .form-control:first-child {
             border-top-right-radius: 0;
