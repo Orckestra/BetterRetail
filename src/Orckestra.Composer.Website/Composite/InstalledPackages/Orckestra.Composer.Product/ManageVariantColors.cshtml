@@ -49,22 +49,20 @@
                     </thead>
                     <tbody tag="tbody" v-model="variantColors">
                         <tr v-for="(variant, index) in variantColors" :key="index">
-
                             <td class="py-4">
                                 <input v-model="variant.lookupValue" disabled :name="'lookupValue' + index" type="text"
                                        class="mt-1 block w-full">
                             </td>
                             <td>
-                                <div class="flex input-group color-picker">
+                                <div class="flex input-group color-picker"
+                                     :id="variant.lookupValue">
                                     <input type="text" class="form-control" :value="getValue(variant, 'color')"
-                                           v-on:focus="showPicker(variant.lookupValue)"
+                                           v-on:click.stop="showPicker(variant.lookupValue)"
                                            v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
-
-                                    <span class="input-group-addon color-picker-container" v-on:focusout="hidePicker"
-                                          tabindex="0">
+                                    <span class="input-group-addon color-picker-container">
                                         <span class="current-color"
                                               :style="`background-color:${getSelectedColor(variant)}`"
-                                              v-on:click="togglePicker(variant.lookupValue)"></span>
+                                              v-on:click.stop="togglePicker(variant.lookupValue)"></span>
                                         <chrome-picker :value="getSelectedColor(variant)"
                                                        v-on:input="updateColorFromPicker($event, variant.lookupValue)"
                                                        v-if="variant.lookupValue === openedPicker" />
@@ -155,8 +153,7 @@
                     handler: function (data) {
                         this.filteredVariantColorsImmutable = this.filter(data);
                         this.variantColors = [...this.filteredVariantColorsImmutable];
-                        this.totalCount = this.filteredVariantColorsImmutable.length;
-                        this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
+                        this.updateCounter(this.filteredVariantColorsImmutable);
                         this.loadMore();
                     }
                 }
@@ -171,8 +168,7 @@
                         this.variantColorsImmutable = _.orderBy(data.colorValues.map(omitTypeName), "lookupValue");
                         this.variantColors = [...this.variantColorsImmutable];
                         if (!_.isEmpty(this.filterKeyword)) this.filteredVariantColorsImmutable = this.filter(this.filterKeyword);
-                        this.totalCount = this.variantColors.length;
-                        this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
+                        this.updateCounter(!_.isEmpty(this.filterKeyword) ? this.filteredVariantColorsImmutable : this.variantColors);
                         this.loadMore();
                         this.isLoadModification = true;
                     }
@@ -210,9 +206,27 @@
                 },
                 showPicker(variant) {
                     this.openedPicker = variant;
+                    if (this.onClick) {
+                        document.removeEventListener('click', this.onClick);
+                    }
+                    this.onClick = (event) => this.documentClick(event, variant);
+                    document.addEventListener('click', this.onClick);
                 },
                 hidePicker() {
                     this.openedPicker = "";
+                    document.removeEventListener('click', this.onClick);
+                    this.onClick = null;
+                },
+                documentClick(e, variant) {
+                    let currentTarget = e.target;
+                    let target = currentTarget;
+                    while (target !== null) {
+                        if (target && target.id && target.id === variant) {
+                            return;
+                        }
+                        target = target.parentNode;
+                    }
+                    this.hidePicker()
                 },
                 togglePicker(variant) {
                     this.openedPicker === variant ? this.hidePicker() : this.showPicker(variant);
@@ -262,6 +276,10 @@
                 loadMore() {
                     let immutableList = _.isEmpty(this.filterKeyword) ? this.variantColorsImmutable : this.filteredVariantColorsImmutable;
                     this.variantColors = immutableList.slice(0, this.counter);
+                },
+                updateCounter(immutableList) {
+                    this.totalCount = immutableList.length;
+                    this.counter = this.totalCount > 0 ? (MAX_ITEM_DISPLAYED <= this.totalCount ? MAX_ITEM_DISPLAYED : this.totalCount) : 0;
                 }
             }
 
