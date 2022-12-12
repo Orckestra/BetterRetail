@@ -1,12 +1,15 @@
 @using System.Globalization
 @using System.Web.WebPages.Html
 @using Composite.Core.WebClient.Renderings.Page;
+@using Composite.Core
+@using Orckestra.Composer.Services
 
 
 @inherits Composite.AspNet.Razor.CompositeC1WebPage
 @{
-    string websiteTitle = HomePageNode.Title;
-    var themeMeta = Data.Get<Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme>().FirstOrDefault(i => i.PageId == HomePageNode.Id);
+    var websiteContext = ServiceLocator.GetService<IWebsiteContext>();
+
+    var themeMeta = websiteContext.GetRootPageMetaData<Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme>();
     var theme = !string.IsNullOrEmpty(themeMeta?.Theme) ? themeMeta.Theme : "default";
     var isPreview = PageRenderer.RenderingReason == RenderingReason.C1ConsoleBrowserPageView;
 }
