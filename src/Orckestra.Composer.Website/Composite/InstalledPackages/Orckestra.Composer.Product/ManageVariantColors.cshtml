@@ -55,7 +55,7 @@
                             </td>
                             <td>
                                 <div class="flex input-group color-picker"
-                                      :id="variant.lookupValue" ref="colorpicker">
+                                     :id="variant.lookupValue">
                                     <input type="text" class="form-control" :value="getValue(variant, 'color')"
                                            v-on:click.stop="showPicker(variant.lookupValue)"
                                            v-on:input="updateItem($event.target.value, variant.lookupValue, 'color')" />
@@ -218,19 +218,15 @@
                     this.onClick = null;
                 },
                 documentClick(e, variant) {
-                    let colorVariants = this.$refs.colorpicker;
                     let currentTarget = e.target;
-                    let currentColorVariant = colorVariants.find(i => i.id === variant);
                     let target = currentTarget;
-                    if (currentColorVariant !== currentTarget) {
-                        while (target !== null) {
-                            target = target.parentNode;
-                            if (target && target.id && target.id === currentColorVariant.id) {
-                                return;
-                            }
+                    while (target !== null) {
+                        if (target && target.id && target.id === variant) {
+                            return;
                         }
-                        this.hidePicker()
+                        target = target.parentNode;
                     }
+                    this.hidePicker()
                 },
                 togglePicker(variant) {
                     this.openedPicker === variant ? this.hidePicker() : this.showPicker(variant);
@@ -320,11 +316,11 @@
             border-radius: 4px;
         }
 
-        .input-group-addon:last-child {
-            border-left: 0;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
+            .input-group-addon:last-child {
+                border-left: 0;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
 
         .input-group .form-control:first-child {
             border-top-right-radius: 0;
