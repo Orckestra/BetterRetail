@@ -1,15 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Web.UI.WebControls;
-using Composite.Data;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
-using Orckestra.Composer.CompositeC1.Utils;
-using Orckestra.Composer.Enums;
-using Orckestra.Composer.ViewModels.Home;
-using Orckestra.Composer.ViewModels.MenuNavigation;
 using System.Web;
 using Orckestra.Composer.Utils;
 using System.Collections.Specialized;
@@ -30,9 +23,11 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         protected const string ClickedOn_QueryStringParam = "clickedon";
         protected const string CategoryPattern_QueryStringParam = "c{0}";
 
-        protected virtual string SanatizeDisplayName(string displayName)
+        private static readonly ConcurrentDictionary<string, string> _sanitizedDisplayNameCache = new ConcurrentDictionary<string, string>();
+
+        protected virtual string SanitizeDisplayName(string displayName)
         {
-            return HttpUtility.UrlEncode(UrlFormatter.FormatProductName(displayName.ToLower()));
+            return _sanitizedDisplayNameCache.GetOrAdd(displayName, str => HttpUtility.UrlEncode(UrlFormatter.FormatProductName(str)));
         }
 
         protected virtual string BuildUrl(string url, string displayName, NameValueCollection categoryHierarchy, MenuOrigin origin)
@@ -46,12 +41,12 @@ namespace Orckestra.Composer.CompositeC1.Mappers
 
             queryString.Add(Origin_QueryStringParam, origin.ToString().ToLowerInvariant());
             queryString.Add(categoryHierarchy);
-            queryString.Add(ClickedOn_QueryStringParam, SanatizeDisplayName(displayName));
+            queryString.Add(ClickedOn_QueryStringParam, SanitizeDisplayName(displayName));
 
             return UrlFormatter.AppendQueryString(url, queryString);
         }
 
-        public virtual string BuildUrl(MainMenuItemWrapper current, IEnumerable<MainMenuItemWrapper> items, MenuOrigin origin)
+        public virtual string BuildUrl(MainMenuItemWrapper current, Dictionary<Guid, MainMenuItemWrapper> items, MenuOrigin origin)
         {
             var categoryHierarchy = GetCategoryHierarchy(items, current);
             return BuildUrl(current.Url, current.DisplayName, categoryHierarchy, origin);
@@ -87,22 +82,23 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         /// <param name="items"></param>
         /// <param name="currentItem"></param>
         /// <returns></returns>
-        private IEnumerable<string> GetHierarchy(IEnumerable<MainMenuItemWrapper> items, MainMenuItemWrapper currentItem)
-        {            
-            yield return SanatizeDisplayName(currentItem.DisplayName);            
+        private IEnumerable<string> GetHierarchy(Dictionary<Guid, MainMenuItemWrapper> items, MainMenuItemWrapper currentItem)
+        {
+            yield return SanitizeDisplayName(currentItem.DisplayName);
 
-            while (currentItem.ParentId.HasValue)
+            Guid? currentMenuItemId = currentItem.ParentId;
+            while (currentMenuItemId.HasValue)
             {
-                var parent = items.First(x => x.Id.Equals(currentItem.ParentId.Value));
-                yield return SanatizeDisplayName(parent.DisplayName);
-                currentItem = parent;
+                var item = items[currentMenuItemId.Value];
+                yield return SanitizeDisplayName(item.DisplayName);
+
+                currentMenuItemId = item.ParentId;
             }
         }
 
-        protected virtual NameValueCollection GetCategoryHierarchy(IEnumerable<MainMenuItemWrapper> items, MainMenuItemWrapper currentItem)
+        protected virtual NameValueCollection GetCategoryHierarchy(Dictionary<Guid, MainMenuItemWrapper> items, MainMenuItemWrapper currentItem)
         {
-            var collection = new NameValueCollection();
-            var hierarchy = GetHierarchy(items, currentItem).Reverse().ToArray();            
+            var hierarchy = GetHierarchy(items, currentItem).Reverse().ToArray();
 
             return BuildCategoryHierarchyQueryStringParameters(hierarchy);
         }
@@ -114,13 +110,13 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         /// <param name="currentItem"></param>
         /// <returns></returns>
         private IEnumerable<string> GetHierarchy(IEnumerable<Footer> items, Footer currentItem)
-        {            
-            yield return SanatizeDisplayName(currentItem.DisplayName);            
+        {
+            yield return SanitizeDisplayName(currentItem.DisplayName);
 
             while (currentItem.ParentId.HasValue)
             {
                 var parent = items.First(x => x.Id.Equals(currentItem.ParentId.Value));
-                yield return SanatizeDisplayName(parent.DisplayName);
+                yield return SanitizeDisplayName(parent.DisplayName);
                 currentItem = parent;
             }
         }
@@ -128,7 +124,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         protected virtual NameValueCollection GetCategoryHierarchy(IEnumerable<Footer> items, Footer currentItem)
         {
             var collection = new NameValueCollection();
-            var hierarchy = GetHierarchy(items, currentItem).Reverse().ToArray();            
+            var hierarchy = GetHierarchy(items, currentItem).Reverse().ToArray();
 
             return BuildCategoryHierarchyQueryStringParameters(hierarchy);
         }
@@ -140,7 +136,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         /// <returns></returns>
         protected virtual NameValueCollection GetCategoryHierarchy(StickyHeader currentItem)
         {
-            return BuildCategoryHierarchyQueryStringParameters(SanatizeDisplayName(currentItem.DisplayName));
+            return BuildCategoryHierarchyQueryStringParameters(SanitizeDisplayName(currentItem.DisplayName));
         }
 
         /// <summary>
@@ -150,7 +146,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         /// <returns></returns>
         protected virtual NameValueCollection GetCategoryHierarchy(FooterOptionalLink currentItem)
         {
-            return BuildCategoryHierarchyQueryStringParameters(SanatizeDisplayName(currentItem.DisplayName));
+            return BuildCategoryHierarchyQueryStringParameters(SanitizeDisplayName(currentItem.DisplayName));
         }
 
         /// <summary>
@@ -160,7 +156,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
         /// <returns></returns>
         protected virtual NameValueCollection GetCategoryHierarchy(HeaderOptionalLink currentItem)
         {
-            return BuildCategoryHierarchyQueryStringParameters(SanatizeDisplayName(currentItem.DisplayName));
+            return BuildCategoryHierarchyQueryStringParameters(SanitizeDisplayName(currentItem.DisplayName));
         }
 
         protected NameValueCollection BuildCategoryHierarchyQueryStringParameters(params string[] @params)

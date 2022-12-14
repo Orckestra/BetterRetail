@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Composite.Data;
+using Composite.Data.Types;
 using Orckestra.Composer.CompositeC1.Cache;
 using Orckestra.Composer.CompositeC1.DataTypes.Navigation;
 using Orckestra.Composer.CompositeC1.Providers.MainMenu;
@@ -25,18 +27,42 @@ namespace Orckestra.Composer.CompositeC1.Mappers
 
         public virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(List<MainMenuItemWrapper> mainMenuItems, Guid? parentId = null)
         {
-            return mainMenuItems
-                .Where(x=> x.ParentId == parentId && C1Helper.IsUrlPagePublished(x.Url))
-                .OrderBy(el => el.Order)
+            var menuItemMap = mainMenuItems.ToDictionary(mi => mi.Id);
+            var menuItemsByParentIdMap = mainMenuItems
+                .ToLookup(menuItem => menuItem.ParentId);
+
+            var pageIds = new HashSet<Guid>(DataFacade.GetData<IPage>().AsEnumerable().Select(p => p.Id));
+            Func<string, bool> urlIsPublished = url =>
+            {
+                if (C1Helper.IsExternalLink(url)) return true;
+
+                var pageIdStr = C1Helper.GetPageGuidFromUrl(url);
+                return !string.IsNullOrWhiteSpace(pageIdStr)
+                       && Guid.TryParse(pageIdStr, out Guid pageId)
+                       && pageIds.Contains(pageId);
+            };
+
+            return MapMainMenuItems(menuItemMap, menuItemsByParentIdMap, urlIsPublished, parentId);
+        }
+
+        protected virtual IEnumerable<IMenuEntryViewModel> MapMainMenuItems(
+            Dictionary<Guid, MainMenuItemWrapper> menuItemsMap,
+            ILookup<Guid?, MainMenuItemWrapper> menuItemsByParentIdMap,
+            Func<string, bool> urlIsPublished,
+            Guid? parentId = null)
+        {
+            return menuItemsByParentIdMap[parentId]
+                .Where(mi => urlIsPublished(mi.Url))
+                .OrderBy(mi => mi.Order)
                 .Select(li => new HomeMainMenuEntryViewModel()
                 {
                     DisplayName = li.DisplayName,
-                    Url = _analyticsNavigationUrlHelper.BuildUrl(li, mainMenuItems, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown),
+                    Url = _analyticsNavigationUrlHelper.BuildUrl(li, menuItemsMap, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown),
                     Image = MapNavigationImage(GetNavigationImage(li.Id, new CultureInfo(li.SourceCultureName))),
                     CssClass = C1Helper.GetCssStyleValue(li.CssStyle),
                     CssClassName = li.CssClassName,
-                    UrlTarget = C1Helper.GetUrlTargetValue(li.Target), 
-                    Children = MapMainMenuItems(mainMenuItems, li.Id),
+                    UrlTarget = C1Helper.GetUrlTargetValue(li.Target),
+                    Children = MapMainMenuItems(menuItemsMap, menuItemsByParentIdMap, urlIsPublished, li.Id),
                     MenuType = MenuTypeEnum.Principal
                 }).ToList();
         }
@@ -47,7 +73,10 @@ namespace Orckestra.Composer.CompositeC1.Mappers
 
             return new HomeNavigationImageViewModel()
             {
-                ImageLabel = navigationImage.ImageLabel, ImageSource = C1Helper.GetMediaUrl(navigationImage.ImageSource), ImageUrl = navigationImage.ImageUrl, ImageUrlTarget = C1Helper.GetUrlTargetValue(navigationImage.Target)
+                ImageLabel = navigationImage.ImageLabel,
+                ImageSource = C1Helper.GetMediaUrl(navigationImage.ImageSource),
+                ImageUrl = navigationImage.ImageUrl,
+                ImageUrlTarget = C1Helper.GetUrlTargetValue(navigationImage.Target)
             };
         }
 
@@ -56,7 +85,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             return optionalLinksItems.OrderBy(el => el.Order).Select(li => new OptionalLinkEntryViewModel()
             {
                 DisplayName = li.DisplayName,
-                Url = _analyticsNavigationUrlHelper.BuildUrl(li, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown),                
+                Url = _analyticsNavigationUrlHelper.BuildUrl(li, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown),
                 UrlTarget = C1Helper.GetUrlTargetValue(li.Target),
                 CssClass = C1Helper.GetCssStyleValue(li.CssStyle)
             }).ToList();
@@ -67,7 +96,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             return optionalLinksItems.OrderBy(el => el.Order).Select(li => new OptionalLinkEntryViewModel()
             {
                 DisplayName = li.DisplayName,
-                Url = _analyticsNavigationUrlHelper.BuildUrl(li, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Footer),                
+                Url = _analyticsNavigationUrlHelper.BuildUrl(li, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Footer),
                 UrlTarget = C1Helper.GetUrlTargetValue(li.Target),
                 CssClass = C1Helper.GetCssStyleValue(li.CssStyle)
             }).ToList();
@@ -78,7 +107,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             return footer.Where(x => x.ParentId == parentId && C1Helper.IsUrlPagePublished(x.Url)).OrderBy(el => el.Order).Select(li => new FooterEntryViewModel()
             {
                 DisplayName = li.DisplayName,
-                Url = _analyticsNavigationUrlHelper.BuildUrl(li, footer, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Footer),                
+                Url = _analyticsNavigationUrlHelper.BuildUrl(li, footer, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Footer),
                 CssClass = C1Helper.GetCssStyleValue(li.CssStyle),
                 UrlTarget = C1Helper.GetUrlTargetValue(li.Target),
                 Children = MapFooterItems(footer, li.Id)
@@ -90,7 +119,7 @@ namespace Orckestra.Composer.CompositeC1.Mappers
             return mainMenuItems.OrderBy(el => el.Order).Select(li => new HomeStickyLinkViewModel()
             {
                 DisplayName = li.DisplayName,
-                Url = _analyticsNavigationUrlHelper.BuildUrl(li, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Sticky),                
+                Url = _analyticsNavigationUrlHelper.BuildUrl(li, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Sticky),
                 UrlTarget = C1Helper.GetUrlTargetValue(li.Target)
             }).ToList();
         }
