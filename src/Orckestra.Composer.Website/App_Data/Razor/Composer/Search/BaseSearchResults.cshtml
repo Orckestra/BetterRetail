@@ -60,14 +60,11 @@
         <div class="overlay" v-if="isLoading"></div>
         @if (ShowPagination)
         {
-            <div class="row filters-row mb-4" v-if="TotalCount > 0">
-                <div class="col-6 d-lg-none">
-                    @FacetHelpers.FacetsModalCollapseBtn()
-                </div>
+            <div class="row filters-row mb-4 d-none d-lg-flex" v-if="TotalCount > 0">
                 <div class="col-6">
                     @SearchHelpers.SortBy()
                 </div>
-                <div class="col-6 d-none d-lg-block">
+                <div class="col-6">
                     @SearchHelpers.PaginationDropdown()
                 </div>
             </div>

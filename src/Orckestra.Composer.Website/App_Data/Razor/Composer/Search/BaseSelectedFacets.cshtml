@@ -15,6 +15,29 @@
     [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
     public List<string> LandingPageUrls { get; set; }
 
+    [FunctionParameter(Label = "", Help = "", DefaultValue = null)]
+    public ProductSearchResultsViewModel ProductSearchVM { get; set; }
+
+    
+    public SelectedSortBy SelectedSortBy { 
+        get {
+            return ProductSearchVM.SelectedSortBy;
+        }
+    }
+
+    
+    public IList<SortBy> AvailableSortBys { 
+        get {
+            return ProductSearchVM.AvailableSortBys;
+        }
+    }
+
+    
+    public long TotalCount { 
+        get {
+            return ProductSearchVM.TotalCount;
+        }
+    }
 
     public SelectedFacets SelectedFacets
     {
@@ -40,6 +63,9 @@
     <div data-oc-controller="Product.SelectedSearchFacets" 
          data-context="@JsonConvert.SerializeObject(SelectedFacets, new Newtonsoft.Json.Converters.StringEnumConverter())" 
          data-landingpageurls="@JsonConvert.SerializeObject(LandingPageUrls)"
+         data-available-sort="@JsonConvert.SerializeObject(AvailableSortBys, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-selected-sort="@JsonConvert.SerializeObject(SelectedSortBy, new Newtonsoft.Json.Converters.StringEnumConverter())"
+         data-items-count="@(TotalCount)"
          id="vueSelectedSearchFacets" v-cloak="true">
         <div class="card facets-card selected-facets"
             v-bind:class="{'d-lg-none' : !Facets.length}">
@@ -69,6 +95,14 @@
                         </span>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div class="row filters-row mb-4 mt-3 d-lg-none" v-if="TotalCount > 0">
+            <div class="col-6">
+                @FacetHelpers.FacetsModalCollapseBtn()
+            </div>
+            <div class="col-6">
+                @FacetHelpers.SortBy()
             </div>
         </div>
     </div>
