@@ -18,7 +18,7 @@ namespace Orckestra.Composer.Extensions
         {
             if (!categoriesTree.TryGetValue(categoryId, out TreeNode<Category> categoryNode))
             {
-                throw new ArgumentException("categoryId doesn't exist", "categoryId");
+                throw new ArgumentException($"Category with Id '{categoryId}' doesn't exist", nameof(categoryId));
             }
 
             var path = new List<Category>
