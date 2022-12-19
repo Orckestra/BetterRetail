@@ -25,7 +25,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
     <script type="text/javascript">
-        var productDetailContext = '@Model.JsonContext';
+        var productDetailContext = @HttpUtility.JavaScriptStringEncode(Model.JsonContext, true);
     </script>
 </head>
 <body>
