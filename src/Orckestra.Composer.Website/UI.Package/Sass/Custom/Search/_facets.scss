@@ -111,18 +111,27 @@
     }
 }
 
+
 .search-results {
     .filters-row {
-        height: 55px;
-        padding-top: 10px;
-        position: sticky;
-        position: -webkit-sticky;
-        top: 193px;
-        @include media-breakpoint-up(lg) {
-            top: 136px;
-          }
-        z-index: 1000;
+        .sps--blw & {
+            position: sticky;
+            position: -webkit-sticky;
+            height: 55px;
+            padding-top: 20px;
+            top: 257px;
+            @include media-breakpoint-up(lg) {
+                top: 178px;
+                height: 75px;
+            }
+            z-index: 1020;
+        }
+        
         background-color: #fff;
+
+        .sort-by {
+            white-space: nowrap;
+        }
     }
 
     .sort-by .btn {
@@ -139,7 +148,7 @@
 
 @include media-breakpoint-up(lg) {
     .facets-col {
-        margin-top: -55px;
+        //margin-top: -55px;
 
         &.collapse {
             display: block;

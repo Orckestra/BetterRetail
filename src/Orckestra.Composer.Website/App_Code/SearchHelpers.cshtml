@@ -78,11 +78,11 @@
             <span v-else="v-else">@Html.Localize("List-Search", "B_FiltersShow")</span>
         </button>
         <span class="d-none d-lg-inline">@Html.Localize("List-Search", "L_Sorting")&#160;</span>
-        <button class="btn btn-outline-default dropdown-toggle" type="button" data-qa="search-sort-by-toggle"
+        <button class="btn btn-outline-default dropdown-toggle" id="sortByDropdown" type="button" data-qa="search-sort-by-toggle"
                 data-toggle="dropdown" aria-expanded="true">
             {{SelectedSortBy.DisplayName}}
         </button>
-        <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" role="menu" data-qa="search-sort-by">
+        <div class="dropdown-menu  dropdown-menu-sm-right  dropdown-menu-md-right" aria-labelledby="sortByDropdown" role="menu" data-qa="search-sort-by">
             <a v-for="sortBy in AvailableSortBys"
                class="dropdown-item"
                v-on:click="sortingChanged(sortBy.Url)">

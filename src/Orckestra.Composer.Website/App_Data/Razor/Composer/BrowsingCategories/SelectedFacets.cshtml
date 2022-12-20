@@ -1,6 +1,8 @@
 ﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Composite.AspNet.Razor
 @using Orckestra.Composer.Search.Context
 @using Orckestra.Composer.Search
+@using Orckestra.Composer.Search.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -11,17 +13,19 @@
 }
 
 @{
-    var categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
+    CategoryBrowsingViewModel categoryBrowsingViewModel = BrowsingRequestContext.GetViewModelAsync().Result;
     if (categoryBrowsingViewModel == null)
     {
         return;
     }
+
+    ProductSearchResultsViewModel productSearchVM = categoryBrowsingViewModel.ProductSearchResults;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = categoryBrowsingViewModel.FacetSettings, LandingPageUrls = categoryBrowsingViewModel.LandingPageUrls })
+    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = categoryBrowsingViewModel.FacetSettings, LandingPageUrls = categoryBrowsingViewModel.LandingPageUrls, ProductSearchVM = productSearchVM })
 </body>
 </html>

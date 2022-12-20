@@ -159,7 +159,8 @@
          data-searchQuery="@SearchRequestContext.SearchQuery"
          data-suggestedTabs="@JsonConvert.SerializeObject(vm.SuggestedTabs)"
          data-total="@vm.Total"
-         v-cloak="true">
+         v-cloak="true"
+         class="sps sps--abv">
         <div class="container-md">
             <template v-if="IsProductsCorrected">
                 <h2>@Html.Localized("List-Search", "L_NoResultsFor", "{{SearchQuery}}")</h2>

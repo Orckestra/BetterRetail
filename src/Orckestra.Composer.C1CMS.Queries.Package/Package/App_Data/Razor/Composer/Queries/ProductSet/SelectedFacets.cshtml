@@ -1,6 +1,8 @@
 ﻿@inherits Composer.Razor.ComposerRazorFunction
 @using Orckestra.Overture.ServiceModel.SearchQueries
 @using Orckestra.Composer.SearchQuery.Context
+@using Orckestra.Composer.SearchQuery.ViewModels
+@using Orckestra.Composer.Search.ViewModels
 
 @functions {
     public override string FunctionDescription
@@ -15,17 +17,18 @@
 }
 
 @{
-    var browsingViewModel = RequestContext.GetSearchQueryViewModelAsync("ProductSet", QueryName).Result;
+    SearchQueryViewModel browsingViewModel = RequestContext.GetSearchQueryViewModelAsync("ProductSet", QueryName).Result;
     if (browsingViewModel == null)
     {
         return;
     }
+    ProductSearchResultsViewModel productSearchVM = browsingViewModel.ProductSearchResults;
 }
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
 </head>
 <body>
-    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = browsingViewModel.FacetSettings })
+    @Function("Composer.Search.BaseSelectedFacets", new { FacetSettings = browsingViewModel.FacetSettings, ProductSearchVM = productSearchVM })
 </body>
 </html>

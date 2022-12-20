@@ -17,6 +17,9 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
+            const SelectedSortBy = this.context.container.data('selected-sort');
+            const AvailableSortBys = this.context.container.data('available-sort');
+            const itemsCount = this.context.container.data('items-count');
             const self = this;
 
             this.vueSelectedSearchFacets = new Vue({
@@ -25,19 +28,43 @@ module Orckestra.Composer {
                 },
                 data: {
                     ...this.context.viewModel,
-                    LandingPageUrls: this.context.container.data('landingpageurls') || []
+                    SelectedSortBy,
+                    TotalCount: itemsCount,
+                    AvailableSortBys,
+                    LandingPageUrls: this.context.container.data('landingpageurls') || [],
+                    SelectedFacets: SearchService.getInstance() ? SearchService.getInstance().getSelectedFacets(): {}
                 },
                 mounted() {
                     self.eventHub.subscribe(SearchEvents.FacetsLoaded, this.onFacetsLoaded);
                     self.eventHub.subscribe(SearchEvents.SearchResultsLoaded, this.onFacetsLoaded);
+                    self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));
                 },
                 computed: {
                 },
                 methods: {
+                    sortingChanged(url) {
+                        self.eventHub.publish(SearchEvents.SortingChanged, {data: {url}});
+                    },
+                    getFacetsCount() {
+                        const getCount = (prev, next) => prev + (Array.isArray(this.SelectedFacets[next]) ? this.SelectedFacets[next].length : 1);
+                        return Object.keys(this.SelectedFacets).reduce(getCount, 0);
+                    },
                     onFacetsLoaded({data}) {
                         this.Facets = data.FacetSettings.SelectedFacets.Facets;
                         this.IsAllRemovable = data.FacetSettings.SelectedFacets.IsAllRemovable;
                         this.LandingPageUrls = data.LandingPageUrls || [];
+                    },
+                    onSearchRequested({data}): void {
+                        this.SelectedFacets = data.selectedFacets;
+                        const dataParams = new URLSearchParams(data.queryString);
+                        this.SelectedSortBy = AvailableSortBys.find(function(sortBy, index){
+                            const sortByParams = new URLSearchParams(sortBy.Url);
+                            var sortDirection = sortByParams.get("sortDirection");
+                            var dataDirection = dataParams.get("sortDirection");
+                            var sortByVal = sortByParams.get("sortBy");
+                            var dataSortBy = dataParams.get("sortBy");
+                            return ((sortByVal === dataSortBy) && (sortDirection === dataDirection));
+                        });
                     },
                     clearSelectedFacets(landingPageUrl) {
                         self.eventHub.publish(SearchEvents.FacetsCleared, { data: { landingPageUrl } });
