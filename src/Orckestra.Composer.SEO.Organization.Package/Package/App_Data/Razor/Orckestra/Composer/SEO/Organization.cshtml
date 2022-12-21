@@ -1,14 +1,18 @@
 ﻿@inherits RazorFunction
+@using Composite.Core
+@using Orckestra.Composer.Services
 
 @functions {
     public override string FunctionDescription
     {
         get { return "The Organization JSON-LD SEO Data"; }
     }
+
+    public IWebsiteContext WebsiteContext { get; set; }
 }
 
 @{
-    var organization = Data.Get<Orckestra.Composer.SEO.Organization>().FirstOrDefault(o => o.PageId == HomePageNode.Id);
+    var organization = WebsiteContext.GetRootPageMetaData<Orckestra.Composer.SEO.Organization>();
     if (organization == null)
     {
         return;

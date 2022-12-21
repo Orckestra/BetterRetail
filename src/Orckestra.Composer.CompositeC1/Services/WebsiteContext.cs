@@ -14,13 +14,15 @@ namespace Orckestra.Composer.CompositeC1.Services
         public WebsiteContext(HttpRequestBase httpRequest, ICacheService cacheService)
         {
             _httpRequest = httpRequest;
-            _cache = cacheService.GetStoreWithDependencies<string, Guid>("Hostname Bindings", 
+            _cache = cacheService.GetStoreWithDependencies<string, Guid>("Hostname Bindings",
                 new CacheDependentEntry<IHostnameBinding>()
             );
         }
 
         private readonly HttpRequestBase _httpRequest;
         private readonly ICacheStore<string, Guid> _cache;
+
+        private Guid? _rootPageVersionId;
 
         private Guid _websiteId;
         public Guid WebsiteId
@@ -64,6 +66,27 @@ namespace Orckestra.Composer.CompositeC1.Services
                 }
 
                 return _websiteId;
+            }
+        }
+
+        public T GetRootPageMetaData<T>() where T : class, IPageMetaData
+        {
+            using (var data = new DataConnection())
+            {
+                if (_rootPageVersionId == null)
+                {
+                    var rootPage = PageManager.GetPageById(_websiteId);
+                    _rootPageVersionId = rootPage.VersionId;
+                }
+
+                var versionId = _rootPageVersionId;
+
+                // Version resolution through DataConnection is slow, so we're disabling the "version resolution service" and selecting the needed version by ourselves
+                data.DisableServices();
+
+                return data.Get<T>()
+                    .AsEnumerable()
+                    .FirstOrDefault(d => d.PageId == _websiteId && d.VersionId == versionId);
             }
         }
     }

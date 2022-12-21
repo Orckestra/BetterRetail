@@ -45,14 +45,17 @@ namespace Orckestra.Composer.CompositeC1.Utils
         {
             if (mediaPath == null) return string.Empty;
 
-            string[] parts = mediaPath.Split(new[] { ':' });
+            string[] parts = mediaPath.Split(':');
 
             string mediaStore = parts[0];
             Guid mediaId = new Guid(parts[1]);
 
             string mediaUrl = MediaUrls.BuildUrl(new MediaUrlData { MediaStore = mediaStore, MediaId = mediaId, QueryParameters = new NameValueCollection() },
                 UrlKind.Public);
-            
+
+            if (mediaUrl == null)
+                throw new InvalidOperationException($"Failed to find media file: '{mediaPath}'");
+
             return mediaUrl.Replace("_jpg", ".jpg").Replace("_mov", ".mov").Replace("_m4v", ".m4v").Replace("_swf", ".swf");
         }
 

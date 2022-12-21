@@ -26,6 +26,11 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
         {
             get; private set;
         }
+
+        public T GetRootPageMetaData<T>() where T : class, IPageMetaData
+        {
+            throw new NotSupportedException();
+        }
     }
 
     public class MultiSitemapGenerator : IMultiSitemapGenerator

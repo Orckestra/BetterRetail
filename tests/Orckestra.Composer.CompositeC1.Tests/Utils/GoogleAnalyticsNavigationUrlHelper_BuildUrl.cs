@@ -46,10 +46,12 @@ namespace Orckestra.Composer.CompositeC1.Tests.Utils
             menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1.1.1", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1.1")).Id });
             menuItems.Add(new MainMenuItemWrapper { Url = _customUrl, DisplayName = "cat1.1.2", Id = Guid.NewGuid(), ParentId = menuItems.First(x => x.DisplayName.Equals("cat1.1")).Id });
 
+            var menuItemsMap = menuItems.ToDictionary(_ => _.Id);
+
             var expectedResult = new List<string>
-            {          
+            {
                 string.Empty,
-                string.Empty,      
+                string.Empty,
                 "/en-CA/women?origin=dropdown&c1=cat1&clickedon=cat1",
                 "/en-CA/women?origin=dropdown&c1=cat2&clickedon=cat2",
                 "/en-CA/women?origin=dropdown&c1=cat1&c2=cat11&clickedon=cat11",
@@ -59,7 +61,7 @@ namespace Orckestra.Composer.CompositeC1.Tests.Utils
             };
 
             //Act
-            var result = menuItems.Select(menuItem => _sut.BuildUrl(menuItem, menuItems, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown));
+            var result = menuItems.Select(menuItem => _sut.BuildUrl(menuItem, menuItemsMap, GoogleAnalyticsNavigationUrlProvider.MenuOrigin.Dropdown));
 
             //Assert
             CollectionAssert.AreEqual(expectedResult.OrderBy(foo => foo), result.OrderBy(foo => foo));
