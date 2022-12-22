@@ -275,6 +275,8 @@
     <Compile Include="ExceptionFilters\BaseExceptionFilter.cs" />
     <Compile Include="ExceptionFilters\ComposerExceptionFilter.cs" />
     <Compile Include="ComposerOvertureClient.cs" />
+    <Compile Include="Exceptions\RecurringOrderLineItemExtentions.cs" />
+    <Compile Include="Exceptions\LineItemExtentions.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="Extensions\CustomerExtensions.cs" />
     <Compile Include="Extensions\LookupExtensions.cs" />

@@ -1,4 +1,5 @@
 using Orckestra.Composer.Configuration;
+using Orckestra.Composer.Extensions;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.Repositories;
@@ -32,17 +33,17 @@ namespace Orckestra.Composer.Services
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(IEnumerable<LineItem> lineItems)
         {
-            return GetImageUrlsAsync(lineItems.Select(lineItem => (lineItem.ProductId, lineItem.VariantId, lineItem.PropertyBag != null && lineItem.PropertyBag.ContainsKey("ImageUrl") ? lineItem.PropertyBag["ImageUrl"].ToString() : null)).ToList());
+            return GetImageUrlsAsync(lineItems.Select(lineItem => (lineItem.ProductId, lineItem.VariantId, lineItem.GetImageUrl())).ToList());
         }
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(ListOfRecurringOrderLineItems list)
         {
-            return GetImageUrlsAsync(list.RecurringOrderLineItems.Select(lineItem =>  (lineItem.ProductId, lineItem.VariantId, lineItem.PropertyBag != null && lineItem.PropertyBag.ContainsKey("ImageUrl") ? lineItem.PropertyBag["ImageUrl"].ToString(): null)).ToList());
+            return GetImageUrlsAsync(list.RecurringOrderLineItems.Select(lineItem => (lineItem.ProductId, lineItem.VariantId, lineItem.GetImageUrl())).ToList());
         }
 
         public virtual Task<List<ProductMainImage>> GetImageUrlsAsync(RecurringOrderLineItem lineItem)
         {
-            return GetImageUrlsAsync(new[] { (lineItem.ProductId, lineItem.VariantId, lineItem.PropertyBag != null && lineItem.PropertyBag.ContainsKey("ImageUrl") ? lineItem.PropertyBag["ImageUrl"].ToString() : null) });
+            return GetImageUrlsAsync(new[] { (lineItem.ProductId, lineItem.VariantId, lineItem.GetImageUrl()) });
         }
 
         public virtual async Task<List<ProductMainImage>> GetImageUrlsAsync(ICollection<(string productId, string variantId, string imageUrl)> products)
