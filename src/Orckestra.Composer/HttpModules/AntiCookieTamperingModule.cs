@@ -7,6 +7,11 @@ using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Services;
 using System.Web.Mvc;
 using Autofac.Integration.Mvc;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Utils;
+using System.Globalization;
+using System.Configuration;
 
 namespace Orckestra.Composer.HttpModules
 {
@@ -25,6 +30,10 @@ namespace Orckestra.Composer.HttpModules
             Handle(httpContext);
         }
 
+        //// ReSharper disable once InconsistentNaming
+        //private readonly bool ValidationPasswordChangedNotDisabled =
+        //    ConfigurationManager.AppSettings["Orckestra.ComposerContext.DisableValidationPasswordChanged"] != "true";
+
         private void Handle(HttpContextBase httpContext)
         {
             var shouldHandle = ShouldHandleRequest(httpContext);
@@ -33,6 +42,42 @@ namespace Orckestra.Composer.HttpModules
             var cookieHandler = GetCookieHandler(httpContext);
             var isAuth = IsAuthenticated(httpContext);
             var isGuest = IsGuest(cookieHandler);
+
+            //Scope and Culture Info is not available at this time
+            //var dto = cookieHandler.Read();
+
+            //if (dto.EncryptedCustomerId != null)
+            //{
+            //    var decryptedCustomerId = new Guid(new EncryptionUtility().Decrypt(dto.EncryptedCustomerId));
+
+            //    var ComposerContext = (IComposerContext)AutofacDependencyResolver.Current.GetService(typeof(IComposerContext));
+            //    var CustomerRepository = (ICustomerRepository)AutofacDependencyResolver.Current.GetService(typeof(ICustomerRepository));
+
+            //    if (dto.IsGuest != true && ValidationPasswordChangedNotDisabled)
+            //    {
+            //        // GetCustomerByIdAsync uses a cache
+            //        var customer = CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam()
+            //        {
+            //            CustomerId = decryptedCustomerId,
+            //            Scope = ComposerContext.Scope,
+            //            CultureInfo = ComposerContext.CultureInfo,
+            //            IncludeAddresses =
+            //                true // all parameters should be the same as in CustomerViewService.GetAccountHeaderViewModelAsync
+            //        }).Result;
+
+            //        var passwordChangedDateTime = customer.LastPasswordChanged.ToUniversalTime();
+            //        // 10 seconds was added to compensate OCS server and EM server difference time.
+            //        var ticketDateTime = (httpContext.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket
+            //            .IssueDate.ToUniversalTime().AddSeconds(10);
+            //        if (passwordChangedDateTime > ticketDateTime)
+            //        {
+            //            RemoveComposerCookie(httpContext);
+            //            RemoveAuth(httpContext);
+            //            ReloadIfRequired(httpContext);
+            //        }
+            //    }
+            //}
+
 
             //If not mutually exclusive
             if (isAuth == isGuest)
