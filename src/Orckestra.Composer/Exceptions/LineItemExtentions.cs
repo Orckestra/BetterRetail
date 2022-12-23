@@ -16,6 +16,5 @@ namespace Orckestra.Composer.Extensions
         {
             return lineItem.PropertyBag != null && lineItem.PropertyBag.ContainsKey("ImageUrl") ? lineItem.PropertyBag["ImageUrl"].ToString() : null;
         }
- 
     }
 }
