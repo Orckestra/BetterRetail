@@ -379,7 +379,7 @@ namespace Orckestra.Composer.Cart.Services.Order
         {
             var itemsToProcess = pickedItemsList
                .Where(x => x.PickingResult == PickingResult.Substituted.ToString() || x.PickingResult == PickingResult.NotAvailable.ToString())
-               .Select(x => (x.ProductId, x.VariantId)).ToList();
+               .Select(x => (x.ProductId, x.VariantId, ImageUrl: string.Empty)).ToList();
 
             if (!itemsToProcess.Any()) return lineItemsList;
 
@@ -439,7 +439,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             return result;
         }
 
-        private async Task<IDictionary<(string ProductId, string VariantId), ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId)> itemsToProcess)
+        private async Task<IDictionary<(string ProductId, string VariantId), ProductMainImage>> CreateImageDictionary(List<(string ProductId, string VariantId, string ImageUrl)> itemsToProcess)
         {
             var productImageInfo = new ProductImageInfo
             {

@@ -25,6 +25,16 @@ namespace Orckestra.Composer.Repositories
         Task<Overture.ServiceModel.Products.Product> GetProductAsync(GetProductParam param);
 
         /// <summary>
+        /// Gets products by ids.
+        /// </summary>
+        /// <param name="productIds">The product ids.</param>
+        /// <param name="scopeId">The scope id.</param>
+        /// <returns>
+        /// Instance of <see cref="ProductList" />.
+        /// </returns>
+        Task<ProductList> GetProductsByIdsAsync(string[] productIds, string scopeId);
+
+        /// <summary>
         /// A definition is a list of properties that is allowed to be set to the instance of product or category being used
         /// </summary>
         /// <param name="param">Retrieve the entity definition defined in the system related to the Name parameter specified in the request</param>

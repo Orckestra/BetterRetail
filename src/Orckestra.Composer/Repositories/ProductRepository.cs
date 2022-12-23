@@ -9,6 +9,7 @@ using Orckestra.Overture.ServiceModel.Products;
 using Orckestra.Overture.ServiceModel.Requests.Products;
 using Orckestra.Overture.ServiceModel.Requests.Search;
 using Orckestra.Overture.ServiceModel.Search;
+using ServiceStack;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 
 
@@ -70,6 +71,48 @@ namespace Orckestra.Composer.Repositories
                 }).ConfigureAwait(false);
 
             return param.ReturnInactive || (result?.Active ?? false) ? result : null;
+        }
+
+        /// <summary>
+        /// Gets products.
+        /// </summary>
+        /// <param name="productIds">The product ids to get.</param>
+        /// <param name="scopeId">The scope id.</param>
+        /// <returns>
+        /// Instance of <see cref="ProductList" />.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">productIds</exception>
+        public virtual async Task<ProductList> GetProductsByIdsAsync(string[] productIds, string scopeId)
+        {
+            if (productIds == null) { throw new ArgumentNullException(nameof(productIds)); }
+            if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(scopeId)), nameof(scopeId)); }
+
+            var productCacheKey = new CacheKey(CacheConfigurationCategoryNames.Product)
+            {
+                Scope = scopeId,
+            };
+
+            productCacheKey.AppendKeyParts("ids" + productIds.Join());
+
+            var result = await CacheProvider.GetOrAddAsync(productCacheKey, () =>
+            {
+                var request = new GetProductsByIdsV2Request
+                {
+                    CultureName = string.Empty,
+                    IncludePriceLists = false,
+                    IncludeRelationships = true,
+                    IncludeVariants = true,
+                    ProductIds = productIds,
+                    ScopeId = scopeId,
+                    IncludeMedia = true,
+                    IncludeImageUrl = true
+
+                };
+
+                return OvertureClient.SendAsync(request);
+            }).ConfigureAwait(false);
+
+            return result;
         }
 
         public virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductDefinitionParam param)
