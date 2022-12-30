@@ -280,12 +280,16 @@ namespace Orckestra.Composer.ViewModels
             }
             else
             {
-                throw new InvalidOperationException(
-                    string.Format(
-                        "Cannot map property '{0}', because source property type was '{1}' and viewmodel property type was '{2}'.",
-                        viewModelPropertyName,
-                        sourceType.FullName,
-                        viewModelPropertyType.FullName));
+                try
+                {
+                    viewModelPropertyValue = Convert.ChangeType(sourceValue, viewModelPropertyType);
+                }
+                catch
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot map property '{viewModelPropertyName}', because source property type was '{sourceType.FullName}' " +
+                        $"and viewmodel property type was '{viewModelPropertyType.FullName}'.");
+                }
             }
             return viewModelPropertyValue;
         }
