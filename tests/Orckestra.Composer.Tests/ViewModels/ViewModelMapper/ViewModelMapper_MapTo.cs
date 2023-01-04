@@ -220,12 +220,12 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelMapper
         }
 
         [Test]
-        public void WHEN_Types_Mismatch_SHOULD_Throw_InvalidOperationException()
+        public void WHEN_Types_Not_Convertable_SHOULD_Throw_InvalidOperationException()
         {
             // Arrange
-            var productionWithWrongPropertyType = new ProductWithWrongPropertyType
+            var productionWithWrongPropertyType = new
             {
-                Brand = 1
+                Brand = new { WrongObjectProperty = "1" }
             };
             var validEnglishCulture = CultureInfo.GetCultureInfo("en-CA");
 
@@ -237,14 +237,14 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelMapper
         }
 
         [Test]
-        public void WHEN_Types_Mismatch_In_PropertyBag_SHOULD_Throw_InvalidOperationException()
+        public void WHEN_Types_Not_Convertable_In_PropertyBag_SHOULD_Throw_InvalidOperationException()
         {
             // Arrange
             var wrongTypeInPropertyBag = new ProductWithWrongPropertyTypeInPropertyBag
             {
                 PropertyBag = new PropertyBag(new Dictionary<string, object>
                 {
-                    { "Colour", 9 }
+                    { "Colour", new { WrongObjectProperty = "1" } }
                 })
             };
             var validEnglishCulture = CultureInfo.GetCultureInfo("en-CA");
@@ -371,11 +371,6 @@ namespace Orckestra.Composer.Tests.ViewModels.ViewModelMapper
             // ReSharper disable once InconsistentNaming (we test explicitly for property with wrong casing)
             public string brand { get; set; }
             public double Price { get; set; }
-        }
-
-        class ProductWithWrongPropertyType
-        {
-            public int Brand { get; set; }
         }
 
         class ProductWithWrongPropertyTypeInPropertyBag
