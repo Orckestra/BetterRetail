@@ -184,6 +184,11 @@ namespace Orckestra.Composer.MyAccount.Api
                 });
             }
 
+            if(string.IsNullOrEmpty(registerRequest.Username))
+            {
+                registerRequest.Username = registerRequest.Email;
+            }
+
             var registerParam = new CreateUserParam
             {
                 Username = registerRequest.Username,
@@ -209,7 +214,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 GuestCustomerId = ComposerContext.CustomerId,
-                Username = registerRequest.Email,
+                Username = registerRequest.Username,
                 Password = registerRequest.Password
             };
 
