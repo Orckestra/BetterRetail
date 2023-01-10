@@ -1,5 +1,4 @@
 ﻿using Autofac.Integration.Mvc;
-using Orckestra.Overture.ServiceModel;
 using Orckestra.Overture.ServiceModel.Customers;
 using Orckestra.Overture.ServiceModel.Customers.Membership;
 using Orckestra.Overture.ServiceModel.Queries;
@@ -26,43 +25,28 @@ namespace Orckestra.Composer.Providers.Membership
         private MembershipConfiguration _configuration;
         private Regex _matchDomainUserRegex;
 
-        public override bool EnablePasswordRetrieval
-        {
-            get { return _configuration.EnablePasswordRetrieval; }
-        }
+        private MembershipConfiguration Configuration =>
+            _configuration ?? throw new InvalidOperationException("Configuration hasn't been initialized"); 
 
-        public override bool EnablePasswordReset
-        {
-            get { return _configuration.EnablePasswordReset; }
-        }
+        public override bool EnablePasswordRetrieval => Configuration.EnablePasswordRetrieval;
 
-        public override bool RequiresQuestionAndAnswer
-        {
-            get { return _configuration.RequiresQuestionAndAnswer; }
-        }
+        public override bool EnablePasswordReset => Configuration.EnablePasswordReset;
+
+        public override bool RequiresQuestionAndAnswer => Configuration.RequiresQuestionAndAnswer;
 
         public override string ApplicationName { get; set; }
 
-        public override int MaxInvalidPasswordAttempts
-        {
-            get { return _configuration.MaxInvalidPasswordAttempts; }
-        }
+        public override int MaxInvalidPasswordAttempts => Configuration.MaxInvalidPasswordAttempts;
 
-        public override int PasswordAttemptWindow
-        {
-            get { return _configuration.PasswordAttemptWindow; }
-        }
+        public override int PasswordAttemptWindow => Configuration.PasswordAttemptWindow;
 
-        public override bool RequiresUniqueEmail
-        {
-            get { return _configuration.RequiresUniqueEmail; }
-        }
+        public override bool RequiresUniqueEmail => Configuration.RequiresUniqueEmail;
 
         public override MembershipPasswordFormat PasswordFormat
         {
             get
             {
-                if (!Enum.TryParse(_configuration.PasswordStrategy.ToString(), out MembershipPasswordFormat passwordFormat))
+                if (!Enum.TryParse(Configuration.PasswordStrategy.ToString(), out MembershipPasswordFormat passwordFormat))
                 {
                     throw new InvalidOperationException(
                         "Unable to parse MembershipPasswordFormat from Overture's MembershipPasswordStrategy.");
@@ -72,20 +56,11 @@ namespace Orckestra.Composer.Providers.Membership
             }
         }
 
-        public override int MinRequiredPasswordLength
-        {
-            get { return _configuration.MinRequiredPasswordLength; }
-        }
+        public override int MinRequiredPasswordLength => Configuration.MinRequiredPasswordLength;
 
-        public override int MinRequiredNonAlphanumericCharacters
-        {
-            get { return _configuration.MinRequiredNonAlphanumericCharacters; }
-        }
+        public override int MinRequiredNonAlphanumericCharacters => Configuration.MinRequiredNonAlphanumericCharacters;
 
-        public override string PasswordStrengthRegularExpression
-        {
-            get { return _configuration.PasswordStrengthRegularExpression; }
-        }
+        public override string PasswordStrengthRegularExpression => Configuration.PasswordStrengthRegularExpression;
 
         public virtual string GetCurrentScope()
         {
@@ -695,7 +670,7 @@ namespace Orckestra.Composer.Providers.Membership
             {
                 var customer = GetCustomerByUsername(username);
 
-                if (customer == null) { throw new InvalidOperationException(string.Format("This customer with username {0} doesn't exist.", username)); }
+                if (customer == null) throw new InvalidOperationException($"A customer with username '{username}' doesn't exist.");
 
                 var updateRequest = new UpdateCustomerRequest()
                 {
@@ -804,20 +779,21 @@ namespace Orckestra.Composer.Providers.Membership
                 config.Add("description", "Overture Membership provider");
             }
 
-            _matchDomainUserRegex = new Regex(string.Format(@"^{0}\\(?<username>.+)$", OvertureMembershipConfiguration.DefaultMembershipDomain), RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            var pattern = $@"^{OvertureMembershipConfiguration.DefaultMembershipDomain}\\(?<username>.+)$";
+            _matchDomainUserRegex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             _client = ComposerHost.Current.Resolve<IComposerOvertureClient>();
 
-            GetMembershipConfigurationFromOverture();
+            LoadMembershipConfigurationFromOverture();
         }
 
-        private void GetMembershipConfigurationFromOverture()
+        private void LoadMembershipConfigurationFromOverture()
         {
             if (_configuration != null) { return; }
 
             try
             {
-                _configuration = _client.Send(new GetMembershipConfigurationRequest());
+                _configuration = _client.Send(new GetMembershipConfigurationRequest()) ?? throw new InvalidOperationException("Failed to load membership configuration");
             }
             catch (Exception ex)
             {
