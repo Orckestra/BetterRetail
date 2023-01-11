@@ -1,8 +1,10 @@
 using System;
 using System.Configuration;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading;
 using System.Web;
+using System.Web.Security;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
@@ -272,7 +274,11 @@ namespace Orckestra.Composer.Services
                         if (passwordChangedDateTime < ticketDateTime)
                         {
                             _customerId = decryptedCustomerId;
-                        }   
+                        }
+                        else
+                        {
+                            CookieAccessor.ClearWithStorage();
+                        }
                     }
                 }
                 if (!_customerId.HasValue)
