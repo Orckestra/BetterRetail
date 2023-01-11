@@ -75,7 +75,11 @@ namespace Orckestra.Composer.CompositeC1.Services
             {
                 if (_rootPageVersionId == null)
                 {
-                    var rootPage = PageManager.GetPageById(_websiteId);
+                    var websiteId = WebsiteId;
+
+                    var rootPage = PageManager.GetPageById(websiteId)
+                        ?? throw new InvalidOperationException($"Failed to get the website root page by ID: '{websiteId}'");
+
                     _rootPageVersionId = rootPage.VersionId;
                 }
 
