@@ -10,6 +10,7 @@ namespace Orckestra.Composer.MyAccount
         {
             host.Register<MembershipViewService, IMembershipViewService>();
             host.Register<CustomerRepository, ICustomerRepository>();
+            host.Register<CustomerSettingsRepository, ICustomerSettingsRepository>();
             host.Register<CustomerAddressRepository, ICustomerAddressRepository>();
             host.Register<CustomerAddressViewService, ICustomerAddressViewService>();
             host.Register<CustomerViewService, ICustomerViewService>();

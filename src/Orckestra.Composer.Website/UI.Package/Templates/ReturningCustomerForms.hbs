@@ -1,6 +1,7 @@
 <form name="login" data-oc-submit="login" method="post" autocomplete="on" action="#">
     {{>ReturningCustomerFormsServerValidations }}
 
+    {{#if UseEmailAsUsername}}
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -16,6 +17,23 @@
             </div>
         </div>
     </div>
+    {{else}}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="username">{{localize 'Forms' 'F_UserName'}}</label>
+                <input data-qa="login-email" class="form-control" id="username" name="Username"
+                    type="text"
+                    placeholder="{{localize 'Forms' 'F_UserNameWaterMark'}}"
+                    {{#if_localized 'Forms' 'F_UsernameIndication'}}
+                        {{>HelpBubbleOpen}}{{localize 'Forms' 'F_UsernameIndication'}}{{>HelpBubbleClose}}
+                    {{/if_localized}}
+                    required="true" {{#if_localized 'Forms' 'F_UsernameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_UsernameRequiredError'}}"{{/if_localized}}
+                    />
+            </div>
+        </div>
+    </div>
+    {{/if}}
 
     <div class="row">
         <div class="col-md-6">

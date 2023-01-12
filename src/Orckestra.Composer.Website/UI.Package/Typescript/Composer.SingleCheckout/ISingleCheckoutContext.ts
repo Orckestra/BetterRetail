@@ -4,6 +4,7 @@
 module Orckestra.Composer {
     export interface ISingleCheckoutContext {
         IsAuthenticated: boolean;
+        UseEmailAsUsername: boolean;
         Cart: any;
         Regions: any;
         ShippingMethodTypes: any;

@@ -28,8 +28,8 @@ module Orckestra.Composer {
                 },
                 computed: {
                     FulfilledCustomer() {
-                        let { Email, Password } = this.Cart.Customer;
-                        let fulfilledSignIn = Email && Password;
+                        let { Email, Password, Username } = this.Cart.Customer;
+                        let fulfilledSignIn = this.Mode.UseEmailAsUsername ? Email && Password: Username && Password;
                         let fulfilled = self.checkoutService.customerFulfilled(this.Cart);
                         return !!(this.Mode.SignIn === SignInModes.SigningIn ? fulfilledSignIn : fulfilled);
                     },
@@ -71,7 +71,10 @@ module Orckestra.Composer {
                                         return this.updateCustomer();
                                     });
                                 case SignInModes.SigningIn:
-                                    let { Email: Username, Password } = this.Cart.Customer;
+                                    let { Username, Password } = this.Cart.Customer;
+                                    if(this.Mode.UseEmailAsUsername) {
+                                        Username = this.Cart.Customer.Email;
+                                    }
                                     let loginData = { Username, Password };
                                     return self.checkoutService.loginUser(loginData);
                             }
@@ -100,7 +103,10 @@ module Orckestra.Composer {
                         this.Mode.SignIn = SignInModes.SigningIn;
                     },
                     signInAndContinue() {
-                        let { Email: Username, Password } = this.Cart.Customer;
+                        let { Username, Password } = this.Cart.Customer;
+                        if(this.Mode.UseEmailAsUsername) {
+                            Username = this.Cart.Customer.Email;
+                        }
                         let loginData = { Username, Password };
                         self.checkoutService.loginUser(loginData)
                             .then((success) => {

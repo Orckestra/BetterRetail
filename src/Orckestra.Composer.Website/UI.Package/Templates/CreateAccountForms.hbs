@@ -1,4 +1,4 @@
-<form id="CreateAccount" data-oc-submit="createAccount" method="post">
+<form id="CreateAccount" data-oc-submit="createAccount" method="post" autocomplete="off">
     <div class="card">
         <h3 class="card-header">{{localize 'MyAccount' 'T_MyInformation'}}</h3>
         <div class="card-body">
@@ -58,7 +58,31 @@
                     </div>
                 </div>
             </div>
-
+            {{#unless UseEmailAsUsername}}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Username">{{localize 'Forms' 'F_UserName'}}</label>
+                        <input type="text"
+                                id="Username"
+                                name="Username"
+                                class="form-control"
+                                value=""
+                                required="true"
+                                autocomplete="off"
+                                placeholder="{{localize 'Forms' 'F_UserNameWaterMark'}}"
+                                data-qa="register-username"
+                                {{#if_localized 'Forms' 'F_UsernameIndication'}}
+                                    {{>HelpBubbleOpen}}{{localize 'Forms' 'F_UsernameIndication'}}{{>HelpBubbleClose}}
+                                {{/if_localized}}
+                                {{#if_localized 'Forms' 'F_UserNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_UserNameRequiredError'}}"{{/if_localized}}
+                                data-parsley-length="[2, 36]"
+                                {{#if_localized 'Forms' 'F_UserNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_UserNameLengthError'}}"{{/if_localized}}
+                        />
+                    </div>
+                </div>
+            </div>
+            {{/unless}}
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -71,7 +95,9 @@
                                 placeholder="{{localize 'Forms' 'F_EmailWaterMark'}}"
                                 data-qa="register-email"
                                 {{#if_localized 'Forms' 'F_EmailIndication'}}
+                                {{#if UseEmailAsUsername}}
                                     {{>HelpBubbleOpen}}{{localize 'Forms' 'F_EmailIndication'}}{{>HelpBubbleClose}}
+                                {{/if}}
                                 {{/if_localized}}
                                 required="true"
                                 {{#if_localized 'Forms' 'F_EmailRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_EmailRequiredError'}}"{{/if_localized}}

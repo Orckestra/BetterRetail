@@ -62,5 +62,10 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         /// The PhoneNumber RegEx validation rule
         /// </summary>
         public string PhoneNumberRegEx { get; set; }
+
+        /// <summary>
+        /// The use Email as Username flag
+        /// </summary>
+        public bool UseEmailAsUsername { get; set; }
     }
 }

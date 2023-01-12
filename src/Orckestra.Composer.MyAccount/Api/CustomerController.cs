@@ -56,6 +56,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Scope = ComposerContext.Scope,
                 PreferredLanguage = request.PreferredLanguage,
                 Email = request.Email,
+                Username = request.Username,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,

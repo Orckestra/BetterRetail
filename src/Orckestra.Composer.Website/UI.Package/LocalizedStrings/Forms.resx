@@ -552,4 +552,16 @@
   <data name="F_PhoneNumberRequiredError" xml:space="preserve">
     <value>Phone Number is required</value>
   </data>
+  <data name="F_UserName" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="F_UserNameRequiredError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="F_UserNameWaterMark" xml:space="preserve">
+    <value>ex: franklin.pollux</value>
+  </data>
+  <data name="F_UsernameIndication" xml:space="preserve">
+    <value>Your Username will be used to login to the site</value>
+  </data>
 </root>

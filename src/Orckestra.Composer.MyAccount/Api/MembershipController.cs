@@ -214,7 +214,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 GuestCustomerId = ComposerContext.CustomerId,
-                Username = registerRequest.Username,
+                Username = createAccountViewModel.Username,
                 Password = registerRequest.Password
             };
 
