@@ -268,9 +268,8 @@ namespace Orckestra.Composer.Services
                         }).Result;
                         
                         var passwordChangedDateTime = customer.LastPasswordChanged.ToUniversalTime();
-                        // 10 seconds was added to compensate OCS server and EM server difference time.
                         var ticketDateTime = (HttpContextBase.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket
-                            .IssueDate.ToUniversalTime().AddSeconds(10);
+                            .IssueDate.ToUniversalTime();
                         if (passwordChangedDateTime < ticketDateTime)
                         {
                             _customerId = decryptedCustomerId;
