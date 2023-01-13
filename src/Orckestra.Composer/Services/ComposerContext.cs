@@ -237,8 +237,7 @@ namespace Orckestra.Composer.Services
             return dto.EncryptedCustomerId;
         }
 
-        // ReSharper disable once InconsistentNaming
-        private readonly bool ValidationPasswordChangedNotDisabled =
+        private readonly bool PasswordChangedValidationEnabled =
             ConfigurationManager.AppSettings["Orckestra.ComposerContext.DisableValidationPasswordChanged"] != "true";
 
         /// <summary>
@@ -255,7 +254,7 @@ namespace Orckestra.Composer.Services
                 {
                     var decryptedCustomerId = new Guid(EncryptionUtility.Decrypt(dto.EncryptedCustomerId));
 
-                    if (dto.IsGuest != true && ValidationPasswordChangedNotDisabled)
+                    if (dto.IsGuest != true && PasswordChangedValidationEnabled)
                     {
                         // GetCustomerByIdAsync uses a cache
                         var customer = CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam()
