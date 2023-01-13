@@ -135,9 +135,11 @@ namespace Orckestra.Composer.Search.Providers
 
         private ProductPriceSearchViewModel GetProductPriceWithoutVariant(ProductDocument document)
         {
+            var entityPricing = document.EntityPricing ?? throw new InvalidOperationException($"Product document for SKU '{document.Sku}' doesn't have EntityPricing property set.");
+
             return IsInDiscount(document) 
-                ? CreatePrice(document, false, true, document.EntityPricing.CurrentPrice, document.EntityPricing.RegularPrice) 
-                : CreatePrice(document, false, false, null, document.EntityPricing.RegularPrice);
+                ? CreatePrice(document, false, true, entityPricing.CurrentPrice, entityPricing.RegularPrice) 
+                : CreatePrice(document, false, false, null, entityPricing.RegularPrice);
         }
 
         private ProductPriceSearchViewModel CreatePrice(
