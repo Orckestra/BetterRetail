@@ -17,6 +17,7 @@ using Orckestra.Overture.ServiceModel.Customers;
 using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.MyAccount.Services
 {
@@ -28,6 +29,7 @@ namespace Orckestra.Composer.MyAccount.Services
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IViewModelMapper ViewModelMapper { get; private set; }
         protected ICustomerRepository CustomerRepository { get; private set; }
+        protected ICustomerSettings CustomerSettings { get; private set; }
         protected ICartMergeProvider CartMergeProvider { get; private set; }
         public IRegexRulesProvider RegexRulesProvider { get; }
         protected IComposerContext ComposerContext { get; }
@@ -41,6 +43,7 @@ namespace Orckestra.Composer.MyAccount.Services
             IMyAccountUrlProvider myAccountUrlProvider,
             IViewModelMapper viewModelMapper,
             ICustomerRepository customerRepository,
+            ICustomerSettings customerSettings,
             ICartMergeProvider cartMergeProvider,
             IComposerContext composerContext,
             IRegexRulesProvider regexRulesProvider)
@@ -53,6 +56,7 @@ namespace Orckestra.Composer.MyAccount.Services
             CartMergeProvider = cartMergeProvider ?? throw new ArgumentNullException(nameof(cartMergeProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             RegexRulesProvider = regexRulesProvider ?? throw new ArgumentNullException(nameof(regexRulesProvider));
+            CustomerSettings = customerSettings ?? throw new ArgumentNullException(nameof(customerSettings));
         }
 
         /// <summary>
@@ -97,7 +101,9 @@ namespace Orckestra.Composer.MyAccount.Services
 
             }).ConfigureAwait(false);
 
-            return GetCreateAccountViewModel(new GetCreateAccountViewModelParam
+            var profileSettings = await CustomerSettings.GetProfileSettingsAsync().ConfigureAwait(false);
+
+            var viewModel = GetCreateAccountViewModel(new GetCreateAccountViewModelParam
             {
                 ReturnUrl = param.ReturnUrl,
                 Status = customer.AccountStatus == AccountStatus.RequiresApproval ? MyAccountStatus.RequiresApproval : MyAccountStatus.Success,
@@ -105,6 +111,8 @@ namespace Orckestra.Composer.MyAccount.Services
                 Customer = customer,
                 TermsAndConditionsUrl = termsAndConditionsUrl
             });
+            viewModel.UseEmailAsUsername = profileSettings.UseEmailAsUsername;
+            return viewModel;
         }
 
         /// <summary>
@@ -255,18 +263,26 @@ namespace Orckestra.Composer.MyAccount.Services
         {
             var urlParam = new BaseUrlParameter { CultureInfo = param.CultureInfo };
 
-            var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
+            var viewModel = new UserMetadataViewModel();
+           
+            if (param.IsAuthenticated)
             {
-                CultureInfo = param.CultureInfo,
-                CustomerId = param.CustomerId,
-                Scope = param.Scope
-            }).ConfigureAwait(false);
+                var customer = await CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam
+                {
+                    CultureInfo = param.CultureInfo,
+                    CustomerId = param.CustomerId,
+                    Scope = param.Scope
+                }).ConfigureAwait(false);
 
-            var viewModel = ViewModelMapper.MapTo<UserMetadataViewModel>(customer, param.CultureInfo) ?? new UserMetadataViewModel();
+                viewModel = ViewModelMapper.MapTo<UserMetadataViewModel>(customer, param.CultureInfo) ?? new UserMetadataViewModel();
+            }
+
+            var profileSettings = await CustomerSettings.GetProfileSettingsAsync().ConfigureAwait(false);
             viewModel.IsAuthenticated = param.IsAuthenticated;
             viewModel.EncryptedCustomerId = param.EncryptedCustomerId;
             viewModel.Url = viewModel.IsAuthenticated ? MyAccountUrlProvider.GetMyAccountUrl(urlParam) : MyAccountUrlProvider.GetLoginUrl(urlParam);
             viewModel.RegisterUrl = MyAccountUrlProvider.GetCreateAccountUrl(urlParam);
+            viewModel.UseEmailAsUsername = profileSettings.UseEmailAsUsername;
             return viewModel;
         }
 

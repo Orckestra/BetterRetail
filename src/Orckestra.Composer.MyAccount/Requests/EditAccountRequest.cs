@@ -14,6 +14,11 @@ namespace Orckestra.Composer.MyAccount.Requests
         public string Email { get; set; }
 
         /// <summary>
+        /// A Username to bind to the User account
+        /// </summary>
+        public string Username { get; set; }
+
+        /// <summary>
         /// (Mandatory)
         /// The Firstname for the User account
         /// </summary>

@@ -37,5 +37,10 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         /// </summary>
         public string EncryptedCustomerId { get; set; }
 
-   }
+        /// <summary>
+        /// The use Email as Username flag
+        /// </summary>
+        public bool UseEmailAsUsername { get; set; }
+
+    }
 }

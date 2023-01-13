@@ -240,6 +240,8 @@
     <Compile Include="Caching\NullCacheProvider.cs" />
     <Compile Include="Caching\ObjectCache.cs" />
     <Compile Include="Caching\PerRequestCacheClient.cs" />
+    <Compile Include="Configuration\ICustomerSettings.cs" />
+    <Compile Include="Configuration\CustomerSettings.cs" />
     <Compile Include="CreditCardPaymentProperties.cs" />
     <Compile Include="Dependency\ComponentLifestyle.cs" />
     <Compile Include="ComposerConfiguration.cs" />
@@ -355,12 +357,14 @@
     <Compile Include="Providers\IRecurringCartUrlProvider.cs" />
     <Compile Include="Providers\IRecurringScheduleUrlProvider.cs" />
     <Compile Include="Repositories\IProductMediaSettingsRepository.cs" />
+    <Compile Include="Repositories\ICustomerSettingsRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\InventoryRepository.cs" />
     <Compile Include="Repositories\IRecurringOrdersRepository.cs" />
     <Compile Include="Repositories\IScopeRepository.cs" />
     <Compile Include="Repositories\ProductMediaSettingsRepository.cs" />
+    <Compile Include="Repositories\CustomerSettingsRepository.cs" />
     <Compile Include="Repositories\RecurringOrdersRepository.cs" />
     <Compile Include="Repositories\ScopeRepository.cs" />
     <Compile Include="Parameters\GetIsPaymentMethodUsedInRecurringOrdersParam.cs" />

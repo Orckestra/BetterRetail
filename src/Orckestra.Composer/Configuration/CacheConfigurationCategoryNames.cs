@@ -50,6 +50,10 @@ namespace Orckestra.Composer.Configuration
         /// Cache name where Customers information will be stored
         /// </summary>
         public static string Customer = "Customer";
+        /// <summary>
+        /// Cache where the Customer Settings will be stored
+        /// </summary>
+        public static string CustomerSettings = "CustomerSettings";
 
         /// <summary>
         /// Cache name where Addresses information will be stored

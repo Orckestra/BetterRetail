@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Orckestra.Composer.ViewModels;
+using ServiceStack;
 
 namespace Orckestra.Composer.MyAccount.ViewModels
 {
@@ -42,6 +43,11 @@ namespace Orckestra.Composer.MyAccount.ViewModels
         ///  The primary and unique email for this User account
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// The unique name used for the User account.
+        /// </summary>
+        public string Username { get; set; }
 
         /// <summary>
         ///  Customer preferred language

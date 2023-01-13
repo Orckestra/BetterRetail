@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.MvcFilters;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Services;
@@ -16,15 +18,18 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IComposerContext ComposerContext { get; private set; }
         protected IMembershipViewService MembershipViewService { get; private set; }
+        protected ICustomerSettings CustomerSettings { get; private set; }
 
         protected MembershipBaseController(
             IMyAccountUrlProvider myAccountUrlProvider,
             IComposerContext composerContext,
-            IMembershipViewService membershipViewService)
+            IMembershipViewService membershipViewService,
+            ICustomerSettings customerSettings)
         {
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext));
             MembershipViewService = membershipViewService ?? throw new ArgumentNullException(nameof(membershipViewService));
+            CustomerSettings = customerSettings ?? throw new ArgumentNullException(nameof(customerSettings));
         }
 
         [AllowAnonymous]
@@ -59,6 +64,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 ForgotPasswordUrl = forgotPasswordUrl,
                 LoginUrl = loginUrl
             });
+            var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
+            loginViewModel.UseEmailAsUsername = profileSettings.UseEmailAsUsername;
 
             return View("ReturningCustomerBlade", loginViewModel);
         }
@@ -114,6 +121,8 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                     ReturnUrl = GetReturnUrlToPreserve(),
                     TermsAndConditionsUrl = termsAndConditionsUrl
                 });
+            var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
+            createAccountViewModel.UseEmailAsUsername = profileSettings.UseEmailAsUsername;
 
             return View("CreateAccountBlade", createAccountViewModel);
         }

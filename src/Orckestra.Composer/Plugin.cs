@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Country;
 using Orckestra.Composer.Dependency;
 using Orckestra.Composer.Factory;
@@ -47,6 +48,7 @@ namespace Orckestra.Composer
             host.Register<ProductPriceViewService, IProductPriceViewService>();
             host.Register<ProductRepository, IProductRepository>();
             host.Register<RegexRulesProvider, IRegexRulesProvider>();
+            host.Register<CustomerSettings, ICustomerSettings>(ComponentLifestyle.Singleton);
 
             host.MetadataRegistry.LoadViewModelMetadataInAssemblyOf(GetType().Assembly);
 

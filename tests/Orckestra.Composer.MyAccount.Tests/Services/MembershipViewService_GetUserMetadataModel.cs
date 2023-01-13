@@ -16,6 +16,7 @@ using Orckestra.ForTests;
 using Orckestra.ForTests.Mock;
 using Orckestra.Overture.ServiceModel.Customers;
 using System.Threading.Tasks;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -30,6 +31,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container.Use(MockMyAccountUrlProviderFactory.Create());
             _container.Use(MockViewModelMapperFactory.Create(typeof(SignInHeaderViewModel).Assembly));
             _container.Use(new Mock<IMembershipProxy>(MockBehavior.Strict));
+            var customerSettingsMock = new Mock<ICustomerSettings>();
+            customerSettingsMock.Setup(c => c.GetProfileSettingsAsync()).ReturnsAsync(new ProfileSettings
+            {
+                UseEmailAsUsername = true
+            });
+            _container.Use(customerSettingsMock);
         }
 
         [Test]
@@ -90,15 +97,14 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
 
             if (isAuthenticated)
             {
+                viewModel.FirstName.Should().Be(firstName);
+                viewModel.LastName.Should().Be(lastName);
                 viewModel.Url.Should().Be(expectedMyAccountUrl, "Because logged in user are invited to their account");
             }
             else
             {
                 viewModel.Url.Should().Be(expectedLoginUrl, "Because logged out user are invited to log in");
             }
-
-            viewModel.FirstName.Should().Be(firstName);
-            viewModel.LastName.Should().Be(lastName);
         }
 
         [Test]

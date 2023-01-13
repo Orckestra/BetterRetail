@@ -172,6 +172,7 @@ namespace Orckestra.Composer.MyAccount.Services
         protected virtual void UpdateCustomerInfo(Customer customer, UpdateAccountParam updateParam)
         {
             customer.Email = updateParam.Email;
+            customer.Username = updateParam.Username;
             customer.FirstName = updateParam.FirstName;
             customer.LastName = updateParam.LastName;
             customer.Language = updateParam.PreferredLanguage;

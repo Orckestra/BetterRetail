@@ -114,12 +114,13 @@ module Orckestra.Composer {
         private initialize() {
 
             let authenticatedPromise = this.membershipService.isAuthenticated();
+            let userMetadataPromise = this.userMetadataService.getUserMetadata();
             let getCartPromise = this.getCart();
             let regionsPromise: Q.Promise<any> = this.regionService.getRegions();
             let shippingMethodTypesPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethodTypes();
 
-            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise])
-                .spread((authVm, cartVm, regionsVm, shippingMethodTypesVm) => {
+            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise, userMetadataPromise])
+                .spread((authVm, cartVm, regionsVm, shippingMethodTypesVm, userMetadataVm) => {
 
                     if (!cartVm.Customer) {
                         cartVm.Customer = {};
@@ -127,6 +128,7 @@ module Orckestra.Composer {
 
                     let results: ISingleCheckoutContext = {
                         IsAuthenticated: authVm.IsAuthenticated,
+                        UseEmailAsUsername: userMetadataVm.UseEmailAsUsername,
                         Cart: cartVm,
                         Regions: regionsVm,
                         ShippingMethodTypes: shippingMethodTypesVm.ShippingMethodTypes,
@@ -195,7 +197,8 @@ module Orckestra.Composer {
                         AddingLine2Address: false,
                         CompleteCheckoutLoading: false,
                         Loading: false,
-                        Authenticated: checkoutContext.IsAuthenticated
+                        Authenticated: checkoutContext.IsAuthenticated,
+                        UseEmailAsUsername: checkoutContext.UseEmailAsUsername
                     },
                     Errors: {
                         PostalCodeError: false,

@@ -58,6 +58,7 @@ module Orckestra.Composer {
 
                         var formData: any = {
                             FirstName: this.FirstName,
+                            Username: this.Username,
                             LastName: this.LastName,
                             Email: this.Email,
                             PreferredLanguage: this.Language

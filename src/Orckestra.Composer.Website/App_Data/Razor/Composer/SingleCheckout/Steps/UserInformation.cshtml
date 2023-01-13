@@ -100,14 +100,17 @@
             </div>
 
             @Forms.Validations.SignInErrors("Errors.SignIn")
-            <div class="form-row" v-show="!SigningInMode">
+            <div class="form-row" v-if="!SigningInMode">
                 @EmailField("username", true)
-
             </div>
-            <div class="form-row" v-show="SigningInMode">
-                @EmailField("username", false)
+            <div class="form-row" v-if="SigningInMode">
+                <template v-if="Mode.UseEmailAsUsername">
+                    @EmailField("username", false)
+                </template>
+                <template v-else="else">
+                    @UsernameField()
+                </template>
             </div>
-
             <div class="form-row" v-show="SigningInMode">
                 <div class="form-group col-md-6">
                     <label for="Password">@Html.Localize("Forms", "F_Password") *</label>
@@ -173,5 +176,23 @@
                @if (showHelpBubble) { @Html.HelpBubble("Forms", "F_EmailAddressGuestIndication") }
                @Html.ParsleyMessage("Forms", "F_EmailLengthError", "length-message")
                @Html.ParsleyMessage("Forms", "F_EmailPatternError", "type-message") />
+    </div>
+}
+
+@helper UsernameField()
+{
+    <div class="form-group col-md-6">
+        <label for="username">@Html.Localize("Forms", "F_UserName") *</label>
+        <input 
+               id="username"
+               v-model="Cart.Customer.Username"
+               name="Username"
+               data-qa="information-username-input"
+               type="text"
+               class="form-control"
+               placeholder="@Html.Localize("Forms", "F_UserNameWaterMark")"
+               required="required"
+               data-parsley-length="[2, 36]"
+               @Html.HelpBubble("Forms", "F_UsernameIndication") />
     </div>
 }

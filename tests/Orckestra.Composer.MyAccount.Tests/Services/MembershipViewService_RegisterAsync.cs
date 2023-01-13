@@ -8,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
 using NUnit.Framework;
+using Orckestra.Composer.Configuration;
 using Orckestra.Composer.Exceptions;
 using Orckestra.Composer.MyAccount.Parameters;
 using Orckestra.Composer.MyAccount.Providers;
@@ -51,6 +52,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
                 .SetupGet(m => m.MinRequiredNonAlphanumericCharacters)
                 .Returns(GetRandom.Int)
                 .Verifiable("Regex must be based on this value");
+
+            var customerSettingsMock = new Mock<ICustomerSettings>();
+            customerSettingsMock.Setup(c => c.GetProfileSettingsAsync()).ReturnsAsync(new ProfileSettings
+            {
+                UseEmailAsUsername = true
+            });
+            _container.Use(customerSettingsMock);
         }
 
         [Test]
