@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -29,6 +28,9 @@ namespace Orckestra.Composer.Search.Api
         private const int MAXIMUM_SEARCH_TERMS_SUGGESTIONS = 5;
         private const int MAXIMUM_CATEGORIES_SUGGESTIONS = 4;
         private const int MAXIMUM_BRAND_SUGGESTIONS = 3;
+
+        private static string RootCategoryId = "Root";
+        private static string CategoryFacetName(int level) => $"CategoryLevel{level}_Facet";
 
         protected IComposerContext ComposerContext { get; private set; }
         protected ISearchViewService SearchViewService { get; private set; }
@@ -228,41 +230,39 @@ namespace Orckestra.Composer.Search.Api
             return Ok(vm);
         }
 
-        private static string RootCategoryId = "Root";
-        private static Regex CategoryFieldName = new Regex(@"CategoryLevel(\d+)_Facet");
-
         [ActionName("suggestCategories")]
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestCategories(AutoCompleteSearchViewModel request, int limit = MAXIMUM_CATEGORIES_SUGGESTIONS, bool withCategoriesUrl = false)
         {
             string language = ComposerContext.CultureInfo.Name;
-            string searchTerm = request.Query.Trim().ToLower();
+            string searchTerm = request.Query.Trim();
 
             List<Category> categories = await SearchViewService.GetAllCategories();
             List<Facet> categoryCounts = await SearchViewService.GetCategoryProductCounts(language);
 
-            List<CategorySuggestionViewModel> categorySuggestionList = new List<CategorySuggestionViewModel>();
+            var categoryByIdMap = categories.ToDictionary(_ => _.Id);
+            var categorySuggestionList = new List<CategorySuggestionViewModel>();
 
             foreach (var category in categories)
             {
                 if (!category.DisplayName.TryGetValue(language, out string displayName)) continue;
 
                 // Find the parents of the category
-                List<Category> parents = new List<Category>();
-                Category currentNode = category;
+                var parents = new List<Category>();
+                var currentNode = category;
                 while (!string.IsNullOrWhiteSpace(currentNode.PrimaryParentCategoryId) && currentNode.PrimaryParentCategoryId != RootCategoryId)
                 {
-                    Category parent = categories.Single((cat) => cat.Id == currentNode.PrimaryParentCategoryId);
+                    Category parent = categoryByIdMap[currentNode.PrimaryParentCategoryId];
                     parents.Add(parent);
                     currentNode = parent;
                 }
                 parents.Reverse();
 
-                FacetValue categoryCount = categoryCounts
-                        .Where((facet) => int.TryParse(CategoryFieldName.Match(facet.FieldName).Groups[1].Value, out int n) && parents.Count == n - 1)
-                        .FirstOrDefault()?
-                        .Values
-                        .Where((facetValue) => facetValue.Value == category.DisplayName[language]).SingleOrDefault();
+                var facetName = CategoryFacetName(parents.Count + 1);
+                var categoryFacet = categoryCounts.FirstOrDefault(facet => facet.FieldName == facetName);
+
+                FacetValue categoryCount = categoryFacet?.Values
+                    .SingleOrDefault(facetValue => facetValue.Value == category.DisplayName[language]);
 
                 if (categoryCount != null)
                 {
@@ -277,14 +277,14 @@ namespace Orckestra.Composer.Search.Api
             };
 
             List<CategorySuggestionViewModel> finalSuggestions = categorySuggestionList
-                .Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm))
-                .OrderByDescending((category) => category.Quantity)
+                .Where(suggestion => suggestion.DisplayName.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                .OrderByDescending(category => category.Quantity)
                 .Take(limit)
                 .ToList();
 
             foreach (var suggestion in finalSuggestions)
             {
-                List<CategorySuggestionViewModel> parents = new List<CategorySuggestionViewModel>();
+                var parents = new List<CategorySuggestionViewModel>();
                 foreach (var parent in suggestion.Parents)
                 {
                     var parentInfo = categorySuggestionList.Find(x => x.DisplayName == parent);
@@ -306,7 +306,7 @@ namespace Orckestra.Composer.Search.Api
                 }
             }
 
-            CategorySuggestionsViewModel vm = new CategorySuggestionsViewModel
+            var vm = new CategorySuggestionsViewModel
             {
                 Suggestions = finalSuggestions
             };
@@ -329,20 +329,23 @@ namespace Orckestra.Composer.Search.Api
         [HttpPost]
         public virtual async Task<IHttpActionResult> SuggestBrands(AutoCompleteSearchViewModel request, int limit = MAXIMUM_BRAND_SUGGESTIONS)
         {
-            string searchTerm = request.Query.Trim().ToLower();
+            string searchTerm = request.Query.Trim();
             List<Facet> facets = await SearchViewService.GetBrandProductCounts(ComposerContext.CultureInfo.Name).ConfigureAwait(false);
-            List<BrandSuggestionViewModel> brandList = facets.Single().Values.Select(facetValue => new BrandSuggestionViewModel
-            {
-                DisplayName = facetValue.DisplayName
-            }).ToList();
 
-            BrandSuggestionsViewModel vm = new BrandSuggestionsViewModel()
+            var brandFacetValues = facets.Single().Values;
+            var matchingBrands = brandFacetValues.Where(facetValue =>
+                    facetValue.DisplayName.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                .OrderBy(x => x.DisplayName)
+                .Take(limit);
+
+            var vm = new BrandSuggestionsViewModel
             {
-                Suggestions = brandList
-                    .Where((suggestion) => suggestion.DisplayName.ToLower().Contains(searchTerm))
-                    .OrderBy(x => x.DisplayName)
-                    .Take(limit).ToList()
+                Suggestions = matchingBrands.Select(facetValue => new BrandSuggestionViewModel
+                {
+                    DisplayName = facetValue.DisplayName
+                }).ToList()
             };
+
             return Ok(vm);
         }
 
