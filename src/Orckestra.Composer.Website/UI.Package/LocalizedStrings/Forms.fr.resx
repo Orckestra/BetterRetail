@@ -543,4 +543,10 @@
   <data name="L_HidePassword" xml:space="preserve">
     <value>Masquer</value>
   </data>
+  <data name="F_UserName" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="F_UsernameIndication" xml:space="preserve">
+    <value>Votre nom d'utilisateur sera utiliser pour vous connecter au site</value>
+  </data>
 </root>
