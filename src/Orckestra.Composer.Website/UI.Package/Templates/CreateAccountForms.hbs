@@ -76,7 +76,8 @@
                                     {{>HelpBubbleOpen}}{{localize 'Forms' 'F_UsernameIndication'}}{{>HelpBubbleClose}}
                                 {{/if_localized}}
                                 {{#if_localized 'Forms' 'F_UserNameRequiredError'}}data-parsley-required-message="{{localize 'Forms' 'F_UserNameRequiredError'}}"{{/if_localized}}
-                                data-parsley-length="[2, 36]"
+                                data-parsley-length="[2, 29]"
+                                data-parsley-pattern="^[A-Za-z0-9_@.]{2,29}$"
                                 {{#if_localized 'Forms' 'F_UserNameLengthError'}}data-parsley-length-message="{{localize 'Forms' 'F_UserNameLengthError'}}"{{/if_localized}}
                         />
                     </div>
