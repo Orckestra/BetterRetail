@@ -268,6 +268,6 @@
     <value>An error occurred while adding the product to the WishList. Please try again.</value>
   </data>
   <data name="L_UsernameAlreadyExists" xml:space="preserve">
-    <value>The specified Username already exist.</value>
+    <value>The specified username already exist.</value>
   </data>
 </root>

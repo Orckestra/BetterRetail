@@ -562,6 +562,6 @@
     <value>ex: franklin.pollux</value>
   </data>
   <data name="F_UsernameIndication" xml:space="preserve">
-    <value>Your Username will be used to login to the site</value>
+    <value>Your username will be used to login to the site.</value>
   </data>
 </root>
