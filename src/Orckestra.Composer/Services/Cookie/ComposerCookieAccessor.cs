@@ -198,6 +198,12 @@ namespace Orckestra.Composer.Services.Cookie
             _requestCachedDto = null;
         }
 
+        public void ClearWithStorage()
+        {
+            Clear();
+            _httpResponse.Headers.Add("Clear-Site-Data", "\"cache\", \"storage\"");
+        }
+
         #region V1
         private string ProtectV1(ComposerCookieDto dto)
         {

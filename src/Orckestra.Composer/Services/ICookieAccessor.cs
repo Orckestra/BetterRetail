@@ -5,5 +5,6 @@
         TDto Read();
         void Write(TDto dto);
         void Clear();
+        void ClearWithStorage();
     }
 }

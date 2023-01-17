@@ -1,7 +1,10 @@
 using System;
+using System.Configuration;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading;
 using System.Web;
+using System.Web.Security;
 using Orckestra.Composer.Parameters;
 using Orckestra.Composer.Providers;
 using Orckestra.Composer.Repositories;
@@ -21,6 +24,7 @@ namespace Orckestra.Composer.Services
         protected IWebsiteContext WebsiteContext { get; }
         protected EncryptionUtility EncryptionUtility { get; }
         protected IScopeRepository ScopeRepository { get; }
+        protected ICustomerRepository CustomerRepository { get; }
 
         public ComposerContext(
             ICookieAccessor<ComposerCookieDto> cookieAccessor,
@@ -28,7 +32,8 @@ namespace Orckestra.Composer.Services
             HttpContextBase httpContextBase,
             ICountryCodeProvider countryCodeProvider,
             IWebsiteContext websiteContext,
-            IScopeRepository scopeRepository)
+            IScopeRepository scopeRepository,
+            ICustomerRepository customerRepository)
         {
             CookieAccessor = cookieAccessor ?? throw new ArgumentNullException(nameof(cookieAccessor));
             ScopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
@@ -37,6 +42,7 @@ namespace Orckestra.Composer.Services
             WebsiteContext = websiteContext ?? throw new ArgumentNullException(nameof(websiteContext));
             EncryptionUtility = new EncryptionUtility();
             ScopeRepository = scopeRepository ?? throw new ArgumentNullException(nameof(scopeRepository));
+            CustomerRepository = customerRepository;
             SetAuthenticated();
         }
 
@@ -231,6 +237,9 @@ namespace Orckestra.Composer.Services
             return dto.EncryptedCustomerId;
         }
 
+        private readonly bool PasswordChangedValidationEnabled =
+            ConfigurationManager.AppSettings["Orckestra.ComposerContext.DisableValidationPasswordChanged"] != "true";
+
         /// <summary>
         /// Initializes the customer identifier.
         /// </summary>
@@ -243,9 +252,34 @@ namespace Orckestra.Composer.Services
 
                 if (dto.EncryptedCustomerId != null)
                 {
-                    _customerId = new Guid(EncryptionUtility.Decrypt(dto.EncryptedCustomerId));
+                    var decryptedCustomerId = new Guid(EncryptionUtility.Decrypt(dto.EncryptedCustomerId));
+
+                    if (dto.IsGuest != true && PasswordChangedValidationEnabled)
+                    {
+                        // GetCustomerByIdAsync uses a cache
+                        var customer = CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam()
+                        {
+                            CustomerId = decryptedCustomerId,
+                            Scope = Scope,
+                            CultureInfo = CultureInfo,
+                            IncludeAddresses =
+                                true // all parameters should be the same as in CustomerViewService.GetAccountHeaderViewModelAsync
+                        }).Result;
+                        
+                        var passwordChangedDateTime = customer.LastPasswordChanged.ToUniversalTime();
+                        var ticketDateTime = (HttpContextBase.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket
+                            .IssueDate.ToUniversalTime();
+                        if (passwordChangedDateTime < ticketDateTime)
+                        {
+                            _customerId = decryptedCustomerId;
+                        }
+                        else
+                        {
+                            CookieAccessor.ClearWithStorage();
+                        }
+                    }
                 }
-                else
+                if (!_customerId.HasValue)
                 {
                     //Second attempt, create a new customerId
                     _customerId = Guid.NewGuid();
@@ -273,8 +307,9 @@ namespace Orckestra.Composer.Services
                 {
                     var websiteId = (HttpContextBase.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket?.UserData;
                     bool isCurrentWebsite = websiteId == WebsiteContext.WebsiteId.ToString();
-                    bool IsAuthenticated = HttpContextBase.User?.Identity.IsAuthenticated ?? false;
-                    return isCurrentWebsite && IsAuthenticated;
+                    bool isAuthenticated = HttpContextBase.User?.Identity.IsAuthenticated ?? false;
+
+                    return isCurrentWebsite && isAuthenticated;
                 });
             }
         }

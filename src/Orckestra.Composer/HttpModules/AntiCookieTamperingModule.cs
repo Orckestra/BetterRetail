@@ -7,6 +7,11 @@ using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Services;
 using System.Web.Mvc;
 using Autofac.Integration.Mvc;
+using Orckestra.Composer.Repositories;
+using Orckestra.Composer.Parameters;
+using Orckestra.Composer.Utils;
+using System.Globalization;
+using System.Configuration;
 
 namespace Orckestra.Composer.HttpModules
 {
