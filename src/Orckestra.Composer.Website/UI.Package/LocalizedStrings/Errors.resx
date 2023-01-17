@@ -270,4 +270,7 @@
   <data name="L_UsernameAlreadyExists" xml:space="preserve">
     <value>The specified username already exist.</value>
   </data>
+  <data name="L_UpdateAccountFailed" xml:space="preserve">
+    <value>An error occurred while updating your acount. Please try again.</value>
+  </data>
 </root>

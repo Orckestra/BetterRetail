@@ -43,12 +43,15 @@ var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
 
                     <div class="card-body">
                         <div v-if="SaveChangesFailed" class="alert alert-danger text-danger error-box">
-                            <i class="fa fa-times-circle-o fa-lg pull-left" aria-hidden="true"></i>&#32;
-                            <div>@Html.Localize("Errors", "L_UpdateAccountFailed")</div>
+                            <i class="pr-1 fa fa-times-circle-o fa-lg float-left" aria-hidden="true"></i>&#32;
+                            <template v-if="Errors">
+                                <div v-for="error in Errors">{{error.LocalizedErrorMessage}}</div>
+                            </template>
+                            <div v-else="else">@Html.Localize("Errors", "L_UpdateAccountFailed")</div>
                         </div>
 
                         <div v-if="SaveChangesSucceeded" class="alert alert-success text-success error-box">
-                            <i class="fa  fa-check-circle-o  fa-lg  pull-left" aria-hidden="true"></i>&#32;
+                            <i class="pr-1 fa  fa-check-circle-o  fa-lg  float-left" aria-hidden="true"></i>&#32;
                             <div>@Html.Localize("MyAccount", "L_UpdateAccountSuccess")</div>
                         </div>
 
@@ -109,7 +112,8 @@ var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
                                                placeholder="@Html.Localize("Forms", "F_UserNameMark")"
                                                type="text"
                                                required="required"
-                                               data-parsley-length="[2, 36]"
+                                               data-parsley-length="[2, 29]"
+                                               data-parsley-pattern="^[A-Za-z0-9_@@.]{2,29}$" 
                                                @Html.HelpBubble("Forms", "F_UsernameIndication")
                                                @Html.ParsleyMessage("Forms", "F_UserNameRequiredError", "required-message")
                                                @Html.ParsleyMessage("Forms", "F_UserNameLengthError", "length-message") />

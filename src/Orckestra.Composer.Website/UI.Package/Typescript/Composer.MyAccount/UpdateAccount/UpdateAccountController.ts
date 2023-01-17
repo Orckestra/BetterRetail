@@ -33,7 +33,8 @@ module Orckestra.Composer {
                 data: {
                     ...userData,
                     UpdateAccountState: "",
-                    IsLoading: false
+                    IsLoading: false,
+                    Errors: []
                 },
                 mounted() {
                     self.initializeParsey(updateAccountFormId);
@@ -81,6 +82,9 @@ module Orckestra.Composer {
                             .then(result => self.onUpdateAccountFulfilled(result))
                             .fail((reason) => {
                                 console.error('Error updating the account.', reason);
+                                if(reason && reason.Errors) {
+                                    this.Errors = reason.Errors;
+                                }
                                 this.UpdateAccountState = UpdateAccountStates.Failed;
 
                             })
