@@ -35,7 +35,7 @@
               </DataElements>
             </Children>
           </Element>
-          <Element Label="Varinat Colors" Id="VariantColors">
+          <Element Label="Variant Colors" Id="VariantColors">
             <Actions>
               <AddDataAction Label="Add" Type="Orckestra.Composer.CompositeC1.DataTypes.IVariantColorConfiguration" />
 				      <CustomUrlAction Icon="folder-edit"
