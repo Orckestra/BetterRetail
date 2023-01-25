@@ -278,6 +278,10 @@ namespace Orckestra.Composer.Services
                             CookieAccessor.ClearWithStorage();
                         }
                     }
+                    else
+                    {
+                        _customerId = decryptedCustomerId;
+                    }
                 }
                 if (!_customerId.HasValue)
                 {
