@@ -20,6 +20,7 @@ using static Orckestra.Composer.Utils.ExpressionUtility;
 
 using System.Linq.Expressions;
 using Orckestra.Composer.MyAccount.ViewModels;
+using Orckestra.Composer.Configuration;
 
 namespace Orckestra.Composer.MyAccount.Tests.Services
 {
@@ -35,6 +36,12 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container = new AutoMocker();
             _container.Use(new Mock<ICustomerRepository>(MockBehavior.Strict));
             _container.Use(new Mock<IMembershipProxy>(MockBehavior.Strict));
+            var customerSettingsMock = new Mock<ICustomerSettings>();
+            customerSettingsMock.Setup(c => c.GetProfileSettingsAsync()).ReturnsAsync(new ProfileSettings
+            {
+                UseEmailAsUsername = false
+            });
+            _container.Use(customerSettingsMock);
         }
 
         [Test]
@@ -184,7 +191,6 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
             _container.GetMock<IMembershipProxy>()
                       .Setup(p => p.GetUser(It.IsNotNull<string>(), It.IsNotNull<bool>()))
                       .Returns<MembershipUser>(null);
-
             //Act
             var result = await sut.LoginAsync(new LoginParam()
             {
