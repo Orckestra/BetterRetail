@@ -10,6 +10,7 @@ namespace Orckestra.Composer.MyAccount.Providers
     internal interface IMembershipProxy
     {
         MembershipUser GetUser(string userName, bool userIsOnline);
+        MembershipUser GetUserByEmail(string userName, bool userIsOnline);
         bool LoginUser(string userName, string password);
         MembershipProviderCollection Providers { get; }
         MembershipProvider Provider { get; }
