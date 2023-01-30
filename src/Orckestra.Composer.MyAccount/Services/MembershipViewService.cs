@@ -189,7 +189,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
             if (loginResponse)
             {
-                var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
+                var profileSettings = await CustomerSettings.GetProfileSettingsAsync().ConfigureAwait(false);
                 var user = profileSettings.UseEmailAsUsername ? Membership.GetUserByEmail(userName, true) : Membership.GetUser(userName, true);
                 if (user != null && user.ProviderUserKey is Guid && !Guid.Empty.Equals(user.ProviderUserKey) && !user.IsLockedOut)
                 {
