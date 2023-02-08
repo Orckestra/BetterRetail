@@ -11,6 +11,11 @@ namespace Orckestra.Composer.MyAccount.Providers
         {
             return Membership.GetUser(userName, userIsOnline);
         }
+        public MembershipUser GetUserByEmail(string email, bool userIsOnline)
+        {
+            var userName = Membership.GetUserNameByEmail(email);
+            return Membership.GetUser(userName, userIsOnline);
+        }
 
         public bool LoginUser(string userName, string password)
         {
