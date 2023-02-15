@@ -69,18 +69,27 @@ namespace Orckestra.Composer.CompositeC1.Services
             }
         }
 
+        private IPage _rootPage;
+        public IPage RootPage
+        {
+            get
+            {
+                if (_rootPage != null) return _rootPage;
+                using (new DataConnection())
+                {
+                    var websiteId = WebsiteId;
+                    return _rootPage = PageManager.GetPageById(websiteId) ?? throw new InvalidOperationException($"Failed to get the website root page by ID: '{websiteId}'");
+                }
+            }
+        }
+
         public T GetRootPageMetaData<T>() where T : class, IPageMetaData
         {
             using (var data = new DataConnection())
             {
                 if (_rootPageVersionId == null)
                 {
-                    var websiteId = WebsiteId;
-
-                    var rootPage = PageManager.GetPageById(websiteId)
-                        ?? throw new InvalidOperationException($"Failed to get the website root page by ID: '{websiteId}'");
-
-                    _rootPageVersionId = rootPage.VersionId;
+                    _rootPageVersionId = RootPage.VersionId;
                 }
 
                 var versionId = _rootPageVersionId;

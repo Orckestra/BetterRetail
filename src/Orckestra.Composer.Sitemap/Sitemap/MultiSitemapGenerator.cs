@@ -27,6 +27,8 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             get; private set;
         }
 
+        public IPage RootPage => throw new NotImplementedException();
+
         public T GetRootPageMetaData<T>() where T : class, IPageMetaData
         {
             throw new NotSupportedException();
