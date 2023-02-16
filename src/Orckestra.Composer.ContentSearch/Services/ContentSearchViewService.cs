@@ -52,8 +52,12 @@ namespace Orckestra.Composer.ContentSearch.Services
                     var isActive = param.PathInfo == tab.UrlTitle;
                     var searchQuery = GetSearchQuery(param);
                     var searchRequest = GetSearchRequestForContentTab(param, tab, searchQuery);
-                    ///Setting Root Page so Website Search can filter by it
-                    PageRenderer.CurrentPage = WebsiteContext.RootPage;
+
+                    if (PageRenderer.CurrentPage == null)
+                    {
+                        //Setting Root Page so Website Search can filter by it
+                        PageRenderer.CurrentPage = WebsiteContext.RootPage;
+                    }
                     var result = WebsiteSearchFacade.Search(searchRequest);
 
                     vm.Tabs.Add(new ContentSearchTabViewModel
