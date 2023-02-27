@@ -17,11 +17,19 @@ namespace Orckestra.Composer.ContentSearch.Functions
             "a014b691-fc87-42c1-b664-84e0b951e4ed" //Search Page
         };
 
-        public static (string Name, string Id)[] GetSearchablePageTypesOptions()
+        public static Tuple<string, string>[] GetSearchablePageTypesOptions()
         {
+            var result = new List<Tuple<string, string>>();
             var pageTypes = DataFacade.GetData<IPageType>().Where(p => p.Available && !PageTypesToExclude.Contains(p.Id.ToString()));
 
-            return pageTypes.AsEnumerable().Select(pageType => (pageType.Name, pageType.Id.ToString())).ToArray();
+            foreach (var pageType in pageTypes)
+            {
+                result.Add(new Tuple<string, string>(
+                     pageType.Name,
+                     pageType.Id.ToString()));
+            }
+
+            return result.ToArray();
         }
     }
 }
