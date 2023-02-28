@@ -11,6 +11,7 @@ using Orckestra.Composer.Repositories;
 using Orckestra.Composer.Services.Cookie;
 using Orckestra.Composer.Utils;
 using Orckestra.Overture.ServiceModel;
+using Orckestra.Overture.ServiceModel.Customers;
 
 namespace Orckestra.Composer.Services
 {
@@ -243,7 +244,7 @@ namespace Orckestra.Composer.Services
         /// <summary>
         /// Initializes the customer identifier.
         /// </summary>
-        private void InitializeCustomerId()
+        protected virtual void InitializeCustomerId()
         {
             if (!_customerId.HasValue)
             {
@@ -257,15 +258,8 @@ namespace Orckestra.Composer.Services
                     if (dto.IsGuest != true && PasswordChangedValidationEnabled)
                     {
                         // GetCustomerByIdAsync uses a cache
-                        var customer = CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam()
-                        {
-                            CustomerId = decryptedCustomerId,
-                            Scope = Scope,
-                            CultureInfo = CultureInfo,
-                            IncludeAddresses =
-                                true // all parameters should be the same as in CustomerViewService.GetAccountHeaderViewModelAsync
-                        }).Result;
-                        
+                       var customer = GetCustomerById(decryptedCustomerId);
+
                         var passwordChangedDateTime = customer.LastPasswordChanged.ToUniversalTime();
                         var ticketDateTime = (HttpContextBase.User?.Identity as System.Web.Security.FormsIdentity)?.Ticket
                             .IssueDate.ToUniversalTime();
@@ -295,6 +289,18 @@ namespace Orckestra.Composer.Services
                     CookieAccessor.Write(dto);
                 }
             }
+        }
+
+        protected virtual Customer GetCustomerById(Guid customerId)
+        {
+            return CustomerRepository.GetCustomerByIdAsync(new GetCustomerByIdParam()
+            {
+                CustomerId = customerId,
+                Scope = Scope,
+                CultureInfo = CultureInfo,
+                IncludeAddresses =
+                    true // all parameters should be the same as in CustomerViewService.GetAccountHeaderViewModelAsync
+            }).Result;
         }
 
         private void SetAuthenticated()
