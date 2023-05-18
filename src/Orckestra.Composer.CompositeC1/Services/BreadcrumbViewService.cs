@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
+using Composite.Data;
 using Composite.Data.Types;
 using Orckestra.Composer.Services.Breadcrumb;
 using Orckestra.Composer.ViewModels.Breadcrumb;
@@ -25,48 +27,53 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var pageId = new Guid(param.CurrentPageId);
-            var page = _pageService.GetPage(pageId, param.CultureInfo) ?? 
-                throw new InvalidOperationException("Could not find any page matching this ID.");
-
-            var breadcrumbViewModel = new BreadcrumbViewModel
+            using (var connection = new DataConnection(param.CultureInfo))
             {
-                ActivePageName = HttpUtility.HtmlEncode(page.MenuTitle),
-                Items = CreateBreadcrumbItems(param, page)
-            };
-
-            return breadcrumbViewModel;
+                var page = connection.SitemapNavigator.GetPageNodeById(pageId) ?? throw new InvalidOperationException("Could not find any page matching this ID."); ;
+                var breadcrumbViewModel = new BreadcrumbViewModel
+                {
+                    ActivePageName = HttpUtility.HtmlEncode(page.MenuTitle),
+                    Items = CreateBreadcrumbItems(param, page, connection)
+                };
+                return breadcrumbViewModel;
+            }
         }
 
-        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, IPage page)
+        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, PageNode page, DataConnection connection)
         {
             var breadcrumbStack = new Stack<BreadcrumbItemViewModel>();
-            var parentPageId = _pageService.GetParentPageId(page);
+            var parentPageId = page.ParentPage?.Id ?? Guid.Empty;
 
             while (parentPageId != Guid.Empty)
             {
-                var parentPage = _pageService.GetPage(parentPageId, param.CultureInfo);
-
-                var itemVM = CreateParentPageItem(parentPage);
-                breadcrumbStack.Push(itemVM);
-
-                parentPageId = _pageService.GetParentPageId(parentPage);
+                var parentPage = connection.SitemapNavigator.GetPageNodeById(parentPageId);
+                if (parentPage != null)
+                {
+                    var itemVM = CreateBreadcrumbItemViewModel(parentPage);
+                    breadcrumbStack.Push(itemVM);
+                    parentPageId = parentPage.ParentPage?.Id ?? Guid.Empty;
+                }
+                else
+                {
+                    parentPageId = Guid.Empty;
+                }
             }
 
             var items = UnrollStack(breadcrumbStack).ToList();
             return items;
         }
 
-        protected virtual BreadcrumbItemViewModel CreateParentPageItem(IPage parentPage)
+        protected virtual BreadcrumbItemViewModel CreateBreadcrumbItemViewModel(PageNode page)
         {
             var itemVM = new BreadcrumbItemViewModel
             {
-                DisplayName = parentPage.MenuTitle
+                DisplayName = page.MenuTitle
             };
 
             var pagesConfiguration = SiteConfiguration.GetPagesConfiguration();
-            if (pagesConfiguration!= null && parentPage.PageTypeId != pagesConfiguration.FolderId)
+            if (pagesConfiguration != null && page.Page.PageTypeId != pagesConfiguration.FolderId)
             {
-                itemVM.Url = _pageService.GetPageUrl(parentPage);
+                itemVM.Url = page.Url;
             }
 
             return itemVM;
