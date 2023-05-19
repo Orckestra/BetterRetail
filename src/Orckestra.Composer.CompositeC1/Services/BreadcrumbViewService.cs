@@ -15,11 +15,13 @@ namespace Orckestra.Composer.CompositeC1.Services
     {
         protected IPageService _pageService;
         protected ISiteConfiguration SiteConfiguration { get; private set; }
+        protected IDataConnectionService DataConnectionService { get; private set; }
 
-        public BreadcrumbViewService(IPageService pageService, ISiteConfiguration siteConfiguration)
+        public BreadcrumbViewService(IPageService pageService, ISiteConfiguration siteConfiguration, IDataConnectionService dataConnectionService)
         {
             _pageService = pageService ?? throw new ArgumentNullException(nameof(pageService));
             SiteConfiguration = siteConfiguration;
+            DataConnectionService = dataConnectionService;
         }
 
         public virtual BreadcrumbViewModel CreateBreadcrumbViewModel(GetBreadcrumbParam param)
@@ -27,9 +29,9 @@ namespace Orckestra.Composer.CompositeC1.Services
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var pageId = new Guid(param.CurrentPageId);
-            using (var connection = new DataConnection(param.CultureInfo))
+            using (var connection = DataConnectionService.GetDataConnection(param.CultureInfo))
             {
-                var page = connection.SitemapNavigator.GetPageNodeById(pageId) ?? throw new InvalidOperationException("Could not find any page matching this ID."); ;
+                var page = connection.GetPageNodeById(pageId) ?? throw new InvalidOperationException("Could not find any page matching this ID."); ;
                 var breadcrumbViewModel = new BreadcrumbViewModel
                 {
                     ActivePageName = HttpUtility.HtmlEncode(page.MenuTitle),
@@ -39,14 +41,14 @@ namespace Orckestra.Composer.CompositeC1.Services
             }
         }
 
-        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, PageNode page, DataConnection connection)
+        protected virtual List<BreadcrumbItemViewModel> CreateBreadcrumbItems(GetBreadcrumbParam param, PageNode page, IDataConnectionAdapter connection)
         {
             var breadcrumbStack = new Stack<BreadcrumbItemViewModel>();
             var parentPageId = page.ParentPage?.Id ?? Guid.Empty;
 
             while (parentPageId != Guid.Empty)
             {
-                var parentPage = connection.SitemapNavigator.GetPageNodeById(parentPageId);
+                var parentPage = connection.GetPageNodeById(parentPageId);
                 if (parentPage != null)
                 {
                     var itemVM = CreateBreadcrumbItemViewModel(parentPage);
