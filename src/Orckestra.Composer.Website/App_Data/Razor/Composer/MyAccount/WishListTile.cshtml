@@ -13,14 +13,21 @@
 <head>
 </head>
 <body>
-<div class="product-container">
-    <div class="wishlist-tile  product-tile d-flexh-100" v-bind:key="@(EntityName).Id" v-bind:class="{'is-loading': @(EntityName).Removing}">
+<div class="product-container"  xmlns:v-on="v-on"
+   v-bind:class="{'active': ActiveProductId === @(EntityName).ProductId || ActiveProductId === @(EntityName).VariantId }">
+
+    <div class="wishlist-tile  product-tile d-flexh-100"
+         v-bind:key="@(EntityName).Id"
+         v-on:mouseover="onMouseover(@(EntityName))"
+         v-on:mouseleave="onMouseleave(@(EntityName))"
+         v-bind:class="{'is-loading': @(EntityName).Removing, 'active': ActiveProductId === @(EntityName).ProductId || ActiveProductId === @(EntityName).VariantId }">
         <a class="product-tile-media" v-bind:href="@(EntityName).ProductUrl">
             <img class="img-fit m-auto" v-bind:src="@(EntityName).ImageUrl"
                  v-bind:alt="@(EntityName).ProductSummary.DisplayName"
                  v-bind:onerror="'this.onerror=null; this.src=\'' + @(EntityName).FallbackImageUrl + '\''" />
             @ProductHelpers.PromotionalBanner(EntityName)
         </a>
+
         @ProductHelpers.PromotionalRibbon(EntityName)
 
         @if (DisplayDeleteButton)
@@ -37,16 +44,16 @@
         <div class="product-tile-content">
             <div class="row">
                 <div class="product-tile-text col-8">
-                    <p v-if="@(EntityName).ProductSummary.Brand" class="product-tile-brand m-0" 
-                    v-html="@(EntityName).ProductSummary.Brand"
-                    data-qa="wishlist-product-brand"></p>
+                    <p v-if="@(EntityName).ProductSummary.Brand" class="product-tile-brand m-0"
+                       v-html="@(EntityName).ProductSummary.Brand"
+                       data-qa="wishlist-product-brand"></p>
 
                     <div v-if="@(EntityName).RecurringOrderProgramName" class="product-tile-recurring">
                         <img src="/UI.Package/Images/recurring.svg" class="recurring-icon" alt="@Html.Localize("General", "L_RecurringProduct")" title="@Html.Localize("General", "L_RecurringProduct")" />
                     </div>
 
                     <a class="p text-default-font" data-qa="wishlist-product-title" v-bind:href="@(EntityName).ProductUrl"
-                    v-bind:title="@(EntityName).ProductSummary.DisplayName" v-bind:data-productId="@(EntityName).ProductId">{{@(EntityName).ProductSummary.DisplayName}}</a>
+                       v-bind:title="@(EntityName).ProductSummary.DisplayName" v-bind:data-productId="@(EntityName).ProductId">{{@(EntityName).ProductSummary.DisplayName}}</a>
 
                     <div v-if="@(EntityName).VariantId" class="wishlist-tile-variants">
                         <span v-for="(key, index) in @(EntityName).KeyVariantAttributesList">
