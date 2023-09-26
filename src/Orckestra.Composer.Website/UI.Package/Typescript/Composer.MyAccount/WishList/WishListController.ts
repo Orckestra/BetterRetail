@@ -12,7 +12,7 @@ module Orckestra.Composer {
     export class WishListController extends Orckestra.Composer.Controller {
 
         protected _wishListService: IWishListService = new WishListService(new WishListRepository(), this.eventHub);
-        protected _cartService: ICartService =  CartService.getInstance();
+        protected _cartService: ICartService = CartService.getInstance();
         protected VueWishList: Vue;
 
         public initialize() {
@@ -66,7 +66,7 @@ module Orckestra.Composer {
                     },
                     deleteLineItem(lineItemId) {
                         const item = this.Items.find(x => x.Id === lineItemId)
-                        if(item) {
+                        if (item) {
                             item.Removing = true;
                             this.Items = [...this.Items];
                         }
@@ -75,6 +75,14 @@ module Orckestra.Composer {
                             .then(wishList => {
                                 this.Items = this.Items.filter(x => x.Id !== lineItemId)
                             })
+                    },
+                    onMouseover(searchProduct) {
+                        const { ProductId, VariantId } = searchProduct;
+                        if (this.ActiveProductId) return;
+                        this.ActiveProductId = VariantId ? VariantId: ProductId;
+                    },
+                    onMouseleave(searchProduct) {
+                        this.ActiveProductId = undefined;
                     }
                 }
             });
