@@ -55,6 +55,7 @@ module Orckestra.Composer {
 
         public cancelEditOrder(orderNumber: string) {
             return this.orderRepository.cancelEditOrder(orderNumber).then(result => {
+                this.cartService.invalidateCache();
                 this.eventHub.publish(MyAccountEvents.EditOrderCanceled, { data: { orderNumber } });
                 return this.cartService.getFreshCart(true);
             })
