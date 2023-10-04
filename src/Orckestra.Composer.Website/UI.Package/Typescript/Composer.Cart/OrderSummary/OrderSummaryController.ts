@@ -84,8 +84,10 @@ module Orckestra.Composer {
 
                         this.Mode.Loading = true;
                         self.orderSummaryService.cleanCart().done(() => {
+                            this.Mode.Loading = false;
                             window.location.href = nextStepUrl;
                         }, reason => {
+                            this.Mode.Loading = false;
                             console.error('Error while proceeding to Checkout', reason);
                             ErrorHandler.instance().outputErrorFromCode('ProceedToCheckoutFailed');
                         });
