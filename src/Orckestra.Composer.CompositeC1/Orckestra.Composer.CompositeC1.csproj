@@ -250,6 +250,8 @@
     <Compile Include="Services\DataQuery\IDataQueryService.cs" />
     <Compile Include="Services\Cache\ICacheService.cs" />
     <Compile Include="Services\Cache\ICacheStore.cs" />
+    <Compile Include="Services\DataConnectionService.cs" />
+    <Compile Include="Services\IDataConnectionService.cs" />
     <Compile Include="Services\IScheduler.cs" />
     <Compile Include="Services\PreviewMode\PreviewModeService.cs" />
     <Compile Include="Services\PreviewMode\IPreviewModeService.cs" />

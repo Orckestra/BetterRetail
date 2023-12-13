@@ -56,6 +56,7 @@ namespace Orckestra.Composer.CompositeC1
             host.Register<CultureService, ICultureService>(ComponentLifestyle.Singleton);
             host.Register<GoogleAnalyticsNavigationUrlProvider>();
             host.Register<NavigationMapper, INavigationMapper>();
+            host.Register<DataConnectionService, IDataConnectionService>(ComponentLifestyle.Singleton);
 
             host.Register<SearchUrlProvider, ISearchUrlProvider>();
             host.Register<CategoryBrowsingUrlProvider, ICategoryBrowsingUrlProvider>();

@@ -26,17 +26,20 @@ namespace Orckestra.Composer.CompositeC1.Controllers
 
         public virtual ActionResult PageHeader()
         {
-            var page = PageService.GetPage(SitemapNavigator.CurrentPageId);
-            var canonicalUrl = page != null ? UrlUtils.ToAbsolute(PageService.GetPageUrl(page.Id)) : string.Empty;
-
-            var pageHeaderViewModel = new PageHeaderViewModel
+            using (var connection = new DataConnection())
             {
-                PageTitle = page.Title,
-                NoIndex = string.IsNullOrWhiteSpace(canonicalUrl),
-                CanonicalUrl = canonicalUrl
-            };
+                var currentPageNode = connection.SitemapNavigator.CurrentPageNode;
+                var pageUrl = currentPageNode?.Url;
+                var canonicalUrl = !string.IsNullOrEmpty(pageUrl) ? UrlUtils.ToAbsolute(pageUrl) : string.Empty;
+                var pageHeaderViewModel = new PageHeaderViewModel
+                {
+                    PageTitle = currentPageNode?.Title,
+                    NoIndex = string.IsNullOrWhiteSpace(canonicalUrl),
+                    CanonicalUrl = canonicalUrl
+                };
 
-            return View("PageHeader", pageHeaderViewModel);
+                return View("PageHeader", pageHeaderViewModel);
+            }
         }
 
         protected virtual bool IsPageIndexed()
