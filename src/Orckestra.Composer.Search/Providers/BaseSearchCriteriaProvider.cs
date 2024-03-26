@@ -33,7 +33,7 @@ namespace Orckestra.Composer.Search.Providers
             searchTerms = SearchTermsTransformationProvider.TransformSearchTerm(searchTerms, ComposerContext.CultureInfo.Name);
             return new SearchCriteria
             {
-                Keywords = string.IsNullOrWhiteSpace(searchTerms) || searchTerms.EndsWith("*") ? searchTerms: searchTerms + "*",
+                Keywords = searchTerms,
                 NumberOfItemsPerPage = SearchConfiguration.MaxItemsPerPage,
                 IncludeFacets = includeFacets,
                 StartingIndex = (page - 1) * SearchConfiguration.MaxItemsPerPage,
