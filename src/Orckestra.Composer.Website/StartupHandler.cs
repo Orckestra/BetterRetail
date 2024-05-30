@@ -22,6 +22,7 @@ using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Composite.Core;
 
 namespace Orckestra.Composer.Website
 {
@@ -184,9 +185,15 @@ namespace Orckestra.Composer.Website
 
             _host = new ComposerHost();
             _host.LoadPlugins();
-            foreach(var type in _host.RegisteredInterfaces)
+            foreach (var type in _host.RegisteredInterfaces)
             {
-                collection.AddTransient(type, provider => AutofacDependencyResolver.Current.GetService(type));
+                collection.AddTransient(type, provider =>
+                {
+                    // Return null if host is not initialized yet;
+                    if ((_host as ComposerHost)?.IsInitialized == false) return null;
+
+                    return AutofacDependencyResolver.Current.GetService(type);
+                });
             }
         }
 
