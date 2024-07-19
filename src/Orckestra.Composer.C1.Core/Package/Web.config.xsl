@@ -147,7 +147,7 @@
             <xsl:apply-templates select="@* | node()" />
         </xsl:copy>
     </xsl:template>
-    <!-- Add the httpRuntime node if it doesn't exist -->
+
     <xsl:template match="configuration/system.web"
                   xml:space="preserve">
         <xsl:copy>
