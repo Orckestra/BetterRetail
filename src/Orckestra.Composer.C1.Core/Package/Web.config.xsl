@@ -109,9 +109,22 @@
       <xsl:copy-of select="msxsl:node-set($AppSettings)/*/node()"/>
    </xsl:copy>
   </xsl:template>
-
+ <!-- Preserve httpRuntime attributes if they exist -->
+  <xsl:template match="configuration/system.web/httpRuntime">
+      <xsl:copy>
+          <!-- Add the maxUrlLength attribute if it doesn't exist -->
+          <xsl:if test="not(@maxUrlLength)">
+              <xsl:attribute name="maxUrlLength">512</xsl:attribute>
+          </xsl:if>
+          <xsl:apply-templates select="@* | node()" />
+      </xsl:copy>
+  </xsl:template>
 	<xsl:template match="configuration/system.web" xml:space="preserve">
     <xsl:copy><xsl:apply-templates select="@*" />
+    <!-- Add the httpRuntime node if it doesn't exist -->
+    <xsl:if test="not(httpRuntime)">
+      <httpRuntime maxUrlLength="512" />
+    </xsl:if>
     <httpCookies httpOnlyCookies="true" requireSSL="true" />
     <authentication mode="Forms">
       <forms loginUrl="login" name=".AUTH" cookieless="UseCookies" requireSSL="true" timeout="131760" />
@@ -205,29 +218,6 @@
         <add name="ApplicationInsightsWebTracking" type="Microsoft.ApplicationInsights.Web.ApplicationInsightsHttpModule, Microsoft.AI.Web" preCondition="managedHandler" />
       </xsl:if>
 
-    </xsl:copy>
-  </xsl:template>
-
-<!-- Add the maxUrlLength attribute to support long URLs due to increased Product Display Name length (256) -->
-<!-- If httpRuntime already exists -->
-  <xsl:template match="/configuration/httpRuntime">
-    <xsl:copy>
-      <!-- Add the maxUrlLength attribute if it doesn't exist -->
-      <xsl:if test="not(@maxUrlLength)">
-        <xsl:attribute name="maxUrlLength">512</xsl:attribute>
-      </xsl:if>
-      <xsl:apply-templates select="@* | node()"/>
-    </xsl:copy>
-  </xsl:template>
-  <!-- If httpRuntime doesn't exist -->
-   <xsl:template match="/configuration">
-    <xsl:copy>
-      <!-- Copy existing nodes -->
-      <xsl:apply-templates select="@* | node()"/>
-      <!-- Add httpRuntime if it doesn't exist -->
-      <xsl:if test="not(httpRuntime)">
-        <httpRuntime maxUrlLength="512"/>
-      </xsl:if>
     </xsl:copy>
   </xsl:template>
 
