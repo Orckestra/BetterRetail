@@ -293,9 +293,9 @@ namespace Orckestra.Composer.Factory
             var conv = decimal.TryParse(vm.ListPrice, NumberStyles.Currency, param.CultureInfo.NumberFormat, out decimal price);
             if (conv)
             {
-                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency());
+                vm.TotalWithoutDiscount = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency(), param.CultureInfo);
 
-                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency());
+                vm.Total = LocalizationProvider.FormatPrice((decimal)vm.Quantity * price, CurrencyProvider.GetCurrency(), param.CultureInfo);
             }
 
             //Adding brand display name
@@ -344,8 +344,8 @@ namespace Orckestra.Composer.Factory
         protected virtual string GetProductOrVariantListPrice(Orckestra.Overture.ServiceModel.Products.Product product, Variant variant, CultureInfo culture)
         {
             return variant != null
-                ? LocalizationProvider.FormatPrice(variant.ListPrice.Value, CurrencyProvider.GetCurrency())
-                : LocalizationProvider.FormatPrice(product.ListPrice.Value, CurrencyProvider.GetCurrency());
+                ? LocalizationProvider.FormatPrice(variant.ListPrice.Value, CurrencyProvider.GetCurrency(), culture)
+                : LocalizationProvider.FormatPrice(product.ListPrice.Value, CurrencyProvider.GetCurrency(), culture);
         }
 
         //TODO: rename to MapShippingAddressAsync if used

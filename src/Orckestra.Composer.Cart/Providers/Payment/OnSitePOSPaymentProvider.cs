@@ -104,7 +104,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
             };
 
             paymentVm.BillingAddress = CartViewModelFactory.GetAddressViewModel(payment.BillingAddress, cultureInfo);
-            paymentVm.Amount = LocalizationProvider.FormatPrice((decimal)payment.Amount, CurrencyProvider.GetCurrency());
+            paymentVm.Amount = LocalizationProvider.FormatPrice((decimal)payment.Amount, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture);
 
             return paymentVm;
         }

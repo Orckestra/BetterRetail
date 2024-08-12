@@ -20,11 +20,13 @@ namespace Orckestra.Composer.Search.Providers
         
         private ILocalizationProvider LocalizationProvider { get; }
         private ICurrencyProvider CurrencyProvider { get; }
+        private IComposerContext ComposerContext { get; }
 
-        public FromPriceProvider( ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider)
+        public FromPriceProvider( ILocalizationProvider localizationProvider, ICurrencyProvider currencyProvider, IComposerContext composerContext)
         {
             LocalizationProvider = localizationProvider ?? throw new ArgumentNullException(nameof(localizationProvider));
             CurrencyProvider = currencyProvider ?? throw new ArgumentNullException(nameof(currencyProvider));
+            ComposerContext = composerContext ?? throw new ArgumentNullException(nameof(composerContext)); ;
         }
 
         // https://tfs12.orckestra.com/overture%20solutions/WorkItemTracking/v1.0/AttachFileHandler.ashx?FileID=5412&FileName=SearchItemPrice.pdf
@@ -174,7 +176,7 @@ namespace Orckestra.Composer.Search.Providers
 
         private string GetDisplayPrice(double? price)
         {
-            return price.HasValue ? LocalizationProvider.FormatPrice((decimal)price.Value, CurrencyProvider.GetCurrency()) : null;
+            return price.HasValue ? LocalizationProvider.FormatPrice((decimal)price.Value, CurrencyProvider.GetCurrency(), ComposerContext.CultureInfo) : null;
         }
 
         private static int GetPriceForComparison(double price)

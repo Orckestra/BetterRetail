@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Fasterflect;
 
 namespace Orckestra.Composer.Providers.Localization
 {
@@ -53,14 +54,32 @@ namespace Orckestra.Composer.Providers.Localization
             return string.Format(cultureInfo, format, price);
         }
 
+        private static readonly Dictionary<string, string> CultureInfoToCurrencyCode =
+            CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                .Select(c => new { c, new RegionInfo(c.LCID).ISOCurrencySymbol })
+                .ToDictionary(x => x.c.Name, x => x.ISOCurrencySymbol);
+
+
         private static readonly Dictionary<string, CultureInfo> ISOCurrenciesToACultureMap =
             CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c => new { c, new RegionInfo(c.LCID).ISOCurrencySymbol })
                 .GroupBy(x => x.ISOCurrencySymbol)
                 .ToDictionary(g => g.Key, g => g.First().c, StringComparer.OrdinalIgnoreCase);
 
+        [Obsolete]
         public static CultureInfo GetCultureByCurrencyIso(this ILocalizationProvider localizationProvider, string currencyCode)
         {
+            return GetCultureByCurrencyIso(localizationProvider, currencyCode, null);
+        }
+
+        public static CultureInfo GetCultureByCurrencyIso(this ILocalizationProvider localizationProvider, string currencyCode, CultureInfo preferredCultureInfo)
+        {
+            if (preferredCultureInfo != null &&
+                CultureInfoToCurrencyCode.TryGetValue(preferredCultureInfo.Name, out var preferredCultureInfoCurrencyCode))
+            {
+                if (preferredCultureInfoCurrencyCode == currencyCode) return preferredCultureInfo;
+            }
+
             if (!ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo))
             {
                 throw new InvalidOperationException($"Not supported currency code: '{currencyCode}'");
@@ -68,19 +87,22 @@ namespace Orckestra.Composer.Providers.Localization
             return cultureInfo;
         }
 
-        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, string currencyCode)
+        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price,
+            string currencyCode)
+        {
+            return FormatPrice(localizationProvider, price, currencyCode, null);
+        }
+
+        public static string FormatPrice(this ILocalizationProvider localizationProvider, decimal price, string currencyCode, CultureInfo preferredCultureInfo)
         {
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }
             if (currencyCode == null) { throw new ArgumentNullException(nameof(currencyCode)); }
 
-            
-            if (!ISOCurrenciesToACultureMap.TryGetValue(currencyCode, out CultureInfo cultureInfo))
-            {
-                throw new InvalidOperationException($"Not supported currency code: '{currencyCode}'");
-            }
+            CultureInfo cultureInfo = GetCultureByCurrencyIso(localizationProvider, currencyCode, preferredCultureInfo);
 
             return localizationProvider.FormatPrice(price, cultureInfo);
         }
+
         public static string FormatPhoneNumber(this ILocalizationProvider localizationProvider, string phoneNumber, CultureInfo cultureInfo)
         {
             if (localizationProvider == null) { throw new ArgumentNullException(nameof(localizationProvider)); }

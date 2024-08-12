@@ -117,7 +117,7 @@ namespace Orckestra.Composer.Cart.Factory
 
             decimal lineItemsSavingTotal = decimal.Add(lineItem.DiscountAmount.GetValueOrDefault(0), lineItemsSavingSale);
 
-            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, CurrencyProvider.GetCurrency());
+            vm.SavingsTotal = lineItemsSavingTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(lineItemsSavingTotal, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture);
 
             vm.KeyVariantAttributesList = GetKeyVariantAttributes(new GetKeyVariantAttributesParam {
                 KvaValues = lineItem.KvaValues,

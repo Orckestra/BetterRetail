@@ -37,7 +37,7 @@ namespace Orckestra.Composer.Cart.Factory
 
                 vm.TaxTotal = codeTaxes.Sum(t => t.TaxTotal);
                 vm.DisplayTaxTotal = vm.TaxTotal.HasValue
-                    ? LocalizationProvider.FormatPrice(vm.TaxTotal.Value, CurrencyProvider.GetCurrency())
+                    ? LocalizationProvider.FormatPrice(vm.TaxTotal.Value, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture)
                     : string.Empty;
 
                 yield return vm;

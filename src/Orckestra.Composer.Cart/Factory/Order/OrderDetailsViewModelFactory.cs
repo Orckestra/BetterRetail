@@ -137,7 +137,7 @@ namespace Orckestra.Composer.Cart.Factory.Order
             orderInfos.OrderStatus = GetOrderStatusDisplayName(param);
             orderInfos.OrderStatusRaw = param.Order.OrderStatus;
             orderInfos.BillingCurrency = param.Order.Cart.BillingCurrency;
-            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency());
+            orderInfos.PricePaid = LocalizationProvider.FormatPrice((decimal)param.Order.Cart.Total, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture);
             orderInfos.HasOwnDraft = HasOwnDraft(param);
 
             return orderInfos;
