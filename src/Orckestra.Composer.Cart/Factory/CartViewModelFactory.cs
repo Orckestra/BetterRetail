@@ -287,7 +287,7 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 GroupName = x.Key.Item1,
                 Taxable = x.Key.Item2,
-                TotalAmount = LocalizationProvider.FormatPrice(x.Value, CurrencyProvider.GetCurrency()),
+                TotalAmount = LocalizationProvider.FormatPrice(x.Value, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture),
             }).ToList();
         }
 
@@ -295,7 +295,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             var price = cost == 0
                 ? GetFreeShippingPriceLabel(cultureInfo)
-                : LocalizationProvider.FormatPrice(cost, CurrencyProvider.GetCurrency());
+                : LocalizationProvider.FormatPrice(cost, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture);
             return price;
         }
 
@@ -373,7 +373,7 @@ namespace Orckestra.Composer.Cart.Factory
                     l => decimal.Multiply(decimal.Subtract(l.CurrentPrice.GetValueOrDefault(0), l.DefaultPrice.GetValueOrDefault(0)), Convert.ToDecimal(l.Quantity))));
 
             decimal savingsTotal = decimal.Add(cart.DiscountTotal.GetValueOrDefault(0), sumAllLineItemsSavings);
-            orderSummary.SavingsTotal = savingsTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(savingsTotal, CurrencyProvider.GetCurrency());
+            orderSummary.SavingsTotal = savingsTotal.Equals(0) ? string.Empty : LocalizationProvider.FormatPrice(savingsTotal, CurrencyProvider.GetCurrency(), cultureInfo);
 
             return orderSummary;
         }
@@ -536,7 +536,7 @@ namespace Orckestra.Composer.Cart.Factory
             {
                 GroupName = x.Key.Item1,
                 Taxable = x.Key.Item2,
-                TotalAmount = LocalizationProvider.FormatPrice(x.Value, CurrencyProvider.GetCurrency()),
+                TotalAmount = LocalizationProvider.FormatPrice(x.Value, CurrencyProvider.GetCurrency(), CultureInfo.CurrentCulture),
             }).ToList();
         }
 

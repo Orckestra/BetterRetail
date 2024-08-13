@@ -119,7 +119,7 @@ namespace Orckestra.Composer.Search.Providers
                     var scopeCurrency = CurrencyProvider.GetCurrency();
                     if (!string.IsNullOrEmpty(scopeCurrency))
                     {
-                        cultureInfo = LocalizationProvider.GetCultureByCurrencyIso(scopeCurrency);
+                        cultureInfo = LocalizationProvider.GetCultureByCurrencyIso(scopeCurrency, cultureInfo);
                         return string.Format(cultureInfo, localizedFormat, formatParams.ToArray());
                     }
                    

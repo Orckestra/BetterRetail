@@ -175,7 +175,7 @@ namespace Orckestra.Composer.ViewModels
                     var scopeCurrency = CurrencyProvider.GetCurrency();
                     if (!string.IsNullOrEmpty(scopeCurrency))
                     {
-                        cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency);
+                        cultureInfo = _localizationProvider.GetCultureByCurrencyIso(scopeCurrency, cultureInfo);
                     }
                 }
 
