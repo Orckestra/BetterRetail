@@ -390,6 +390,7 @@
     <Compile Include="Utils\LineItemHelper.cs" />
     <Compile Include="Utils\MessagesHelper.cs" />
     <Compile Include="Utils\MvcFilterRedirectUtil.cs" />
+    <Compile Include="Utils\PageHelper.cs" />
     <Compile Include="Utils\ProductHelper.cs" />
     <Compile Include="Utils\PropertyBagHelper.cs" />
     <Compile Include="Utils\RecurringOrderTemplateHelper.cs" />
