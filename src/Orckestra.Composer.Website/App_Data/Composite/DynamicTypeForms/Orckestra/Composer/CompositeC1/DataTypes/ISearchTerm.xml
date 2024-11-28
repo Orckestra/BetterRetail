@@ -20,14 +20,14 @@
             <cms:bind source="Value" />
           </TextBox.Text>
         </TextBox>
-        <DoubleKeySelector Label="Website ID" Help="" Required="true">
-          <DoubleKeySelector.FirstKey>
+        <KeySelector OptionsKeyField="Key" OptionsLabelField="Value" Label="Website ID" Help="" Required="true">
+          <KeySelector.Selected>
             <cms:bind source="WebsiteId" />
-          </DoubleKeySelector.FirstKey>
-          <DoubleKeySelector.Options>
-            <f:StaticMethodCall Type="Composite.Plugins.Routing.Hostnames.FormFunctions" Method="GetRootPages" />
-          </DoubleKeySelector.Options>
-        </DoubleKeySelector>
+          </KeySelector.Selected>
+          <KeySelector.Options>
+            <f:StaticMethodCall Type="Orckestra.Composer.Utils.PageHelper" Method="GetWebsitesRootPages" />
+          </KeySelector.Options>
+        </KeySelector>
       </FieldGroup>
       <FieldGroup Label="Publication settings">
         <KeySelector OptionsKeyField="Key" OptionsLabelField="Value" Label="Status" Help="Send the data to another publication status.">
