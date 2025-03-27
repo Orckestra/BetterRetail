@@ -37,12 +37,12 @@
                 event: Orckestra.Composer.Mocks.MockJqueryEventObject
             };
 
-            eventHub.subscribe('multiFacetChanged', (eventInformation: Orckestra.Composer.IEventInformation) => {
+            eventHub.subscribe('multiFacetChanged', () => {
                 spy();
                 done();
             });
 
-            controller.multiFacetChanged(controllerActionContext);
+            controller.multiFacetChanged('', '');
         });
 
         it('SHOULD publish the multiFacetChanged event.', () => {

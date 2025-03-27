@@ -66,15 +66,7 @@ module Orckestra.Composer {
                         return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < 0;
                     },
                     multiFacetChanged(name, value){
-                        if (!_.isEmpty(this._debounceHandle)) {
-                            this._debounceHandle.cancel();
-                        }
-
-                        this._debounceHandle = _.debounce(() => {
-                            self.publishMultiFacetChanged(name, value, UrlHelper.resolvePageType())
-                        }, 800);
-
-                        this._debounceHandle();
+                        self.multiFacetChanged(name, value);
                     }
                 },
                 updated() {
@@ -82,6 +74,18 @@ module Orckestra.Composer {
                     self.initializeRangeSlider();
                 }
             });
+        }
+
+        public multiFacetChanged(name, value){
+            if (!_.isEmpty(this._debounceHandle)) {
+                this._debounceHandle.cancel();
+            }
+
+            this._debounceHandle = _.debounce(() => {
+                this.publishMultiFacetChanged(name, value, UrlHelper.resolvePageType())
+            }, 800);
+
+            this._debounceHandle();
         }
 
         public dispose() {
