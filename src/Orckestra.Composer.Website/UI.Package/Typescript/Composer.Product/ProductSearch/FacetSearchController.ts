@@ -64,6 +64,17 @@ module Orckestra.Composer {
                     },
                     IsValuesCollapsed(facet) {
                         return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < 0;
+                    },
+                    multiFacetChanged(name, value){
+                        if (!_.isEmpty(this._debounceHandle)) {
+                            this._debounceHandle.cancel();
+                        }
+
+                        this._debounceHandle = _.debounce(() => {
+                            self.publishMultiFacetChanged(name, value, UrlHelper.resolvePageType())
+                        }, 800);
+
+                        this._debounceHandle();
                     }
                 },
                 updated() {
@@ -71,22 +82,6 @@ module Orckestra.Composer {
                     self.initializeRangeSlider();
                 }
             });
-        }
-
-        public multiFacetChanged(actionContext: IControllerActionContext) {
-            if (!_.isEmpty(this._debounceHandle)) {
-                this._debounceHandle.cancel();
-            }
-
-            var anchorContext = actionContext.elementContext,
-                facetKey = anchorContext.attr('name'),
-                facetValue = anchorContext.attr('value');
-
-            this._debounceHandle = _.debounce(() => {
-                this.publishMultiFacetChanged(facetKey, facetValue, UrlHelper.resolvePageType())
-            }, 800);
-
-            this._debounceHandle();
         }
 
         public dispose() {
