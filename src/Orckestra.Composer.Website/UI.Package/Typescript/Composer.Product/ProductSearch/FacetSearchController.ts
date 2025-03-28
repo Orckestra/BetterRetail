@@ -64,6 +64,9 @@ module Orckestra.Composer {
                     },
                     IsValuesCollapsed(facet) {
                         return facet.OnDemandFacetValues.findIndex((n:any) => n.IsSelected) < 0;
+                    },
+                    multiFacetChanged(name, value){
+                        self.multiFacetChanged(name, value);
                     }
                 },
                 updated() {
@@ -73,17 +76,13 @@ module Orckestra.Composer {
             });
         }
 
-        public multiFacetChanged(actionContext: IControllerActionContext) {
+        public multiFacetChanged(name, value){
             if (!_.isEmpty(this._debounceHandle)) {
                 this._debounceHandle.cancel();
             }
 
-            var anchorContext = actionContext.elementContext,
-                facetKey = anchorContext.attr('name'),
-                facetValue = anchorContext.attr('value');
-
             this._debounceHandle = _.debounce(() => {
-                this.publishMultiFacetChanged(facetKey, facetValue, UrlHelper.resolvePageType())
+                this.publishMultiFacetChanged(name, value, UrlHelper.resolvePageType())
             }, 800);
 
             this._debounceHandle();

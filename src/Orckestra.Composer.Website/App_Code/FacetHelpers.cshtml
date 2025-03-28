@@ -42,7 +42,7 @@
                    class="form-check-input"
                    v-bind:name="facetValue.FieldName + '[]'"
                    v-bind:value="facetValue.Value"
-                   data-oc-click="multiFacetChanged"
+                   v-on:click="multiFacetChanged(facetValue.FieldName, facetValue.Value)"
                    v-bind:checked="facetValue.IsSelected" />
             {{facetValue.Title}}&#160;({{facetValue.Quantity}})
         </label>
@@ -87,7 +87,7 @@
                    v-bind:name="facet.FieldName + '[]'"
                    v-bind:value="facetValue.Value"
                    v-bind:disabled="!facetValue.IsRemovable"
-                   data-oc-click="multiFacetChanged"
+                   v-on:click="multiFacetChanged(facet.FieldName, facetValue.Value)"
                    v-bind:checked="facetValue.IsSelected" />
             <span v-html="facetValue.Title"></span><span> ({{facetValue.Quantity}})</span>
         </label>
