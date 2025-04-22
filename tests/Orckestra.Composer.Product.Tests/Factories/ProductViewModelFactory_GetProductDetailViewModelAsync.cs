@@ -304,12 +304,27 @@ namespace Orckestra.Composer.Product.Tests.Factories
                 }
             };
 
+            List<AllProductVideos> dummyAllProductVideos = new List<AllProductVideos>
+            {
+                new AllProductVideos
+                {
+                    ProductId      = GetRandom.String(32),
+                    VariantId      = GetRandom.String(32),
+                    SequenceNumber = GetRandom.PositiveInt(),
+                    VideoUrl       = GetRandom.WwwUrl(),
+                }
+            };
+
             damProvider.Setup(context => context.GetProductMainImagesAsync(It.IsNotNull<GetProductMainImagesParam>()))
                        .ReturnsAsync(dummyMainImages)
                        .Verifiable();
 
             damProvider.Setup(context => context.GetAllProductImagesAsync(It.IsNotNull<GetAllProductImagesParam>()))
                        .ReturnsAsync(dummyAllProductImages)
+                       .Verifiable();
+
+            damProvider.Setup(context => context.GetAllProductVideosAsync(It.IsNotNull<GetAllProductVideosParam>()))
+                       .ReturnsAsync(dummyAllProductVideos)
                        .Verifiable();
 
             return damProvider;

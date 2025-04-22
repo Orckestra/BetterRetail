@@ -1,0 +1,65 @@
+﻿using Orckestra.Overture.ServiceModel;
+
+namespace Orckestra.Composer.Providers.Dam
+{
+    public class AllProductVideos
+    {
+        /// <summary>
+        /// Gets or sets the product id.
+        /// </summary>
+        /// <value>
+        /// The product id.
+        /// </value>
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the variant id.
+        /// </summary>
+        /// <value>
+        /// The variant id.
+        /// </value>
+        public string VariantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sequence number for ordering this image.
+        /// </summary>
+        /// <value>
+        /// The sequence number.
+        /// </value>
+        public int SequenceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the image URL.
+        /// </summary>
+        /// <value>
+        /// The image URL.
+        /// </value>
+        public string VideoUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the fallback Image URL to display when no ImageUrl are available
+        /// </summary>
+        /// <value>
+        /// The fallback image URL.
+        /// </value>
+        public string FallbackImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets is Image selected.
+        /// </summary>
+        /// <value>
+        /// Is Image Selected.
+        /// </value>
+        public bool Selected { get; set; }
+
+        /// <summary>
+        /// Get or set alternate text for image
+        /// </summary>        
+        public LocalizedString Alt { get; set; }
+
+        /// <summary>
+        /// Get or set alternate text for image
+        /// </summary>        
+        public LocalizedString Description { get; set; }
+    }
+}

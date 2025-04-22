@@ -343,6 +343,8 @@
     <Compile Include="Parameters\UpdateUserPreferredStoreParam.cs" />
     <Compile Include="PaymentStatus.cs" />
     <Compile Include="Providers\CurrencyProvider.cs" />
+    <Compile Include="Providers\Dam\AllProductVideos.cs" />
+    <Compile Include="Providers\Dam\GetAllProductVideosParam.cs" />
     <Compile Include="Providers\Dam\ProductImageInfo.cs" />
     <Compile Include="Providers\ICurrencyProvider.cs" />
     <Compile Include="Providers\IPageNotFoundUrlProvider.cs" />

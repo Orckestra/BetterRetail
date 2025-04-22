@@ -38,6 +38,8 @@ namespace Orckestra.Composer.Product.ViewModels
 
         public List<ProductDetailImageViewModel> Images { get; set; }
 
+        public List<ProductDetailVideoViewModel> Videos { get; set; }
+
         public bool IsProductZoomEnabled
         {
             get { return Images.All(image => image.IsProductZoomImageUrlDefined); }

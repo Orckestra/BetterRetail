@@ -10,6 +10,7 @@
         return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
     }
 
+    bool hasVideo = false;
 }
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
 <head>
@@ -30,29 +31,46 @@
 <body>
     <div class="row">
         <!-- Thumbnails -->
-        <div class="col-lg-2 order-2 order-md-1" >
-            @if (Model.Variants == null || Model.Variants.Count == 0)
-            {
-                <div class="row" data-oc-click="selectImage">
-                    @foreach (var image in Model.Images)
-                    {
-                        @RenderThumbnailImg(image, false)
-                    }
-                </div>
-            }
-            else
-            {
-                foreach (var variant in Model.Variants)
+        <div class="col-lg-2 order-2 order-md-1">
+            <div class="product-thumbnails">
+                @if (Model.Variants == null || Model.Variants.Count == 0)
                 {
-                    <div data-variant="@variant.Id" class="row @SelectedVariantClass(variant.Id) js-thumbnails" data-oc-click="selectImage">
-                        @foreach (var image in variant.Images)
-                        {
-                            @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId)
-                        }
-                    </div>
-                }
-            }
+                    foreach (var image in Model.Images)
+                    {
+                        @RenderThumbnailImg(image, false, "")
+                    }
+                    if (Model.Videos != null && Model.Videos.Count > 0)
+                    {
+                        hasVideo = true;
 
+                        foreach (var video in Model.Videos)
+                        {
+                            @RenderThumbnailVideo(video, false, "")
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var variant in Model.Variants)
+                    {
+                        foreach (var image in variant.Images)
+                        {
+                            @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId, variant.Id)
+                        }
+                        if (variant.Videos != null && variant.Videos.Count > 0)
+                        {
+                            hasVideo = true;
+
+                            foreach (var video in variant.Videos)
+                            {
+                                @RenderThumbnailVideo(video, variant.Id != Model.SelectedVariantId, variant.Id)
+                            }
+                        }
+
+                    }
+                }
+
+            </div>
         </div>
         <!-- Main image -->
         <div class="col-lg-10 order-1 order-md-2">
@@ -88,33 +106,55 @@
                          src="@Model.FallbackImageUrl" />
                 }
 
-                @if (Model.IsProductZoomEnabled)
-                {
-                    <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block">
-                        <i class="fa  fa-search-plus"></i>
-                    </a>
-                }
+                    @if (Model.IsProductZoomEnabled)
+                    {
+                        <a href="" class="product-details-zoom-trigger js-zoom d-none d-md-block" role="button" aria-hidden="true" tabindex="-1">
+                            <i class="fa fa-search-plus"></i>
+                        </a>
+                    }
 
             </div>
             }
-         </div>
+        </div>
+
+        @if (hasVideo)
+        {
+            <div data-oc-controller="Product.Videos">
+                <div class="modal fade" id="video-modal" tabindex="-1" role="dialog" aria-labelledby="video-modal-label">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="video-modal-label"></h4>
+                            </div>
+                            <div class="modal-body vjs-16-9">
+                                <video id="product-video" class="video-js" src="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </body>
 </html>
 
-@helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden)
+@helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden, string variantId)
 {
-    <div class="col-3  col-lg-12"
-         style="display: none;">
-        <a href="#" class="thumbnail @(image.Selected ? "active": "")" style="display: none;">
+        <a href="#" class="thumbnail @(isHidden ? "d-none" : "") @(image.Selected ? "active": "") js-thumbnails" style="display: none;" data-oc-click="selectImage" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
             <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }
                  data-main-src="@image.ImageUrl"
                  data-zoom-src="@image.ProductZoomImageUrl"
                  alt="@image.Alt"
                  onload="imgLoaded(this)"
                  class="img-fluid" />
-
         </a>
-    </div>
+}
+
+@helper RenderThumbnailVideo(ProductDetailVideoViewModel video, bool isHidden, string variantId)
+{
+        <a href="#" class="video-thumbnail @(isHidden ? "d-none" : "")" data-video-url="@video.VideoUrl" title="@video.Alt" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
+            <img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
+        </a>
 }
 
