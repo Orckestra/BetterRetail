@@ -9,8 +9,9 @@ module Orckestra.Composer {
 
         public initialize() {
             super.initialize();
-            this.initThumbnails();
+            this.initCtas();
             this.initModal();
+            this.initVideosSection();
         }
 
         protected loadVideo(videoUrl: string, videoTitle: string): void {
@@ -33,8 +34,8 @@ module Orckestra.Composer {
             $(this.videoModalElement).modal('show');
         }
 
-        protected initThumbnails(): void {
-            document.querySelectorAll('a.video-thumbnail').forEach((el: Element) => {
+        protected initCtas(): void {
+            document.querySelectorAll('a.pdp-video-cta').forEach((el: Element) => {
                 el.addEventListener('click', (e: Event) => {
                     e.preventDefault();
 
@@ -51,6 +52,40 @@ module Orckestra.Composer {
                 this.videoPlayer.pause();
                 this.videoPlayer.currentTime(0);
             });
+        }
+
+        /**
+         * Hide the videos section if no media is visible for current variant, otherwise make it visible
+         * @param videoSection
+         * @protected
+         */
+        protected switchVideosSectionVisibility(videoSection: HTMLElement): void {
+            let visibleVideosList: NodeListOf<Element> = videoSection.querySelectorAll('.media:not(.d-none)');
+
+            if (visibleVideosList.length > 0) {
+                videoSection.classList.remove('d-none');
+            } else {
+                videoSection.classList.add('d-none');
+            }
+        }
+
+        /**
+         * Manage the visibility of the video section on the PDP (if the Razor function is used)
+         * @protected
+         */
+        protected initVideosSection(): void {
+            let videoSection: HTMLElement = document.getElementById('product-video-list');
+
+            if (videoSection) {
+                //On page load
+                this.switchVideosSectionVisibility(videoSection);
+
+                //On variant switch, after the media visibility has been done in the ProductDetailController
+                this.eventHub.subscribe('productMediasUpdated', () => {
+                    this.switchVideosSectionVisibility(videoSection)
+                })
+
+            }
         }
     }
 }

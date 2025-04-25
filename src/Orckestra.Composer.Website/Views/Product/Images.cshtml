@@ -22,8 +22,7 @@
         }
         function imgLoaded(el) {
             if (el.complete) {
-                el.parentNode.style.display = 'block';
-                el.parentNode.parentNode.style.display = 'block';
+                el.parentNode.removeAttribute('style');
             }
         }
     </script>
@@ -76,35 +75,35 @@
         <div class="col-lg-10 order-1 order-md-2">
             @if (Model.SelectedImage != null)
             {
-            <div class="product-details-media">
+                <div class="product-details-media">
 
-                @if (Model.Variants == null || Model.Variants.Count == 0)
-                {
-                    <img class="product-main-img img-fluid"
-                         property="image"
-                         src="@Model.SelectedImage.ImageUrl"
-                         alt="@Model.SelectedImage.Alt"
-                         onerror="imgError(this)" />
-                }
-                else
-                {
-                    var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
-                    foreach (var imageGroup in mainImages)
+                    @if (Model.Variants == null || Model.Variants.Count == 0)
                     {
-                        var ids = imageGroup.Select(v => v.Id).ToArray();
-                        var image = imageGroup.First().SelectedImage;
-                        <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
-                             data-variant="@(String.Join(",", ids))"
+                        <img class="product-main-img img-fluid"
                              property="image"
-                             src="@image.ImageUrl"
-                             alt="@image.Alt"
+                             src="@Model.SelectedImage.ImageUrl"
+                             alt="@Model.SelectedImage.Alt"
                              onerror="imgError(this)" />
                     }
-                    <img data-variant="unavailable"
-                         class="product-main-img img-fluid d-none"
-                         property="image"
-                         src="@Model.FallbackImageUrl" />
-                }
+                    else
+                    {
+                        var mainImages = Model.Variants.GroupBy(v => v.SelectedImage.ImageUrl).ToList();
+                        foreach (var imageGroup in mainImages)
+                        {
+                            var ids = imageGroup.Select(v => v.Id).ToArray();
+                            var image = imageGroup.First().SelectedImage;
+                            <img class="product-main-img img-fluid @SelectedVariantClass(ids)"
+                                 data-variant="@(String.Join(",", ids))"
+                                 property="image"
+                                 src="@image.ImageUrl"
+                                 alt="@image.Alt"
+                                 onerror="imgError(this)" />
+                        }
+                        <img data-variant="unavailable"
+                             class="product-main-img img-fluid d-none"
+                             property="image"
+                             src="@Model.FallbackImageUrl" />
+                    }
 
                     @if (Model.IsProductZoomEnabled)
                     {
@@ -113,7 +112,7 @@
                         </a>
                     }
 
-            </div>
+                </div>
             }
         </div>
 
@@ -141,20 +140,20 @@
 
 @helper RenderThumbnailImg(ProductDetailImageViewModel image, bool isHidden, string variantId)
 {
-        <a href="#" class="thumbnail @(isHidden ? "d-none" : "") @(image.Selected ? "active": "") js-thumbnails" style="display: none;" data-oc-click="selectImage" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
-            <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }
-                 data-main-src="@image.ImageUrl"
-                 data-zoom-src="@image.ProductZoomImageUrl"
-                 alt="@image.Alt"
-                 onload="imgLoaded(this)"
-                 class="img-fluid" />
-        </a>
+    <a href="#" class="thumbnail @(isHidden ? "d-none" : "") @(image.Selected ? "active": "") js-thumbnails" style="display: none;" data-oc-click="selectImage" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
+        <img @if (isHidden) { <text> data-src="@image.ThumbnailUrl" </text>  } else { <text> src="@image.ThumbnailUrl" </text> }
+             data-main-src="@image.ImageUrl"
+             data-zoom-src="@image.ProductZoomImageUrl"
+             alt="@image.Alt"
+             onload="imgLoaded(this)"
+             class="img-fluid" />
+    </a>
 }
 
 @helper RenderThumbnailVideo(ProductDetailVideoViewModel video, bool isHidden, string variantId)
 {
-        <a href="#" class="video-thumbnail @(isHidden ? "d-none" : "")" data-video-url="@video.VideoUrl" title="@video.Alt" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
-            <img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
-        </a>
+    <a href="#" class="video-thumbnail @(isHidden ? "d-none" : "")" data-video-url="@video.VideoUrl" title="@video.Alt" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
+        <img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
+    </a>
 }
 

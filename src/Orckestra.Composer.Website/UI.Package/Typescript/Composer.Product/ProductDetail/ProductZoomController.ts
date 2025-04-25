@@ -48,7 +48,17 @@ module Orckestra.Composer {
 
         protected updateModalImages(e) {
             const zoomThumbnailsContainer: HTMLElement = document.querySelector('.js-zoom-thumbnails');
-            const selectedVariantThumbnails: NodeListOf<Element> = document.querySelectorAll('.product-thumbnails .js-thumbnails[data-variant="' + e.data.selectedVariantId + '"]');
+            let selectedVariantThumbnails: NodeListOf<Element>;
+            //For regular "Images.cshtml" view, available for Grocery and Retail
+            const productThumbnails: HTMLElement = document.querySelector('.product-thumbnails');
+            //For "ImagesLargeGallery.cshtml" and "ThumbsGallery.cshtml" views combo, only available on Retail (and current default)
+            const mobileCarouselThumbnails: HTMLElement = document.querySelector('.mobile-carousel-thumbnails');
+
+            if (productThumbnails) {
+                selectedVariantThumbnails = document.querySelectorAll('.product-thumbnails .js-thumbnails[data-variant="' + e.data.selectedVariantId + '"]');
+            } else if (mobileCarouselThumbnails) {
+                selectedVariantThumbnails = document.querySelectorAll('.mobile-carousel-thumbnails a.thumbnail[data-variant="' + e.data.selectedVariantId + '"]');
+            }
 
             //Clear the zoom thumbnails
             zoomThumbnailsContainer.innerHTML = '';

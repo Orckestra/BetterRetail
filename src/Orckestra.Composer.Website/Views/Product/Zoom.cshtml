@@ -11,25 +11,21 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">@Model.DisplayName</h4>
                 </div>
-                <div class="modal-body tall">
-                    <div class="row">
-                        <div class="col-md-9 order-2 order-md-1">
-                            <img property="image" class="img-zoom js-zoom-image"
-                                 alt="@Model.DisplayName"
-                                 src="@Model.SelectedImage.ProductZoomImageUrl"
-                                 onerror="imgError(this)" />
-                        </div>
-                        <div class="col-md-3 order-1 order-md-2">
-                            <div id="zoom-thumbnails" class="js-zoom-thumbnails">
-                                @foreach (var image in Model.Images)
-                                {
-                                    <a href="#" class="thumbnail @(image.Selected ? "active": "")" style="display: none">
-                                        <img class="img-fluid" src="@image.ThumbnailUrl" data-zoom-src="@image.ProductZoomImageUrl" alt="@image.Alt"
-                                             onload="imgLoaded(this)" />
-                                    </a>
-                                }
-                            </div>
-                        </div>
+                <div class="modal-body tall d-flex flex-column flex-md-row">
+                    <div id="zoom-thumbnails" class="d-flex align-content-start flex-shrink-0 flex-md-wrap order-md-2 mb-2 js-zoom-thumbnails">
+                        @foreach (var image in Model.Images)
+                        {
+                            <a href="#" class="thumbnail flex-shrink-0 @(image.Selected ? "active": "")" style="display: none">
+                                <img class="img-fluid" src="@image.ThumbnailUrl" data-zoom-src="@image.ProductZoomImageUrl" alt="@image.Alt"
+                                        onload="imgLoaded(this)" />
+                            </a>
+                        }
+                    </div>
+                    <div class="flex-md-grow-1 order-md-1">
+                        <img property="image" class="img-zoom img-fluid d-block mx-auto js-zoom-image"
+                             alt="@Model.DisplayName"
+                             src="@Model.SelectedImage.ProductZoomImageUrl"
+                             onerror="imgError(this)" />
                     </div>
                 </div>
             </div><!-- /.modal-content -->

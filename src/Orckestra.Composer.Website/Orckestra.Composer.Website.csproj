@@ -358,6 +358,8 @@
     </Content>
     <Content Include="Views\web.config" />
     <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Product\ImagesLargeGallery.cshtml" />
+    <Content Include="Views\Product\ThumbsGallery.cshtml" />
     <None Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />

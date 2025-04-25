@@ -409,6 +409,8 @@ module Orckestra.Composer {
                     $el.addClass('d-none');
                 }
             });
+
+            this.eventHub.publish('productMediasUpdated', null);
         }
 
         protected handleHiddenImages(el) {
