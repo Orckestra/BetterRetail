@@ -35,7 +35,7 @@ module Orckestra.Composer {
         }
 
         protected initCtas(): void {
-            document.querySelectorAll('a.pdp-video-cta').forEach((el: Element) => {
+            document.querySelectorAll('a.js-pdp-video-cta').forEach((el: Element) => {
                 el.addEventListener('click', (e: Event) => {
                     e.preventDefault();
 

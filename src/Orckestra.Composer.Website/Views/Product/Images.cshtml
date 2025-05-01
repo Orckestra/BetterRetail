@@ -152,7 +152,7 @@
 
 @helper RenderThumbnailVideo(ProductDetailVideoViewModel video, bool isHidden, string variantId)
 {
-    <a href="#" class="video-thumbnail @(isHidden ? "d-none" : "")" data-video-url="@video.VideoUrl" title="@video.Alt" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
+    <a href="#" class="video-thumbnail @(isHidden ? "d-none" : "") js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
         <img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
     </a>
 }
