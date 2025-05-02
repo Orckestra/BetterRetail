@@ -242,6 +242,7 @@
     <Compile Include="Caching\PerRequestCacheClient.cs" />
     <Compile Include="Configuration\ICustomerSettings.cs" />
     <Compile Include="Configuration\CustomerSettings.cs" />
+    <Compile Include="Configuration\IProductDetailsPageSettings.cs" />
     <Compile Include="CreditCardPaymentProperties.cs" />
     <Compile Include="Dependency\ComponentLifestyle.cs" />
     <Compile Include="ComposerConfiguration.cs" />
