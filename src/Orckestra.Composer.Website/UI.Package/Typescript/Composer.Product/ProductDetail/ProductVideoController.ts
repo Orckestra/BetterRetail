@@ -14,28 +14,44 @@ module Orckestra.Composer {
             this.initVideosSection();
         }
 
+        /**
+         * Update the video and its title in the modal and open it.
+         * @param videoUrl
+         * @param videoTitle
+         * @protected
+         */
         protected loadVideo(videoUrl: string, videoTitle: string): void {
-            const videoElement: HTMLVideoElement = <HTMLVideoElement>this.videoModalElement.querySelector('#product-video');
+            const videoElement: HTMLVideoElement = <HTMLVideoElement>this.videoModalElement.querySelector('.video-js');
 
+            //If the video url changed, or the video player is not initialized...
             if ((this.videoPlayer && this.currentVideoUrl !== videoUrl) || !this.videoPlayer) {
-                this.videoModalElement.querySelector('#video-modal-label').textContent = videoTitle;
+                //Update video title
+                this.videoModalElement.querySelector('.js-video-modal-label').textContent = videoTitle;
 
-                if (!this.videoPlayer) {
+                if (!this.videoPlayer) { //If the video player is not initialized, do it
                     videoElement.src = videoUrl;
                     // @ts-ignore
-                    this.videoPlayer = videojs('product-video', {fluid: true, controls: true, preload: 'auto'});
-                } else {
+                    this.videoPlayer = videojs(videoElement, {fluid: true, controls: true, preload: 'auto'});
+                } else { //Otherwise update the video url
                     this.videoPlayer.src(videoUrl);
                 }
 
+                //Keep track of the current video, to prevent unneeded update to the player if the same video is opened multiple times
                 this.currentVideoUrl = videoUrl;
             }
 
             $(this.videoModalElement).modal('show');
         }
 
+        /**
+         * Initialize the CTAs/thumbnails that will open the video modal.
+         * The 'data-ctas-container' attribute is used to target the right CTAs/thumbnails parent, in case we have the controller more than once on the page.
+         * @protected
+         */
         protected initCtas(): void {
-            document.querySelectorAll('a.js-pdp-video-cta').forEach((el: Element) => {
+            const ctasContainerSelector: string = this.context.container[0].getAttribute('data-ctas-container');
+
+            document.querySelectorAll(ctasContainerSelector + ' a.js-pdp-video-cta').forEach((el: Element) => {
                 el.addEventListener('click', (e: Event) => {
                     e.preventDefault();
 
@@ -45,8 +61,12 @@ module Orckestra.Composer {
             })
         }
 
+        /**
+         * Initialize modal box and configure its events
+         * @protected
+         */
         protected initModal(): void {
-            this.videoModalElement = document.querySelector('#video-modal');
+            this.videoModalElement = this.context.container[0].querySelector('.video-modal');
 
             $(this.videoModalElement).on('hide.bs.modal', () => {
                 this.videoPlayer.pause();

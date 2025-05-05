@@ -39,6 +39,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IProductPromotionsFactory ProductPromotionsFactory { get; private set; }
+        protected IProductDetailsPageSettings ProductDetailsPageSettings { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -53,7 +54,8 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrdersSettings recurringOrdersSettings,
             IProductSpecificationsViewService productSpecificationsViewService,
             IMyAccountUrlProvider myAccountUrlProvider,
-            IProductPromotionsFactory productPromotionsFactory)
+            IProductPromotionsFactory productPromotionsFactory,
+            IProductDetailsPageSettings productDetailsPageSettings)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -68,6 +70,7 @@ namespace Orckestra.Composer.Product.Factory
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
+            ProductDetailsPageSettings = productDetailsPageSettings;
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -111,8 +114,10 @@ namespace Orckestra.Composer.Product.Factory
                 CultureInfo = param.CultureInfo,
                 VariantId = param.VariantId,
                 BaseUrl = param.BaseUrl,
-                Currency = currency,
+                Currency = currency
             });
+
+            productViewModel.AreVideosDisplayedInSummary = ProductDetailsPageSettings.VideosInSummaryEnabled;
 
             productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product);
 

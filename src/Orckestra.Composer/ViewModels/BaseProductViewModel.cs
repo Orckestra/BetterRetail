@@ -134,5 +134,11 @@ namespace Orckestra.Composer.ViewModels
             }
         }
 
+        /// <summary>
+        /// For the PDP. Are the videos displayed in the product summary, along the images.
+        /// This value is managed via the Commerce Settings in C1 CMS.
+        /// </summary>
+        public bool AreVideosDisplayedInSummary { get; set; }
+
     }
 }

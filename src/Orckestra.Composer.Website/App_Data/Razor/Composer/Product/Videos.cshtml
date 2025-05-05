@@ -70,20 +70,19 @@
 		}
 
     </div>
-	</div>
-
+	</div>		
 		@if (hasVideo)
         {
-            <div data-oc-controller="Product.Videos">
-                <div class="modal fade" id="video-modal" tabindex="-1" role="dialog" aria-labelledby="video-modal-label">
+            <div data-oc-controller="Product.Videos" data-ctas-container="#product-video-list">
+                <div class="video-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="video-list-modal-label">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title" id="video-modal-label"></h4>
+                                <h4 id="video-list-modal-label" class="modal-title js-video-modal-label"></h4>
                             </div>
                             <div class="modal-body vjs-16-9">
-                                <video id="product-video" class="video-js" src="" />
+                                <video class="video-js" src="" />
                             </div>
                         </div>
                     </div>
@@ -97,7 +96,7 @@
 {
        
 	<div class="media col-md-6 col-lg-4 @(isHidden ? "d-none" : "")"  @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
-		<a href="#" class="pdp-video-cta align-self-start mr-3" data-video-url="@video.VideoUrl" title="@video.Alt">
+		<a href="#" class="pdp-video-cta align-self-start mr-3 js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt">
 			<img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
 		</a>
 		<div class="media-body">

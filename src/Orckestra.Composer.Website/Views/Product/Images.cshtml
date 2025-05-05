@@ -38,7 +38,7 @@
                     {
                         @RenderThumbnailImg(image, false, "")
                     }
-                    if (Model.Videos != null && Model.Videos.Count > 0)
+                    if (Model.Videos != null && Model.Videos.Count > 0 && Model.AreVideosDisplayedInSummary)
                     {
                         hasVideo = true;
 
@@ -56,7 +56,7 @@
                         {
                             @RenderThumbnailImg(image, variant.Id != Model.SelectedVariantId, variant.Id)
                         }
-                        if (variant.Videos != null && variant.Videos.Count > 0)
+                        if (variant.Videos != null && variant.Videos.Count > 0 && Model.AreVideosDisplayedInSummary)
                         {
                             hasVideo = true;
 
@@ -116,18 +116,18 @@
             }
         </div>
 
-        @if (hasVideo)
+        @if (hasVideo && Model.AreVideosDisplayedInSummary)
         {
-            <div data-oc-controller="Product.Videos">
-                <div class="modal fade" id="video-modal" tabindex="-1" role="dialog" aria-labelledby="video-modal-label">
+            <div data-oc-controller="Product.Videos" data-ctas-container=".product-details">
+                <div class="video-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="summary-video-modal-label">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="video-modal-label"></h4>
+                                <h4 id="summary-video-modal-label" class="modal-title js-video-modal-label"></h4>
                             </div>
                             <div class="modal-body vjs-16-9">
-                                <video id="product-video" class="video-js" src="" />
+                                <video class="video-js" src="" />
                             </div>
                         </div>
                     </div>
