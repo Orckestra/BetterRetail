@@ -8,6 +8,7 @@ using Orckestra.Composer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -41,20 +42,20 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             CategoryMetaContext = categoryMetaContext;
         }
 
-        public virtual ActionResult Summary(
+        public virtual async Task<ActionResult> Summary(
             [Bind(Prefix = SearchRequestParams.Page)]int page = 1,
             [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
             [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = null)
         {
-            return ExecuteBrowsing("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection);
+            return await ExecuteBrowsingAsync("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection);
         }
 
-        public virtual ActionResult ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
+        public virtual async Task<ActionResult> ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
         {
-            return ExecuteBrowsing("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
+            return await ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
         }
 
-        protected ActionResult ExecuteBrowsing(string emptyView, string filledView, Func<CategoryBrowsingViewModel, object> viewModelSelector, object emptyViewModel, int page, string sortBy = null, string sortDirection = null)
+        protected async Task<ActionResult> ExecuteBrowsingAsync(string emptyView, string filledView, Func<CategoryBrowsingViewModel, object> viewModelSelector, object emptyViewModel, int page, string sortBy = null, string sortDirection = null)
         {
             var categoryId = CategoryMetaContext.GetCategoryId();
             if (string.IsNullOrWhiteSpace(categoryId))
@@ -62,7 +63,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 return View(emptyView, emptyViewModel);
             }
 
-            var container = RequestContext.GetViewModelAsync().Result;
+            var container = await RequestContext.GetViewModelAsync().ConfigureAwait(false);
 
             var viewName = container.ProductSearchResults.TotalCount <= 0 ? emptyView : filledView;
             var model = viewModelSelector.Invoke(container);

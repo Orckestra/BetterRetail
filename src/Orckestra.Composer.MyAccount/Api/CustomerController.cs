@@ -63,7 +63,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CultureInfo = ComposerContext.CultureInfo,
             };
 
-            var viewModel = await CustomerViewService.UpdateAccountAsync(param);
+            var viewModel = await CustomerViewService.UpdateAccountAsync(param).ConfigureAwait(false);
 
             if (viewModel == null) { return Unauthorized(); }
 
@@ -82,7 +82,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 CountryCode = ComposerContext.CountryCode
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -111,7 +111,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 AddAddressUrl = addAddressUrl,
                 EditAddressBaseUrl = editAddressBaseUrl,
                 CountryCode = ComposerContext.CountryCode
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }

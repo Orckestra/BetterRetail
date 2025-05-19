@@ -38,7 +38,7 @@ namespace Orckestra.Composer.Store.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope
-            });
+            }).ConfigureAwait(false);
             return Ok(vm);
         }
 
@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Store.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 SearchPoint = request.SearchPoint
-            });
+            }).ConfigureAwait(false);
             return Ok(vm);
         }
     }

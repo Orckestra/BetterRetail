@@ -353,7 +353,7 @@ namespace Orckestra.Composer.Factory
         {
             var address = await AddressRepository.GetAddressByIdAsync(shippingAddressId).ConfigureAwait(false);
 
-            return GetAddressViewModel(address, culture);
+            return await GetAddressViewModelAsync(address, culture);
         }
 
         /// <summary>
@@ -362,18 +362,18 @@ namespace Orckestra.Composer.Factory
         /// <param name="address"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public virtual RecurringOrderTemplateAddressViewModel GetAddressViewModel(Address address, CultureInfo cultureInfo)
+        public virtual async Task<RecurringOrderTemplateAddressViewModel> GetAddressViewModelAsync(Address address, CultureInfo cultureInfo)
         {
             if (address == null) { return new RecurringOrderTemplateAddressViewModel(); }
 
             var addressViewModel = ViewModelMapper.MapTo<RecurringOrderTemplateAddressViewModel>(address, cultureInfo);
 
-            var regionName = CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
+            var regionName = await CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
             {
                 CultureInfo = cultureInfo,
                 IsoCode = ComposerContext.CountryCode,
                 RegionCode = address.RegionCode
-            }).Result;
+            }).ConfigureAwait(false);
 
             addressViewModel.RegionName = regionName;
             addressViewModel.PhoneNumber = LocalizationProvider.FormatPhoneNumber(address.PhoneNumber, cultureInfo);

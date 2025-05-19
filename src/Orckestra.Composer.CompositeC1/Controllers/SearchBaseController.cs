@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Parameters;
@@ -14,14 +15,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             SearchRequestContext = searchRequestContext ?? throw new ArgumentNullException(nameof(searchRequestContext));
         }
 
-        public virtual ActionResult PageHeader(string keywords)
+        public virtual async Task<ActionResult> PageHeader(string keywords)
         {
-            var pageHeaderViewModel = SearchRequestContext.GetPageHeaderViewModelAsync(new GetPageHeaderParam
+            var pageHeaderViewModel = await SearchRequestContext.GetPageHeaderViewModelAsync(new GetPageHeaderParam
             {
                 Keywords = keywords,
                 IsPageIndexed = IsPageIndexed()
 
-            }).Result;
+            }).ConfigureAwait(false);
 
             return View(pageHeaderViewModel);
         }

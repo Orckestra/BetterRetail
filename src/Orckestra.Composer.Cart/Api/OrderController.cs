@@ -48,7 +48,7 @@ namespace Orckestra.Composer.Cart.Api
                 Page = param.Page,
                 OrderTense = OrderTense.CurrentOrders,
                 //WebsiteId = SiteConfiguration.GetWebsiteId()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -67,7 +67,7 @@ namespace Orckestra.Composer.Cart.Api
                 Scope = ComposerContext.Scope,
                 Page = param.Page,
                 OrderTense = OrderTense.PastOrders
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -90,7 +90,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CountryCode = ComposerContext.CountryCode,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             if (orderDetailViewModel == null) { return NotFound(); }
 
@@ -125,7 +125,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 OrderNumber = id
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -145,7 +145,7 @@ namespace Orckestra.Composer.Cart.Api
                 CountryCode = ComposerContext.CountryCode,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 CustomerId = ComposerContext.CustomerId
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -166,7 +166,7 @@ namespace Orckestra.Composer.Cart.Api
                 CountryCode = ComposerContext.CountryCode,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 Email = param.Email
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -215,7 +215,8 @@ namespace Orckestra.Composer.Cart.Api
         {
             if (param == null) return BadRequest($"{nameof(param)} cannot be empty");
 
-            var vm = await OrderHistoryViewService.SaveEditedOrderAsync(param.OrderNumber, RequestUtils.GetBaseUrl(Request).ToString());
+            var vm = await OrderHistoryViewService.SaveEditedOrderAsync(param.OrderNumber, RequestUtils.GetBaseUrl(Request).ToString())
+                .ConfigureAwait(false);
 
             return Ok(vm);
         }

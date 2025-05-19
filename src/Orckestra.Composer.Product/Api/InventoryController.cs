@@ -76,7 +76,7 @@ namespace Orckestra.Composer.Product.Api
                 Scope = ComposerContext.Scope,
                 Date = DateTime.UtcNow,
                 Skus = skus,
-                InventoryLocationId = await InventoryLocationProvider.GetDefaultInventoryLocationIdAsync()
+                InventoryLocationId = await InventoryLocationProvider.GetDefaultInventoryLocationIdAsync().ConfigureAwait(false)
             });
 
             return inventoryItemsAvailabilityViewModel;
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Product.Api
 
         protected virtual async Task<bool> IsInventoryEnabled()
         {
-            var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo);
+            var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
 
             return productSettingsViewModel.IsInventoryEnabled;
         }

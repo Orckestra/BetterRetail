@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Product.Api
                     CultureInfo = ComposerContext.CultureInfo,
                     Scope = ComposerContext.Scope,
                 }
-            );
+            ).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Product.Api
                     Scope = ComposerContext.Scope,
                     BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
                 }
-            );
+            ).ConfigureAwait(false);
 
             //Some additionnal Context Required by JS - used by Product Quick View on search page
             vm.Context["Images"] = vm.Images;
@@ -97,7 +97,7 @@ namespace Orckestra.Composer.Product.Api
                 CurrencyIso = CurrencyProvider.GetCurrency()
             };
 
-            var vm = await RelatedProductViewService.GetRelatedProductsAsync(param);
+            var vm = await RelatedProductViewService.GetRelatedProductsAsync(param).ConfigureAwait(false);
 
             return Ok(vm);
         }

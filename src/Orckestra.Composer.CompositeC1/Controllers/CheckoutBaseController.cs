@@ -9,6 +9,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Services;
 using Orckestra.Composer.Utils;
 using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
@@ -41,7 +42,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         }
 
         [MustBeAnonymous(MustBeAnonymousAttribute.CartDestination)]
-        public virtual ActionResult CheckoutSignInAsGuest()
+        public virtual async Task<ActionResult> CheckoutSignInAsGuest()
         {
             var checkoutUrl = UrlProvider.GetCheckoutPageUrl(new BaseUrlParameter
             {
@@ -54,7 +55,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 ReturnUrl = checkoutUrl
             });
 
-            var cart = CartService.GetCartViewModelAsync(new GetCartParam()
+            var cart = await CartService.GetCartViewModelAsync(new GetCartParam()
             {
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 CartName = CartConfiguration.ShoppingCartName,
@@ -62,7 +63,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CustomerId = ComposerContext.CustomerId,
                 ExecuteWorkflow = true,
                 Scope = ComposerContext.Scope
-            }).Result;
+            }).ConfigureAwait(false);
 
             var hasRecurringItems = cart.HasRecurringLineitems;
 
