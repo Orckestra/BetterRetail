@@ -126,8 +126,13 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 id="summary-video-modal-label" class="modal-title js-video-modal-label"></h4>
                             </div>
-                            <div class="modal-body vjs-16-9">
-                                <video class="video-js" src="" />
+                            <div class="modal-body">
+                                <div class="vjs-16-9 d-none">
+                                    <video class="video-js" src="" />
+                                </div>
+                                <div class="embed-responsive embed-responsive-16by9 d-none">
+                                    <iframe src="" title="" frameBorder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen="allowFullScreen"></iframe>
+                                </div>
                             </div>
                         </div>
                     </div>
