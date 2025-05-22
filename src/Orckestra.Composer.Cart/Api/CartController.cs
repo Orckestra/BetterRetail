@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = GetCartName(),
                 CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-            });
+            }).ConfigureAwait(false);
 
             if (cartViewModel.OrderSummary != null)
             {
@@ -125,7 +125,7 @@ namespace Orckestra.Composer.Cart.Api
                 UpdateValues = updateCartRequest.UpdatedCart
             };
 
-            var updateCartResultViewModel = await CheckoutService.UpdateCheckoutCartAsync(updateCheckoutCartParam);
+            var updateCartResultViewModel = await CheckoutService.UpdateCheckoutCartAsync(updateCheckoutCartParam).ConfigureAwait(false);
 
             return Ok(updateCartResultViewModel);
         }
