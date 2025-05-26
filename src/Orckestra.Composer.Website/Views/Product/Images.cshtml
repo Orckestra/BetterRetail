@@ -44,7 +44,7 @@
 
                         foreach (var video in Model.Videos)
                         {
-                            @RenderThumbnailVideo(video, false, "")
+                            @RenderThumbnailVideo(video, Model.DefaultVideoThumbnail, false, "")
                         }
                     }
                 }
@@ -62,7 +62,7 @@
 
                             foreach (var video in variant.Videos)
                             {
-                                @RenderThumbnailVideo(video, variant.Id != Model.SelectedVariantId, variant.Id)
+                                @RenderThumbnailVideo(video, Model.DefaultVideoThumbnail, variant.Id != Model.SelectedVariantId, variant.Id)
                             }
                         }
 
@@ -155,10 +155,10 @@
     </a>
 }
 
-@helper RenderThumbnailVideo(ProductDetailVideoViewModel video, bool isHidden, string variantId)
+@helper RenderThumbnailVideo(ProductDetailVideoViewModel video, string thumbnailUrl, bool isHidden, string variantId)
 {
     <a href="#" class="video-thumbnail @(isHidden ? "d-none" : "") js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\"" + variantId + "\"" : ""))>
-        <img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
+        <img class="img-fluid p-1" src="@thumbnailUrl" />
     </a>
 }
 

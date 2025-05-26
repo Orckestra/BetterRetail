@@ -3,6 +3,7 @@ using Composite.Data;
 using Composite.Data.Hierarchy;
 using Composite.Data.Hierarchy.DataAncestorProviders;
 using Composite.Data.ProcessControlled;
+using Composite.Data.Validation.Validators;
 using System;
 
 namespace Orckestra.Composer.CompositeC1.DataTypes
@@ -25,5 +26,13 @@ namespace Orckestra.Composer.CompositeC1.DataTypes
         [FieldPosition(0)]
         [DefaultFieldBoolValue(false)]
         bool VideosInSummaryEnabled { get; set; }
+
+        [ImmutableFieldId("6b5c6314-a1e6-4432-a0ac-cc811fc45748")]
+        [FormRenderingProfile(Label = "Default video thumbnail")]
+        [StoreFieldType(PhysicalStoreFieldType.String, 2048, IsNullable = true)]
+        [FieldPosition(1)]
+        [NullStringLengthValidator(0, 2048)]
+        [ForeignKey("Composite.Data.Types.IImageFile,Composite", AllowCascadeDeletes = true, NullableString = true)]
+        string DefaultVideoThumbnail { get; set; }
     }
 }

@@ -139,6 +139,7 @@ namespace Orckestra.Composer.ViewModels
         /// This value is managed via the Commerce Settings in C1 CMS.
         /// </summary>
         public bool AreVideosDisplayedInSummary { get; set; }
+        public string DefaultVideoThumbnail { get; set; }
 
     }
 }

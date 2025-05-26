@@ -118,6 +118,7 @@ namespace Orckestra.Composer.Product.Factory
             });
 
             productViewModel.AreVideosDisplayedInSummary = ProductDetailsPageSettings.VideosInSummaryEnabled;
+            productViewModel.DefaultVideoThumbnail = ProductDetailsPageSettings.DefaultVideoThumbnail;
 
             productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product);
 
