@@ -263,7 +263,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 ProviderNames = providers.Select(p => p.ProviderName).ToList(),
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            });
+            }).ConfigureAwait(false);
 
             return Ok(results);
         }
