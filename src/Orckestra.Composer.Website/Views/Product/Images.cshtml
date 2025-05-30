@@ -30,8 +30,8 @@
 <body>
     <div class="row">
         <!-- Thumbnails -->
-        <div class="col-lg-2 order-2 order-md-1">
-            <div class="product-thumbnails">
+        <div class="col-lg-2 order-2 order-lg-1 pr-lg-0">
+            <div class="product-thumbnails pr-lg-2">
                 @if (Model.Variants == null || Model.Variants.Count == 0)
                 {
                     foreach (var image in Model.Images)
@@ -72,7 +72,7 @@
             </div>
         </div>
         <!-- Main image -->
-        <div class="col-lg-10 order-1 order-md-2">
+        <div class="col-lg-10 order-1 order-lg-2">
             @if (Model.SelectedImage != null)
             {
                 <div class="product-details-media">

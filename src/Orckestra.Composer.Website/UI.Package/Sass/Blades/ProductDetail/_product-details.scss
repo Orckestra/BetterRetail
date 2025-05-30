@@ -1,3 +1,4 @@
+$main-image-max-height: 530px;
 $thumbnails-gap: 10px;
 $thumbnails-per-row: 5;
 $zoom-thumbnails-width: 80px;
@@ -55,6 +56,14 @@ $zoom-thumbnails-max-width: 120px;
     }
   }
 
+  .product-thumbnails {
+    @include media-breakpoint-up(lg) {
+      max-height: $main-image-max-height;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+  }
+
   .thumbnail,
   .video-thumbnail {
     aspect-ratio: 1;
@@ -69,6 +78,7 @@ $zoom-thumbnails-max-width: 120px;
   }
 
   .video-thumbnail {
+    background-color: map-get($grays, "200");
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -110,6 +120,10 @@ $zoom-thumbnails-max-width: 120px;
     position: absolute;
     right: 10px;
     top: 10px;
+  }
+
+  .product-main-img {
+    max-height: $main-image-max-height;
   }
 }
 
