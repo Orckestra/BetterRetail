@@ -31,7 +31,7 @@ namespace Orckestra.Composer.Services
             if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scope)); }
             if (cultureInfo == null) { throw new ArgumentNullException(nameof(cultureInfo)); }
 
-            var overtureProductSettings = await ProductSettingsRepository.GetProductSettings(scope);
+            var overtureProductSettings = await ProductSettingsRepository.GetProductSettings(scope).ConfigureAwait(false);
             var productSettingsViewModel = ViewModelMapper.MapTo<ProductSettingsViewModel>(overtureProductSettings, cultureInfo);
 
             return productSettingsViewModel;

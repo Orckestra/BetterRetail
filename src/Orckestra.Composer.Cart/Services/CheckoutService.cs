@@ -208,7 +208,7 @@ namespace Orckestra.Composer.Cart.Services
 
             foreach (var operation in operationsToExecute)
             {
-                await operation.Invoke(cart);
+                await operation.Invoke(cart).ConfigureAwait(false);
             }
 
             var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);

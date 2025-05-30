@@ -189,7 +189,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
             }));
 
-            var viewModels = await Task.WhenAll(tasks);
+            var viewModels = await Task.WhenAll(tasks).ConfigureAwait(false);
 
             return new LightRecurringOrderCartsViewModel
             {
@@ -320,7 +320,7 @@ namespace Orckestra.Composer.Cart.Services
                 cart.Shipments.First().Address = newAddress;
             }
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
 
             var vm = await CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {

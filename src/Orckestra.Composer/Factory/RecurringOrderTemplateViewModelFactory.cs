@@ -110,7 +110,7 @@ namespace Orckestra.Composer.Factory
 
             foreach (var template in vm.RecurringOrderTemplateViewModelList)
             {
-                await MapRecurringOrderLineitemFrequencyName(template, param.CultureInfo);
+                await MapRecurringOrderLineitemFrequencyName(template, param.CultureInfo).ConfigureAwait(false);
             }
 
             return vm;
@@ -245,9 +245,9 @@ namespace Orckestra.Composer.Factory
                     RecurringOrderLineItemIds = new List<Guid> { recrurringLineItem.RecurringOrderLineItemId },
                     ScopeId = recrurringLineItem.ScopeId
                 };
-                await OvertureClient.SendAsync(deleteRecurringLineItem);
+                await OvertureClient.SendAsync(deleteRecurringLineItem).ConfigureAwait(false);
 
-                return await Task.FromResult<RecurringOrderTemplateLineItemViewModel>(null);
+                return await Task.FromResult<RecurringOrderTemplateLineItemViewModel>(null).ConfigureAwait(false);
             }
 
             var variant = getProductResponse.Variants.SingleOrDefault(v => v.Id == recrurringLineItem.VariantId);
@@ -271,7 +271,7 @@ namespace Orckestra.Composer.Factory
                 CultureInfo = param.CultureInfo,
                 Scope = recrurringLineItem.ScopeId,
                 ProductIds = new List<string>() { recrurringLineItem.ProductId }
-            });
+            }).ConfigureAwait(false);
             
             var productPriceVm = productsPricesVm.ProductPrices.SingleOrDefault(p => p.ProductId == recrurringLineItem.ProductId);
             if (productPriceVm != null)
@@ -299,7 +299,7 @@ namespace Orckestra.Composer.Factory
             }
 
             //Adding brand display name
-            var brandLookup = await OvertureClient.SendAsync(new GetProductLookupRequest { LookupName = "Brand" });
+            var brandLookup = await OvertureClient.SendAsync(new GetProductLookupRequest { LookupName = "Brand" }).ConfigureAwait(false);
             var brandId = getProductResponse.Brand;
 
             if (brandId != null)
@@ -308,7 +308,7 @@ namespace Orckestra.Composer.Factory
                 vm.ProductSummary.Brand = brandLookup?.GetDisplayName(brandValue, param.CultureInfo.Name) ?? brandId;
             }
 
-            var list = await ProductHelper.GetKeyVariantAttributes(getProductResponse, variant, param.CultureInfo, OvertureClient);
+            var list = await ProductHelper.GetKeyVariantAttributes(getProductResponse, variant, param.CultureInfo, OvertureClient).ConfigureAwait(false);
             if (list != null && list.Count > 0)
             {
                 vm.KeyVariantAttributesList = list.ToList();
@@ -334,7 +334,7 @@ namespace Orckestra.Composer.Factory
             vm.EditUrl = recurringScheduleEditUrl;
             vm.ScheduleUrl = param.RecurringScheduleUrl;
 
-            var program = await RecurringOrderRepository.GetRecurringOrderProgram(recrurringLineItem.ScopeId, recrurringLineItem.RecurringOrderProgramName);
+            var program = await RecurringOrderRepository.GetRecurringOrderProgram(recrurringLineItem.ScopeId, recrurringLineItem.RecurringOrderProgramName).ConfigureAwait(false);
             var programViewModel = RecurringOrderProgramViewModelFactory.CreateRecurringOrderProgramViewModel(program, param.CultureInfo);
             vm.RecurringOrderProgramFrequencies = programViewModel?.Frequencies;
 
@@ -353,7 +353,7 @@ namespace Orckestra.Composer.Factory
         {
             var address = await AddressRepository.GetAddressByIdAsync(shippingAddressId).ConfigureAwait(false);
 
-            return await GetAddressViewModelAsync(address, culture);
+            return await GetAddressViewModelAsync(address, culture).ConfigureAwait(false);
         }
 
         /// <summary>
