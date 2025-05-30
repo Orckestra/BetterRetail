@@ -189,7 +189,7 @@ namespace Orckestra.Composer.Factory
                     RecurringScheduleUrl = recurringScheduleUrl
                 }));
 
-                var templateLineItems = await Task.WhenAll(tasks);
+                var templateLineItems = await Task.WhenAll(tasks).ConfigureAwait(false);
 
                 //Filter null to not have an error when rendering the page
                 templateViewModel.RecurringOrderTemplateLineItemViewModels.AddRange(templateLineItems.Where(t => t != null).ToList());

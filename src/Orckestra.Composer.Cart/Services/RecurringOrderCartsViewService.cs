@@ -128,7 +128,7 @@ namespace Orckestra.Composer.Cart.Services
                 programTasks.Add(programName, RecurringOrdersRepository.GetRecurringOrderProgram(ComposerContext.Scope, programName));
             }
 
-            var programs = await Task.WhenAll(programTasks.Values);
+            var programs = await Task.WhenAll(programTasks.Values).ConfigureAwait(false);
             param.RecurringOrderPrograms = programs.ToList();
 
             var vm = RecurringOrderCartViewModelFactory.CreateRecurringOrderCartViewModel(param);
