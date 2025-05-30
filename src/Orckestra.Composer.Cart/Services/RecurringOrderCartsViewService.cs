@@ -545,7 +545,7 @@ namespace Orckestra.Composer.Cart.Services
                 }
             }
 
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
             return true;
         }
     }
