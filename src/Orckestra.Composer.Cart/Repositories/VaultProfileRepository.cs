@@ -89,7 +89,7 @@ namespace Orckestra.Composer.Cart.Repositories
 
             await CacheProvider.RemoveAsync(BuildPaymentMethodCacheKey(param.ScopeId, param.CartName, param.CustomerId, param.PaymentProviderName)).ConfigureAwait(false);
 
-            return await OvertureClient.SendAsync(request);
+            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
 
         protected virtual CacheKey BuildPaymentMethodCacheKey(string scope, string cartName, Guid customerId, string providerName)

@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Cart.Services
             if (param.ScopeId == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.ScopeId)), nameof(param)); }
 
             param.Cart = await AddPaymentIfRequired(param).ConfigureAwait(false);
-            param.Cart = await SetFulfillmentLocationIfRequired(param);
+            param.Cart = await SetFulfillmentLocationIfRequired(param).ConfigureAwait(false);
 
             return param.Cart;
         }

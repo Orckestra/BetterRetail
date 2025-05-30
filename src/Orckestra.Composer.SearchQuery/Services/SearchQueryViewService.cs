@@ -291,7 +291,7 @@ namespace Orckestra.Composer.SearchQuery.Services
         protected virtual async Task<SelectedFacets> GetSelectedFacetsAsync(SearchParam param)
         {
             var selectedFacets = param.Criteria.SelectedFacets;
-            return await Task.FromResult(FlattenFilterList(selectedFacets, param.Criteria.CultureInfo));
+            return await Task.FromResult(FlattenFilterList(selectedFacets, param.Criteria.CultureInfo)).ConfigureAwait(false);
         }
 
         public ProductDocument ToProductDocument(Document document)

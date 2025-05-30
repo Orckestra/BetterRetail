@@ -124,7 +124,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = CartConfiguration.ShoppingCartName,
                 Scope = ComposerContext.Scope,
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            });
+            }).ConfigureAwait(false);
 
             if (vm != null)
             {

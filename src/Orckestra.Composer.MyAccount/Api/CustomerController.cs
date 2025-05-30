@@ -136,7 +136,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Scope = ComposerContext.Scope,
                 EditAddress = request,
                 ReturnUrl = returnUrl
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -160,7 +160,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 EditAddress = request,
                 AddressId = id,
                 ReturnUrl = returnUrl
-            });
+            }).ConfigureAwait(false);
 
             if (viewModel == null) { return Unauthorized(); }
 
@@ -176,7 +176,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 AddressId = id
-            });
+            }).ConfigureAwait(false);
 
             if (viewModel == null) { return Unauthorized(); }
 
@@ -192,7 +192,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
                 AddressId = id
-            });
+            }).ConfigureAwait(false);
 
             if (viewModel == null) { return Unauthorized(); }
 
@@ -207,7 +207,7 @@ namespace Orckestra.Composer.MyAccount.Api
             {
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope,
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -242,7 +242,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 AddAddressUrl = addAddressUrl,
                 EditAddressBaseUrl = editAddressBaseUrl,
                 CountryCode = ComposerContext.CountryCode
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }

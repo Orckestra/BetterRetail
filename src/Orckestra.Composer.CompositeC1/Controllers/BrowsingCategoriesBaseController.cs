@@ -47,12 +47,12 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
             [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = null)
         {
-            return await ExecuteBrowsingAsync("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection);
+            return await ExecuteBrowsingAsync("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection).ConfigureAwait(false);
         }
 
         public virtual async Task<ActionResult> ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
         {
-            return await ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection);
+            return await ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection).ConfigureAwait(false);
         }
 
         protected async Task<ActionResult> ExecuteBrowsingAsync(string emptyView, string filledView, Func<CategoryBrowsingViewModel, object> viewModelSelector, object emptyViewModel, int page, string sortBy = null, string sortDirection = null)

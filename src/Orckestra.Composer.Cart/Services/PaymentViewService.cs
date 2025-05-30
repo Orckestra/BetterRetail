@@ -148,7 +148,7 @@ namespace Orckestra.Composer.Cart.Services
 
             param.ProviderNames = providers.Select(p => p.ProviderName).ToList();
 
-            var results = await GetPaymentMethodsAsync(param);
+            var results = await GetPaymentMethodsAsync(param).ConfigureAwait(false);
 
             if (results.ActivePaymentViewModel == null)
             {
@@ -185,7 +185,7 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 CultureInfo = param.CultureInfo,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             var hasRecurring = false;
             if (RecurringOrdersSettings.Enabled)
@@ -199,7 +199,7 @@ namespace Orckestra.Composer.Cart.Services
                 paymentMethods = paymentMethods.Where(p => supported.Any(s => s.ToString() == p.PaymentType)).ToList();
             }
 
-            var vm = await MapCheckoutPaymentViewModel(cart, paymentMethods, param.CultureInfo, param.IsAuthenticated);
+            var vm = await MapCheckoutPaymentViewModel(cart, paymentMethods, param.CultureInfo, param.IsAuthenticated).ConfigureAwait(false);
             return vm;
         }
 
@@ -208,7 +208,7 @@ namespace Orckestra.Composer.Cart.Services
             var paymentMethods = await PaymentRepository.GetPaymentMethodsAsync(param).ConfigureAwait(false);
             if (paymentMethods == null) { return null; }
 
-            var vm = await MapPaymentMethodsViewModel(paymentMethods, param.CultureInfo, param.CustomerId, param.Scope);
+            var vm = await MapPaymentMethodsViewModel(paymentMethods, param.CultureInfo, param.CustomerId, param.Scope).ConfigureAwait(false);
             return vm;
         }
 
@@ -234,7 +234,7 @@ namespace Orckestra.Composer.Cart.Services
                     var paymentProvider = ObtainPaymentProvider(methodViewModel.PaymentProviderName);
                     methodViewModel.PaymentProviderType = paymentProvider?.ProviderType;
 
-                    await IsSavedCardUsedInRecurringOrders(methodViewModel, cultureInfo, customerId, scope);
+                    await IsSavedCardUsedInRecurringOrders(methodViewModel, cultureInfo, customerId, scope).ConfigureAwait(false);
 
                     IsCreditCardPaymentMethod(methodViewModel);
 
@@ -384,7 +384,7 @@ namespace Orckestra.Composer.Cart.Services
 
             if (activePayment.ShouldInvokePrePaymentSwitch())
             {
-                activePayment = await PreparePaymentSwitch(param, activePayment);
+                activePayment = await PreparePaymentSwitch(param, activePayment).ConfigureAwait(false);
                 param.PaymentId = activePayment.Id;
             }
 
@@ -399,18 +399,18 @@ namespace Orckestra.Composer.Cart.Services
                 PaymentMethodId = param.PaymentMethodId
             };
 
-            var isPaymentMethodValid = await ValidatePaymentMethod(validatePaymentMethodParam);
+            var isPaymentMethodValid = await ValidatePaymentMethod(validatePaymentMethodParam).ConfigureAwait(false);
 
             if (!isPaymentMethodValid)
             {
                 throw new Exception($"Payment method for provider name /'{param.PaymentProviderName}/' not valid. Credit card has probably expired.");
             }
 
-            Overture.ServiceModel.Orders.Cart cart = await PaymentRepository.UpdatePaymentMethodAsync(param);
+            Overture.ServiceModel.Orders.Cart cart = await PaymentRepository.UpdatePaymentMethodAsync(param).ConfigureAwait(false);
 
             var initParam = BuildInitializePaymentParam(cart, param);
             var paymentProvider = ObtainPaymentProvider(param.PaymentProviderName);
-            cart = await paymentProvider.InitializePaymentAsync(cart, initParam);
+            cart = await paymentProvider.InitializePaymentAsync(cart, initParam).ConfigureAwait(false);
 
             var activePaymentVm = GetActivePaymentViewModel(new GetActivePaymentViewModelParam
             {
@@ -465,7 +465,7 @@ namespace Orckestra.Composer.Cart.Services
                 CustomerId = param.CustomerId,
                 CultureInfo = param.CultureInfo,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             var payment = GetActivePayment(cart);
 
@@ -506,7 +506,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             var newPayment = GetActivePayment(cart);
             return newPayment;
@@ -648,7 +648,7 @@ namespace Orckestra.Composer.Cart.Services
 
             if (activePayment.ShouldInvokePrePaymentSwitch())
             {
-                activePayment = await PreparePaymentSwitch(param, activePayment);
+                activePayment = await PreparePaymentSwitch(param, activePayment).ConfigureAwait(false);
                 param.PaymentId = activePayment.Id;
             }
 
@@ -663,18 +663,18 @@ namespace Orckestra.Composer.Cart.Services
                 PaymentMethodId = param.PaymentMethodId
             };
 
-            var isPaymentMethodValid = await ValidatePaymentMethod(validatePaymentMethodParam);
+            var isPaymentMethodValid = await ValidatePaymentMethod(validatePaymentMethodParam).ConfigureAwait(false);
 
             if (!isPaymentMethodValid)
             {
                 throw new Exception($"Payment method for provider name /'{param.PaymentProviderName}/' not valid. Credit card has probably expired.");
             }
 
-            Overture.ServiceModel.Orders.Cart cart = await PaymentRepository.UpdatePaymentMethodAsync(param);
+            Overture.ServiceModel.Orders.Cart cart = await PaymentRepository.UpdatePaymentMethodAsync(param).ConfigureAwait(false);
 
             var initParam = BuildInitializePaymentParam(cart, param);
             var paymentProvider = ObtainPaymentProvider(param.PaymentProviderName);
-            cart = await paymentProvider.InitializePaymentAsync(cart, initParam);
+            cart = await paymentProvider.InitializePaymentAsync(cart, initParam).ConfigureAwait(false);
 
             var vm = await RecurringOrderCartsViewService.CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
@@ -682,7 +682,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = baseUrl
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }

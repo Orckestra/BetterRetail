@@ -88,7 +88,7 @@ namespace Orckestra.Composer.Search.Context
                 CultureInfo = ComposerContext.CultureInfo,
                 CategoryId = categoryId
 
-            });
+            }).ConfigureAwait(false);
 
             if (categoryViewModels == null)
             {

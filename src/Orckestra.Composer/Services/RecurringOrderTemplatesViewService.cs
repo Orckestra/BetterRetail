@@ -81,7 +81,7 @@ namespace Orckestra.Composer.Services
                 BaseUrl = param.BaseUrl,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope,
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }
@@ -101,11 +101,11 @@ namespace Orckestra.Composer.Services
                 CultureInfo = param.CultureInfo,
                 LookupType = LookupType.Order,
                 LookupName = "PaymentMethodType",
-            });
+            }).ConfigureAwait(false);
 
             param.PaymentMethodDisplayNames = methodDisplayNames;
 
-            var vm = await RecurringOrderTemplateViewModelFactory.CreateRecurringOrderTemplatesViewModel(param);
+            var vm = await RecurringOrderTemplateViewModelFactory.CreateRecurringOrderTemplatesViewModel(param).ConfigureAwait(false);
 
             return vm;
         }
@@ -126,7 +126,7 @@ namespace Orckestra.Composer.Services
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl,
                 ScopeId = param.ScopeId,
-                CustomerId = param.CustomerId});
+                CustomerId = param.CustomerId}).ConfigureAwait(false);
         }
 
         public virtual async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplateLineItemAsync(RemoveRecurringOrderTemplateLineItemParam param)
@@ -141,7 +141,7 @@ namespace Orckestra.Composer.Services
                 Scope = param.ScopeId,
                 CustomerId = param.CustomerId,
                 CultureInfo =  param.Culture,
-                BaseUrl = param.BaseUrl });
+                BaseUrl = param.BaseUrl }).ConfigureAwait(false);
         }
 
         public virtual async Task<RecurringOrderTemplatesViewModel> RemoveRecurringOrderTemplatesLineItemsAsync(RemoveRecurringOrderTemplateLineItemsParam param)
@@ -157,7 +157,7 @@ namespace Orckestra.Composer.Services
                 Scope = param.ScopeId,
                 CustomerId = param.CustomerId,
                 CultureInfo = param.Culture,
-                BaseUrl = param.BaseUrl});
+                BaseUrl = param.BaseUrl}).ConfigureAwait(false);
         }
 
         public virtual async Task<RecurringOrderTemplatesViewModel> UpdateRecurringOrderTemplateLineItemAsync(UpdateRecurringOrderTemplateLineItemParam param)
@@ -175,7 +175,7 @@ namespace Orckestra.Composer.Services
                 BaseUrl = param.BaseUrl,
                 ScopeId = param.ScopeId,
                 CustomerId = param.CustomerId,
-            });
+            }).ConfigureAwait(false);
         }
 
         public virtual async Task<RecurringOrderTemplateViewModel> GetRecurringOrderTemplateDetailViewModelAsync(GetRecurringOrderTemplateDetailParam param)
@@ -201,7 +201,7 @@ namespace Orckestra.Composer.Services
                 BaseUrl = param.BaseUrl,
                 CustomerId = param.CustomerId,
                 ScopeId = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }
@@ -221,11 +221,11 @@ namespace Orckestra.Composer.Services
                 CultureInfo = param.CultureInfo,
                 LookupType = LookupType.Order,
                 LookupName = "PaymentMethodType",
-            });
+            }).ConfigureAwait(false);
 
             param.PaymentMethodDisplayNames = methodDisplayNames;
 
-            var vm = await RecurringOrderTemplateViewModelFactory.CreateRecurringOrderTemplateDetailsViewModel(param);
+            var vm = await RecurringOrderTemplateViewModelFactory.CreateRecurringOrderTemplateDetailsViewModel(param).ConfigureAwait(false);
 
             return vm;
         }

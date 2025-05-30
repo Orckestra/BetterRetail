@@ -481,7 +481,7 @@ namespace Orckestra.Composer.MyAccount.Services
                 param.Scope,
                 param.OldPassword,
                 param.NewPassword
-            );
+            ).ConfigureAwait(false);
 
             return GetChangePasswordViewModel(new GetChangePasswordViewModelParam
             {

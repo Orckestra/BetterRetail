@@ -184,17 +184,17 @@ namespace Orckestra.Composer.Search.Services
             return await CategoryRepository.GetCategoriesAsync(new GetCategoriesParam
             {
                 Scope = ComposerContext.Scope
-            });
+            }).ConfigureAwait(false);
         }
 
         public virtual async Task<List<Orckestra.Overture.ServiceModel.Search.Facet>> GetCategoryProductCounts(string cultureName)
         {
-            return await CategoryRepository.GetCategoryProductCount(ComposerContext.Scope, cultureName);
+            return await CategoryRepository.GetCategoryProductCount(ComposerContext.Scope, cultureName).ConfigureAwait(false);
         }
 
         public async Task<List<Orckestra.Overture.ServiceModel.Search.Facet>> GetBrandProductCounts(string cultureName)
         {
-            return await CategoryRepository.GetBrandProductCount(ComposerContext.Scope, cultureName);
+            return await CategoryRepository.GetBrandProductCount(ComposerContext.Scope, cultureName).ConfigureAwait(false);
         }
     }
 }

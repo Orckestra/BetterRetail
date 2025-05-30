@@ -256,7 +256,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 ReturnUrl = returnUrl
-            });
+            }).ConfigureAwait(false);
 
             return Ok(changePasswordViewModel);
         }
@@ -293,7 +293,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 ReturnUrl = returnUrl
-            });
+            }).ConfigureAwait(false);
 
             return Ok(resetPasswordViewModel);
         }
@@ -316,7 +316,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Email = forgotPasswordRequest.Email,
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo
-            });
+            }).ConfigureAwait(false);
 
             return Ok(forgotPasswordViewModel);
         }
@@ -339,7 +339,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 EncryptedCustomerId = ComposerContext.GetEncryptedCustomerId()
             };
 
-            var vm = await MembershipViewService.GetUserMetadataModel(getParam);
+            var vm = await MembershipViewService.GetUserMetadataModel(getParam).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -378,7 +378,7 @@ namespace Orckestra.Composer.MyAccount.Api
                 Email = email
             };
 
-            var isUserExistViewModel = await MembershipViewService.GetIsUserExistViewModelAsync(getCustomerByEmailParam);
+            var isUserExistViewModel = await MembershipViewService.GetIsUserExistViewModelAsync(getCustomerByEmailParam).ConfigureAwait(false);
             return Ok(isUserExistViewModel);
         }
     }

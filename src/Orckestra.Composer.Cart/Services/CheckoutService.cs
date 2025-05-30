@@ -211,7 +211,7 @@ namespace Orckestra.Composer.Cart.Services
                 await operation.Invoke(cart);
             }
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
 
             var createCartViewModelParam = new CreateCartViewModelParam
             {
@@ -220,7 +220,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.GetCartParam.BaseUrl
             };
 
-            var cartViewModel = await CreateCartViewModelAsync(createCartViewModelParam);
+            var cartViewModel = await CreateCartViewModelAsync(createCartViewModelParam).ConfigureAwait(false);
 
             var updateCartResultViewModel = new UpdateCartResultViewModel
             {
@@ -270,7 +270,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 LookupType = LookupType.Order,
                 LookupName = "PaymentMethodType",
-            });
+            }).ConfigureAwait(false);
 
             param.PaymentMethodDisplayNames = methodDisplayNames;
 
@@ -395,7 +395,7 @@ namespace Orckestra.Composer.Cart.Services
                 shipment.FulfillmentLocationId = fulfillmentLocation.Id;
             }
 
-            shipment.FulfillmentMethod = await GetFulfillmentMethodAsync(cart, shippingMethodViewModel);
+            shipment.FulfillmentMethod = await GetFulfillmentMethodAsync(cart, shippingMethodViewModel).ConfigureAwait(false);
         }
 
         protected virtual async Task<FulfillmentMethod> GetFulfillmentMethodAsync(Overture.ServiceModel.Orders.Cart cart, ShippingMethodViewModel shippingMethodViewModel)
@@ -408,7 +408,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = cart.ScopeId
             };
 
-            var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(param);
+            var fulfillmentMethods = await FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(param).ConfigureAwait(false);
 
             var fulfillmentMethod = fulfillmentMethods.Find(method =>
                 method.Name == shippingMethodViewModel.Name &&

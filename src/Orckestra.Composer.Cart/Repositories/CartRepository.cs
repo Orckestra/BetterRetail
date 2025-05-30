@@ -113,9 +113,9 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
             };
             CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
-            await CacheProvider.RemoveAsync(cacheKey);
+            await CacheProvider.RemoveAsync(cacheKey).ConfigureAwait(false);
 
-            return await OvertureClient.SendAsync(request);
+            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
 
         public virtual Task<PaymentMethod> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)

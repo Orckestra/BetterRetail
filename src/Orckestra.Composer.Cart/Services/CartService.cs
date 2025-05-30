@@ -539,7 +539,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var shipment = cart?.Shipments.FirstOrDefault() ?? throw new InvalidOperationException("No shipment was found in the cart.");
 
-            await MapShippingAddressPostalCodeToShipmentAsync(param, shipment);
+            await MapShippingAddressPostalCodeToShipmentAsync(param, shipment).ConfigureAwait(false);
 
             return await UpdateCartAsync(new UpdateCartViewModelParam
             {
@@ -609,7 +609,7 @@ namespace Orckestra.Composer.Cart.Services
                 payment.BillingAddress = new Address() { PropertyBag = new PropertyBag() };
             }
 
-            await MapBillingAddressPostalCodeToPaymentAsync(param, payment);
+            await MapBillingAddressPostalCodeToPaymentAsync(param, payment).ConfigureAwait(false);
 
             return await UpdateCartAsync(new UpdateCartViewModelParam
             {
@@ -640,7 +640,7 @@ namespace Orckestra.Composer.Cart.Services
 
             var paymentMethod = await CartRepository.SetDefaultCustomerPaymentMethod(param).ConfigureAwait(false);
 
-            return await MapPaymentMethodToViewModel(paymentMethod, param.Culture);
+            return await MapPaymentMethodToViewModel(paymentMethod, param.Culture).ConfigureAwait(false);
         }
 
         protected virtual async Task<IPaymentMethodViewModel> MapPaymentMethodToViewModel(PaymentMethod paymentMethod, CultureInfo culture)

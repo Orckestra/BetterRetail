@@ -47,7 +47,7 @@ namespace Orckestra.Composer.Product.Api
             //TODO: Log if inventory is enabled or disabled
             if (await IsInventoryEnabled())
             {
-                productSkusAvailableToSell = await GetInventoryItems(request.Skus.ToList());
+                productSkusAvailableToSell = await GetInventoryItems(request.Skus.ToList()).ConfigureAwait(false);
             }
             else
             {
@@ -61,7 +61,7 @@ namespace Orckestra.Composer.Product.Api
         protected virtual async Task<List<string>> GetInventoryItems(List<string> skus)
         {
             var availableInventoryStatuses = GetAvailableInventoryStatuses();
-            var inventoryItemsAvailabilityViewModel = await FindInventoryItemStatus(skus);
+            var inventoryItemsAvailabilityViewModel = await FindInventoryItemStatus(skus).ConfigureAwait(false);
 
             var productSkusAvailableToSell = GetProductSkusAvailableToSell(availableInventoryStatuses, inventoryItemsAvailabilityViewModel);
 
@@ -77,7 +77,7 @@ namespace Orckestra.Composer.Product.Api
                 Date = DateTime.UtcNow,
                 Skus = skus,
                 InventoryLocationId = await InventoryLocationProvider.GetDefaultInventoryLocationIdAsync().ConfigureAwait(false)
-            });
+            }).ConfigureAwait(false);
 
             return inventoryItemsAvailabilityViewModel;
         }
