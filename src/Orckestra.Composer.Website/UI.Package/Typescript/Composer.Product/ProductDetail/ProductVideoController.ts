@@ -81,7 +81,7 @@ module Orckestra.Composer {
                 //If the Video-js player is not initialized... do it!
                 if (!this.videoPlayer) {
                     this.videoJsElement.src = videoUrl;
-                    // @ts-ignore
+                    // @ts-ignore - Could not make the type definition work...
                     this.videoPlayer = videojs(this.videoJsElement, {fluid: true, controls: true, preload: 'auto'});
                     this.isLoadedVideoFromYoutube = true;
                 } else { //Otherwise just update the video url
