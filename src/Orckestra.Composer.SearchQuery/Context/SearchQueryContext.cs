@@ -108,7 +108,7 @@ namespace Orckestra.Composer.SearchQuery.Context
 
         protected virtual SearchCriteria BuildProductsSearchCriteria()
         {
-            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(null, RequestUtils.GetBaseUrl(Request).ToString(), true, CurrentPage).Result;
+            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(null, RequestUtils.GetBaseUrl(Request).ToString(), true, CurrentPage).ConfigureAwait(false).GetAwaiter().GetResult();
             criteria.SortBy = SortBy;
             criteria.SortDirection = SortDirection;
 

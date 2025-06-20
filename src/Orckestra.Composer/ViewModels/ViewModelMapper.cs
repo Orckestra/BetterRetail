@@ -147,7 +147,7 @@ namespace Orckestra.Composer.ViewModels
                             Delimiter = viewModelProperty.LookupDelimiter
                         };
                         // calling blocking .Result because we don't want otmake the mapper async
-                        viewModelPropertyValue = _lookupService.GetLookupDisplayNameAsync(param).Result; 
+                        viewModelPropertyValue = _lookupService.GetLookupDisplayNameAsync(param).ConfigureAwait(false).GetAwaiter().GetResult(); 
                     }
                     var formattedViewModelPropertyValue = LocalizeValue(viewModelPropertyValue, viewModelProperty, culture);
                     formattedViewModelPropertyValue = FormatValue(formattedViewModelPropertyValue, viewModelProperty, culture);

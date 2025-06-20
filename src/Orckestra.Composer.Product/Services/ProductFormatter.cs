@@ -100,7 +100,7 @@ namespace Orckestra.Composer.Product.Services
                     };
                     // call this synchronously to avoid async calls up the stack
                     // the request is cached, so this shouldn't be a performance burden
-                    valueText = _lookupService.GetLookupDisplayNameAsync(param).Result;
+                    valueText = _lookupService.GetLookupDisplayNameAsync(param).ConfigureAwait(false).GetAwaiter().GetResult();
 
                     valueText = FormatValueByType(valueText, property.PropertyName, BasePropertyTypeLookupResourceKey, cultureInfo);
                     break;

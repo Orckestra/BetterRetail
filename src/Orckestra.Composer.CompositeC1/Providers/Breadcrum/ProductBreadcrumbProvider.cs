@@ -53,7 +53,7 @@ namespace Orckestra.Composer.CompositeC1.Providers.Breadcrumb
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
             };
 
-            return BreadcrumbService.CreateBreadcrumbAsync(parameters).Result;
+            return BreadcrumbService.CreateBreadcrumbAsync(parameters).ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }
