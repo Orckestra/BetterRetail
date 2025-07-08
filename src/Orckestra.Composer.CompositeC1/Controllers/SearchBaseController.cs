@@ -15,14 +15,14 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             SearchRequestContext = searchRequestContext ?? throw new ArgumentNullException(nameof(searchRequestContext));
         }
 
-        public virtual async Task<ActionResult> PageHeader(string keywords)
+        public virtual ActionResult PageHeader(string keywords)
         {
-            var pageHeaderViewModel = await SearchRequestContext.GetPageHeaderViewModelAsync(new GetPageHeaderParam
+            var pageHeaderViewModel = SearchRequestContext.GetPageHeaderViewModelAsync(new GetPageHeaderParam
             {
                 Keywords = keywords,
                 IsPageIndexed = IsPageIndexed()
 
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return View(pageHeaderViewModel);
         }
