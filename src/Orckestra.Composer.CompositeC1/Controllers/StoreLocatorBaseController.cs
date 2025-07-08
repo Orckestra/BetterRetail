@@ -44,11 +44,11 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             StoreContext = storeContext ?? throw new ArgumentNullException(nameof(storeContext));
         }
 
-        public virtual async Task<ActionResult> StoreDirectory(int page = 1)
+        public virtual ActionResult StoreDirectory(int page = 1)
         {
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
 
-            var model =  await StoreDirectoryViewService.GetStoreDirectoryViewModelAsync(new GetStoresParam
+            var model =  StoreDirectoryViewService.GetStoreDirectoryViewModelAsync(new GetStoresParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -56,7 +56,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 PageNumber = page,
                 PageSize = StoreConfiguration.DirectoryListMaxItemsPerPage,
                 WebsiteId = SitemapNavigator.CurrentHomePageId
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (model == null)
             {
