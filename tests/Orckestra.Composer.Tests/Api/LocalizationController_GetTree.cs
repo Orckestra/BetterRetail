@@ -46,7 +46,7 @@ namespace Orckestra.Composer.Tests.Api
                 controller.ControllerContext = cc;
 
                 //Act
-                controller.GetTree("en-CA").ExecuteResult(cc);
+                (controller.GetTree("en-CA").ConfigureAwait(false).GetAwaiter().GetResult()).ExecuteResult(cc);
                 jsonResponse = output.ToString().Trim();
 
                 output.Close();
