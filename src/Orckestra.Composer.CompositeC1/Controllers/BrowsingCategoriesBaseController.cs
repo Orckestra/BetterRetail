@@ -50,9 +50,9 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             return await ExecuteBrowsingAsync("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection).ConfigureAwait(false);
         }
 
-        public virtual async Task<ActionResult> ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
+        public virtual ActionResult ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
         {
-            return await ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection).ConfigureAwait(false);
+            return ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         protected async Task<ActionResult> ExecuteBrowsingAsync(string emptyView, string filledView, Func<CategoryBrowsingViewModel, object> viewModelSelector, object emptyViewModel, int page, string sortBy = null, string sortDirection = null)
