@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Country
             };
             regionsCacheKey.AppendKeyParts(param.IsoCode);
 
-            var result = await _cacheProvider.GetOrAddAsync(regionsCacheKey, async () =>
+            var result = await _cacheProvider.GetOrAddAsync(regionsCacheKey, () =>
             {
                 var request = new GetRegionsRequest
                 {
@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Country
                     IncludeUnsupported = false
                 };
 
-                return await _overtureClient.SendAsync(request).ConfigureAwait(false);
+                return _overtureClient.SendAsync(request);
             }).ConfigureAwait(false);
 
             return result;

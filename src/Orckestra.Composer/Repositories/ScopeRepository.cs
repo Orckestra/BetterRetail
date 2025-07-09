@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Repositories
 
             var key = new CacheKey(CacheConfigurationCategoryNames.Scopes, param.Scope);
 
-            var scope = CacheProvider.GetOrAddAsync(key, async () =>
+            var scope = CacheProvider.GetOrAddAsync(key, () =>
             {
                 var req = new GetScopeRequest
                 {
@@ -45,9 +45,8 @@ namespace Orckestra.Composer.Repositories
                     CultureName = null
                 };
 
-                var response = await OvertureClient.SendAsync(req).ConfigureAwait(false);
-                return response;
-            });
+                return OvertureClient.SendAsync(req);
+             });
 
             return scope;
         }

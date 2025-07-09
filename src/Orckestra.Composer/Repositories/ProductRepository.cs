@@ -51,7 +51,7 @@ namespace Orckestra.Composer.Repositories
 
             productCacheKey.AppendKeyParts(param.ProductId);
 
-            var result = await CacheProvider.GetOrAddAsync(productCacheKey, async () =>
+            var result = await CacheProvider.GetOrAddAsync(productCacheKey, () =>
                 {
                     var request = new GetProductV2Request
                     {
@@ -67,7 +67,7 @@ namespace Orckestra.Composer.Repositories
 
                     };
 
-                    return await OvertureClient.SendAsync(request).ConfigureAwait(false);
+                    return OvertureClient.SendAsync(request);
                 }).ConfigureAwait(false);
 
             return param.ReturnInactive || (result?.Active ?? false) ? result : null;
