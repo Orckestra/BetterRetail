@@ -26,14 +26,14 @@ namespace Orckestra.Composer.Country
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public async Task<Overture.ServiceModel.Country> RetrieveCountry(RetrieveCountryParam param)
+        public Task<Overture.ServiceModel.Country> RetrieveCountry(RetrieveCountryParam param)
         {
             if (string.IsNullOrWhiteSpace(param.IsoCode)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.IsoCode)), nameof(param)); }
 
             var countryCacheKey = new CacheKey(CacheConfigurationCategoryNames.Country);
             countryCacheKey.AppendKeyParts(param.IsoCode);
 
-            var result = await _cacheProvider.GetOrAddAsync(countryCacheKey, () =>
+            var result = _cacheProvider.GetOrAddAsync(countryCacheKey, () =>
             {
                 var request = new GetCountryRequest
                 {
@@ -42,7 +42,7 @@ namespace Orckestra.Composer.Country
                 };
 
                 return _overtureClient.SendAsync(request);
-            }).ConfigureAwait(false);
+            });
 
             return result;
         }
@@ -63,7 +63,7 @@ namespace Orckestra.Composer.Country
             };
             regionsCacheKey.AppendKeyParts(param.IsoCode);
 
-            var result = await _cacheProvider.GetOrAddAsync(regionsCacheKey, () =>
+            var result = await _cacheProvider.GetOrAddAsync(regionsCacheKey, async () =>
             {
                 var request = new GetRegionsRequest
                 {
@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Country
                     IncludeUnsupported = false
                 };
 
-                return _overtureClient.SendAsync(request);
+                return await _overtureClient.SendAsync(request).ConfigureAwait(false);
             }).ConfigureAwait(false);
 
             return result;

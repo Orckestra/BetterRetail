@@ -45,11 +45,9 @@ namespace Orckestra.Composer.Repositories
                 Scope = param.Scope
             };
 
-            var result = await CacheProvider.GetOrAddAsync(cacheKey, 
-                () => OvertureClient.SendAsync(new GetCategoriesV2Request
-            {
-                ScopeId = param.Scope
-            })).ConfigureAwait(false);
+            var result = await CacheProvider.GetOrAddAsync(cacheKey,
+               async () => await OvertureClient.SendAsync(new GetCategoriesV2Request { ScopeId = param.Scope }).ConfigureAwait(false))
+                .ConfigureAwait(false);
 
             return result?.Categories;
         }

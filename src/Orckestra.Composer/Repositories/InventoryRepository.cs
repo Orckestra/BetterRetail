@@ -27,7 +27,7 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual async Task<List<InventoryItemAvailability>> FindInventoryItemStatus(FindInventoryItemStatusParam param)
+        public virtual Task<List<InventoryItemAvailability>> FindInventoryItemStatus(FindInventoryItemStatusParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Repositories
                 Skus = param.Skus
             };
 
-            var result = await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            var result = OvertureClient.SendAsync(request);
 
             return result;
         }
@@ -53,7 +53,7 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual async Task<InventoryItemStatusDetailsQueryResult> GetInventoryItemsBySkuAsync(GetInventoryItemsBySkuParam param)
+        public virtual Task<InventoryItemStatusDetailsQueryResult> GetInventoryItemsBySkuAsync(GetInventoryItemsBySkuParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -73,7 +73,7 @@ namespace Orckestra.Composer.Repositories
                 IncludeChildScopes = param.IncludeChildScopes
             };
 
-            return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
     }
 }
