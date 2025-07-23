@@ -1,12 +1,9 @@
 ﻿using Orckestra.Composer.CompositeC1.Services;
-using Orckestra.Composer.Search;
 using Orckestra.Composer.Search.Context;
-using Orckestra.Composer.Search.Facets;
 using Orckestra.Composer.Search.RequestConstants;
 using Orckestra.Composer.Search.ViewModels;
 using Orckestra.Composer.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -42,17 +39,19 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             CategoryMetaContext = categoryMetaContext;
         }
 
-        public virtual async Task<ActionResult> Summary(
-            [Bind(Prefix = SearchRequestParams.Page)]int page = 1,
-            [Bind(Prefix = SearchRequestParams.SortBy)]string sortBy = null,
-            [Bind(Prefix = SearchRequestParams.SortDirection)]string sortDirection = null)
+        public virtual ActionResult Summary(
+            [Bind(Prefix = SearchRequestParams.Page)] int page = 1,
+            [Bind(Prefix = SearchRequestParams.SortBy)] string sortBy = null,
+            [Bind(Prefix = SearchRequestParams.SortDirection)] string sortDirection = null)
         {
-            return await ExecuteBrowsingAsync("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection).ConfigureAwait(false);
+            return ExecuteBrowsingAsync("CategoryBrowsingSummaryEmpty", "CategoryBrowsingSummary", c => c, null, page, sortBy, sortDirection)
+                .ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         public virtual ActionResult ChildCategories(int page = 1, string sortBy = null, string sortDirection = null)
         {
-            return ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection).ConfigureAwait(false).GetAwaiter().GetResult();
+            return ExecuteBrowsingAsync("ChildCategories", "ChildCategories", c => c, EmptyCategoryBrowsingContainer, page, sortBy, sortDirection)
+                .ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         protected async Task<ActionResult> ExecuteBrowsingAsync(string emptyView, string filledView, Func<CategoryBrowsingViewModel, object> viewModelSelector, object emptyViewModel, int page, string sortBy = null, string sortDirection = null)
