@@ -1,11 +1,10 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 #tool "nuget:?package=Microsoft.TypeScript.Compiler&version=3.1.5"
 
-#addin "nuget:?package=Cake.MsDeploy&version=0.8.0"
+#addin nuget:?package=Cake.MsDeploy&version=5.0.0
 #addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
-#addin "nuget:?package=Cake.Npm&version=0.17.0"
-#addin "nuget:?package=Cake.Karma&version=0.2.0"
-#addin "nuget:?package=Cake.Powershell&version=1.0.1"
+#addin nuget:?package=Cake.Npm&version=5.1.0
+#addin nuget:?package=Cake.Powershell&version=4.0.0
 
 #load "helpers/filesystem.cake"
 #load "helpers/typescripts.cake"
@@ -15,7 +14,6 @@ using System.IO;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using Cake.Npm;
-using Cake.Karma;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -155,29 +153,14 @@ Task("Compile-Typescripts-Default").Does(() =>
 Task("Run-Karma-Tests-Default")
 .Does(() => 
 {
-    var settings = new KarmaStartSettings
-    {
-       ConfigFile = "karma.conf.js",
-       
-       RunMode = KarmaRunMode.Local
-    };
-    KarmaStart(settings);
+    StartProcess("npx", "karma start karma.conf.js");
 });
 
 
 Task("Run-Karma-Tests-Debug")
 .Does(() => 
 {
-    var settings = new KarmaStartSettings
-    {
-       ConfigFile = "karma.conf.js",
-       RunMode = KarmaRunMode.Local,
-       LogLevel = KarmaLogLevel.Debug,
-       SingleRun = false,
-       NoSingleRun = true,
-       Browsers = new List<string>(){"Chrome"}
-    };
-    KarmaStart(settings);
+    StartProcess("npx", "karma start karma.conf.js --log-level debug --no-single-run --browsers Chrome");
 });
 
 Task("Copy-To-Artifacts").Does(() =>
