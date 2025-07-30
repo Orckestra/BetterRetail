@@ -29,7 +29,7 @@ namespace Orckestra.Composer.CompositeC1.Context
             Request = request ?? throw new ArgumentNullException(nameof(request));
             PreviewModeService = previewModeService ?? throw new ArgumentNullException(nameof(previewModeService));
 
-            _viewModel = new Lazy<StoreViewModel>(() => GetStoreViewModelAsync().Result, true);
+            _viewModel = new Lazy<StoreViewModel>(() => GetStoreViewModelAsync().ConfigureAwait(false).GetAwaiter().GetResult(), true);
         }
 
         public virtual StoreViewModel ViewModel => _viewModel.Value;
@@ -44,7 +44,7 @@ namespace Orckestra.Composer.CompositeC1.Context
         {
             if (string.IsNullOrWhiteSpace(storeNumber))
             {
-                return ContextHelper.HandlePreviewMode(() => GetStoreViewModelAsync(PreviewModeService.Value.GetStoreNumber()).Result);
+                return ContextHelper.HandlePreviewMode(() => GetStoreViewModelAsync(PreviewModeService.Value.GetStoreNumber()).ConfigureAwait(false).GetAwaiter().GetResult());
             }
 
             var vm = await StoreViewService.GetStoreViewModelAsync(new GetStoreByNumberParam

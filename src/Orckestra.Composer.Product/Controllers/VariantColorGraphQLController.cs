@@ -72,7 +72,7 @@ namespace Orckestra.Composer.Product.Controllers
                 ? HttpStatusCode.BadRequest
                 : HttpStatusCode.OK;
 
-            var json = await _writer.WriteToStringAsync(result);
+            var json = await _writer.WriteToStringAsync(result).ConfigureAwait(false);
 
             var response = request.CreateResponse(httpResult);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");

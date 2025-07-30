@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Orckestra.Composer.MvcFilters;
 using Orckestra.Composer.Providers;
@@ -25,9 +26,9 @@ namespace Orckestra.Composer.Api
         }
 
         [HttpGet]
-        public ActionResult GetTree(string language)
+        public async Task<ActionResult> GetTree(string language)
         {
-            var tree = _localizationProvider.GetLocalizationTreeAsync(_composerContext.CultureInfo).Result;
+            var tree = await _localizationProvider.GetLocalizationTreeAsync(_composerContext.CultureInfo).ConfigureAwait(false);
             var cache = ComposerConfiguration.LocalizationCacheOptions;
 
             //Only this work in Sitecore. OutputCache attribute doesn't work.

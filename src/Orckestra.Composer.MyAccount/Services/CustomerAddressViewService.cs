@@ -270,7 +270,7 @@ namespace Orckestra.Composer.MyAccount.Services
 
             if (!await EnsureAddressBelongsToCustomer(param.CustomerId, param.Scope, param.AddressId).ConfigureAwait(false)) { return null; }
 
-            var address = await AddressRepository.GetAddressByIdAsync(param.AddressId);
+            var address = await AddressRepository.GetAddressByIdAsync(param.AddressId).ConfigureAwait(false);
 
             return await GetEditAddressViewModel(new GetEditAddressViewModelParam
             {

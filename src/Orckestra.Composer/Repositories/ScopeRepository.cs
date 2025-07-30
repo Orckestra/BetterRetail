@@ -35,7 +35,7 @@ namespace Orckestra.Composer.Repositories
 
             var key = new CacheKey(CacheConfigurationCategoryNames.Scopes, param.Scope);
 
-            var scope = CacheProvider.GetOrAddAsync(key, async () =>
+            var scope = CacheProvider.GetOrAddAsync(key, () =>
             {
                 var req = new GetScopeRequest
                 {
@@ -45,9 +45,8 @@ namespace Orckestra.Composer.Repositories
                     CultureName = null
                 };
 
-                var response = await OvertureClient.SendAsync(req).ConfigureAwait(false);
-                return response;
-            });
+                return OvertureClient.SendAsync(req);
+             });
 
             return scope;
         }
@@ -78,11 +77,11 @@ namespace Orckestra.Composer.Repositories
             return dependentScopes.ContainsKey(scope) ? dependentScopes[scope] : scope;
         }
 
-        protected virtual async Task<Dictionary<string, string>> GetDependentScopesWithParents()
+        protected virtual Task<Dictionary<string, string>> GetDependentScopesWithParents()
         {
             var key = new CacheKey(CacheConfigurationCategoryNames.Scopes, nameof(GetDependentScopesWithParents));
 
-            var dependentsScopes = await CacheProvider.GetOrAddAsync(key, async () =>
+            var dependentsScopes = CacheProvider.GetOrAddAsync(key, async () =>
             {
                 var result = new Dictionary<string, string>();
                 var scope = await GetAllScopesAsync().ConfigureAwait(false);
@@ -95,7 +94,8 @@ namespace Orckestra.Composer.Repositories
                 }
 
                 return result;
-            }).ConfigureAwait(false);
+            });
+
             return dependentsScopes;
         }
 

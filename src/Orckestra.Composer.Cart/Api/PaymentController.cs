@@ -54,7 +54,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = CartConfiguration.ShoppingCartName,
                 CustomerId = ComposerContext.CustomerId,
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            });
+            }).ConfigureAwait(false);
 
             if (vm?.ActivePaymentViewModel != null)
             {
@@ -80,7 +80,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = CartConfiguration.ShoppingCartName,
                 CustomerId = ComposerContext.CustomerId,
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            });
+            }).ConfigureAwait(false);
 
             vm.CreditCardTrustImage = ImageService.GetCheckoutTrustImageViewModel(ComposerContext.CultureInfo);
 
@@ -108,7 +108,7 @@ namespace Orckestra.Composer.Cart.Api
                 IsAuthenticated = ComposerContext.IsAuthenticated
             };
 
-            var vm = await PaymentViewService.UpdateActivePaymentMethodAsync(param);
+            var vm = await PaymentViewService.UpdateActivePaymentMethodAsync(param).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -124,7 +124,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = CartConfiguration.ShoppingCartName,
                 Scope = ComposerContext.Scope,
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            });
+            }).ConfigureAwait(false);
 
             if (vm != null)
             {
@@ -263,7 +263,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 ProviderNames = providers.Select(p => p.ProviderName).ToList(),
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            });
+            }).ConfigureAwait(false);
 
             return Ok(results);
         }

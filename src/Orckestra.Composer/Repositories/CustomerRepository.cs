@@ -161,7 +161,7 @@ namespace Orckestra.Composer.Repositories
         /// <returns>
         /// The created Customer
         /// </returns>
-        public virtual async Task<Customer> CreateUserAsync(CreateUserParam createUserParam)
+        public virtual Task<Customer> CreateUserAsync(CreateUserParam createUserParam)
         {
             if (createUserParam == null) { throw new ArgumentNullException(nameof(createUserParam)); }
             if (createUserParam.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(createUserParam.CultureInfo)), nameof(createUserParam)); }
@@ -185,7 +185,7 @@ namespace Orckestra.Composer.Repositories
                 ScopeId = createUserParam.Scope
             };
 
-            var createdCustomer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            var createdCustomer = OvertureClient.SendAsync(request);
 
             return createdCustomer;
         }
@@ -197,7 +197,7 @@ namespace Orckestra.Composer.Repositories
         /// <returns>
         /// The updated Customer and a status representing a possible cause of errors
         /// </returns>
-        public virtual async Task<Customer> UpdateUserAsync(UpdateUserParam param)
+        public virtual Task<Customer> UpdateUserAsync(UpdateUserParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (param.Customer == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Customer)), nameof(param)); }
@@ -207,7 +207,7 @@ namespace Orckestra.Composer.Repositories
                 ScopeId = param.Scope
             };
             request.ExtendUpdateCustomerRequest(param.Customer);
-            var updatedCustomer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            var updatedCustomer = OvertureClient.SendAsync(request);
 
             return updatedCustomer;
         }
@@ -217,7 +217,7 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="param">Parameters container</param>
         /// <returns>The updated customer</returns>
-        public virtual async Task<Customer> UpdateUserPreferredStoreAsync(UpdateUserPreferredStoreParam param)
+        public virtual Task<Customer> UpdateUserPreferredStoreAsync(UpdateUserPreferredStoreParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
             if (param.CustomerId == Guid.Empty) throw new ArgumentException(GetMessageOfEmpty(nameof(param.CustomerId)), nameof(param));
@@ -232,7 +232,7 @@ namespace Orckestra.Composer.Repositories
                 CustomerId = param.CustomerId
             };
 
-            var updatedCustomer = await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            var updatedCustomer = OvertureClient.SendAsync(request);
 
             return updatedCustomer;
         }

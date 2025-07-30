@@ -99,7 +99,7 @@ namespace Orckestra.Composer.Store.Services
 
             var storesForCurrentPage = stores.Skip((param.PageNumber - 1) * param.PageSize).Take(param.PageSize).ToList();
 
-            var schedules = await GetStoreSchedules(storesForCurrentPage, param);
+            var schedules = await GetStoreSchedules(storesForCurrentPage, param).ConfigureAwait(false);
 
             foreach (var store in storesForCurrentPage)
             {

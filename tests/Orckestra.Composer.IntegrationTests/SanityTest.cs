@@ -28,7 +28,7 @@ namespace Orckestra.Composer.Tests.IntegrationTests
             {
                 tasks[i] = CreateRequest();
             }
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         private Task CreateRequest()

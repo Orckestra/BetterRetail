@@ -80,7 +80,7 @@ namespace Orckestra.Composer.Product.Services
                 Scope = getProductIdentifiersParam.Scope,
                 MaxItems = getProductIdentifiersParam.MaxItems,
                 SortBy = "score",
-                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync(),
+                InventoryLocationIds = await InventoryLocationProvider.GetInventoryLocationIdsForSearchAsync().ConfigureAwait(false),
                 CurrentProductId = getProductIdentifiersParam.ProductId,
                 AvailabilityDate = FulfillmentContext.AvailabilityAndPriceDate
             };

@@ -302,7 +302,7 @@ namespace Orckestra.Composer.Cart.Services.Order
                 Scope = param.Scope,
                 Order = order,
                 OrderId = Guid.Parse(order.Id)
-            });
+            }).ConfigureAwait(false);
 
             return updatedOrder;
         }
@@ -574,7 +574,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 BaseUrl = baseUrl
-            });
+            }).ConfigureAwait(false);
 
             resultViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
                 new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });
@@ -598,7 +598,7 @@ namespace Orckestra.Composer.Cart.Services.Order
             
             if (order == null) throw new InvalidOperationException($"Order {param.OrderNumber} cannot be received.");
 
-            await EditingOrderProvider.CancelOrder(order);
+            await EditingOrderProvider.CancelOrder(order).ConfigureAwait(false);
 
             var orderFulfillmentState = await OrderRepository.GetOrderFulfillmentStateAsync(new GetOrderFulfillmentStateParam
             {

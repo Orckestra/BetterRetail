@@ -60,7 +60,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return View("AccountHeaderBlade", viewModel);
         }
@@ -74,7 +74,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 CountryCode = ComposerContext.CountryCode
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return View("EditAddressBlade", viewModel);
         }
@@ -93,7 +93,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
             if (vm == null)
             {
                 return UnexpectedAddressForCustomer();
@@ -110,7 +110,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 CustomerId = ComposerContext.CustomerId,
                 CultureInfo = ComposerContext.CultureInfo,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-                }).Result;
+                }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (vm != null && vm.RecurringOrderTemplateViewModelList.Count == 0)
             {

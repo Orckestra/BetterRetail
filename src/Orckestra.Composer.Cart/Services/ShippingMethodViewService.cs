@@ -133,7 +133,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope
             }).ConfigureAwait(false);
 
-            return await GetShippingMethodsAsync(param);
+            return await GetShippingMethodsAsync(param).ConfigureAwait(false);
         }
 
         protected virtual Task<List<FulfillmentMethod>> GetFulfillmentMethods(GetShippingMethodsParam param)
@@ -161,7 +161,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 ForceUpdate = true
 
-            });
+            }).ConfigureAwait(false);
 
             return await CartService.UpdateCartAsync(new UpdateCartViewModelParam
             {
@@ -179,7 +179,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = cart.ScopeId,
                 Shipments = cart.Shipments,
                 Status = cart.Status
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Orckestra.Composer.Cart.Services
             if (param.CultureInfo == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.CultureInfo)), nameof(param)); }
             if (param.Cart == null) { throw new ArgumentException(GetMessageOfNull(nameof(param.Cart)), nameof(param)); }
 
-            var shippingMethods = await GetShippingMethodsForShippingEstimationAsync(param);
+            var shippingMethods = await GetShippingMethodsForShippingEstimationAsync(param).ConfigureAwait(false);
             var selectedMethod = GetCheapestShippingMethodViewModel(shippingMethods);
             var firstShipment = GetShipment(param.Cart);
 
@@ -280,7 +280,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 CustomerId = param.CustomerId,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             if (fulfillmentMethods == null)
                 throw new InvalidOperationException($"No fulfillmentMethods was found for the cart name ({param.CartName}).");
@@ -291,7 +291,7 @@ namespace Orckestra.Composer.Cart.Services
             shipment.FulfillmentMethod = fulfillmentMethod 
                 ?? throw new InvalidOperationException($"The fulfillmentMethod ({param.ShippingProviderId}) was not found.");
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
 
             var vm = await RecurringOrderCartsViewService.CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
@@ -299,7 +299,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = new CultureInfo(updatedCart.CultureName),
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl,
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }

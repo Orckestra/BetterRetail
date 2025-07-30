@@ -164,7 +164,7 @@ namespace Orckestra.Composer.Cart.Api
                 PaymentType = request.PaymentType,
                 ProviderNames = providers.Select(p => p.ProviderName).ToList(),
                 IsAuthenticated = ComposerContext.IsAuthenticated
-            }, RequestUtils.GetBaseUrl(Request).ToString());
+            }, RequestUtils.GetBaseUrl(Request).ToString()).ConfigureAwait(false);
 
             return Ok(vm);
         }

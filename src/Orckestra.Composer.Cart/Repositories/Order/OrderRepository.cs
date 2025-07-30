@@ -135,12 +135,11 @@ namespace Orckestra.Composer.Cart.Repositories.Order
             return OvertureClient.SendAsync(request);
         }
 
-        public virtual async Task<OrderSettings> GetOrderSettings(string scope)
+        public virtual Task<OrderSettings> GetOrderSettings(string scope)
         {
             var cacheKey = BuildOrderSettingsCacheKey(scope);
-            return await CacheProvider
-                .GetOrAddAsync(cacheKey, async () => await OvertureClient.SendAsync(new GetOrderSettingsRequest()))
-                .ConfigureAwait(false);
+            return CacheProvider
+                .GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(new GetOrderSettingsRequest()));
         }
 
         protected virtual CacheKey BuildOrderSettingsCacheKey(string scope)

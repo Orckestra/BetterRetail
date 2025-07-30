@@ -142,7 +142,7 @@ namespace Orckestra.Composer.Cart.Factory
             vm.AdditionalFees = MapLineItemAdditionalFeeViewModel(lineItem, param.CultureInfo).ToList();
             MapProductPromotions(vm);
             //Because the whole class is not async, we call a .Result here
-            _ = MapRecurringOrderFrequencies(vm, lineItem, param.CultureInfo).Result;
+            _ = MapRecurringOrderFrequencies(vm, lineItem, param.CultureInfo).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return vm;
         }

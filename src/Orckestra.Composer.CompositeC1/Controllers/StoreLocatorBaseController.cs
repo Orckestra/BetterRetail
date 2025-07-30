@@ -12,6 +12,7 @@ using Orckestra.Composer.Utils;
 using Orckestra.Composer.Store;
 using Orckestra.Composer.Store.ViewModels;
 using Orckestra.Composer.CompositeC1.Context;
+using System.Threading.Tasks;
 
 namespace Orckestra.Composer.CompositeC1.Controllers
 {
@@ -47,7 +48,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
         {
             var baseUrl = RequestUtils.GetBaseUrl(Request).ToString();
 
-            var model = StoreDirectoryViewService.GetStoreDirectoryViewModelAsync(new GetStoresParam
+            var model =  StoreDirectoryViewService.GetStoreDirectoryViewModelAsync(new GetStoresParam
             {
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
@@ -55,7 +56,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 PageNumber = page,
                 PageSize = StoreConfiguration.DirectoryListMaxItemsPerPage,
                 WebsiteId = SitemapNavigator.CurrentHomePageId
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (model == null)
             {

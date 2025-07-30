@@ -69,7 +69,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = GetCartName(),
                 CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-            });
+            }).ConfigureAwait(false);
 
             if (cartViewModel.OrderSummary != null)
             {
@@ -125,7 +125,7 @@ namespace Orckestra.Composer.Cart.Api
                 UpdateValues = updateCartRequest.UpdatedCart
             };
 
-            var updateCartResultViewModel = await CheckoutService.UpdateCheckoutCartAsync(updateCheckoutCartParam);
+            var updateCartResultViewModel = await CheckoutService.UpdateCheckoutCartAsync(updateCheckoutCartParam).ConfigureAwait(false);
 
             return Ok(updateCartResultViewModel);
         }
@@ -144,7 +144,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = CartConfiguration.ShoppingCartName
-            });
+            }).ConfigureAwait(false);
 
             return Ok(shippingMethodsViewModel);
         }
@@ -164,7 +164,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = CartConfiguration.ShoppingCartName
-            });
+            }).ConfigureAwait(false);
 
             shippingMethodTypesViewModel.ShippingMethodTypes = shippingMethodTypesViewModel.ShippingMethodTypes
                 .Where(method => CartConfiguration.AvailableShippingMethodTypes.Contains(method.FulfillmentMethodType))
@@ -187,7 +187,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 CartName = request.CartName
-            });
+            }).ConfigureAwait(false);
 
             return Ok(shippingMethodsViewModel);
         }
@@ -203,7 +203,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 ScopeId = ComposerContext.Scope,
                 Culture = ComposerContext.CultureInfo
-            });
+            }).ConfigureAwait(false);
 
             return Ok(paymentMethod);
         }
@@ -231,7 +231,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 Scope = ComposerContext.Scope
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -269,7 +269,7 @@ namespace Orckestra.Composer.Cart.Api
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = request.RecurringOrderProgramName,
                 PropertyBag = request.PropertyBag
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -295,7 +295,7 @@ namespace Orckestra.Composer.Cart.Api
                 CartName = GetCartName(),
                 CartType = GetCartType(),
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -325,7 +325,7 @@ namespace Orckestra.Composer.Cart.Api
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = request.RecurringOrderProgramName,
                 PropertyBag = request.PropertyBag
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -351,7 +351,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 PostalCode = request.PostalCode,
                 Scope = ComposerContext.Scope
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -377,7 +377,7 @@ namespace Orckestra.Composer.Cart.Api
                 CustomerId = ComposerContext.CustomerId,
                 PostalCode = request.PostalCode,
                 Scope = ComposerContext.Scope
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -397,7 +397,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -417,7 +417,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -475,7 +475,7 @@ namespace Orckestra.Composer.Cart.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
-            });
+            }).ConfigureAwait(false);
 
             checkoutViewModel.NextStepUrl = CartUrlProvider.GetCheckoutConfirmationPageUrl(
                 new BaseUrlParameter { CultureInfo = ComposerContext.CultureInfo });

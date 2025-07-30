@@ -24,14 +24,14 @@ namespace Orckestra.Composer.Repositories
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public virtual async Task<ProductSettings> GetProductSettings(string scope)
+        public virtual Task<ProductSettings> GetProductSettings(string scope)
         {
             if (string.IsNullOrWhiteSpace(scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(), nameof(scope)); }
 
             var productSettingsCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductSettings);
             productSettingsCacheKey.AppendKeyParts(scope);
 
-            var result = await CacheProvider.GetOrAddAsync(productSettingsCacheKey, () =>
+            var result = CacheProvider.GetOrAddAsync(productSettingsCacheKey, () =>
             {
                 var request = new GetProductSettingsRequest
                 {
@@ -39,7 +39,7 @@ namespace Orckestra.Composer.Repositories
                 };
 
                 return OvertureClient.SendAsync(request);
-            }).ConfigureAwait(false);
+            });
 
             return result;
         }

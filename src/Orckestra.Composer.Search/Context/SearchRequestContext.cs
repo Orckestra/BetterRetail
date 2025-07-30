@@ -36,7 +36,7 @@ namespace Orckestra.Composer.Search.Context
             _viewModel = new Lazy<SearchViewModel>(() =>
             {
                 var criteria = BuildProductsSearchCriteria();
-                return SearchViewService.GetSearchViewModelAsync(criteria).Result;
+                return SearchViewService.GetSearchViewModelAsync(criteria).ConfigureAwait(false).GetAwaiter().GetResult();
             });
         }
 
@@ -84,7 +84,7 @@ namespace Orckestra.Composer.Search.Context
 
         protected virtual SearchCriteria BuildProductsSearchCriteria()
         {
-            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(SearchQuery, RequestUtils.GetBaseUrl(Request).ToString(), true, CurrentPage).Result;
+            var criteria = BaseSearchCriteriaProvider.GetSearchCriteriaAsync(SearchQuery, RequestUtils.GetBaseUrl(Request).ToString(), true, CurrentPage).ConfigureAwait(false).GetAwaiter().GetResult();
             criteria.SortBy = IsProductsSearchActive ? SortBy : null;
             criteria.SortDirection = IsProductsSearchActive ? SortDirection : null;
 

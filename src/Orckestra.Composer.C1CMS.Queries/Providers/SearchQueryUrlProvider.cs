@@ -22,7 +22,7 @@ namespace Orckestra.Composer.C1CMS.Queries.Providers
 
             var cacheKey = new CacheKey("SearchQuery", param.PageId.ToString(), param.CultureInfo);
 
-            var categoryBaseUrl = CacheProvider.GetOrAddAsync(cacheKey, () => Task.FromResult(GetPageUrl(param.PageId, param.CultureInfo))).Result;
+            var categoryBaseUrl = CacheProvider.GetOrAddAsync(cacheKey, () => Task.FromResult(GetPageUrl(param.PageId, param.CultureInfo))).ConfigureAwait(false).GetAwaiter().GetResult();
 
             // Category page is not found
             if (categoryBaseUrl == null)
