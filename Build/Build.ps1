@@ -105,7 +105,6 @@ Try
     $ADDINS_DIR = Join-Path $TOOLS_DIR "Addins"
     $MODULES_DIR = Join-Path $TOOLS_DIR "Modules"
     $NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
-    $CAKE_EXE = Join-Path $TOOLS_DIR "Cake/Cake.exe"
     $NUGET_URL = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
     $PACKAGES_CONFIG = Join-Path $TOOLS_DIR "packages.config"
     $PACKAGES_CONFIG_MD5 = Join-Path $TOOLS_DIR "packages.config.md5sum"
@@ -215,11 +214,6 @@ Try
         Pop-Location
     }
 
-    # Make sure that Cake has been installed.
-    if (!(Test-Path $CAKE_EXE)) {
-        Throw "Could not find Cake.exe at $CAKE_EXE"
-    }
-
 
 
     # Build Cake arguments
@@ -237,7 +231,7 @@ Try
 
     # Start Cake
     Write-Host "Running build script..."
-    &$CAKE_EXE $cakeArguments
+    dotnet cake build.cake -- $cakeArguments
 }
 Finally
 {

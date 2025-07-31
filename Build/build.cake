@@ -61,18 +61,18 @@ var tslintConfig = $"{buildDir}/tslint.json";
 //////////////////////////////////////////////////////////////////////
 Task("Tslint-Tests").Does(() =>
 {
-    StartPowershellScript("Invoke-Command", args =>
-        {
-            args.Append($"-ScriptBlock {{tslint {tslintFiles} --config {tslintConfig}}}");
-        });
+    var command = $"tslint {tslintFiles} --config {tslintConfig}";
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\""
+    });
 });
 
 Task("Tslint-Fix").Does(() =>
 {
-    StartPowershellScript("Invoke-Command", args =>
-        {
-            args.Append($"-ScriptBlock {{tslint {tslintFiles} --config {tslintConfig} --fix}}");
-        });
+    var command = $"tslint {tslintFiles} --config {tslintConfig} --fix";
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\""
+    });
 });
 
 Task("Clean-Solution").Does(() =>
