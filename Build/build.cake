@@ -150,17 +150,19 @@ Task("Compile-Typescripts-Default").Does(() =>
     CompileTypeScripts(rootDir, $"--project {rootDir}/Build/tsconfigs/orckestra.json", 30);
 });
 
-Task("Run-Karma-Tests-Default")
-.Does(() => 
-{
-    StartProcess("npx", "karma start karma.conf.js");
+Task("Run-Karma-Tests-Default").Does(() => 
+{;
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = "-Command \"npx karma start karma.conf.js\""
+    });
 });
 
 
-Task("Run-Karma-Tests-Debug")
-.Does(() => 
+Task("Run-Karma-Tests-Debug").Does(() => 
 {
-    StartProcess("npx", "karma start karma.conf.js --log-level debug --no-single-run --browsers Chrome");
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = "-Command \"npx karma start karma.conf.js --log-level debug --no-single-run --browsers Chrome\""
+    });
 });
 
 Task("Copy-To-Artifacts").Does(() =>
