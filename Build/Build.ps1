@@ -203,7 +203,10 @@ Try
 
         Pop-Location
     }
-    
+
+    dotnet tool restore
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
     # Build Cake arguments
     $cakeArguments = @("$Script");
     if ($Target) { $cakeArguments += "--target=$Target" }
@@ -221,7 +224,7 @@ Try
 
     # Start Cake
     Write-Host "Running build script..."
-    dotnet cake build.cake --verbosity=diagnostic -- $cakeArguments
+    dotnet cake build.cake -- $cakeArguments
 }
 Finally
 {
