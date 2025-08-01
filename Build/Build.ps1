@@ -221,8 +221,7 @@ Try
 
     # Start Cake
     Write-Host "Running build script..."
-    #dotnet cake build.cake --verbosity=diagnostic -- $cakeArguments
-    Write-Host "dotnet cake build.cake was called."
+    dotnet cake build.cake --verbosity=diagnostic -- $cakeArguments
 }
 Finally
 {
