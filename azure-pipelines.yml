@@ -12,7 +12,7 @@ stages:
   - job: Build
 
     pool:
-      vmImage: 'windows-2019'
+      vmImage: 'windows-2022'
 
     variables:
       buildPlatform: 'Any CPU'
@@ -25,6 +25,13 @@ stages:
       inputs:
         versionSpec: 10.x
 
+    - task: DotNetCoreCLI@2
+      displayName: Restore .NET tools
+      inputs:
+        command: custom
+        custom: tool
+        arguments: restore --tool-manifest ${{ parameters.workingDirectory }}/build/.config/dotnet-tools.json
+ 
     - task: GitVersion@5
       inputs:
         runtime: 'full'
