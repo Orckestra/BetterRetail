@@ -1,5 +1,6 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 #tool "nuget:?package=Microsoft.TypeScript.Compiler&version=3.1.5"
+#tool dotnet:?package=Cake.Tool&version=5.0.0
 
 #addin nuget:?package=Cake.MsDeploy&version=5.0.0
 #addin nuget:?package=Cake.Npm&version=5.1.0

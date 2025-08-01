@@ -203,10 +203,7 @@ Try
 
         Pop-Location
     }
-
-    dotnet tool restore
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
+    
     # Build Cake arguments
     $cakeArguments = @("$Script");
     if ($Target) { $cakeArguments += "--target=$Target" }
