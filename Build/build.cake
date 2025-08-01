@@ -151,12 +151,11 @@ Task("Compile-Typescripts-Default").Does(() =>
 });
 
 Task("Run-Karma-Tests-Default").Does(() => 
-{;
+{
     StartProcess("pwsh", new ProcessSettings {
         Arguments = "-Command \"npx karma start karma.conf.js\""
     });
 });
-
 
 Task("Run-Karma-Tests-Debug").Does(() => 
 {
