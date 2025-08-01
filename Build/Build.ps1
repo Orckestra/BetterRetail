@@ -117,16 +117,6 @@ Try
         New-Item -Path $TOOLS_DIR -Type directory | out-null
     }
 
-    # Make sure that packages.config exist.
-    if (!(Test-Path $PACKAGES_CONFIG)) {
-        Write-Verbose -Message "Downloading packages.config..."    
-        try {        
-            $wc = GetProxyEnabledWebClient
-            $wc.DownloadFile("https://cakebuild.net/download/bootstrapper/packages", $PACKAGES_CONFIG) } catch {
-            Throw "Could not download packages.config."
-        }
-    }
-
     # Try find NuGet.exe in path if not exists
     if (!(Test-Path $NUGET_EXE)) {
         Write-Verbose -Message "Trying to find nuget.exe in PATH..."
@@ -213,17 +203,13 @@ Try
 
         Pop-Location
     }
-
-    $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
-    $env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
-    $env:DOTNET_NOLOGO = '1'
-    dotnet tool restore
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
+    
     # Build Cake arguments
     $cakeArguments = @("$Script");
-    if ($Target) { $cakeArguments += "-target=$Target" }
-    if ($Configuration) { $cakeArguments += "-configuration=$Configuration" }
+    if ($Target) { $cakeArguments += "--target=$Target" }
+    if ($Configuration) { $cakeArguments += "--configuration=$Configuration" }
+    # The parameters below probably require a double-dash, like above, for Cake 1.0+
+    # They are left with a single dash until they cause a problem and can be tested in context.
     if ($Verbosity) { $cakeArguments += "-verbosity=$Verbosity" }
     if ($ShowDescription) { $cakeArguments += "-showdescription" }
     if ($DryRun) { $cakeArguments += "-dryrun" }
