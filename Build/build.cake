@@ -91,7 +91,9 @@ Task("Clean-Solution").Does(() =>
 Task("Compile-Solution").Does(() =>
 {
       MSBuild(solutionFile, settings =>
-        settings.SetConfiguration(configuration));
+        settings.SetConfiguration(configuration)
+          .UseToolVersion(MSBuildToolVersion.VS2022)
+      );
 });
 
 
