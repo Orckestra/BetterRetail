@@ -51,9 +51,6 @@ stages:
 
     - task: PowerShell@1
       displayName: Build
-      env:
-        NUGET_USERNAME: $(NUGET_USERNAME)
-        NUGET_PASSWORD: $(NUGET_PASSWORD)
       inputs:
         scriptName: Build/build.ps1
         arguments: '-t Build -Verbosity Diagnostic'
