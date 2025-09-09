@@ -20,13 +20,8 @@ stages:
 
 
     steps:
-    - task: NuGetToolInstaller@1
-
     - task: NuGetAuthenticate@1
       displayName: 'Authenticate to NuGet feeds'
-
-    - script: dotnet tool restore
-      displayName: 'Restore .NET tools'
 
     - task: NodeTool@0
       displayName: 'Use Node 10.x'
