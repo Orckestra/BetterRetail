@@ -92,7 +92,7 @@ namespace Orckestra.Composer.Cart.Providers.Payment
                 CultureInfo = cultureInfo,
                 LookupType = LookupType.Order,
                 LookupName = "PaymentMethodType",
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             var paymentMethodDisplayName = methodDisplayNames.FirstOrDefault(x => x.Key == payment.PaymentMethod.Type.ToString()).Value;
 

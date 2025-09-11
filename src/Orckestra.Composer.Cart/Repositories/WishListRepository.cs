@@ -22,7 +22,7 @@ namespace Orckestra.Composer.Cart.Repositories
             CacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
         }
 
-        public virtual async Task<ProcessedCart> GetWishListAsync(GetCartParam param)
+        public virtual Task<ProcessedCart> GetWishListAsync(GetCartParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -42,10 +42,10 @@ namespace Orckestra.Composer.Cart.Repositories
                 WorkflowToExecute = param.WorkflowToExecute
             };
 
-            return await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        public virtual async Task<ProcessedCart> AddLineItemAsync(AddLineItemParam param)
+        public virtual Task<ProcessedCart> AddLineItemAsync(AddLineItemParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -58,10 +58,10 @@ namespace Orckestra.Composer.Cart.Repositories
             var request = BuildAddLineItemRequestFromParam(param);
             var cacheKey = BuildWishListCacheKey(param.Scope, param.CustomerId, param.CartName);
 
-            return await CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
-        public virtual async Task<ProcessedCart> RemoveLineItemAsync(RemoveLineItemParam param)
+        public virtual Task<ProcessedCart> RemoveLineItemAsync(RemoveLineItemParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.Scope)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Scope)), nameof(param)); }
@@ -80,7 +80,7 @@ namespace Orckestra.Composer.Cart.Repositories
             };
 
             var cacheKey = BuildWishListCacheKey(param.Scope, param.CustomerId, param.CartName);
-            return await CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
+            return  CacheProvider.ExecuteAndSetAsync(cacheKey, () => OvertureClient.SendAsync(request));
         }
 
         protected virtual AddLineItemRequest BuildAddLineItemRequestFromParam(AddLineItemParam param)

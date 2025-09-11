@@ -22,14 +22,14 @@ namespace Orckestra.Composer.Repositories
         /// Retrieve the Customer Profile Settings from Overture
         /// </summary>
         /// <returns><see cref="ProfileSettings"/></returns>
-        public virtual async Task<ProfileSettings> GetCustomerSettings()
+        public virtual Task<ProfileSettings> GetCustomerSettings()
         {
             var settingsCacheKey = new CacheKey(CacheConfigurationCategoryNames.CustomerSettings);
 
-            var result = await CacheProvider.GetOrAddAsync(settingsCacheKey, () =>
+            var result = CacheProvider.GetOrAddAsync(settingsCacheKey, () =>
             {
                 return OvertureClient.SendAsync(new GetProfileSettingsRequest());
-            }).ConfigureAwait(false);
+            });
 
             return result;
         }

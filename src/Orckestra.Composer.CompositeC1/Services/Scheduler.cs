@@ -45,7 +45,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 
             while (!cToken.IsCancellationRequested)
             {
-                await Task.Delay(HeartbeatInMs, cToken);
+                await Task.Delay(HeartbeatInMs, cToken).ConfigureAwait(false);
 
                 lock (tasks)
                 {

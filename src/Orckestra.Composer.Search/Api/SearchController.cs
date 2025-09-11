@@ -237,8 +237,8 @@ namespace Orckestra.Composer.Search.Api
             string language = ComposerContext.CultureInfo.Name;
             string searchTerm = request.Query.Trim();
 
-            List<Category> categories = await SearchViewService.GetAllCategories();
-            List<Facet> categoryCounts = await SearchViewService.GetCategoryProductCounts(language);
+            List<Category> categories = await SearchViewService.GetAllCategories().ConfigureAwait(false);
+            List<Facet> categoryCounts = await SearchViewService.GetCategoryProductCounts(language).ConfigureAwait(false);
 
             var categoryByIdMap = categories.ToDictionary(_ => _.Id);
             var categorySuggestionList = new List<CategorySuggestionViewModel>();

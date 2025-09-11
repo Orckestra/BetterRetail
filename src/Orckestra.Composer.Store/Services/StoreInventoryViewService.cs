@@ -64,7 +64,7 @@ namespace Orckestra.Composer.Store.Services
 
             var model = new StoreInventoryViewModel { Stores = new List<StoreViewModel>() };
 
-            var stores = await GetStores(param, overtureInventoryItems);
+            var stores = await GetStores(param, overtureInventoryItems).ConfigureAwait(false);
 
             if (stores.Count == 0) { return null; }
 
@@ -81,8 +81,8 @@ namespace Orckestra.Composer.Store.Services
                     .Take(param.PageSize)
                     .ToList();
 
-            var isInventoryEnabled = await IsInventoryEnabledAsync(param);
-            var statusDisplayNames = await GetInventoryStatusDisplayNamesAsync(param, isInventoryEnabled);
+            var isInventoryEnabled = await IsInventoryEnabledAsync(param).ConfigureAwait(false);
+            var statusDisplayNames = await GetInventoryStatusDisplayNamesAsync(param, isInventoryEnabled).ConfigureAwait(false);
 
             foreach (var store in storesForCurrentPage)
             {
@@ -139,7 +139,7 @@ namespace Orckestra.Composer.Store.Services
                     CultureInfo = param.CultureInfo,
                     LookupType = LookupType.Order,
                     LookupName = "LineItemStatus"
-                })
+                }).ConfigureAwait(false)
                 : null;
         }
 
@@ -181,7 +181,7 @@ namespace Orckestra.Composer.Store.Services
 
         protected virtual async Task<bool> IsInventoryEnabledAsync(GetStoreInventoryViewModelParam param)
         {
-            var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(param.Scope, param.CultureInfo);
+            var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(param.Scope, param.CultureInfo).ConfigureAwait(false);
 
             return productSettingsViewModel.IsInventoryEnabled;
         }

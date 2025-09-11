@@ -82,7 +82,7 @@ namespace Orckestra.Composer.Repositories
         /// Instance of <see cref="ProductList" />.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">productIds</exception>
-        public virtual async Task<ProductList> GetProductsByIdsAsync(string[] productIds, string scopeId)
+        public virtual Task<ProductList> GetProductsByIdsAsync(string[] productIds, string scopeId)
         {
             if (productIds == null) { throw new ArgumentNullException(nameof(productIds)); }
             if (string.IsNullOrWhiteSpace(scopeId)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(scopeId)), nameof(scopeId)); }
@@ -94,7 +94,7 @@ namespace Orckestra.Composer.Repositories
 
             productCacheKey.AppendKeyParts("ids" + productIds.Join());
 
-            var result = await CacheProvider.GetOrAddAsync(productCacheKey, () =>
+            var result = CacheProvider.GetOrAddAsync(productCacheKey, () =>
             {
                 var request = new GetProductsByIdsV2Request
                 {
@@ -110,19 +110,19 @@ namespace Orckestra.Composer.Repositories
                 };
 
                 return OvertureClient.SendAsync(request);
-            }).ConfigureAwait(false);
+            });
 
             return result;
         }
 
-        public virtual async Task<ProductDefinition> GetProductDefinitionAsync(GetProductDefinitionParam param)
+        public virtual Task<ProductDefinition> GetProductDefinitionAsync(GetProductDefinitionParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
 
             var productDefinitionCacheKey = new CacheKey(CacheConfigurationCategoryNames.ProductDefinition);
             productDefinitionCacheKey.AppendKeyParts(param.Name);
 
-            var result = await CacheProvider.GetOrAddAsync(productDefinitionCacheKey, () =>
+            var result = CacheProvider.GetOrAddAsync(productDefinitionCacheKey, () =>
             {
                 var request = new GetProductDefinitionRequest
                 {
@@ -131,7 +131,7 @@ namespace Orckestra.Composer.Repositories
                 };
 
                 return OvertureClient.SendAsync(request);
-            }).ConfigureAwait(false);
+            });
 
             return result;
         }

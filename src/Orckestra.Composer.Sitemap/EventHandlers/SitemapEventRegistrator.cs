@@ -66,7 +66,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
 
                 try
                 {
-                    await Task.Delay(WaitingForCancellationTimeInMs, cancellationToken);
+                    await Task.Delay(WaitingForCancellationTimeInMs, cancellationToken).ConfigureAwait(false);
                 }
                 catch (TaskCanceledException) {}
             }
@@ -83,7 +83,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
             {
                 try
                 {
-                    await Task.Delay(WaitingForCancellationTimeInMs, cancellationToken);
+                    await Task.Delay(WaitingForCancellationTimeInMs, cancellationToken).ConfigureAwait(false);
                 }
                 catch (TaskCanceledException) { }
             }

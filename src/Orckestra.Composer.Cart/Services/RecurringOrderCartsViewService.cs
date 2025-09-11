@@ -76,7 +76,7 @@ namespace Orckestra.Composer.Cart.Services
                 Carts = carts,
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo
-            });
+            }).ConfigureAwait(false);
         }
 
         public virtual async Task<RecurringOrderCartsViewModel> GetRecurringOrderCartListViewModelFromCartsAsync(GetRecurringOrderCartsViewModelFromCartsParam param)
@@ -114,7 +114,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 LookupType = LookupType.Order,
                 LookupName = "PaymentMethodType",
-            });
+            }).ConfigureAwait(false);
 
             param.PaymentMethodDisplayNames = methodDisplayNames;
 
@@ -128,12 +128,12 @@ namespace Orckestra.Composer.Cart.Services
                 programTasks.Add(programName, RecurringOrdersRepository.GetRecurringOrderProgram(ComposerContext.Scope, programName));
             }
 
-            var programs = await Task.WhenAll(programTasks.Values);
+            var programs = await Task.WhenAll(programTasks.Values).ConfigureAwait(false);
             param.RecurringOrderPrograms = programs.ToList();
 
             var vm = RecurringOrderCartViewModelFactory.CreateRecurringOrderCartViewModel(param);
 
-            await ExtendLineItems(vm, ComposerContext.Scope, ComposerContext.CustomerId, ComposerContext.CultureInfo);
+            await ExtendLineItems(vm, ComposerContext.Scope, ComposerContext.CustomerId, ComposerContext.CultureInfo).ConfigureAwait(false);
 
             return vm;
         }
@@ -189,7 +189,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
             }));
 
-            var viewModels = await Task.WhenAll(tasks);
+            var viewModels = await Task.WhenAll(tasks).ConfigureAwait(false);
 
             return new LightRecurringOrderCartsViewModel
             {
@@ -235,7 +235,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl,
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }
@@ -257,7 +257,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             var shipment = cart.Shipments.First();
-            var newAddress = await AddressRepository.GetAddressByIdAsync(param.ShippingAddressId) 
+            var newAddress = await AddressRepository.GetAddressByIdAsync(param.ShippingAddressId).ConfigureAwait(false)
                 ?? throw new InvalidOperationException("Address not found");
             
             shipment.Address = newAddress;
@@ -270,14 +270,14 @@ namespace Orckestra.Composer.Cart.Services
             }
             else if (param.BillingAddressId != Guid.Empty)
             {
-                var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId) 
+                var newbillingAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwait(false)
                     ?? throw new InvalidOperationException("Address not found");
 
                 payment.BillingAddress = newbillingAddress;
                 payment.BillingAddressId = newbillingAddress.Id;
             }
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
 
             var vm = await CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
@@ -285,7 +285,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }
@@ -306,7 +306,7 @@ namespace Orckestra.Composer.Cart.Services
                 CartName = param.CartName
             }).ConfigureAwait(false);
 
-            var newAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId) 
+            var newAddress = await AddressRepository.GetAddressByIdAsync(param.BillingAddressId).ConfigureAwait(false)
                 ?? throw new InvalidOperationException("Address not found");
 
             var payment = cart.Payments.FirstOrDefault() 
@@ -320,7 +320,7 @@ namespace Orckestra.Composer.Cart.Services
                 cart.Shipments.First().Address = newAddress;
             }
 
-            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart));
+            var updatedCart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(cart)).ConfigureAwait(false);
 
             var vm = await CreateCartViewModelAsync(new CreateRecurringOrderCartViewModelParam
             {
@@ -328,7 +328,7 @@ namespace Orckestra.Composer.Cart.Services
                 CultureInfo = param.CultureInfo,
                 IncludeInvalidCouponsMessages = false,
                 BaseUrl = param.BaseUrl
-            });
+            }).ConfigureAwait(false);
 
             return vm;
         }
@@ -350,7 +350,7 @@ namespace Orckestra.Composer.Cart.Services
             }).ConfigureAwait(false);
 
             //get customer recurring lineitems
-            var listOfRecurringLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId)
+            var listOfRecurringLineItems = await RecurringOrdersRepository.GetRecurringOrderTemplates(param.Scope, param.CustomerId).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Recurring lineItems for customer {param.CustomerId} not found");
 
             var continueShipment = true;
@@ -392,7 +392,7 @@ namespace Orckestra.Composer.Cart.Services
                 NextOccurence = newDate,
                 Scope = param.Scope,
                 CartName = param.CartName
-            });
+            }).ConfigureAwait(false);
 
             var vm = new RecurringOrderCartsRescheduleResultViewModel();
 
@@ -402,7 +402,7 @@ namespace Orckestra.Composer.Cart.Services
                 Scope = param.Scope,
                 CustomerId = param.CustomerId,
                 CultureInfo = param.CultureInfo
-            });
+            }).ConfigureAwait(false);
 
             vm.RescheduledCartHasMerged = !carts.Any(rc => string.Equals(rc.Name, param.CartName, StringComparison.OrdinalIgnoreCase));
 
@@ -411,7 +411,7 @@ namespace Orckestra.Composer.Cart.Services
                 Carts = carts,
                 BaseUrl = param.BaseUrl,
                 CultureInfo = param.CultureInfo
-            });
+            }).ConfigureAwait(false);
 
             vm.RecurringOrderCartsViewModel = cartsVm;
 
@@ -444,7 +444,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl,
                 CustomerId = param.CustomerId,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
         }
 
         public virtual async Task<CartViewModel> UpdateLineItemAsync(UpdateLineItemParam param)
@@ -468,7 +468,7 @@ namespace Orckestra.Composer.Cart.Services
                 CouponCodes = CouponViewService.GetInvalidCouponsCode(cart.Coupons).ToList(),
                 CustomerId = param.CustomerId,
                 Scope = param.ScopeId
-            });
+            }).ConfigureAwait(false);
 
             var vmParam = new CreateRecurringOrderCartViewModelParam
             {
@@ -478,7 +478,7 @@ namespace Orckestra.Composer.Cart.Services
                 BaseUrl = param.BaseUrl
             };
 
-            var viewModel = await CreateCartViewModelAsync(vmParam);
+            var viewModel = await CreateCartViewModelAsync(vmParam).ConfigureAwait(false);
 
             return viewModel;
         }
@@ -545,7 +545,7 @@ namespace Orckestra.Composer.Cart.Services
                 }
             }
 
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
             return true;
         }
     }

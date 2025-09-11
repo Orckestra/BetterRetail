@@ -47,7 +47,7 @@ namespace Orckestra.Composer.Product.Api
             //TODO: Log if inventory is enabled or disabled
             if (await IsInventoryEnabled())
             {
-                productSkusAvailableToSell = await GetInventoryItems(request.Skus.ToList());
+                productSkusAvailableToSell = await GetInventoryItems(request.Skus.ToList()).ConfigureAwait(false);
             }
             else
             {
@@ -61,7 +61,7 @@ namespace Orckestra.Composer.Product.Api
         protected virtual async Task<List<string>> GetInventoryItems(List<string> skus)
         {
             var availableInventoryStatuses = GetAvailableInventoryStatuses();
-            var inventoryItemsAvailabilityViewModel = await FindInventoryItemStatus(skus);
+            var inventoryItemsAvailabilityViewModel = await FindInventoryItemStatus(skus).ConfigureAwait(false);
 
             var productSkusAvailableToSell = GetProductSkusAvailableToSell(availableInventoryStatuses, inventoryItemsAvailabilityViewModel);
 
@@ -76,8 +76,8 @@ namespace Orckestra.Composer.Product.Api
                 Scope = ComposerContext.Scope,
                 Date = DateTime.UtcNow,
                 Skus = skus,
-                InventoryLocationId = await InventoryLocationProvider.GetDefaultInventoryLocationIdAsync()
-            });
+                InventoryLocationId = await InventoryLocationProvider.GetDefaultInventoryLocationIdAsync().ConfigureAwait(false)
+            }).ConfigureAwait(false);
 
             return inventoryItemsAvailabilityViewModel;
         }
@@ -95,7 +95,7 @@ namespace Orckestra.Composer.Product.Api
 
         protected virtual async Task<bool> IsInventoryEnabled()
         {
-            var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo);
+            var productSettingsViewModel = await ProductSettingsViewService.GetProductSettings(ComposerContext.Scope, ComposerContext.CultureInfo).ConfigureAwait(false);
 
             return productSettingsViewModel.IsInventoryEnabled;
         }

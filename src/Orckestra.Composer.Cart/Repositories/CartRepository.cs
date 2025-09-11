@@ -113,9 +113,9 @@ namespace Orckestra.Composer.Cart.Repositories
                 ScopeId = param.Scope
             };
             CacheKey cacheKey = BuildCartCacheKey(param.Scope, param.CustomerId, param.CartName);
-            await CacheProvider.RemoveAsync(cacheKey);
+            await CacheProvider.RemoveAsync(cacheKey).ConfigureAwait(false);
 
-            return await OvertureClient.SendAsync(request);
+            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
         }
 
         public virtual Task<PaymentMethod> SetDefaultCustomerPaymentMethod(SetDefaultCustomerPaymentMethodParam param)
@@ -221,7 +221,7 @@ namespace Orckestra.Composer.Cart.Repositories
         /// </summary>
         /// <param name="param">Parameters used to add a payment to the cart.</param>
         /// <returns></returns>
-        public virtual async Task<ProcessedCart> AddPaymentAsync(AddPaymentParam param)
+        public virtual Task<ProcessedCart> AddPaymentAsync(AddPaymentParam param)
         {
             if (param == null) { throw new ArgumentNullException(nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CartName)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CartName)), nameof(param)); }
@@ -247,7 +247,7 @@ namespace Orckestra.Composer.Cart.Repositories
             // The fix is to register the CacheProvider to be Singleton and let the cache client handle the 
             // lifetime of the cache OR to move the methods that use the BuildCartCacheKey method 
             // from PaymentRepository to CartRepository.
-            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            return OvertureClient.SendAsync(request);
         }
 
         protected IReturn<ProcessedCart> BuildAddPaymentRequest(AddPaymentParam param)
@@ -576,12 +576,12 @@ namespace Orckestra.Composer.Cart.Repositories
                 return GetCartAsync(getCartParam);
             });
 
-            var carts = await Task.WhenAll(resultTasks);
+            var carts = await Task.WhenAll(resultTasks).ConfigureAwait(false);
 
             return carts.Where(i => i != null).ToList();
         }
 
-        public virtual async Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
+        public virtual Task<ListOfRecurringOrderLineItems> RescheduleRecurringCartAsync(RescheduleRecurringCartParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
@@ -593,9 +593,9 @@ namespace Orckestra.Composer.Cart.Repositories
                 CartName = param.CartName
             };
 
-            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            return OvertureClient.SendAsync(request);
         }
-        public virtual async Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
+        public virtual Task<HttpWebResponse> RemoveRecurringCartLineItemAsync(RemoveRecurringCartLineItemParam param)
         {
             if (param == null) throw new ArgumentNullException(nameof(param));
 
@@ -606,7 +606,7 @@ namespace Orckestra.Composer.Cart.Repositories
                 LineItemIds = new List<Guid>() { param.LineItemId }
             };
 
-            return await OvertureClient.SendAsync(request).ConfigureAwait(false);
+            return OvertureClient.SendAsync(request);
         }
     }
 }

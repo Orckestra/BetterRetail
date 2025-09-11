@@ -64,7 +64,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 ForgotPasswordUrl = forgotPasswordUrl,
                 LoginUrl = loginUrl
             });
-            var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
+            var profileSettings = CustomerSettings.GetProfileSettingsAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             loginViewModel.UseEmailAsUsername = profileSettings.UseEmailAsUsername;
 
             return View("ReturningCustomerBlade", loginViewModel);
@@ -121,7 +121,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                     ReturnUrl = GetReturnUrlToPreserve(),
                     TermsAndConditionsUrl = termsAndConditionsUrl
                 });
-            var profileSettings = CustomerSettings.GetProfileSettingsAsync().Result;
+            var profileSettings = CustomerSettings.GetProfileSettingsAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             createAccountViewModel.UseEmailAsUsername = profileSettings.UseEmailAsUsername;
 
             return View("CreateAccountBlade", createAccountViewModel);
@@ -144,7 +144,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
             {
                 CultureInfo = ComposerContext.CultureInfo,
                 Ticket = ticket
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return View("NewPasswordBlade", resetPasswordViewModel);
         }
@@ -157,7 +157,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Scope = ComposerContext.Scope,
                 CultureInfo = ComposerContext.CultureInfo,
                 CustomerId = ComposerContext.CustomerId
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return View("ChangePasswordBlade", changePasswordViewModel);
         }

@@ -151,7 +151,7 @@ namespace Orckestra.Composer.Providers.Localization
             if (string.IsNullOrWhiteSpace(param.Key)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.Key)), nameof(param)); }
             if (string.IsNullOrWhiteSpace(param.CultureInfo?.Name)) { throw new ArgumentException(GetMessageOfNullWhiteSpace(nameof(param.CultureInfo.Name)), nameof(param)); }
 
-            return GetLocalizedStringAsync(param).Result;
+            return GetLocalizedStringAsync(param).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         /// <summary>

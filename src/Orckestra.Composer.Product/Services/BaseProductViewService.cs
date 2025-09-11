@@ -103,7 +103,7 @@ namespace Orckestra.Composer.Product.Services
             var productIds = param.ProductIds.Select(p => p.ProductId).ToList();
             var prices = ProductRepository.CalculatePricesAsync(productIds, param.Scope, FulfillmentContext.AvailabilityAndPriceDate);
             var images = DamProvider.GetProductMainImagesAsync(GetImagesParam(products));
-            await Task.WhenAll(prices, images);
+            await Task.WhenAll(prices, images).ConfigureAwait(false);
 
             var createVmParam = new CreateRelatedProductViewModelParam
             {

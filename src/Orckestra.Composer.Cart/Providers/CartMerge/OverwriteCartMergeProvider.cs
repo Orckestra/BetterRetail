@@ -66,13 +66,13 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
             loggedCustomerCart.Shipments.First().LineItems = guestCustomerLineItems;
             loggedCustomerCart.Coupons = guestCustomerCart.Coupons;
 
-            var cart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(loggedCustomerCart));
+            var cart = await CartRepository.UpdateCartAsync(UpdateCartParamFactory.Build(loggedCustomerCart)).ConfigureAwait(false);
 
             await FixCartService.FixCartAsync(new FixCartParam
             {
                 Cart = cart,
                 ScopeId = param.Scope
-            });
+            }).ConfigureAwait(false);
         }
     }
 }
