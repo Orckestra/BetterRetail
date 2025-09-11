@@ -1,6 +1,5 @@
 #addin "nuget:?package=Cake.IIS&version=0.4.2"
 #addin "nuget:?package=Cake.Hosts&version=1.5.1"
-#addin "nuget:?package=Cake.Powershell&version=1.0.1"
 #addin "nuget:?package=System.Reflection.TypeExtensions&version=4.6.0"
 #addin "nuget:?package=System.ServiceProcess.ServiceController&version=4.7.0"
 #addin "nuget:?package=Microsoft.Web.Administration&version=11.1.0"
