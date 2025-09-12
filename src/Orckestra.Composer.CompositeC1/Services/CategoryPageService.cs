@@ -47,7 +47,7 @@ namespace Orckestra.Composer.CompositeC1.Services
 		public void Sync()
 		{
 		    var categories = CategoryRepository
-		        .GetCategoriesTreeAsync(new GetCategoriesParam {Scope = ScopeProvider.DefaultScope}).Result;
+		        .GetCategoriesTreeAsync(new GetCategoriesParam {Scope = ScopeProvider.DefaultScope}).ConfigureAwait(false).GetAwaiter().GetResult();
 			
             CategoryPageData categoryPageData = GetCategoryPages();
 			EnsureCategoryPages(categories["Root"], categoryPageData);

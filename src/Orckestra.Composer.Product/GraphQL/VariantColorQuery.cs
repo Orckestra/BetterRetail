@@ -46,7 +46,7 @@ namespace Orckestra.Composer.Product.GraphQL
 
 
                         var lookupServise = context.RequestServices.GetService(typeof(ILookupService)) as LookupService;
-                        var lookup = lookupServise.GetLookupAsync(LookupType.Product, "Colour").Result;
+                        var lookup = lookupServise.GetLookupAsync(LookupType.Product, "Colour").ConfigureAwait(false).GetAwaiter().GetResult();
 
                         var QSOuterJoin = from emp in lookup.Values
                                           join add in varConfig

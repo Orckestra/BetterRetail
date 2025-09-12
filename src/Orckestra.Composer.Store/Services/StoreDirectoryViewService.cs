@@ -75,11 +75,11 @@ namespace Orckestra.Composer.Store.Services
             })).ToList();
 
             model.Pagination = BuildPagination(totalCount, param);
-            model.Groups = await GetStoreDirectoryGroupsAsync(stores, param);
+            model.Groups = await GetStoreDirectoryGroupsAsync(stores, param).ConfigureAwait(false);
 
             foreach (var countryGroup in model.Groups)
             {
-                countryGroup.Anchors = await GetStoreDirectoryCountryGroupAnchorsAsync(sortedResults, countryGroup, param);
+                countryGroup.Anchors = await GetStoreDirectoryCountryGroupAnchorsAsync(sortedResults, countryGroup, param).ConfigureAwait(false);
             }
 
             return model;
@@ -179,7 +179,7 @@ namespace Orckestra.Composer.Store.Services
                 {
                     CultureInfo = viewModelParam.CultureInfo,
                     IsoCode = countryCode
-                }) ?? countryCode;
+                }).ConfigureAwait(false) ?? countryCode;
 
                 foreach (var regionGroup in countryGroup.SubGroups)
                 {
@@ -188,7 +188,7 @@ namespace Orckestra.Composer.Store.Services
                         CultureInfo = viewModelParam.CultureInfo,
                         IsoCode = countryCode,
                         RegionCode = regionGroup.Key.ToString()
-                    });
+                    }).ConfigureAwait(false);
                 }
             }
             return groups;
@@ -221,7 +221,7 @@ namespace Orckestra.Composer.Store.Services
                         CultureInfo = viewModelParam.CultureInfo,
                         IsoCode = countryCode,
                         RegionCode = region
-                    }),
+                    }).ConfigureAwait(false),
                 Key = "#" + region,
                     Url = pageNumber == viewModelParam.PageNumber 
                     ? string.Empty 

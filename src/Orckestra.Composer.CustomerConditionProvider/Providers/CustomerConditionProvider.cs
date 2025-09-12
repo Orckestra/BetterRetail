@@ -84,7 +84,7 @@ namespace Orckestra.Composer.CustomerConditionProvider.Providers
         public Dictionary<string, Field> GetFields()
         {
 
-            var definition = CustomerDefinitionsRepository.GetCustomerDefinitionAsync().Result;
+            var definition = CustomerDefinitionsRepository.GetCustomerDefinitionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             var result = new Dictionary<string, Field>();
 
             foreach (var field in Fields)
@@ -155,7 +155,7 @@ namespace Orckestra.Composer.CustomerConditionProvider.Providers
                     CultureInfo = ComposerContext.CultureInfo,
                     CustomerId = ComposerContext.CustomerId,
                     Scope = ComposerContext.Scope
-                }).Result;
+                }).ConfigureAwait(false).GetAwaiter().GetResult();
             }
             return customer;
         }

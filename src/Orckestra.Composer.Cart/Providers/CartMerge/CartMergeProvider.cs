@@ -79,7 +79,7 @@ namespace Orckestra.Composer.Cart.Providers.CartMerge
 			{
 				Cart = cart,
                 ScopeId = param.Scope
-			});
+			}).ConfigureAwait(false);
 		}
 
 		protected virtual List<Coupon> MergeCoupons(List<Coupon> guestCoupons, List<Coupon> loggedCustomerCoupons)

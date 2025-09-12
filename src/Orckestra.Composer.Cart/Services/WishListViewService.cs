@@ -102,7 +102,7 @@ namespace Orckestra.Composer.Cart.Services
                 WishList = fixedWishlist,
                 CultureInfo = param.CultureInfo,
                 BaseUrl = param.BaseUrl
-            });
+            }).ConfigureAwait(false);
         }
 
         protected virtual Task<ProcessedCart> FixWishList(ProcessedCart wishList)

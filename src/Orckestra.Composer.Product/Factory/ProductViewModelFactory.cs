@@ -89,20 +89,20 @@ namespace Orckestra.Composer.Product.Factory
             {
                 Name = product.DefinitionName,
                 CultureInfo = param.CultureInfo
-            });
+            }).ConfigureAwait(false);
 
             if (productDefinition == null) { return null; }
 
             //TODO: Use the GetLookupDisplayName
-            var productLookups = await LookupService.GetLookupsAsync(LookupType.Product);
-            var productDetailImages = await GetProductImages(product, product.Variants);
+            var productLookups = await LookupService.GetLookupsAsync(LookupType.Product).ConfigureAwait(false);
+            var productDetailImages = await GetProductImages(product, product.Variants).ConfigureAwait(false);
             var productDetailVideos = await GetProductVideos(product, product.Variants);
 
             var currency = await ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
                 CultureInfo = param.CultureInfo,
                 Scope = param.Scope
-            });
+            }).ConfigureAwait(false);
 
             var productViewModel = CreateViewModel(new CreateProductDetailViewModelParam
             {
@@ -120,7 +120,7 @@ namespace Orckestra.Composer.Product.Factory
             productViewModel.AreVideosDisplayedInSummary = ProductDetailsPageSettings.VideosInSummaryEnabled;
             productViewModel.DefaultVideoThumbnail = ProductDetailsPageSettings.DefaultVideoThumbnail;
 
-            productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product);
+            productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product).ConfigureAwait(false);
 
             return productViewModel;
         }

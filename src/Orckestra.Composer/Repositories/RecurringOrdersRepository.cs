@@ -70,7 +70,7 @@ namespace Orckestra.Composer.Repositories
                     MustApplyUpdatesToRecurringCart = false
                 };
 
-                return await OvertureClient.SendAsync(request);
+                return await OvertureClient.SendAsync(request).ConfigureAwait(false);
             }
 
             return new ListOfRecurringOrderLineItems();
@@ -132,7 +132,7 @@ namespace Orckestra.Composer.Repositories
                     LineItems = lineitems.RecurringOrderLineItems
                 };
 
-                return await OvertureClient.SendAsync(request);
+                return await OvertureClient.SendAsync(request).ConfigureAwait(false);
             }
 
             return new ListOfRecurringOrderLineItems();

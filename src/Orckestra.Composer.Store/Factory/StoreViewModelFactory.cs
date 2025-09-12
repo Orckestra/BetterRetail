@@ -275,7 +275,7 @@ namespace Orckestra.Composer.Store.Factory
                         {
                             CultureInfo = param.CultureInfo,
                             IsoCode = overtureAddress.CountryCode
-                        }).Result;
+                        }).ConfigureAwait(false).GetAwaiter().GetResult();
 
                         var regionName =
                             CountryService.RetrieveRegionDisplayNameAsync(new RetrieveRegionDisplayNameParam
@@ -283,7 +283,7 @@ namespace Orckestra.Composer.Store.Factory
                                 CultureInfo = param.CultureInfo,
                                 IsoCode = overtureAddress.CountryCode,
                                 RegionCode = overtureAddress.RegionCode
-                            }).Result;
+                            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
                         addressViewModel.CountryName = !string.IsNullOrWhiteSpace(countryName)
                             ? countryName

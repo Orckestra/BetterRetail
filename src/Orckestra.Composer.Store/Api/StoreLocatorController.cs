@@ -45,7 +45,7 @@ namespace Orckestra.Composer.Store.Api
                 CultureInfo = ComposerContext.CultureInfo,
                 Scope = ComposerContext.Scope,
                 StoreNumber = request.StoreNumber
-            });
+            }).ConfigureAwait(false);
             return Ok(vm);
         }
 
@@ -107,7 +107,7 @@ namespace Orckestra.Composer.Store.Api
                     Scope = ComposerContext.Scope,
                     LoadStoresBounds = true,
                     CultureInfo = ComposerContext.CultureInfo
-                });
+                }).ConfigureAwait(false);
 
             return Ok(vm);
         }

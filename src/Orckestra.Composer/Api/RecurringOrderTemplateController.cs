@@ -94,7 +94,7 @@ namespace Orckestra.Composer.Api
                 LineItemsIds = request.LineItemsIds,
                 CustomerId = ComposerContext.CustomerId,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(results);
         }

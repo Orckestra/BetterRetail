@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Sitemap
                     culture: param.Culture,
                     offset: offset,
                     count: NumberOfEntriesPerSitemap
-                ).Result;
+                ).ConfigureAwait(false).GetAwaiter().GetResult();
 
                 var isEntriesNotEnough = entries.Count() < NumberOfEntriesPerSitemap;
 

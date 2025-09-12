@@ -221,7 +221,7 @@ namespace Orckestra.Composer.Cart.Factory
         {
             if (vm.ShippingAddress != null)
             {
-                vm.ShippingAddress.PhoneRegex = CountryService.RetrieveCountryAsync(CountryParam).Result.PhoneRegex;
+                vm.ShippingAddress.PhoneRegex = CountryService.RetrieveCountryAsync(CountryParam).ConfigureAwait(false).GetAwaiter().GetResult().PhoneRegex;
 
                 if (vm.Payment != null && vm.Payment.BillingAddress != null)
                 {
@@ -232,7 +232,7 @@ namespace Orckestra.Composer.Cart.Factory
 
         protected virtual void SetPostalCodeRegexPattern(CartViewModel vm)
         {
-            var regex = CountryService.RetrieveCountryAsync(CountryParam).Result.PostalCodeRegex;
+            var regex = CountryService.RetrieveCountryAsync(CountryParam).ConfigureAwait(false).GetAwaiter().GetResult().PostalCodeRegex;
 
             if (vm.ShippingAddress == null)
             {
@@ -695,7 +695,7 @@ namespace Orckestra.Composer.Cart.Factory
                     CultureInfo = cultureInfo,
                     IsoCode = ComposerContext.CountryCode,
                     RegionCode = address.RegionCode
-                }).Result;
+                }).ConfigureAwait(false).GetAwaiter().GetResult();
                 addressViewModel.RegionName = regionName;
             }
 
@@ -744,7 +744,7 @@ namespace Orckestra.Composer.Cart.Factory
             };
 
             //TODO: Remove the repository and pass the list of fulfillmentMethods in params
-            var fulfillmentMethods = FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(shippingMethodParam).Result;
+            var fulfillmentMethods = FulfillmentMethodRepository.GetCalculatedFulfillmentMethods(shippingMethodParam).ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (fulfillmentMethods == null || !fulfillmentMethods.Any())
             {
@@ -941,7 +941,7 @@ namespace Orckestra.Composer.Cart.Factory
                     CultureInfo = cultureInfo,
                     IsoCode = ComposerContext.CountryCode,
                     RegionCode = address.RegionCode
-                }).Result;
+                }).ConfigureAwait(false).GetAwaiter().GetResult();
 
                 addressViewModel.RegionName = regionName;
             }

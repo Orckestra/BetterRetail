@@ -43,7 +43,7 @@ namespace Orckestra.Composer.Cart.Api
                 WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 //WebsiteId = SiteConfiguration.GetWebsiteId()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -65,7 +65,7 @@ namespace Orckestra.Composer.Cart.Api
                 ExecuteWorkflow = CartConfiguration.WishListExecuteWorkflow,
                 WorkflowToExecute = CartConfiguration.WishListWorkflowToExecute,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(viewModel);
         }
@@ -96,7 +96,7 @@ namespace Orckestra.Composer.Cart.Api
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString(),
                 RecurringOrderFrequencyName = request.RecurringOrderFrequencyName,
                 RecurringOrderProgramName = request.RecurringOrderProgramName
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }
@@ -122,7 +122,7 @@ namespace Orckestra.Composer.Cart.Api
                 LineItemId = new Guid(request.LineItemId),
                 CartName = CartConfiguration.WishlistCartName,
                 BaseUrl = RequestUtils.GetBaseUrl(Request).ToString()
-            });
+            }).ConfigureAwait(false);
 
             return Ok(vm);
         }

@@ -97,7 +97,7 @@ namespace Orckestra.Composer.CompositeC1.Builders
                         List<Category> categories = Repository.GetCategoriesAsync(new GetCategoriesParam()
                         {
                             Scope = scope
-                        }).Result;
+                        }).ConfigureAwait(false).GetAwaiter().GetResult();
 
                         var selectedKeys = categories.Select(d => d.Id).ToList();
 

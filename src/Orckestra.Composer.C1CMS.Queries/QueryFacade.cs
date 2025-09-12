@@ -28,7 +28,7 @@ namespace Orckestra.Composer.C1CMS.Queries
                     {
                         Scope = scope,
                         QueryType = queryType
-                    }).Result;
+                    }).ConfigureAwait(false).GetAwaiter().GetResult();
 
                     return queries.SearchQueries.Select(d => d.Name).ToList();
                 }

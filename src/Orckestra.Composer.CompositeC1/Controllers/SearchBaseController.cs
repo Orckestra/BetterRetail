@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Orckestra.Composer.Search.Context;
 using Orckestra.Composer.Search.Parameters;
@@ -21,7 +22,7 @@ namespace Orckestra.Composer.CompositeC1.Controllers
                 Keywords = keywords,
                 IsPageIndexed = IsPageIndexed()
 
-            }).Result;
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             return View(pageHeaderViewModel);
         }

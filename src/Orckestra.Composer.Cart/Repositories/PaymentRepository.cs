@@ -299,8 +299,10 @@ namespace Orckestra.Composer.Cart.Repositories
 				ScopeId = scopeId,
 			};
 
-			var paymentProviders = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
-			return paymentProviders.PaymentProviders;
+            var paymentProviders = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request))
+                .ConfigureAwait(false);
+
+            return paymentProviders.PaymentProviders;
 		}
 
 
@@ -322,8 +324,10 @@ namespace Orckestra.Composer.Cart.Repositories
 				ProviderType = providerType,
 			};
 
-			var paymentProviders = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request)).ConfigureAwait(false);
-			return paymentProviders.Providers;
+            var paymentProviders = await CacheProvider.GetOrAddAsync(cacheKey, () => OvertureClient.SendAsync(request))
+                .ConfigureAwait(false);
+
+            return paymentProviders.Providers;
 		}
 
 		/// <summary>
