@@ -101,7 +101,7 @@
 
 <div class="media col-md-6 col-lg-4 mb-2 @(isHidden ? " d-none" : "" )" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\" " + variantId + " \"" : "" ))>
     <a href="#" class="pdp-video-cta align-self-start mr-3 js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt">
-        <img class="img-fluid p-1" src="~/UI.Package/Images/Icons/videoThumbnail.svg" />
+        <img class="img-fluid p-1" src="@Model.DefaultVideoThumbnail" />
     </a>
     <div class="media-body">
         <h3 class="mt-0"><a href="#" class="pdp-video-cta js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt">@video.Alt</a></h3>

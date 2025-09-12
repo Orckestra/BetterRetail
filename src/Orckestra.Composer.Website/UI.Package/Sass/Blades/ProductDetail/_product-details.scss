@@ -302,6 +302,11 @@ $zoom-thumbnails-max-width: 120px;
   .media {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 20%, rgba(196, 196, 196, 1) 100%) left bottom #fff no-repeat;
     background-size: 100% 1px;
+	height: 100%;
+
+    > a {
+      max-width: 30%;
+    }
   }
 }
 
