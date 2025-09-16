@@ -153,7 +153,7 @@ stages:
         displayName: Install Website
         inputs:
           filePath: 'Build/install.ps1'
-          arguments: '-t Build-Website -env=int'
+          arguments: '-Target Build-Website --env=int'
 
       - task: 7z@1
         displayName: 'Archive Website'

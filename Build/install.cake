@@ -18,7 +18,6 @@
 using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.PowerShell.Commands;
 using Microsoft.Web.Administration;
 using System.Text.RegularExpressions;
 
