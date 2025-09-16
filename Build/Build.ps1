@@ -221,7 +221,7 @@ Try
 
     # Start Cake
     Write-Host "Running build script..."
-    dotnet cake build.cake -- $cakeArguments
+    dotnet cake $Script -- $cakeArguments
 }
 Finally
 {
