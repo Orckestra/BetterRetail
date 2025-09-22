@@ -40,7 +40,7 @@ else
     Information("-----------------------------------------------------------------------------------------------");
     Information("-docs                     Displays available commands");
     Information("-t All                    Executes specific target, default is 'ALL'");
-    Information("-env=INT2                 Use environment from configuration. If not suplied, default is used");
+    Information("-env=INT2                 Use environment from configuration. If not supplied, default is used");
 }
 
 //////////////////////////////////////////////////////////////////////
