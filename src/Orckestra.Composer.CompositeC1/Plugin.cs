@@ -42,6 +42,7 @@ namespace Orckestra.Composer.CompositeC1
 
         private void RegisterDependencies(IComposerHost host)
         {
+            host.Register<ProductDetailsPageSettings, IProductDetailsPageSettings>(ComponentLifestyle.PerRequest);
             host.Register<RecurringOrdersSettings, IRecurringOrdersSettings>(ComponentLifestyle.PerRequest);
             host.Register<GoogleSettings, IGoogleSettings>(ComponentLifestyle.PerRequest);
             host.Register<WebsiteContext, IWebsiteContext>(ComponentLifestyle.PerRequest);

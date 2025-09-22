@@ -39,6 +39,7 @@ namespace Orckestra.Composer.Product.Factory
         protected IProductSpecificationsViewService ProductSpecificationsViewService { get; private set; }
         protected IMyAccountUrlProvider MyAccountUrlProvider { get; private set; }
         protected IProductPromotionsFactory ProductPromotionsFactory { get; private set; }
+        protected IProductDetailsPageSettings ProductDetailsPageSettings { get; private set; }
 
         public ProductViewModelFactory(
             IViewModelMapper viewModelMapper,
@@ -53,7 +54,8 @@ namespace Orckestra.Composer.Product.Factory
             IRecurringOrdersSettings recurringOrdersSettings,
             IProductSpecificationsViewService productSpecificationsViewService,
             IMyAccountUrlProvider myAccountUrlProvider,
-            IProductPromotionsFactory productPromotionsFactory)
+            IProductPromotionsFactory productPromotionsFactory,
+            IProductDetailsPageSettings productDetailsPageSettings)
         {
             ViewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             ProductRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
@@ -68,6 +70,7 @@ namespace Orckestra.Composer.Product.Factory
             ProductSpecificationsViewService = productSpecificationsViewService ?? throw new ArgumentNullException(nameof(productSpecificationsViewService));
             MyAccountUrlProvider = myAccountUrlProvider ?? throw new ArgumentNullException(nameof(myAccountUrlProvider));
             ProductPromotionsFactory = productPromotionsFactory ?? throw new ArgumentNullException(nameof(productPromotionsFactory));
+            ProductDetailsPageSettings = productDetailsPageSettings;
         }
 
         public virtual async Task<ProductViewModel> GetProductViewModel(GetProductParam param)
@@ -93,6 +96,7 @@ namespace Orckestra.Composer.Product.Factory
             //TODO: Use the GetLookupDisplayName
             var productLookups = await LookupService.GetLookupsAsync(LookupType.Product).ConfigureAwait(false);
             var productDetailImages = await GetProductImages(product, product.Variants).ConfigureAwait(false);
+            var productDetailVideos = await GetProductVideos(product, product.Variants);
 
             var currency = await ScopeViewService.GetScopeCurrencyAsync(new GetScopeCurrencyParam
             {
@@ -106,11 +110,15 @@ namespace Orckestra.Composer.Product.Factory
                 ProductDefinition = productDefinition,
                 ProductLookups = productLookups,
                 ProductDetailImages = productDetailImages,
+                ProductDetailVideos = productDetailVideos,
                 CultureInfo = param.CultureInfo,
                 VariantId = param.VariantId,
                 BaseUrl = param.BaseUrl,
-                Currency = currency,
+                Currency = currency
             });
+
+            productViewModel.AreVideosDisplayedInSummary = ProductDetailsPageSettings.VideosInSummaryEnabled;
+            productViewModel.DefaultVideoThumbnail = ProductDetailsPageSettings.DefaultVideoThumbnail;
 
             productViewModel = await SetViewModelRecurringOrdersRelatedProperties(param, productViewModel, product).ConfigureAwait(false);
 
@@ -167,6 +175,7 @@ namespace Orckestra.Composer.Product.Factory
             var productDetailViewModel = ViewModelMapper.MapTo<ProductViewModel>(param.Product, param.CultureInfo);
 
             InitializeProductImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, productDetailViewModel);
+            InitializeProductVideos(param.Product.Id, param.ProductDetailVideos, param.CultureInfo, productDetailViewModel);
 
             var productDisplayName = productDetailViewModel.DisplayName ?? string.Empty;
 
@@ -176,6 +185,7 @@ namespace Orckestra.Composer.Product.Factory
                 productDisplayName,
                 param.CultureInfo,
                 vvm => InitializeVariantImages(param.Product.Id, param.ProductDetailImages, param.CultureInfo, vvm),
+                vvm => InitializeVariantVideos(param.Product.Id, param.ProductDetailVideos, param.CultureInfo, vvm),
                 vvm => InitializeVariantSpecificaton(param.Product, param.ProductDefinition, vvm)
             ).ToList();
 
@@ -271,12 +281,33 @@ namespace Orckestra.Composer.Product.Factory
             productViewModel.FallbackImageUrl = selectedImage?.FallbackImageUrl ?? string.Empty;
         }
 
+        /// <summary>
+        /// Initializes video fields for a given variant.
+        /// </summary>
+        /// <param name="productId">ID of the product.</param>
+        /// <param name="productVideos">Available product videos.</param>
+        /// <param name="cultureInfo">Culture info.</param>
+        /// <param name="productViewModel">ViewModel to be impacted.</param>
+        protected virtual void InitializeProductVideos(
+            string productId,
+            IEnumerable<AllProductVideos> productVideos,
+            CultureInfo cultureInfo,
+            ProductViewModel productViewModel)
+        {
+            var videos = BuildVideos(productId, null, productViewModel.DisplayName, productVideos, cultureInfo).ToList();
+            var selectedVideo = videos.Find(i => i.Selected) ?? videos.FirstOrDefault();
+
+            productViewModel.Videos = videos;
+            productViewModel.FallbackImageUrl = selectedVideo?.FallbackImageUrl ?? string.Empty;
+        }
+
         protected virtual IEnumerable<VariantViewModel> GetVariantViewModels(
             IEnumerable<Variant> variants,
             IList<ProductPropertyDefinition> variantProperties,
             string displayName,
             CultureInfo cultureInfo,
             Action<VariantViewModel> imageSetter,
+            Action<VariantViewModel> videoSetter,
             Action<VariantViewModel> specificationSetter)
         {
             if (variants == null) { yield break; }
@@ -307,6 +338,7 @@ namespace Orckestra.Composer.Product.Factory
                     .ToDictionary(bagEntry => bagEntry.Key, bagEntry => bagEntry.Value);
 
                 imageSetter.Invoke(variantVm);
+                videoSetter.Invoke(variantVm);
                 specificationSetter.Invoke(variantVm);
 
                 yield return variantVm;
@@ -335,11 +367,30 @@ namespace Orckestra.Composer.Product.Factory
         }
 
         /// <summary>
-        /// Initializes specifications for a given variant.
+        /// Initializes video fields for a given variant.
         /// </summary>
         /// <param name="productId">ID of the product.</param>
-        /// <param name="productImages">Available product images.</param>
+        /// <param name="productVideos">Available product videos.</param>
         /// <param name="cultureInfo">Culture info.</param>
+        /// <param name="variantViewModel">ViewModel to be impacted.</param>
+        protected virtual void InitializeVariantVideos(
+            string productId,
+            IEnumerable<AllProductVideos> productVideos,
+            CultureInfo cultureInfo,
+            VariantViewModel variantViewModel)
+        {
+            var videos = BuildVideos(productId, variantViewModel.Id, variantViewModel.DisplayName, productVideos, cultureInfo).ToList();
+            var selectedVideo = videos.Find(i => i.Selected) ?? videos.FirstOrDefault();
+
+            variantViewModel.Videos = videos;
+            variantViewModel.FallbackImageUrl = selectedVideo?.FallbackImageUrl ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Initializes specifications for a given variant.
+        /// </summary>
+        /// <param name="product">The product</param>
+        /// <param name="productDefinition">The product definitnion</param>
         /// <param name="variantViewModel">ViewModel to be impacted.</param>
         protected virtual void InitializeVariantSpecificaton(
             Overture.ServiceModel.Products.Product product,
@@ -673,6 +724,29 @@ namespace Orckestra.Composer.Product.Factory
         }
 
         /// <summary>
+        /// Get the product videos associated with a productId and a variantId
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="variants"></param>
+        /// <returns></returns>
+        protected virtual async Task<List<AllProductVideos>> GetProductVideos(
+            Overture.ServiceModel.Products.Product product,
+            IList<Variant> variants)
+        {
+            var param = new GetAllProductVideosParam
+            {
+                ProductId = product.Id,
+                PropertyBag = product.PropertyBag,
+                ProductDefinitionName = product.DefinitionName,
+                Variants = variants == null ? new List<Variant>() : variants.ToList(),
+                MediaSet = product.MediaSet,
+                VariantMediaSet = product.VariantMediaSet
+            };
+
+            return await DamProvider.GetAllProductVideosAsync(param).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Build an enumerable of images applicable to the current Product / Variant.
         /// </summary>
         /// <param name="productId">Id of the product.</param>
@@ -707,6 +781,38 @@ namespace Orckestra.Composer.Product.Factory
             }
 
             return images;
+        }
+
+        /// <summary>
+        /// Build an enumerable of videos applicable to the current Product / Variant.
+        /// </summary>
+        /// <param name="productId">Id of the product.</param>
+        /// <param name="variantId">Id of the Variant.</param>
+        /// <param name="productVideos">Videos of all products being mapped.</param>
+        /// <param name="cultureInfo">Culture Info.</param>
+        /// <returns></returns>
+        protected virtual IEnumerable<ProductDetailVideoViewModel> BuildVideos(
+            string productId,
+            string variantId,
+            string defaultAlt,
+            IEnumerable<AllProductVideos> productVideos,
+            CultureInfo cultureInfo)
+        {
+            if (productVideos == null) { return Enumerable.Empty<ProductDetailVideoViewModel>(); }
+
+            var videos = productVideos
+                .Where(pi => string.Equals(pi.ProductId, productId, StringComparison.InvariantCultureIgnoreCase))
+                .Where(pi => string.Equals(pi.VariantId, variantId, StringComparison.InvariantCultureIgnoreCase))
+                .OrderBy(pi => pi.SequenceNumber)
+                .Select(pi =>
+                {
+                    var video = ViewModelMapper.MapTo<ProductDetailVideoViewModel>(pi, cultureInfo);
+                    if (string.IsNullOrEmpty(video.Alt))
+                        video.Alt = defaultAlt;
+                    return video;
+                }).ToList();
+
+            return videos;
         }
 
         protected static void SetFirstImageSelected(IEnumerable<ProductDetailImageViewModel> imageViewModels)

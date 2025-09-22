@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Orckestra.Composer.Providers.Dam;
 using Orckestra.Composer.ViewModels;
 
 namespace Orckestra.Composer.Product.ViewModels
@@ -10,6 +11,7 @@ namespace Orckestra.Composer.Product.ViewModels
         {
             SelectedImage = new ProductDetailImageViewModel();
             Images = new List<ProductDetailImageViewModel>();
+            Videos = new List<ProductDetailVideoViewModel>();
             Kvas = new Dictionary<string, object>();
         }
 
@@ -35,6 +37,8 @@ namespace Orckestra.Composer.Product.ViewModels
         public string FallbackImageUrl { get; set; }
 
         public string DisplayName { get; set; }
+
+        public List<ProductDetailVideoViewModel> Videos { get; set; }
 
         /// <summary>
         /// Key variant attributes values for this Variant

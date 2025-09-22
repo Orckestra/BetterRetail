@@ -1,4 +1,4 @@
-@using System.Web;
+﻿@using System.Web;
 @using System.Globalization;
 @using Orckestra.Composer.Product.ViewModels;
 @model Orckestra.Composer.Product.ViewModels.ProductViewModel
@@ -32,8 +32,7 @@
         }
         function imgLoaded(el) {
             if (el.complete) {
-                el.parentNode.style.display = 'block';
-                el.parentNode.parentNode.style.display = 'block';
+                el.parentNode.removeAttribute('style');
             }
         }
     </script>
@@ -78,8 +77,7 @@
 
 @helper RenderImg(ProductDetailImageViewModel image, bool isHidden)
 {
-    <div class="product-img-container"  style="display: none;">
-        <a href="#" class="@(image.Selected ? "active": "")">
+        <a href="#" class="product-gallery-img @(image.Selected ? "active": "")" style="display: none;">
             <img @if (isHidden) { <text> data-src="@image.ImageUrl" </text>  } else { <text> src="@image.ImageUrl" </text> }
                  data-main-src="@image.ImageUrl"
                  data-zoom-src="@image.ProductZoomImageUrl"
@@ -88,7 +86,5 @@
                  onerror="imgError(this)"
                  class="js-zoom product-img img-fluid" 
                  data-oc-click="zoomImage" />
-
         </a>
-    </div>
 }

@@ -25,6 +25,13 @@ namespace Orckestra.Composer.Providers
         Task<List<AllProductImages>> GetAllProductImagesAsync(GetAllProductImagesParam param);
 
         /// <summary>
+        /// Asynchronously returns a list of all videos associated to a product or a variant.
+        /// </summary>
+        /// <param name="param">The product and/or variant information which will be used to retrieve a list of videos associated to them.</param>
+        /// <returns>A list of all videos associated to a product or variants.</returns>
+        Task<List<AllProductVideos>> GetAllProductVideosAsync(GetAllProductVideosParam param);
+
+        /// <summary>
         /// Get main media image from product
         /// </summary>
         /// <param name="product">Full product entity</param>

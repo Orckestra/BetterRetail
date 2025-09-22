@@ -73,6 +73,12 @@
         <Type type="Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettings,Orckestra.Composer.CompositeC1.DataTypes">
           <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
         </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.ProductDetailsPageSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.ProductDetailsPageSettings_administrated.xml" />
+        </Type>
+        <Type type="Orckestra.Composer.CompositeC1.DataTypes.ProductDetailsPageSettings,Orckestra.Composer.CompositeC1.DataTypes">
+          <Data dataScopeIdentifier="public" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.ProductDetailsPageSettings_public.xml" />
+        </Type>
         <Type type="Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleTheme,Orckestra.Composer.CompositeC1.DataTypes">
           <Data dataScopeIdentifier="administrated" locale="?" dataFilename="~\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_administrated.xml" />
         </Type>

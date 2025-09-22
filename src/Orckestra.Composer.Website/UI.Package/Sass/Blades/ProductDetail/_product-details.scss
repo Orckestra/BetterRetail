@@ -1,164 +1,242 @@
+$main-image-max-height: 530px;
+$thumbnails-gap: 10px;
+$thumbnails-per-row: 5;
+$zoom-thumbnails-width: 80px;
+$zoom-thumbnails-max-width: 120px;
+
 #product-gallery {
-    @include media-breakpoint-down(sm) {
-        height: 122vw;
-        &.mobile-carousel-container {
-            height: 94vw;
-        }
+  @include media-breakpoint-down(sm) {
+    height: 122vw;
+    &.mobile-carousel-container {
+      height: 94vw;
     }
+  }
+
+  .product-img-container {
+    a {
+      &:hover {
+        cursor: default;
+      }
+
+      > img:hover {
+        cursor: zoom-in;
+      }
+    }
+  }
 }
 
 .product-details {
-    .add-to-wishlist {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 9;
+  .add-to-wishlist {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9;
+  }
+
+  .product-thumbnails,
+  .mobile-carousel-thumbnails {
+    display: flex;
+    gap: $thumbnails-gap;
+    margin-block: $thumbnails-gap;
+    overflow: auto;
+    scrollbar-width: thin;
+
+    @include media-breakpoint-up(lg) {
+      flex-direction: column;
+      margin-block: 0;
     }
+
+    > a {
+      flex: none;
+      width: calc((100% - (#{$thumbnails-per-row} - 1) * #{$thumbnails-gap}) / #{$thumbnails-per-row});
+
+      @include media-breakpoint-up(lg) {
+        width: 100%;
+      }
+    }
+  }
+
+  .product-thumbnails {
+    @include media-breakpoint-up(lg) {
+      max-height: $main-image-max-height;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+  }
+
+  .thumbnail,
+  .video-thumbnail {
+    aspect-ratio: 1;
+    background-color: #fff;
+    border-radius: $border-radius;
+    border: 1px solid transparent;
+    overflow: hidden;
+
+    &:hover {
+      border: 1px dashed theme-color('primary');
+    }
+  }
+
+  .video-thumbnail {
+    background-color: map-get($grays, "200");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 50px;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
-.product-img-container {
-    a {
-        &:hover {
-            cursor: default;
-        }
-        > img:hover {
-            cursor: zoom-in;
-        }
+.product-thumbnails {
+  .thumbnail,
+  .video-thumbnail {
+    &.active {
+      border-color: theme-color('primary');
     }
+  }
 }
 
 .product-details-thumbnail {
-    position: relative;
-    height: 0;
-    padding-bottom: $product-thumb-image-ratio * 100%;
+  position: relative;
+  height: 0;
+  padding-bottom: $product-thumb-image-ratio * 100%;
 }
 
 .product-details-media {
-    position: relative;
-    //height: 0;
-    //padding-bottom: $product-lg-image-ratio * 100%;
-    margin-bottom: round($spacer / 2);
-    i {
-        font-size: 2rem;
-        position: absolute;
-        right: 10px;
-        top: 10px;
-    }
+  position: relative;
+  //height: 0;
+  //padding-bottom: $product-lg-image-ratio * 100%;
+  margin-bottom: round($spacer / 2);
+
+  i {
+    font-size: 2rem;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .product-main-img {
+    max-height: $main-image-max-height;
+  }
 }
 
+/** ZOOM *********************************************************************/
+//Zoom modal
 .product-details-zoom {
-    img {
-        display: block;
-    }
-    &.modal-fullscreen {
-        background: transparentize($gray-900, 0.6);
+  &.modal-fullscreen {
+    background: transparentize($gray-900, 0.6);
 
-        .modal-dialog {
-            width: 80vw;
-            max-width: 80vw;
-        }
+    .modal-dialog {
+      width: 80vw;
+      max-width: 80vw;
+    }
 
-    }
-    @include media-breakpoint-up(sm) {
-        .sps {
-            position: sticky;
-        }       
-    }
-   
+    .modal-body {
+      overflow-y: auto;
 
-    .js-zoom-thumbnails {
-        display: flex;
-        @include media-breakpoint-up(sm) {
-            display: block;
-            position: fixed;
-            width: 5vw;
-        }
+      @include media-breakpoint-up(md) {
+        gap: $thumbnails-gap;
+        //Move the padding to the width of the #zoom-thumbnails container to prevent potential scrollbar hiding part of the thumbnails
+        padding-inline-end: 0;
+      }
     }
+  }
+
+  //Zoom thumbnails
+  #zoom-thumbnails {
+    gap: $thumbnails-gap;
+    overflow: auto;
+    scrollbar-width: thin;
+
+    @include media-breakpoint-only(md) {
+      width: calc(#{$zoom-thumbnails-width} + 1rem); //1rem to replace .modal-body right padding
+    }
+
+    @include media-breakpoint-up(lg) {
+      width: calc(((#{$zoom-thumbnails-width} * 2) + #{$thumbnails-gap}) + 1rem); //1rem to replace .modal-body right padding
+    }
+
     .thumbnail {
-        border: none;
-        margin-bottom: 0;
-        width: 100%;
-        @include media-breakpoint-down(md) {
-            margin: 0 5px;
+      border: none;
+      margin-bottom: 0;
+      width: $zoom-thumbnails-width;
+
+      &.active {
+        img {
+          border: 1px solid #000;
         }
-        &.active {
-            img {
-                border: 1px solid #000;
-            }
-        }
+      }
     }
-    .tall {
-        height: calc(100% - 56px);
-        overflow-y: auto;
-        .row {
-            height: 100%;
-            @include media-breakpoint-up(md) {
-                &>div {
-                    height: 100%;
-                }
-            }
-            @include media-breakpoint-down(md) {
-                &>div {
-                    text-align: center;
-                }
-                &>div:first-child {
-                    height: calc(100% - 131px);
-                }
-            }
-            .img-zoom {
-                margin: 0 auto;
-                max-width: 95%;
-            }
-        }
-    }
-    &-trigger {
-        display: block;
-        left: 0;
-        position: absolute;
-        bottom: 50px;
-        width: 100%;
-    }
+  }
+
+  //Zoom main image
+  .img-zoom {
+    max-width: 100%;
+  }
+
+  //Zoom CTA
+  &-trigger {
+    display: block;
+    left: 0;
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+  }
 }
 
 .specification-attributes {
-    padding-top: 20px;
-    margin-top: 10px;
-    border-top: 1px solid $gray-300;
-    &-row {
-        display: flex;
-        align-items: baseline;
-        column-gap: 10px;
-        h6 {
-            white-space: nowrap;
-            &:after {
-                content: ":";
-            }
-        }
+  padding-top: 20px;
+  margin-top: 10px;
+  border-top: 1px solid $gray-300;
+
+  &-row {
+    display: flex;
+    align-items: baseline;
+    column-gap: 10px;
+
+    h6 {
+      white-space: nowrap;
+
+      &:after {
+        content: ":";
+      }
     }
+  }
 }
 
 .kva-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 
-    & > .btn {
-        margin: 0;
-        &.disabled {
-            cursor: not-allowed;
-        }
-        &.btn {
-            margin: 0;
-        }
+  & > .btn {
+    margin: 0;
+
+    &.disabled {
+      cursor: not-allowed;
     }
+
+    &.btn {
+      margin: 0;
+    }
+  }
 }
 
 .accordion {
   padding: 10px 0;
   border-top: 1px solid $gray-300;
+
   &:last-child {
     border-bottom: 1px solid $gray-300;
   }
+
   .specifications {
     display: flex;
     align-items: center;
@@ -172,6 +250,7 @@
     .fa-chevron-up {
       display: inline-block;
     }
+
     .fa-chevron-down {
       display: none;
     }
@@ -180,36 +259,62 @@
       .fa-chevron-up {
         display: none;
       }
+
       .fa-chevron-down {
         display: inline-block;
       }
     }
   }
 }
-.mobile-carousel {
-    flex-wrap: nowrap;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    &-container {
-        overflow-x: scroll;
-    }
-    > div {
-        transform-origin: center center;
-        transform: scale(1);
-        transition: transform 0.5s;
-        scroll-snap-align: start;
-        flex-shrink: 0;
-    }
 
-    .img-anchor {
-        position: absolute;
-        top: -150px;
-        left: 0px;
+.mobile-carousel {
+  flex-wrap: nowrap;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  &-container {
+    overflow-x: scroll;
+  }
+
+  > div {
+    transform-origin: center center;
+    transform: scale(1);
+    transition: transform 0.5s;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  .img-anchor {
+    position: absolute;
+    top: -150px;
+    left: 0px;
+  }
+
+  @include media-breakpoint-up(md) {
+    flex-wrap: wrap;
+    &-container {
+      overflow-x: unset;
     }
-    @include media-breakpoint-up(md){
-        flex-wrap: wrap;
-        &-container {
-            overflow-x: unset;
-        }
+  }
+}
+
+#product-video-list {
+  .media {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 20%, rgba(196, 196, 196, 1) 100%) left bottom #fff no-repeat;
+    background-size: 100% 1px;
+	height: 100%;
+
+    > a {
+      max-width: 30%;
     }
+  }
+}
+
+.video-modal {
+  .modal-header {
+    .close {
+      top: 2px;
+      right: 7px;
+    }
+  }
 }

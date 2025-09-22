@@ -37,7 +37,7 @@
             <div id="product-gallery" class="col-md-7 col-lg-8 @(Model.Images.Count > 1 ? "mobile-carousel-container" : "")">
                 @Partial("Product", "ImagesLargeGallery", Model)
             </div>
-            <div class="mobile-carousel-thumbnails  @(Model.Images.Count > 1 ? "" : "d-none") d-md-none">
+            <div class="mobile-carousel-thumbnails  @(Model.Images.Count > 1 ? "d-flex" : "d-none") d-md-none">
                 @Partial("Product", "ThumbsGallery", Model)
             </div>
             <div class="col-md-5 col-lg-4">

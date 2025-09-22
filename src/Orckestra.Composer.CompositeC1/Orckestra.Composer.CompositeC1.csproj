@@ -255,6 +255,7 @@
     <Compile Include="Services\PreviewMode\IPreviewModeService.cs" />
     <Compile Include="Services\Scheduler.cs" />
     <Compile Include="Services\WebsiteContext.cs" />
+    <Compile Include="Settings\ProductDetailsPageSettings.cs" />
     <Compile Include="Settings\RecurringOrdersSettings.cs" />
     <Compile Include="Settings\GoogleSettings.cs" />
     <Compile Include="Utils\C1Helper.cs" />

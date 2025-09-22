@@ -214,7 +214,7 @@ module Orckestra.Composer {
             let busy = this.asyncBusy({ elementContext: actionContext.elementContext }),
                 quantity = this.getCurrentQuantity(),
                 vm = this.context.viewModel;
-                
+
               this.addLineItemImpl(vm, vm.ListPrice, vm.selectedVariantId, quantity,
                 recurringOrderFrequencyName)
                 .then((data: any) => {
@@ -260,30 +260,29 @@ module Orckestra.Composer {
         }
 
         public selectImage(actionContext: IControllerActionContext) {
-
             actionContext.event.preventDefault();
-            var target = actionContext.event.target;
-            var mainSrc = $(target).attr('data-main-src');
-            var zoomSrc = $(target).attr('data-zoom-src');
 
-            if (target.tagName.toLowerCase() === 'img') {
-                $(target).parents('[data-variant]').find('a').removeClass('active');
-                $(target).parent('a').addClass('active');
-                $('.product-main-img:visible').attr('src', mainSrc);
+            const zoomThumbnailsContainer: HTMLElement = document.querySelector('.js-zoom-thumbnails');
+            const anchorTag: HTMLAnchorElement = <HTMLAnchorElement>actionContext.elementContext[0];
+            const imageTag: HTMLImageElement = anchorTag.querySelector('img');
+            const mainSrc: string = imageTag.getAttribute('data-main-src');
+            const zoomSrc: string = imageTag.getAttribute('data-zoom-src');
 
-                var zoomThumbnail = $('.js-zoom-thumbnails').find('img[data-zoom-src="' + zoomSrc + '"]');
-                zoomThumbnail.click();
-            }
-
+            //Update the active state of current variant thumbs (the ones without the 'd-none' class)
+            anchorTag.closest('div').querySelector('a.active:not(.d-none)').classList.remove('active');
+            anchorTag.classList.add('active');
+            //Update the main image
+            document.querySelector('.product-main-img:not(.d-none)').setAttribute('src', mainSrc);
+            //Update the zoomed image
+            const zoomThumbnail: HTMLElement = zoomThumbnailsContainer.querySelector('img[data-zoom-src="' + zoomSrc + '"]');
+            zoomThumbnail.click();
         }
 
         public zoomImage(actionContext: IControllerActionContext) {
-            
             var target = actionContext.event.target;
             var zoomSrc = $(target).attr('data-zoom-src');
 
             if (target.tagName.toLowerCase() === 'img') {
-
                 var zoomThumbnail = $('.js-zoom-thumbnails').find('img[data-zoom-src="' + zoomSrc + '"]');
                 zoomThumbnail.click();
             }
@@ -294,7 +293,7 @@ module Orckestra.Composer {
             var selectionsToAdd = {};
             var propertyName: any = actionContext.elementContext.parents('[data-propertyname]').data('propertyname');
             var propertyDataType: any = actionContext.elementContext.parents('[data-propertydatatype]').data('propertydatatype');
-            
+
             var formatter = new Orckestra.Composer.ProductFormatter();
             var value = formatter.convertToStronglyTyped(actionContext.elementContext.val(), propertyDataType);
 

@@ -350,6 +350,8 @@
     <Content Include="App_Data\Razor\Composer\Membership\SignInSticky.cshtml" />
     <Content Include="App_Data\Razor\Composer\MyAccount\WishListTile.cshtml" />
     <Content Include="App_Data\Razor\Composer\WishList\Shared.cshtml" />
+    <Content Include="App_Data\Razor\Composer\Product\Videos.cshtml" />
+    <Content Include="App_Data\Media\451e46b6-ba59-4d91-a31b-518370f0bfda" />
     <None Include="Properties\PublishProfiles\Website - CD.pubxml" />
     <None Include="Properties\PublishProfiles\Website.pubxml" />
     <Content Include="ViewModelAsExtensionModelTemplate.tt">
@@ -358,6 +360,8 @@
     </Content>
     <Content Include="Views\web.config" />
     <Content Include="Views\Shared\PageHeader.cshtml" />
+    <Content Include="Views\Product\ImagesLargeGallery.cshtml" />
+    <Content Include="Views\Product\ThumbsGallery.cshtml" />
     <None Include="web.config" />
     <Content Include="Views\Product\Images.cshtml" />
     <Content Include="Views\Product\Zoom.cshtml" />

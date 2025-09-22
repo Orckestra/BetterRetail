@@ -60,6 +60,8 @@
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.GoogleSettingss_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.IWebsiteStyleThemes_public.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.ProductDetailsPageSettings_administrated.xml" />
+    <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.ProductDetailsPageSettings_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_administrated.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.CompositeC1.DataTypes.RecurringOrdersSettingss_public.xml" />
     <Content Include="Package\Datas\Orckestra.Composer.ContentSearch.DataTypes.IContentTabs_administrated.xml" />

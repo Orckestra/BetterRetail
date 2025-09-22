@@ -1,0 +1,112 @@
+﻿@inherits Composer.Razor.ComposerRazorFunction
+@using Orckestra.Composer.CompositeC1.Context
+@using Orckestra.Composer.Product.ViewModels
+
+@functions {
+    public override string FunctionDescription
+    {
+        get { return "Product Video List"; }
+    }
+
+    [FunctionParameter(Name = "Title", Label = "Title", DefaultValue = "Videos", Help = "Title of the section. Will be displayed above the videos.")]
+    public string title { get; set; }
+
+
+    public IProductContext ProductContext { get; set; }
+    public new ProductViewModel Model { get { return ProductContext.ViewModel; } }
+
+
+    public string SelectedVariantClass(params string[] ids)
+    {
+        return ids.Contains(Model.SelectedVariantId) ? "" : "d-none";
+    }
+
+    public bool IsWithoutVariants()
+    {
+        return Model.Variants == null || Model.Variants.Count == 0;
+    }
+}
+
+@{
+
+    bool hasVideo = false;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://www.composite.net/ns/function/1.0">
+<head>
+</head>
+<body>
+    <div id="product-video-list" class="d-none">
+        <hr />
+        <h2>@title</h2>
+        <div class="row">
+            @if (Model.Variants == null || Model.Variants.Count == 0)
+            {
+                if (Model.Videos != null && Model.Videos.Count > 0)
+                {
+                    hasVideo = true;
+
+                    foreach (var video in Model.Videos)
+                    {
+                        @RenderThumbnailVideo(video, false, "")
+                    }
+                }
+            }
+            else
+            {
+                foreach (var variant in Model.Variants)
+                {
+                    if (variant.Videos != null && variant.Videos.Count > 0)
+                    {
+                        hasVideo = true;
+
+                        foreach (var video in variant.Videos)
+                        {
+                            @RenderThumbnailVideo(video, variant.Id != Model.SelectedVariantId, variant.Id)
+                        }
+                    }
+
+                }
+            }
+        </div>
+    </div>
+    @if (hasVideo)
+    {
+    <div data-oc-controller="Product.Videos" data-ctas-container="#product-video-list">
+        <div class="video-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="video-list-modal-label">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 id="video-list-modal-label" class="modal-title js-video-modal-label"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="vjs-16-9 d-none">
+                            <video class="video-js" src="" />
+                        </div>
+                        <div class="embed-responsive embed-responsive-16by9 d-none">
+                            <iframe src="" title="" frameBorder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen="allowFullScreen"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</body>
+</html>
+
+@helper RenderThumbnailVideo(ProductDetailVideoViewModel video, bool isHidden, string variantId)
+{
+
+<div class="media col-md-6 col-lg-4 mb-2 @(isHidden ? " d-none" : "" )" @Html.Raw((!string.IsNullOrWhiteSpace(variantId) ? "data-variant=\" " + variantId + " \"" : "" ))>
+    <a href="#" class="pdp-video-cta align-self-start mr-3 js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt">
+        <img class="img-fluid p-1" src="@Model.DefaultVideoThumbnail" />
+    </a>
+    <div class="media-body">
+        <h3 class="mt-0"><a href="#" class="pdp-video-cta js-pdp-video-cta" data-video-url="@video.VideoUrl" title="@video.Alt">@video.Alt</a></h3>
+        <p>@video.Description</p>
+    </div>
+</div>
+
+}
