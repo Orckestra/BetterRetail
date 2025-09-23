@@ -369,7 +369,11 @@ Task("Modify-Configs-For-Debug").Does(() =>
 
 Task("Open-Website").Does(() =>
 {
-    Process.Start($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+  var url = $"{Parameters["websiteUrl"]}/Composite/top.aspx";
+  StartProcess("cmd", new ProcessSettings {
+     Arguments = $"/c start {url}"
+ });
+
 });
 
 
