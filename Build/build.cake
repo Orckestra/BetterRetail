@@ -1,11 +1,9 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
 #tool "nuget:?package=Microsoft.TypeScript.Compiler&version=3.1.5"
+#tool dotnet:?package=Cake.Tool&version=5.0.0
 
-#addin "nuget:?package=Cake.MsDeploy&version=0.8.0"
-#addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
-#addin "nuget:?package=Cake.Npm&version=0.17.0"
-#addin "nuget:?package=Cake.Karma&version=0.2.0"
-#addin "nuget:?package=Cake.Powershell&version=1.0.1"
+#addin nuget:?package=Cake.MsDeploy&version=5.0.0
+#addin nuget:?package=Cake.Npm&version=5.1.0
 
 #load "helpers/filesystem.cake"
 #load "helpers/typescripts.cake"
@@ -15,7 +13,6 @@ using System.IO;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using Cake.Npm;
-using Cake.Karma;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -63,18 +60,18 @@ var tslintConfig = $"{buildDir}/tslint.json";
 //////////////////////////////////////////////////////////////////////
 Task("Tslint-Tests").Does(() =>
 {
-    StartPowershellScript("Invoke-Command", args =>
-        {
-            args.Append($"-ScriptBlock {{tslint {tslintFiles} --config {tslintConfig}}}");
-        });
+    var command = $"tslint {tslintFiles} --config {tslintConfig}";
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\""
+    });
 });
 
 Task("Tslint-Fix").Does(() =>
 {
-    StartPowershellScript("Invoke-Command", args =>
-        {
-            args.Append($"-ScriptBlock {{tslint {tslintFiles} --config {tslintConfig} --fix}}");
-        });
+    var command = $"tslint {tslintFiles} --config {tslintConfig} --fix";
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\""
+    });
 });
 
 Task("Clean-Solution").Does(() =>
@@ -93,7 +90,9 @@ Task("Clean-Solution").Does(() =>
 Task("Compile-Solution").Does(() =>
 {
       MSBuild(solutionFile, settings =>
-        settings.SetConfiguration(configuration));
+        settings.SetConfiguration(configuration)
+          .UseToolVersion(MSBuildToolVersion.VS2022)
+      );
 });
 
 
@@ -152,32 +151,18 @@ Task("Compile-Typescripts-Default").Does(() =>
     CompileTypeScripts(rootDir, $"--project {rootDir}/Build/tsconfigs/orckestra.json", 30);
 });
 
-Task("Run-Karma-Tests-Default")
-.Does(() => 
+Task("Run-Karma-Tests-Default").Does(() => 
 {
-    var settings = new KarmaStartSettings
-    {
-       ConfigFile = "karma.conf.js",
-       
-       RunMode = KarmaRunMode.Local
-    };
-    KarmaStart(settings);
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = "-Command \"npx karma start karma.conf.js\""
+    });
 });
 
-
-Task("Run-Karma-Tests-Debug")
-.Does(() => 
+Task("Run-Karma-Tests-Debug").Does(() => 
 {
-    var settings = new KarmaStartSettings
-    {
-       ConfigFile = "karma.conf.js",
-       RunMode = KarmaRunMode.Local,
-       LogLevel = KarmaLogLevel.Debug,
-       SingleRun = false,
-       NoSingleRun = true,
-       Browsers = new List<string>(){"Chrome"}
-    };
-    KarmaStart(settings);
+    StartProcess("pwsh", new ProcessSettings {
+        Arguments = "-Command \"npx karma start karma.conf.js --log-level debug --no-single-run --browsers Chrome\""
+    });
 });
 
 Task("Copy-To-Artifacts").Does(() =>

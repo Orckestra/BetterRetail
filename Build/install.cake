@@ -1,7 +1,5 @@
-#addin "nuget:?package=Cake.CoreCLR&version=0.35.0"
 #addin "nuget:?package=Cake.IIS&version=0.4.2"
 #addin "nuget:?package=Cake.Hosts&version=1.5.1"
-#addin "nuget:?package=Cake.Powershell&version=1.0.1"
 #addin "nuget:?package=System.Reflection.TypeExtensions&version=4.6.0"
 #addin "nuget:?package=System.ServiceProcess.ServiceController&version=4.7.0"
 #addin "nuget:?package=Microsoft.Web.Administration&version=11.1.0"
@@ -20,7 +18,6 @@
 using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.PowerShell.Commands;
 using Microsoft.Web.Administration;
 using System.Text.RegularExpressions;
 
@@ -43,7 +40,7 @@ else
     Information("-----------------------------------------------------------------------------------------------");
     Information("-docs                     Displays available commands");
     Information("-t All                    Executes specific target, default is 'ALL'");
-    Information("-env=INT2                 Use environment from configuration. If not suplied, default is used");
+    Information("-env=INT2                 Use environment from configuration. If not supplied, default is used");
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -372,7 +369,11 @@ Task("Modify-Configs-For-Debug").Does(() =>
 
 Task("Open-Website").Does(() =>
 {
-    Process.Start($"{Parameters["websiteUrl"]}/Composite/top.aspx");
+  var url = $"{Parameters["websiteUrl"]}/Composite/top.aspx";
+  StartProcess("cmd", new ProcessSettings {
+     Arguments = $"/c start {url}"
+ });
+
 });
 
 

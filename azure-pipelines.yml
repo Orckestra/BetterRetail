@@ -12,7 +12,7 @@ stages:
   - job: Build
 
     pool:
-      vmImage: 'windows-2019'
+      vmImage: 'windows-2022'
 
     variables:
       buildPlatform: 'Any CPU'
@@ -20,11 +20,21 @@ stages:
 
 
     steps:
+    - task: NuGetAuthenticate@1
+      displayName: 'Authenticate to NuGet feeds'
+
     - task: NodeTool@0
       displayName: 'Use Node 10.x'
       inputs:
         versionSpec: 10.x
 
+    - task: DotNetCoreCLI@2
+      displayName: Restore .NET tools
+      inputs:
+        command: custom
+        custom: tool
+        arguments: restore --tool-manifest build/.config/dotnet-tools.json
+ 
     - task: GitVersion@5
       inputs:
         runtime: 'full'
@@ -143,7 +153,7 @@ stages:
         displayName: Install Website
         inputs:
           filePath: 'Build/install.ps1'
-          arguments: '-t Build-Website -env=int'
+          arguments: '-Target Build-Website --env=int'
 
       - task: 7z@1
         displayName: 'Archive Website'
