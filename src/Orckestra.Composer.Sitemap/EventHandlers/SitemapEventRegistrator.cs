@@ -123,7 +123,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
         private static void SitemapUpdateAfterPageChanged(object sender, DataEventArgs dataEventArgs)
         {
             if (dataEventArgs.Data.DataSourceId.PublicationScope != PublicationScope.Published) return;
-
+            CacheProvider.Clear();
             SitemapGeneratorScheduler.RegenerateSitemapJob();
         }
     }
