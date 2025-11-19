@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Composite.AspNet;
+using Orckestra.Composer.Sitemap;
+using Orckestra.Composer.Sitemap.Models;
+using Orckestra.Composer.Utils;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Composite.AspNet;
-using Orckestra.Composer.Sitemap;
-using Orckestra.Composer.Sitemap.Models;
-using Orckestra.Composer.Utils;
 
 namespace Orckestra.Composer.CompositeC1.Sitemap
 {
@@ -15,6 +15,7 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
     {
         private readonly IC1ContentSitemapPageExcludeProvider _pageToExcludeProvider;
         private readonly IC1ContentSitemapDataTypesIncluder _dynamicPagesEntryProvider;
+        private readonly string _cacheKey = nameof(C1ContentSitemapEntryProvider);
 
         public C1ContentSitemapEntryProvider(IC1ContentSitemapPageExcludeProvider pageToExcludeProvider, IC1ContentSitemapDataTypesIncluder dynamicPagesEntryProvider)
         {
@@ -40,6 +41,21 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
             // Source: CompositeC1 -> CompositeC1SiteMapProvider.cs (line 276)
             RequestUtils.DefineHttpContextIfNotExist(sitemapParams.BaseUrl);
 
+            var allEntries = GetAllC1ContentEntries(sitemapParams, culture, provider);
+            var entriesPerPage = allEntries.Skip(offset).Take(count);
+
+            return Task.FromResult(entriesPerPage);
+        }
+
+        private IEnumerable<SitemapEntry> GetAllC1ContentEntries(SitemapParams sitemapParams, CultureInfo culture, CmsPageSiteMapProvider provider)
+        {
+            var cacheKey = $"{_cacheKey}-{sitemapParams.Website}-{culture}";
+            var cachedResult = CacheProvider.Get<List<SitemapEntry>>(cacheKey);
+            if (cachedResult != null)
+            {
+                return cachedResult as IEnumerable<SitemapEntry>;
+            }
+
             var entriesList = new List<SitemapEntry>();
 
             var rootNodes = provider.GetRootNodes().ToList();
@@ -56,7 +72,10 @@ namespace Orckestra.Composer.CompositeC1.Sitemap
 
             var dynamicTypesToInclude = _dynamicPagesEntryProvider.GetEntries(sitemapParams, culture);
             entriesList.AddRange(dynamicTypesToInclude);
-            return Task.FromResult(entriesList as IEnumerable<SitemapEntry>);
+
+            CacheProvider.Set(cacheKey, entriesList);
+
+            return entriesList as IEnumerable<SitemapEntry>;
         }
 
         private SitemapEntry CreateSitemapEntryFromCompositeC1SiteMapNode(string baseUrl, CmsPageSiteMapNode node)
