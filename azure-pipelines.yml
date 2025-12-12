@@ -52,15 +52,15 @@ stages:
     - task: PowerShell@1
       displayName: Build
       inputs:
-        scriptName: Build/build.ps1
-        arguments: '-t Build -Verbosity Diagnostic'
         workingFolder: Orckestra.StarterSite/CF/Source
+        scriptName: Build/Build.ps1
+        arguments: '-t Build -CakeVerbosity Diagnostic'
         failOnStandardError: false
 
     - task: PowerShell@1
       displayName: Tests
       inputs:
-        scriptName: Build/build.ps1
+        scriptName: Build/Build.ps1
         arguments: '-t Tests'
         failOnStandardError: false
 
@@ -79,7 +79,7 @@ stages:
     - task: PowerShell@1
       displayName: Artifacts
       inputs:
-        scriptName: Build/build.ps1
+        scriptName: Build/Build.ps1
         arguments: '-t Artifacts'
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
@@ -87,7 +87,7 @@ stages:
     - task: PowerShell@1
       displayName: Package
       inputs:
-        scriptName: Build/build.ps1
+        scriptName: Build/Build.ps1
         arguments: '-t Package'
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
