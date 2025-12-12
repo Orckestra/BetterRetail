@@ -91,7 +91,7 @@ For example:
 - parameters.**int2**.json
 - parameters.**int2**.local.json
 
-Such configurations with keywords are to be used and have the highest priority only if deployed by passing the `-env=int2` param and argument, [more about deploying here](#deploy).
+Such configurations with keywords are to be used and have the highest priority only if deployed by passing the `--env=int2` param and argument, [more about deploying, below](#deploy).
 
 The typical configuration file has the following params:
   - `ocs-cm-hostName` - environment hostname
@@ -99,7 +99,7 @@ The typical configuration file has the following params:
   - `adminName` - admin name of a deploying website
   - `adminPassword` - admin password, no less than 6 symbols
   - `adminEmail` - admin email
-  - `C1Url` - URL to download C1 CMS since the Reference Application based on it and requires it during the deploy process. If the URL includes the **orckestra.local** hostname, be sure that the Orckestra VPN connection during a deployment is active.
+  - `C1Url` - URL to download C1 CMS since the Reference Application is based on it and requires it during the deploy process. If the URL includes the **orckestra.local** hostname, be sure that the Orckestra VPN connection during a deployment is active.
   - `baseCulture` - a culture to be used for a deploying website
   
   Other settings usually do not have to be changed but still can be.
@@ -120,14 +120,14 @@ In general, the full deployment process includes the following steps:
 - Creating https binding of the configured domain to the localhost;
 - Installing the Reference Application itself and additional packages to C1 CMS
 
-If you need to deploy using a configuration from a specific file, use the `-env={keyword}` param and argument. For example, if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 -env=int2`. The configuration file parameters.int2.json has the highest priority in this case. 
+If you need to deploy using a configuration from a specific file, use the `--env={keyword}` param and argument. For example, if you want to use the configuration from the **parameters.int2.json** file, then run in Powershell the deploying command `{solution_dir}\build\install.ps1 --env=int2`. The configuration file parameters.int2.json has the highest priority in this case. 
 
 The file **{solution_dir_path}\build\configuration\SetupDescription.xml** includes packages to be installed during the deploy.
 The file contains *C1 CMS* packages, *Experience Management* packages and *Reference Application* packages, created during the Build process. 
 
 *Experience Management* packages are installed from the **develop** branch by default. To install *Experience Management* packages from a specific branch, set `"em-branch" : "{branch_name}"` in parameters.
 
-For *C1 CMS* package next link is used by default: *http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)* which will download **latest** package version suitable for current *C1 CMS* version. To download a specific package version, it is required to use the following link format: *https://package.composite.net:443/packages/{package-GUID}-ver-{package-Version}.zip*. 
+For the *C1 CMS* package, the following link is used by default: *http://package.composite.net/Download.ashx?package=Orckestra.Versioning.VersionPublication&amp;c1version=$(version)* which will download **latest** package version suitable for the current *C1 CMS* version. To download a specific package version, it is required to use the following link format: *https://package.composite.net:443/packages/{package-GUID}-ver-{package-Version}.zip*. 
 
 Example:
 

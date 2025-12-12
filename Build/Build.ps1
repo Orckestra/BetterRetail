@@ -19,20 +19,16 @@ The build script to execute.
 The build script target to run.
 .PARAMETER Configuration
 The build configuration to use.
-.PARAMETER Verbosity
+.PARAMETER CakeVerbosity
 Specifies the amount of information to be displayed.
 .PARAMETER ShowDescription
 Shows description about tasks.
 .PARAMETER DryRun
 Performs a dry run.
-.PARAMETER Experimental
-Uses the nightly builds of the Roslyn script engine.
-.PARAMETER Mono
-Uses the Mono Compiler rather than the Roslyn script engine.
 .PARAMETER SkipToolPackageRestore
 Skips restoring of packages.
-.PARAMETER ScriptArgs
-Remaining arguments are added here.
+.PARAMETER RemainingArguments
+$RemainingArguments is an array of all parameters not bound to this PowerShell script's parameters, as commanded by parameter attribute ValueFromRemainingArguments=$true.
 
 .LINK
 https://cakebuild.net
@@ -45,16 +41,14 @@ Param(
     [string]$Target,
     [string]$Configuration,
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
-    [string]$Verbosity,
+    [string]$CakeVerbosity,
     [switch]$ShowDescription,
     [Alias("WhatIf", "Noop")]
     [switch]$DryRun,
-    [switch]$Experimental,
-    [switch]$Mono,
     [switch]$SkipToolPackageRestore,
     [switch]$Docs,
-    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
-    [string[]]$ScriptArgs
+    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]  # $RemainingArguments is an array of all parameters not bound to this PowerShell script's parameters, as commanded by parameter attribute ValueFromRemainingArguments=$true.
+    [string[]]$RemainingArguments
 )
 
 $scriptpath = $MyInvocation.MyCommand.Path
@@ -120,7 +114,7 @@ Try
     # Try find NuGet.exe in path if not exists
     if (!(Test-Path $NUGET_EXE)) {
         Write-Verbose -Message "Trying to find nuget.exe in PATH..."
-        $existingPaths = $Env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
+        $existingPaths = $env:Path -Split ';' | Where-Object { (![string]::IsNullOrEmpty($_)) -and (Test-Path $_ -PathType Container) }
         $NUGET_EXE_IN_PATH = Get-ChildItem -Path $existingPaths -Filter "nuget.exe" | Select-Object -First 1
         if ($null -ne $NUGET_EXE_IN_PATH -and (Test-Path $NUGET_EXE_IN_PATH.FullName)) {
             Write-Verbose -Message "Found in PATH at $($NUGET_EXE_IN_PATH.FullName)."
@@ -140,7 +134,7 @@ Try
     }
 
     # Save nuget.exe path to environment to be available to child processed
-    $ENV:NUGET_EXE = $NUGET_EXE
+    $env:NUGET_EXE = $NUGET_EXE
 
     # Restore tools from NuGet?
     if(-Not $SkipToolPackageRestore.IsPresent) {
@@ -205,23 +199,28 @@ Try
     }
     
     # Build Cake arguments
+    # See https://cakebuild.net/docs/running-builds/runners/dotnet-tool
     $cakeArguments = @("$Script");
     if ($Target) { $cakeArguments += "--target=$Target" }
     if ($Configuration) { $cakeArguments += "--configuration=$Configuration" }
-    # The parameters below probably require a double-dash, like above, for Cake 1.0+
-    # They are left with a single dash until they cause a problem and can be tested in context.
-    if ($Verbosity) { $cakeArguments += "-verbosity=$Verbosity" }
-    if ($ShowDescription) { $cakeArguments += "-showdescription" }
-    if ($DryRun) { $cakeArguments += "-dryrun" }
-    if ($Experimental) { $cakeArguments += "-experimental" }
-    if ($Mono) { $cakeArguments += "-mono" }
-    if ($Docs) { $cakeArguments += "-showtree" }
+    if ($CakeVerbosity) { $cakeArguments += "--verbosity=$CakeVerbosity" }
+    if ($ShowDescription) { $cakeArguments += "--showdescription" }
+    if ($DryRun) { $cakeArguments += "--dryrun" }
+    if ($Docs) {
+        Write-Host "-----------------------------------------------------------------------------------------------"
+        Write-Host "-docs                     Displays available commands"
+        Write-Host "-t All                    Executes specific target, default is 'ALL'"
+        Write-Host "-Configuration Release    Build configuration"
+        Write-Host "--package-version=0.0.1   Nuget package version. If not specified, taken from 'SharedAssemblyInfo.cs'"
+        Write-Host "`nTarget values:"
+        $cakeArguments += "--tree"
+    }
 
-    $cakeArguments += $ScriptArgs
+    $cakeArguments += $RemainingArguments
 
     # Start Cake
     Write-Host "Running build script..."
-    dotnet cake $Script -- $cakeArguments
+    dotnet cake $cakeArguments
 }
 Finally
 {

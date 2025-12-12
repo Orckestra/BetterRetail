@@ -33,6 +33,8 @@ param (
 	$NewText
 )
 
+$renameWitnessFile = 'src/Orckestra.Composer.Website/Orckestra.Composer.Website.csproj'
+
 Push-Location $PSScriptRoot
 
 $StartTime = $(Get-Date)
@@ -43,12 +45,9 @@ $OldText = "Orckestra.Composer.Website"
 [string[]]$Excludes = @('node_modules', 'lib', 'Packages', 'obj', 'bin', $RenamerScriptName )
 
 # This function will check if this script is executed in a ClientName repos
-function CheckIfScriptIsInClientNameGitRepos(){
-	$checkIsGitRepos = ((git log ClientName.sln) -match "commit")
-	$isClientNameGitRepo = ($checkIsGitRepos.Length -ne 0) 
-
-	if(!$isClientNameGitRepo){
-		throw "This script expects to be executed in ClientName cloned git repository."
+function CheckRenameWitnessFile() {
+	if(-not (Test-Path $renameWitnessFile)) {
+		throw "File $renameWitnessFile not found. Was the project already renamed?"
 	}
 }
 
@@ -157,7 +156,7 @@ function FixAppInsightsConfig(){
 #Start of process
 Write-Host "Start of process" -ForegroundColor Green
 
-#CheckIfScriptIsInClientNameGitRepos
+CheckRenameWitnessFile
 
 ProcessRecursiveRenaming($directory)
 

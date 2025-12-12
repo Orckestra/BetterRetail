@@ -17,8 +17,6 @@ using Cake.Npm;
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
-var isShowingDoc = Context.Configuration.GetValue("showtree") != null;
-
 var target = Argument("target", "All");
 var configuration = Argument("configuration", "Release");
 var packageVersion = Argument("package-version", "");
@@ -26,21 +24,9 @@ var packageVersion = Argument("package-version", "");
 if (target.ToLower() == "dev")
     configuration = "Debug";
 
-if (!isShowingDoc)
-{
-    Information($"Target: {target}");
-    Information($"Configuration: {configuration}");
-    Information($"Package Version: {packageVersion}");
-}
-else
-{
-    Information("");
-    Information("-----------------------------------------------------------------------------------------------");
-    Information("-docs                     Displays available commands");
-    Information("-t All                    Executes specific target, default is 'ALL'");
-    Information("-configuration Release    Build configuration");
-    Information("-package-version=0.0.1   Nuget package version. If not specified, taken from 'SharedAssemblyInfo.cs'");
-}
+Information($"Target: {target}");
+Information($"Configuration: {configuration}");
+Information($"Package Version: {packageVersion}");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION

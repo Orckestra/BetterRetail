@@ -40,7 +40,8 @@ else
     Information("-----------------------------------------------------------------------------------------------");
     Information("-docs                     Displays available commands");
     Information("-t All                    Executes specific target, default is 'ALL'");
-    Information("-env=INT2                 Use environment from configuration. If not supplied, default is used");
+    Information("--env=INT2                Use environment from configuration. If not supplied, default is used");
+	return;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -110,11 +111,12 @@ Task("Load-CakeConfig").Does(() =>
     }
     if (hasError)
     {
+	    var parametersEnvironment = string.IsNullOrWhiteSpace(environment) ? "[env]" : environment;
         Error(@$"Parameters can be overridden in:
     ../ref.app.parameters.json
     build/configuration/parameters.local.json
-    ../ref.app.parameters.[env].json
-    build/configuration/parameters.[env].local.json
+    ../ref.app.parameters.{parametersEnvironment}.json
+    build/configuration/parameters.{parametersEnvironment}.local.json
     ");
         throw new Exception("Required parameter is missing");
     }
