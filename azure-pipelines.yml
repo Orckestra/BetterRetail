@@ -52,9 +52,9 @@ stages:
     - task: PowerShell@1
       displayName: Build
       inputs:
-        workingFolder: Orckestra.StarterSite/CF/Source
         scriptName: Build/Build.ps1
         arguments: '-t Build -CakeVerbosity Diagnostic'
+        workingFolder: Orckestra.StarterSite/CF/Source_FailTest
         failOnStandardError: false
 
     - task: PowerShell@1
