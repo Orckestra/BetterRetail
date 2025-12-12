@@ -33,7 +33,7 @@ stages:
       inputs:
         command: custom
         custom: tool
-        arguments: restore --tool-manifest build/.config/dotnet-tools.json
+        arguments: restore --tool-manifest .config/dotnet-tools.json
  
     - task: GitVersion@5
       inputs:
