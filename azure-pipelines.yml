@@ -49,7 +49,7 @@ stages:
         restoreSolution: '**/*.sln'
         feedsToUse: 'config'
 
-    - task: PowerShell@1
+    - task: PowerShell@2
       displayName: Build
       inputs:
         scriptName: Build/Build.ps1
@@ -57,7 +57,7 @@ stages:
         workingFolder: Orckestra.StarterSite/CF/Source_FailTest
         failOnStandardError: false
 
-    - task: PowerShell@1
+    - task: PowerShell@2
       displayName: Tests
       inputs:
         scriptName: Build/Build.ps1
@@ -76,7 +76,7 @@ stages:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/karma.junit.xml'
 
-    - task: PowerShell@1
+    - task: PowerShell@2
       displayName: Artifacts
       inputs:
         scriptName: Build/Build.ps1
@@ -84,7 +84,7 @@ stages:
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
-    - task: PowerShell@1
+    - task: PowerShell@2
       displayName: Package
       inputs:
         scriptName: Build/Build.ps1
