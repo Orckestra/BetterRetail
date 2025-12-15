@@ -56,6 +56,13 @@ stages:
         script: |
           Write-Host "`$(Build.SourcesDirectory) = `$env:Build_SourcesDirectory = $($env:Build_SourcesDirectory)"
           Write-Host "`$PWD = $($PWD)"
+          if (Test-Path Orckestra.StarterSite) {
+              Write-Host "Orckestra.StarterSite exists"
+          }
+          else
+          {
+              Write-Host "Orckestra.StarterSite does not exist"
+          }
 
     - task: PowerShell@2
       displayName: Build
