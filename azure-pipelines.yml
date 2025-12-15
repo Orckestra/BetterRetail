@@ -50,6 +50,14 @@ stages:
         feedsToUse: 'config'
 
     - task: PowerShell@2
+      displayName: Set CMP and Nuget stability if undefined
+      inputs:
+        targetType: inline
+        script: |
+          Write-Host "`$(Build.SourcesDirectory) = `$env:Build_SourcesDirectory = $($env:Build_SourcesDirectory)"
+          Write-Host "`$PWD = $($PWD)"
+
+    - task: PowerShell@2
       displayName: Build
       inputs:
         scriptName: Build/Build.ps1
