@@ -64,7 +64,7 @@ stages:
               Write-Host "Orckestra.StarterSite does not exist"
           }
 
-    - task: PowerShell@2
+    - task: PowerShell@1
       displayName: Build
       inputs:
         scriptName: Build/Build.ps1
