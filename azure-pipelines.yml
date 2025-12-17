@@ -54,7 +54,7 @@ stages:
       inputs:
         filePath: Build/Build.ps1
         arguments: '-t Build -CakeVerbosity Diagnostic'
-        workingFolder: Orckestra.StarterSite/CF/Source
+        workingDirectory: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
     - task: PowerShell@2
@@ -81,7 +81,7 @@ stages:
       inputs:
         filePath: Build/Build.ps1
         arguments: '-t Artifacts'
-        workingFolder: Orckestra.StarterSite/CF/Source
+        workingDirectory: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
     - task: PowerShell@2
@@ -89,7 +89,7 @@ stages:
       inputs:
         filePath: Build/Build.ps1
         arguments: '-t Package'
-        workingFolder: Orckestra.StarterSite/CF/Source
+        workingDirectory: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
     - task: CopyFiles@2
