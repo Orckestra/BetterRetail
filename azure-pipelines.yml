@@ -50,26 +50,11 @@ stages:
         feedsToUse: 'config'
 
     - task: PowerShell@2
-      displayName: Show $env:Build_SourcesDirectory
-      inputs:
-        targetType: inline
-        script: |
-          Write-Host "`$`(Build.SourcesDirectory) = `$env:Build_SourcesDirectory = $($env:Build_SourcesDirectory)"
-          Write-Host "`$PWD = $($PWD)"
-          if (Test-Path Orckestra.StarterSite) {
-              Write-Host "Orckestra.StarterSite exists"
-          }
-          else
-          {
-              Write-Host "Orckestra.StarterSite does not exist"
-          }
-
-    - task: PowerShell@2
       displayName: Build
       inputs:
         filePath: Build/Build.ps1
         arguments: '-t Build -CakeVerbosity Diagnostic'
-        workingFolder: Orckestra.StarterSite/CF/Source_FailTest
+        workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
     - task: PowerShell@2

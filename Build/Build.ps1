@@ -91,8 +91,18 @@ function GetProxyEnabledWebClient
 
 Write-Host "Preparing to run build script..."
 
-Push-Location $scriptDir
+Write-Host "`$`(Build.SourcesDirectory) = `$env:Build_SourcesDirectory = $($env:Build_SourcesDirectory)"
+Write-Host "`$PWD = $($PWD)"
+if (Test-Path Orckestra.StarterSite) {
+    Write-Host "Orckestra.StarterSite exists"
+}
+else
+{
+    Write-Host "Orckestra.StarterSite does not exist"
+}
 
+Push-Location $scriptDir
+Write-Host "`$PWD = $($PWD)"
 Try
 {
     $TOOLS_DIR = Join-Path $PSScriptRoot "tools"
