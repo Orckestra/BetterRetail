@@ -87,7 +87,6 @@ stages:
       inputs:
         filePath: Build/Build.ps1
         arguments: '-t Package'
-        workingDirectory: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
     - task: CopyFiles@2
