@@ -64,10 +64,10 @@ stages:
               Write-Host "Orckestra.StarterSite does not exist"
           }
 
-    - task: PowerShell@1
+    - task: PowerShell@2
       displayName: Build
       inputs:
-        scriptName: Build/Build.ps1
+        filePath: Build/Build.ps1
         arguments: '-t Build -CakeVerbosity Diagnostic'
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
@@ -75,7 +75,7 @@ stages:
     - task: PowerShell@2
       displayName: Tests
       inputs:
-        scriptName: Build/Build.ps1
+        filePath: Build/Build.ps1
         arguments: '-t Tests'
         failOnStandardError: false
 
@@ -94,7 +94,7 @@ stages:
     - task: PowerShell@2
       displayName: Artifacts
       inputs:
-        scriptName: Build/Build.ps1
+        filePath: Build/Build.ps1
         arguments: '-t Artifacts'
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
@@ -102,7 +102,7 @@ stages:
     - task: PowerShell@2
       displayName: Package
       inputs:
-        scriptName: Build/Build.ps1
+        filePath: Build/Build.ps1
         arguments: '-t Package'
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
