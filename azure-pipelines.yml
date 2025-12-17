@@ -54,7 +54,6 @@ stages:
       inputs:
         filePath: Build/Build.ps1
         arguments: '-t Build -CakeVerbosity Diagnostic'
-        workingDirectory: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
     - task: PowerShell@2
