@@ -126,7 +126,7 @@ stages:
   - job: Deploy
 
     pool:
-      vmImage: 'windows-2019'
+      vmImage: 'windows-2022'
     steps:
       - task: DownloadBuildArtifacts@0
         inputs:
