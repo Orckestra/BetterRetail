@@ -111,7 +111,6 @@ Robocopy %25WebProjectPath%25Views %25TempPath%25Views /E /NJH /NDL /NS /NC /NP
 Robocopy %25WebProjectPath%25bin %25TempPath%25Bin *.dll /XF Composite*.dll /NJH /NDL /NS /NC /NP
 
 DEL /F /Q %25TempPath%25Bin\Orckestra.Logging.dll
-DEL /F /Q %25TempPath%25Bin\Microsoft.Extensions.DependencyInjection*.dll
 DEL /F /Q %25TempPath%25Bin\System.Reactive*.dll
 DEL /F /Q %25TempPath%25Bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
 DEL /F /Q %25TempPath%25Bin\Microsoft.Practices.EnterpriseLibrary.Validation.dll

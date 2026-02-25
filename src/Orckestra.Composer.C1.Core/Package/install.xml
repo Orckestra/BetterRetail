@@ -46,7 +46,17 @@
         <File sourceFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" targetFilename="~\Bin\Orckestra.ExperienceManagement.Configuration.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" targetFilename="~\Bin\Orckestra.Media.AutoImageResizing.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Newtonsoft.Json.dll" targetFilename="~\Bin\Newtonsoft.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
-        <File sourceFilename="~\Bin\Microsoft.ServiceBus.dll" targetFilename="~\Bin\Microsoft.ServiceBus.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" targetFilename="~\Bin\System.Diagnostics.DiagnosticSource.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\Azure.Core.dll" targetFilename="~\Bin\Azure.Core.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\Azure.Core.Amqp.dll" targetFilename="~\Bin\Azure.Core.Amqp.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\Azure.Messaging.ServiceBus.dll" targetFilename="~\Bin\Azure.Messaging.ServiceBus.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.Bcl.AsyncInterfaces.dll" targetFilename="~\Bin\Microsoft.Bcl.AsyncInterfaces.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.Azure.Amqp.dll" targetFilename="~\Bin\Microsoft.Azure.Amqp.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll" targetFilename="~\Bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Threading.Tasks.Extensions.dll" targetFilename="~\Bin\System.Threading.Tasks.Extensions.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Text.Json.dll" targetFilename="~\Bin\System.Text.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.Memory.Data.dll" targetFilename="~\Bin\System.Memory.Data.dll" allowOverwrite="true" addAssemblyBinding="true"/>
+        <File sourceFilename="~\Bin\System.ClientModel.dll" targetFilename="~\Bin\System.ClientModel.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" targetFilename="~\Bin\Orckestra.Composer.HandlebarsCompiler.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Jurassic.dll" targetFilename="~\Bin\Jurassic.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\NUglify.dll" targetFilename="~\Bin\NUglify.dll" allowOverwrite="true" />
@@ -63,7 +73,6 @@
         <File sourceFilename="~\Bin\GraphQL.NewtonsoftJson.dll" targetFilename="~\Bin\GraphQL.NewtonsoftJson.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\GraphQL-Parser.dll" targetFilename="~\Bin\GraphQL-Parser.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\System.ComponentModel.Annotations.dll" targetFilename="~\Bin\System.ComponentModel.Annotations.dll" allowOverwrite="true" addAssemblyBinding="true"/>
-
       </Files>
     </mi:Add>
 
