@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Azure.Messaging.ServiceBus;
+using Orckestra.ExperienceManagement.Configuration.ServiceBus;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.ServiceBus.Messaging;
-using Orckestra.ExperienceManagement.Configuration.ServiceBus;
 
 namespace Orckestra.Composer.Sitemap.EventHandlers
 {
@@ -12,7 +12,7 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
 
         public Action Action { set; get; }
 
-        public Task ProcessMessageAsync(BrokeredMessage message, CancellationToken cancellationToken)
+        public Task ProcessMessageAsync(ServiceBusReceivedMessage message, CancellationToken cancellationToken)
         {
             if (EventName == null) throw new ArgumentException(nameof(EventName));
             if (Action == null) throw new ArgumentException(nameof(Action));
