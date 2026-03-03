@@ -17,7 +17,9 @@ namespace Orckestra.Composer.Sitemap.EventHandlers
             if (EventName == null) throw new ArgumentException(nameof(EventName));
             if (Action == null) throw new ArgumentException(nameof(Action));
 
-            if (message.ContentType.Contains(EventName))
+            var contentType = message.GetMessageContentType();
+
+            if (contentType != null && contentType.Contains(EventName))
             {
                 Action();
             }
