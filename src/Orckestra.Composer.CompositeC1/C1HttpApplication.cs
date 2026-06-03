@@ -19,7 +19,7 @@ namespace Orckestra.Composer.CompositeC1
 
             RegisterRoutes(RouteTable.Routes);
 
-            PclExport.Instance = new ComposerPclExport();
+            ComposerRequestFilter.Register();
         }
 
         protected virtual void RegisterRoutes(RouteCollection routes)

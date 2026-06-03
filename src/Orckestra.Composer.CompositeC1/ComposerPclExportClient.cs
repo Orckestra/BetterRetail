@@ -1,24 +1,27 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using ServiceStack;
 
 namespace Orckestra.Composer.CompositeC1
 {
     /// <exclude />
-    public class ComposerPclExport : Net45PclExport
+    public static class ComposerRequestFilter
     {
-        public override void Config(HttpWebRequest req, bool? allowAutoRedirect, TimeSpan? timeout,
-            TimeSpan? readWriteTimeout, string userAgent, bool? preAuthenticate)
+        /// <summary>
+        /// Registers a global ServiceStack client request filter that sets the HTTP Referer header
+        /// for performance profiling logging on every outbound OCS API call.
+        /// </summary>
+        public static void Register()
         {
-            base.Config(req, allowAutoRedirect, timeout, readWriteTimeout, userAgent, preAuthenticate);
-
-            var context = ContextPreservationHttpModule.PreservedHttpContext.Value;
-
-            // Setting the 'Referer' for the performance profiling logging
-            if (string.IsNullOrEmpty(req.Referer) && context != null)
+            JsonServiceClient.GlobalRequestFilter += (HttpWebRequest req) =>
             {
-                req.Referer = context.Request.Url.ToString();
-            }
+                var context = ContextPreservationHttpModule.PreservedHttpContext.Value;
+
+                // Setting the 'Referer' for the performance profiling logging
+                if (string.IsNullOrEmpty(req.Referer) && context != null)
+                {
+                    req.Referer = context.Request.Url.ToString();
+                }
+            };
         }
     }
 }
