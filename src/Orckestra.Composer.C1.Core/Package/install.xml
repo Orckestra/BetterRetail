@@ -50,10 +50,10 @@
         <File sourceFilename="~\Bin\Azure.Core.dll" targetFilename="~\Bin\Azure.Core.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Azure.Core.Amqp.dll" targetFilename="~\Bin\Azure.Core.Amqp.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Azure.Messaging.ServiceBus.dll" targetFilename="~\Bin\Azure.Messaging.ServiceBus.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\Microsoft.Bcl.AsyncInterfaces.dll" targetFilename="~\Bin\Microsoft.Bcl.AsyncInterfaces.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\Microsoft.Bcl.AsyncInterfaces.dll" targetFilename="~\Bin\Microsoft.Bcl.AsyncInterfaces.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\Microsoft.Azure.Amqp.dll" targetFilename="~\Bin\Microsoft.Azure.Amqp.dll" allowOverwrite="true" />
         <File sourceFilename="~\Bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll" targetFilename="~\Bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll" allowOverwrite="true" />
-        <File sourceFilename="~\Bin\System.Threading.Tasks.Extensions.dll" targetFilename="~\Bin\System.Threading.Tasks.Extensions.dll" allowOverwrite="true" />
+        <File sourceFilename="~\Bin\System.Threading.Tasks.Extensions.dll" targetFilename="~\Bin\System.Threading.Tasks.Extensions.dll" allowOverwrite="true" addAssemblyBinding="true" />
         <File sourceFilename="~\Bin\System.Text.Json.dll" targetFilename="~\Bin\System.Text.Json.dll" allowOverwrite="true" addAssemblyBinding="true"/>
         <File sourceFilename="~\Bin\System.Text.Encodings.Web.dll" targetFilename="~\Bin\System.Text.Encodings.Web.dll" allowOverwrite="true"/>
         <File sourceFilename="~\Bin\System.Memory.Data.dll" targetFilename="~\Bin\System.Memory.Data.dll" allowOverwrite="true" addAssemblyBinding="true"/>
