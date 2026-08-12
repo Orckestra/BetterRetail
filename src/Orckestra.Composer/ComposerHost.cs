@@ -26,12 +26,6 @@ namespace Orckestra.Composer
     {
         static ComposerHost()
         {
-            // TODO: Replace with your actual ServiceStack license key obtained from https://servicestack.net/free
-            // The key can also be stored in appSettings as "servicestack:license" and loaded here:
-            //   Licensing.RegisterLicense(ConfigurationManager.AppSettings["servicestack:license"]);
-           // Licensing.RegisterLicense(ConfigurationManager.AppSettings["servicestack:license"] ?? string.Empty);
-          //  Licensing.RegisterLicense("OSS MIT 2026 https://github.com/Orckestra/BetterRetail d4hedXta+F6gkADvWhG5CgYnv1G09mhHsxEJ+0QWbC8pVamOOf6lIxgGvlRtF1rfgpjlvwlU6ToVRn3c7kB/xYGLxw409k9Z7qDROqcjnPEPFI9GLOHjeMmKbR7e8PmAOIhmTw8czZwmkEWEU/8OKbfDVBjmhG7q22iCqSTxJRk=");
-
             // Making sure OCC API specific JsonSerializationConfig isn't loaded twice
             var orckestraConfigAlreadyLoaded = JsConfig.TypeWriter?.Method?.DeclaringType?.Assembly?.FullName?.StartsWith("Orckestra") == true;
             if (!orckestraConfigAlreadyLoaded)
