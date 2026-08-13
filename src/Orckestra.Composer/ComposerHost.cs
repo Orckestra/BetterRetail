@@ -8,6 +8,7 @@ using Orckestra.Composer.Providers;
 using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.ViewEngine;
 using Orckestra.Composer.ViewModels;
+using ServiceStack;
 using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Orckestra.Composer
         static ComposerHost()
         {
             // Making sure OCC API specific JsonSerializationConfig isn't loaded twice
-            var orckestraConfigAlreadyLoaded = JsConfig.TypeWriter.Method.DeclaringType.Assembly.FullName.StartsWith("Orckestra");
+            var orckestraConfigAlreadyLoaded = JsConfig.TypeWriter?.Method?.DeclaringType?.Assembly?.FullName?.StartsWith("Orckestra") == true;
             if (!orckestraConfigAlreadyLoaded)
             {
                 Overture.Serialization.JsonSerializationConfig.SetConfig();
