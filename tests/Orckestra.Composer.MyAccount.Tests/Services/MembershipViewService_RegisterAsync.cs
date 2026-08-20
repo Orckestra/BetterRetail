@@ -249,13 +249,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" \t\r\n")]
-        public async Task WHEN_passing_empty_PasswordQuestion_SHOULD_succeed(string passwordQuestion)
+        [TestCase(null, AccountStatus.Active)]
+        [TestCase("", AccountStatus.Active)]
+        [TestCase(" \t\r\n", AccountStatus.Active)]
+        public async Task WHEN_passing_empty_PasswordQuestion_SHOULD_succeed(string passwordQuestion, AccountStatus accountStatus)
         {
             //Arrange
-            var expectedCustomer = MockCustomerFactory.CreateRandom();
+            var expectedCustomer = MockCustomerFactory.CreateRandom(accountStatus);
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
 
@@ -282,13 +282,13 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         }
 
         [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" \t\r\n")]
-        public async Task WHEN_passing_empty_PasswordAnswer_SHOULD_succeed(string passwordAnswer)
+        [TestCase(null, AccountStatus.Active)]
+        [TestCase("", AccountStatus.Active)]
+        [TestCase(" \t\r\n", AccountStatus.Active)]
+        public async Task WHEN_passing_empty_PasswordAnswer_SHOULD_succeed(string passwordAnswer, AccountStatus accountStatus)
         {
             //Arrange
-            var expectedCustomer = MockCustomerFactory.CreateRandom();
+            var expectedCustomer = MockCustomerFactory.CreateRandom(accountStatus);
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
 
