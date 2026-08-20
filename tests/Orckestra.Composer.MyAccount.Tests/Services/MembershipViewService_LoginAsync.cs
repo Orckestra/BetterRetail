@@ -48,7 +48,7 @@ namespace Orckestra.Composer.MyAccount.Tests.Services
         public async Task WHEN_requesting_to_log_in_valid_user_response_SHOULD_be_success()
         {
             //Arrange
-            var expectedCustomer = MockCustomerFactory.CreateRandom();
+            var expectedCustomer = MockCustomerFactory.CreateRandom(AccountStatus.Active);
             var sut = _container.CreateInstance<MembershipViewService>();
             sut.Membership = _container.Get<IMembershipProxy>();
 
