@@ -7,14 +7,12 @@ using NUnit.Framework;
 using Orckestra.Composer.CompositeC1.Services;
 using Orckestra.Composer.CompositeC1.Tests.Mocks;
 using Orckestra.Composer.Services.Breadcrumb;
+using Orckestra.Composer.ViewModels.Breadcrumb;
 using Orckestra.ExperienceManagement.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using static Orckestra.Composer.Utils.MessagesHelper.ArgumentException;
-using static Orckestra.Composer.Utils.ExpressionUtility;
-using Orckestra.Composer.ViewModels.Breadcrumb;
 using System.Linq.Expressions;
 
 namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
@@ -51,7 +49,10 @@ namespace Orckestra.Composer.CompositeC1.Tests.Services.BreadcrumbViewService
 
             var dataSource = BuildPageDataSource(contentPageId);
             var pageServiceMock = new PageServiceMock(dataSource);
+
+            var dataConnectionServiceMcok = new DataConnectionServiceMock(dataSource);
             Container.Use<IPageService>(pageServiceMock);
+            Container.Use<IDataConnectionService>(dataConnectionServiceMcok);
 
             var mockedSiteConfiguration = new Mock<ISiteConfiguration>();
 
