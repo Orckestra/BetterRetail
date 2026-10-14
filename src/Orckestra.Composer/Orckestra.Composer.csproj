@@ -443,6 +443,7 @@
     <Compile Include="Utils\ProductHelper.cs" />
     <Compile Include="Utils\PropertyBagHelper.cs" />
     <Compile Include="Utils\RecurringOrderTemplateHelper.cs" />
+    <Compile Include="Utils\StoreTimeZoneHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\FormatValueHelper.cs" />
     <Compile Include="ViewEngine\HandleBarsHelpers\LookupHelper.cs" />
     <Compile Include="ViewModels\BaseProductViewModel.cs" />

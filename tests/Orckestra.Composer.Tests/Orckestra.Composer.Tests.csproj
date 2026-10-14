@@ -299,6 +299,7 @@
     <Compile Include="Util\EncryptionUtility_TestDecryption.cs" />
     <Compile Include="Util\GuidUtility_Create.cs" />
     <Compile Include="Util\RequestUrilsGetBaseUrl.cs" />
+    <Compile Include="Util\StoreTimeZoneHelper_GetStoreNow.cs" />
     <Compile Include="Util\TreeNode_GetLevel.cs" />
     <Compile Include="Util\Tree_Ctor.cs" />
     <Compile Include="Util\TreeNode_Ctor.cs" />

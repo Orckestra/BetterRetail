@@ -9,6 +9,7 @@ using Orckestra.Composer.Providers.Localization;
 using Orckestra.Composer.Store.Parameters;
 using Orckestra.Composer.Store.Providers;
 using Orckestra.Composer.Store.Utils;
+using Orckestra.Composer.Utils;
 using Orckestra.Composer.Store.ViewModels;
 using Orckestra.Composer.ViewModels;
 using Orckestra.Overture.ServiceModel.Customers;
@@ -180,13 +181,7 @@ namespace Orckestra.Composer.Store.Factory
             if (param.Store.StoreSchedule == null) { return null; }
 
             var model = new StoreScheduleViewModel();
-            var storeNowTime = DateTime.Now;
-
-            if (!string.IsNullOrWhiteSpace(param.Store.FulfillmentLocation.TimeZone))
-            {
-                var storeTimeInfo = TimeZoneInfo.FindSystemTimeZoneById(param.Store.FulfillmentLocation.TimeZone);
-                storeNowTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, storeTimeInfo);
-            }
+            var storeNowTime = GetStoreNowTime(param);
 
             model.OpeningHours = GetOpeningHours(param.Store.StoreSchedule, param.CultureInfo, storeNowTime);
             model.OpeningHourExceptions = GetOpeningHourExceptions(param.Store.StoreSchedule, param.CultureInfo, storeNowTime);
@@ -197,6 +192,15 @@ namespace Orckestra.Composer.Store.Factory
             model.IsOpenNow = IsTimeInIntervals(storeNowTime.TimeOfDay, todayOpeningTimes);
 
             return model;
+        }
+
+        /// <summary>
+        /// Current date and time in the store's time zone.
+        /// Falls back to server time when the store's time zone is empty or invalid.
+        /// </summary>
+        protected virtual DateTime GetStoreNowTime(CreateStoreViewModelParam param)
+        {
+            return StoreTimeZoneHelper.GetStoreNow(param.Store.FulfillmentLocation?.TimeZone, param.Store.Number);
         }
 
         protected virtual List<DailyScheduleExceptionViewModel> GetOpeningHourExceptions(FulfillmentSchedule schedule, CultureInfo cultureInfo, DateTime today)
