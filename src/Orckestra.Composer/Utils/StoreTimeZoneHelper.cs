@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Security;
 using Orckestra.Composer.Logging;
 
@@ -12,14 +13,22 @@ namespace Orckestra.Composer.Utils
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
+        // Resolved time zones by id; unresolvable ids are cached as null so the lookup and warning happen only once.
+        private static readonly ConcurrentDictionary<string, TimeZoneInfo> TimeZoneCache = new ConcurrentDictionary<string, TimeZoneInfo>();
+
         /// <summary>
         /// Returns the store's time zone, or null when the time zone id is empty or cannot be resolved.
-        /// A warning with the store number and time zone value is logged when the id cannot be resolved.
+        /// A warning with the store number and time zone value is logged the first time an id cannot be resolved.
         /// </summary>
         public static TimeZoneInfo GetStoreTimeZone(string timeZoneId, string storeNumber)
         {
             if (string.IsNullOrWhiteSpace(timeZoneId)) { return null; }
 
+            return TimeZoneCache.GetOrAdd(timeZoneId, id => FindTimeZone(id, storeNumber));
+        }
+
+        private static TimeZoneInfo FindTimeZone(string timeZoneId, string storeNumber)
+        {
             try
             {
                 return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
