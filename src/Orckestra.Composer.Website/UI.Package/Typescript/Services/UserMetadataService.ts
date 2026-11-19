@@ -5,7 +5,7 @@
 ///<reference path='../Cache/CacheProvider.ts' />
 ///<reference path='../Utils/Utils.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class UserMetadataService {

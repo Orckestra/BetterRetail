@@ -3,7 +3,7 @@
 ///<reference path='../ViewModels/IActivePaymentViewModel.ts' />
 ///<reference path='../BaseCheckoutPaymentProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class OnSitePOSPaymentProvider extends BaseCheckoutPaymentProvider {

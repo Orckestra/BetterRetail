@@ -8,7 +8,7 @@
 ///<reference path='./IGuestOrderDetailsViewModel.ts' />
 ///<reference path='./IFindMyOrderViewModel.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class FindMyOrderController extends Orckestra.Composer.Controller {

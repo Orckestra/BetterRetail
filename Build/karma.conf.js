@@ -34,14 +34,13 @@
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
         
-        browsers: ['PhantomJS'],
+        browsers: ['ChromeHeadless'],
         
         plugins: 
         [
             'karma-jasmine',
             'karma-sinon',
             'karma-chrome-launcher',
-            'karma-phantomjs-launcher',
             'karma-spec-reporter',
             'karma-junit-reporter'
         ],

@@ -1,7 +1,7 @@
 ///<reference path='./IAnalyticsProduct.ts' />
 ///<reference path='./IAnalyticsSearchResults.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
     export interface IAnalyticsPlugin {
         productImpressions(products: IAnalyticsProduct[]): void;

@@ -1,45 +1,36 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
-public void CompileTypeScripts(string rootDir, string projectFilePathArg, int timeOutSeconds)
+/// <summary>Finds the native TypeScript compiler restored from the Microsoft.TypeScript.MSBuild package.</summary>
+public FilePath FindTsc(string rootDir)
 {
-    string compilerPath = GetFiles($"{rootDir}/build/tools/Microsoft.TypeScript.Compiler.*/tools/tsc.exe").Last().FullPath;
-    Process tscProcess = Process.Start(new ProcessStartInfo()
-    {
-        FileName = compilerPath,
-        Arguments = projectFilePathArg,
-        RedirectStandardError = true,
-        RedirectStandardOutput = true,
-        UseShellExecute = false,
-        WorkingDirectory = $"{rootDir}/Build",
-        CreateNoWindow = true
-    });
-            
-    List<string> output = new List<string>();
-    while (tscProcess.StandardOutput.Peek() > -1)
-    {
-        string line = tscProcess.StandardOutput.ReadLine();
-        output.Add(line);
-    }
-    while (tscProcess.StandardError.Peek() > -1)
-    {
-        string line = tscProcess.StandardError.ReadLine();
-        output.Add(line);
-    }
+    return GetFiles($"{rootDir}/build/tools/Microsoft.TypeScript.MSBuild.*/tools/runtimes/win32-x64/tsc.exe").Last();
+}
 
-    bool tscProcessResult = tscProcess.WaitForExit(30 * 1000);
-    if (!tscProcessResult)
-    {
-        tscProcess.Kill();
-        throw new TimeoutException($"Typescript compilation timeout expired.");
-    }
+/// <summary>Runs the native compiler and returns its output. Fails the build on a non-zero exit code.</summary>
+public List<string> RunTsc(string rootDir, string arguments)
+{
+    var settings = new ProcessSettings { Arguments = arguments, RedirectStandardOutput = true };
+    int exitCode = StartProcess(FindTsc(rootDir), settings, out IEnumerable<string> output);
+    var lines = output.ToList();
+    if (exitCode != 0)
+        throw new Exception($"Typescript compilation ended with code {exitCode}. " + string.Join("\n", lines));
+    return lines;
+}
 
-    if (tscProcess.ExitCode != 0)
-    {
-        string detalisation = output.Any() ? "Additional info: " + string.Join(",", output) : "No additional info";
-        throw new Exception($"Typescript compilation ended with code {tscProcess.ExitCode}." + detalisation);
-    }
-    Information($"Successfull compiled typescripts with arguments {projectFilePathArg}.");
+/// <summary>
+/// Compiles a project to individual files, then concatenates the emitted scripts into one bundle.
+/// The compiler's own file order is used, which keeps base classes ahead of derived ones.
+/// </summary>
+public void BundleTypeScripts(string rootDir, string configPath, string sourceRoot, string outDir, string bundlePath)
+{
+    RunTsc(rootDir, $"--project {configPath}");
+    string root = MakeAbsolute(Directory(sourceRoot)).FullPath;
+    var scripts = RunTsc(rootDir, $"--project {configPath} --listFilesOnly")
+        .Where(f => f.EndsWith(".ts") && !f.EndsWith(".d.ts"))
+        .Select(f => System.IO.Path.ChangeExtension(System.IO.Path.GetRelativePath(root, f), ".js"))
+        .Select(f => System.IO.Path.Combine(MakeAbsolute(Directory(outDir)).FullPath, f))
+        .ToList();
+    System.IO.File.WriteAllText(bundlePath, string.Join("\n", scripts.Select(System.IO.File.ReadAllText)));
+    Information($"Bundled {scripts.Count} scripts into {bundlePath}.");
 }

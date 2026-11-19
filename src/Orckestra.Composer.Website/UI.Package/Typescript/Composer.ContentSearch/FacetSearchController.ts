@@ -6,7 +6,7 @@
 /// <reference path='./SearchParams.ts' />
 /// <reference path='./Constants/ContentSearchEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     interface SerializeObject extends JQuery {

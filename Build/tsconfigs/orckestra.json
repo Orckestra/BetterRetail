@@ -1,8 +1,7 @@
 {
+  "extends": "./base.json",
   "compilerOptions": {
-    "target": "ES5",
-    "outFile": "../../src/Orckestra.Composer.Website/UI.Package/JavaScript/orckestra.composer.js",
-    "sourceMap": false,
+    "outDir": "../.temp/lib",
     "removeComments": true
   },
   "include": ["../../src/Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts"]

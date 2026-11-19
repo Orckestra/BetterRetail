@@ -11,7 +11,7 @@
 ///<reference path='./CartEvents.ts' />
 ///<reference path='../../Composer.Product/ProductEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class CartSummaryController extends Orckestra.Composer.Controller {
         protected source: string = 'Checkout';

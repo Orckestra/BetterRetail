@@ -1,6 +1,6 @@
 'use strict';
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface ISetDefaultCustomerPaymentMethodViewModel {
         PaymentProviderName: string;
 

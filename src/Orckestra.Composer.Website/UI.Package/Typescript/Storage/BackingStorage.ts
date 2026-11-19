@@ -2,7 +2,7 @@
 /// <reference path='./IStorage.ts' />
 /// <reference path='./IStorageItem.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class BackingStorage implements Orckestra.Composer.IStorage {
 

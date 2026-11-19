@@ -1,6 +1,6 @@
 ///<reference path='./IFacet.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface ISelectedFacet {
         facetFieldName: string;
         selectedValues: string[];

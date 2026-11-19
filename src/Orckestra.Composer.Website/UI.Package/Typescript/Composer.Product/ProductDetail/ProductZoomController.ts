@@ -1,6 +1,6 @@
 ///<reference path='../Product/ProductController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class ProductZoomController extends Orckestra.Composer.ProductController {
 
         private allImages = {};

@@ -14,7 +14,7 @@
 ///<reference path='./ProductFormatter.ts' />
 ///<reference path='./KeyVariantAttributeItemsBuilder.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class ProductController extends Orckestra.Composer.Controller {
 

@@ -2,7 +2,7 @@
 ///<reference path='../../../Typings/vue/index.d.ts' />
 ///<reference path='./CheckoutHelpers.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CheckoutPageVueComponent {

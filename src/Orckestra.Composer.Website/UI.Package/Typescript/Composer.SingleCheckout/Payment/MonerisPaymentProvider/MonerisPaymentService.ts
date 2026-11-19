@@ -5,7 +5,7 @@
 ///<reference path='../../../../Typings/tsd.d.ts' />
 ///<reference path='../../../Mvc/ComposerClient.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class MonerisPaymentService {
 
         /**

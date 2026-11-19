@@ -16,6 +16,6 @@
 /// <reference path="./vue-autosuggest/index.d.ts" />
 
 // Very barebones interface for jasmine.Ajax as there is currently no d.ts file on DefinitelyTyped.
-declare module jasmine {
+declare namespace jasmine {
     export var Ajax: any;
 }

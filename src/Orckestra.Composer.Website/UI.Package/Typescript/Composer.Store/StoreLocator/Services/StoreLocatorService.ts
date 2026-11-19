@@ -6,7 +6,7 @@
 ///<reference path='./StoreLocatorEndPointUrls.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class StoreLocatorService implements IStoreLocatorService {

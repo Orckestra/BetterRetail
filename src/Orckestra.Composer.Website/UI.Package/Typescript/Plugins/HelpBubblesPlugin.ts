@@ -1,7 +1,7 @@
 /// <reference path='./IPlugin.ts' />
 /// <reference path='../JQueryPlugins/IPopOverJqueryPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class HelpBubblesPlugin implements IPlugin {
         public initialize(window: Window, document: HTMLDocument) {
             /**

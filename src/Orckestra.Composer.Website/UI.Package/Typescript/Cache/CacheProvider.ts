@@ -7,7 +7,7 @@
 /// <reference path='../Storage/StorageFactory.ts' />
 /// <reference path='../Storage/StorageType.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class CacheProvider implements ICacheProvider {
 

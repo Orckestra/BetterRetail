@@ -5,7 +5,7 @@
 /// <reference path='../../Mvc/ComposerClient.ts' />
 /// <reference path='./IWishListRepository.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class WishListRepository implements Orckestra.Composer.IWishListRepository {
 

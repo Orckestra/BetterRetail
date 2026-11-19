@@ -4,7 +4,7 @@
 ///<reference path='../../Composer.Cart/CartSummary/CartEvents.ts' />
 ///<reference path='../../Composer.Cart/CartSummary/CartStateService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * Controller for the Coupons section.
      */

@@ -6,7 +6,7 @@
 ///<reference path='../../Typescript/Storage/StorageFactory.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     (() => {

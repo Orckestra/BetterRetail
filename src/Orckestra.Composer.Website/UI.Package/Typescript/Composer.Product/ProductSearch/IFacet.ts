@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IFacet {
         isArray: boolean;
         facetFieldName: string;

@@ -13,7 +13,7 @@
 ///<reference path='./Events/EventHub.ts' />
 ///<reference path='./Utils/CookieUtils.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     'use strict';
 

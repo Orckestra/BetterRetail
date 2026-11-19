@@ -2,7 +2,7 @@
 ///<reference path='../../Events/EventHub.ts' />
 ///<reference path='../../Mvc/Controller.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class AddToCartNotificationController extends Controller {
         public initialize() {
             super.initialize();

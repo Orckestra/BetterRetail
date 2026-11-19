@@ -1,11 +1,8 @@
 {
+  "extends": "./base.json",
   "compilerOptions": {
-    "target": "ES5",
     "outDir": "../.temp",
-    "removeComments": false,
-    "declaration": true,
-    "noImplicitAny": false,
-    "noLib": false
+    "removeComments": false
   },
-  "include": ["../.temp/Tests/**/*.ts"]
+  "include": ["../../src/Orckestra.Composer.Website/UI.Package/Tests/**/*.ts"]
 }

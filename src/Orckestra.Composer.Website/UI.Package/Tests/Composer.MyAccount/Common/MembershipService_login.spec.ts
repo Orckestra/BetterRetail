@@ -4,7 +4,7 @@
 ///<reference path='../../Mocks/MockControllerContext.ts' />
 ///<reference path='../../../Typescript/Composer.MyAccount/Common/MembershipService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     (() => {

@@ -2,7 +2,7 @@
 ///<reference path='./BaseSingleCheckoutController.ts' />
 ///<reference path='../Composer.Cart/Coupons/CouponService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SingleCheckoutCouponsController extends Orckestra.Composer.BaseSingleCheckoutController {

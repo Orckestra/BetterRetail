@@ -7,7 +7,7 @@
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../MyAccount/MyAccountController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     enum UpdateAccountStates {
         Sucsess = 'sucsess',
         Failed = 'failed'

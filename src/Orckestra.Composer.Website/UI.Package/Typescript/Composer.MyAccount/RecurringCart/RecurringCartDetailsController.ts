@@ -6,7 +6,7 @@
 ///<reference path='../../Composer.Cart/CartSummary/CartService.ts' />
 ///<reference path='../../Repositories/CartRepository.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class RecurringCartDetailsController extends Orckestra.Composer.Controller {
         public initialize() {

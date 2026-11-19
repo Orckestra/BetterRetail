@@ -6,7 +6,7 @@
 ///<reference path='../OrderHistory/Services/OrderService.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class OrderDetailsController extends Controller {

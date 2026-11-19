@@ -8,7 +8,7 @@
 
 /// <reference path='../Composer.Product/ProductSearch/Services/ShowFacetsService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class ContentSearchResultsController extends Orckestra.Composer.Controller {

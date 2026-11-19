@@ -3,7 +3,7 @@
 ///<reference path='../../Mvc/ComposerClient.ts' />
 ///<reference path='./IStoreService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class StoreService implements IStoreService {

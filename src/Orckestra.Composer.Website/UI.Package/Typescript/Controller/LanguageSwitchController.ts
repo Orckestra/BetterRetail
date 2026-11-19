@@ -1,7 +1,7 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../Mvc/Controller.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class LanguageSwitchController extends Controller {
 
         private languageSwitchEvent: string = 'languageSwitchEvent';

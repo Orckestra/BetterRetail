@@ -2,7 +2,7 @@
 ///<reference path='./IGetOrderDetailsUrlRequest.ts' />
 ///<reference path='./IGuestOrderDetailsViewModel.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IFindOrderService {
         getOrderDetailsUrl(req: IGetOrderDetailsUrlRequest): Q.Promise<IGuestOrderDetailsViewModel>;
 

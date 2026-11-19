@@ -5,7 +5,7 @@
 ///<reference path='../../Events/IEventInformation.ts' />
 ///<reference path='./ILocalizationProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class LocalizationProvider implements Orckestra.Composer.ILocalizationProvider {
 
         private static _instance: Orckestra.Composer.ILocalizationProvider = new LocalizationProvider();

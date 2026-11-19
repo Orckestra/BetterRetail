@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IActivePaymentViewModel {
         Id: string;
         PaymentMethodType: string;

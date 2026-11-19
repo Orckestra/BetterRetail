@@ -4,7 +4,7 @@
 ///<reference path='../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 ///<reference path='./MembershipService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export enum MyAccountEvents {
         AccountCreated,

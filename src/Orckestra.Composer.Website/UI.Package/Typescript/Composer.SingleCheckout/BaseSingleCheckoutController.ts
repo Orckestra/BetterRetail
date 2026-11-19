@@ -5,7 +5,7 @@
 ///<reference path='./Services/ISingleCheckoutService.ts' />
 ///<reference path='./Services/SingleCheckoutService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class BaseSingleCheckoutController extends Orckestra.Composer.Controller implements Orckestra.Composer.IBaseSingleCheckoutController {

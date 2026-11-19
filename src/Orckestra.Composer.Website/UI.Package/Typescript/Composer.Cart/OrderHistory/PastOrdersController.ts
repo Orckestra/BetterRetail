@@ -5,7 +5,7 @@
 /// <reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='./Services/OrderService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class PastOrdersController extends Controller {

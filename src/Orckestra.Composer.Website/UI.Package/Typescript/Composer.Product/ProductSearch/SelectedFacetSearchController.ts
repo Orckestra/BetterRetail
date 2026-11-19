@@ -9,7 +9,7 @@
 /// <reference path='./UrlHelper.ts' />
 /// <reference path='../../Composer.ContentSearch/SearchParams.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SelectedFacetSearchController extends Orckestra.Composer.Controller {

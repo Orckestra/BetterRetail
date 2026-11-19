@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * Information that an event publishes to its subscribers.
     */

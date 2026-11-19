@@ -1,6 +1,6 @@
 /// <reference path="../ViewModels/IActivePaymentViewModel.ts" />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IMonerisAddVaultProfileViewModel {
         /**
          * Determines if the request was successful.

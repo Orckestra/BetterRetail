@@ -9,7 +9,7 @@
 ///<reference path='../../../Events/IEventHub.ts' />
 ///<reference path='../../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class MonerisCanadaPaymentProvider extends BaseCheckoutPaymentProvider {

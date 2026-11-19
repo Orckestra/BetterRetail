@@ -7,7 +7,7 @@
 declare var dataLayer: any;
 declare var ga: any;
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class GoogleAnalyticsPlugin extends AnalyticsPlugin {

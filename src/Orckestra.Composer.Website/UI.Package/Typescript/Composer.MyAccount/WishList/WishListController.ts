@@ -7,7 +7,7 @@
 ///<reference path='../../Repositories/CartRepository.ts' />
 ///<reference path='../../Composer.Product/Product/ProductHelpers.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class WishListController extends Orckestra.Composer.Controller {
 

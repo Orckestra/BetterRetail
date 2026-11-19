@@ -1,6 +1,6 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     /**
      * Defines a storage engine API capable of performing all the basic CRUD operations.

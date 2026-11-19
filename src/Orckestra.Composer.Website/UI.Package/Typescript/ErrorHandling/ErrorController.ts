@@ -2,7 +2,7 @@
 /// <reference path='../Mvc/Controller.ts' />
 /// <reference path='./IErrorCollection.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class ErrorController extends Controller {
         private lastErrorCodes: string[];
 

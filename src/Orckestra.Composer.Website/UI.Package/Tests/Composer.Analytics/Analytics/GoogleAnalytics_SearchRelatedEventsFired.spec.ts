@@ -3,7 +3,7 @@
 ///<reference path='../../../Typescript/Composer.Analytics/Analytics/GoogleAnalyticsPlugin.ts' />
 ///<reference path='../../../Typescript/Composer.Analytics/Analytics/AnalyticsPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     (() => {
 
         'use strict';

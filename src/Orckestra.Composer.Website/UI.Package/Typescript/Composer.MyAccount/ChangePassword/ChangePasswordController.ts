@@ -5,7 +5,7 @@
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../MyAccount/MyAccountController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class ChangePasswordController extends Orckestra.Composer.MyAccountController {
 

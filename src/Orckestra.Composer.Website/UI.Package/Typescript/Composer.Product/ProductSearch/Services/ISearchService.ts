@@ -2,7 +2,7 @@
 /// <reference path='../../../Generics/Collections/IHashTable.ts' />
 /// <reference path='../ISearchCriteriaOptions.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface ISearchService {
         initialize(options: ISearchCriteriaOptions);
 

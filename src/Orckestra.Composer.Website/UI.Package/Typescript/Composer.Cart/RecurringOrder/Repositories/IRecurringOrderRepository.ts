@@ -3,7 +3,7 @@
 ///<reference path='../ViewModels/IRecurringOrderViewModel.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IRecurringOrderRepository {
         updateLineItemsDate(updateLineItemParam: IRecurringOrderLineItemsUpdateDateParam) : Q.Promise<any>;
         deleteLineItem(deleteLineItemParam: IRecurringOrderLineItemDeleteParam) : Q.Promise<any>;

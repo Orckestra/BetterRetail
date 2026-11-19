@@ -5,7 +5,7 @@
 ///<reference path='./IGetOrderDetailsUrlRequest.ts' />
 ///<reference path='./IGuestOrderDetailsViewModel.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class FindOrderService implements IFindOrderService {
         private eventHub: IEventHub;
 

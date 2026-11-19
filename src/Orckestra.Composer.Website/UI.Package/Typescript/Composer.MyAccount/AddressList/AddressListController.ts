@@ -8,7 +8,7 @@
 ///<reference path='../MyAccount/MyAccountController.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     //TODO refactor modal : create a generic modal service
     export class AddressListController extends Orckestra.Composer.MyAccountController {

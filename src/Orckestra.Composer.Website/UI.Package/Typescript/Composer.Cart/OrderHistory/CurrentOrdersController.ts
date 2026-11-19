@@ -7,7 +7,7 @@
 /// <reference path='../../ErrorHandling/ErrorHandler.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CurrentOrdersController extends Controller {

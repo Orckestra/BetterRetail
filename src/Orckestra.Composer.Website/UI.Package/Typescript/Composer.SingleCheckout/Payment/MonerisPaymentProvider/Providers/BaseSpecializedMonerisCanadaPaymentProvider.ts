@@ -2,7 +2,7 @@
 ///<reference path='../../../../../Typings/tsd.d.ts' />
 ///<reference path='../../../Payment/ViewModels/IActivePaymentViewModel.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export type BaseMonerisCanadaPaymentProviderCollection = { [type: string] : BaseSpecializedMonerisCanadaPaymentProvider };

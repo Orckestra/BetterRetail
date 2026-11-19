@@ -1,6 +1,6 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     const PAGE_PARAM = 'page';
     const SORT_BY_PARAM = 'sortBy';
     const SORT_DIRECTION_PARAM = 'sortDirection';

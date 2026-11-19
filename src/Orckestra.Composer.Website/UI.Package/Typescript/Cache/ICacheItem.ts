@@ -1,6 +1,6 @@
 /// <reference path='./ICachePolicy.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export interface ICacheItem<T> {
 

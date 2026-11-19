@@ -6,7 +6,7 @@
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../Common/MembershipService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class AccountHeaderController extends Orckestra.Composer.Controller {
 

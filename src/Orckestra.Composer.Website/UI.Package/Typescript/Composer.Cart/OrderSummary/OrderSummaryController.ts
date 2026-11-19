@@ -8,7 +8,7 @@
 ///<reference path='./OrderSummaryService.ts' />
 ///<reference path='../OrderHistory/Services/OrderService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class OrderSummaryController extends Orckestra.Composer.Controller {
 

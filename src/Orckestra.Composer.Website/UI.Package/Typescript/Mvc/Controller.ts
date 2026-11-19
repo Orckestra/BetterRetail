@@ -14,7 +14,7 @@
 /// <reference path='../IComposerContext.ts' />
 /// <reference path='../IComposerConfiguration.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     /**

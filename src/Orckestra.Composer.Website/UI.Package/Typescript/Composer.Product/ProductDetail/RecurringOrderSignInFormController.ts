@@ -1,7 +1,7 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='../../Composer.MyAccount/ReturningCustomer/ReturningCustomerController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class RecurringOrderSignInFormController extends ReturningCustomerController {
 

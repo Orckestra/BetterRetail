@@ -6,7 +6,7 @@
 ///<reference path='./IWishListService.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class WishListService implements IWishListService {

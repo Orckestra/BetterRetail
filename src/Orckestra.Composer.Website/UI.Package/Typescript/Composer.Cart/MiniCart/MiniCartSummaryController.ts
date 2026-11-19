@@ -7,7 +7,7 @@
 ///<reference path='../../Composer.Analytics/Analytics/GoogleAnalyticsPlugin.ts' />
 ///<reference path='../CartSummary/CartService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class MiniCartSummaryController extends Orckestra.Composer.Controller {

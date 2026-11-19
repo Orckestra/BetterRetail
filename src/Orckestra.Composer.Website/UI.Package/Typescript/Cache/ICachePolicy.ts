@@ -1,6 +1,6 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     /**
      * Represents a set of eviction and expiration details for a specific cache entry.

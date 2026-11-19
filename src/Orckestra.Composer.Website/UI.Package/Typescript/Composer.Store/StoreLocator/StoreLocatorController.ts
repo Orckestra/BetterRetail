@@ -11,7 +11,7 @@
 ///<reference path='./IStoreLocatorHistoryState.ts' />
 ///<reference path='../../Cache/CacheProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class StoreLocatorController extends Controller {
 

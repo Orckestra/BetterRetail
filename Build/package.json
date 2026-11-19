@@ -11,7 +11,6 @@
     "karma-chrome-launcher": "3.1.0",
     "karma-cli": "2.0.0",
     "karma-jasmine": "3.1.1",
-    "karma-phantomjs-launcher": "1.0.4",
     "karma-sinon": "1.0.5",
     "karma-spec-reporter": "0.0.32",
     "karma-junit-reporter": "2.0.1",

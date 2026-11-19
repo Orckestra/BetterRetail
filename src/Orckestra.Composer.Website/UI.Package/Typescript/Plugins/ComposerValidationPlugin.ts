@@ -3,7 +3,7 @@
 /// <reference path='../ComposerContext.ts' />
 /// <reference path='./IPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class ComposerValidationLocalizationPlugin implements IPlugin {
         public initialize(window: Window, document: HTMLDocument) {
             var locale: string,

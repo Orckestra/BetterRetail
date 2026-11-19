@@ -4,7 +4,7 @@
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='../StoreLocator/Services/GeoLocationService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class StoresDirectoryController extends Controller {
 

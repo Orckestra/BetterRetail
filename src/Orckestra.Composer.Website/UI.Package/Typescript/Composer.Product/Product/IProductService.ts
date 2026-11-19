@@ -1,6 +1,6 @@
 ///<reference path='../RelatedProducts/ProductIdentifierDto.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IProductService {
         calculatePrice(productId: string, concern: string);
 

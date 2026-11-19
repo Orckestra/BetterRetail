@@ -3,7 +3,7 @@
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
 /// <reference path='../../JQueryPlugins/IPopOverJqueryPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     enum RecurringMode  {
         Single = 'Single',

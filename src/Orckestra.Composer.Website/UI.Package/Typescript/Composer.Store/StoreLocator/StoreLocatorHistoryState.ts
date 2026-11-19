@@ -1,7 +1,7 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 ///<reference path='./IStoreLocatorHistoryState.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class StoreLocatorHistoryState implements IStoreLocatorHistoryState {

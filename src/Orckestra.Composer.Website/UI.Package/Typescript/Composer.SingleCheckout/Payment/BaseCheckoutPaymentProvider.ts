@@ -2,7 +2,7 @@
 ///<reference path='../../System/IDisposable.ts' />
 ///<reference path='./ViewModels/IActivePaymentViewModel.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class BaseCheckoutPaymentProvider implements Orckestra.Composer.IDisposable {

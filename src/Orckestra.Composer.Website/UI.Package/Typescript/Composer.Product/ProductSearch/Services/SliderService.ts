@@ -7,7 +7,7 @@
 /// <reference path='../../../Events/IEventHub.ts' />
 /// <reference path='../../../System/IDisposable.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SliderService implements IDisposable {

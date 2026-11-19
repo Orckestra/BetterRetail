@@ -1,6 +1,6 @@
 ///<reference path='../../../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IWishListService {
         addLineItem(productId: string, variantId?: string,
             quantity?: number,

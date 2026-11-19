@@ -6,7 +6,7 @@
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 /// <reference path='./UrlHelper.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SortBySearchController extends Orckestra.Composer.Controller {

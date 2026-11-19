@@ -6,7 +6,7 @@
 ///<reference path='../Payment/IPaymentRepository.ts' />
 ///<reference path='./IPaymentService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class PaymentService implements IPaymentService {

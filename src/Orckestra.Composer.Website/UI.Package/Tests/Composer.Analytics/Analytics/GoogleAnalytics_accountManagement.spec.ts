@@ -4,7 +4,7 @@
 ///<reference path='../../../Typescript/Composer.Analytics/Analytics/AnalyticsPlugin.ts' />
 ///<reference path='../../../Typescript/Composer.MyAccount/Common/MyAccountEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     (() => {
 
         'use strict';

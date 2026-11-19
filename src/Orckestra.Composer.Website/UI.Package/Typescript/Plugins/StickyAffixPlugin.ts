@@ -1,7 +1,7 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 /// <reference path='./IPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class StickyAffixPlugin implements IPlugin {
         public initialize(window: Window, document: HTMLDocument) {
             $('[data-sticky-top]').each(function() {

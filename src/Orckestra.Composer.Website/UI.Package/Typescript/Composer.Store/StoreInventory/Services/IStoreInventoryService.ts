@@ -1,7 +1,7 @@
 ///<reference path='../../../../Typings/tsd.d.ts' />
 ///<reference path='./GetStoresInventoryParam.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IStoreInventoryService {
         getStoresInventory(param: GetStoresInventoryParam): Q.Promise<any>;
 

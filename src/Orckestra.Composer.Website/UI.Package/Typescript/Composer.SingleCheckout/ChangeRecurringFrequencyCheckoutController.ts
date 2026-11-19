@@ -1,7 +1,7 @@
 ///<reference path='../..//Typings/tsd.d.ts' />
 ///<reference path='./BillingAddressSingleCheckoutController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class ChangeRecurringFrequencyCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {

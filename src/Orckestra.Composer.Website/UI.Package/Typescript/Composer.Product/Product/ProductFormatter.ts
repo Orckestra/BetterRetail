@@ -2,7 +2,7 @@
 ///<reference path='../../Mvc/ComposerClient.ts' />
 ///<reference path='../../Events/EventHub.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     /**

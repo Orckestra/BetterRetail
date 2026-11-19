@@ -6,7 +6,7 @@
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../Common/MyAccountStatus.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * Controller for the Coupons section.
      */

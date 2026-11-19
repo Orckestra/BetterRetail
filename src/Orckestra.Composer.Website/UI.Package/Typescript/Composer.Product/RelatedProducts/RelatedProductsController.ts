@@ -1,7 +1,7 @@
 /// <reference path='../Product/ProductController.ts' />
 ///<reference path='../../Plugins/SlickCarouselPlugin.ts' />
 ///<reference path='../ProductEvents.ts' />
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class RelatedProductController extends Orckestra.Composer.ProductController  {
 
         protected concern: string = 'relatedProduct';

@@ -5,7 +5,7 @@
 /// <reference path='./Constants/SearchEvents.ts' />
 /// <reference path='../../Composer.ContentSearch/Constants/ContentSearchEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SearchSummaryController extends Orckestra.Composer.Controller {

@@ -1,5 +1,5 @@
 ///<reference path='./IAnalyticsCoupon.ts' />
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
     export interface IAnalyticsOrder {
         id?: string;

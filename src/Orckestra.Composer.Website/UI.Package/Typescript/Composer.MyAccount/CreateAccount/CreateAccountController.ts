@@ -7,7 +7,7 @@
 ///<reference path='../Common/MyAccountStatus.ts' />
 ///<reference path='../MyAccount/MyAccountController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class CreateAccountController extends Orckestra.Composer.MyAccountController {
 

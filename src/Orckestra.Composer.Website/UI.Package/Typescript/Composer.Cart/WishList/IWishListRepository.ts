@@ -1,6 +1,6 @@
 /// <reference path='../../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     /**
      * Separates the logic that retrieves the data and maps it to the entity model from the application services that acts on the model.

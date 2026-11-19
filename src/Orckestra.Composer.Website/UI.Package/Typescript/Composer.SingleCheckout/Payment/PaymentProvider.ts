@@ -4,7 +4,7 @@
 ///<reference path='./IUpdatePaymentOptions.ts' />
 ///<reference path='./IGetPaymentMethodsOptions.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class PaymentProvider {

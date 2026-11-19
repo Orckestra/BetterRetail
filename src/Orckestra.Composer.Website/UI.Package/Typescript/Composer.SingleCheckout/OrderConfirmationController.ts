@@ -11,7 +11,7 @@
 ///<reference path='../Utils/PasswordCheckService.ts' />
 ///<reference path='../ErrorHandling/ErrorHandler.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class OrderConfirmationController extends Orckestra.Composer.Controller {

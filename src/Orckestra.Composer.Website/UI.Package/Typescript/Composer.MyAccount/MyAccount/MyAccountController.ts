@@ -2,7 +2,7 @@
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='../../JQueryPlugins/ISerializeObjectJqueryPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class MyAccountController extends Orckestra.Composer.Controller {
 

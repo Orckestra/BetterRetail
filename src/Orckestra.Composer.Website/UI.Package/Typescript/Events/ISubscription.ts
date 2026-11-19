@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * A hook that allows a listener to unsubscribe from an event.
      */

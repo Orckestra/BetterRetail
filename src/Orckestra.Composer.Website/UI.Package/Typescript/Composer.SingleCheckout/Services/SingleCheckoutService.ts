@@ -24,7 +24,7 @@
 ///<reference path='../../Services/UserMetadataService.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export enum CheckoutStepNumbers {

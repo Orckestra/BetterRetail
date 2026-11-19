@@ -1,6 +1,6 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     ///Docs : https://bootstrap-datepicker.readthedocs.io/en/latest/

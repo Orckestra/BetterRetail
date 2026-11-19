@@ -1,18 +1,18 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../../Typescript/Mvc/IControllerContext.ts' />
 
-module Orckestra.Composer.Mocks {
+namespace Orckestra.Composer.Mocks {
     'use strict';
 
     export var MockJqueryEventObject: JQueryEventObject = {
         altKey: false,
-        AT_TARGET: 0,
+        AT_TARGET: 2,
         bubbles: false,
-        BUBBLING_PHASE: 0,
+        BUBBLING_PHASE: 3,
         button: 0,
         cancelable: false,
         cancelBubble: true,
-        CAPTURING_PHASE: 0,
+        CAPTURING_PHASE: 1,
         char: {},
         charCode: 0,
         clientX: 0,

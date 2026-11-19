@@ -4,7 +4,7 @@
 /// <reference path='./SearchBoxController.ts' />
 ///<reference path='../Mvc/ComposerClient.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     interface VueAutocompleteData {
         sectionConfigs: any;
         debounceMilliseconds: number;

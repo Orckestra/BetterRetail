@@ -9,7 +9,7 @@
 ///<reference path='../Common/DatepickerService.ts' />
 ///<reference path='../../Utils/Utils.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class MyRecurringScheduleDetailsController extends Orckestra.Composer.RecurringScheduleDetailsController {
         protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);

@@ -1,7 +1,7 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 /// <reference path='./StorageType.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     var localStoragePolyFill: any;
     var sessionStoragePolyFill: any;
     export class StoragePolyfill {

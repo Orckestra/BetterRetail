@@ -2,7 +2,7 @@
 ///<reference path='../../Repositories/MembershipRepository.ts' />
 ///<reference path='./IMembershipService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class MembershipService implements IMembershipService {

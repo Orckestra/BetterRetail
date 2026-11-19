@@ -3,7 +3,7 @@
 ///<reference path='../Mvc/ComposerClient.ts'/>
 ///<reference path='../Mvc/ControllerFactory.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
   export class LazyController extends Controller {
     public initialize() {
       super.initialize();

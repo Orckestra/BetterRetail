@@ -6,7 +6,7 @@
 /// <reference path='./ICacheItem.ts' />
 /// <reference path='./ICachePolicy.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     var NoExpirationPolicy: ICachePolicy = { };
 

@@ -1,5 +1,5 @@
 ///<reference path='../../../../Typings/tsd.d.ts' />
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IStoreLocatorService {
         getMapConfiguration(): Q.Promise<any>;
 

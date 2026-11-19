@@ -6,7 +6,7 @@
 ///<reference path='../Common/MyAccountStatus.ts' />
 ///<reference path='../MyAccount/MyAccountController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class ForgotPasswordController extends Orckestra.Composer.MyAccountController {
 

@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class ProductsHelper {
         static isSize(kvaName) {
             return kvaName.toLowerCase().includes('size');

@@ -4,7 +4,7 @@
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../../Services/UserMetadataService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SignInHeaderController extends Orckestra.Composer.Controller {

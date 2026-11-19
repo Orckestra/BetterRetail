@@ -5,7 +5,7 @@
 ///<reference path='../RelatedProducts/ProductIdentifierDto.ts' />
 ///<reference path='./IProductService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class ProductService implements IProductService {

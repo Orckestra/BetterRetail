@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IMonerisResponseData {
         responseCode: string[];
         dataKey: string;

@@ -18,7 +18,7 @@
 ///<reference path='../../Composer.MyAccount/Common/MembershipService.ts' />
 /// <reference path='./Services/ShowFacetsService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SearchResultsController extends Orckestra.Composer.Controller {

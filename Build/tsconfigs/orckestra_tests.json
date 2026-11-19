@@ -1,10 +1,8 @@
 {
+  "extends": "./base.json",
   "compilerOptions": {
-    "target": "ES5",
-    "outFile": "../../src/Orckestra.Composer.Website/UI.Package/JavaScript/orckestra.composer.tests.js",
-    "sourceMap": true,
-    "removeComments": false,
-    "declaration": true
+    "outDir": "../.temp/lib_tests",
+    "removeComments": false
   },
   "include": ["../../src/Orckestra.Composer.Website/UI.Package/Typescript/**/*.ts"],
   "exclude": ["../../src/Orckestra.Composer.Website/UI.Package/Typescript/App.ts"]

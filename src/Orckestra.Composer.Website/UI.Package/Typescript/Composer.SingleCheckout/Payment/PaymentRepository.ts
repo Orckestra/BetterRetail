@@ -5,7 +5,7 @@
 ///<reference path="./ViewModels/IActivePaymentViewModel.ts" />
 ///<reference path="./ViewModels/IPaymentProfileListViewModel.ts" />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class PaymentRepository implements IPaymentRepository {
 
         /**

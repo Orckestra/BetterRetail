@@ -1,6 +1,6 @@
 /// <reference path='./IPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class AntiIFrameClickJackingPlugin implements IPlugin {
 
         public initialize(window: Window, document: HTMLDocument): void {

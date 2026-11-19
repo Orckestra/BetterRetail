@@ -3,7 +3,7 @@
 /// <reference path='../../Mocks/MockJqueryEventObject.ts' />
 /// <reference path='../../../Typescript/Composer.Store/StoreLocator/Services/StoreLocatorService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
     (() => {
 

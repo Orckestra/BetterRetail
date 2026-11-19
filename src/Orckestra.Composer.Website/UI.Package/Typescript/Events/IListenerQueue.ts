@@ -1,6 +1,6 @@
 /// <reference path='./IListener.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IListenerQueue {
         queue: IListener[];
     }

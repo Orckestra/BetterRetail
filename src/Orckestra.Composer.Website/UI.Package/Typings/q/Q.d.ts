@@ -13,7 +13,7 @@ declare function Q<T>(promise: Q.IPromise<T>): Q.Promise<T>;
  */
 declare function Q<T>(value: T): Q.Promise<T>;
 
-declare module Q {
+declare namespace Q {
     interface IPromise<T> {
         then<U>(onFulfill?: (value: T) => U | IPromise<U>, onReject?: (error: any) => U | IPromise<U>): IPromise<U>;
     }

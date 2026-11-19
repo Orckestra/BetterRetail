@@ -6,7 +6,7 @@
 ///<reference path='../../../Typescript/Composer.Cart/WishList/WishListRepository.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     (() => {

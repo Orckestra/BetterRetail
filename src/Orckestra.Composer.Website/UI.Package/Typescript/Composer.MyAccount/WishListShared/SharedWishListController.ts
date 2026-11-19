@@ -3,7 +3,7 @@
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='../WishList/WishListController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class SharedWishListController extends Orckestra.Composer.WishListController {
 

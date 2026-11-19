@@ -3,7 +3,7 @@
 ///<reference path='./IMapOptions.ts' />
 ///<reference path='./MarkerPool.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class MapService {

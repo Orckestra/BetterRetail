@@ -10,7 +10,7 @@
 /// <reference path='./UrlHelper.ts' />
 /// <reference path='./Facets/FacetTreeVueComponent.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     interface SerializeObject extends JQuery {

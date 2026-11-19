@@ -6,7 +6,7 @@
 ///<reference path='../../../Payment/ViewModels/IActivePaymentViewModel.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class SavedCreditCardMonerisCanadaPaymentProvider extends BaseSpecializedMonerisCanadaPaymentProvider {

@@ -7,7 +7,7 @@
 ///<reference path='../CartSummary/CartService.ts' />
 ///<reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class MiniCartButtonController extends Orckestra.Composer.Controller {

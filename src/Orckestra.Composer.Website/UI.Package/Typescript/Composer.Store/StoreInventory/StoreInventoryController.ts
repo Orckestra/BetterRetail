@@ -5,7 +5,7 @@
 ///<reference path='../StoreLocator/Services/GeoLocationService.ts' />
 ///<reference path='../../Cache/CacheProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class StoreInventoryController extends Controller {
 

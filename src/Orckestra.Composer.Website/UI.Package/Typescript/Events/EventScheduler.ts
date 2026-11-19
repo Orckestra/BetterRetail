@@ -2,7 +2,7 @@
 ///<reference path='./IScheduledCallback.ts' />
 ///<reference path='./EventHub.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * Class in charge of scheduling multiple calls to an event.
      * This class is a multiton. Please use the instance() method to get an instance.

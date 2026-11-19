@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-declare module google.maps {
+declare namespace google.maps {
     /***** Map *****/
     export class Map extends MVCObject {
         constructor(mapDiv: Element, opts?: MapOptions);fitBounds(bounds: LatLngBounds): void;
@@ -187,7 +187,7 @@ declare module google.maps {
         toGeoJson(callback: (feature: Object) => void): void;
     }
 
-    export module Data {
+    export namespace Data {
         export interface DataOptions {
             controlPosition?: ControlPosition;
             controls?: string[];
@@ -1716,7 +1716,7 @@ declare module google.maps {
     }
 
     /***** Geometry Library *****/
-    export module geometry {
+    export namespace geometry {
         export class encoding {
             static decodePath(encodedPath: string): LatLng[];
             static encodePath(path: any[]): string; // LatLng[]|MVCArray<LatLng>
@@ -1740,7 +1740,7 @@ declare module google.maps {
     }
 
     /***** AdSense Library *****/
-    export module adsense {
+    export namespace adsense {
         export class AdUnit extends MVCObject {
             constructor(container: Element, opts: AdUnitOptions);
             getBackgroundColor(): string;
@@ -1801,7 +1801,7 @@ declare module google.maps {
     }
 
     /***** Places Library *****/
-    export module places {
+    export namespace places {
         export class Autocomplete extends MVCObject {
             constructor(inputField: HTMLInputElement, opts?: AutocompleteOptions);
             getBounds(): LatLngBounds;
@@ -1997,7 +1997,7 @@ declare module google.maps {
     }
 
     /***** Drawing Library *****/
-    export module drawing {
+    export namespace drawing {
         export class DrawingManager extends MVCObject {
             constructor(options?: DrawingManagerOptions);
             getDrawingMode(): OverlayType;
@@ -2039,7 +2039,7 @@ declare module google.maps {
     }
 
     /***** Visualization Library *****/
-    export module visualization {
+    export namespace visualization {
         export class MapsEngineLayer extends MVCObject {
             constructor(options: MapsEngineLayerOptions);
             getLayerId(): string;

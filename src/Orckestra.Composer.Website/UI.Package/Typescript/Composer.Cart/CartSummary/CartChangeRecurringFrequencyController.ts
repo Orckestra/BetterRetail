@@ -1,7 +1,7 @@
 ///<reference path='../../../Typings/tsd.d.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CartChangeRecurringFrequencyController extends Orckestra.Composer.Controller {

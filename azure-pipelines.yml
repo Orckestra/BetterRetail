@@ -57,6 +57,15 @@ stages:
         workingFolder: Orckestra.StarterSite/CF/Source
         failOnStandardError: false
 
+    - task: PowerShell@2
+      displayName: 'Check Chrome for Karma tests'
+      inputs:
+        targetType: inline
+        script: |
+          $chrome = @("$env:ProgramFiles\Google\Chrome\Application\chrome.exe", "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $chrome) { throw 'Google Chrome is required by the Karma tests (ChromeHeadless) and was not found on this agent.' }
+          Write-Host "Chrome found: $chrome, version $((Get-Item $chrome).VersionInfo.ProductVersion)"
+
     - task: PowerShell@1
       displayName: Tests
       inputs:

@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * A listener that can subscribe to an event.
     */

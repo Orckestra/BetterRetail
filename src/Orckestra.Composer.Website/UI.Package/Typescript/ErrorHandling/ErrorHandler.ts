@@ -5,7 +5,7 @@
 /// <reference path='../Mvc/Localization/LocalizationProvider.ts' />
 /// <reference path='../Events/EventHub.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class ErrorHandler implements IErrorHandler {
 
         public static instance(): IErrorHandler {

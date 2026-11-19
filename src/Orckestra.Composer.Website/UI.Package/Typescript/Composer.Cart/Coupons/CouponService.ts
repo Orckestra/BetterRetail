@@ -3,7 +3,7 @@
 ///<reference path='../CartSummary/CartService.ts' />
 ///<reference path='../CartSummary/CartEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CouponService {

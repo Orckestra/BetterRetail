@@ -3,7 +3,7 @@
 ///<reference path='../Events/EventHub.ts' />
 ///<reference path='./IMembershipRepository.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class MembershipRepository implements IMembershipRepository {

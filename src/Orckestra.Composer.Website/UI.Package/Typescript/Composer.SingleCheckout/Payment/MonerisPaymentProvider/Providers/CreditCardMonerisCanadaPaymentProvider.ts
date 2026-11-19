@@ -7,7 +7,7 @@
 ///<reference path='../../../Payment/ViewModels/IActivePaymentViewModel.ts' />
 ///<reference path='../../../../JQueryPlugins/IParsleyJqueryPlugin.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CreditCardMonerisCanadaPaymentProvider extends BaseSpecializedMonerisCanadaPaymentProvider {

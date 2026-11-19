@@ -7,7 +7,7 @@
 ///<reference path='../Common/MyAccountEvents.ts' />
 ///<reference path='../../Composer.Cart/WishList/Services/WishListService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class WishListInHeaderController extends Orckestra.Composer.Controller {

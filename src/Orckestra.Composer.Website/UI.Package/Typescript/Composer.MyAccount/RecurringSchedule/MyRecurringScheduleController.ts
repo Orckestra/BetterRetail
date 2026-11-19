@@ -7,7 +7,7 @@
 ///<reference path='../../Composer.Cart/RecurringOrder/Repositories/RecurringOrderRepository.ts' />
 ///<reference path='../../UI/UIModal.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class MyRecurringScheduleController extends Orckestra.Composer.RecurringScheduleController {
         protected recurringOrderService: IRecurringOrderService = new RecurringOrderService(new RecurringOrderRepository(), this.eventHub);

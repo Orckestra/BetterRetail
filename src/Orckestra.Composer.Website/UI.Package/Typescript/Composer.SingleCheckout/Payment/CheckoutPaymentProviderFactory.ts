@@ -2,7 +2,7 @@
 /// <reference path='../../Events/IEventHub.ts' />
 /// <reference path='./BaseCheckoutPaymentProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CheckoutPaymentProviderFactory {

@@ -1,7 +1,7 @@
 ///<reference path='./StoragePolyFill.ts' />
 ///<reference path='./StorageType.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     //We need to defer the evaluation of the storage since on google chrome / incognito mode,
     //it raise a security error exception / access denied

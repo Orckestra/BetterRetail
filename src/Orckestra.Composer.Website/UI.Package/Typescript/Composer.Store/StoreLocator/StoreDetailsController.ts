@@ -2,7 +2,7 @@
 ///<reference path='../../Mvc/Controller.ts' />
 ///<reference path='./Services/GeoLocationService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class StoreDetailsController extends Controller {
 

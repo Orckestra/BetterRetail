@@ -4,7 +4,7 @@
 /// <reference path='../../Generics/Collections/IHashTable.ts' />
 /// <reference path='./ISearchCriteriaOptions.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class SearchCriteria {
         private static facetFieldNameKeyPrefix: string = 'fn';
         private static facetValueKeyPrefix: string = 'fv';

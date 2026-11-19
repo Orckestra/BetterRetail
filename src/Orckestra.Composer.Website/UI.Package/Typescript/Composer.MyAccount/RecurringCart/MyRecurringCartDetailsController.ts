@@ -14,7 +14,7 @@
 ///<reference path='../Common/DatepickerService.ts' />
 ///<reference path='../../Utils/Utils.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export enum EditSection {
         NextOccurence = 0,

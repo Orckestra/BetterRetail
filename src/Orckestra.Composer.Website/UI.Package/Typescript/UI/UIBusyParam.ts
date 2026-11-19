@@ -1,6 +1,6 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface UIBusyParam {
         /*
          * Custom UI busy function (optional). This overides the out of the box UI busy effect.

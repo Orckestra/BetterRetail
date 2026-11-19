@@ -2,7 +2,7 @@
 ///<reference path='../../Typescript/Mvc/IController.ts' />
 ///<reference path='../../Typescript/Mvc/IControllerContext.ts' />
 
-module Orckestra.Composer.Mocks {
+namespace Orckestra.Composer.Mocks {
 
     export class MockController extends Orckestra.Composer.Controller {
         public initialize() {

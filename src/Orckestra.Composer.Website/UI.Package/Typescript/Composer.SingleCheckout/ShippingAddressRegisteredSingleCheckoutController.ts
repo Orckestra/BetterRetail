@@ -2,7 +2,7 @@
 ///<reference path='./BaseSingleCheckoutController.ts' />
 ///<reference path='./ShippingAddressSingleCheckoutController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class ShippingAddressRegisteredSingleCheckoutController extends Orckestra.Composer.BaseSingleCheckoutController {

@@ -1,5 +1,5 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.10.0"
-#tool "nuget:?package=Microsoft.TypeScript.Compiler&version=3.1.5"
+#tool "nuget:?package=Microsoft.TypeScript.MSBuild&version=7.0.1"
 #tool dotnet:?package=Cake.Tool&version=5.0.0
 
 #addin nuget:?package=Cake.MsDeploy&version=5.0.0
@@ -48,6 +48,7 @@ else
 
 var rootDir = "..";
 var srcDir = $"{rootDir}/src";
+var uiDir = $"{srcDir}/Orckestra.Composer.Website/UI.Package";
 var testsDir = $"{rootDir}/tests";
 var outputDir = $"{rootDir}/output";
 var buildDir = $"{rootDir}/build";
@@ -126,29 +127,19 @@ Task("Clean-Typescripts-Unit-Tests").Does(() =>
     DeleteDirectories($"{buildDir}/.temp");
 });
 
-Task("Prepare-Typescripts-Unit-Tests").Does(() =>
-{
-    var destPath = $"{buildDir}/.temp";
-    DeleteDirectories(destPath);
-    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Tests", $"{destPath}/Tests");
-    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Typescript", $"{destPath}/Typescript");
-    CopyDirectory($"{srcDir}/Orckestra.Composer.Website/UI.Package/Typings", $"{destPath}/Typings");
-});
-
-
 Task("Compile-Typescripts-Unit-Tests").Does(() =>
 {
-    CompileTypeScripts(rootDir, $"--project {buildDir}/tsconfigs/unittests.json", 30);
+    RunTsc(rootDir, $"--project {buildDir}/tsconfigs/unittests.json");
 });
 
 Task("Compile-Typescripts-TestBase").Does(() =>
 {
-    CompileTypeScripts(rootDir, $"--project {rootDir}/Build/tsconfigs/orckestra_tests.json", 30);
+    BundleTypeScripts(rootDir, $"{buildDir}/tsconfigs/orckestra_tests.json", uiDir, $"{buildDir}/.temp/lib_tests", $"{uiDir}/JavaScript/orckestra.composer.tests.js");
 });
 
 Task("Compile-Typescripts-Default").Does(() =>
 {
-    CompileTypeScripts(rootDir, $"--project {rootDir}/Build/tsconfigs/orckestra.json", 30);
+    BundleTypeScripts(rootDir, $"{buildDir}/tsconfigs/orckestra.json", uiDir, $"{buildDir}/.temp/lib", $"{uiDir}/JavaScript/orckestra.composer.js");
 });
 
 Task("Run-Karma-Tests-Default").Does(() => 
@@ -221,7 +212,6 @@ Task("Create-NuGet-Package").Does(() =>
 Task("Prepare-Karma-Tests")
 .IsDependentOn("Clean-Typescripts-Unit-Tests")
 .IsDependentOn("Compile-Typescripts-TestBase")
-.IsDependentOn("Prepare-Typescripts-Unit-Tests")
 .IsDependentOn("Compile-Typescripts-Unit-Tests");
 
 Task("Build")

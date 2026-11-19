@@ -1,7 +1,7 @@
 ///<reference path='./IPaymentMethodViewModel.ts' />
 ///<reference path='./IActivePaymentViewModel.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export interface IPaymentViewModel {

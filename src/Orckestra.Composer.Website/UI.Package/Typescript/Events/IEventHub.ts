@@ -4,7 +4,7 @@
 /// <reference path='./IEventInformation.ts' />
 /// <reference path='../Generics/Collections/IHashTable.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * An event hub for subscribing to and publishing events.
     */

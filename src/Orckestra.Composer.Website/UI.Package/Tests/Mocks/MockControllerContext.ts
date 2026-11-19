@@ -1,7 +1,7 @@
 ///<reference path='../../Typings/tsd.d.ts' />
 ///<reference path='../../Typescript/Mvc/IControllerContext.ts' />
 
-module Orckestra.Composer.Mocks {
+namespace Orckestra.Composer.Mocks {
     'use strict';
 
     import IControllerContext = Orckestra.Composer.IControllerContext;

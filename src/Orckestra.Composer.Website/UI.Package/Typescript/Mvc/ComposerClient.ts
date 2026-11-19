@@ -2,7 +2,7 @@
 ///<reference path='./Localization/ILocalizationProvider.ts' />
 ///<reference path='./Localization/LocalizationProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     interface EnhancedJQueryAjaxSettings extends JQueryAjaxSettings {

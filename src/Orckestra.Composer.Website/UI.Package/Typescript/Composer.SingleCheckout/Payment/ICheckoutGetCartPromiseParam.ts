@@ -1,6 +1,6 @@
 ///<reference path='./ICheckoutGetCartPromiseFailureHandler.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     /**

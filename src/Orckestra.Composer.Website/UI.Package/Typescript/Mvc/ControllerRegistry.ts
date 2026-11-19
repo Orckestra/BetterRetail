@@ -1,7 +1,7 @@
 ///<reference path='../Generics/Collections/IHashTable.ts' />
 ///<reference path='./IController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class ControllerRegistry {
         private static _instance : ControllerRegistry;
         private static _registry : IHashTable<any> = {}; //IHashTable<IController> = {};

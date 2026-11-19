@@ -1,6 +1,6 @@
 /// <reference path='./Mvc/IControllerConfiguration.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export interface IComposerConfiguration {
         plugins?: string[];
         paymentProvider?: {

@@ -5,7 +5,7 @@
 ///<reference path='../../../Utils/Utils.ts' />
 ///<reference path='../../../Cache/CacheProvider.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class ShowFacetsService implements IShowFacetsService {

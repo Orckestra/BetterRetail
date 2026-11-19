@@ -9,7 +9,7 @@
 ///<reference path='../../../Repositories/SearchRepository.ts' />
 /// <reference path='../Constants/SearchEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     const FacetsModalId = '#facetsModal';

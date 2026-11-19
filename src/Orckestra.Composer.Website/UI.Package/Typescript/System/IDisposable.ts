@@ -1,4 +1,4 @@
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     /**
      * Provides a mechanism for releasing any resources.
      */

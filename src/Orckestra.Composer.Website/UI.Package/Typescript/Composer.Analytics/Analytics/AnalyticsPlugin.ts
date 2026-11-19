@@ -8,7 +8,7 @@
 /// <reference path='../../Composer.MyAccount/Common/MyAccountEvents.ts' />
 /// <reference path='../../Composer.Product/ProductEvents.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class AnalyticsPlugin implements IAnalyticsPlugin, IPlugin {
         protected cacheProvider: ICacheProvider;
         protected eventHub: IEventHub;

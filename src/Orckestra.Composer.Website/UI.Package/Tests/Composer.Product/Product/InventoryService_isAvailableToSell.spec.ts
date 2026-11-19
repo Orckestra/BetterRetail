@@ -9,7 +9,7 @@
 ///<reference path='../../../Typescript/Composer.Product/Product/InventoryService.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     (() => {

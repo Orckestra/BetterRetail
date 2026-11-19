@@ -2,7 +2,7 @@
 ///<reference path='../../Composer.MyAccount/Common/CustomerService.ts' />
 ///<reference path='../../Dto/AddressDto.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
     export class AddressRegisteredService {
 

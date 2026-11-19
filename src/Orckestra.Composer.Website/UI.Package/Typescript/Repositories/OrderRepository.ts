@@ -2,7 +2,7 @@
 /// <reference path='../Mvc/ComposerClient.ts' />
 /// <reference path='./IOrderRepository.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class OrderRepository implements IOrderRepository {

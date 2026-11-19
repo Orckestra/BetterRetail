@@ -5,7 +5,7 @@
 ///<reference path='../../../Repositories/IOrderRepository.ts' />
 ///<reference path='../../CartSummary/ICartService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class OrderService {

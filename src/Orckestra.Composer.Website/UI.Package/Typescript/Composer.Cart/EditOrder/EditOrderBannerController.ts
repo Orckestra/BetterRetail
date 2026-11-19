@@ -5,7 +5,7 @@
 ///<reference path='../CartSummary/CartEvents.ts' />
 
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class EditOrderBannerController extends Controller {
         protected cartService: ICartService = CartService.getInstance();
         protected orderService = new OrderService();

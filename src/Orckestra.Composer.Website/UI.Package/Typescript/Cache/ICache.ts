@@ -1,7 +1,7 @@
 /// <reference path='../../Typings/tsd.d.ts' />
 /// <reference path='./ICachePolicy.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     /**
      * Represents an object cache and provides services for accessing the cache.

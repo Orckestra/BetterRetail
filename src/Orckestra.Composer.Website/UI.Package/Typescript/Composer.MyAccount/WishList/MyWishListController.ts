@@ -3,7 +3,7 @@
 ///<reference path='../../Mvc/IControllerActionContext.ts' />
 ///<reference path='./WishListController.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
 
     export class MyWishListController extends Orckestra.Composer.WishListController {
         protected VueWishList: Vue;

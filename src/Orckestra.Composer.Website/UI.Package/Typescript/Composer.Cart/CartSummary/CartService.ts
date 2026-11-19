@@ -8,7 +8,7 @@
 ///<reference path='./CartEvents.ts' />
 ///<reference path='../../Composer.Product/Product/ProductHelpers.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CartService implements ICartService {

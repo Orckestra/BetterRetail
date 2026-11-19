@@ -2,7 +2,7 @@
 /// <reference path='./IPlugin.ts' />
 ///<reference path='../Events/EventHub.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     export class SlickCarouselPlugin implements IPlugin {
 
         public initialize(window: Window, document: HTMLDocument) {

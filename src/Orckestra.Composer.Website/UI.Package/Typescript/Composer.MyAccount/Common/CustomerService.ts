@@ -2,7 +2,7 @@
 ///<reference path='../../Repositories/CustomerRepository.ts' />
 ///<reference path='./ICustomerService.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class CustomerService  implements ICustomerService {

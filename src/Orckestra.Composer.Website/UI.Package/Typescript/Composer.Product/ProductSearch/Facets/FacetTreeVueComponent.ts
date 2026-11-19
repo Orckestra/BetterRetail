@@ -1,7 +1,7 @@
 ///<reference path='../../../../Typings/tsd.d.ts' />
 ///<reference path='../../../../Typings/vue/index.d.ts' />
 
-module Orckestra.Composer {
+namespace Orckestra.Composer {
     'use strict';
 
     export class FacetTreeVueComponent {
