@@ -10,66 +10,66 @@ namespace Orckestra.Composer {
         /**
          * Get the cart of the current customer.
          */
-        getCart(): Q.Promise<any>;
+        getCart(): Promise<any>;
 
         /**
          * Add a line item to the cart of the current customer.
          */
         addLineItem(productId: string, variantId?: string, quantity?: number,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any>;
+            recurringOrderProgramName?: string): Promise<any>;
 
         /**
          * Update the quantity of a line item in the cart of the current customer.
          */
         updateLineItem(lineItemId: string, quantity: number,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any>;
+            recurringOrderProgramName?: string): Promise<any>;
 
         /**
          * Delete a line item from the cart of the current customer.
          */
-        deleteLineItem(lineItemId: string): Q.Promise<any>;
+        deleteLineItem(lineItemId: string): Promise<any>;
 
         /**
          * Update the postal code of the billing method in cart of the current customer.
          */
-        updateBillingMethodPostalCode(postalCode: string): Q.Promise<any>;
+        updateBillingMethodPostalCode(postalCode: string): Promise<any>;
 
         /**
          * Update the postal code of the shipping method in cart of the current customer.
          */
-        updateShippingMethodPostalCode(postalCode: string): Q.Promise<any>;
+        updateShippingMethodPostalCode(postalCode: string): Promise<any>;
 
         /**
          * Set the cheapest shipping method in cart of the current customer.
          */
-        setCheapestShippingMethod(): Q.Promise<any>;
+        setCheapestShippingMethod(): Promise<any>;
 
         /**
          * Add a coupon to the cart of the current customer.
          */
-        addCoupon(couponCode: string): Q.Promise<any>;
+        addCoupon(couponCode: string): Promise<any>;
 
         /**
          * Remove a coupon from the cart of the current customer.
          */
-        removeCoupon(couponCode: string): Q.Promise<any>;
+        removeCoupon(couponCode: string): Promise<any>;
 
         /**
          * Cleans the cart of invalid line items.
          */
-        clean(): Q.Promise<any>;
+        clean(): Promise<any>;
 
         /**
          * Update the cart of the current customer.
          */
-        updateCart(param: any): Q.Promise<IUpdateCartResult>;
+        updateCart(param: any): Promise<IUpdateCartResult>;
 
         /**
          * Complete the checkout, thereby clearing every item in the cart of the current customer.
          */
-        completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult>;
+        completeCheckout(currentStep: number): Promise<ICompleteCheckoutResult>;
     }
 
     export interface IUpdateCartResult {

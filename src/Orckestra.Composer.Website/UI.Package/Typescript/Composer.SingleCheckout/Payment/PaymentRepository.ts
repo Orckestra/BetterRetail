@@ -13,8 +13,8 @@ namespace Orckestra.Composer {
          * @param  {providers: Array<string>}       Array of provider names.
          * @return {Array<IPaymentMethodViewModel>} Instance of the provider.
          */
-        public getPaymentMethods(providers: Array<string>): Q.Promise<IPaymentViewModel> {
-            return <Q.Promise<IPaymentViewModel>>
+        public getPaymentMethods(providers: Array<string>): Promise<IPaymentViewModel> {
+            return <Promise<IPaymentViewModel>>
                 ComposerClient.post('/api/payment/paymentmethods', { Providers : providers});
         }
 
@@ -22,13 +22,13 @@ namespace Orckestra.Composer {
          * Return the active payment for the active cart
          * @return {IActivePaymentViewModel} Active payment for the active cart.
          */
-        public getActivePayment() : Q.Promise<IActivePaymentViewModel> {
-            return <Q.Promise<IActivePaymentViewModel>>
+        public getActivePayment() : Promise<IActivePaymentViewModel> {
+            return <Promise<IActivePaymentViewModel>>
                 ComposerClient.get('/api/payment/activepayment');
         }
 
-        public removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Q.Promise<void> {
-            return <Q.Promise<void>>
+        public removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Promise<void> {
+            return <Promise<void>>
                 ComposerClient.remove('/api/payment/removemethod',
                                         {
                                             PaymentMethodId: paymentMethodId,
@@ -36,8 +36,8 @@ namespace Orckestra.Composer {
                                         });
         }
 
-        public setPaymentMethod(request : any) : Q.Promise<IPaymentViewModel> {
-            return <Q.Promise<IPaymentViewModel>>
+        public setPaymentMethod(request : any) : Promise<IPaymentViewModel> {
+            return <Promise<IPaymentViewModel>>
                 ComposerClient.put('/api/payment/paymentMethod', request);
         }
 
@@ -45,12 +45,12 @@ namespace Orckestra.Composer {
          * Return a list of payment methods and payment provider
          * @return {ICheckoutPaymentViewModel} Instance of the provider.
          */
-        public getCheckoutPayment(): Q.Promise<ICheckoutPaymentViewModel> {
-            return <Q.Promise<ICheckoutPaymentViewModel>> ComposerClient.get('/api/payment/checkoutpayment');
+        public getCheckoutPayment(): Promise<ICheckoutPaymentViewModel> {
+            return <Promise<ICheckoutPaymentViewModel>> ComposerClient.get('/api/payment/checkoutpayment');
         }
 
-        public updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel> {
-            return <Q.Promise<IActivePaymentViewModel>> ComposerClient.put('/api/payment/checkoutpayment', request);
+        public updatePaymentMethod(request : any) : Promise<IActivePaymentViewModel> {
+            return <Promise<IActivePaymentViewModel>> ComposerClient.put('/api/payment/checkoutpayment', request);
         }
     }
 }

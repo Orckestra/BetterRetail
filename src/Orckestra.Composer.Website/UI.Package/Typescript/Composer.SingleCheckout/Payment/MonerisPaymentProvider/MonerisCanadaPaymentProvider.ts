@@ -13,7 +13,7 @@ namespace Orckestra.Composer {
     'use strict';
 
     export class MonerisCanadaPaymentProvider extends BaseCheckoutPaymentProvider {
-        private _validationDefer: Q.Deferred<any>;
+        private _validationDefer: Deferred<any>;
         private _monerisPaymentService: MonerisPaymentService;
         private _providers: BaseMonerisCanadaPaymentProviderCollection;
 
@@ -34,13 +34,13 @@ namespace Orckestra.Composer {
          * Method called to get a promise for payment validation.
          * Returns a promise of boolean. The return boolean needs to be false for validation error,
          * or true if valid.
-         * @return {Q.Promise<boolean>} Promise that will be executed when we validate the payment control.
+         * @return {Promise<boolean>} Promise that will be executed when we validate the payment control.
          */
-        public validatePayment(activePaymentVM: IActivePaymentViewModel): Q.Promise<boolean> {
+        public validatePayment(activePaymentVM: IActivePaymentViewModel): Promise<boolean> {
             return this.getProvider(activePaymentVM.PaymentMethodType).validatePayment(activePaymentVM);
         }
 
-        public submitPayment(activePaymentVM : IActivePaymentViewModel): Q.Promise<any> {
+        public submitPayment(activePaymentVM : IActivePaymentViewModel): Promise<any> {
             return this.getProvider(activePaymentVM.PaymentMethodType)
                        .addVaultProfileToken(activePaymentVM);
         }
@@ -49,7 +49,7 @@ namespace Orckestra.Composer {
             this.unregisterDomEvents();
         }
 
-        protected setDefaultCustomerPaymentMethod(activePaymentVM: IActivePaymentViewModel): Q.Promise<IPaymentMethodViewModel> {
+        protected setDefaultCustomerPaymentMethod(activePaymentVM: IActivePaymentViewModel): Promise<IPaymentMethodViewModel> {
             return this._monerisPaymentService
                        .setDefaultCustomerPaymentMethod({
                            PaymentMethodId: activePaymentVM.Id,

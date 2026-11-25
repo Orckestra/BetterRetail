@@ -5,11 +5,11 @@ namespace Orckestra.Composer {
         addLineItem(productId: string, variantId?: string,
             quantity?: number,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any>;
+            recurringOrderProgramName?: string): Promise<any>;
 
-        removeLineItem(lineItemId: string): Q.Promise<any>;
+        removeLineItem(lineItemId: string): Promise<any>;
 
-        getWishListSummary(): Q.Promise<any>;
+        getWishListSummary(): Promise<any>;
 
         clearCache();
     }

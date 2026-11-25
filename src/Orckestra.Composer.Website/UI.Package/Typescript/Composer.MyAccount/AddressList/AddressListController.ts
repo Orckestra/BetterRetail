@@ -51,8 +51,7 @@ namespace Orckestra.Composer {
 
             this.customerService.setDefaultAddress(addressId.toString(), '')
                 .then(result => location.reload(), reason => console.error(reason))
-                .fin(() => busy.done())
-                .done();
+                .finally(() => busy.done());
         }
 
         /**
@@ -67,8 +66,7 @@ namespace Orckestra.Composer {
 
             this.customerService.deleteAddress(addressId, '')
                 .then(result => this.onDeleteAddressFulfilled(result, $addressListItem), reason => console.error(reason))
-                .fin(() => busy.done())
-                .done();
+                .finally(() => busy.done());
         }
 
         private onDeleteAddressFulfilled(result: any, $addressListItem: JQuery): void {

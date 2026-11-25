@@ -32,9 +32,9 @@ namespace Orckestra.Composer {
         private _isSearch: boolean = false;
         private _timer: number;
         private _enterPressedTimer: number;
-        private _getCurrentLocation: Q.Deferred<google.maps.LatLng> = Q.defer<google.maps.LatLng>();
+        private _getCurrentLocation: Deferred<google.maps.LatLng> = new Deferred<google.maps.LatLng>();
 
-        public getCurrentLocation(): Q.Promise<google.maps.LatLng> {
+        public getCurrentLocation(): Promise<google.maps.LatLng> {
             return this._getCurrentLocation.promise;
         }
 
@@ -102,7 +102,7 @@ namespace Orckestra.Composer {
                     if (!currentLocation) { return ; }
                     this.eventHub.publish('searchPointChanged', { data: currentLocation });
                 })
-                .fail(reason => this.handlePromiseFail('StoreLocator Initialize', reason));
+                .catch(reason => this.handlePromiseFail('StoreLocator Initialize', reason));
         }
 
         protected getCommonStoreLocatorVueConfig(self: StoreLocatorController): any {
@@ -202,11 +202,11 @@ namespace Orckestra.Composer {
             });
         }
 
-        private initCacheData(): Q.Promise<string> {
+        private initCacheData(): Promise<string> {
             // first check if address is posted from other page.
             let postedAddress = this.getPostedAddress();
 
-            if (postedAddress) {  return Q.resolve(postedAddress); }
+            if (postedAddress) {  return Promise.resolve(postedAddress); }
 
             // then check history state
             this._historyState.parseHistoryState();
@@ -217,7 +217,7 @@ namespace Orckestra.Composer {
                     this.setPostedAddress(cachedAddr);
                     return cachedAddr;
 
-                }).fail(() =>  '');
+                }).catch(() =>  '');
         }
 
         protected getMapOptions(storeLocatorOption: IStoreLocatorInitializationOptions, historyState: IStoreLocatorHistoryState): IMapOptions {
@@ -294,7 +294,7 @@ namespace Orckestra.Composer {
                         });
 
                     })
-                    .fail(reason => this.handlePromiseFail('StoreLocator OnMarkerClick', reason));
+                    .catch(reason => this.handlePromiseFail('StoreLocator OnMarkerClick', reason));
             }
         }
 
@@ -344,7 +344,7 @@ namespace Orckestra.Composer {
                     this._historyState.historyPushState({ page, point: searchPoint, zoom: zoomLevel, center });
                     this._isSearch = false;
                 })
-                .fail(reason => this.handlePromiseFail('StoreLocator UpdateMarkers getMarkers', reason));
+                .catch(reason => this.handlePromiseFail('StoreLocator UpdateMarkers getMarkers', reason));
         }
 
         private setSearchLocationInMap(point: google.maps.LatLng, zoomLevel: number = this._storeLocatorOptions.zoomLevel) {
@@ -373,7 +373,7 @@ namespace Orckestra.Composer {
                         this.eventHub.publish('searchPointChanged', { data: currentLocation });
                     })
                 )
-                .fail(reason => this.handlePromiseFail('StoreLocator searchCurrentLocation', reason));
+                .catch(reason => this.handlePromiseFail('StoreLocator searchCurrentLocation', reason));
         }
 
         // Remember element position in history
@@ -395,19 +395,19 @@ namespace Orckestra.Composer {
             nearestInfoPanel.removeClass('d-none');
         }
 
-        protected getStores(page): Q.Promise<any> {
+        protected getStores(page): Promise<any> {
             this._historyState.historyPushState({ page });
             return this.getStoresForPage(page, this.getPageSize());
         }
 
-        protected getStoresForPage(page: number, pageSize?: number): Q.Promise<any> {
+        protected getStoresForPage(page: number, pageSize?: number): Promise<any> {
             let mapBounds = this._mapService.getBounds(this._storeLocatorOptions.markerPadding);
             let searchPoint = this._searchPoint;
 
             return this._storeLocatorService.getStores(mapBounds.getSouthWest(), mapBounds.getNorthEast(), searchPoint, page, pageSize);
         }
 
-        protected setGoogleDirectionLinks(): Q.Promise<any> {
+        protected setGoogleDirectionLinks(): Promise<any> {
 
             return this.getCurrentLocation().then(location => {
                 this._geoService.updateDirectionLinksWithLatLngSourceAddress(this.getContainer(), location);

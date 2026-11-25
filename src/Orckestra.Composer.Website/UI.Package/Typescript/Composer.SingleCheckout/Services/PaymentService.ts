@@ -23,7 +23,7 @@ namespace Orckestra.Composer {
          * @param  {providers: Array<string>}      Array of provider names.
          * @return {Array<IPaymentMethodViewModel} List of payment provider details
          */
-        public getPaymentMethods(providers: Array<string>): Q.Promise<IPaymentViewModel> {
+        public getPaymentMethods(providers: Array<string>): Promise<IPaymentViewModel> {
             return this.paymentRepository.getPaymentMethods(providers);
         }
 
@@ -31,15 +31,15 @@ namespace Orckestra.Composer {
          * Return the active payment for the active cart
          * @return {IActivePaymentViewModel} Active payment for the active cart.
          */
-        public getActivePayment(): Q.Promise<IActivePaymentViewModel> {
+        public getActivePayment(): Promise<IActivePaymentViewModel> {
             return this.paymentRepository.getActivePayment();
         }
 
-        public removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Q.Promise<void> {
+        public removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Promise<void> {
             return this.paymentRepository.removePaymentMethod(paymentMethodId, paymentProviderName);
         }
 
-        public setPaymentMethod(request: any): Q.Promise<IPaymentViewModel> {
+        public setPaymentMethod(request: any): Promise<IPaymentViewModel> {
             return this.paymentRepository.setPaymentMethod(request);
         }
 
@@ -47,11 +47,11 @@ namespace Orckestra.Composer {
          * Return a list of acceptable payment providers and methods details with labels
          * @return {ICheckoutPaymentViewModel} payment details
          */
-        public getCheckoutPayment(): Q.Promise<ICheckoutPaymentViewModel> {
+        public getCheckoutPayment(): Promise<ICheckoutPaymentViewModel> {
             return this.paymentRepository.getCheckoutPayment();
         }
 
-        public updatePaymentMethod(request: any): Q.Promise<IActivePaymentViewModel> {
+        public updatePaymentMethod(request: any): Promise<IActivePaymentViewModel> {
             return this.paymentRepository.updatePaymentMethod(request);
         }
     }

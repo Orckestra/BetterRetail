@@ -28,7 +28,7 @@ namespace Orckestra.Composer {
         * Adds a coupon using the Composer API.
         * @param couponCode Code of the Coupon to add through the API.
         */
-        public addCoupon(couponCode: string): Q.Promise<void> {
+        public addCoupon(couponCode: string): Promise<void> {
 
             var data = {
                 CouponCode: couponCode
@@ -53,7 +53,7 @@ namespace Orckestra.Composer {
          * Removes a coupon using the Composer API
          * @param {String} couponCode Code of the coupon to remove.
          */
-        public removeCoupon(couponCode: string): Q.Promise<void> {
+        public removeCoupon(couponCode: string): Promise<void> {
 
             var data = {
                 CouponCode: couponCode

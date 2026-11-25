@@ -63,23 +63,23 @@ namespace Orckestra.Composer {
         }
 
         private trigger(data: any): void {
-            var promise: Q.Promise<any> = this.triggerCallbacks(data);
+            var promise: Promise<any> = this.triggerCallbacks(data);
 
             promise
                 .then((data: any) => this.triggerPostEvent(data))
-                .done(() => console.log(`Event '${this.eventName}' fulfilled by the Event Schedule successfully.`),
+                .then(() => console.log(`Event '${this.eventName}' fulfilled by the Event Schedule successfully.`),
                     (reason: any) => this.onError(reason));
         }
 
-        private triggerCallbacks(data: any): Q.Promise<any> {
-            var promise: Q.Promise<any>;
+        private triggerCallbacks(data: any): Promise<any> {
+            var promise: Promise<any>;
 
             if (_.isEmpty(this.onEventCallbacks)) {
-                promise = Q(data);
+                promise = Promise.resolve(data);
             } else {
-               var promises: Q.Promise<any>[] = _.map(this.onEventCallbacks, (callback: IScheduledCallback) => callback(data));
+               var promises: Promise<any>[] = _.map(this.onEventCallbacks, (callback: IScheduledCallback) => callback(data));
 
-               promise = Q.all(promises)
+               promise = Promise.all(promises)
                 .then((values: any[]) => {
                     return data;
                 });
@@ -88,13 +88,13 @@ namespace Orckestra.Composer {
             return promise;
         }
 
-        private triggerPostEvent(data: any): Q.Promise<any> {
-            var promise: Q.Promise<any>;
+        private triggerPostEvent(data: any): Promise<any> {
+            var promise: Promise<any>;
 
             if (this.postEventCallback) {
                 promise = this.postEventCallback(data);
             } else {
-                promise = Q(data);
+                promise = Promise.resolve(data);
             }
 
             return promise;

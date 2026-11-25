@@ -11,27 +11,27 @@ namespace Orckestra.Composer {
 
     export class ComposerClient {
 
-        public static get(url: string, data?: any) : Q.Promise<any> {
+        public static get(url: string, data?: any) : Promise<any> {
 
             return this.sendRequest('GET', url, data);
         }
 
-        public static post(url: string, data: any) : Q.Promise<any> {
+        public static post(url: string, data: any) : Promise<any> {
 
             return this.sendRequest('POST', url, data ? JSON.stringify(data) : null);
         }
 
-        public static put(url: string, data: any) : Q.Promise<any> {
+        public static put(url: string, data: any) : Promise<any> {
 
             return this.sendRequest('PUT', url, data ? JSON.stringify(data) : null);
         }
 
-        public static remove(url: string, data: any) : Q.Promise<any> {
+        public static remove(url: string, data: any) : Promise<any> {
 
             return this.sendRequest('DELETE', url, data ? JSON.stringify(data) : null);
         }
 
-        private static sendRequest(method: string, url: string, data?: any) : Q.Promise<any> {
+        private static sendRequest(method: string, url: string, data?: any) : Promise<any> {
 
             const settings: EnhancedJQueryAjaxSettings = {
                 contentType: 'application/json',
@@ -45,7 +45,7 @@ namespace Orckestra.Composer {
                 }
             };
 
-            return Q($.ajax(settings)).fail(reason => this.onRequestRejected(reason));
+            return Promise.resolve($.ajax(settings)).catch(reason => this.onRequestRejected(reason));
         }
 
         private static getPageCulture(): string {

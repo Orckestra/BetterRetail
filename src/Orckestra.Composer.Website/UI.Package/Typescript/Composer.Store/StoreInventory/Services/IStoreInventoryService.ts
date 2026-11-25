@@ -3,10 +3,10 @@
 
 namespace Orckestra.Composer {
     export interface IStoreInventoryService {
-        getStoresInventory(param: GetStoresInventoryParam): Q.Promise<any>;
+        getStoresInventory(param: GetStoresInventoryParam): Promise<any>;
 
-        getDefaultAddress(): Q.Promise<any>;
+        getDefaultAddress(): Promise<any>;
 
-        getSkuSelection(productId: string): Q.Promise<any>;
+        getSkuSelection(productId: string): Promise<any>;
     }
 }

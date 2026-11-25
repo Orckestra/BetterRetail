@@ -97,7 +97,7 @@ namespace Orckestra.Composer {
 
                     this.reRenderCartPage(result);
                 })
-                .fail((reason) => {
+                .catch((reason) => {
                     console.error(reason);
                 });
         }
@@ -176,7 +176,7 @@ namespace Orckestra.Composer {
                         }
                         busyHandle.done();
                     })
-                    .fail((reason) => {
+                    .catch((reason) => {
                         console.error(reason);
                         busyHandle.done();
                     });
@@ -303,12 +303,12 @@ namespace Orckestra.Composer {
             this.editPayment = false;
         }
 
-        public getShippingMethods(cartName) : Q.Promise<any> {
+        public getShippingMethods(cartName) : Promise<any> {
             let param: IRecurringOrderGetCartShippingMethods = {
                 CartName: cartName
             };
             return this.recurringOrderService.getCartShippingMethods(param)
-                    .fail((reason) => {
+                    .catch((reason) => {
                         console.error('Error while retrieving shipping methods', reason);
                     });
         }
@@ -395,11 +395,11 @@ namespace Orckestra.Composer {
 
                         this.reRenderCartPage(result);
                     })
-                    .fail((reason) => {
+                    .catch((reason) => {
                         console.error('Error: Error while saving shipping method', reason);
                         this.showError('RecurringCartShippingMethodUpdateFailed', `[data-templateid="RecurringCartDetailsShippingMethod"]`);
                     })
-                    .fin(() => busy.done());
+                    .finally(() => busy.done());
             }
         }
 
@@ -431,14 +431,14 @@ namespace Orckestra.Composer {
 
                             this.render('RecurringCartDetailsAddress', addressesVm);
                         })
-                        .fin(() => busy.done());
+                        .finally(() => busy.done());
                 } else {
                     this.storeService.getStores()
                         .then((storesVm) => {
                             //console.log(storesVm);
                             //TODO: Open adresse with list of stores
                         })
-                        .fin(() => busy.done());
+                        .finally(() => busy.done());
                 }
 
             } else {
@@ -501,11 +501,11 @@ namespace Orckestra.Composer {
 
                     this.reRenderCartPage(result);
                 })
-                .fail((reason) => {
+                .catch((reason) => {
                     console.error('Error: Error while saving addresses', reason);
                     this.showError('RecurringCartAddressesUpdateFailed', `[data-templateid="RecurringCartDetailsAddress"]`);
                 })
-                .fin(() => busy.done());
+                .finally(() => busy.done());
         }
 
         public useShippingAddress() : Boolean {
@@ -559,7 +559,7 @@ namespace Orckestra.Composer {
                         result.EditMode = this.editPayment;
                         this.render('RecurringCartDetailsPayment', result);
                     })
-                    .fin(() => busy.done());
+                    .finally(() => busy.done());
 
             } else {
                 this.render('RecurringCartDetailsPayment', this.viewModel);
@@ -641,8 +641,8 @@ namespace Orckestra.Composer {
 
                     this.reRenderCartPage(result);
                 })
-                .fail((reason: any) => this.onLineItemQuantityFailed(context, reason))
-                .fin(() => busy.done());
+                .catch((reason: any) => this.onLineItemQuantityFailed(context, reason))
+                .finally(() => busy.done());
         }
 
         protected onLineItemQuantityFailed(context: JQuery, reason: any): void {
@@ -693,8 +693,8 @@ namespace Orckestra.Composer {
                     //TODO: Manage if last item?
                     //Deleting the last recurring item will reschedule the cartName to the line item next occurence
                 })
-                .fail((reason: any) => this.onLineItemDeleteFailed(context, reason))
-                .fin(() => busy.done());
+                .catch((reason: any) => this.onLineItemDeleteFailed(context, reason))
+                .finally(() => busy.done());
         }
 
         protected onLineItemDeleteFailed(context: JQuery, reason: any): void {
@@ -711,7 +711,7 @@ namespace Orckestra.Composer {
           /**
          * Requires the element in action context to have a data-address-id.
          */
-        protected deleteAddress(event: JQueryEventObject): Q.Promise<void> {
+        protected deleteAddress(event: JQueryEventObject): Promise<void> {
 
             let element = $(event.target);
             var $addressListItem = element.closest('[data-address-id]');
@@ -724,7 +724,7 @@ namespace Orckestra.Composer {
                     this.eventHub.publish(MyAccountEvents[MyAccountEvents.AddressDeleted], { data: addressId });
                     //this.reRenderCartPage(this.viewModel);
                 })
-                .fin(() => busy.done());
+                .finally(() => busy.done());
         }
 
         public onAddressDeleted(e: IEventInformation) {
@@ -765,12 +765,12 @@ namespace Orckestra.Composer {
                     this.viewModel = result;
                     this.reRenderCartPage(result);
                 })
-                .fail((reason) => {
+                .catch((reason) => {
                     console.error('Error: Error while saving payment', reason);
                     this.showError('RecurringCartPaymentUpdateFailed', `[data-templateid="RecurringCartDetailsPayment"]`);
 
                 })
-                .fin(() => busy.done());
+                .finally(() => busy.done());
         }
 
         protected releaseBusyHandler(): void {

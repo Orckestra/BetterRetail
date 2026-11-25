@@ -20,8 +20,8 @@ namespace Orckestra.Composer {
             let relatedProductsPromise = self.getRelatedProducts();
             let getWithListTask = this.wishListService.getWishListSummary();
             let authenticatedPromise = this.membershipService.isAuthenticated();
-            Q.all([relatedProductsPromise, getWithListTask, authenticatedPromise])
-            .spread((relatedproducts, wishlist, authVm) => {
+            Promise.all([relatedProductsPromise, getWithListTask, authenticatedPromise])
+            .then(([relatedproducts, wishlist, authVm]) => {
                 self.VueRelatedProducts = new Vue({
                     el: '#vueRelatedProducts',
                     data: {
@@ -82,7 +82,7 @@ namespace Orckestra.Composer {
                                     product.SizeSelected = true;
                                     this.ProductsMap[ProductId] = product;
                                 })
-                                .fin(() => this.loadingProduct(relatedProduct, false));
+                                .finally(() => this.loadingProduct(relatedProduct, false));
                         },
                         onMouseleave(relatedProduct) {
                             this.ActiveProductId = undefined;
@@ -122,7 +122,7 @@ namespace Orckestra.Composer {
 
                             self.inventoryService.isAvailableToSell(variant.Sku)
                                 .then(result => relatedProduct.IsAvailableToSell = result)
-                                .fin(() => this.loadingProduct(relatedProduct, false));
+                                .finally(() => this.loadingProduct(relatedProduct, false));
                         },
                         searchProductClick(product, index) {
                             self.eventHub.publish(ProductEvents.ProductClick, {
@@ -146,8 +146,8 @@ namespace Orckestra.Composer {
                             this.loadingProduct(product, true);
 
                             self.cartService.addLineItem(product, price, product.VariantId,  1, self.getListNameForAnalytics())
-                                .fail(reason => this.onAddToCartFailed(reason, 'AddToCartFailed'))
-                                .fin(() => this.loadingProduct(product, false));
+                                .catch(reason => this.onAddToCartFailed(reason, 'AddToCartFailed'))
+                                .finally(() => this.loadingProduct(product, false));
                         },
                         addLineItemToWishList(relatedProduct) {
                             if (!this.IsAuthenticated) {
@@ -158,13 +158,13 @@ namespace Orckestra.Composer {
     
                             self.wishListService.addLineItem(ProductId, VariantId, 1, undefined, RecurringOrderProgramName)
                                 .then(wishList => this.WishList = wishList)
-                                .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                                .catch(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
                         },
     
                         removeLineItemFromWishList(relatedProduct) {
                             self.wishListService.removeLineItem(relatedProduct.WishListItem.Id)
                                 .then(wishList => this.WishList = wishList)
-                                .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                                .catch(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
                         },
                         onAddToCartFailed(reason: any, errorCode): void {
                             console.error('Error on adding item to cart', reason);
@@ -184,7 +184,7 @@ namespace Orckestra.Composer {
         }
 
 
-        private getRelatedProducts(): Q.Promise<any> {
+        private getRelatedProducts(): Promise<any> {
             let vm = this.context.viewModel;
             let identifiers = vm.ProductIdentifiers;
             return this.productService.getRelatedProducts(identifiers)

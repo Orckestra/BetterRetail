@@ -3,6 +3,6 @@
 namespace Orckestra.Composer {
     export interface IStoreService {
 
-        getStores(): Q.Promise<any>;
+        getStores(): Promise<any>;
     }
 }

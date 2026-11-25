@@ -25,11 +25,11 @@ namespace Orckestra.Composer {
         /**
         * Return a Promise which returns an array of Payment Methods.
         */
-        public getPaymentMethods(getPaymentMethodOptions: IGetPaymentMethodsOptions): Q.Promise<any> {
+        public getPaymentMethods(getPaymentMethodOptions: IGetPaymentMethodsOptions): Promise<any> {
             return ComposerClient.post('/api/payment/paymentmethods', getPaymentMethodOptions);
         }
 
-        public updatePaymentMethod(request: IUpdatePaymentOptions): Q.Promise<any> {
+        public updatePaymentMethod(request: IUpdatePaymentOptions): Promise<any> {
             return ComposerClient.put('/api/payment/paymentmethod', request)
                 .then((payload) => {
                     this._currentPaymentMethod = request;

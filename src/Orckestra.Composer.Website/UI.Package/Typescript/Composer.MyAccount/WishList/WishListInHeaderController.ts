@@ -29,7 +29,7 @@ namespace Orckestra.Composer {
             }
 
             this._wishListService.getWishListSummary()
-                .done(wishList => {
+                .then(wishList => {
 
                     if (!_.isEmpty(wishList)) {
                         this.renderWishList(wishList);
@@ -54,7 +54,7 @@ namespace Orckestra.Composer {
             this.renderWishList(wishList);
         }
 
-        protected onRefreshUser(e: IEventInformation): Q.Promise<any> {
+        protected onRefreshUser(e: IEventInformation): Promise<any> {
 
             return this._wishListService.clearCache();
         }

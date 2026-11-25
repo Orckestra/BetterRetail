@@ -12,12 +12,12 @@ namespace Orckestra.Composer {
             this._geocoder = new google.maps.Geocoder();
         }
 
-        public geolocate(): Q.Promise<any> {
-            return this._browserGeolocation ? this.getCurrentLocation() : Q.reject('browserGeolocation not define');
+        public geolocate(): Promise<any> {
+            return this._browserGeolocation ? this.getCurrentLocation() : Promise.reject('browserGeolocation not define');
         }
 
-        private getCurrentLocation(): Q.Promise<google.maps.LatLng> {
-            let deferred = Q.defer<google.maps.LatLng>();
+        private getCurrentLocation(): Promise<google.maps.LatLng> {
+            let deferred = new Deferred<google.maps.LatLng>();
             this._browserGeolocation.getCurrentPosition((pos) => {
                 this._currenctLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 deferred.resolve(this._currenctLocation);
@@ -27,8 +27,8 @@ namespace Orckestra.Composer {
             return deferred.promise;
         }
 
-        public getAddressByLocation(location: google.maps.LatLng): Q.Promise<string> {
-            var deferred = Q.defer<string>();
+        public getAddressByLocation(location: google.maps.LatLng): Promise<string> {
+            var deferred = new Deferred<string>();
 
             this._geocoder.geocode({ location: location },
                 function (results, status) {
@@ -43,8 +43,8 @@ namespace Orckestra.Composer {
             return deferred.promise;
         }
 
-        public getLocationByAddress(address: string): Q.Promise<google.maps.LatLng> {
-            var deferred = Q.defer<google.maps.LatLng>();
+        public getLocationByAddress(address: string): Promise<google.maps.LatLng> {
+            var deferred = new Deferred<google.maps.LatLng>();
 
             this._geocoder.geocode({ address: address },
                 (results, status) => {

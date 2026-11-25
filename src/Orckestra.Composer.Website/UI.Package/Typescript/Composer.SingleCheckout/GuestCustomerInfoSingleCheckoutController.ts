@@ -50,17 +50,17 @@ namespace Orckestra.Composer {
                     prepareCustomer() {
                         this.initializeParsey(self.formSelector);
                     },
-                    processCustomer(): Q.Promise<boolean> {
+                    processCustomer(): Promise<boolean> {
 
                         if (this.ShowSignInButton) {
                             this.Mode.SignIn = SignInModes.Base;
                             this.Cart.Customer = { ...this.customerBeforeEdit };
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
-                            return Q.reject('User information is not valid');
+                            return Promise.reject('User information is not valid');
                         }
 
                         if (!this.IsAuthenticated) {
@@ -83,9 +83,9 @@ namespace Orckestra.Composer {
                         return this.updateCustomer();
                     },
 
-                    updateCustomer(): Q.Promise<boolean> {
+                    updateCustomer(): Promise<boolean> {
                         if (!this.isCustomerModified()) {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         this.Steps.Information.Loading = true;
@@ -126,10 +126,10 @@ namespace Orckestra.Composer {
                             this.Mode.SignIn = SignInModes.Base;
                         }
                     },
-                    checkUserExist(email: string): Q.Promise<boolean> {
+                    checkUserExist(email: string): Promise<boolean> {
                         if (this.CheckedEmailAddress.Email === email) {
                             this.Mode.SignIn = this.CheckedEmailAddress.IsExist ? SignInModes.UserExists : SignInModes.Base;
-                            return Q.resolve(this.CheckedEmailAddress.IsExist);
+                            return Promise.resolve(this.CheckedEmailAddress.IsExist);
                         }
 
                         return self.checkoutService.checkUserExist(email)
@@ -145,12 +145,12 @@ namespace Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueUserMixin);
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getViewModelNameForUpdatePromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 var vueData = this.checkoutService.VueCheckout;
                 let isValid = vueData.validateParsey(this.formSelector);
                 if (!isValid) {
-                    return Q.reject('User information is not valid');
+                    return Promise.reject('User information is not valid');
                 }
 
                 if (vueData.isCustomerModified()) {
@@ -159,8 +159,8 @@ namespace Orckestra.Composer {
             });
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let vueCustomerData = this.checkoutService.VueCheckout.Cart.Customer;
                 return { [this.viewModelName]: JSON.stringify(vueCustomerData) };
             });

@@ -19,9 +19,9 @@ namespace Orckestra.Composer {
                     AddressName: null,
                 },
                 methods: {
-                    processShippingAddressRegistered(): Q.Promise<boolean> {
+                    processShippingAddressRegistered(): Promise<boolean> {
                         if(!this.shippingAddressModified()) {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         //WHEN CHANGING SHIPPING ADDRESS, WE ALSO NEED UPDATE BILLING IF UseShippingAddress = TRUE
@@ -45,7 +45,7 @@ namespace Orckestra.Composer {
                     addShippingAddressToMyAddressBook() {
                         let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
-                            return Q.reject('Shipping Address information is not valid');
+                            return Promise.reject('Shipping Address information is not valid');
                         }
 
                         let postalCode = this.Cart.ShippingAddress.PostalCode;
@@ -60,7 +60,7 @@ namespace Orckestra.Composer {
                                             address.RegionName = this.ShippingAddress.RegionName;
                                             this.changeRegisteredShippingAddress(address.Id);
                                         })
-                                        .fail((reason) => {
+                                        .catch((reason) => {
                                             console.log(reason);
                                             this.handleAddressErrors(reason);
                                         });
@@ -79,7 +79,7 @@ namespace Orckestra.Composer {
                                 //WHEN CHANGING SHIPPING, WE ALSO NEED UPDATE BILLING
                                 let controllersToUpdate = [self.viewModelName, 'BillingAddressRegistered'];
                                 self.checkoutService.updateCart(controllersToUpdate)
-                                    .fail((reason) => {
+                                    .catch((reason) => {
                                         console.log(reason);
                                     });
                             }, 500);
@@ -92,7 +92,7 @@ namespace Orckestra.Composer {
                     updateEditedShippingAddress() {
                         let isValid = this.validateParsey('#editAddressForm');
                         if (!isValid) {
-                            return Q.reject('Address information is not valid');
+                            return Promise.reject('Address information is not valid');
                         }
                         this.Mode.Loading = true;
                         this.EditingAddress.AddressName = this.AddressName;
@@ -108,8 +108,8 @@ namespace Orckestra.Composer {
                                 }
                             }
                         })
-                        .fail(reason => this.handleAddressErrors(reason))
-                        .fin(() => this.Mode.Loading = false)
+                        .catch(reason => this.handleAddressErrors(reason))
+                        .finally(() => this.Mode.Loading = false)
                     }
                 }
             };
@@ -117,8 +117,8 @@ namespace Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueShippingAddressRegisteredMixin);
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getViewModelNameForUpdatePromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 var vueData = this.checkoutService.VueCheckout;
                 if (!vueData.IsAuthenticated) {
                     return;
@@ -130,8 +130,8 @@ namespace Orckestra.Composer {
             });
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let selectedAddressId = this.checkoutService.VueCheckout.SelectedShippingAddressId;
                 return {[this.viewModelName]: JSON.stringify({ ShippingAddressId: selectedAddressId })};
             });

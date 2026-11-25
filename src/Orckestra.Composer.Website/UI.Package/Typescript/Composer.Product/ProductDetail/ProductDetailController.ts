@@ -29,7 +29,7 @@ namespace Orckestra.Composer {
                 loadingIndicatorSelector: '.loading-indicator-pricediscount'
             });
 
-            Q.when(this.calculatePrice()).done(() => {
+            Promise.resolve(this.calculatePrice()).then(() => {
                 priceDisplayBusy.done();
                 this.notifyAnalyticsOfProductDetailsImpression();
             });
@@ -43,8 +43,8 @@ namespace Orckestra.Composer {
             let getCartPromise = this.cartService.getFreshCart();
             let authenticatedPromise = this._membershipService.isAuthenticated();
             let getWishListPromise = this._wishListService.getWishListSummary();
-            Q.all([availableToSellPromise, getCartPromise, authenticatedPromise, getWishListPromise])
-                .spread((isAvailableToSell, cartVm, authVm, wishListVm) => {
+            Promise.all([availableToSellPromise, getCartPromise, authenticatedPromise, getWishListPromise])
+                .then(([isAvailableToSell, cartVm, authVm, wishListVm]) => {
                     this.initAddToCartWithQtyInCartVueComponent(isAvailableToSell, cartVm, authVm);
                     this.initAddToCartWithQtyVueComponent(isAvailableToSell, cartVm, authVm);
                     this.initAddToWishListVueComponent(authVm, wishListVm);
@@ -125,7 +125,7 @@ namespace Orckestra.Composer {
                                 self.onAddLineItemFailed(reason);
                                 throw reason;
                             })
-                            .fin(() => this.Loading = false);
+                            .finally(() => this.Loading = false);
 
                     },
                     updateItemQuantity(quantity: number) {
@@ -170,7 +170,7 @@ namespace Orckestra.Composer {
                                         self.onAddLineItemFailed(reason);
                                         throw reason;
                                     })
-                                    .fin(() => this.Loading = false);
+                                    .finally(() => this.Loading = false);
 
                             }, 400);
                         }
@@ -240,7 +240,7 @@ namespace Orckestra.Composer {
                                 self.onAddLineItemFailed(reason);
                                 throw reason;
                             })
-                            .fin(() => {
+                            .finally(() => {
                                 this.Loading = false; 
                                 this.Quantity = this.Cart.QuantityRange.Min;
                             });
@@ -300,7 +300,7 @@ namespace Orckestra.Composer {
                         });
 
                         self._wishListService.addLineItem(ProductId, selectedVariantId, 1, null, RecurringOrderProgramName)
-                            .fin(() => this.Loading = false);
+                            .finally(() => this.Loading = false);
                     },
 
                     removeLineItemFromWishList() {
@@ -312,7 +312,7 @@ namespace Orckestra.Composer {
 
                         this.Loading = true;
                         self._wishListService.removeLineItem(this.WishListItem.Id)
-                            .fin(() => this.Loading = false);
+                            .finally(() => this.Loading = false);
                     }
                 }
             })

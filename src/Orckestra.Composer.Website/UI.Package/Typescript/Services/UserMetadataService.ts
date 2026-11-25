@@ -36,10 +36,10 @@ namespace Orckestra.Composer {
             return UserMetadataService.instance;
         }
 
-        public getUserMetadata(): Q.Promise<any> {
+        public getUserMetadata(): Promise<any> {
 
             return this.getFromCache()
-                .fail(reason => {
+                .catch(reason => {
 
                     if (this.canHandle(reason)) {
                         return this.getFreshMetadata();
@@ -54,7 +54,7 @@ namespace Orckestra.Composer {
             return reason === CacheError.Expired || reason === CacheError.NotFound;
         }
 
-        public getFreshMetadata(): Q.Promise<any> {
+        public getFreshMetadata(): Promise<any> {
 
             return this.membershipRepository.userMetadata()
                 .then(result => this.setToCache(result));
@@ -65,18 +65,18 @@ namespace Orckestra.Composer {
             return `${this.cacheKey}.${Utils.getCulture()}.${Utils.getWebsiteId()}`;
         }
 
-        public invalidateCache(): Q.Promise<void> {
+        public invalidateCache(): Promise<void> {
 
             return this.cacheProvider.defaultCache.clear(this.buildCacheKey());
         }
 
-        private getFromCache(): Q.Promise<any> {
+        private getFromCache(): Promise<any> {
 
             var composedKey = this.buildCacheKey();
             return this.cacheProvider.defaultCache.get<any>(composedKey);
         }
 
-        private setToCache(cart: any): Q.Promise<any> {
+        private setToCache(cart: any): Promise<any> {
 
             var composedKey = this.buildCacheKey();
             return this.cacheProvider.defaultCache.set(composedKey, cart, this.cachePolicy);

@@ -25,7 +25,7 @@ namespace Orckestra.Composer {
 
             ComposerClient.get('/api/address/regions')
                 .then(regions => this.rebuildRegionSelector(regions))
-                .done(() => busy.done());
+                .then(() => busy.done());
         }
 
         protected registerSubscriptions() {
@@ -81,8 +81,7 @@ namespace Orckestra.Composer {
 
             this.customerService.createAddress(formData, returnUrl)
                 .then(result => this.onCreateAddressFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => busy.done())
-                .done();
+                .finally(() => busy.done());
         }
 
         private onCreateAddressFulfilled(result: any): void {
@@ -107,8 +106,7 @@ namespace Orckestra.Composer {
 
             this.customerService.updateAddress(formData, addressId, returnUrl)
                 .then(result => this.onUpdateAddressFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => busy.done())
-                .done();
+                .finally(() => busy.done());
         }
 
         private onUpdateAddressFulfilled(result: any): void {

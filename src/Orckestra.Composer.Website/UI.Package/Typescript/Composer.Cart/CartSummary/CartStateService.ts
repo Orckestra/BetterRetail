@@ -63,9 +63,9 @@ namespace Orckestra.Composer {
             });
 
             let authenticatedPromise = this.membershipService.isAuthenticated();
-            let getCartPromise = this.cartService.getFreshCart().fail(reason => this.loadCartFailed(reason));
-            Q.all([authenticatedPromise, getCartPromise])
-                .spread((authVm, cartVm) => {
+            let getCartPromise = this.cartService.getFreshCart().catch(reason => this.loadCartFailed(reason));
+            Promise.all([authenticatedPromise, getCartPromise])
+                .then(([authVm, cartVm]) => {
                     this.publishToAnalytics(cartVm);
                     this.eventHub.publish(CartEvents.CartUpdated, { data: cartVm });
                     let vueData: any = this.VueFullCart;

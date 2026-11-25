@@ -25,7 +25,7 @@
 //                 done();
 //             });
 //
-//             var promise = Q.fcall(() => {
+//             var promise = Promise.resolve().then(() => {
 //                     return ['SKU-Dummy'];
 //                 });
 //

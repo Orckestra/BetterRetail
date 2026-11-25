@@ -80,7 +80,7 @@ namespace Orckestra.Composer {
                                 return result;
                             })
                             .then(result => self.onUpdateAccountFulfilled(result))
-                            .fail((reason) => {
+                            .catch((reason) => {
                                 console.error('Error updating the account.', reason);
                                 if(reason && reason.Errors) {
                                     this.Errors = reason.Errors;
@@ -88,7 +88,7 @@ namespace Orckestra.Composer {
                                 this.UpdateAccountState = UpdateAccountStates.Failed;
 
                             })
-                            .fin(() => this.IsLoading = false);
+                            .finally(() => this.IsLoading = false);
                     }
                 }
             });
@@ -112,11 +112,11 @@ namespace Orckestra.Composer {
             }
         }
 
-        protected onUpdateAccountFulfilled(result: any): Q.Promise<any> {
+        protected onUpdateAccountFulfilled(result: any): Promise<any> {
 
             this.eventHub.publish(MyAccountEvents[MyAccountEvents.AccountUpdated], { data: result });
 
-            return Q(result);
+            return Promise.resolve(result);
         }
     }
 }

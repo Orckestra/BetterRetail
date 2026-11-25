@@ -336,7 +336,7 @@ namespace Orckestra.Composer {
             var analyticsProducts: IAnalyticsProduct[] = [];
 
             if (data.Cart) {
-                Q.resolve(data.Cart).then(cart => {
+                Promise.resolve(data.Cart).then(cart => {
                     _.each(cart.LineItemDetailViewModels, (lineItemDetailViewModel: any) => {
                         var analyticsProduct: IAnalyticsProduct = {
                             name: lineItemDetailViewModel.ProductSummary.DisplayName,

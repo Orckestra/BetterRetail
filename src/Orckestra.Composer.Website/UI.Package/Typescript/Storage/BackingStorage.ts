@@ -12,20 +12,20 @@ namespace Orckestra.Composer {
         constructor(private _storage: Storage) {
         }
 
-        public init(): Q.Promise<void> {
+        public init(): Promise<void> {
 
-            return Q.fcall(() => {
+            return Promise.resolve().then(() => {
                 this._isInitialized = true;
             });
         }
 
-        public initObjectStore(type: string): Q.Promise<void> {
+        public initObjectStore(type: string): Promise<void> {
 
             if (!type) {
                 throw new Error('The type is required');
             }
 
-            return Q.fcall(() => {
+            return Promise.resolve().then(() => {
 
                 if (!this._isInitialized) {
                     throw new Error('The local storage has not been initialized');
@@ -48,7 +48,7 @@ namespace Orckestra.Composer {
             this._initializedObjectStores[type] = true;
         }
 
-        public get<T>(type: string, id: string): Q.Promise<T> {
+        public get<T>(type: string, id: string): Promise<T> {
 
             if (!type) {
                 throw new Error('The type is required');
@@ -57,7 +57,7 @@ namespace Orckestra.Composer {
                 throw new Error('The id is required');
             }
 
-            return Q.fcall<T>(() => {
+            return Promise.resolve().then<T>(() => {
 
                 if (!this._isInitialized) {
                     throw new Error('The local storage has not been initialized');
@@ -81,7 +81,7 @@ namespace Orckestra.Composer {
             return null;
         }
 
-        public remove(type: string, id: string): Q.Promise<void> {
+        public remove(type: string, id: string): Promise<void> {
 
             if (!type) {
                 throw new Error('The type is required');
@@ -90,7 +90,7 @@ namespace Orckestra.Composer {
                 throw new Error('The id is required');
             }
 
-            return Q.fcall<void>(() => {
+            return Promise.resolve().then<void>(() => {
 
                 if (!this._isInitialized) {
                     throw new Error('The local storage has not been initialized');
@@ -103,13 +103,13 @@ namespace Orckestra.Composer {
             });
         }
 
-        public fullRemove(type: string): Q.Promise<void> {
+        public fullRemove(type: string): Promise<void> {
 
             if (!type) {
                 throw new Error('The type is required');
             }
 
-            return Q.fcall<void>(() => {
+            return Promise.resolve().then<void>(() => {
 
                 if (!this._isInitialized) {
                     throw new Error('The local storage has not been initialized');
@@ -138,7 +138,7 @@ namespace Orckestra.Composer {
             this.setObjectStore(type, null);
         }
 
-        public set<T>(type: string, item: IStorageItem<T>): Q.Promise<void> {
+        public set<T>(type: string, item: IStorageItem<T>): Promise<void> {
 
             if (!type) {
                 throw new Error('The type is required');
@@ -150,7 +150,7 @@ namespace Orckestra.Composer {
                 throw new Error('The item id is required');
             }
 
-            return Q.fcall<void>(() => {
+            return Promise.resolve().then<void>(() => {
 
                 if (!this._isInitialized) {
                     throw new Error('The local storage has not been initialized');

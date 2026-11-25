@@ -59,7 +59,7 @@ namespace Orckestra.Composer {
         private readonly window: Window;
         private readonly eventHub: IEventHub;
         private registeredControllers: any = {};
-        private allControllersReady: Q.Deferred<boolean>;
+        private allControllersReady: Deferred<boolean>;
         private cacheProvider: ICacheProvider;
 
         protected cartService: ICartService;
@@ -90,7 +90,7 @@ namespace Orckestra.Composer {
 
             this.eventHub = EventHub.instance();
             this.window = window;
-            this.allControllersReady = Q.defer<boolean>();
+            this.allControllersReady = new Deferred<boolean>();
             this.cacheProvider = CacheProvider.instance();
 
             this.cartService = CartService.getInstance();
@@ -116,11 +116,11 @@ namespace Orckestra.Composer {
             let authenticatedPromise = this.membershipService.isAuthenticated();
             let userMetadataPromise = this.userMetadataService.getUserMetadata();
             let getCartPromise = this.getCart();
-            let regionsPromise: Q.Promise<any> = this.regionService.getRegions();
-            let shippingMethodTypesPromise: Q.Promise<any> = this.shippingMethodService.getShippingMethodTypes();
+            let regionsPromise: Promise<any> = this.regionService.getRegions();
+            let shippingMethodTypesPromise: Promise<any> = this.shippingMethodService.getShippingMethodTypes();
 
-            Q.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise, userMetadataPromise])
-                .spread((authVm, cartVm, regionsVm, shippingMethodTypesVm, userMetadataVm) => {
+            Promise.all([authenticatedPromise, getCartPromise, regionsPromise, shippingMethodTypesPromise, userMetadataPromise])
+                .then(([authVm, cartVm, regionsVm, shippingMethodTypesVm, userMetadataVm]) => {
 
                     if (!cartVm.Customer) {
                         cartVm.Customer = {};
@@ -142,7 +142,7 @@ namespace Orckestra.Composer {
                 .then(() => {
                     this.allControllersReady.resolve(true);
                 })
-                .fail((reason: any) => {
+                .catch((reason: any) => {
                     console.error('Error while initializing SingleCheckoutService.', reason);
                     ErrorHandler.instance().outputErrorFromCode('CheckoutRenderFailed');
                 });
@@ -273,7 +273,7 @@ namespace Orckestra.Composer {
                         /// Navigate to checkout step by the id
                         this.CheckoutPageComponent.navigateToStep(step);
                     },
-                    deleteAddress(event: JQueryEventObject): Q.Promise<void> {
+                    deleteAddress(event: JQueryEventObject): Promise<void> {
                         let element = $(event.target);
                         let $addressListItem = element.closest('[data-address-id]');
                         let addressId = $addressListItem.data('address-id');
@@ -398,7 +398,7 @@ namespace Orckestra.Composer {
 
         public registerController(controller: IBaseSingleCheckoutController) {
 
-            if (this.allControllersReady.promise.isPending()) {
+            if (this.allControllersReady.isPending) {
                 this.allControllersReady.resolve(false);
             }
 
@@ -419,37 +419,37 @@ namespace Orckestra.Composer {
             delete this.registeredControllers[controllerName];
         }
 
-        public updatePostalCode(postalCode: string): Q.Promise<void> {
+        public updatePostalCode(postalCode: string): Promise<void> {
 
             return this.cartService.updateShippingMethodPostalCode(postalCode);
         }
 
-        public invalidateCache(): Q.Promise<void> {
+        public invalidateCache(): Promise<void> {
 
             return this.cartService.invalidateCache();
         }
 
-        public getCart(): Q.Promise<any> {
+        public getCart(): Promise<any> {
 
             return this.invalidateCache()
                 .then(() => this.cartService.getCart())
-                .fail(reason => {
+                .catch(reason => {
                     this.handleError(reason);
                 });
         }
 
-        public removeCartItem(id: any, productId: any): Q.Promise<any> {
+        public removeCartItem(id: any, productId: any): Promise<any> {
 
             return this.invalidateCache().
                 then(() => this.cartService.deleteLineItem(id, productId))
-                .fail(reason => {
+                .catch(reason => {
                     this.handleError(reason);
                 });
         }
 
         public updateCartItem(id: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any> {
+            recurringOrderProgramName?: string): Promise<any> {
             let vue: any = this.VueCheckout;
             vue.Mode.Loading = true;
 
@@ -459,7 +459,7 @@ namespace Orckestra.Composer {
                     this.updateVueState(vue, Cart);
                     return Cart;
                 })
-                .fail(reason => {
+                .catch(reason => {
                     this.handleError(reason);
                 })
                 .finally(() => {
@@ -467,7 +467,7 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public updateCart(controllerNames: Array<string> = null): Q.Promise<IUpdateCartResult> {
+        public updateCart(controllerNames: Array<string> = null): Promise<IUpdateCartResult> {
             let emptyVm = {
                 UpdatedCart: {}
             };
@@ -498,7 +498,7 @@ namespace Orckestra.Composer {
             vue.updateBeforeEditLineItemList();
         }
 
-        public updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel> {
+        public updatePaymentMethod(param: any): Promise<IActivePaymentViewModel> {
             let vue: any = this.VueCheckout;
 
             vue.Steps.Payment.Loading = true;
@@ -508,7 +508,7 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public completeCheckout(): Q.Promise<any> {
+        public completeCheckout(): Promise<any> {
             console.log('completeCheckout(): Publishing the cart!');
 
             return this.cartService.completeCheckout()
@@ -528,15 +528,15 @@ namespace Orckestra.Composer {
                         window.location.href = result.NextStepUrl;
                     }
                 })
-                .fail(reason => {
+                .catch(reason => {
                     console.error('An error occurred while completing the checkout.', reason);
                     ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                 });
         }
 
-        public collectViewModelNamesForUpdateCart(): Q.Promise<any> {
+        public collectViewModelNamesForUpdateCart(): Promise<any> {
             let controllerInstance: IBaseSingleCheckoutController;
-            let promises: Q.Promise<any>[] = [];
+            let promises: Promise<any>[] = [];
 
             for (let controllerName in this.registeredControllers) {
 
@@ -546,15 +546,15 @@ namespace Orckestra.Composer {
                 }
             }
 
-            return Q.all(promises);
+            return Promise.all(promises);
         }
 
-        private buildCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
+        private buildCartUpdateViewModel(vm: any, controllersName = null): Promise<any> {
 
             return this.getCartUpdateViewModel(vm, controllersName);
         }
 
-        private getCartUpdateViewModel(vm: any, controllersName = null): Q.Promise<any> {
+        private getCartUpdateViewModel(vm: any, controllersName = null): Promise<any> {
 
             let updateModelPromise = this.collectUpdateModelPromises(controllersName);
 
@@ -575,9 +575,9 @@ namespace Orckestra.Composer {
             });
         }
 
-        private collectUpdateModelPromises(controllerNames = null): Q.Promise<any> {
+        private collectUpdateModelPromises(controllerNames = null): Promise<any> {
 
-            let promises: Q.Promise<any>[] = [];
+            let promises: Promise<any>[] = [];
             let controllerInstance: IBaseSingleCheckoutController;
 
             for (let controllerName in this.registeredControllers) {
@@ -592,7 +592,7 @@ namespace Orckestra.Composer {
                 }
             }
 
-            return Q.all(promises);
+            return Promise.all(promises);
         }
 
         private handleError(reason: any): void {
@@ -604,22 +604,22 @@ namespace Orckestra.Composer {
 
         public setOrderConfirmationToCache(orderConfirmationViewModel: any): void {
 
-            this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, orderConfirmationViewModel).done();
+            this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, orderConfirmationViewModel);
         }
 
-        public getOrderConfirmationFromCache(): Q.Promise<any> {
+        public getOrderConfirmationFromCache(): Promise<any> {
 
             return this.cacheProvider.defaultCache.get<any>(this.orderConfirmationCacheKey);
         }
 
         public clearOrderConfirmationFromCache(): void {
 
-            this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
+            this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey);
         }
 
         public setOrderToCache(orderConfirmationViewModel: any): void {
 
-            this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationViewModel).done();
+            this.cacheProvider.defaultCache.set(this.orderCacheKey, orderConfirmationViewModel);
         }
 
         public getPaymentProviders(paymentProviders: Array<any>): Array<BaseCheckoutPaymentProvider> {
@@ -630,15 +630,15 @@ namespace Orckestra.Composer {
             return paymentProviders.map((vm: any) => this.paymentProviderFactory.getInstance(vm.ProviderType, vm.ProviderName));
         }
 
-        public getPaymentCheckout(): Q.Promise<ICheckoutPaymentViewModel> {
+        public getPaymentCheckout(): Promise<ICheckoutPaymentViewModel> {
             return this.paymentService.getCheckoutPayment();
         }
 
-        public updateBillingPostalCode(postalCode: string): Q.Promise<void> {
+        public updateBillingPostalCode(postalCode: string): Promise<void> {
             return this.cartService.updateBillingMethodPostalCode(postalCode);
         }
 
-        public saveAddressToMyAccountAddressBook(address: any): Q.Promise<any> {
+        public saveAddressToMyAccountAddressBook(address: any): Promise<any> {
             return this.customerService.createAddress(address, null).then(address => {
                 var vue: any = this.VueCheckout;
                 vue.RegisteredAddresses.push(address);
@@ -647,11 +647,11 @@ namespace Orckestra.Composer {
             );
         }
 
-        public updateAddressInMyAccountAddressBook(address: any): Q.Promise<any> {
+        public updateAddressInMyAccountAddressBook(address: any): Promise<any> {
             return this.customerService.updateAddress(address, address.Id, null);
         }
 
-        public deleteAddress(addressId: any): Q.Promise<any> {
+        public deleteAddress(addressId: any): Promise<any> {
             return this.customerService.deleteAddress(addressId, null).then(() => {
                 let vue: any = this.VueCheckout;
                 const index = vue.RegisteredAddresses.findIndex(address => address.Id === addressId);
@@ -661,7 +661,7 @@ namespace Orckestra.Composer {
             });
         }
 
-        public loginUser(formData: any): Q.Promise<boolean> {
+        public loginUser(formData: any): Promise<boolean> {
             let returnUrl = window.location.pathname;
             var vue: any = this.VueCheckout;
             vue.Steps.Information.Loading = true;
@@ -676,7 +676,7 @@ namespace Orckestra.Composer {
                     vue.Steps.Information.Loading = false;
                     return true;
                 })
-                .fail(({ Errors: [error] }) => {
+                .catch(({ Errors: [error] }) => {
                     this.onLoginRejected(error, vue);
                     return false;
                 }).finally(() => vue.Steps.Information.Loading = false);
@@ -687,7 +687,7 @@ namespace Orckestra.Composer {
             if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
 
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
-                this.cacheProvider.defaultCache.set('customerId', null).done();
+                this.cacheProvider.defaultCache.set('customerId', null);
                 this.cacheProvider.sessionCache.fullClear();
                 this.userMetadataService.invalidateCache();
                 this.loadUserAddresses();
@@ -708,12 +708,12 @@ namespace Orckestra.Composer {
             vueData.AccountLockedDownUntil = error.Bag["AccountLockedDownUntil"];
         }
 
-        public checkUserExist(email: string): Q.Promise<boolean> {
+        public checkUserExist(email: string): Promise<boolean> {
             return this.membershipService.isUserExist(email)
                 .then(result => result.IsExist);
         }
 
-        public loadUserAddresses(): Q.Promise<any> {
+        public loadUserAddresses(): Promise<any> {
             let vue: any = this.VueCheckout;
             return this.addressRegisteredService.getShippingAddresses(vue.Cart)
                 .then(data => {

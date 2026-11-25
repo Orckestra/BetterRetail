@@ -18,7 +18,7 @@ namespace Orckestra.Composer {
          * Get the customer addresses. The selected billing/shipping address is taken from the cart by default.
          * If no address has been set in the cart, the selected billing/shipping address corresponds to the preferred address.
          */
-        public getRecurringCartAddresses(cart: any): Q.Promise<any> {
+        public getRecurringCartAddresses(cart: any): Promise<any> {
 
             if (!cart) {
                 throw new Error('The cart is required');
@@ -34,7 +34,7 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public getRecurringTemplateAddresses(id: any): Q.Promise<any> {
+        public getRecurringTemplateAddresses(id: any): Promise<any> {
 
             if (!id) {
                 throw new Error('The recurring schedule id is required');

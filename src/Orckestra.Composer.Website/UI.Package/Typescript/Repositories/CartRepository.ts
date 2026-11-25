@@ -7,14 +7,14 @@ namespace Orckestra.Composer {
 
     export class CartRepository implements ICartRepository {
 
-        public getCart(): Q.Promise<any> {
+        public getCart(): Promise<any> {
 
             return ComposerClient.get('/api/cart/getcart');
         }
 
         public addLineItem(productId: string, variantId?: string, quantity: number = 1,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any> {
+            recurringOrderProgramName?: string): Promise<any> {
 
             if (!productId) {
                 throw new Error('The product id is required');
@@ -37,7 +37,7 @@ namespace Orckestra.Composer {
 
         public updateLineItem(lineItemId: string, quantity: number,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any> {
+            recurringOrderProgramName?: string): Promise<any> {
 
             if (!lineItemId) {
                 throw new Error('The line item id is required');
@@ -57,7 +57,7 @@ namespace Orckestra.Composer {
             return ComposerClient.put('/api/cart/lineitem', data);
         }
 
-        public deleteLineItem(lineItemId: string): Q.Promise<any> {
+        public deleteLineItem(lineItemId: string): Promise<any> {
 
             if (!lineItemId) {
                 throw new Error('The line item id is required');
@@ -70,7 +70,7 @@ namespace Orckestra.Composer {
             return ComposerClient.remove('/api/cart/lineitem', data);
         }
 
-        public updateBillingMethodPostalCode(postalCode: string): Q.Promise<any> {
+        public updateBillingMethodPostalCode(postalCode: string): Promise<any> {
 
             if (!postalCode) {
                 throw new Error('The postal code is required');
@@ -83,7 +83,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post('/api/cart/billingaddress', data);
         }
 
-        public updateShippingMethodPostalCode(postalCode: string): Q.Promise<any> {
+        public updateShippingMethodPostalCode(postalCode: string): Promise<any> {
 
             if (!postalCode) {
                 throw new Error('The postal code is required');
@@ -96,7 +96,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post('/api/cart/shippingaddress', data);
         }
 
-        public setCheapestShippingMethod(): Q.Promise<any> {
+        public setCheapestShippingMethod(): Promise<any> {
 
             var data = {
                 UseCheapest: true
@@ -105,7 +105,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post('/api/cart/shippingmethod', data);
         }
 
-        public addCoupon(couponCode: string): Q.Promise<any> {
+        public addCoupon(couponCode: string): Promise<any> {
 
             if (!couponCode) {
                 throw new Error('The coupon code is required');
@@ -118,7 +118,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post('/api/cart/coupon', data);
         }
 
-        public removeCoupon(couponCode: string): Q.Promise<any> {
+        public removeCoupon(couponCode: string): Promise<any> {
 
             if (!couponCode) {
                 throw new Error('The coupon code is required');
@@ -131,14 +131,14 @@ namespace Orckestra.Composer {
             return ComposerClient.remove('/api/cart/coupon', data);
         }
 
-        public clean(): Q.Promise<any> {
+        public clean(): Promise<any> {
 
             var data = { };
 
             return ComposerClient.remove('/api/cart/clean', data);
         }
 
-        public updateCart(param: any): Q.Promise<IUpdateCartResult> {
+        public updateCart(param: any): Promise<IUpdateCartResult> {
 
             if (!param) {
                 throw new Error('The param is required');
@@ -147,7 +147,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post('/api/cart/updateCart', param);
         }
 
-        public completeCheckout(currentStep: number): Q.Promise<ICompleteCheckoutResult> {
+        public completeCheckout(currentStep: number): Promise<ICompleteCheckoutResult> {
 
             if (currentStep) {
                 //TODO: this is for old checkout, need to clean later

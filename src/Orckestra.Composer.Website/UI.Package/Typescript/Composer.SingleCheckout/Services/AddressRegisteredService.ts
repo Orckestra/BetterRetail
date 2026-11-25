@@ -16,7 +16,7 @@ namespace Orckestra.Composer {
          * Get the customer addresses. The selected shipping address is taken from the cart by default.
          * If no address has been set in the cart, the selected shipping address corresponds to the preferred address.
          */
-        public getShippingAddresses(cart: any): Q.Promise<any> {
+        public getShippingAddresses(cart: any): Promise<any> {
 
             if (!cart) {
                 throw new Error('The cart is required');

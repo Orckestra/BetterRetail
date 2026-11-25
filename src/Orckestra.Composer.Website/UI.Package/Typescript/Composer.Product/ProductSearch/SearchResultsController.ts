@@ -36,7 +36,7 @@ namespace Orckestra.Composer {
             super.initialize();
             let getWithListTask = this.wishListService.getWishListSummary();
             let authenticatedPromise = this.membershipService.isAuthenticated();
-            Q.all([authenticatedPromise, getWithListTask]).spread((authVm, wishList) => this.initializeVueComponent(wishList, authVm));
+            Promise.all([authenticatedPromise, getWithListTask]).then(([authVm, wishList]) => this.initializeVueComponent(wishList, authVm));
         }
 
         protected initializeVueComponent(wishlist, authVm) {
@@ -157,14 +157,14 @@ namespace Orckestra.Composer {
                         this.loadingProduct(searchProduct, true, true);
                         const pricesTask = self.productService.calculatePrices(ProductId, this.ListName);
                         const productDetailsTask = self.productService.loadProduct(ProductId, VariantId);
-                         Q.all([pricesTask, productDetailsTask])
-                            .spread((prices, product) => {
+                         Promise.all([pricesTask, productDetailsTask])
+                            .then(([prices, product]) => {
                                 product.ProductPrice = <any>_.find(prices.ProductPrices, { ProductId });
                                 product.SelectedVariant = product.Variants.find(v => v.Id === VariantId);
                                 product.SizeSelected = true;
                                 this.ProductsMap[ProductId] = product;
                                })
-                            .fin(() => this.loadingProduct(searchProduct, false, false));
+                            .finally(() => this.loadingProduct(searchProduct, false, false));
                     },
                     onMouseleave(searchProduct) {
                         this.ActiveProductId = undefined;
@@ -205,7 +205,7 @@ namespace Orckestra.Composer {
                         this.ActiveProductId = productId;
                         self.inventoryService.isAvailableToSell(variant.Sku)
                         .then(result => searchProduct.IsAvailableToSell = result)
-                        .fin(() => this.loadingProduct(searchProduct, false));
+                        .finally(() => this.loadingProduct(searchProduct, false));
                     },
                     loadingProduct(product, loading, variantsLoading = false) {
                         product.loading = loading;
@@ -233,8 +233,8 @@ namespace Orckestra.Composer {
                         this.loadingProduct(product, true);
  
                         self.cartService.addLineItem(product, price, product.VariantId, 1, this.ListName)
-                            .fail(reason => this.onAddToCartFailed(reason, 'AddToCartFailed'))
-                            .fin(() => this.loadingProduct(product, false));
+                            .catch(reason => this.onAddToCartFailed(reason, 'AddToCartFailed'))
+                            .finally(() => this.loadingProduct(product, false));
                         
                     },
                     isAddToCartDisabled(product) {
@@ -254,13 +254,13 @@ namespace Orckestra.Composer {
 
                         self.wishListService.addLineItem(ProductId, VariantId, 1, undefined, RecurringOrderProgramName)
                             .then(wishList => this.WishList = wishList)
-                            .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                            .catch(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
                     },
 
                     removeLineItemFromWishList(searchProduct) {
                         self.wishListService.removeLineItem(searchProduct.WishListItem.Id)
                             .then(wishList => this.WishList = wishList)
-                            .fail(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
+                            .catch(reason => this.onAddToCartFailed(reason, 'AddToWishListFailed'));
                     },
                     registerSubscriptions(): void {
                         self.eventHub.subscribe(SearchEvents.SearchRequested, this.onSearchRequested.bind(this));

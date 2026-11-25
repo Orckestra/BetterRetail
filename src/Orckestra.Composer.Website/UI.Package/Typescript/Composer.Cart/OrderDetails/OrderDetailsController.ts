@@ -40,13 +40,13 @@ namespace Orckestra.Composer {
                         this.Loading = true;
                         self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                         self.orderService.editOrder(orderNumber)
-                            .fin(() => this.Loading = false);
+                            .finally(() => this.Loading = false);
                     },
                     cancelEditingOrder(orderNumber: string) {
                         if (this.Loading) return;
                         this.Loading = true;
                         self.orderService.cancelEditOrder(orderNumber)
-                            .fin(() => this.Loading = false);
+                            .finally(() => this.Loading = false);
                     },
                     reload(){
                         window.location.reload()
@@ -59,7 +59,7 @@ namespace Orckestra.Composer {
                         if (this.Loading) return;
                         this.Loading = true;
                         self.orderService.cancelOrder(this.OrderNumber)
-                            .fin(() => this.Loading = false);
+                            .finally(() => this.Loading = false);
                     }
                 }
             });

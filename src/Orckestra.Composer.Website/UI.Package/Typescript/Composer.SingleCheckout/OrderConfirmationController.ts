@@ -41,9 +41,9 @@ namespace Orckestra.Composer {
                 .then((result: ICompleteCheckoutResult) => {
 
                     this.eventHub.publish('CheckoutConfirmation', { data: result });
-                    this.cacheProvider.defaultCache.clear(this.orderCacheKey).done();
+                    this.cacheProvider.defaultCache.clear(this.orderCacheKey);
                 })
-                .fail((reason: any) => {
+                .catch((reason: any) => {
 
                     console.error('Unable to retrieve order number from cache, attempt to redirect.');
                 });
@@ -125,9 +125,9 @@ namespace Orckestra.Composer {
                         data: { StepNumber: 'confirmation' }
                     });
 
-                    this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey).done();
+                    this.cacheProvider.defaultCache.clear(this.orderConfirmationCacheKey);
                 })
-                .fail((reason: any) => {
+                .catch((reason: any) => {
 
                     console.error('Unable to retrieve order number from cache, attempt to redirect.');
 
@@ -141,16 +141,16 @@ namespace Orckestra.Composer {
                 });
         }
 
-        private findOrderAsync(request: IGetOrderDetailsUrlRequest): Q.Promise<IGuestOrderDetailsViewModel> {
+        private findOrderAsync(request: IGetOrderDetailsUrlRequest): Promise<IGuestOrderDetailsViewModel> {
             return this.findOrderService.getOrderDetailsUrl(request);
         }
 
-        private findUserAsync(email: string): Q.Promise<boolean> {
+        private findUserAsync(email: string): Promise<boolean> {
             return this.membershipService.isUserExist(email)
                 .then(result => result.IsExist);
         }
 
-        private createCustomer(FirstName: string, LastName: string, Email: string, Password: string): Q.Promise<any> {
+        private createCustomer(FirstName: string, LastName: string, Email: string, Password: string): Promise<any> {
             let formData = { FirstName, LastName, Email, Password };
             return this.membershipService.register(formData, null).then(result => {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.AccountCreated], { data: result });
@@ -159,13 +159,13 @@ namespace Orckestra.Composer {
                 }
 
                 return result;
-            }).fail(({ Errors: [error] }) => {
+            }).catch(({ Errors: [error] }) => {
                 ErrorHandler.instance().outputErrorFromCode(error.ErrorCode);
                 throw error;
             });
         }
 
-        private IsAuthenticated(): Q.Promise<boolean> {
+        private IsAuthenticated(): Promise<boolean> {
             return this.membershipService.isAuthenticated().then(result => result.IsAuthenticated);
         }
     }

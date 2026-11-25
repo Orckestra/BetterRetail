@@ -16,7 +16,7 @@
 
             let promise = posProvider.validatePayment(<Orckestra.Composer.IActivePaymentViewModel> { });
 
-            promise.done((val: boolean) => {
+            promise.then((val: boolean) => {
                 validationResult = val;
                 doneCb();
 
@@ -41,7 +41,7 @@
 
             let promise = posProvider.submitPayment(<Orckestra.Composer.IActivePaymentViewModel> {});
 
-            promise.done((val: any) => {
+            promise.then((val: any) => {
                 result = val;
                 doneCb();
 

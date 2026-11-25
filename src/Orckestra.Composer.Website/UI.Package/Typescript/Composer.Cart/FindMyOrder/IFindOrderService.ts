@@ -4,8 +4,8 @@
 
 namespace Orckestra.Composer {
     export interface IFindOrderService {
-        getOrderDetailsUrl(req: IGetOrderDetailsUrlRequest): Q.Promise<IGuestOrderDetailsViewModel>;
+        getOrderDetailsUrl(req: IGetOrderDetailsUrlRequest): Promise<IGuestOrderDetailsViewModel>;
 
-        addOrderToCurrentUser(orderNumber: string): Q.Promise<any>;
+        addOrderToCurrentUser(orderNumber: string): Promise<any>;
     }
 }

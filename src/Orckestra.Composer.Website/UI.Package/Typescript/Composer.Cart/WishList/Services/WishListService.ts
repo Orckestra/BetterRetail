@@ -11,7 +11,7 @@ namespace Orckestra.Composer {
 
     export class WishListService implements IWishListService {
 
-        private static GettingFreshWishListSummary: Q.Promise<any>;
+        private static GettingFreshWishListSummary: Promise<any>;
 
         private wishListRepository: IWishListRepository;
         private cacheKey: string = 'WishListSummaryViewModel';
@@ -33,10 +33,10 @@ namespace Orckestra.Composer {
             this.eventHub = eventHub;
         }
 
-        public getWishListSummary(): Q.Promise<any> {
+        public getWishListSummary(): Promise<any> {
 
             return this.getCacheWishListSummary()
-                .fail(reason => {
+                .catch(reason => {
 
                     if (this.canHandle(reason)) {
                         return this.getFreshWishListSummary();
@@ -47,7 +47,7 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public getFreshWishListSummary(): Q.Promise<any> {
+        public getFreshWishListSummary(): Promise<any> {
             if (!WishListService.GettingFreshWishListSummary) {
                 WishListService.GettingFreshWishListSummary =
                     this.wishListRepository.getWishListSummary().then(wishList => this.setWishListToCache(wishList));
@@ -55,27 +55,27 @@ namespace Orckestra.Composer {
 
             // to avoid getting a fresh wishlist multiple times within a page session
             return WishListService.GettingFreshWishListSummary
-                .fail((reason) => {
+                .catch((reason) => {
                     console.error('An error occured while getting a fresh wish list.', reason);
                     throw reason;
                 });
         }
 
-        public redirectToSignIn(): Q.Promise<any>  {
+        public redirectToSignIn(): Promise<any>  {
             return this.getSignInUrl().then(signInUrl => {
                 this.clearCache();
                 window.location.href = signInUrl + '?ReturnUrl=' + window.location.href;
             });
         }
 
-        public getSignInUrl(): Q.Promise<any> {
+        public getSignInUrl(): Promise<any> {
             return this.getWishListSummary()
                 .then(wishList => {
                     return wishList.SignInUrl;
                 });
         }
 
-        public getLineItem(productId: string, variantId?: string): Q.Promise<any> {
+        public getLineItem(productId: string, variantId?: string): Promise<any> {
 
             return this.getWishListSummary().then(wishList => {
                 if (wishList && wishList.Items) {
@@ -88,7 +88,7 @@ namespace Orckestra.Composer {
 
         public addLineItem(productId: string, variantId?: string, quantity: number = 1,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any> {
+            recurringOrderProgramName?: string): Promise<any> {
 
             var data = {
                 ProductId: productId,
@@ -104,13 +104,13 @@ namespace Orckestra.Composer {
                     this.eventHub.publish(ProductEvents.WishListUpdated, { data: wishList });
                     return wishList;
                 })
-                .fail(reason => {
+                .catch(reason => {
                     this.clearCache();
                     throw reason;
                 });
         }
 
-        public removeLineItem(lineItemId: string): Q.Promise<any> {
+        public removeLineItem(lineItemId: string): Promise<any> {
             var data = {
                 LineItemId: lineItemId
             };
@@ -123,7 +123,7 @@ namespace Orckestra.Composer {
                     this.eventHub.publish(ProductEvents.WishListUpdated, { data: wishList });
                     return wishList;
                 })
-                .fail(reason => {
+                .catch(reason => {
                     this.clearCache();
                     throw reason;
                 });
@@ -133,12 +133,12 @@ namespace Orckestra.Composer {
             return this.cacheProvider.defaultCache.clear(this.cacheKey);
         }
 
-        protected getCacheWishListSummary(): Q.Promise<any> {
+        protected getCacheWishListSummary(): Promise<any> {
 
             return this.cacheProvider.defaultCache.get<any>(this.cacheKey);
         }
 
-        protected setWishListToCache(wishList: any): Q.Promise<any> {
+        protected setWishListToCache(wishList: any): Promise<any> {
 
             return this.cacheProvider.defaultCache.set(this.cacheKey, wishList, this.cachePolicy);
         }

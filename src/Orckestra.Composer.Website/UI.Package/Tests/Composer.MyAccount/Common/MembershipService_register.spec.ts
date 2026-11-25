@@ -14,7 +14,7 @@ namespace Orckestra.Composer {
 
             beforeEach(function() {
                 composerClientStub = sinon.stub(Orckestra.Composer.ComposerClient, 'post', () => {
-                    return Q.fcall(() => {
+                    return Promise.resolve().then(() => {
                         return true;
                     });
                 });

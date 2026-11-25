@@ -11,7 +11,7 @@ namespace Orckestra.Composer {
         * Attempt to register using Composer API.
         * @param
         */
-        public updateAccount(formData: any, returnUrl: string): Q.Promise<any> {
+        public updateAccount(formData: any, returnUrl: string): Promise<any> {
 
             var data = _.extend({ ReturnUrl: returnUrl }, formData);
             return ComposerClient.post('/api/customer/update', data);
@@ -20,7 +20,7 @@ namespace Orckestra.Composer {
          /**
          * Get the customer addresses.
          */
-        public getAddresses(): Q.Promise<any> {
+        public getAddresses(): Promise<any> {
 
               return ComposerClient.get('/api/customer/addresses');
         }
@@ -28,7 +28,7 @@ namespace Orckestra.Composer {
         /**
          * Get the customer addresses for a recurring cart page.
          */
-        public getRecurringCartAddresses(cartName: string): Q.Promise<any> {
+        public getRecurringCartAddresses(cartName: string): Promise<any> {
 
             var data = {
                 CartName: cartName
@@ -39,7 +39,7 @@ namespace Orckestra.Composer {
         /**
          * Get the customer addresses for a recurring cart page.
          */
-        public getRecurringTemplateAddresses(id: string): Q.Promise<any> {
+        public getRecurringTemplateAddresses(id: string): Promise<any> {
 
             var data = {
                 id: id
@@ -51,7 +51,7 @@ namespace Orckestra.Composer {
         * Create a new customer address
         * @param
         */
-        public createAddress(formData: any, returnUrl: string): Q.Promise<any> {
+        public createAddress(formData: any, returnUrl: string): Promise<any> {
 
             var data = _.extend({ ReturnUrl: returnUrl }, formData);
             return ComposerClient.post('/api/customer/addresses', data);
@@ -61,7 +61,7 @@ namespace Orckestra.Composer {
         * Update a customer address
         * @param
         */
-        public updateAddress(formData: any, addressId: string, returnUrl: string): Q.Promise<any> {
+        public updateAddress(formData: any, addressId: string, returnUrl: string): Promise<any> {
 
             var data = _.extend({ ReturnUrl: returnUrl }, formData);
             return ComposerClient.post('/api/customer/addresses/' + addressId, data);
@@ -71,7 +71,7 @@ namespace Orckestra.Composer {
         * Delete a customer address
         * @param
         */
-        public deleteAddress(addressId: JQuery, returnUrl: string): Q.Promise<any> {
+        public deleteAddress(addressId: JQuery, returnUrl: string): Promise<any> {
 
             var data = { ReturnUrl: returnUrl };
             return ComposerClient.remove('/api/customer/addresses/' + addressId, data);
@@ -81,7 +81,7 @@ namespace Orckestra.Composer {
         * Set default address for a customer
         * @param
         */
-        public setDefaultAddress(addressId: string, returnUrl: string): Q.Promise<any> {
+        public setDefaultAddress(addressId: string, returnUrl: string): Promise<any> {
 
             var data = { ReturnUrl: returnUrl };
             return ComposerClient.post('/api/customer/setdefaultaddress/' + addressId, data);

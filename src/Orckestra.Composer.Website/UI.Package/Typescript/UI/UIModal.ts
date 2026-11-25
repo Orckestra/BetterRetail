@@ -5,7 +5,7 @@ namespace Orckestra.Composer {
     export class UIModal {
 
         private modalContext: JQuery;
-        private confirmDeferred: Q.Deferred<any>;
+        private confirmDeferred: Deferred<any>;
         private confirmAction: any;
         private window: Window;
         private sender: any;
@@ -40,7 +40,7 @@ namespace Orckestra.Composer {
         public openModal = (event: JQueryEventObject) => {
 
             this.modalContext = $(this.modalContextSelector);
-            this.confirmDeferred = Q.defer();
+            this.confirmDeferred = new Deferred();
 
             this.modalContext.on('shown.bs.modal', (event: JQueryEventObject) => {
                 $('[data-dismiss]', event.target).focus();
@@ -49,7 +49,7 @@ namespace Orckestra.Composer {
             this.modalContext.on('hide.bs.modal', (event: JQueryEventObject) => {
                 $(event.target).off('shown.bs.modal hide.bs.modal');
 
-                if (this.confirmDeferred.promise.isPending()) {
+                if (this.confirmDeferred.isPending) {
                     this.confirmDeferred.resolve(false);
                 }
             });
@@ -63,7 +63,7 @@ namespace Orckestra.Composer {
                         return this.confirmAction.call(this.sender, event);
                     }
                 })
-                .done(null, (error) => {
+                .catch((error) => {
                     console.log(error);
                 });
         }

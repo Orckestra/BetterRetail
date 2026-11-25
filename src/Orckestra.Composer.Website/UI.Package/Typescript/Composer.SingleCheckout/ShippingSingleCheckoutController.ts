@@ -63,7 +63,7 @@ namespace Orckestra.Composer {
 
                         this.preparePickUpAddress();
                     },
-                    processShipping(): Q.Promise<boolean> {
+                    processShipping(): Promise<boolean> {
                         if (this.IsShippingMethodType) {
                             if (this.IsAuthenticated) {
                                 return this.processShippingAddressRegistered();
@@ -76,7 +76,7 @@ namespace Orckestra.Composer {
                             return this.processPickUpAddress();
                         }
 
-                        return Q.resolve(true);
+                        return Promise.resolve(true);
                     },
                     processBilling() {
                         if (this.IsAuthenticated) {
@@ -121,7 +121,7 @@ namespace Orckestra.Composer {
                             shippingMethodCollapse.collapse(command);
                         }
                     },
-                    updateShippingMethodProcess(methodEntity: any): Q.Promise<any> {
+                    updateShippingMethodProcess(methodEntity: any): Promise<any> {
                         let oldShippingMethod = { ...this.Cart.ShippingMethod };
                         let oldPickUpLocationId = this.Cart.PickUpLocationId;
 
@@ -174,8 +174,8 @@ namespace Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueShippingMixin);
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let { Name, ShippingProviderId } = this.checkoutService.VueCheckout.Cart.ShippingMethod;
                 return {[this.viewModelName]: JSON.stringify({ Name, ShippingProviderId })};
             });

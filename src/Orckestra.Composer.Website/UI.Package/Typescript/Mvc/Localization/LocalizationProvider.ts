@@ -30,7 +30,7 @@ namespace Orckestra.Composer {
          * This call is responsibly for refreshing all localization
          * to the current page culture
          */
-        public initialize(composerContext: IComposerContext): Q.Promise<any> {
+        public initialize(composerContext: IComposerContext): Promise<any> {
 
             this._composerContext = composerContext;
 

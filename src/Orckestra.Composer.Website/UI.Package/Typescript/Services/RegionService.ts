@@ -9,7 +9,7 @@ export class RegionService implements IRegionService {
 
         private _memoizeGetRegions: Function;
 
-        public getRegions(): Q.Promise<any> {
+        public getRegions(): Promise<any> {
 
              if (_.isUndefined(this._memoizeGetRegions)) {
 
@@ -19,7 +19,7 @@ export class RegionService implements IRegionService {
             return this._memoizeGetRegions();
         }
 
-         private getRegionsImpl(): Q.Promise<any> {
+         private getRegionsImpl(): Promise<any> {
 
             return ComposerClient.get('/api/address/regions');
         }

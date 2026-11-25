@@ -43,16 +43,16 @@ namespace Orckestra.Composer {
                     showStoreLocatorLocationError() {
                         this.Errors.StoreLocatorLocationError = true;
                     },
-                    processPickUpAddress(): Q.Promise<boolean> {
+                    processPickUpAddress(): Promise<boolean> {
                         let controllersToUpdate = [self.viewModelName];
 
                         if (!this.Cart.PickUpLocationId) {
                             this.Errors.StoreNotSelectedError = true;
-                            return Q.reject('PickUpLocationId is not specified');
+                            return Promise.reject('PickUpLocationId is not specified');
                         }
 
                         if (!this.pickUpAddressModified()) {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         return self.checkoutService.updateCart(controllersToUpdate)
@@ -79,21 +79,21 @@ namespace Orckestra.Composer {
             this.checkoutService.registerController(this);
         }
 
-        public getValidationPromise(): Q.Promise<boolean> {
-            return Q.resolve(true);
+        public getValidationPromise(): Promise<boolean> {
+            return Promise.resolve(true);
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let { PickUpLocationId } = this.checkoutService.VueCheckout.Cart;
                 return { [this.viewModelName]: JSON.stringify({ PickUpLocationId }) };
             });
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
+        public getViewModelNameForUpdatePromise(): Promise<any> {
             let vueData = this.checkoutService.VueCheckout;
             if (vueData.pickUpAddressModified()) {
-                return Q.resolve(this.viewModelName);
+                return Promise.resolve(this.viewModelName);
             }
         }
 

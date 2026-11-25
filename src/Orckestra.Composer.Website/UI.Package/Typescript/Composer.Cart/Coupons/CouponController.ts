@@ -40,7 +40,7 @@ namespace Orckestra.Composer {
                         this.Mode.ApplyingCoupon = true;
 
                         self.couponService.addCoupon(this.CouponCode)
-                            .fin(() => {
+                            .finally(() => {
                                 if (!this.HasCouponsErrorMessage) this.CouponCode = undefined;
                                 this.Mode.ApplyingCoupon = false;
                                 this.ShowAlert = true;

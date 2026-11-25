@@ -32,14 +32,14 @@ namespace Orckestra.Composer {
                         this.Mode.AddingNewAddress = false;
                         this.initializeParsey(self.formSelector);
                     },
-                    processShippingAddress(): Q.Promise<boolean> {
+                    processShippingAddress(): Promise<boolean> {
                         let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
-                            return Q.reject('Shipping Address information is not valid');
+                            return Promise.reject('Shipping Address information is not valid');
                         }
 
                         if (!this.shippingAddressModified()) {
-                           return Q.resolve(true);
+                           return Promise.resolve(true);
                         }
 
                         let postalCode = this.Cart.ShippingAddress.PostalCode;
@@ -52,7 +52,7 @@ namespace Orckestra.Composer {
                             if(needUpdateBilling) this.fixAddressNullValues(this.Cart.Payment.BillingAddress);
 
                             return self.checkoutService.updateCart(controllersToUpdate)
-                                .fail(reason => {
+                                .catch(reason => {
                                     console.log(reason);
                                     return false;
                                 });
@@ -68,7 +68,7 @@ namespace Orckestra.Composer {
 
                     },
                     changePostalCode(postalCode: any) {
-                        var processPostalCode: Q.Deferred<boolean> = Q.defer<boolean>();
+                        var processPostalCode: Deferred<boolean> = new Deferred<boolean>();
 
                         this.Errors.PostalCodeError = false;
                         if (this.adressBeforeEdit.PostalCode !== postalCode) {
@@ -87,7 +87,7 @@ namespace Orckestra.Composer {
                                 };
                                 processPostalCode.resolve(true);
                             })
-                                .fail(reason => {
+                                .catch(reason => {
                                     console.log(reason);
                                     this.Errors.PostalCodeError = true;
                                     processPostalCode.resolve(false);
@@ -116,12 +116,12 @@ namespace Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueShippingAddressMixin);
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getViewModelNameForUpdatePromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 var vueData = this.checkoutService.VueCheckout;
                 let isValid = vueData.validateParsey(this.formSelector);
                 if (!isValid) {
-                    return Q.reject('Shipping Address information is not valid');
+                    return Promise.reject('Shipping Address information is not valid');
                 }
 
                 if (vueData.shippingAddressModified()) {
@@ -130,8 +130,8 @@ namespace Orckestra.Composer {
             });
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let vueAddressData = this.checkoutService.VueCheckout.Cart.ShippingAddress;
                 return {[this.viewModelName]: JSON.stringify(vueAddressData)};
             });

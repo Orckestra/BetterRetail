@@ -17,7 +17,7 @@ namespace Orckestra.Composer {
          * The promise will be rejected if the storage engine cannot be used.
          * It should be possible to call this method multiple times, and the same result will be returned each time.
          */
-        init(): Q.Promise<void>;
+        init(): Promise<void>;
 
         /**
          * The client must call this to initialize the object store associated with a specific object type.
@@ -25,32 +25,32 @@ namespace Orckestra.Composer {
          * The promise will be rejected if the object type cannot be stored.
          * It should be possible to call this method multiple times, and the same result will be returned each time.
          */
-        initObjectStore(type: string): Q.Promise<void>;
+        initObjectStore(type: string): Promise<void>;
 
         /**
          * If an object with a specific id for a specific type is found, the promise will be fulfilled with that object.
          * If no object is found, the promise will be fulfilled with a null object.
          */
-        get<T>(type: string, id: string): Q.Promise<T>;
+        get<T>(type: string, id: string): Promise<T>;
 
         /**
          * This will remove an object with a specific id for a specific type.
          * If no object is found, the promise will be fulfilled.
          * If an object is found and removed, the promise will be fulfilled.
          */
-        remove(type: string, id: string): Q.Promise<void>;
+        remove(type: string, id: string): Promise<void>;
 
         /**
          * This will remove the specific type
          * If no type is found, the promise will be fulfilled.
          * If a type is found and removed, the promise will be fulfilled.
          */
-        fullRemove(type: string): Q.Promise<void>;
+        fullRemove(type: string): Promise<void>;
 
         /**
          * This will handle adding and updating objects of a specific type.
          * On success, the promise will be fulfilled.
          */
-        set<T>(type: string, item: IStorageItem<T>): Q.Promise<void>;
+        set<T>(type: string, item: IStorageItem<T>): Promise<void>;
     }
 }

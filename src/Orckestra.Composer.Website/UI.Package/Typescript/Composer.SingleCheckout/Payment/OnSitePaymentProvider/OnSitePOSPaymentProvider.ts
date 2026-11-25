@@ -16,18 +16,18 @@ namespace Orckestra.Composer {
          * Method called to get a promise for payment validation.
          * Returns a promise of boolean. The return boolean needs to be false for validation error,
          * or true if valid.
-         * @return {Q.Promise<boolean>} Promise that will be executed when we validate the payment control.
+         * @return {Promise<boolean>} Promise that will be executed when we validate the payment control.
          */
-        public validatePayment(activeVM: IActivePaymentViewModel): Q.Promise<boolean> {
-            return Q(true);
+        public validatePayment(activeVM: IActivePaymentViewModel): Promise<boolean> {
+            return Promise.resolve(true);
         }
 
         /**
          * Method called to get a promise when payment will submit.
-         * @return {Q.Promise<any>} Promise that will be executed when to cart is about the be updated.
+         * @return {Promise<any>} Promise that will be executed when to cart is about the be updated.
          */
-        public submitPayment(activeVM: IActivePaymentViewModel): Q.Promise<any> {
-            return Q({});
+        public submitPayment(activeVM: IActivePaymentViewModel): Promise<any> {
+            return Promise.resolve({});
         }
     }
 }

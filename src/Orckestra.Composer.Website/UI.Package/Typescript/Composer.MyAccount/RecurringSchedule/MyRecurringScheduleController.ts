@@ -94,8 +94,8 @@ namespace Orckestra.Composer {
                     //render only section?
                     this.reRenderPage(result);
                 })
-                .fail((reason: any) => this.onLineItemQuantityFailed(context, reason))
-                .fin(() => this.releaseBusyHandler());
+                .catch((reason: any) => this.onLineItemQuantityFailed(context, reason))
+                .finally(() => this.releaseBusyHandler());
         }
 
         protected onLineItemQuantityFailed(context: JQuery, reason: any): void {
@@ -140,7 +140,7 @@ namespace Orckestra.Composer {
             this.uiModalConfirmRemove.openModal(actionContext.event);
         }
 
-        public deleteLineItem(event: JQueryEventObject): Q.Promise<void> {
+        public deleteLineItem(event: JQueryEventObject): Promise<void> {
 
             let element = $(event.target);
             var $listItem = element.closest('[data-lineitemid]');
@@ -156,7 +156,7 @@ namespace Orckestra.Composer {
                 .then(result => {
                     $('#recurringOrderTemplatesRemoveConfirm').modal('hide');
                     this.reRenderPage(result);
-                }).fin(() => this.releaseBusyHandler());
+                }).finally(() => this.releaseBusyHandler());
         }
 
         public editDetailsClick(actionContext: IControllerActionContext) {

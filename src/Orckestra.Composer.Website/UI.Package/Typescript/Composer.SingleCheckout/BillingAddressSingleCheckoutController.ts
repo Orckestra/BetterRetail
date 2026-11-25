@@ -30,7 +30,7 @@ namespace Orckestra.Composer {
                     prepareBilling() {
                         return this.IsAuthenticated ? this.prepareBillingAddressRegistered() : this.prepareBillingAddress();
                     },
-                    prepareBillingAddress(): Q.Promise<boolean> {
+                    prepareBillingAddress(): Promise<boolean> {
                         this.fillAddressNames(this.Cart.Payment.BillingAddress);
                         this.fixAddressNullValues(this.Cart.Payment.BillingAddress);
 
@@ -38,18 +38,18 @@ namespace Orckestra.Composer {
                             this.Cart.Payment.BillingAddress.UseShippingAddress = false;
                         }
 
-                        return Q.resolve(true);
+                        return Promise.resolve(true);
                     },
-                    processBillingAddress(): Q.Promise<boolean> {
+                    processBillingAddress(): Promise<boolean> {
 
                         if (!this.billingAddressModified()) {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         if (!this.BillingAddress.UseShippingAddress) {
                             let isValid = this.validateParsey(self.formSelector);
                             if (!isValid) {
-                                return Q.reject('Billing Address information is not valid');
+                                return Promise.reject('Billing Address information is not valid');
                             }
 
                             let postalCode = this.BillingAddress.PostalCode;
@@ -60,7 +60,7 @@ namespace Orckestra.Composer {
                             return this.updateBillingAddress();
                         }
                     },
-                    updateBillingAddress(): Q.Promise<boolean> {
+                    updateBillingAddress(): Promise<boolean> {
                         this.Steps.Billing.Loading = true;
                         return self.checkoutService.updateCart([self.viewModelName])
                             .then(() => {
@@ -69,10 +69,10 @@ namespace Orckestra.Composer {
                             })
                             .finally(() =>  this.Steps.Billing.Loading = false);
                     },
-                    changeBillingPostalCode(postalCode: any): Q.Promise<boolean> {
+                    changeBillingPostalCode(postalCode: any): Promise<boolean> {
                         this.Errors.PostalCodeError = false;
                         if (this.billingAddressBeforeEdit.PostalCode === postalCode) {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         this.Mode.Loading = true;
@@ -87,7 +87,7 @@ namespace Orckestra.Composer {
                                 };
                                 return true;
                             })
-                            .fail(reason => {
+                            .catch(reason => {
                                 this.Errors.PostalCodeError = true;
                                 throw Error(reason);
                             })
@@ -140,8 +140,8 @@ namespace Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueBillingAddressMixin);
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getViewModelNameForUpdatePromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 var vueData = this.checkoutService.VueCheckout;
                 if (vueData.IsAuthenticated) {
                     return;
@@ -149,7 +149,7 @@ namespace Orckestra.Composer {
                 let isValid = vueData.validateParsey(this.formSelector);
                 if (!isValid) {
                     console.log('Billing Address information is not valid');
-                    return Q.reject('Billing Address information is not valid');
+                    return Promise.reject('Billing Address information is not valid');
                 }
 
                 if (vueData.billingAddressModified()) {
@@ -158,8 +158,8 @@ namespace Orckestra.Composer {
             });
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let { Payment } = this.checkoutService.VueCheckout.Cart;
                 return {[this.viewModelName]: JSON.stringify(Payment.BillingAddress)};
             });

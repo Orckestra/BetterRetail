@@ -3,10 +3,10 @@
 namespace Orckestra.Composer {
     export interface IShowFacetsService  {
 
-        setShowFacets(show: any): Q.Promise<any>;
+        setShowFacets(show: any): Promise<any>;
 
-        getShowFacets(): Q.Promise<any>;
+        getShowFacets(): Promise<any>;
 
-        clearShowFacets(): Q.Promise<any>;
+        clearShowFacets(): Promise<any>;
     }
 }

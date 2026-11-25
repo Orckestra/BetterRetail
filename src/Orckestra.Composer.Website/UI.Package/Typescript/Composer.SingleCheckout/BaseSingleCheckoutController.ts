@@ -35,12 +35,12 @@ namespace Orckestra.Composer {
            this.checkoutService.unregisterController(this.viewModelName);
         }
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.resolve(null);
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve(null);
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.resolve(null);
+        public getViewModelNameForUpdatePromise(): Promise<any> {
+            return Promise.resolve(null);
         }
 
         protected getContainer(): JQuery {

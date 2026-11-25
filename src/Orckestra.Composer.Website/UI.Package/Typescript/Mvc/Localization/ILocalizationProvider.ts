@@ -8,7 +8,7 @@ namespace Orckestra.Composer {
         /**
          * Boostrap the localization.
          */
-        initialize(composerContext: IComposerContext): Q.Promise<any>;
+        initialize(composerContext: IComposerContext): Promise<any>;
 
         /**
          * Get a  localized string

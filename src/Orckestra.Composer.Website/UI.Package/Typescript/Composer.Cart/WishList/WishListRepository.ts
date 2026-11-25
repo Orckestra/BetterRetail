@@ -10,20 +10,20 @@ namespace Orckestra.Composer {
     export class WishListRepository implements Orckestra.Composer.IWishListRepository {
 
 
-        public getWishList(): Q.Promise<any> {
+        public getWishList(): Promise<any> {
 
             return ComposerClient.get('/api/wishlist/getwishlist');
 
         }
 
-        public getWishListSummary(): Q.Promise<any> {
+        public getWishListSummary(): Promise<any> {
 
            return ComposerClient.get('/api/wishlist/getwishlistsummary');
         }
 
         public addLineItem(productId: string, variantId: string, quantity: number,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<void> {
+            recurringOrderProgramName?: string): Promise<void> {
 
             if (!productId) {
                 throw new Error('The product id is required');
@@ -44,7 +44,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post('/api/wishlist/lineitem', data);
         }
 
-        public deleteLineItem(lineItemId: string): Q.Promise<void> {
+        public deleteLineItem(lineItemId: string): Promise<void> {
 
             if (!lineItemId) {
                 throw new Error('The line item id is required');

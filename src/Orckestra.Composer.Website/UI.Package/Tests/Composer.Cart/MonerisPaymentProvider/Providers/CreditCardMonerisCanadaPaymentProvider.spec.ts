@@ -154,7 +154,7 @@
             var promiseResponse: boolean;
 
             beforeEach((done) => {
-                var promise: Q.Promise<boolean>;
+                var promise: Promise<boolean>;
 
                 cardholderName = chance.name();
                 eventData = {
@@ -174,7 +174,7 @@
                     CanSavePaymentMethod: false
                 });
 
-                promise.done(val => {
+                promise.then(val => {
                     promiseResponse = val;
                     done();
                 }, reason => {
@@ -200,7 +200,7 @@
             var failureResponse: any;
 
             beforeEach((done) => {
-                var promise: Q.Promise<boolean>;
+                var promise: Promise<boolean>;
 
                 cardholderName = chance.name();
                 eventData = {
@@ -223,7 +223,7 @@
                     CanSavePaymentMethod: false
                 });
 
-                promise.done(() => {
+                promise.then(() => {
                     fail('Should not have fulfilled promise');
                     done();
                 }, (reason: any) => {
@@ -253,7 +253,7 @@
             var failureReason: any;
 
             beforeEach((done) => {
-                var promise: Q.Promise<boolean>;
+                var promise: Promise<boolean>;
 
                 cardholderName = '';
                 eventData = {
@@ -273,7 +273,7 @@
                     CanSavePaymentMethod: false
                 });
 
-                promise.done(() => {
+                promise.then(() => {
                     fail('Promise should not have been fulfilled.');
                     done();
                 }, (reason: any) => {
@@ -315,7 +315,7 @@
             let cardholder = chance.name();
 
             composerClientStub = sinon.stub(Orckestra.Composer.ComposerClient, 'post', (url: string, data: any) => {
-                return Q({
+                return Promise.resolve({
                     Success: isSuccess
                 });
             });
@@ -352,7 +352,7 @@
             let vm: Orckestra.Composer.IActivePaymentViewModel;
 
             beforeEach((done) => {
-                let promise: Q.Promise<any>;
+                let promise: Promise<any>;
 
                 isSuccess = true;
                 vm = {
@@ -368,7 +368,7 @@
 
                 promise = paymentProvider.addVaultProfileToken(vm);
 
-                promise.done((val: any) => {
+                promise.then((val: any) => {
                     value = val;
                     done();
                 }, (reason: any) => {
@@ -399,7 +399,7 @@
             var vm: Orckestra.Composer.IActivePaymentViewModel;
 
             beforeEach((done) => {
-                var promise: Q.Promise<any>;
+                var promise: Promise<any>;
 
                 isSuccess = true;
                 vm = {
@@ -415,7 +415,7 @@
 
                 promise = paymentProvider.addVaultProfileToken(vm);
 
-                promise.done((val: any) => {
+                promise.then((val: any) => {
                     value = val;
                     done();
                 }, (reason: any) => {
@@ -442,7 +442,7 @@
             let vm: Orckestra.Composer.IActivePaymentViewModel;
 
             beforeEach((done) => {
-                let promise: Q.Promise<any>;
+                let promise: Promise<any>;
 
                 isSuccess = false;
                 vm = {
@@ -457,7 +457,7 @@
                 };
 
                 promise = paymentProvider.addVaultProfileToken(vm);
-                promise.done((val: any) => {
+                promise.then((val: any) => {
                     fail('Promise should have been rejected');
                     done();
                 }, (reason: any) => {
@@ -480,7 +480,7 @@
             let vm: Orckestra.Composer.IActivePaymentViewModel;
 
             beforeEach((done) => {
-                let promise: Q.Promise<any>;
+                let promise: Promise<any>;
 
                 values = [];
                 isSuccess = true;
@@ -504,7 +504,7 @@
                     });
                 });
 
-                promise.done((result: Array<any>) => {
+                promise.then((result: Array<any>) => {
                     done();
                 }, (reason: any) => {
                     fail(reason);

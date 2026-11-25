@@ -11,7 +11,7 @@ namespace Orckestra.Composer {
 
         unregisterController(controllerName: string);
 
-        getCart(): Q.Promise<any>;
+        getCart(): Promise<any>;
 
         calculateStartStep(cart: any, isAuthenticated: boolean): number;
 
@@ -21,29 +21,29 @@ namespace Orckestra.Composer {
 
         billingFulfilled(cart: any, isAuthenticated: boolean): boolean;
 
-        removeCartItem(id, productId): Q.Promise<any>;
+        removeCartItem(id, productId): Promise<any>;
 
         updateCartItem(id: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any>;
+            recurringOrderProgramName?: string): Promise<any>;
 
-        updateCart(controllerNames?: Array<string>): Q.Promise<IUpdateCartResult>;
+        updateCart(controllerNames?: Array<string>): Promise<IUpdateCartResult>;
 
-        updatePaymentMethod(param: any): Q.Promise<IActivePaymentViewModel>;
+        updatePaymentMethod(param: any): Promise<IActivePaymentViewModel>;
 
-        completeCheckout(): Q.Promise<ICompleteCheckoutResult>;
+        completeCheckout(): Promise<ICompleteCheckoutResult>;
 
-        updatePostalCode(postalCode: string): Q.Promise<void>;
+        updatePostalCode(postalCode: string): Promise<void>;
 
-        invalidateCache(): Q.Promise<void>;
+        invalidateCache(): Promise<void>;
 
         getPaymentProviders(paymentProviders: Array<any>) : Array<BaseCheckoutPaymentProvider>;
 
-        getPaymentCheckout(): Q.Promise<ICheckoutPaymentViewModel>;
+        getPaymentCheckout(): Promise<ICheckoutPaymentViewModel>;
 
-        updateBillingPostalCode(postalCode: string): Q.Promise<void>;
+        updateBillingPostalCode(postalCode: string): Promise<void>;
 
-        collectViewModelNamesForUpdateCart():  Q.Promise<any>;
+        collectViewModelNamesForUpdateCart():  Promise<any>;
 
         setOrderConfirmationToCache(orderConfirmationviewModel : any) : void;
 
@@ -51,17 +51,17 @@ namespace Orckestra.Composer {
 
         setOrderToCache(orderConfirmationviewModel : any) : void;
 
-        saveAddressToMyAccountAddressBook(address: any): Q.Promise<any>;
+        saveAddressToMyAccountAddressBook(address: any): Promise<any>;
 
-        updateAddressInMyAccountAddressBook(address: any): Q.Promise<any>;
+        updateAddressInMyAccountAddressBook(address: any): Promise<any>;
 
-        deleteAddress(addressId: any): Q.Promise<any>;
+        deleteAddress(addressId: any): Promise<any>;
 
-        loginUser(formData: any): Q.Promise<any>;
+        loginUser(formData: any): Promise<any>;
 
-        checkUserExist(username: string): Q.Promise<boolean>;
+        checkUserExist(username: string): Promise<boolean>;
 
-        loadUserAddresses(): Q.Promise<any>;
+        loadUserAddresses(): Promise<any>;
 
         isAddressBookIdEmpty(id): boolean;
     }

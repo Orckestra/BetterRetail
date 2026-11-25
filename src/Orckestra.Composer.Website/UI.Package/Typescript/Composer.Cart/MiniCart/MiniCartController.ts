@@ -25,7 +25,7 @@ namespace Orckestra.Composer {
         private initializeMiniCartQuantity(): void {
 
             this.cartService.getCart()
-                .done(cart => {
+                .then(cart => {
 
                     if (!_.isEmpty(cart)) {
                         this.renderCart(cart);
@@ -56,7 +56,7 @@ namespace Orckestra.Composer {
             this.renderCart(cart);
         }
 
-        protected onRefreshUser(e: IEventInformation): Q.Promise<any> {
+        protected onRefreshUser(e: IEventInformation): Promise<any> {
 
             return this.cartService.invalidateCache();
         }

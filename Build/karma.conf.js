@@ -15,7 +15,6 @@
             path.join(thirdPartyJavaScriptPath, 'jquery-1.11.2.min.js'),
             path.join(thirdPartyJavaScriptPath, 'lodash-4.17.21.min.js'),
             path.join(thirdPartyJavaScriptPath, 'parsley.min.js'),
-            path.join(thirdPartyJavaScriptPath, 'q-1.2.0.js'),
             path.join(thirdPartyJavaScriptPath, 'jquery.serialize-object.js'),
             path.join(thirdPartyJavaScriptPath, 'typeahead.js'),
             '../src/Orckestra.Composer.Website/UI.Package/Javascript/orckestra.composer.tests.js',

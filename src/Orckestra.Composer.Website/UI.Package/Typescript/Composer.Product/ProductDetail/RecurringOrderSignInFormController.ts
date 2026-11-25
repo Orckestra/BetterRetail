@@ -12,7 +12,7 @@ namespace Orckestra.Composer {
             this.returnUrl = this.context.container.data('product-url');
         }
 
-        protected loginImpl(actionContext: IControllerActionContext): Q.Promise<any> {
+        protected loginImpl(actionContext: IControllerActionContext): Promise<any> {
             let formData: any = (<ISerializeObjectJqueryPlugin>actionContext.elementContext).serializeObject();
 
             return this.membershipService.login(formData, this.returnUrl);

@@ -16,9 +16,9 @@ namespace Orckestra.Composer {
         private _informationWindow: google.maps.InfoWindow;
         private _projectionOverlay: google.maps.OverlayView;
 
-        private _mapInitialized: Q.Deferred<MapService> = Q.defer<MapService>();
-        private _mapIdle: Q.Deferred<MapService> = Q.defer<MapService>();
-        private _mapDragEnded: Q.Deferred<MapService> = Q.defer<MapService>();
+        private _mapInitialized: Deferred<MapService> = new Deferred<MapService>();
+        private _mapIdle: Deferred<MapService> = new Deferred<MapService>();
+        private _mapDragEnded: Deferred<MapService> = new Deferred<MapService>();
 
         constructor(eventHub: IEventHub) {
             this.eventHub = eventHub;
@@ -47,7 +47,7 @@ namespace Orckestra.Composer {
             });
 
             google.maps.event.addListener(this._map, 'dragstart', () => {
-                this._mapDragEnded = Q.defer<MapService>();
+                this._mapDragEnded = new Deferred<MapService>();
             });
             google.maps.event.addListener(this._map, 'dragend', () => {
                 this._mapDragEnded.resolve(this);
@@ -121,15 +121,15 @@ namespace Orckestra.Composer {
             }
         }
 
-        public mapInitialized(): Q.Promise<MapService> {
+        public mapInitialized(): Promise<MapService> {
             return this._mapInitialized.promise;
         }
 
-        public mapIdle(): Q.Promise<MapService> {
+        public mapIdle(): Promise<MapService> {
             return this._mapIdle.promise;
         }
 
-        public mapDragEnded(): Q.Promise<MapService> {
+        public mapDragEnded(): Promise<MapService> {
             return this._mapDragEnded.promise;
         }
 
@@ -141,7 +141,7 @@ namespace Orckestra.Composer {
                         var northEast = new google.maps.LatLng(storeBounds.NorthEast.Lat, storeBounds.NorthEast.Lng);
                         var bounds = new google.maps.LatLngBounds(southWest, northEast);
                         this._map.fitBounds(bounds);
-                        this._mapIdle = Q.defer<MapService>();
+                        this._mapIdle = new Deferred<MapService>();
                     });
             }
         }
@@ -156,7 +156,7 @@ namespace Orckestra.Composer {
                 () => {
                     this._map.setCenter(point);
                     this._map.setZoom(zoomLevel);
-                    this._mapIdle = Q.defer<MapService>();
+                    this._mapIdle = new Deferred<MapService>();
                 });
         }
 
@@ -168,7 +168,7 @@ namespace Orckestra.Composer {
                     bounds.extend(point2);
                     this._map.fitBounds(bounds);
                     this._map.setCenter(bounds.getCenter());
-                    this._mapIdle = Q.defer<MapService>();
+                    this._mapIdle = new Deferred<MapService>();
                 });
         }
 
@@ -204,8 +204,8 @@ namespace Orckestra.Composer {
                 });
         }
 
-        private transformResult(result, markerPool: MarkerPool, action): Q.Promise<any[]> {
-            var deferred = Q.defer<Marker[]>();
+        private transformResult(result, markerPool: MarkerPool, action): Promise<any[]> {
+            var deferred = new Deferred<Marker[]>();
             var markers: Marker[] = [];
 
 

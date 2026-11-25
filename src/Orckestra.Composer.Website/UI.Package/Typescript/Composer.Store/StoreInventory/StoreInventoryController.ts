@@ -21,16 +21,16 @@ namespace Orckestra.Composer {
         private _isAuthenticated: boolean;
         private _pageSize: number;
         private _productId: any;
-        private _getCurrentLocation: Q.Deferred<google.maps.LatLng> = Q.defer<google.maps.LatLng>();
+        private _getCurrentLocation: Deferred<google.maps.LatLng> = new Deferred<google.maps.LatLng>();
 
-        public getCurrentLocation(): Q.Promise<google.maps.LatLng> {
+        public getCurrentLocation(): Promise<google.maps.LatLng> {
             return this._getCurrentLocation.promise;
         }
 
 
         public initialize() {
-            var getDefaultsTasks: Q.Promise<any>[] = [];
-            var getDefaultAddressTask: Q.Promise<any>;
+            var getDefaultsTasks: Promise<any>[] = [];
+            var getDefaultAddressTask: Promise<any>;
 
             super.initialize();
             this.registerSubscriptions();
@@ -45,9 +45,9 @@ namespace Orckestra.Composer {
 
             getDefaultsTasks.push(this.getDefaultAddress());
 
-            Q.all(getDefaultsTasks).then(() => {
+            Promise.all(getDefaultsTasks).then(() => {
                 this.getStoresInventory();
-            }).fail(reason => console.log(this._concern + reason));
+            }).catch(reason => console.log(this._concern + reason));
 
             this._geoService.geolocate().then(location => {
                 this._getCurrentLocation.resolve(location);
@@ -105,7 +105,7 @@ namespace Orckestra.Composer {
             }
         }
 
-        protected getStoresInventory(): Q.Promise<any> {
+        protected getStoresInventory(): Promise<any> {
             var debounceHandle;
 
             if (this._selectedSku) {
@@ -117,7 +117,7 @@ namespace Orckestra.Composer {
                         this.render('StoreInventoryList', result);
                         this.setGoogleDirectionLinks();
                     })
-                    .fail(reason => console.log(reason));
+                    .catch(reason => console.log(reason));
             }
         }
 
@@ -136,10 +136,10 @@ namespace Orckestra.Composer {
 
                     this.setGoogleDirectionLinks();
                 })
-                .fail(reason => console.log(reason));
+                .catch(reason => console.log(reason));
         }
 
-        protected setGoogleDirectionLinks(): Q.Promise<any> {
+        protected setGoogleDirectionLinks(): Promise<any> {
 
             return this.getCurrentLocation().then(location => {
 
@@ -158,7 +158,7 @@ namespace Orckestra.Composer {
             return param;
         }
 
-        protected getDefaultAddress(): Q.Promise<any> {
+        protected getDefaultAddress(): Promise<any> {
             // try get address from local storage
             return this.cache.get<any>(this._searchPointAddressCacheKey)
                 .then(cachedAddr => {

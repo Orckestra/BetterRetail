@@ -12,7 +12,7 @@ namespace Orckestra.Composer {
 
     export class CreditCardMonerisCanadaPaymentProvider extends BaseSpecializedMonerisCanadaPaymentProvider {
 
-        private _validationDefer: Q.Deferred<any>;
+        private _validationDefer: Deferred<any>;
 
         /**
          * This property has to be public for the specs to work
@@ -48,15 +48,15 @@ namespace Orckestra.Composer {
          * Returns a promise of boolean. The return boolean needs to be false for validation error,
          * or true if valid.
          * @param   {IActivePaymentViewModel}   The current active payment view model
-         * @return  {Q.Promise<boolean>}        Promise that will be executed when we validate the payment control.
+         * @return  {Promise<boolean>}        Promise that will be executed when we validate the payment control.
          */
-        public validatePayment(activePaymentVM: IActivePaymentViewModel): Q.Promise<boolean> {
-            return Q
-                .fcall(() => this.collectAndValidateFormData())
+        public validatePayment(activePaymentVM: IActivePaymentViewModel): Promise<boolean> {
+            return Promise.resolve()
+                .then(() => this.collectAndValidateFormData())
                 .then(_ => {
                     this.hideAllMonerisErrors();
 
-                    this._validationDefer = Q.defer();
+                    this._validationDefer = new Deferred();
                     this._validationDefer.promise
                         .then((monerisRes: IMonerisResponseData) => {
                             this._validationDefer = null;
@@ -80,13 +80,13 @@ namespace Orckestra.Composer {
                 });
         }
 
-        private validateMonerisIFrame(vm: IActivePaymentViewModel): Q.Promise<boolean> {
+        private validateMonerisIFrame(vm: IActivePaymentViewModel): Promise<boolean> {
             var monerisFrame: HTMLIFrameElement = this.getMonerisIFrame();
             var monerisContentWindow: Window = monerisFrame.contentWindow;
-            var promise: Q.Promise<boolean>;
+            var promise: Promise<boolean>;
             this.hideAllMonerisErrors();
 
-            this._validationDefer = Q.defer();
+            this._validationDefer = new Deferred();
             promise = this._validationDefer.promise
                 .then((monerisRes: IMonerisResponseData) => {
                     this._validationDefer = null;
@@ -112,11 +112,11 @@ namespace Orckestra.Composer {
         /**
          * Add the temporary token to the vault profile of the user
          * @param   {IActivePaymentViewModel}   The current active payment view model
-         * @return  {Q.Promise<any>}            The object is the updated properties of the cart used in CheckoutService.updateCart()
+         * @return  {Promise<any>}            The object is the updated properties of the cart used in CheckoutService.updateCart()
          */
-        public addVaultProfileToken(activePaymentVM : IActivePaymentViewModel): Q.Promise<any> {
+        public addVaultProfileToken(activePaymentVM : IActivePaymentViewModel): Promise<any> {
             if (!activePaymentVM.ShouldCapturePayment) {
-                return Q({});
+                return Promise.resolve({});
             }
 
             let formData = this.collectAndValidateFormData();

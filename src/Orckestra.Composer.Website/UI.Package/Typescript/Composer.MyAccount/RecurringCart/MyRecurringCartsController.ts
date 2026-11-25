@@ -20,7 +20,7 @@ namespace Orckestra.Composer {
             var busyHandle = this.asyncBusy();
 
             this.recurringOrderService.getRecurringOrderCartsByUser()
-                .done((viewModel) => {
+                .then((viewModel) => {
 
                     if (!_.isEmpty(viewModel)) {
                         this.render('MyRecurringCarts', viewModel);

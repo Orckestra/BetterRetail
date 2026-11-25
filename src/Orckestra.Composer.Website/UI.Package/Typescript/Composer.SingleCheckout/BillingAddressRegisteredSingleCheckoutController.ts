@@ -27,11 +27,11 @@ namespace Orckestra.Composer {
                         if (this.IsPickUpMethodType) {
                             this.Cart.Payment.BillingAddress.UseShippingAddress = false;
                         }
-                        return Q.resolve(true);
+                        return Promise.resolve(true);
                     },
-                    processBillingAddressRegistered():Q.Promise<boolean> {
+                    processBillingAddressRegistered():Promise<boolean> {
                         if (!this.billingAddressModified()) {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
 
                         return self.checkoutService.updateCart([self.viewModelName])
@@ -46,7 +46,7 @@ namespace Orckestra.Composer {
                     addBillingAddressToMyAddressBook() {
                         let isValid = this.validateParsey(self.formSelector);
                         if (!isValid) {
-                            return Q.reject('Billing Address information is not valid');
+                            return Promise.reject('Billing Address information is not valid');
                         }
                         let addressData = { ...this.Cart.Payment.BillingAddress };
                         addressData.AddressName = this.AddressName;
@@ -55,7 +55,7 @@ namespace Orckestra.Composer {
                             .then(address => {
                                 return this.changeRegisteredBillingAddress(address.Id);
                             })
-                            .fail((reason) => {
+                            .catch((reason) => {
                                 console.log(reason);
                                 if (reason.Errors && _.find(reason.Errors, (e: any) => e.ErrorCode === 'NameAlreadyUsed')) {
                                     this.Errors.AddressNameAlreadyInUseError = true;
@@ -84,7 +84,7 @@ namespace Orckestra.Composer {
                     updateEditedBillingAddress() {
                         let isValid = this.validateParsey('#editAddressForm');
                         if (!isValid) {
-                            return Q.reject('Address information is not valid');
+                            return Promise.reject('Address information is not valid');
                         }
                         this.Mode.Loading = true;
                         this.EditingAddress.AddressName = this.AddressName;
@@ -100,8 +100,8 @@ namespace Orckestra.Composer {
                                 }
                             }
                         })
-                        .fail(reason => this.handleAddressErrors(reason))
-                        .fin(() => this.Mode.Loading = false)
+                        .catch(reason => this.handleAddressErrors(reason))
+                        .finally(() => this.Mode.Loading = false)
                     }
                 }
             };
@@ -109,8 +109,8 @@ namespace Orckestra.Composer {
             this.checkoutService.VueCheckoutMixins.push(vueBillingAddressRegisteredMixin);
         }
 
-        public getViewModelNameForUpdatePromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getViewModelNameForUpdatePromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 var vueData = this.checkoutService.VueCheckout;
                 if (!vueData.IsAuthenticated) {
                     return;
@@ -123,8 +123,8 @@ namespace Orckestra.Composer {
         }
 
 
-        public getUpdateModelPromise(): Q.Promise<any> {
-            return Q.fcall(() => {
+        public getUpdateModelPromise(): Promise<any> {
+            return Promise.resolve().then(() => {
                 let { Payment } = this.checkoutService.VueCheckout.Cart;
                 let { AddressBookId, UseShippingAddress } = Payment.BillingAddress;
 

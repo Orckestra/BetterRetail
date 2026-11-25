@@ -36,7 +36,7 @@ namespace Orckestra.Composer {
                         this.Mode.Loading = true;
 
                         self.couponService.addCoupon(this.CouponCode)
-                            .fin(() => {
+                            .finally(() => {
                                 if (!this.HasCouponsErrorMessage) this.CouponCode = undefined;
                                 this.Mode.ApplyingCoupon = false;
                                 this.Mode.Loading = false;
@@ -51,7 +51,7 @@ namespace Orckestra.Composer {
                         }
                         this.Mode.Loading = true;
                         self.couponService.removeCoupon(couponCode.toString())
-                            .fin(() => this.Mode.Loading = false);
+                            .finally(() => this.Mode.Loading = false);
                     },
                     onCartUpdated(cart) {
                         this.Cart = cart.data;

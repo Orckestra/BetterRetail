@@ -23,7 +23,7 @@ namespace Orckestra.Composer {
         * Attempt to Log In using Composer API.
         * @param
         */
-        public login(formData: any, returnUrl: string): Q.Promise<any> {
+        public login(formData: any, returnUrl: string): Promise<any> {
 
             return this.membershipRepository.login(formData, returnUrl);
         }
@@ -32,7 +32,7 @@ namespace Orckestra.Composer {
         * Logout using Composer API.
         * @param
         */
-        public logout(returnUrl: string = '', preserveCustomerInfo: boolean = false): Q.Promise<any> {
+        public logout(returnUrl: string = '', preserveCustomerInfo: boolean = false): Promise<any> {
 
             return this.membershipRepository.logout(returnUrl, preserveCustomerInfo);
         }
@@ -41,7 +41,7 @@ namespace Orckestra.Composer {
         * Attempt to register using Composer API.
         * @param
         */
-        public register(formData: any, returnUrl: string): Q.Promise<any> {
+        public register(formData: any, returnUrl: string): Promise<any> {
 
             return this.membershipRepository.register(formData, returnUrl);
         }
@@ -50,7 +50,7 @@ namespace Orckestra.Composer {
         * Attempt to trigger the forgot password email using Composer API.
         * @param
         */
-        public forgotPassword(formData: any): Q.Promise<any> {
+        public forgotPassword(formData: any): Promise<any> {
 
             return this.membershipRepository.forgotPassword(formData);
         }
@@ -59,7 +59,7 @@ namespace Orckestra.Composer {
         * Attempt to reset password for the Customer identified by the ticket using Composer API.
         * @param
         */
-        public resetPassword(formData: any, ticket: string, returnUrl: string): Q.Promise<any> {
+        public resetPassword(formData: any, ticket: string, returnUrl: string): Promise<any> {
 
             return this.membershipRepository.resetPassword(formData, ticket, returnUrl);
         }
@@ -68,7 +68,7 @@ namespace Orckestra.Composer {
         * Attempt to change the password for the connected Customer using Composer API.
         * @param
         */
-        public changePassword(formData: any, returnUrl: string): Q.Promise<any> {
+        public changePassword(formData: any, returnUrl: string): Promise<any> {
 
             return this.membershipRepository.changePassword(formData, returnUrl);
         }
@@ -76,7 +76,7 @@ namespace Orckestra.Composer {
         /**
          * If the current user is authenticated or not
          */
-         public isAuthenticated(): Q.Promise<any> {
+         public isAuthenticated(): Promise<any> {
 
             if (_.isUndefined(this.memoizeIsAuthenticated)) {
 
@@ -89,7 +89,7 @@ namespace Orckestra.Composer {
         /**
          * If the current user is authenticated or not
          */
-         protected isAuthenticatedImpl(): Q.Promise<any> {
+         protected isAuthenticatedImpl(): Promise<any> {
 
             return this.membershipRepository.isAuthenticated();
         }
@@ -97,7 +97,7 @@ namespace Orckestra.Composer {
         /**
         * If user with this username exist
         */
-        public isUserExist(email: string): Q.Promise<any> {
+        public isUserExist(email: string): Promise<any> {
 
             return this.membershipRepository.isUserExist(email);
         }

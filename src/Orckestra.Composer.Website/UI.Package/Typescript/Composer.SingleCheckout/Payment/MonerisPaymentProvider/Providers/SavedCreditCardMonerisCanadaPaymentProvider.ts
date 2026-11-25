@@ -40,24 +40,24 @@ namespace Orckestra.Composer {
          * Returns a promise of boolean. The return boolean needs to be false for validation error,
          * or true if valid.
          * @param   {IActivePaymentViewModel}   The current active payment view model
-         * @return  {Q.Promise<boolean>}        Promise that will be executed when we validate the payment control.
+         * @return  {Promise<boolean>}        Promise that will be executed when we validate the payment control.
          */
-        public validatePayment(activePaymentVM: IActivePaymentViewModel): Q.Promise<boolean> {
+        public validatePayment(activePaymentVM: IActivePaymentViewModel): Promise<boolean> {
             // Considering the credit card was already added we do not need to run additional validations
-            return Q(true);
+            return Promise.resolve(true);
         }
 
         /**
          * Add the temporary token to the vault profile of the user
          * @param   {IActivePaymentViewModel}   The current active payment view model
-         * @return  {Q.Promise<any>}            The object is the updated properties of the cart used in CheckoutService.updateCart()
+         * @return  {Promise<any>}            The object is the updated properties of the cart used in CheckoutService.updateCart()
          */
-        public addVaultProfileToken(activePaymentVM : IActivePaymentViewModel): Q.Promise<any> {
+        public addVaultProfileToken(activePaymentVM : IActivePaymentViewModel): Promise<any> {
             // no need to add the payment method to the vault
-            return Q({});
+            return Promise.resolve({});
         }
 
-        protected deleteCart(event: JQueryEventObject) : Q.Promise<void> {
+        protected deleteCart(event: JQueryEventObject) : Promise<void> {
             let element = $(event.target);
             let paymentMethodId: string = element.data('payment-id');
             let paymentProviderName: string = element.data('payment-provider');
@@ -70,8 +70,8 @@ namespace Orckestra.Composer {
             return this._paymentService
                        .removePaymentMethod(paymentMethodId, paymentProviderName)
                        .then(() => this._eventHub.publish('paymentMethodsUpdated', null))
-                       .fail(reason => ErrorHandler.instance().outputError(reason))
-                       .fin(() => {
+                       .catch(reason => ErrorHandler.instance().outputError(reason))
+                       .finally(() => {
                            this.releaseBusyHandler();
                        });
         }

@@ -6,8 +6,8 @@ namespace Orckestra.Composer {
 
         viewModelName: string;
 
-        getUpdateModelPromise(): Q.Promise<any>;
+        getUpdateModelPromise(): Promise<any>;
 
-        getViewModelNameForUpdatePromise(): Q.Promise<any>;
+        getViewModelNameForUpdatePromise(): Promise<any>;
     }
 }

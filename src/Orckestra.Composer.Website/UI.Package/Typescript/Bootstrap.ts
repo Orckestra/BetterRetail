@@ -12,6 +12,7 @@
 ///<reference path='./Plugins/IPlugin.ts' />
 ///<reference path='./Events/EventHub.ts' />
 ///<reference path='./Utils/CookieUtils.ts' />
+///<reference path='./Utils/UnhandledRejectionLogger.ts' />
 
 namespace Orckestra.Composer {
 
@@ -44,6 +45,11 @@ namespace Orckestra.Composer {
         return cacheProvider.defaultCache.get(cacheKey).then(function (value) {
             eventHub.publish('languageSwitched', null);
             cacheProvider.defaultCache.clear(cacheKey);
+        }).catch(function (reason) {
+            // NotFound is the normal case when no language switch happened
+            if (reason !== CacheError.NotFound && reason !== CacheError.Expired) {
+                throw reason;
+            }
         });
     }
 
@@ -62,11 +68,13 @@ namespace Orckestra.Composer {
             localizationProvider: Orckestra.Composer.ILocalizationProvider = Orckestra.Composer.LocalizationProvider.instance(),
             composerContext: Orckestra.Composer.IComposerContext = new ComposerContext();
 
+        UnhandledRejectionLogger.register(window);
+
         // TODO: Need a better solution that <any>.
         (<any>Handlebars).partials = (<any>Orckestra.Composer).Templates;
         (<any>Handlebars).localizationProvider = localizationProvider;
 
-        localizationProvider.initialize(composerContext).fail(function() {
+        localizationProvider.initialize(composerContext).catch(function() {
             console.log('Failed to initialize the localization provider');
         }).then(() => {
             var blades = $('[data-oc-controller]'),
@@ -117,6 +125,6 @@ namespace Orckestra.Composer {
                 controllers.forEach(controller => controller.dispose());
             });
             setTimezoneOffsetCookie();
-        }).done();
+        });
     };
 }

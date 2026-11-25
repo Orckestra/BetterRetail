@@ -24,7 +24,7 @@ namespace Orckestra.Composer {
                         this.eventHub.publish(MyAccountEvents.EditOrderStarted, { data: data });
                     }
                 })
-                .fail(() => {
+                .catch(() => {
                     ErrorHandler.instance().outputErrorFromCode('EditingOrderFailed');
                 });
         }
@@ -33,8 +33,8 @@ namespace Orckestra.Composer {
             return this.orderRepository.saveEditOrder(orderNumber).then((result: ICompleteCheckoutResult) => {
 
                 result.IsUpdatedOrder = true;
-                this.cacheProvider.defaultCache.set(this.orderCacheKey, result).done();
-                this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, result).done();
+                this.cacheProvider.defaultCache.set(this.orderCacheKey, result);
+                this.cacheProvider.defaultCache.set(this.orderConfirmationCacheKey, result);
 
                 this.eventHub.publish(MyAccountEvents.EditOrderFinished, { data: { orderNumber } });
 
@@ -45,12 +45,12 @@ namespace Orckestra.Composer {
                     window.location.href = result.NextStepUrl;
                 }
 
-            }).fail(reason => ErrorHandler.instance().outputErrorFromCode('UpdatingOrderFailed'));
+            }).catch(reason => ErrorHandler.instance().outputErrorFromCode('UpdatingOrderFailed'));
         }
         
         public cancelOrder(orderNumber: string) {
             return this.orderRepository.cancelOrder(orderNumber).then(result => this.eventHub.publish(MyAccountEvents.OrderCanceled, { data: { orderNumber } })) 
-            .fail(reason => ErrorHandler.instance().outputErrorFromCode('CancelOrderFailed'));
+            .catch(reason => ErrorHandler.instance().outputErrorFromCode('CancelOrderFailed'));
         }
 
         public cancelEditOrder(orderNumber: string) {
@@ -60,7 +60,7 @@ namespace Orckestra.Composer {
                 return this.cartService.getFreshCart(true);
             })
                 .then(cart => this.eventHub.publish(CartEvents.CartUpdated, { data: cart }))
-                .fail(reason => console.log(reason));
+                .catch(reason => console.log(reason));
         }
 
         public getPastOrders(options: IGetOrderParameters = { page: 1 }) {

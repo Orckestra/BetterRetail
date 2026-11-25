@@ -6,11 +6,11 @@ namespace Orckestra.Composer {
     'use strict';
 
     export class RecurringOrderRepository implements IRecurringOrderRepository {
-        public updateLineItemsDate(updateLineItemsParam: IRecurringOrderLineItemsUpdateDateParam): Q.Promise<any> {
+        public updateLineItemsDate(updateLineItemsParam: IRecurringOrderLineItemsUpdateDateParam): Promise<any> {
             return ComposerClient.put(`/api/recurringcart/reschedule`, updateLineItemsParam);
         }
 
-        public deleteLineItem(deleteLineItemParam: IRecurringOrderLineItemDeleteParam): Q.Promise<any> {
+        public deleteLineItem(deleteLineItemParam: IRecurringOrderLineItemDeleteParam): Promise<any> {
             const {lineItemId, cartName} = deleteLineItemParam;
             if (!lineItemId) {
                 throw new Error('lineItemId is required');
@@ -27,7 +27,7 @@ namespace Orckestra.Composer {
             return ComposerClient.remove(`/api/recurringcart/lineitem/`, data);
         }
 
-        public deleteLineItems(deleteLineItemsParam: IRecurringOrderLineItemsDeleteParam): Q.Promise<any> {
+        public deleteLineItems(deleteLineItemsParam: IRecurringOrderLineItemsDeleteParam): Promise<any> {
             const {lineItemsIds, cartName} = deleteLineItemsParam;
             if (!lineItemsIds) {
                 throw new Error('lineItemsIds is required');
@@ -62,7 +62,7 @@ namespace Orckestra.Composer {
             return ComposerClient.get(`/api/recurringordertemplate/getrecurringordertemplates`);
         }
 
-        public updateCartShippingAddress(updateCartAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
+        public updateCartShippingAddress(updateCartAddressParam: IRecurringOrderUpdateTemplateAddressParam): Promise<any> {
 
             const {billingAddressId, shippingAddressId, cartName, useSameForShippingAndBilling} = updateCartAddressParam;
             if (!billingAddressId && !shippingAddressId) {
@@ -82,7 +82,7 @@ namespace Orckestra.Composer {
             return ComposerClient.put(`/api/recurringcart/address`, data);
         }
 
-        public updateCartBillingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Q.Promise<any> {
+        public updateCartBillingAddress(updateTemplateAddressParam: IRecurringOrderUpdateTemplateAddressParam): Promise<any> {
 
             const {billingAddressId, shippingAddressId, cartName, useSameForShippingAndBilling} = updateTemplateAddressParam;
             if (!billingAddressId && !shippingAddressId) {
@@ -102,7 +102,7 @@ namespace Orckestra.Composer {
             return ComposerClient.put(`/api/recurringordercart/${cartName}/billing-address`, data);
         }
 
-        public updateTemplatePaymentMethod(updateTemplatePaymentMethodParam: IRecurringOrderUpdateTemplatePaymentMethodParam): Q.Promise<any> {
+        public updateTemplatePaymentMethod(updateTemplatePaymentMethodParam: IRecurringOrderUpdateTemplatePaymentMethodParam): Promise<any> {
 
             const {paymentMethodId, cartName, providerName} = updateTemplatePaymentMethodParam;
             if (!paymentMethodId) {
@@ -125,7 +125,7 @@ namespace Orckestra.Composer {
 
         }
 
-        public updateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderUpdateLineItemQuantityParam): Q.Promise<any> {
+        public updateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderUpdateLineItemQuantityParam): Promise<any> {
 
             const {lineItemId, quantity, cartName, recurringProgramName, recurringFrequencyName} = updateLineItemQuantityParam;
 
@@ -150,7 +150,7 @@ namespace Orckestra.Composer {
             return ComposerClient.put(`/api/recurringcart/lineitem/`, data);
         }
 
-        public updateTemplateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderTemplateUpdateLineItemQuantityParam): Q.Promise<any> {
+        public updateTemplateLineItemQuantity(updateLineItemQuantityParam: IRecurringOrderTemplateUpdateLineItemQuantityParam): Promise<any> {
 
             const {lineItemId, quantity} = updateLineItemQuantityParam;
 
@@ -169,11 +169,11 @@ namespace Orckestra.Composer {
             return ComposerClient.put(`/api/recurringordertemplate/lineitemquantity/`, data);
         }
 
-        public getRecurringOrderProgramsByUser(): Q.Promise<any> {
+        public getRecurringOrderProgramsByUser(): Promise<any> {
             return ComposerClient.get(`/api/recurringordertemplate/get-recurring-order-programs-by-user/`);
         }
 
-        public getRecurringOrderProgramsByNames(programsByNamesParam: IRecurringOrderProgramsByNamesParam): Q.Promise<any> {
+        public getRecurringOrderProgramsByNames(programsByNamesParam: IRecurringOrderProgramsByNamesParam): Promise<any> {
 
             const {recurringOrderProgramNames} = programsByNamesParam;
 
@@ -188,7 +188,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post(`/api/recurringordercart/get-recurring-order-programs-by-names/`, data);
         }
 
-        public updateTemplateLineItem(templateLineItemUpdateParam: IRecurringOrderTemplateLineItemUpdateParam): Q.Promise<any> {
+        public updateTemplateLineItem(templateLineItemUpdateParam: IRecurringOrderTemplateLineItemUpdateParam): Promise<any> {
             const {
                 lineItemId,
                 paymentMethodId,
@@ -239,7 +239,7 @@ namespace Orckestra.Composer {
             return ComposerClient.put(`/api/recurringordertemplate/lineitem/`, data);
         }
 
-        public deleteTemplateLineItem(deleteTemplateLineItemParam: IRecurringOrderTemplateLineItemDeleteParam): Q.Promise<any> {
+        public deleteTemplateLineItem(deleteTemplateLineItemParam: IRecurringOrderTemplateLineItemDeleteParam): Promise<any> {
             const {lineItemId} = deleteTemplateLineItemParam;
             if (!lineItemId) {
                 throw new Error('lineItemId is required');
@@ -251,7 +251,7 @@ namespace Orckestra.Composer {
             return ComposerClient.remove(`/api/recurringordertemplate/lineitem/`, data);
         }
 
-        public deleteTemplateLineItems(deleteTemplateLineItemsParam: IRecurringOrderTemplateLineItemsDeleteParam): Q.Promise<any> {
+        public deleteTemplateLineItems(deleteTemplateLineItemsParam: IRecurringOrderTemplateLineItemsDeleteParam): Promise<any> {
             const {lineItemsIds} = deleteTemplateLineItemsParam;
             if (!lineItemsIds) {
                 throw new Error('lineItemsIds is required');
@@ -264,15 +264,15 @@ namespace Orckestra.Composer {
             return ComposerClient.remove(`/api/recurringordertemplate/lineitems/byIds`, datas);
         }
 
-        public getCartContainsRecurrence(): Q.Promise<any> {
+        public getCartContainsRecurrence(): Promise<any> {
             return ComposerClient.get(`/api/recurringordercart/get-cart-contains-recurrence`);
         }
 
-        public getRecurrenceConfigIsActive(): Q.Promise<any> {
+        public getRecurrenceConfigIsActive(): Promise<any> {
             return ComposerClient.get(`/api/recurringordercart/get-recurrence-config-is-active`);
         }
 
-        public getCanRemovePaymentMethod(paymentMethodId): Q.Promise<any> {
+        public getCanRemovePaymentMethod(paymentMethodId): Promise<any> {
 
             const datas = {
                 PaymentMethodId: paymentMethodId,
@@ -280,11 +280,11 @@ namespace Orckestra.Composer {
             return ComposerClient.post(`/api/recurringordertemplate/get-can-remove-payment-method`, datas);
         }
 
-        public getRecurringOrderCartSummaries(): Q.Promise<any> {
+        public getRecurringOrderCartSummaries(): Promise<any> {
             return ComposerClient.get(`/api/recurringordercart/customer-cart-summaries`);
         }
 
-        public addRecurringOrderCartLineItem(addLineItemQuantityParam: IAddRecurringOrderCartLineItemParam): Q.Promise<any> {
+        public addRecurringOrderCartLineItem(addLineItemQuantityParam: IAddRecurringOrderCartLineItemParam): Promise<any> {
             if (!addLineItemQuantityParam.cartName) {
                 throw new Error('billingAddressId is required');
             }
@@ -304,7 +304,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post(`/api/recurringordercart/lineitem`, addLineItemQuantityParam);
         }
 
-        public updateCartShippingMethod(updateCartShippingMethodParam: IRecurringOrderCartUpdateShippingMethodParam): Q.Promise<any> {
+        public updateCartShippingMethod(updateCartShippingMethodParam: IRecurringOrderCartUpdateShippingMethodParam): Promise<any> {
             if (!updateCartShippingMethodParam.shippingProviderId) {
                 throw new Error('shippingProviderId is required');
             }
@@ -319,11 +319,11 @@ namespace Orckestra.Composer {
                 updateCartShippingMethodParam);
         }
 
-        public getAnonymousCartSignInUrl(): Q.Promise<any> {
+        public getAnonymousCartSignInUrl(): Promise<any> {
             return ComposerClient.get(`/api/recurringcart/getanonymouscartsigninurl`);
         }
 
-        public getCartShippingMethods(getCartShippingMethodsParam: IRecurringOrderGetCartShippingMethods): Q.Promise<any> {
+        public getCartShippingMethods(getCartShippingMethodsParam: IRecurringOrderGetCartShippingMethods): Promise<any> {
             if (!getCartShippingMethodsParam.CartName) {
                 throw new Error('CartName is required');
             }
@@ -332,19 +332,19 @@ namespace Orckestra.Composer {
                 getCartShippingMethodsParam);
         }
 
-        public getOrderTemplateShippingMethods(): Q.Promise<any> {
+        public getOrderTemplateShippingMethods(): Promise<any> {
             return ComposerClient.get(`/api/cart/shippingmethodsscope`);
         }
 
-        public getInactifProductsFromCustomer(): Q.Promise<any> {
+        public getInactifProductsFromCustomer(): Promise<any> {
             return ComposerClient.get(`/api/recurringordertemplate/inactifProducts`);
         }
 
-        public clearCustomerInactifItems(): Q.Promise<any> {
+        public clearCustomerInactifItems(): Promise<any> {
             return ComposerClient.get(`/api/recurringordertemplate/clear-customer-inactif-items`);
         }
 
-        public getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Q.Promise<any> {
+        public getRecurringCart(getRecurringCartParam: IRecurringOrderCartParam): Promise<any> {
             const {cartName} = getRecurringCartParam;
             if (!cartName) {
                 throw new Error('cartName is required');
@@ -357,7 +357,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post(`/api/recurringcart/getrecurringcart`, data);
         }
 
-        public getCartPaymentMethods(getCartPaymentMethodsParam: IRecurringOrderGetCartPaymentMethods): Q.Promise<any> {
+        public getCartPaymentMethods(getCartPaymentMethodsParam: IRecurringOrderGetCartPaymentMethods): Promise<any> {
             const {cartName} = getCartPaymentMethodsParam;
             if (!cartName) {
                 throw new Error('cartName is required');
@@ -371,7 +371,7 @@ namespace Orckestra.Composer {
         }
 
 
-        public updateCartPaymentMethod(updateCartPaymentMethodParam: IRecurringOrderCartUpdatePaymentMethodParam): Q.Promise<any> {
+        public updateCartPaymentMethod(updateCartPaymentMethodParam: IRecurringOrderCartUpdatePaymentMethodParam): Promise<any> {
             if (!updateCartPaymentMethodParam.paymentId) {
                 throw new Error('paymentId is required');
             }
@@ -392,7 +392,7 @@ namespace Orckestra.Composer {
                 updateCartPaymentMethodParam);
         }
 
-        public getRecurringTemplateDetail(recurringOrderTemplateId: string): Q.Promise<any> {
+        public getRecurringTemplateDetail(recurringOrderTemplateId: string): Promise<any> {
             if (!recurringOrderTemplateId) {
                 throw new Error('recurringOrderTemplateId is required');
             }
@@ -404,7 +404,7 @@ namespace Orckestra.Composer {
             return ComposerClient.post(`/api/recurringordertemplate/getrecurringordertemplatedetails`, data);
         }
 
-        public getTemplatePaymentMethods(getTemplatePaymentMethodsParam: IRecurringOrderGetTemplatePaymentMethods): Q.Promise<any> {
+        public getTemplatePaymentMethods(getTemplatePaymentMethodsParam: IRecurringOrderGetTemplatePaymentMethods): Promise<any> {
             const {id} = getTemplatePaymentMethodsParam;
             if (!id) {
                 throw new Error('id is required');

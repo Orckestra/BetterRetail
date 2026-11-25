@@ -9,12 +9,12 @@ namespace Orckestra.Composer {
         /**
         * Return a Promise which returns the ShippingMethods available for the cart.
         */
-        public getShippingMethods(): Q.Promise<any> {
+        public getShippingMethods(): Promise<any> {
 
             return ComposerClient.get('/api/cart/shippingmethods');
         }
 
-        public getShippingMethodTypes(): Q.Promise<any> {
+        public getShippingMethodTypes(): Promise<any> {
             return ComposerClient.get('/api/cart/groupedshippingmethods');
         }
     }

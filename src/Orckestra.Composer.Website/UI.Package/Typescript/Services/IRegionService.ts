@@ -8,6 +8,6 @@ namespace Orckestra.Composer {
         /**
          * Return a Promise which returns an array of region.
          */
-        getRegions(): Q.Promise<any>;
+        getRegions(): Promise<any>;
     }
 }

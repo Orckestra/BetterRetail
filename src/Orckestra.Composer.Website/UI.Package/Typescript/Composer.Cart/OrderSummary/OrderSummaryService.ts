@@ -24,7 +24,7 @@ namespace Orckestra.Composer {
             this.eventHub = eventHub;
         }
 
-        public setCheapestShippingMethodUsing(postalCode: string): Q.Promise<void> {
+        public setCheapestShippingMethodUsing(postalCode: string): Promise<void> {
 
             this.eventHub.publish(CartEvents.CartUpdating, { data: { PostalCode: postalCode } });
 
@@ -32,13 +32,13 @@ namespace Orckestra.Composer {
                        .then(() => this.cartService.setCheapestShippingMethod())
                        .then(() => this.cartService.getCart())
                        .then(cart => this.eventHub.publish(CartEvents.CartUpdated, { data: cart }))
-                       .fail((reason: any) => {
+                       .catch((reason: any) => {
                            console.error('Error while updating the shipping method using the postal code', reason);
                            throw reason;
                        });
         }
 
-        public cleanCart(): Q.Promise<void> {
+        public cleanCart(): Promise<void> {
 
             return this.cartService.clean();
         }

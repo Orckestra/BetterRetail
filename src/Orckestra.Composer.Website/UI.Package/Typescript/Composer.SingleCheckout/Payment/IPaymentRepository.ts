@@ -9,24 +9,24 @@ namespace Orckestra.Composer {
          * @param  {providers: Array<string>}       Array of provider names.
          * @return {Array<IPaymentMethodViewModel>} Instance of the provider.
          */
-        getPaymentMethods(providers: Array<string>) : Q.Promise<IPaymentViewModel>;
+        getPaymentMethods(providers: Array<string>) : Promise<IPaymentViewModel>;
 
         /**
          * Return the active payment for the active cart
          * @return {IActivePaymentViewModel} Active payment for the active cart.
          */
-        getActivePayment() : Q.Promise<IActivePaymentViewModel>;
+        getActivePayment() : Promise<IActivePaymentViewModel>;
 
-        removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Q.Promise<void>;
+        removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Promise<void>;
 
-        setPaymentMethod(request : any) : Q.Promise<IPaymentViewModel>;
+        setPaymentMethod(request : any) : Promise<IPaymentViewModel>;
 
         /**
          * Return a list of payment methods and payment provider
          * @return {ICheckoutPaymentViewModel} Instance of the provider.
          */
-        getCheckoutPayment() : Q.Promise<ICheckoutPaymentViewModel>;
+        getCheckoutPayment() : Promise<ICheckoutPaymentViewModel>;
 
-        updatePaymentMethod(request : any) : Q.Promise<IActivePaymentViewModel>;
+        updatePaymentMethod(request : any) : Promise<IActivePaymentViewModel>;
     }
 }

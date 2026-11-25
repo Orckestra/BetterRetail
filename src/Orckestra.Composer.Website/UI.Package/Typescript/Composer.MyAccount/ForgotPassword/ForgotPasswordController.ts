@@ -50,8 +50,7 @@ namespace Orckestra.Composer {
  
             this.membershipService.forgotPassword(formData)
                 .then(result => this.onForgotPasswordFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => this.busyHandler.done())
-                .done();
+                .finally(() => this.busyHandler.done());
         }
 
         private onForgotPasswordFulfilled(result: any): void {

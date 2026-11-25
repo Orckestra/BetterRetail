@@ -10,15 +10,15 @@ namespace Orckestra.Composer {
 
     export class StoreInventoryService implements IStoreInventoryService {
 
-        public getStoresInventory(param: GetStoresInventoryParam): Q.Promise<any> {
+        public getStoresInventory(param: GetStoresInventoryParam): Promise<any> {
             return ComposerClient.post('/api/storeinventory/storesinventory', param);
         }
 
-        public getDefaultAddress(): Q.Promise<any> {
+        public getDefaultAddress(): Promise<any> {
             return ComposerClient.get('/api/customer/getdefaultaddress');
         }
 
-        public getSkuSelection(productId: string): Q.Promise<any> {
+        public getSkuSelection(productId: string): Promise<any> {
             var data = {
                 ProductId: productId
             };

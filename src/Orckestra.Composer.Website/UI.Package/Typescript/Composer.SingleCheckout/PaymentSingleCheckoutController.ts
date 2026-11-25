@@ -96,11 +96,11 @@ namespace Orckestra.Composer {
                         }).then((result) => {
                             ErrorHandler.instance().removeErrors();
                             this.Payment.ActivePaymentViewModel = result;
-                        }).fail((reason) => {
+                        }).catch((reason) => {
                             console.error('Error while changing the payment method.', reason);
                             ErrorHandler.instance().outputErrorFromCode('PaymentMethodChangeFailed');
                             this.selectPaymentMethod(oldPayment.Id);
-                        }).fin(() => this.Mode.Loading = false);
+                        }).finally(() => this.Mode.Loading = false);
                     },
 
                     selectPaymentMethod(paymentId: string) {
@@ -112,17 +112,17 @@ namespace Orckestra.Composer {
                         return self.activePaymentProvider = this.Providers.find(provider => provider.providerType === ProviderType);
                     },
 
-                    processPayment(): Q.Promise<boolean> {
+                    processPayment(): Promise<boolean> {
                         let activeProvider = this.findActivePaymentProvider();
 
                         return activeProvider.validatePayment(this.Payment.ActivePaymentViewModel)
                             .then(success => {
-                                if (!success) { return Q.reject('Card information not valid'); }
+                                if (!success) { return Promise.reject('Card information not valid'); }
                                 return true;
                             });
                     },
 
-                    submitPayment(): Q.Promise<any> {
+                    submitPayment(): Promise<any> {
                         return this.processPayment()
                             .then(() => {
                                 console.log('Committing payment information.');
@@ -130,7 +130,7 @@ namespace Orckestra.Composer {
                             });
                     },
 
-                    preparePayment(): Q.Promise<boolean> {
+                    preparePayment(): Promise<boolean> {
                         if (!this.Payment) {
                             this.Steps.Payment.Loading = true;
                             return self.checkoutService.getPaymentCheckout()
@@ -140,7 +140,7 @@ namespace Orckestra.Composer {
                                     return true;
                                 });
                         } else {
-                            return Q.resolve(true);
+                            return Promise.resolve(true);
                         }
                     }
                 }

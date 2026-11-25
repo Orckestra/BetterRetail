@@ -6,18 +6,18 @@ namespace Orckestra.Composer {
 
     export  interface IOrderRepository {
 
-        editOrder(OrderNumber: string): Q.Promise<any>;
+        editOrder(OrderNumber: string): Promise<any>;
 
-        saveEditOrder(OrderNumber: string):  Q.Promise<any>;
+        saveEditOrder(OrderNumber: string):  Promise<any>;
 
-        cancelEditOrder(OrderNumber: string):  Q.Promise<any>;
+        cancelEditOrder(OrderNumber: string):  Promise<any>;
 
-        getEditedOrder():  Q.Promise<any>;
+        getEditedOrder():  Promise<any>;
 
-        getPastOrders(options: IGetOrderParameters): Q.Promise<any>;
+        getPastOrders(options: IGetOrderParameters): Promise<any>;
 
-        getCurrentOrders(options: IGetOrderParameters):  Q.Promise<any>;
+        getCurrentOrders(options: IGetOrderParameters):  Promise<any>;
         
-        cancelOrder(OrderNumber: string):  Q.Promise<any>;
+        cancelOrder(OrderNumber: string):  Promise<any>;
     }
 }

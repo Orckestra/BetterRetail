@@ -10,76 +10,76 @@ namespace Orckestra.Composer {
         /**
          * Get the cart of the current customer.
          */
-        getCart(): Q.Promise<any>;
+        getCart(): Promise<any>;
 
          /**
          * Get the cart of the current customer.
          * This forces the repository to get a fresh cart from Composer,
          * because the cart will contain different property values for each checkout step.
          */
-        getFreshCart(force?: boolean): Q.Promise<any>;
+        getFreshCart(force?: boolean): Promise<any>;
 
         /**
          * Add a line item to the cart of the current customer.
          */
         addLineItem(product: any, variantId: string, price: string, quantity: number, concern?: string,
-            recurringOrderFrequencyName?: string): Q.Promise<any>;
+            recurringOrderFrequencyName?: string): Promise<any>;
 
         /**
          * Update the quantity of a line item in the cart of the current customer.
          */
         updateLineItem(lineItemId: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any>;
+            recurringOrderProgramName?: string): Promise<any>;
 
         /**
          * Delete a line item from the cart of the current customer.
          */
-        deleteLineItem(lineItemId: string, productId: string): Q.Promise<any>;
+        deleteLineItem(lineItemId: string, productId: string): Promise<any>;
 
         /**
          * Update the postal code of the billing method in cart of the current customer.
          */
-        updateBillingMethodPostalCode(postalCode: string): Q.Promise<void>;
+        updateBillingMethodPostalCode(postalCode: string): Promise<void>;
 
         /**
          * Update the postal code of the shipping method in cart of the current customer.
          */
-        updateShippingMethodPostalCode(postalCode: string): Q.Promise<void>;
+        updateShippingMethodPostalCode(postalCode: string): Promise<void>;
 
         /**
          * Set the cheapest shipping method in cart of the current customer.
          */
-        setCheapestShippingMethod(): Q.Promise<void>;
+        setCheapestShippingMethod(): Promise<void>;
 
         /**
          * Add a coupon to the cart of the current customer.
          */
-        addCoupon(couponCode: string): Q.Promise<void>;
+        addCoupon(couponCode: string): Promise<void>;
 
         /**
          * Remove a coupon from the cart of the current customer.
          */
-        removeCoupon(couponCode: string): Q.Promise<void>;
+        removeCoupon(couponCode: string): Promise<void>;
 
         /**
          * Cleans the cart of invalid line items.
          */
-        clean(): Q.Promise<void>;
+        clean(): Promise<void>;
 
         /**
          * Update the cart of the current customer.
          */
-        updateCart(param: any): Q.Promise<IUpdateCartResult>;
+        updateCart(param: any): Promise<IUpdateCartResult>;
 
         /**
          * Complete the checkout, thereby clearing every item in the cart of the current customer.
          */
-        completeCheckout(currentStep?: number): Q.Promise<ICompleteCheckoutResult>;
+        completeCheckout(currentStep?: number): Promise<ICompleteCheckoutResult>;
 
         /**
          * Clear the Cart cache
          */
-        invalidateCache(): Q.Promise<void>;
+        invalidateCache(): Promise<void>;
     }
 }

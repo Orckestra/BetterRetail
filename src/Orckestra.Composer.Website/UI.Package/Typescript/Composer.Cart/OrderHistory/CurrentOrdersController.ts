@@ -47,21 +47,21 @@ namespace Orckestra.Composer {
                                     this.Pagination = data.Pagination;
                                     this.Page = page;
                                 })
-                                .fail(reason => console.log(reason))
-                                .fin(() => this.Loading = false);
+                                .catch(reason => console.log(reason))
+                                .finally(() => this.Loading = false);
                         },
                         editOrder(orderNumber: string) {
                             if (this.Loading) return;
                             this.Loading = true;
                             self.eventHub.publish(MyAccountEvents.StartEditOrder, { data: orderNumber });
                             self.orderService.editOrder(orderNumber)
-                                .fin(() => this.Loading = false);
+                                .finally(() => this.Loading = false);
                         },
                         cancelEditingOrder(orderNumber: string) {
                             if (this.Loading) return;
                             this.Loading = true;
                             self.orderService.cancelEditOrder(orderNumber)
-                                .fin(() => this.Loading = false);
+                                .finally(() => this.Loading = false);
                         },
                         reload() {
                             window.location.reload()
@@ -73,7 +73,7 @@ namespace Orckestra.Composer {
                         cancelOrder() {
                             if (this.Loading) return;
                             this.Loading = true;
-                            self.orderService.cancelOrder(this.OrderNumber).fin(() => this.Loading = false);
+                            self.orderService.cancelOrder(this.OrderNumber).finally(() => this.Loading = false);
                         }
                     }
                 })

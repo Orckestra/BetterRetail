@@ -13,7 +13,7 @@ namespace Orckestra.Composer {
 
         private memoizeStore: Function;
 
-        public getStore(storeNumber: string): Q.Promise<any> {
+        public getStore(storeNumber: string): Promise<any> {
             if (!storeNumber) {
                 throw new Error('The Store Number is required');
             }
@@ -26,13 +26,13 @@ namespace Orckestra.Composer {
             return this.memoizeStore(storeNumber);
         }
 
-        private getStoreImpl(storeNumber: string): Q.Promise<any> {
+        private getStoreImpl(storeNumber: string): Promise<any> {
             var data = { StoreNumber: storeNumber };
             return ComposerClient.post(StoreLocatorEndPointUrls.GetStoreEndPointUrl, data);
         }
 
         public getStores(southWest: google.maps.LatLng, northEast: google.maps.LatLng,
-            searchPoint: google.maps.LatLng, page: number, pageSize: number): Q.Promise<any> {
+            searchPoint: google.maps.LatLng, page: number, pageSize: number): Promise<any> {
 
             var data = {
                 page: page,
@@ -47,12 +47,12 @@ namespace Orckestra.Composer {
             return ComposerClient.post(StoreLocatorEndPointUrls.GetStoresEndPointUrl, data);
         }
 
-        public getMapConfiguration(): Q.Promise<any> {
+        public getMapConfiguration(): Promise<any> {
             return ComposerClient.get(StoreLocatorEndPointUrls.GetMapConfigurationEndPointUrl);
         }
 
         public getMarkers(southWest: google.maps.LatLng, northEast: google.maps.LatLng, zoomLevel: number,
-            searchPoint: google.maps.LatLng, isSearch: boolean, pageSize: number): Q.Promise<any> {
+            searchPoint: google.maps.LatLng, isSearch: boolean, pageSize: number): Promise<any> {
 
             var data = {
                 zoomLevel: zoomLevel,

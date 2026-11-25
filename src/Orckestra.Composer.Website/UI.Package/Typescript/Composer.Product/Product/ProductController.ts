@@ -62,10 +62,10 @@ namespace Orckestra.Composer {
             return;
         }
 
-        protected renderData(): Q.Promise<void[]> {
+        protected renderData(): Promise<void[]> {
 
             var quantity = this.getCurrentQuantity();
-            var renderTasks: Array<Q.Promise<any>> = [];
+            var renderTasks: Array<Promise<any>> = [];
 
             if (this.isProductWithVariants() && this.isSelectedVariantUnavailable()) {
 
@@ -79,7 +79,7 @@ namespace Orckestra.Composer {
             }
             renderTasks.push(this.renderAddToWishList());
 
-            return Q.all(renderTasks);
+            return Promise.all(renderTasks);
         }
 
         protected isProductWithVariants(): boolean {
@@ -92,19 +92,19 @@ namespace Orckestra.Composer {
             return !this.context.viewModel.selectedVariantId;
         }
 
-        protected renderUnavailableQuantity(quantity: any): Q.Promise<void> {
+        protected renderUnavailableQuantity(quantity: any): Promise<void> {
 
-            return Q.fcall(() => this.render('ProductQuantity', { Quantity: quantity, Disabled: true }));
+            return Promise.resolve().then(() => this.render('ProductQuantity', { Quantity: quantity, Disabled: true }));
         }
 
-        protected renderAvailableQuantity(quantity: any): Q.Promise<void> {
+        protected renderAvailableQuantity(quantity: any): Promise<void> {
 
             return this.inventoryService
                 .isAvailableToSell(this.context.viewModel.Sku)
                 .then(result => this.render('ProductQuantity', { Quantity: quantity, Disabled: !result }));
         }
 
-        protected renderAddToWishList(): Q.Promise<void> {
+        protected renderAddToWishList(): Promise<void> {
             let vm = this.context.viewModel;
             this.render('AddToWishList', { Loaded: false });
 
@@ -122,12 +122,12 @@ namespace Orckestra.Composer {
                 });
         }
 
-        protected renderUnavailableAddToCart(): Q.Promise<void> {
+        protected renderUnavailableAddToCart(): Promise<void> {
 
             return;
         }
 
-        protected renderAvailableAddToCart(): Q.Promise<void> {
+        protected renderAvailableAddToCart(): Promise<void> {
 
             return;
         }
@@ -137,7 +137,7 @@ namespace Orckestra.Composer {
             quantity.Value--;
 
             actionContext.event.preventDefault();
-            this.renderAvailableQuantity(quantity).done();
+            this.renderAvailableQuantity(quantity);
         }
 
         public incrementQuantity(actionContext: IControllerActionContext) {
@@ -145,7 +145,7 @@ namespace Orckestra.Composer {
             quantity.Value++;
 
             actionContext.event.preventDefault();
-            this.renderAvailableQuantity(quantity).done();
+            this.renderAvailableQuantity(quantity);
         }
 
         public changeQuantity(actionContext: IControllerActionContext) {
@@ -156,7 +156,7 @@ namespace Orckestra.Composer {
                 quantity.Value = Math.max(Math.min(newValue, quantity.Max), quantity.Min); // constraint newvalue to max and min.
             }
 
-            this.renderAvailableQuantity(quantity).done();
+            this.renderAvailableQuantity(quantity);
         }
 
         public addLineItemToWishList(actionContext: IControllerActionContext) {
@@ -177,7 +177,7 @@ namespace Orckestra.Composer {
                     this._wishListService.addLineItem(vm.productId, vm.selectedVariantId, 1, null, vm.RecurringOrderProgramName).then(data => {
                         var lineItem = data.Items.filter(it => it.ProductId === vm.productId && it.VariantId === vm.selectedVariantId)[0];
                         this.render('AddToWishList', { Loaded: true, IsInWishList: true, Id: lineItem.Id });
-                    }).fin(() => busy.done());
+                    }).finally(() => busy.done());
 
                 } else {
                     this.redirectToSignInBeforeAddToWishList();
@@ -194,7 +194,7 @@ namespace Orckestra.Composer {
                     var busy = this.asyncBusy({ elementContext: actionContext.elementContext });
                     this._wishListService.removeLineItem(id).then(data => {
                         this.render('AddToWishList', { Loaded: true, IsInWishList: false });
-                    }).fin(() => busy.done());
+                    }).finally(() => busy.done());
                 } else {
                     this.redirectToSignInBeforeAddToWishList();
                 }
@@ -227,7 +227,7 @@ namespace Orckestra.Composer {
                     throw reason;
                 })
                 .then((data: any) => this.completeAddLineItem(quantity))
-                .fin(() => busy.done());
+                .finally(() => busy.done());
         }
 
         protected onAddLineItemSuccess(data: any = undefined): void {
@@ -250,11 +250,11 @@ namespace Orckestra.Composer {
         }
 
         protected addLineItemImpl(product: any, price: string, variantId: string, quantity: any,
-            recurringOrderFrequencyName?: string): Q.Promise<any> {
+            recurringOrderFrequencyName?: string): Promise<any> {
             return this.cartService.addLineItem(product, price, variantId, quantity.Value, this.getListNameForAnalytics(), recurringOrderFrequencyName);
         }
 
-        protected completeAddLineItem(quantityAdded: any): Q.Promise<void> {
+        protected completeAddLineItem(quantityAdded: any): Promise<void> {
 
             return;
         }
@@ -302,7 +302,7 @@ namespace Orckestra.Composer {
             this.productService.updateSelectedKvasWith(selectionsToAdd, this.concern);
         }
 
-        protected calculatePrice(): Q.Promise<any> {
+        protected calculatePrice(): Promise<any> {
 
             return this.productService.calculatePrice(this.context.viewModel.productId, this.concern);
         }

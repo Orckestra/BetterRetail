@@ -35,12 +35,12 @@ namespace Orckestra.Composer {
             beforeEach(done => {
 
                 mock = sinon.mock(ComposerClient);
-                mock.expects('post').once().returns(Q.fcall(() => jasmine.any));
+                mock.expects('post').once().returns(Promise.resolve().then(() => jasmine.any));
 
                 cut = new StoreLocatorService();
                 cut.getStore('0001')
                     .then(() => cut.getStore('0001'))
-                    .done(() => done());
+                    .then(() => done());
             });
 
             afterEach(() => {
@@ -59,12 +59,12 @@ namespace Orckestra.Composer {
             beforeEach(done => {
 
                 mock = sinon.mock(ComposerClient);
-                mock.expects('post').twice().returns(Q.fcall(() => jasmine.any));
+                mock.expects('post').twice().returns(Promise.resolve().then(() => jasmine.any));
 
                 cut = new StoreLocatorService();
                 cut.getStore('0001')
                     .then(() => cut.getStore('0002'))
-                    .done(() => done());
+                    .then(() => done());
             });
 
             afterEach(() => {

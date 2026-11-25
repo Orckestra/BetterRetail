@@ -70,8 +70,8 @@ namespace Orckestra.Composer {
                                 updatePromise.then(cart => {
                                     this.Cart = cart;
                                 })
-                                    .fail((reason: any) => self.lineItemUpdateFailed(reason))
-                                    .fin(() => this.Mode.Loading = false)
+                                    .catch((reason: any) => self.lineItemUpdateFailed(reason))
+                                    .finally(() => this.Mode.Loading = false)
                             }, 400);
                         }
 
@@ -88,7 +88,7 @@ namespace Orckestra.Composer {
                                     this.Cart = cart;
                                 }
                             })
-                            .fail((reason: any) => self.onLineItemDeleteFailed(reason))
+                            .catch((reason: any) => self.onLineItemDeleteFailed(reason))
                             .finally(() => {
                                 this.Mode.Loading = false;
                             });

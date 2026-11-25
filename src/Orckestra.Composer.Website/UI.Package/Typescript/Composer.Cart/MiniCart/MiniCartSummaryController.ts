@@ -81,7 +81,7 @@ namespace Orckestra.Composer {
 
         protected initializeMiniCartSummary(): void {
             var busy = this.asyncBusy({containerContext: this.context.container });
-            this.cartService.getCart().done(cart => {
+            this.cartService.getCart().then(cart => {
                 if (!_.isEmpty(cart)) {
                     this.renderMiniCart(cart);
                 }

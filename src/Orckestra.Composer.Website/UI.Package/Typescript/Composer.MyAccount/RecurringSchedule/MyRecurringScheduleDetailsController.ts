@@ -53,7 +53,7 @@ namespace Orckestra.Composer {
                     this.id = id;
                     this.reRenderPage(result.RecurringOrderTemplateLineItemViewModels[0]);
                 })
-                .fail((reason) => {
+                .catch((reason) => {
                     console.error(reason);
                 });
         }
@@ -131,9 +131,9 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public getShippingMethods() : Q.Promise<any> {
+        public getShippingMethods() : Promise<any> {
             return this.recurringOrderService.getOrderTemplateShippingMethods()
-                    .fail((reason) => {
+                    .catch((reason) => {
                         console.error('Error while retrieving shipping methods', reason);
                     });
         }
@@ -202,7 +202,7 @@ namespace Orckestra.Composer {
           /**
          * Requires the element in action context to have a data-address-id.
          */
-        protected deleteAddress(event: JQueryEventObject): Q.Promise<void> {
+        protected deleteAddress(event: JQueryEventObject): Promise<void> {
 
             let element = $(event.target);
             var $addressListItem = element.closest('[data-address-id]');
@@ -214,7 +214,7 @@ namespace Orckestra.Composer {
                 .then(result => {
                     this.reRenderPage(this.viewModel);
                 })
-                .fin(() => busy.done());
+                .finally(() => busy.done());
         }
 
         protected releaseBusyHandler(): void {
@@ -224,7 +224,7 @@ namespace Orckestra.Composer {
             }
         }
 
-        public saveRecurringOrderTemplate(actionContext: IControllerActionContext): Q.Promise<void> {
+        public saveRecurringOrderTemplate(actionContext: IControllerActionContext): Promise<void> {
 
             let lineItemId = this.id;
             let paymentMethodId;
@@ -325,11 +325,11 @@ namespace Orckestra.Composer {
                         item[0].UpdateStatus = 'Success';
                         this.reRenderPage(item[0]);
                     })
-                    .fail((reason) => {
+                    .catch((reason) => {
                         console.error(reason);
                         ErrorHandler.instance().outputErrorFromCode('RecurringScheduleUpdateFailed');
                     })
-                    .fin(() => this.releaseBusyHandler());
+                    .finally(() => this.releaseBusyHandler());
             }
             return null;
         }

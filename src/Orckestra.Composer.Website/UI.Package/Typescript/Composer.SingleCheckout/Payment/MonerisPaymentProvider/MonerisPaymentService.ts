@@ -11,18 +11,18 @@ namespace Orckestra.Composer {
         /**
          * Adds a token from Moneris to the current payment.
          * @param  {ICreateVaultTokenOptions} request Request to add the Vault Token.
-         * @return {Q.Promise<any>}                   Promise of the AJAX request.
+         * @return {Promise<any>}                   Promise of the AJAX request.
          */
-        public addCreditCard(request: ICreateVaultTokenOptions): Q.Promise<IMonerisAddVaultProfileViewModel> {
+        public addCreditCard(request: ICreateVaultTokenOptions): Promise<IMonerisAddVaultProfileViewModel> {
             return ComposerClient.post('/api/vaultprofile/addprofile', request);
         }
 
-        public setDefaultCustomerPaymentMethod(request: ISetDefaultCustomerPaymentMethodViewModel): Q.Promise<IPaymentMethodViewModel> {
+        public setDefaultCustomerPaymentMethod(request: ISetDefaultCustomerPaymentMethodViewModel): Promise<IPaymentMethodViewModel> {
             return ComposerClient.put('/api/cart/setdefaultpaymentmethod', request);
         }
 
-        public removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Q.Promise<void> {
-            return <Q.Promise<void>>
+        public removePaymentMethod(paymentMethodId: string, paymentProviderName: string): Promise<void> {
+            return <Promise<void>>
                 ComposerClient.remove('/api/payment/removemethod',
                                         {
                                             PaymentMethodId: paymentMethodId,
@@ -30,8 +30,8 @@ namespace Orckestra.Composer {
                                         });
         }
 
-        public removeRecurringCartPaymentMethod(paymentMethodId: string, paymentProviderName: string, cartName: string): Q.Promise<void> {
-            return <Q.Promise<void>>
+        public removeRecurringCartPaymentMethod(paymentMethodId: string, paymentProviderName: string, cartName: string): Promise<void> {
+            return <Promise<void>>
                 ComposerClient.remove('/api/payment/recurringcartremovemethod',
                                         {
                                             PaymentMethodId: paymentMethodId,

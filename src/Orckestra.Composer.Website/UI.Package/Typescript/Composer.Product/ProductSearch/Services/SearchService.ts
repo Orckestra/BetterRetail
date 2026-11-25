@@ -180,7 +180,7 @@ namespace Orckestra.Composer {
                         this._searchRepository.getFacets(queryString));
 
                 getFacetsPromise.then(result => this._eventHub.publish(SearchEvents.FacetsLoaded, { data: result }))
-                    .fail(reason => console.log(reason))
+                    .catch(reason => console.log(reason))
                     .finally(() => $(FacetsModalId).removeClass('loading'));
 
             } else {

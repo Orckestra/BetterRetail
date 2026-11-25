@@ -111,19 +111,19 @@ namespace Orckestra.Composer {
             });
         });
 
-        function initObjectStore(type: string): Q.Promise<void> {
+        function initObjectStore(type: string): Promise<void> {
 
-            return Q.fcall(() => {
+            return Promise.resolve().then(() => {
                 return;
             });
         }
 
-        function nullValueCacheItem(type: string, key: string): Q.Promise<ICacheItem<any>> {
+        function nullValueCacheItem(type: string, key: string): Promise<ICacheItem<any>> {
 
-            return Q.fcall<ICacheItem<any>>(() => null);
+            return Promise.resolve().then<ICacheItem<any>>(() => null);
         }
 
-        function expiredCacheItem(type: string, key: string): Q.Promise<ICacheItem<any>> {
+        function expiredCacheItem(type: string, key: string): Promise<ICacheItem<any>> {
 
             var now: Date = new Date();
 
@@ -137,7 +137,7 @@ namespace Orckestra.Composer {
                 lastAccessed: now.getTime()
             };
 
-            return Q.fcall<ICacheItem<any>>(() => expired);
+            return Promise.resolve().then<ICacheItem<any>>(() => expired);
         }
 
     })();

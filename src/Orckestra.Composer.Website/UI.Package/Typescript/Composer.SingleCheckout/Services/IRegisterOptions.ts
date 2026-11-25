@@ -3,11 +3,11 @@
 namespace Orckestra.Composer {
 
     export interface IValidationCallback {
-        (): Q.Promise<boolean>;
+        (): Promise<boolean>;
     }
 
     export interface IUpdateCallback {
-        (): Q.Promise<any>;
+        (): Promise<any>;
     }
 
     export interface IRegisterOptions {

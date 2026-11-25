@@ -14,13 +14,13 @@
             service = new Orckestra.Composer.MonerisPaymentService();
 
             composerClientStub = sinon.stub(Orckestra.Composer.ComposerClient, 'post', function(url: string, data: any) {
-                return Q({ });
+                return Promise.resolve({ });
             });
 
             composerClientStub.withArgs('/api/vaultprofile/addprofile', jasmine.any(Object));
 
             service.addCreditCard(<Orckestra.Composer.ICreateVaultTokenOptions> {})
-                .done((val: any) => {
+                .then((val: any) => {
                     returnedValue = val;
                     composerClientStub.restore();
                     done();

@@ -24,7 +24,7 @@ namespace Orckestra.Composer {
         * Attempt to register using Composer API.
         * @param
         */
-        public updateAccount(formData: any, returnUrl: string): Q.Promise<any> {
+        public updateAccount(formData: any, returnUrl: string): Promise<any> {
 
             return this.customerRepository.updateAccount(formData, returnUrl);
         }
@@ -32,7 +32,7 @@ namespace Orckestra.Composer {
          /**
          * Get the customer addresses.
          */
-        public getAddresses(): Q.Promise<any> {
+        public getAddresses(): Promise<any> {
 
              if (_.isUndefined(this.memoizeGetAdresses)) {
                 this.memoizeGetAdresses = _.memoize(arg => this.getAddressesImpl());
@@ -41,7 +41,7 @@ namespace Orckestra.Composer {
             return this.memoizeGetAdresses();
         }
 
-        private getAddressesImpl(): Q.Promise<any> {
+        private getAddressesImpl(): Promise<any> {
 
              return this.customerRepository.getAddresses();
         }
@@ -49,7 +49,7 @@ namespace Orckestra.Composer {
         /**
          * Get the customer addresses for a recurring cart page.
          */
-        public getRecurringCartAddresses(cartName: string): Q.Promise<any> {
+        public getRecurringCartAddresses(cartName: string): Promise<any> {
 
             if (_.isUndefined(this.memoizeGetAdresses)) {
                this.memoizeGetAdresses = _.memoize(arg => this.getRecurringCartAddressesImpl(cartName));
@@ -58,14 +58,14 @@ namespace Orckestra.Composer {
            return this.memoizeGetAdresses();
         }
 
-        private getRecurringCartAddressesImpl(cartName: string): Q.Promise<any> {
+        private getRecurringCartAddressesImpl(cartName: string): Promise<any> {
             return this.customerRepository.getRecurringCartAddresses(cartName);
         }
 
         /**
          * Get the customer addresses for a recurring cart page.
          */
-        public getRecurringTemplateAddresses(id: string): Q.Promise<any> {
+        public getRecurringTemplateAddresses(id: string): Promise<any> {
 
             if (_.isUndefined(this.memoizeGetAdresses)) {
                this.memoizeGetAdresses = _.memoize(arg => this.getRecurringTemplateAddressesImpl(id));
@@ -74,7 +74,7 @@ namespace Orckestra.Composer {
            return this.memoizeGetAdresses();
         }
 
-        private getRecurringTemplateAddressesImpl(id: string): Q.Promise<any> {
+        private getRecurringTemplateAddressesImpl(id: string): Promise<any> {
 
             return this.customerRepository.getRecurringTemplateAddresses(id);
         }
@@ -83,7 +83,7 @@ namespace Orckestra.Composer {
         * Create a new customer address
         * @param
         */
-        public createAddress(formData: any, returnUrl: string): Q.Promise<any> {
+        public createAddress(formData: any, returnUrl: string): Promise<any> {
 
             return this.customerRepository.createAddress(formData, returnUrl);
         }
@@ -92,7 +92,7 @@ namespace Orckestra.Composer {
         * Update a customer address
         * @param
         */
-        public updateAddress(formData: any, addressId: string, returnUrl: string): Q.Promise<any> {
+        public updateAddress(formData: any, addressId: string, returnUrl: string): Promise<any> {
 
             return this.customerRepository.updateAddress(formData, addressId, returnUrl);
         }
@@ -101,7 +101,7 @@ namespace Orckestra.Composer {
         * Delete a customer address
         * @param
         */
-        public deleteAddress(addressId: JQuery, returnUrl: string): Q.Promise<any> {
+        public deleteAddress(addressId: JQuery, returnUrl: string): Promise<any> {
             this.memoizeGetAdresses = undefined;
             return this.customerRepository.deleteAddress(addressId, returnUrl);
         }
@@ -110,7 +110,7 @@ namespace Orckestra.Composer {
         * Set default address for a customer
         * @param
         */
-        public setDefaultAddress(addressId: string, returnUrl: string): Q.Promise<any> {
+        public setDefaultAddress(addressId: string, returnUrl: string): Promise<any> {
 
             return this.customerRepository.setDefaultAddress(addressId, returnUrl);
         }

@@ -33,8 +33,8 @@ namespace Orckestra.Composer {
                                 this.Orders = data.Orders;
                                 this.Pagination = data.Pagination;
                             })
-                                .fail(reason => console.log(reason))
-                                .fin(() => this.Loading = false);
+                                .catch(reason => console.log(reason))
+                                .finally(() => this.Loading = false);
                         }
                     }
                 })

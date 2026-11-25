@@ -4,6 +4,6 @@ namespace Orckestra.Composer {
 
     export interface IScheduledCallback {
 
-        (data: any): Q.Promise<any>;
+        (data: any): Promise<any>;
     }
 }

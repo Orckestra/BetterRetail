@@ -63,8 +63,7 @@ namespace Orckestra.Composer {
 
             this.membershipService.changePassword(formData, returnUrl)
                 .then(result => this.onChangePasswordFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => this.busyHandler.done())
-                .done();
+                .finally(() => this.busyHandler.done());
         }
 
         private onChangePasswordFulfilled(result: any): void {

@@ -43,19 +43,19 @@ namespace Orckestra.Composer {
          * Returns a promise of boolean. The return boolean needs to be false for validation error,
          * or true if valid.
          * @param   {IActivePaymentViewModel}   The current active payment view model
-         * @return  {Q.Promise<boolean>}        Promise that will be executed when we validate the payment control.
+         * @return  {Promise<boolean>}        Promise that will be executed when we validate the payment control.
          */
-        public validatePayment(activePaymentVM: IActivePaymentViewModel): Q.Promise<boolean> {
-            return Q(true);
+        public validatePayment(activePaymentVM: IActivePaymentViewModel): Promise<boolean> {
+            return Promise.resolve(true);
         }
 
         /**
          * Add the temporary token to the vault profile of the user
          * @param   {IActivePaymentViewModel}   The current active payment view model
-         * @return  {Q.Promise<any>}            The object is the updated properties of the cart used in CheckoutService.updateCart()
+         * @return  {Promise<any>}            The object is the updated properties of the cart used in CheckoutService.updateCart()
          */
-        public addVaultProfileToken(activePaymentVM : IActivePaymentViewModel): Q.Promise<any> {
-            return Q({});
+        public addVaultProfileToken(activePaymentVM : IActivePaymentViewModel): Promise<any> {
+            return Promise.resolve({});
         }
     }
 }

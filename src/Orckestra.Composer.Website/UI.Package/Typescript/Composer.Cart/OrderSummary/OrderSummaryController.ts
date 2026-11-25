@@ -61,18 +61,18 @@ namespace Orckestra.Composer {
                             }, (reason: any) => {
                                 ErrorHandler.instance().outputErrorFromCode('PostalCodeUpdateFailed');
                             })
-                            .fin(() => this.Mode.Loading = false);
+                            .finally(() => this.Mode.Loading = false);
 
                     },
                     cancelEditOrder() {
                         this.Mode.Loading = true;
                         self.orderService.cancelEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
-                            .fin(() => this.Mode.Loading = false);
+                            .finally(() => this.Mode.Loading = false);
                     },
                     saveEditOrder() {
                         this.Mode.Loading = true;
                         self.orderService.saveEditOrder(this.Cart.OrderSummary.OrderNumberForOrderDraft)
-                            .fin(() => this.Mode.Loading = false);
+                            .finally(() => this.Mode.Loading = false);
                     },
                     proceedToCheckout() {
                         let nextStepUrl = this.OrderSummary.CheckoutUrlTarget;
@@ -83,7 +83,7 @@ namespace Orckestra.Composer {
                         AnalyticsPlugin.setCheckoutOrigin('Checkout');
 
                         this.Mode.Loading = true;
-                        self.orderSummaryService.cleanCart().done(() => {
+                        self.orderSummaryService.cleanCart().then(() => {
                             this.Mode.Loading = false;
                             window.location.href = nextStepUrl;
                         }, reason => {
@@ -98,7 +98,7 @@ namespace Orckestra.Composer {
                         self.orderSummaryService.cleanCart()
                             .then(cart => 
                                 self.eventHub.publish(CartEvents.CartUpdated, { data: cart })
-                        ).fin(() => this.Mode.Loading = false);
+                        ).finally(() => this.Mode.Loading = false);
                     }
                 }
             };

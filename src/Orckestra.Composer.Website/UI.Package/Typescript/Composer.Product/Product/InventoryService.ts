@@ -9,7 +9,7 @@ namespace Orckestra.Composer {
 
         private _memoizeIsAvailableToSell: Function;
 
-        public isAvailableToSell(sku: string): Q.Promise<boolean> {
+        public isAvailableToSell(sku: string): Promise<boolean> {
 
             if (!sku) {
                 throw new Error('The sku is required');
@@ -23,7 +23,7 @@ namespace Orckestra.Composer {
             return this._memoizeIsAvailableToSell(sku);
         }
 
-        private isAvailableToSellImpl(sku: string): Q.Promise<boolean> {
+        private isAvailableToSellImpl(sku: string): Promise<boolean> {
 
             var data = { skus: [sku] };
 

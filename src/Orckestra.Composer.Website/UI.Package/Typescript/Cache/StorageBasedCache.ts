@@ -15,7 +15,7 @@ namespace Orckestra.Composer {
      */
     export class StorageBasedCache implements Orckestra.Composer.ICache {
 
-        private _storageInitializing: Q.Promise<void>;
+        private _storageInitializing: Promise<void>;
         private _storage: IStorage;
         private _type: string;
 
@@ -35,7 +35,7 @@ namespace Orckestra.Composer {
                 storage.init().then(() => storage.initObjectStore(this._type));
         }
 
-        public get<T>(key: string): Q.Promise<T> {
+        public get<T>(key: string): Promise<T> {
 
             if (!key) {
                 throw new Error('The key is required');
@@ -43,12 +43,13 @@ namespace Orckestra.Composer {
 
             return this._storageInitializing
                        .then(() => this._storage.get<ICacheItem<T>>(this._type, key))
-                       .then(cacheItem => this.validate(key, cacheItem).then(() => cacheItem.value));
+                       .then(cacheItem => this.validate(key, cacheItem)
+                       .then(() => cacheItem.value));
         }
 
-        private validate<T>(key: string, item: ICacheItem<T>): Q.Promise<void> {
+        private validate<T>(key: string, item: ICacheItem<T>): Promise<void> {
 
-            return Q.Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
 
                 if (_.isNull(item) || _.isNull(item.value)) {
 
@@ -58,7 +59,7 @@ namespace Orckestra.Composer {
 
                     this._storageInitializing
                         .then(() => this._storage.remove(this._type, key))
-                        .done(() => reject(CacheError.Expired), reason => reject(reason));
+                        .then(() => reject(CacheError.Expired), reason => reject(reason));
 
                 } else {
 
@@ -71,7 +72,7 @@ namespace Orckestra.Composer {
 
                     this._storageInitializing
                         .then(() => this._storage.set(this._type, storageItem))
-                        .done(() => resolve(void 0), reason => reject(reason));
+                        .then(() => resolve(void 0), reason => reject(reason));
                 }
             });
         }
@@ -91,7 +92,7 @@ namespace Orckestra.Composer {
             return expirationTime < now;
         }
 
-        public set<T>(key: string, value: T, policy?: ICachePolicy, type?: string): Q.Promise<T> {
+        public set<T>(key: string, value: T, policy?: ICachePolicy, type?: string): Promise<T> {
 
             if (!key) {
                 throw new Error('The key is required');
@@ -115,7 +116,7 @@ namespace Orckestra.Composer {
                        .then(() => value);
         }
 
-        public clear(key: string): Q.Promise<void> {
+        public clear(key: string): Promise<void> {
 
             if (!key) {
                 throw new Error('The key is required');
@@ -125,7 +126,7 @@ namespace Orckestra.Composer {
                 .then(() => this._storage.remove(this._type, key));
         }
 
-        public fullClear(): Q.Promise<void> {
+        public fullClear(): Promise<void> {
 
             return this._storageInitializing
                 .then(() => this._storage.fullRemove(this._type));

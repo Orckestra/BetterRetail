@@ -38,7 +38,7 @@ namespace Orckestra.Composer {
                 .then((vm: IGuestOrderDetailsViewModel) => {
                     this.getWindow().location.href = vm.Url;
                 })
-                .fail(reason => {
+                .catch(reason => {
                     busy.done();
 
                     if (reason.status && reason.status === 404) {
@@ -49,7 +49,7 @@ namespace Orckestra.Composer {
                 });
         }
 
-        private findOrderAsync(request: IGetOrderDetailsUrlRequest): Q.Promise<IGuestOrderDetailsViewModel> {
+        private findOrderAsync(request: IGetOrderDetailsUrlRequest): Promise<IGuestOrderDetailsViewModel> {
             return this.findOrderService.getOrderDetailsUrl(request);
         }
 

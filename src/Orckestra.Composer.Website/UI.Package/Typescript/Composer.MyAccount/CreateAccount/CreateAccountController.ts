@@ -54,8 +54,7 @@ namespace Orckestra.Composer {
             }
             this.membershipService.register(formData, returnUrl)
                 .then(result => this.onRegisterFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => this.busyHandler.done())
-                .done();
+                .finally(() => this.busyHandler.done());
         }
 
         private onRegisterFulfilled(result: any): void {

@@ -26,7 +26,7 @@ namespace Orckestra.Composer {
                     }
                 },
                 methods: {
-                    processCompleteCheckout(): Q.Promise<any> {
+                    processCompleteCheckout(): Promise<any> {
                         this.Mode.CompleteCheckoutLoading = true;
                         return self.checkoutService.collectViewModelNamesForUpdateCart().
                             then(viewModels => {
@@ -34,7 +34,7 @@ namespace Orckestra.Composer {
                             })
                             .then(() => this.submitPayment())
                             .then(() => self.checkoutService.completeCheckout())
-                            .fail(reason => {
+                            .catch(reason => {
                                 console.error('An error occurred while completing the checkout.', reason);
                                 ErrorHandler.instance().outputErrorFromCode('CompleteCheckoutFailed');
                             })

@@ -167,23 +167,23 @@ namespace Orckestra.Composer {
             this.eventHub.publish(concern + 'PricesChanged', { data: this.context.viewModel });
         }
 
-        public getRelatedProducts(relatedProductIdentifiers: ProductIdentifierDto[]): Q.Promise<any> {
+        public getRelatedProducts(relatedProductIdentifiers: ProductIdentifierDto[]): Promise<any> {
             return ComposerClient.post('/api/product/relatedProducts', relatedProductIdentifiers);
         }
 
-        public loadProduct(productId: string, variantId: string) : Q.Promise<any> {
+        public loadProduct(productId: string, variantId: string) : Promise<any> {
             var data = {
                 ProductId: productId,
                 VariantId: variantId
             };
             return ComposerClient.post('/api/product/variantSelection', data).
-            fail((reason: any) => {
+            catch((reason: any) => {
                 console.error('Failed loading the Product', reason);
                 throw reason;
             });
         }
 
-        public loadQuickBuyProduct(productId: string, variantId: string, concern: string, source: string): Q.Promise<any> {
+        public loadQuickBuyProduct(productId: string, variantId: string, concern: string, source: string): Promise<any> {
 
             var data = {
                 ProductId: productId,
@@ -194,7 +194,7 @@ namespace Orckestra.Composer {
                 .then((quickBuyProductViewModel) => {
                     this.eventHub.publish(concern + 'QuickBuyLoaded', { data: quickBuyProductViewModel, source: source });
                     return quickBuyProductViewModel;
-                }).fail((reason: any) => {
+                }).catch((reason: any) => {
                     console.error('Failed loading the ProductQuickView', reason);
                     throw reason;
                 });

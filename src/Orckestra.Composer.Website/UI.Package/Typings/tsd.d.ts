@@ -2,7 +2,6 @@
 /// <reference path="./jquery/jquery.d.ts" />
 /// <reference path="./jasmine/jasmine.d.ts" />
 /// <reference path="./lodash/lodash-4.d.ts" />
-/// <reference path="./q/Q.d.ts" />
 /// <reference path="./sinon/sinon.d.ts" />
 /// <reference path="./handlebars/handlebars.d.ts" />
 /// <reference path="./chance/chance.d.ts" />

@@ -4,6 +4,6 @@ namespace Orckestra.Composer {
 
     export interface IInventoryService {
 
-        isAvailableToSell(sku: string): Q.Promise<boolean>;
+        isAvailableToSell(sku: string): Promise<boolean>;
     }
 }

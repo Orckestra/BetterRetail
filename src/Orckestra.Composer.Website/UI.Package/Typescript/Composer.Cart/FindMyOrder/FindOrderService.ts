@@ -13,7 +13,7 @@ namespace Orckestra.Composer {
             this.eventHub = eventHub;
         }
 
-        public getOrderDetailsUrl(req: IGetOrderDetailsUrlRequest): Q.Promise<IGuestOrderDetailsViewModel> {
+        public getOrderDetailsUrl(req: IGetOrderDetailsUrlRequest): Promise<IGuestOrderDetailsViewModel> {
             var promise = ComposerClient.post('/api/order/url', req)
                 .then((vm: IGuestOrderDetailsViewModel) => {
                     this.eventHub.publish('orderDetailsUrlUpdated', {
@@ -26,7 +26,7 @@ namespace Orckestra.Composer {
             return promise;
         }
 
-        public addOrderToCurrentUser(orderNumber: string): Q.Promise<any> {
+        public addOrderToCurrentUser(orderNumber: string): Promise<any> {
             return ComposerClient.post(`/api/order/attach-customer/${orderNumber}`, {});
         }
     }

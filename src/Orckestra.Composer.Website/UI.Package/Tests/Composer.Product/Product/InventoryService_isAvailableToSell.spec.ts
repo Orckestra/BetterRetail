@@ -42,11 +42,11 @@ namespace Orckestra.Composer {
             beforeEach(done => {
 
                 mock = sinon.mock(ComposerClient);
-                mock.expects('post').once().returns(Q.fcall(() => []));
+                mock.expects('post').once().returns(Promise.resolve().then(() => []));
 
                 cut = new InventoryService();
                 cut.isAvailableToSell('any sku')
-                   .done(() => done());
+                   .then(() => done());
             });
 
             afterEach(() => {
@@ -65,12 +65,12 @@ namespace Orckestra.Composer {
             beforeEach(done => {
 
                 mock = sinon.mock(ComposerClient);
-                mock.expects('post').once().returns(Q.fcall(() => []));
+                mock.expects('post').once().returns(Promise.resolve().then(() => []));
 
                 cut = new InventoryService();
                 cut.isAvailableToSell('any sku')
                    .then(() => cut.isAvailableToSell('any sku'))
-                   .done(() => done());
+                   .then(() => done());
             });
 
             afterEach(() => {
@@ -89,12 +89,12 @@ namespace Orckestra.Composer {
             beforeEach(done => {
 
                 mock = sinon.mock(ComposerClient);
-                mock.expects('post').twice().returns(Q.fcall(() => []));
+                mock.expects('post').twice().returns(Promise.resolve().then(() => []));
 
                 cut = new InventoryService();
                 cut.isAvailableToSell('sku1')
                    .then(() => cut.isAvailableToSell('sku2'))
-                   .done(() => done());
+                   .then(() => done());
             });
 
             afterEach(() => {

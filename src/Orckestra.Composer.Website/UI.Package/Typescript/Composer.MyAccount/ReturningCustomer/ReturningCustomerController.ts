@@ -30,9 +30,9 @@ namespace Orckestra.Composer {
             scheduler.setPostEventCallback((data: any) => this.onLoggedIn(data));
         }
 
-        private onLoggedIn(data: any): Q.Promise<any> {
+        private onLoggedIn(data: any): Promise<any> {
 
-            var promise: Q.Promise<any> = Q.fcall(() => {
+            var promise: Promise<any> = Promise.resolve().then(() => {
                 if (data.ReturnUrl) {
                     window.location.replace(decodeURIComponent(data.ReturnUrl));
                 } else {
@@ -59,11 +59,10 @@ namespace Orckestra.Composer {
           
             this.loginImpl(actionContext)
                 .then(result => this.onLoginFulfilled(result))
-                .fail(reason => this.onLoginRejected(reason))
-                .done();
+                .catch(reason => this.onLoginRejected(reason));
         }
 
-        protected loginImpl(actionContext: IControllerActionContext): Q.Promise<any> {
+        protected loginImpl(actionContext: IControllerActionContext): Promise<any> {
 
             var formData: any = (<ISerializeObjectJqueryPlugin>actionContext.elementContext).serializeObject();
             var href: string = window.location.href;
@@ -77,7 +76,7 @@ namespace Orckestra.Composer {
 
             if (result.Status === MyAccountStatus[MyAccountStatus.Success]) {
                 this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedIn], { data: result });
-                this.cacheProvider.defaultCache.set('customerId', null).done();
+                this.cacheProvider.defaultCache.set('customerId', null);
             } else {
                 this.renderFailedForm(result.Status);
                 this.busyHandler.done();

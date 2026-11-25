@@ -13,7 +13,7 @@ namespace Orckestra.Composer {
 
     export class CartService implements ICartService {
 
-        protected static GettingFreshCart: Q.Promise<any>;
+        protected static GettingFreshCart: Promise<any>;
         private static instance: ICartService;
         public VueCart: Vue;
         public VueCartMixins: any = [];
@@ -42,10 +42,10 @@ namespace Orckestra.Composer {
             return CartService.instance;
         }
 
-        public getCart(): Q.Promise<any> {
+        public getCart(): Promise<any> {
 
             return this.getCacheCart()
-                .fail(reason => {
+                .catch(reason => {
 
                     if (this.canHandle(reason)) {
                         return this.getFreshCart();
@@ -61,7 +61,7 @@ namespace Orckestra.Composer {
             return reason === CacheError.Expired || reason === CacheError.NotFound;
         }
 
-        public getFreshCart(force: boolean = false): Q.Promise<any> {
+        public getFreshCart(force: boolean = false): Promise<any> {
 
             if (!CartService.GettingFreshCart || force) {
                 CartService.GettingFreshCart = this.cartRepository.getCart()
@@ -70,7 +70,7 @@ namespace Orckestra.Composer {
 
             // to avoid getting a fresh cart multiple times within a page session
             return CartService.GettingFreshCart
-                .fail((reason) => {
+                .catch((reason) => {
                     console.error('An error occured while getting a fresh cart.', reason);
                     throw reason;
                 });
@@ -100,7 +100,7 @@ namespace Orckestra.Composer {
 
         public updateLineItem(lineItemId: string, quantity: number, productId: string,
             recurringOrderFrequencyName?: string,
-            recurringOrderProgramName?: string): Q.Promise<any> {
+            recurringOrderProgramName?: string): Promise<any> {
 
             var data = {
                 LineItemId: lineItemId,
@@ -118,7 +118,7 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public deleteLineItem(lineItemId: string, productId: string): Q.Promise<any> {
+        public deleteLineItem(lineItemId: string, productId: string): Promise<any> {
 
             var data = {
                 LineItemId: lineItemId,
@@ -135,65 +135,65 @@ namespace Orckestra.Composer {
                 });
         }
 
-        public updateBillingMethodPostalCode(postalCode: string): Q.Promise<any> {
+        public updateBillingMethodPostalCode(postalCode: string): Promise<any> {
 
             return this.cartRepository.updateBillingMethodPostalCode(postalCode)
                 .then(cart => this.setCartToCache(cart));
         }
 
-        public updateShippingMethodPostalCode(postalCode: string): Q.Promise<any> {
+        public updateShippingMethodPostalCode(postalCode: string): Promise<any> {
 
             return this.cartRepository.updateShippingMethodPostalCode(postalCode)
                 .then(cart => this.setCartToCache(cart));
         }
 
-        public setCheapestShippingMethod(): Q.Promise<any> {
+        public setCheapestShippingMethod(): Promise<any> {
 
             return this.cartRepository.setCheapestShippingMethod()
                 .then(cart => this.setCartToCache(cart));
         }
 
-        public addCoupon(couponCode: string): Q.Promise<any> {
+        public addCoupon(couponCode: string): Promise<any> {
 
             return this.cartRepository.addCoupon(couponCode)
                 .then(cart => this.setCartToCache(cart));
         }
 
-        public removeCoupon(couponCode: string): Q.Promise<any> {
+        public removeCoupon(couponCode: string): Promise<any> {
 
             return this.cartRepository.removeCoupon(couponCode)
                 .then(cart => this.setCartToCache(cart));
         }
 
-        public clean(): Q.Promise<any> {
+        public clean(): Promise<any> {
 
             return this.cartRepository.clean()
                 .then(cart => this.setCartToCache(cart));
         }
 
-        public updateCart(param: any): Q.Promise<IUpdateCartResult> {
+        public updateCart(param: any): Promise<IUpdateCartResult> {
 
             return this.cartRepository.updateCart(param)
                  .then((result: IUpdateCartResult) => this.setCartToCache(result.Cart).then(() => result));
         }
 
-        public completeCheckout(currentStep: number = null): Q.Promise<ICompleteCheckoutResult> {
+        public completeCheckout(currentStep: number = null): Promise<ICompleteCheckoutResult> {
 
             return this.cartRepository.completeCheckout(currentStep)
                  .then((result: ICompleteCheckoutResult) => this.setCartToCache(null).then(() => result));
         }
 
-        public invalidateCache(): Q.Promise<void> {
+        public invalidateCache(): Promise<void> {
             CartService.GettingFreshCart = undefined;
             return this.cacheProvider.defaultCache.clear(this.cacheKey);
         }
 
-        protected getCacheCart(): Q.Promise<any> {
+        protected getCacheCart(): Promise<any> {
 
             return this.cacheProvider.defaultCache.get<any>(this.cacheKey);
         }
 
-        protected setCartToCache(cart: any): Q.Promise<any> {
+        protected setCartToCache(cart: any): Promise<any> {
 
             return this.cacheProvider.defaultCache.set(this.cacheKey, cart, this.cachePolicy);
         }

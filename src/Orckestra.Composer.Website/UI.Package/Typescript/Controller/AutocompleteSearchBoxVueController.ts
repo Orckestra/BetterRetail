@@ -135,7 +135,7 @@ namespace Orckestra.Composer {
                                 return ComposerClient.post(apiPath, { Query: query })
                             });
 
-                            Q.all(results).then(values => {
+                            Promise.all(results).then(values => {
                                 this.selected = null;
 
                                 this.suggestions = sectionNames

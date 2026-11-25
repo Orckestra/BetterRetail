@@ -79,7 +79,7 @@
 
             provider
                 .validatePayment(<Orckestra.Composer.IActivePaymentViewModel>{ })
-                .done(value => {
+                .then(value => {
                     promiseResponseValue = value;
                     done();
                 });
@@ -122,7 +122,7 @@
 
             provider
                 .addVaultProfileToken(<Orckestra.Composer.IActivePaymentViewModel>{ })
-                .done(value => {
+                .then(value => {
                     promiseResponseValue = value;
                     done();
                 });

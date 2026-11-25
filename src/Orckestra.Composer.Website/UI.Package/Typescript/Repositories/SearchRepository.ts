@@ -7,27 +7,27 @@ namespace Orckestra.Composer {
 
     export class SearchRepository implements ISearchRepository {
 
-        public getFacets(QueryString): Q.Promise<any> {
+        public getFacets(QueryString): Promise<any> {
             return ComposerClient.post('/api/search/getfacets', { QueryString });
         }
 
-        public getCategoryFacets(CategoryId, QueryString): Q.Promise<any> {
+        public getCategoryFacets(CategoryId, QueryString): Promise<any> {
             return ComposerClient.post('/api/search/getcategoryfacets', { QueryString, CategoryId });
         }
 
-        public getQueryFacets(QueryName, QueryType, QueryString): Q.Promise<any> {
+        public getQueryFacets(QueryName, QueryType, QueryString): Promise<any> {
             return ComposerClient.post('/api/searchquery/getqueryfacets', { QueryString, QueryName, QueryType });
         }
 
-        public getSearchResults(QueryString, CategoryId): Q.Promise<any> {
+        public getSearchResults(QueryString, CategoryId): Promise<any> {
             return ComposerClient.post('/api/search/search', { QueryString, CategoryId });
         }
 
-        public getQuerySearchResults(QueryString, QueryName, QueryType): Q.Promise<any> {
+        public getQuerySearchResults(QueryString, QueryName, QueryType): Promise<any> {
             return ComposerClient.post('/api/searchquery/search', { QueryString, QueryName, QueryType });
         }
 
-        public getContentSearchResults(QueryString, CurrentTabPathInfo, IsCurrentSiteOnly): Q.Promise<any> {
+        public getContentSearchResults(QueryString, CurrentTabPathInfo, IsCurrentSiteOnly): Promise<any> {
             return ComposerClient.post('/api/contentsearch/search', { QueryString, CurrentTabPathInfo, IsCurrentSiteOnly });
         }
     }

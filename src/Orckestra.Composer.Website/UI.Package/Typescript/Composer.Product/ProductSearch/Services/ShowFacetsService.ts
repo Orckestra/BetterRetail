@@ -19,17 +19,17 @@ namespace Orckestra.Composer {
             return ShowFacetsService._instance;
         }
 
-        public setShowFacets(show: any): Q.Promise<any>
+        public setShowFacets(show: any): Promise<any>
         {
             return this.cacheProvider.sessionCache.set(this.cacheShowFacetKey, show);
         }
 
-        public getShowFacets(): Q.Promise<any>
+        public getShowFacets(): Promise<any>
         {
             return this.cacheProvider.sessionCache.get<any>(this.cacheShowFacetKey);
         }
 
-        public clearShowFacets(): Q.Promise<any>
+        public clearShowFacets(): Promise<any>
         {
             return this.cacheProvider.sessionCache.clear(this.cacheShowFacetKey);
         }

@@ -45,11 +45,11 @@ namespace Orckestra.Composer {
             loggedInScheduler.subscribe(e => this.onLoggedIn(e));
         }
 
-        protected onLoggedOut(e: IEventInformation): Q.Promise<any> {
+        protected onLoggedOut(e: IEventInformation): Promise<any> {
             return this.userMetadataService.invalidateCache();
         }
 
-        protected onLoggedIn(e: IEventInformation): Q.Promise<any> {
+        protected onLoggedIn(e: IEventInformation): Promise<any> {
             return this.userMetadataService.invalidateCache();
         }
     }

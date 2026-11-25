@@ -66,8 +66,7 @@ namespace Orckestra.Composer {
 
             this.membershipService.resetPassword(formData, ticket, returnUrl)
                 .then(result => this.onResetPasswordFulfilled(result), reason => this.renderFormErrorMessages(reason))
-                .fin(() => this.busyHandler.done())
-                .done();
+                .finally(() => this.busyHandler.done());
         }
 
         private onResetPasswordFulfilled(result: any): void {

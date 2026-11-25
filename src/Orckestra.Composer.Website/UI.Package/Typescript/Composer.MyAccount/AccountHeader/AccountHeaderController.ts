@@ -24,8 +24,8 @@ namespace Orckestra.Composer {
             scheduler.setPostEventCallback((data: any) => this.onLoggedOut(data));
         }
 
-        private onLoggedOut(data: any): Q.Promise<any> {
-            var promise: Q.Promise<any> = Q.fcall(() => {
+        private onLoggedOut(data: any): Promise<any> {
+            var promise: Promise<any> = Promise.resolve().then(() => {
                 var newLocation = decodeURIComponent(data.ReturnUrl) || window.location.href;
                 window.location.replace(newLocation);
             });
@@ -49,8 +49,7 @@ namespace Orckestra.Composer {
 
             this.membershipService.logout(returnUrl, false)
                 .then(result => this.eventHub.publish(MyAccountEvents[MyAccountEvents.LoggedOut], { data: result }))
-                .fin(() => busy.done())
-                .done();
+                .finally(() => busy.done());
         }
     }
 }
